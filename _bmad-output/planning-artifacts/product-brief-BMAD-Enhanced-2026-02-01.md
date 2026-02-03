@@ -22,6 +22,300 @@ Context reconstruction time drops from hours to minutes (<5% time spent vs 30-40
 
 ---
 
+## What is BMAD-Enhanced? (In Simple Terms)
+
+### The Magic Notebook Analogy
+
+Imagine building a product with your team is like building a LEGO castle with friends:
+- One person **designs** the castle (designer)
+- One person **decides** what rooms to build and why (product manager)
+- One person **builds** it (engineer)
+- One person **checks** if doors open properly (QA)
+
+After you finish, someone asks: **"Why did you put the dragon tower on the left instead of the right?"**
+
+Nobody remembers why. You argue for 20 minutes trying to reconstruct the decision from memory.
+
+**BMAD-Enhanced is like a magic notebook that captures WHY you made each decision while you're making it.**
+
+When you decide "dragon tower goes left because the moat is on the right," the notebook captures that reasoning. When someone asks later, you open the notebook and show them: "See? We wrote it down. The moat is on the right, so the dragon tower goes left."
+
+### The Alignment Problem (Not Just "Connected Notes")
+
+But it's more than just writing things down. The real power is **alignment**:
+
+**Different types of notes must stay aligned:**
+
+1. **Intention Notes** (The "Why"):
+   - Hypothesis: "We think kids like dragons"
+   - Product Brief: "We're building a dragon castle for 5-year-olds"
+
+2. **Standards Notes** (The "How It Should Be"):
+   - Design System: "All dragons must be friendly-looking (no scary teeth)"
+   - Architecture Rules: "Dragon towers must be stable (wide base)"
+   - Test Checklist: "Dragon must survive drop from table height"
+
+3. **Execution Notes** (The "What We Built"):
+   - Design: "Here's the dragon drawing (friendly face, no teeth)"
+   - Build: "Here's the dragon tower (wide base)"
+   - Test Results: "Dropped from table - survived ✓"
+
+**When notes are NOT aligned, problems happen:**
+- Designer draws scary dragon (ignores "friendly-looking" standard)
+- Builder makes narrow tower (ignores "wide base" architecture)
+- Result: Scary dragon on unstable tower that breaks
+
+**BMAD-Enhanced ensures alignment:**
+- When designer creates dragon drawing, notebook says: "This design must align with: Design System (friendly face), Hypothesis (kids like dragons), Architecture (stable structure)"
+- If designer draws scary teeth → Notebook alerts: "⚠️ Misalignment: Design System says friendly, but your dragon has scary teeth"
+- Designer fixes it → Design is now **aligned** with standards and intentions
+
+### The Core Value: Traceability Enables Alignment Validation
+
+**Traceability** = Following the links between notes (hypothesis → design → build → test)
+
+**Alignment** = Ensuring each note follows the rules set by related notes (design follows standards, build matches design, tests validate hypothesis)
+
+**Together**: You can trace from code back to the original hypothesis (traceability), AND verify that the code actually solves the problem the hypothesis identified (alignment).
+
+**Simple Formula:**
+```
+Magic Notebook (BMAD-Enhanced) =
+  Capture WHY (reasoning) +
+  Link related notes (traceability) +
+  Check alignment (validation) +
+  Make it conversational (AI chat interface)
+```
+
+---
+
+## Content Alignment Validation Pattern
+
+### **What This Validates**
+
+**Structural alignment** (baseline): Artifacts are linked correctly (hypothesis → design → story → test)
+
+**Content alignment** (this pattern): Artifact *content* actually addresses what parent artifacts specify
+
+**Example Misalignment:**
+- Hypothesis: "Users abandon checkout due to 5-step process"
+- Design: Shows 2-step checkout wireframe ✓ ALIGNED
+- Story: "Implement payment form validation" ❌ MISALIGNED (doesn't address step reduction)
+
+---
+
+### **How to Invoke (Two Interface Options)**
+
+**Option 1: Natural Language (Conversational)**
+
+User asks Claude Code conversational commands:
+
+```
+"Check alignment for story-042"
+"Does design-101 align with its hypothesis?"
+"Validate that test-suite-203 covers hypothesis-042"
+```
+
+**No syntax to memorize** - natural language queries work.
+
+**Option 2: Slash Command (Power Users)**
+
+```
+/align story-042              → Adjacent pair validation (default)
+/align story-042 --full       → Full chain validation
+```
+
+**Fast, precise syntax for power users.** Both options trigger identical behavior.
+
+---
+
+### **Validation Scope: Adjacent Pair by Default**
+
+**Default Behavior: Validates One Link Only**
+
+To avoid context window issues, alignment checks validate **adjacent pairs** by default:
+
+```
+/align story-042
+OR
+"Check alignment for story-042"
+
+Claude validates: story-042 → design-101 (immediate parent only)
+
+Claude reports:
+✓ story-042 ALIGNED with design-101 (immediate parent)
+
+💡 Tip: This check assumes design-101 is already aligned with hypothesis-042.
+   Want to verify the full chain? Ask: "Check alignment for design-101"
+   or use: /align design-101
+```
+
+**Explicit Full Chain Validation**
+
+When you need confidence across the entire chain:
+
+```
+/align story-042 --full
+OR
+"Check full chain alignment for story-042"
+
+Claude validates:
+  story-042 → design-101 ✓
+  design-101 → hypothesis-042 ✓
+
+Reports: Full chain aligned (or identifies first misalignment)
+```
+
+**Why Adjacent Pair Default?**
+- **Context efficiency:** Reads 2 files max (not 3-5)
+- **Fast validation:** Quick sanity check at artifact creation time
+- **Incremental validation:** Validate each artifact once when created
+- **Trust but verify:** Assume earlier links validated, verify current link
+
+---
+
+### **What Claude Does (Semantic Analysis)**
+
+1. **Load trace chain (limited scope):**
+   - Default: Read artifact + immediate parent only
+   - `--full` flag: Read complete ancestor chain
+   - Example: story-042 → design-101 (2 files)
+
+2. **Read content:**
+   - Parent artifact: What was specified/required?
+   - Current artifact: What was implemented/addressed?
+
+3. **Perform semantic validation:**
+   - Does current artifact content address parent artifact requirements?
+   - Are acceptance criteria complete relative to parent?
+   - Are there gaps or misalignments?
+
+4. **Report findings:**
+   ```
+   ✓ ALIGNED: story-042 addresses hypothesis-042
+   OR
+   ⚠️ MISALIGNMENT DETECTED: story-042 missing key AC
+   ```
+
+---
+
+### **Realignment Flow (AI-Assisted Correction)**
+
+When misalignment detected, Claude proposes corrections:
+
+**Step 1: Claude reports misalignment**
+```
+⚠️ MISALIGNMENT DETECTED: story-042 vs design-101
+
+Validating: story-042 → design-101 (adjacent pair check)
+
+Design (design-101):
+Specifies: 2-step checkout flow (reduced from 5 steps)
+
+Story (story-042):
+❌ MISALIGNED - AC focus on form validation only,
+but don't address implementing the 2-step flow reduction.
+
+Would you like me to propose realigned acceptance criteria?
+```
+
+**Step 2: User confirms → Claude proposes changes**
+```
+Proposed changes to story-042:
+
+ADD to acceptance criteria:
+- [ ] Checkout flow reduced from 5 steps to 2 steps
+- [ ] Step 1: Shipping + Payment combined
+- [ ] Step 2: Review + Confirm
+
+KEEP existing:
+- [ ] Payment form validation
+
+Apply these changes? (y/n)
+```
+
+**Step 3: User approves → Claude updates artifact**
+- Edits story-042.md frontmatter/content
+- Preserves existing content where appropriate
+- Adds alignment metadata: `validated_against: hypothesis-042`
+
+**CRITICAL: Permission Boundary**
+- Claude ONLY edits files after explicit user approval
+- All proposed changes shown before application
+- User can reject, modify, or approve
+- No automatic corrections without permission
+
+---
+
+### **Context Management Constraints (Critical)**
+
+**V1 Default: Adjacent Pair Validation (Optimized)**
+
+Each validation request reads **2 files by default** (artifact + immediate parent):
+- Example: `/align story-042` reads 2 files (story-042, design-101)
+- Context window usage: Minimal and predictable
+- Max artifacts in project: ~50 (constraint simplifies scaling)
+
+**Optional: Full Chain Validation**
+
+When explicit full chain validation requested (`--full` flag):
+- Example: `/align story-042 --full` reads 3 files (story-042, design-101, hypothesis-042)
+- Context window usage: Moderate (max ~5 files for deepest chains)
+- Use case: High-confidence validation before major changes
+
+**Deferred to Phase 2: Batch Validation**
+
+Validating multiple artifacts simultaneously:
+- Example: "Check alignment for ALL stories in epic-005" (12 stories = 24+ files)
+- Context window risk: High
+- Solution: Document single-artifact pattern first, optimize batch later
+
+**Deferred to Phase 2: Auto-Fix and Menu**
+
+- `/align story-042 --fix` (auto-propose corrections)
+- `/align` (show menu of recently modified artifacts)
+
+**User Guidance:**
+- Default behavior validates adjacent pair (fast, minimal context)
+- Use `--full` when you need confidence across complete chain
+- Validate incrementally at artifact creation time (natural workflow)
+
+---
+
+### **Where This Lives (Documentation, Not Development)**
+
+**Implementation Cost:** Zero code - this leverages Claude Code's existing capabilities:
+- File reading (already works)
+- Semantic analysis (Claude's native strength)
+- File editing (already works with user permission)
+
+**Deliverable Type:** Usage guide / workflow documentation
+
+**Location in Product Brief:**
+- Section: Key usage pattern for BMAD-Enhanced
+- Format: Step-by-step guide with examples
+- Audience: All roles (PM, Designer, Engineer, QA)
+
+---
+
+### **Real-World Value (Why This Matters)**
+
+**Prevents "Broken Telephone" Problem:**
+- PM writes hypothesis → Designer interprets → Engineer implements → Original intent lost
+- Content alignment validation catches drift at each handoff
+
+**Enables Long-Term Context Retrieval:**
+- Artifact created 3 months ago, reasoning forgotten
+- Ask Claude: "Why does story-042 require 2-step checkout?"
+- Claude reads trace chain, answers with original context
+
+**Reduces Meeting Overhead:**
+- Instead of scheduling "clarification meeting" when AC unclear
+- Engineer asks Claude to explain story rationale via trace chain
+- Instant context, zero meeting time
+
+---
+
 ## Core Vision
 
 ### Problem Statement
@@ -74,7 +368,11 @@ When shared understanding decays across boundaries:
    - Amplify the problem: faster implementation of potentially wrong solutions
    - No traceability to validated hypotheses or design intent
 
-**What's Missing:** A reasoning preservation layer that captures decisions at decision-time, maintains traceability through changes, and makes context instantly retrievable.
+**What's Missing:** A reasoning preservation layer that:
+- **Captures WHY** at decision-time (not retroactively)
+- **Maintains traceability** through changes (hypothesis → design → code → test links)
+- **Validates alignment** (design follows standards, code matches design, tests verify hypothesis)
+- **Makes context instantly retrievable** (natural language queries, not archeology)
 
 ### Proposed Solution
 
@@ -485,29 +783,37 @@ _bmad/_config/
 
 ---
 
-#### ADR-002: Cross-Phase Traceability Implementation
+#### ADR-002: Cross-Phase Traceability & Alignment Validation
 
-**Decision:** Artifact-Embedded Metadata + On-Demand Index
+**Decision:** Artifact-Embedded Metadata + On-Demand Index + Alignment Checks
+
+**Why This Matters (Simple Explanation):**
+Traceability alone isn't enough - you need to verify artifacts stay ALIGNED with their related artifacts:
+- **Traceability** = Following links (hypothesis → design → code → test)
+- **Alignment** = Checking conformance (does design follow standards? does code match design? do tests validate hypothesis?)
 
 **Mechanism:**
-- Each artifact has frontmatter: `traces: {hypothesis: path, design: path, tests: [paths]}`
-- `.bmad/trace-index.json` (generated, not committed) for fast lookup
-- CLI rebuilds index on demand (`bmad trace rebuild`)
+- **Traceability Links**: Each artifact has frontmatter with `traces: {hypothesis: path, design: path, tests: [paths]}`
+- **Alignment Metadata**: Artifacts declare what they must align with (standards, intentions, constraints)
+- **Index**: `.bmad/trace-index.json` (generated, not committed) for fast lookup
+- **Validation**: CLI can check alignment (`bmad validate alignment <artifact-id>`)
 
 **Trade-offs Accepted:**
 - ✅ Self-documenting artifacts (frontmatter in each file)
 - ✅ Git-friendly (frontmatter changes tracked automatically)
+- ✅ Alignment validation (catch mismatches early)
 - ✅ Index optional (graceful degradation without it)
 - ⚠️ Index regeneration cost on large repos (mitigated by caching)
-- ⚠️ Frontmatter verbosity (adds lines to files)
+- ⚠️ Frontmatter verbosity (adds lines to files, mitigated by three-state lifecycle)
 
 **Optional Enhancement:**
 - Append-only trace log (`.bmad/trace.log`) for audit trail on high-stakes decisions (user opt-in)
 
 **Rationale:**
-1. Git-native: Frontmatter changes version-controlled automatically
-2. Graceful degradation: Works without index, index improves UX
-3. Audit option: Teams can enable event log for compliance needs
+1. **Traceability**: Follow reasoning from code back to hypothesis (Git-native frontmatter)
+2. **Alignment**: Verify deliverables conform to intentions and standards (validation commands)
+3. **Graceful degradation**: Works without index, index improves UX
+4. **Audit trail**: Teams can enable event log for compliance needs
 
 **Example Frontmatter:**
 ```yaml
@@ -523,28 +829,75 @@ traces:
 
 ---
 
-#### ADR-003: CLI-First vs. GUI-First for Phase 0
+#### ADR-003: AI Chat-First Interface Strategy (Conversational Validation)
 
-**Decision:** CLI-Only v1.0, VSCode Extension v1.1, Web UI v2.0+
+**Decision:** AI Chat Interface (Claude Code in VSCode) v1.0, Web UI v2.0+
+
+**Why This Matters (Simple Explanation):**
+Instead of learning commands like `bmad create hypothesis --title "..." --context "..."`, you just talk to Claude Code like a smart note-taking friend:
+- **You:** "I want to document why we're prioritizing mobile app"
+- **Claude:** "What's the main reason?"
+- **You:** "70% of our users are on mobile"
+- **Claude:** "Got it! I've created the note and linked it to your mobile app project."
+
+It's thinking out loud with a friend who captures everything, not memorizing syntax.
 
 **Phased Approach:**
-- **v1.0 (Month 1-2)**: Pure CLI + terminal help + markdown docs
-- **v1.1 (Month 3-4)**: VSCode extension with inline traceability view → **THE INFLECTION POINT** (adoption accelerates here, not CLI or GUI)
-- **v2.0 (Month 7+)**: Web UI (only if CLI proves PMF: >500 teams, NPS >7)
+- **v1.0 (Month 1-2)**: AI chat interface via Claude Code MCP server in VSCode
+  - Conversational artifact creation ("Create a hypothesis for mobile app redesign")
+  - Natural language queries ("Show me all hypotheses related to authentication")
+  - Zero syntax to learn, accessible to all roles (PM, Designer, Engineer, QA)
+- **v1.1 (Month 3-4)**: Enhanced VSCode extension with inline traceability hover + chat
+  - Hover over artifact ID → See preview inline
+  - Chat interface for complex queries and workflow orchestration
+  - **THE INFLECTION POINT** (adoption accelerates here)
+- **v2.0 (Month 7+)**: Web UI for dashboards and visualization (only if v1.0-1.1 prove PMF: >500 teams, NPS >7)
+
+**Why AI Chat-First (Not Traditional CLI):**
+
+**Traditional CLI Problems:**
+- Requires syntax learning (`bmad create hypothesis --title "..." --context "..."`)
+- High ceremony for non-technical users (PMs, designers)
+- Command memorization burden
+- Text-based output (no rich formatting)
+
+**AI Chat Interface Advantages:**
+- **Zero ceremony**: "Document why we're prioritizing mobile app" → Claude Code creates artifact conversationally
+- **Cross-role accessibility**: Same conversational interface works for PM, designer, engineer, QA
+- **Contextual guidance**: AI asks clarifying questions, guides workflow
+- **Natural queries**: "Why did we build feature X?" vs `bmad artifact show --id feature-x --related`
+- **Agent orchestration validation**: Tests whether BMAD agents (analyst, architect, PM, designer, dev, QA) provide helpful responses
+
+**What Phase 0-2 Validates:**
+- ✅ Do BMAD agents provide helpful, actionable responses?
+- ✅ Do workflows (create-hypothesis, create-story, create-design) guide users effectively?
+- ✅ Does cross-module traceability work (Quint → BMAD → DesignOS)?
+- ✅ Do users find value through conversational interaction?
+- ✅ Is agent orchestration seamless across modules?
+
+**What Phase 0-2 Does NOT Validate:**
+- ❌ GUI design patterns and visual hierarchy
+- ❌ Button layouts and form design
+- ❌ Dashboard information architecture
+- ❌ Non-technical user adoption at scale (validated later via web UI)
 
 **Trade-offs Accepted:**
 - ✅ Fastest validation path (weeks vs. months)
-- ✅ Lower development cost (no UI complexity)
-- ✅ Technical users give better framework feedback vs. GUI nitpicks
-- ⚠️ Limits addressable market to power users (mitigated by BMAD Method familiarity)
+- ✅ Zero syntax learning curve (conversational = accessible)
+- ✅ Validates core value: workflows and agent orchestration
+- ✅ Technical users in VSCode give better framework feedback
+- ✅ Same interface works for all roles (PM types in chat, engineer types in chat)
+- ⚠️ Requires VSCode + Claude Code (Phase 0-2 acceptable, web UI later for broader access)
 - ⚠️ GUI design decisions deferred (may need rework later)
+- ⚠️ Depends on Claude Code MCP server quality
 
 **Rationale:**
-1. Aligns with user request: "works exactly as BMAD Method does"
-2. Fastest validation: No UI delays framework merge testing
-3. Incremental enhancement: VSCode extension (v1.1) becomes adoption catalyst by making traceability **faster than not using it**
-4. BMAD Method familiarity: Existing users already CLI-native
-5. **Reverse engineering insight**: VSCode inline traceability view eliminated context switching, becoming the real inflection point (not CLI or GUI)
+1. **Conversational = Accessible**: PMs, designers, engineers, QA all use natural language (no CLI syntax barrier)
+2. **Validation Focus**: Phase 0-2 validates workflows and agent orchestration, not GUI usability
+3. **Fastest Path**: AI chat interface is weeks to build vs. months for full GUI
+4. **Agent Testing**: Conversational interface is best way to test if BMAD agents provide value
+5. **VSCode Native**: Target users already in VSCode (engineers always, PMs occasionally for PR reviews)
+6. **Incremental Enhancement**: v1.1 adds hover + inline views while keeping chat as primary interface
 
 **Gating Criteria for GUI (v2.0):**
 - >500 teams actively using CLI
@@ -740,7 +1093,7 @@ interface StoryArtifact extends BaseArtifact {
 
 #### ADR-006: Contract Versioning, Integration Testing & Dependency Management
 
-**Decision:** Semantic Versioning with Adapter Pattern + 3-Level Test Pyramid + Module Compatibility Matrix
+**Decision:** Semantic Versioning with Adapter Pattern + 2-Level Test Pyramid + Module Compatibility Matrix
 
 **Context:** Federated module architecture requires coordinated evolution without lockstep releases. Analysis of 40+ federated systems identified 3 critical failure modes:
 - **Dependency Conflicts:** 45% of federated architecture failures
@@ -863,9 +1216,17 @@ bmad contract migrate --from 1.0.0 --to 2.0.0 --confirm
 
 **Part 2: Integration Validation Testing**
 
-**3-Level Test Pyramid:**
+**2-Level Test Pyramid (Simple Explanation):**
+
+**Why Two Levels?**
+Like building a house, you test different things at different speeds:
+- **Level 1 (Foundation)**: Fast checks that every note has the 3 required parts (title, why, related-to)
+- **Level 2 (Complete House)**: Checks that links connect to real notes AND that complete journeys work (hypothesis → design → build → test)
+
+Both levels run on every commit - no separate "nightly" tests needed since we're only checking artifact files (no 3rd party APIs, no heavy AI execution).
 
 **Level 1: Contract Schema Tests (Fast, 100+ tests)**
+**Purpose**: Make sure every artifact follows the 3 basic rules (has id, type, metadata)
 
 ```typescript
 // tests/contracts/base-artifact-compliance.test.ts
@@ -895,7 +1256,8 @@ describe('BaseArtifact Contract Compliance', () => {
 });
 ```
 
-**Level 2: Cross-Module Reference Tests (Medium, 30+ tests)**
+**Level 2: Cross-Module Reference & Lifecycle Tests (50+ tests)**
+**Purpose**: Make sure links between notes actually work (design-042 exists, story-101 can find it) AND complete lifecycle chains are valid
 
 ```typescript
 // tests/integration/cross-module-traceability.test.ts
@@ -936,15 +1298,8 @@ describe('Cross-Module Traceability', () => {
     const traceGraph = await buildTraceGraph(hypothesis);
     expect(traceGraph.depth).toBe(2);  // Hypothesis → Story → Design
   });
-});
-```
 
-**Level 3: Full Lifecycle Tests (Slow, 5-10 tests)**
-
-```typescript
-// tests/integration/full-lifecycle.test.ts
-describe('Full Lifecycle Workflow', () => {
-  it('Discovery → Design → Dev → Quality workflow', async () => {
+  it('Discovery → Design → Dev → Quality full lifecycle chain validates', async () => {
     // Discovery: Create hypothesis in Quint
     const hypothesis = await createHypothesis({...});
 
@@ -963,17 +1318,21 @@ describe('Full Lifecycle Workflow', () => {
       traces: { parent: story.id }
     });
 
-    // Validate full trace chain
+    // Validate full trace chain (static file analysis, no AI execution)
     const fullTrace = await buildTraceGraph(testSuite);
     expect(fullTrace.ancestors).toContain(hypothesis.id);
     expect(fullTrace.depth).toBe(4);
+
+    // Validate alignment metadata present
+    expect(testSuite.metadata.validates).toBe(hypothesis.id);
   });
 });
 ```
 
 **CI Integration:**
-- **Level 1-2:** Run on every commit (fast feedback, <2 minutes)
-- **Level 3:** Run nightly (comprehensive validation, ~10 minutes)
+- **Both Level 1 & 2:** Run on every commit (fast feedback, <2 minutes)
+- **Why no "nightly" tests:** We're only validating artifact files (static analysis), not executing agents or calling 3rd party APIs
+- **Token efficiency:** No AI execution in tests = no token consumption concerns
 
 **Runtime Contract Validation:**
 
@@ -1145,12 +1504,23 @@ bmad init --modules bmm,designos,agentos
 5. Build module registry with lazy loading (ADR-004)
 6. Define BaseArtifact interface and domain-specific extensions (StoryArtifact, DesignArtifact, TestArtifact, HypothesisArtifact)
 7. Implement artifact state detection parser (scans for cross-domain references)
-8. **NEW**: Build artifact commands (`bmad artifact promote`, `bmad artifact demote`, `bmad artifact validate`)
-9. **NEW**: Build contract migration tooling (`bmad contract migrate`, `bmad contract check`) - implements ADR-006
-10. **NEW**: Build contract version adapters for modules (v1.0 → v2.0 adapters)
-11. **NEW**: Create module.yaml declarations with contract version dependencies (ADR-006)
-12. **NEW**: Build dependency resolver (`bmad init` compatibility checks) - implements ADR-006
-13. **NEW**: Build frontmatter UI helpers (`bmad trace hide`, `bmad trace collapse`) - moved earlier from Month 2 to proactively address verbosity before alpha
+8. **NEW**: Research Claude Code integration options (Week 1-2, before building MCP server)
+   - Evaluate: Custom MCP server vs existing Claude Code tool use API
+   - Prototype: Simple conversational spike to validate AI chat interface works
+   - Decision gate: Only build full MCP server if prototype validates user preference
+9. **NEW**: Build Claude Code integration for BMAD-Enhanced (implements ADR-003 AI Chat-First strategy) - ONLY if prototype validated
+   - Conversational artifact creation ("Create hypothesis for X" → Guided conversation)
+   - Natural language queries ("Show all hypotheses related to authentication")
+   - Traceability graph generation ("Show decision tree for Q4 roadmap")
+   - **DEFERRED**: Context Loss Report (downgraded to P1 Week 2+ feature, requires Linear/Slack API integration validation)
+10. **NEW**: Build artifact commands (conversational and programmatic interfaces):
+   - Conversational: "Link test-login.spec.ts to story-045"
+   - Programmatic: `bmad artifact promote <id>`, `bmad artifact demote <id>`, `bmad artifact validate <id>`
+11. **NEW**: Build contract migration tooling (`bmad contract migrate`, `bmad contract check`) - implements ADR-006
+12. **NEW**: Build contract version adapters for modules (v1.0 → v2.0 adapters)
+13. **NEW**: Create module.yaml declarations with contract version dependencies (ADR-006)
+14. **NEW**: Build dependency resolver (`bmad init` compatibility checks) - implements ADR-006
+15. **NEW**: Build frontmatter UI helpers (`bmad trace hide`, `bmad trace collapse`) - moved earlier from Month 2 to proactively address verbosity before alpha
 
 **Month 2 (End-to-End Validation):**
 
@@ -1196,20 +1566,26 @@ bmad init --modules bmm,designos,agentos
 
 **Key Success Criteria:**
 - ✅ All 4 frameworks load without conflicts
-- ✅ Agents callable via CLI with correct namespace resolution
+- ✅ **Validation-first approach executed: Conversational prototype built Week 1-2, tested with 3-5 users before heavy MCP investment** - ADR-003
+- ✅ **Claude Code integration options researched (custom MCP vs tool use API decision documented)** - ADR-003
+- ✅ **CONDITIONAL**: AI-guided artifact creation working (ONLY if prototype validated) - ADR-003
+- ✅ **Natural language queries working ("Show hypotheses related to X", "Link test to story-Y")** - ADR-003
+- ✅ **Agent orchestration validated (BMAD agents provide helpful, contextual responses)** - ADR-003
+- ❌ **DEFERRED**: Context Loss Report (downgraded to P1 post-alpha, requires Linear/Slack API integration validation)
+- ✅ Agents callable via conversational interface with correct namespace resolution
 - ✅ **Module-first command invocation working: explicit prefix, aliases, interactive fallback**
 - ✅ **Workflow catalog complete: 80%+ of workflows have unique aliases (zero collision overhead)**
 - ✅ Cross-phase traceability working (hypothesis → design → story → test)
-- ✅ Complete end-to-end workflow produces coherent artifacts
+- ✅ Complete end-to-end workflow produces coherent artifacts via conversation
 - ✅ **Artifact architecture validated: 80% of artifacts remain domain-native (minimal overhead), cross-domain promotion triggers working**
-- ✅ Self-dogfooding: Used BMAD-Enhanced from Week 1 Day 1 (product brief, Phase 1 plan, architecture docs created using BMAD-Enhanced)
+- ✅ Self-dogfooding: Used BMAD-Enhanced from Week 1 Day 1 via Claude Code chat (product brief, Phase 1 plan, architecture docs created conversationally)
 - ✅ Daily dogfood journal maintained, pain points addressed weekly
 - ✅ **Contract migration tooling built and tested (`bmad contract migrate`, `bmad contract check`)** - ADR-006
 - ✅ **Contract validation test suite passing in CI (3-level pyramid: schema, references, lifecycle)** - ADR-006
 - ✅ **Module compatibility matrix functional (dependency resolver working)** - ADR-006
 - ✅ **Adapter mode tested (modules with version mismatches use runtime adapters)** - ADR-006
 - ✅ Frontmatter UI helpers working (`bmad trace hide`, `bmad trace collapse`) - prevents alpha abandonment
-- ✅ Artifact commands functional (`bmad artifact promote/demote/validate`)
+- ✅ Artifact commands functional (conversational + programmatic interfaces)
 - ✅ User alias configuration functional (~/.bmad/aliases.yaml)
 
 ---
@@ -1596,6 +1972,32 @@ Getting Designer AND PM adoption in first 30 days of team onboarding.
 
 ## Implementation Strategy
 
+### **Validation-First Philosophy**
+
+**Core Principle: Validate assumptions with minimal investment BEFORE heavy building**
+
+This product brief adopts a **validation mindset** over a **building mindset**:
+
+**Validation Approach:**
+- Week 1-2: Research Claude Code integration options (custom MCP vs tool use API)
+- Week 1-2: Build throwaway conversational prototype (2-day spike)
+- Week 1-2: Test prototype with 3-5 internal users → Measure preference
+- **GATE DECISION**: Only build full integration if prototype validates positive response
+- Deferred features: Context Loss Report (P1 post-alpha), Slack integration (post-alpha)
+
+**Why This Matters:**
+- **Risk mitigation**: Proves AI chat interface works before Month 1 Week 4 MCP server investment
+- **Pivot-friendly**: If users don't like conversational interface, can pivot to web form without sunk cost
+- **Lean learning**: Discover what users actually want vs what we assume they want
+
+**Key Validation Gates:**
+1. **Week 1-2 Gate**: Does conversational interface feel natural to users? (Prototype test)
+2. **Month 1 End Gate**: Do all 4 frameworks integrate without conflicts? (Technical validation)
+3. **Phase 0.5 Gate**: Are critical bugs fixed before alpha? (Quality validation)
+4. **Alpha Gate (Month 3)**: Do 80% of teams complete full workflow? (Product-market fit signal)
+
+---
+
 **Phase 0: Framework Merge & Validation (Private, Month 1-2 + 2-week buffer)**
 
 **Goal:** Prove end-to-end integration works BEFORE building user-facing features.
@@ -1680,10 +2082,16 @@ Getting Designer AND PM adoption in first 30 days of team onboarding.
 - Works exactly like BMAD Method (familiar to existing users)
 - Documentation: Markdown guides, terminal-based help, VSCode extension quick start
 
-**User Profile:**
+**User Profile (Alpha Team Selection Criteria):**
 - Teams already using BMAD Method (familiar with CLI workflow)
 - Technical teams comfortable with Git, markdown, terminal
 - Early adopters willing to report issues
+- **VSCode adoption prerequisite (CRITICAL)**: All team members (PM, designer, engineer, QA) must have VSCode installed and use it at least occasionally
+  - Engineers: Use VSCode daily (required)
+  - PMs: Use VSCode for PR reviews at least weekly (required)
+  - Designers: Use VSCode for design tokens/config at least monthly (required)
+  - QA: Use VSCode for test development (required)
+- **Rationale**: Phase 0-2 validates conversational interface via Claude Code in VSCode; teams without VSCode adoption cannot participate in validation
 
 **Focus:**
 - Framework stability (does integration hold under real use?)
@@ -1763,19 +2171,42 @@ Getting Designer AND PM adoption in first 30 days of team onboarding.
 - Large enough to experience severe alignment pain (3+ teams, cross-functional dependencies)
 - Small enough to adopt new tools without bureaucratic approval processes
 - Actively building features (not maintenance-only)
-- Technical sophistication: Familiar with Git, CLI tools, modern workflows
+- Technical sophistication: Familiar with VSCode, Git, modern workflows
+- **Phase 0-2 Interface**: AI chat (Claude Code in VSCode) - conversational, zero command syntax
 
 **Secondary Target: Fast-Growing Startups (10-20 → 50+)**
 - Scaling from single team to multiple teams
 - Establishing process infrastructure before chaos sets in
 - Early investment in alignment prevents future technical debt
 - Willing to adopt new tools that solve emerging pain points
+- **Phase 0-2 Interface**: Same conversational AI chat interface
 
 **NOT For:**
 - Solo developers (overhead not justified for 1-person teams)
 - Very early startups (<5 people, no cross-functional complexity yet)
 - Maintenance-only teams (low feature velocity, minimal decision-making)
 - Enterprise teams >500 (require vendor compliance, security reviews, procurement cycles)
+- **Teams without VSCode adoption** (Phase 0-2 requires VSCode + Claude Code; web UI comes Phase 3+ if PMF proven)
+
+---
+
+**Phase 0-2 Interface Strategy (ADR-003):**
+
+**Primary Interface: AI Chat via Claude Code MCP Server in VSCode**
+- **Zero syntax to learn**: Natural language ("Create hypothesis for X", "Show stories related to Y")
+- **Cross-role accessible**: Same conversational interface for PM, designer, engineer, QA
+- **Validation focus**: Tests whether workflows and agent orchestration provide value
+- **NOT validating**: GUI design patterns, button layouts, visual hierarchy
+
+**Why AI Chat-First (Not Traditional CLI):**
+- Traditional CLI requires syntax memorization (`bmad create hypothesis --title "..." --context "..."`)
+- AI chat enables conversation ("I want to document why we're prioritizing mobile app" → Claude Code guides with questions)
+- Accessible to non-technical roles (PM, designer) without CLI intimidation
+- Validates core value proposition: Do BMAD agents provide helpful responses?
+
+**Post-Validation Expansion:**
+- **v1.1 (Month 3-4)**: Enhanced VSCode extension (inline hover + chat) - THE INFLECTION POINT
+- **v2.0 (Month 7+)**: Web UI for dashboards (only if Phase 0-2 proves PMF: >500 teams, NPS >7)
 
 ---
 
@@ -1815,12 +2246,39 @@ Getting Designer AND PM adoption in first 30 days of team onboarding.
 - **Decision traceability**: Every feature traces back to original hypothesis with 1 click
 - **Async collaboration**: Designer sees hypothesis → creates design → engineer sees both → builds aligned feature
 
-**Adoption Journey:**
-- **Discovery (Week 1)**: Hears about BMAD-Enhanced from peer at product management meetup
-- **Trial (Week 1-2)**: Installs CLI, creates first hypothesis artifact, links to story in Linear
-- **Aha Moment (Week 2)**: Engineer asks "why this feature?" → Alex shares link to hypothesis artifact → Engineer says "oh, that's clear!"
-- **Daily Use (Week 3+)**: Every roadmap decision starts as hypothesis artifact, traces to stories/designs
-- **Champion (Month 3)**: Evangelizes to other PMs, demonstrates traceability graph in product review meeting
+**Adoption Journey (AI Chat-First):**
+- **Discovery (Week 1, Day 1)**: Hears about BMAD-Enhanced from peer at product management meetup
+  - Peer opens VSCode, shows Claude Code chat: "Show me the hypothesis behind our Q4 roadmap"
+  - Claude Code responds with artifact summary and visual graph
+  - Alex: "Wait, you're just... talking to it? No commands to memorize?"
+
+- **Trial (Week 1, Day 2)**: Opens VSCode (already has it for reviewing PRs occasionally)
+  - Opens Claude Code chat panel
+  - Types: "I want to document why we're prioritizing mobile app over web redesign"
+  - Claude Code: "I'll help you create a hypothesis artifact. What user research or data supports this decision?"
+  - Alex: "Our analytics show 70% of traffic is mobile, NPS for mobile is 6 vs web is 8"
+  - Claude Code: "Got it. I've created hypothesis-042 with that context and linked it to Linear epic MOBILE-001"
+  - **First artifact created in 2-minute conversation - zero syntax learned**
+  - **Instant Value (Day 2)**: Artifact creation was easy, but full value comes when engineer asks question...
+
+- **Aha Moment (Week 1, Day 3)**: Engineer Sam asks in Slack: "Why are we prioritizing mobile app?"
+  - Alex opens Claude Code: "Show me the hypothesis for mobile app prioritization"
+  - Claude Code: "Here's hypothesis-042: [summarizes reasoning]. Would you like me to share this link with Sam?"
+  - Alex: "Yes" → Claude Code posts link in Slack
+  - Sam: "Perfect, this is exactly what I needed. Makes sense now."
+  - **Alex's reaction: "I didn't have to remember, search Notion, or reconstruct from memory. I just asked."**
+
+- **Daily Use (Week 2+)**: Every strategic decision starts with Claude Code conversation
+  - "Document why we're rejecting feature X"
+  - "Link this design to the authentication hypothesis"
+  - "Show me all hypotheses validated in Q4"
+  - Artifact creation feels like note-taking with an assistant, not data entry
+
+- **Champion (Month 2)**: In product review meeting, opens Claude Code chat in front of leadership
+  - "Show me the decision tree for our Q4 roadmap"
+  - Claude Code generates visual traceability graph
+  - Leadership: "How did you build this?"
+  - Alex: "I just talked to Claude Code while making decisions. It captured everything."
 
 **Success Metrics (Alex's Perspective):**
 - Time spent explaining decisions to team: -75%
@@ -1829,10 +2287,14 @@ Getting Designer AND PM adoption in first 30 days of team onboarding.
 - Ability to validate if feature solved original problem: 100% (vs 10% before)
 
 **Critical Needs to Avoid Abandonment:**
-- **Non-technical UX**: Cannot feel like engineer tool (no CLI intimidation)
+- **Conversational interface**: Cannot require CLI syntax or command memorization
+- **VSCode accessibility**: Must work in VSCode (where Alex already reviews PRs)
+- **Fast Aha moment (Day 2-3)**: Value must be felt within first week (artifact creation → engineer question → instant answer)
 - **Linear/Figma integration**: Must live in existing workflow, not separate tool
 - **Visual traceability**: Graph view showing hypothesis → design → story → test (not just text)
-- **5-minute setup**: No complex configuration, works out of the box
+
+**Future Enhancement (Post-Alpha):**
+- **Context Loss Report (Week 2+ feature)**: Analyzes Linear/Slack to quantify context reconstruction time - deferred until core conversational workflow validated
 
 ---
 
@@ -1870,13 +2332,46 @@ Getting Designer AND PM adoption in first 30 days of team onboarding.
 - **Portfolio-ready artifacts** (export design reasoning as case study)
 - **Engineer alignment** (interaction intent documented, not just pixels)
 
-**Adoption Journey:**
-- **Discovery (Week 1)**: PM introduces BMAD-Enhanced, shows hypothesis artifact
-- **Skepticism (Week 1)**: "Another tool? I already use Figma, Notion, Loom..."
-- **Trial (Week 2)**: Installs Figma plugin, tries annotation feature on 1 design
-- **Aha Moment (Week 3)**: Engineer asks "why did you choose this pattern?" → Jordan shares annotated design artifact → Engineer: "This is so helpful!"
-- **Conversion (Week 4)**: Uses for every design, exports artifact for portfolio case study
-- **Champion (Month 2)**: Advocates to design team, demonstrates workflow in design critique
+**Adoption Journey (AI Chat + Figma Plugin Hybrid):**
+- **Discovery (Week 1)**: PM Alex introduces BMAD-Enhanced, shows hypothesis artifact in Claude Code chat
+  - Jordan (skeptical): "Another tool? I already use Figma, Notion, Loom..."
+  - Alex: "It's not a separate tool - it's in VSCode chat and Figma plugin. You just talk to it."
+
+- **Trial (Week 2, Day 1)**: Opens VSCode (uses occasionally for design tokens review)
+  - Opens Claude Code chat
+  - Types: "I need to document why I chose tabs over accordion in the settings redesign"
+  - Claude Code: "I'll help you create a design artifact. What were the key factors in your decision?"
+  - Jordan: "Tabs allow faster navigation between sections, and our user testing showed 80% preferred tabs"
+  - Claude Code: "Got it. I've created design-042 and linked it to story-045 in Linear. Would you like me to connect this to your Figma file?"
+  - Jordan: "Yes, it's settings-redesign-v3"
+  - Claude Code: "Done. Added annotation to Figma file with design rationale."
+  - **First design rationale captured in 3-minute conversation**
+
+- **Figma Plugin (Week 2, Day 2)**: Working in Figma, notices new panel
+  - Selects frame with 3 mockup variations
+  - Right-clicks → "Annotate design decision"
+  - Plugin prompts: "Which design did you choose and why?"
+  - Jordan: "Design B - better visual hierarchy and tested better with users"
+  - Plugin: "I've detected 2 other variations in version history. Should I mark them as rejected options?"
+  - Jordan: "Yes"
+  - **Proactive capture of rejected designs - zero ceremony**
+
+- **Aha Moment (Week 3)**: Engineer Sam asks in Slack: "Why did you use tabs instead of accordion in settings?"
+  - Jordan opens Claude Code: "Show me the design rationale for settings tabs"
+  - Claude Code: "Here's design-042: [summarizes]. Would you like me to share with Sam?"
+  - Jordan: "Yes" → Link posted to Slack
+  - Sam: "This is so helpful! I almost implemented accordion because I thought it would save space."
+  - **Jordan's reaction: "I didn't have to remember or search Figma comments. Just asked."**
+
+- **Conversion (Week 4)**: Uses Claude Code chat for every design decision
+  - "Document why I chose color palette A over B"
+  - "Link this wireframe to the authentication hypothesis"
+  - "Export design-042 as portfolio case study" → Claude Code generates PDF with rationale
+
+- **Champion (Month 2)**: In design critique, uses Claude Code to show decision history
+  - "Show me all designs related to onboarding flow"
+  - Claude Code displays timeline with rationale for each iteration
+  - Junior designer: "This is amazing - I can see your thinking process!"
 
 **Success Metrics (Jordan's Perspective):**
 - Time spent explaining design decisions: -70%
@@ -1885,9 +2380,10 @@ Getting Designer AND PM adoption in first 30 days of team onboarding.
 - Portfolio case studies created: +300% (0 → 3 per quarter)
 
 **Critical Needs to Avoid Abandonment:**
-- **Figma-native experience**: Cannot leave Figma to document (must be plugin/integration)
+- **Dual interface (VSCode chat + Figma plugin)**: Conversational for complex rationale, plugin for quick annotations
+- **Proactive capture**: Tool detects deleted Figma frames, prompts to capture rejected options
 - **Visual annotation**: Screenshot + annotations, not text-heavy documentation
-- **5-minute learning curve**: No training videos required, intuitive UI
+- **Zero Figma context-switching**: Plugin works within Figma, chat accessible in VSCode
 - **Export to PDF/portfolio**: Design artifacts usable outside BMAD-Enhanced
 
 ---
@@ -1926,12 +2422,46 @@ Getting Designer AND PM adoption in first 30 days of team onboarding.
 - **2-minute code review context**: PR linked to story → Story linked to hypothesis → Full context instantly
 - **Onboarding acceleration**: New engineer reads artifact graph, understands codebase in 1 week (vs 3 weeks)
 
-**Adoption Journey:**
-- **Discovery (Week 1)**: PM introduces BMAD-Enhanced, Sam skeptical ("another tool?")
-- **Trial (Week 1)**: Installs VS Code extension, sees inline hypothesis preview
-- **Aha Moment (Week 2)**: Working on story, hovers over story ID → Sees hypothesis → Realizes PM wants MVP (not scalable solution) → Saves 2 days
-- **Daily Use (Week 3+)**: Every PR links to story artifact, code reviews faster
-- **Champion (Month 2)**: Onboards new engineer using artifact graph, engineer productive in 1 week
+**Adoption Journey (AI Chat + IDE Integration):**
+- **Discovery (Week 1, Day 1)**: PM Alex mentions BMAD-Enhanced in standup OR Sam discovers via GitHub README in team repo
+  - Alex: "I've been documenting our decisions in BMAD-Enhanced. You can see the context for any story in Claude Code."
+  - Sam (skeptical): "Another tool? I already juggle Linear, Slack, Notion, Figma..."
+  - Alex: "It's just Claude Code chat in VSCode. You already have it."
+
+- **Trial (Week 1, Day 2)**: Opens VSCode (already uses daily)
+  - Starts working on story-045 (authentication feature)
+  - Opens Claude Code chat
+  - Types: "Show me the context for story-045"
+  - Claude Code: "Story-045 (Add OAuth login) links to hypothesis-023: Users abandoning signup because password creation is friction. PM wants MVP OAuth (Google only), not full social login suite. Estimated effort: 2 days for MVP vs 5 days for full suite."
+  - Sam: "Perfect - I was about to build full OAuth suite with Google/GitHub/Apple. Saved 3 days."
+  - **First Aha Moment: Instant context prevents over-engineering**
+
+- **Exploration (Week 1, Day 3)**: Sam tries hover feature
+  - Hovers over `story-045` in code comment
+  - Inline preview shows hypothesis summary
+  - Clicks → Opens full artifact with design mockups linked
+  - **Second Aha Moment: "This is faster than searching Slack/Notion"**
+
+- **Missing Context Scenario (Week 1, Day 4)**: Working on story-038 (password reset)
+  - Hovers over story-038 → No hypothesis found
+  - Claude Code prompts: "Missing context for story-038. This story has no linked hypothesis."
+  - Sam asks PM directly: "Alex, can you add context for story-038 in BMAD-Enhanced?"
+  - Alex opens Claude Code, creates hypothesis, links to story-038
+  - Sam refreshes → Context now appears
+  - **Creates pull behavior: Sam pulls Alex into tool through direct communication**
+
+- **Daily Use (Week 2+)**: Natural workflow integration
+  - Before coding: "Show me context for story-X" in Claude Code chat
+  - During coding: Hover over story IDs for quick reference
+  - Code review: "Why did we choose approach X?" → Claude Code explains with hypothesis link
+  - Documentation: "Document technical decision for story-045" → Claude Code creates technical artifact
+
+- **Champion (Month 1)**: New junior engineer joins team
+  - Sam: "Read the artifact graph for our authentication system"
+  - Junior types in Claude Code: "Show me all artifacts related to authentication"
+  - Claude Code displays: hypothesis-023 → design-012 → story-045 → test-suite-008
+  - Junior: "I understand the full context now. This would've taken me a week to piece together."
+  - Sam: "You're productive in 1 week instead of 3. That's why we use it."
 
 **Success Metrics (Sam's Perspective):**
 - Time understanding product context: -75% (2 hours/week → 30 min/week)
@@ -1940,10 +2470,11 @@ Getting Designer AND PM adoption in first 30 days of team onboarding.
 - Code review efficiency: +40% (context instantly available)
 
 **Critical Needs to Avoid Abandonment:**
-- **VS Code integration**: Cannot leave IDE to read docs (must be inline)
+- **VS Code native**: Inline hover + Claude Code chat (never leave IDE)
+- **Conversational interface**: Natural language queries, zero command syntax
+- **Missing context fallback**: "Request context from PM" feature prevents empty tool experience
 - **Git workflow native**: Artifact IDs in commit messages, PRs auto-link to stories
-- **Zero ceremony**: No complex artifact creation, auto-generated from Linear/Jira stories
-- **CLI-first**: GUI nice-to-have, but CLI must be powerful and fast
+- **Fast performance**: Hover preview <500ms, chat response <2 seconds
 
 ---
 
@@ -1981,12 +2512,55 @@ Getting Designer AND PM adoption in first 30 days of team onboarding.
 - **Risk-based testing documentation**: Capture "why we prioritized testing feature A over B"
 - **Shift-left testing**: See hypothesis during story creation, write acceptance tests BEFORE implementation
 
-**Adoption Journey:**
-- **Discovery (Week 1)**: Attends sprint planning, PM demonstrates hypothesis → story → test traceability
-- **Trial (Week 2)**: Creates test artifact linked to story, marks coverage status
-- **Aha Moment (Week 3)**: PM asks "is hypothesis X tested?" → Taylor shares traceability graph → 30-second answer (vs 30-minute search)
-- **Daily Use (Week 4+)**: Reviews stories in backlog refinement, flags coverage gaps proactively
-- **Champion (Month 2)**: Presents coverage dashboard to leadership, demonstrates risk-based testing strategy
+**Adoption Journey (AI Chat + Manual Linking Alpha):**
+- **Discovery (Week 1, Sprint Planning)**: PM Alex demonstrates BMAD-Enhanced
+  - Alex shows hypothesis → story → design traceability graph in Claude Code chat
+  - Taylor: "Can I link tests to stories the same way?"
+  - Alex: "Yes - you can link test files to stories manually in alpha, then query instantly."
+
+- **Trial (Week 2, Day 1)**: Opens VSCode, Claude Code chat
+  - Types: "Link test file login.spec.ts to story-045"
+  - Claude Code: "I'll create a test artifact for login.spec.ts and link it to story-045 (Add OAuth login). What's the test coverage level?"
+  - Taylor: "90% - covers happy path and error cases, missing edge case for expired tokens"
+  - Claude Code: "Got it. Test artifact created with 90% coverage status and noted missing edge case."
+  - **First test linked in 1 minute - manual but fast**
+
+- **Instant Value (Week 2, Day 2)**: Types: "Show me all stories without test coverage"
+  - Claude Code: "Found 8 stories without linked tests:
+    - story-038 (Password reset) - no tests
+    - story-042 (User profile update) - no tests
+    - story-051 (Email notifications) - no tests
+    [5 more...]
+
+    Would you like me to create a coverage report?"
+  - Taylor: "Yes"
+  - Claude Code generates markdown report with coverage gaps
+  - **Coverage visibility in 30 seconds vs 30-minute manual search**
+
+- **Aha Moment (Week 3, Stakeholder Meeting)**: Leadership asks "Is our authentication system fully tested?"
+  - Taylor opens Claude Code: "Show me test coverage for all authentication-related stories"
+  - Claude Code: "Authentication system coverage:
+    - hypothesis-023 (OAuth login) → story-045 → test-suite-008 (✅ 90% coverage)
+    - story-038 (Password reset) → ❌ No tests linked
+    - story-051 (Session management) → test-suite-012 (✅ 85% coverage)
+
+    Overall: 2/3 stories tested (67% coverage)"
+  - Leadership: "What about password reset?"
+  - Taylor: "Not tested yet - I'll prioritize it this sprint."
+  - **30-second answer with full context vs "let me get back to you"**
+
+- **Daily Use (Week 4+)**: Natural workflow integration
+  - Before sprint: "Show coverage gaps for next sprint stories" → Proactive gap identification
+  - During testing: "Link test-checkout.spec.ts to story-055" → Fast manual linking
+  - Postmortem: "Show me which hypothesis led to story-042" → Root cause tracing
+
+- **Champion (Month 2)**: Presents to leadership
+  - Opens Claude Code: "Generate coverage dashboard for Q4 features"
+  - Claude Code displays visual graph with percentages
+  - Leadership: "This is impressive - can you show test strategy rationale?"
+  - Taylor: "Show me test artifacts with risk justifications"
+  - Claude Code lists artifacts with "why we prioritized testing X over Y" rationale
+  - **Demonstrates risk-based testing strategy with evidence**
 
 **Success Metrics (Taylor's Perspective):**
 - Time identifying test coverage: -90% (30 min → 3 min)
@@ -1995,10 +2569,11 @@ Getting Designer AND PM adoption in first 30 days of team onboarding.
 - QA onboarding time: -60% (2 weeks → 1 week via artifact graph)
 
 **Critical Needs to Avoid Abandonment:**
-- **TestRail replacement**: Coverage tracking built-in, no separate tool
-- **CI/CD integration**: Test artifacts auto-updated from test run results
-- **Visual coverage graph**: Non-technical stakeholders can understand test status
-- **Automated gap detection**: System flags stories without linked test artifacts
+- **Fast manual linking (Alpha)**: Conversational linking via Claude Code chat (acceptable ceremony for early adopters)
+- **Instant coverage queries**: "Show gaps" → 30-second results (no 30-minute manual search)
+- **Visual coverage graph**: Non-technical stakeholders can understand test status via Claude Code
+- **Phased automation**: Manual linking in alpha → Suggested linking in beta → Auto-linking in v2.0
+- **TestRail alternative**: Coverage tracking built-in (replaces separate tool, not adds to stack)
 
 ---
 
@@ -2029,28 +2604,32 @@ Getting Designer AND PM adoption in first 30 days of team onboarding.
 ### Adoption Failure Modes (What Kills Each Persona)
 
 **Alex (PM) Abandons If:**
-- ❌ Tool feels too technical (CLI intimidation)
+- ❌ Requires command syntax memorization (conversational interface solves this)
 - ❌ No Linear/Jira integration (separate workflow)
-- ❌ Setup takes >10 minutes
+- ❌ No instant value on Day 1 (Context Loss Report solves this)
+- ❌ Aha moment delayed to Week 2+ (must be Day 1-3)
 - ❌ No visual graph (text-only artifacts)
 
 **Jordan (Designer) Abandons If:**
-- ❌ Must leave Figma to document (context switching)
+- ❌ Must leave Figma to document (plugin + VSCode chat solves this)
 - ❌ Text-heavy interface (not visual)
+- ❌ Manual marking of rejected designs (proactive detection solves this)
 - ❌ Can't export to portfolio
 - ❌ Requires training videos to learn
 
 **Sam (Engineer) Abandons If:**
 - ❌ No VS Code integration (must leave IDE)
-- ❌ Artifact creation ceremony (too much overhead)
-- ❌ GUI-first (wants CLI power)
+- ❌ No conversational interface (command syntax barrier)
+- ❌ No fallback for missing context (request from PM feature solves this)
 - ❌ Slow performance (>2 seconds to load context)
+- ❌ High artifact creation ceremony
 
 **Taylor (QA) Abandons If:**
-- ❌ No CI/CD integration (manual test artifact updates)
-- ❌ No coverage dashboard (just traceability links)
+- ❌ High ceremony linking (conversational "link test to story" solves this for alpha)
+- ❌ Slow coverage queries (must be <30 seconds vs 30-minute manual search)
+- ❌ No coverage dashboard (just traceability links - needs visual graph)
 - ❌ Can't replace TestRail (adding tool, not replacing)
-- ❌ No automated gap detection
+- ❌ Manual linking stays manual forever (needs phased automation roadmap: manual → suggested → auto)
 
 ---
 
@@ -2170,11 +2749,22 @@ Getting Designer AND PM adoption in first 30 days of team onboarding.
 - [ ] Build `bmad workflow list` command
 - [ ] Punt on advanced alias features if timeline pressured (defer to Month 2-3)
 
+**Week 1-2 (Added - Validation First):**
+- [ ] **CRITICAL**: Research Claude Code integration options (custom MCP server vs tool use API)
+- [ ] **CRITICAL**: Build conversational prototype spike (throwaway, validates AI chat interface)
+- [ ] **CRITICAL**: Test prototype with 3-5 internal users → Measure: Do they prefer conversation vs traditional commands?
+- [ ] **GATE DECISION**: Only proceed with full MCP server if prototype validates positive user response
+
 **Week 4:**
 - [ ] Build module registry with lazy loading (ADR-004)
 - [ ] Define BaseArtifact interface and domain-specific extensions
 - [ ] Implement artifact state detection parser
-- [ ] Build artifact commands (`bmad artifact promote/demote/validate`)
+- [ ] **CONDITIONAL**: Build Claude Code integration (ONLY if Week 1-2 prototype validated)
+  - [ ] Conversational artifact creation with guided prompts
+  - [ ] Natural language query engine ("Show all X related to Y")
+  - [ ] Traceability graph generation from chat interface
+  - [ ] **DEFERRED**: Context Loss Report (P1 feature, requires API integration validation)
+- [ ] Build artifact commands (conversational + programmatic)
 - [ ] Build contract migration tooling (`bmad contract migrate`, `bmad contract check`) - ADR-006
 - [ ] Build contract version adapters for modules (v1.0 → v2.0 adapters) - ADR-006
 - [ ] Create module.yaml declarations with contract version dependencies - ADR-006
@@ -2183,7 +2773,12 @@ Getting Designer AND PM adoption in first 30 days of team onboarding.
 
 **Success Metrics:**
 - ✅ All 4 frameworks (BMAD, DesignOS, AgentOS, Quint) load without conflicts
-- ✅ Agents callable via CLI with correct namespace resolution
+- ✅ **Claude Code integration options researched (decision: custom MCP vs tool use API)** - ADR-003
+- ✅ **Conversational prototype validated (3-5 users prefer AI chat over traditional commands)** - ADR-003
+- ✅ **CONDITIONAL**: Claude Code integration functional (ONLY if prototype validated) - ADR-003
+- ✅ **Natural language queries working ("Show me hypotheses related to X")** - ADR-003
+- ✅ Agents callable via conversational interface with correct namespace resolution
+- ❌ **DEFERRED**: Context Loss Report (downgraded to P1 post-alpha feature)
 - ✅ Module-first command invocation working (explicit prefix, aliases, interactive fallback)
 - ✅ Workflow catalog populated with aliases
 - ✅ Artifact architecture implemented (three-state lifecycle working)
