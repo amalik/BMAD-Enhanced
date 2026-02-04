@@ -9,10 +9,10 @@
 
 | Framework | Primary Role | Maturity | Integration Status | Key Differentiation |
 |-----------|--------------|----------|-------------------|---------------------|
-| **BMAD Method** | Development Lifecycle Management | ✅ Mature (v6.0.0-Beta.4) | Currently Installed | Named agents with personalities, 41 workflows, 4-phase lifecycle |
-| **Quint** | Discovery & Reasoning Engine | ✅ Mature (Active development) | Cloned locally | FPF methodology, ADI cycle, hypothesis validation with evidence decay |
-| **DesignOS** | Design Rationale Preservation | 🟡 Planned (v1.5.0 spec) | Not yet implemented | Design decision records, Figma integration, hypothesis-driven design |
-| **AgentOS** | Quality & Orchestration Layer | 🟡 Conceptual (v2.1.0 spec) | Not yet implemented | Meta-framework for multi-agent coordination, quality gates, standards enforcement |
+| **BMAD Method** | Development Lifecycle Management | ✅ Mature (v6.0.0) | Currently Installed | Named agents with personalities, 41 workflows, 4-phase lifecycle |
+| **Quint** | Discovery & Reasoning Engine | ✅ Mature (v1.0.0) | Cloned locally | FPF methodology, ADI cycle, hypothesis validation with evidence decay |
+| **DesignOS** | Design Rationale Preservation | 🟡 Planned (v1.5.0) | Not yet implemented | Design decision records, Figma integration, hypothesis-driven design |
+| **AgentOS** | Quality & Orchestration Layer | 🟡 Conceptual (v2.1.0) | Not yet implemented | Meta-framework for multi-agent coordination, quality gates, standards enforcement |
 
 ---
 

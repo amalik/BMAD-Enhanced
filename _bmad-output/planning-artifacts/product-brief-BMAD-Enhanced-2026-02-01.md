@@ -2067,6 +2067,13 @@ This product brief adopts a **validation mindset** over a **building mindset**:
 
 ---
 
+**⚠️ Phase Numbering Note:**
+This document uses **Product Phases 0-3+** (validation → alpha → beta → product strategy). The Integration Roadmap uses **Implementation Phases 1-5** (technical integration milestones). These are complementary but distinct:
+- **Product Phases (this doc):** Focus on validation and go-to-market strategy
+- **Implementation Phases (integration-roadmap):** Focus on technical integration work
+
+---
+
 **Phase 0: Framework Merge & Validation (Private, Month 1-2 + 2-week buffer)**
 
 **Goal:** Prove end-to-end integration works BEFORE building user-facing features.
