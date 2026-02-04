@@ -728,26 +728,51 @@ cross_domain_refs: 3
 ---
 ```
 
-**BaseArtifact Interface (Minimal Contract):**
+**BaseArtifact Interface v2.0.0 (Minimal Contract):**
 ```typescript
 interface BaseArtifact {
-  id: string                    // UUID
-  type: ArtifactType           // 'story' | 'design' | 'test' | 'hypothesis'
+  // Identity
+  id: string                           // UUID or semantic ID
+  type: ArtifactType                   // 'bmad:story' | 'quint:hypothesis' | etc.
+  contract_version: string             // BaseArtifact version (e.g., "2.0.0")
+
+  // Timestamps
   created_date: ISO8601String
   updated_date: ISO8601String
-  traces: TraceMap             // Cross-domain traceability
-  metadata: {
-    module: string             // 'bmad' | 'designos' | 'agentos' | 'quint'
-    version: string            // Artifact schema version
+
+  // Traceability
+  traces: {
+    parent?: string                    // Parent artifact ID (single)
+    children?: string[]                // Child artifact IDs
+    related?: string[]                 // Related artifact IDs
+    validates?: string[]               // Artifacts this validates
+    validated_by?: string[]            // Artifacts that validate this
   }
+
+  // Module Metadata
+  metadata: {
+    module: string                     // 'bmad' | 'quint' | 'designos' | 'agentos'
+    module_version: string             // Module version (e.g., "6.0.0")
+    schema_version: string             // Module-specific schema version
+    created_by?: string                // Agent/persona name
+    tags?: string[]                    // Searchable tags
+  }
+
+  // Namespace Isolation (module-specific data)
+  bmm_data?: object                    // BMAD Method data
+  quint_data?: object                  // Quint FPF data
+  designos_data?: object               // DesignOS data
+  agentos_data?: object                // AgentOS data
 }
 ```
 
-**Domain Extensions (Additive, Never Subtractive):**
-- StoryArtifact extends BaseArtifact (adds: tasks[], acceptance_criteria[], priority)
-- DesignArtifact extends BaseArtifact (adds: figma_link, components[], design_tokens)
-- TestArtifact extends BaseArtifact (adds: test_cases[], coverage_metrics, assertions)
-- HypothesisArtifact extends BaseArtifact (adds: evidence[], confidence_score, validation_status)
+**Domain Extensions (Additive via Namespaces):**
+- BMAD Story: Uses `bmm_data` (adds: priority, story_points, status, sprint)
+- Quint Hypothesis: Uses `quint_data` (adds: layer, cached_r_score, evidence_scores)
+- DesignOS Design: Uses `designos_data` (adds: figma_link, design_system, components_used)
+- AgentOS Gate: Uses `agentos_data` (adds: gate_decision, gate_type, concerns)
+
+**Implementation Reference:** See [BaseArtifact Contract Specification v2.0.0](./baseartifact-contract-spec.md) for complete schema, versioning rules, traceability implementation, and examples.
 
 **Auto-Detection Rules:**
 - Parser scans artifact for external references (design-*, test-*, hypothesis-*)
@@ -815,17 +840,43 @@ Traceability alone isn't enough - you need to verify artifacts stay ALIGNED with
 3. **Graceful degradation**: Works without index, index improves UX
 4. **Audit trail**: Teams can enable event log for compliance needs
 
-**Example Frontmatter:**
+**Example Frontmatter (v2.0.0):**
 ```yaml
 ---
+id: "bmad-story-checkout-optimization-001"
+type: "bmad:story"
+contract_version: "2.0.0"
+created_date: "2026-02-04T10:15:30.000Z"
+updated_date: "2026-02-04T14:32:15.234Z"
+
 traces:
-  hypothesis: _bmad-output/hypotheses/h-001-express-checkout.md
-  design: _bmad-output/design/wireframes/checkout-flow.md
-  tests:
-    - tests/e2e/checkout.spec.ts
-    - tests/unit/payment-service.test.ts
+  parent: "quint-hypothesis-l2-checkout-abandonment"
+  children:
+    - "bmad-test-checkout-steps"
+  related:
+    - "designos-design-spec-checkout-wireframe"
+  validated_by:
+    - "agentos-quality-gate-story-ready-001"
+
+metadata:
+  module: "bmad"
+  module_version: "6.0.0"
+  schema_version: "1.0.0"
+  created_by: "Bob (SM)"
+  tags: ["checkout", "ux-improvement", "sprint-12"]
+
+bmm_data:
+  priority: "high"
+  story_points: 8
+  status: "in_progress"
+
+quint_data:
+  layer: "L2"
+  cached_r_score: 92
 ---
 ```
+
+**Note:** Traces use artifact IDs (not file paths) for rename-safe traceability. The trace index (`.bmad/trace-index.json`) maps IDs to file paths.
 
 ---
 
@@ -1107,18 +1158,34 @@ interface StoryArtifact extends BaseArtifact {
 **Semantic Versioning for BaseArtifact Contract:**
 
 ```typescript
-// Version-aware BaseArtifact with migration support
+// Version-aware BaseArtifact v2.0.0 with migration support
 interface BaseArtifact {
+  // Identity
   id: string
   type: ArtifactType
+  contract_version: string         // BaseArtifact contract version (e.g., "2.0.0") - TOP LEVEL
+
+  // Timestamps
   created_date: ISO8601String
   updated_date: ISO8601String
+
+  // Traceability
   traces: TraceMap
+
+  // Module Metadata
   metadata: {
-    module: string
-    version: string              // Artifact schema version
-    contract_version: string     // BaseArtifact contract version (e.g., "1.2.0")
+    module: string                 // 'bmad' | 'quint' | 'designos' | 'agentos'
+    module_version: string         // Module version (e.g., "6.0.0")
+    schema_version: string         // Module-specific artifact schema version
+    created_by?: string
+    tags?: string[]
   }
+
+  // Namespace isolation
+  bmm_data?: object
+  quint_data?: object
+  designos_data?: object
+  agentos_data?: object
 }
 
 // Semantic versioning for contracts
@@ -1128,6 +1195,8 @@ interface ContractVersion {
   patch: number  // Bug fixes (no schema changes)
 }
 ```
+
+**Key Change:** `contract_version` is now a **top-level field** (not nested in metadata) for quick version detection during parsing.
 
 **Version Change Policies:**
 
