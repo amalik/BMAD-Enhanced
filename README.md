@@ -63,7 +63,12 @@ bmad init
 
 # Install git hooks (optional but recommended)
 bmad init --install-hooks
+
+# (Optional) Clone Quint framework for local analysis
+git clone https://github.com/m0n0x41d/quint-code _quint
 ```
+
+**Note:** `_quint/` is excluded from version control (analysis only).
 
 ### Your First Workflow
 
