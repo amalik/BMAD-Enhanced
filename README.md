@@ -155,6 +155,7 @@ Automated quality enforcement before each deployment milestone
 7. **[Technical Deep-Dive Analysis](_bmad-output/planning-artifacts/technical-deep-dive-analysis.md)** - 50K+ word comprehensive technical analysis
 8. **[Architectural Comparison: Quint-First vs BMAD-First](_bmad-output/planning-artifacts/architectural-comparison-quint-vs-bmad-first.md)** - Options 1 & 2 detailed analysis
 9. **[Greenfield Architecture Analysis](_bmad-output/planning-artifacts/greenfield-architecture-analysis.md)** - Option 3 evaluation and 3-way comparison
+10. **[Architecture Decision Record (ADR)](_bmad-output/planning-artifacts/architectural-decision-record.md)** - Official decision: BMAD-First Architecture
 
 ---
 
