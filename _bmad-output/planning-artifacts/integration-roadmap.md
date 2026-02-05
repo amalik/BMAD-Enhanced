@@ -21,6 +21,14 @@ This document uses **Implementation Phases 1-5** (technical integration roadmap)
 - **Implementation Phases (this doc):** Focus on technical integration milestones
 - **Product Phases (product-brief):** Focus on validation and go-to-market strategy
 
+**🏗️ Architectural Approach:**
+After comprehensive analysis of 3 integration options (Quint-First, BMAD-First, Greenfield), this roadmap implements **BMAD-First Architecture** (scored 8.55/10):
+- **Core:** BMAD Method's markdown-based workflow engine with 41 existing workflows
+- **Quint Integration:** Bidirectional sync adapter (2,700 LOC) connecting Quint's SQLite database to markdown artifacts
+- **Why BMAD-First:** 100% code reuse, fastest time-to-value (POC Week 3), lowest risk, proven production systems
+- **Comparison:** Scored higher than Quint-First (5.15/10) and Greenfield (7.85/10) on feasibility, effort, and risk
+- **See:** [architectural-comparison-quint-vs-bmad-first.md](architectural-comparison-quint-vs-bmad-first.md) and [greenfield-architecture-analysis.md](greenfield-architecture-analysis.md) for full analysis
+
 ---
 
 ## Roadmap Overview
@@ -382,12 +390,16 @@ describe('BaseArtifact v2.0.0 Compliance', () => {
 
 ---
 
-## Phase 2: Quint ↔ BMAD Integration
+## Phase 2: Quint ↔ BMAD Integration (BMAD-First Architecture)
 
 **Duration:** 6 weeks (Weeks 5-10)
-**Goal:** Create bidirectional integration between Quint FPF and BMAD Method
+**Goal:** Create bidirectional sync adapter connecting Quint's SQLite database to BMAD's markdown artifacts
 **Dependencies:** Phase 1 complete
 **Team:** 2-3 engineers + Quint module expert
+**Architecture:** BMAD-First with 2,700 LOC bidirectional sync adapter
+
+**🎯 Phase 2 Core Strategy:**
+This phase implements the bidirectional sync adapter that enables Quint (SQLite-based) and BMAD (markdown-based) to operate as a unified system. Quint's 12 slash commands (q0-init through q5-decide) will read/write to SQLite, and the adapter ensures real-time synchronization with markdown artifacts for version control, collaboration, and BMAD workflow integration.
 
 ### Week 5-6: Quint Integration Foundation
 
@@ -431,7 +443,71 @@ quint_data:
 ---
 ```
 
-#### Task 2.2: Implement Quint DRR → BMAD Story Workflow
+#### Task 2.2: Build Bidirectional Sync Adapter (Quint SQLite ↔ BMAD Markdown)
+- **Owner:** Backend Engineer
+- **Effort:** 8 days (Core component of BMAD-First architecture)
+- **Deliverable:** `@bmad/quint-sync-adapter` package (2,700 LOC)
+- **Acceptance Criteria:**
+  - [ ] Real-time sync: SQLite changes → Markdown (write-through)
+  - [ ] Real-time sync: Markdown changes → SQLite (file watcher)
+  - [ ] Bidirectional conflict resolution (last-write-wins with warnings)
+  - [ ] Performance: Sync latency <200ms (p95)
+  - [ ] Atomic transactions (SQLite + Git commit)
+  - [ ] Error handling with rollback
+  - [ ] 150+ unit tests, 20+ integration tests
+
+**Sync Adapter Architecture:**
+```typescript
+// Core sync adapter interface
+interface QuintSyncAdapter {
+  // SQLite → Markdown (write-through on Quint commands)
+  syncToMarkdown(quintArtifact: QuintArtifact): Promise<MarkdownFile>;
+
+  // Markdown → SQLite (triggered by file watcher)
+  syncToSQLite(markdownPath: string): Promise<QuintArtifact>;
+
+  // Bidirectional conflict detection
+  detectConflicts(quintData: any, markdownData: any): Conflict[];
+
+  // Reconciliation strategy
+  reconcile(conflict: Conflict, strategy: 'quint-wins' | 'markdown-wins'): void;
+}
+
+// File watcher integration
+const watcher = chokidar.watch('_quint/**/*.md');
+watcher.on('change', async (path) => {
+  await adapter.syncToSQLite(path);
+});
+
+// Git integration
+async function commitSync(files: string[], message: string) {
+  await git.add(files);
+  await git.commit(message);
+}
+```
+
+**Sync Flow Example:**
+```bash
+# User runs Quint command (SQLite write)
+/q1-add "Users abandon checkout"
+
+# Adapter intercepts SQLite write
+→ SQLite: INSERT INTO holons (id, layer, ...) VALUES (...)
+→ Adapter: Detect new holon
+→ Markdown: Create _quint/hypotheses/hypothesis-001.md
+→ Git: git add _quint/hypotheses/hypothesis-001.md
+→ Git: git commit -m "Add hypothesis: Users abandon checkout"
+
+# User edits markdown file
+vim _quint/hypotheses/hypothesis-001.md
+
+# File watcher detects change
+→ Adapter: Read markdown YAML frontmatter
+→ SQLite: UPDATE holons SET ... WHERE id = 'hypothesis-001'
+→ Adapter: Verify bidirectional consistency
+```
+
+#### Task 2.3: Implement Quint DRR → BMAD Story Workflow
 - **Owner:** Workflow Engineer
 - **Effort:** 5 days
 - **Deliverable:** `bmad-create-story-from-drr` workflow
@@ -478,7 +554,7 @@ Would you like to:
 [C]ancel
 ```
 
-#### Task 2.3: Add Quint DRR Reference to BMAD Architecture Artifacts
+#### Task 2.4: Add Quint DRR Reference to BMAD Architecture Artifacts
 - **Owner:** Backend Engineer
 - **Effort:** 2 days
 - **Deliverable:** Enhanced BMAD architecture schema
@@ -507,7 +583,7 @@ quint_data:
 ---
 ```
 
-#### Task 2.4: Implement Quint `/q-actualize` Integration
+#### Task 2.5: Implement Quint `/q-actualize` Integration
 - **Owner:** Quint Module Expert
 - **Effort:** 4 days
 - **Deliverable:** Enhanced `/q-actualize` command
@@ -545,7 +621,7 @@ Would you like to:
 
 ### Week 7-8: Bidirectional Linking
 
-#### Task 2.5: Implement `/align` Command (Quint ↔ BMAD)
+#### Task 2.6: Implement `/align` Command (Quint ↔ BMAD)
 - **Owner:** Backend Engineer
 - **Effort:** 5 days
 - **Deliverable:** Content alignment validation (see align-command-prototype.md)
@@ -558,7 +634,7 @@ Would you like to:
 
 **See:** [align-command-prototype.md](./align-command-prototype.md) for full specification
 
-#### Task 2.6: Create Quint → BMAD Traceability Index
+#### Task 2.7: Create Quint → BMAD Traceability Index
 - **Owner:** Backend Engineer
 - **Effort:** 3 days
 - **Deliverable:** Cross-module trace index
@@ -601,7 +677,7 @@ Would you like to:
 }
 ```
 
-#### Task 2.7: Implement `bmad trace` Query Commands
+#### Task 2.8: Implement `bmad trace` Query Commands
 - **Owner:** CLI Engineer
 - **Effort:** 4 days
 - **Deliverable:** Traceability query CLI
@@ -630,7 +706,7 @@ bmad trace --id bmad-story-checkout-001 --graph
 → [See align-command-prototype.md for example output]
 ```
 
-#### Task 2.8: Add Git Hooks for Trace Index Updates
+#### Task 2.9: Add Git Hooks for Trace Index Updates
 - **Owner:** DevOps Engineer
 - **Effort:** 2 days
 - **Deliverable:** Git hooks for automatic index generation
@@ -658,7 +734,7 @@ Configuration:
 
 ### Week 9-10: Testing & Validation
 
-#### Task 2.9: Write Level 2 Reference Integrity Tests
+#### Task 2.10: Write Level 2 Reference Integrity Tests
 - **Owner:** QA Engineer
 - **Effort:** 4 days
 - **Deliverable:** Reference validation test suite (30+ tests)
@@ -690,7 +766,7 @@ describe('Quint ↔ BMAD Trace Integrity', () => {
 });
 ```
 
-#### Task 2.10: Create End-to-End Integration Test
+#### Task 2.11: Create End-to-End Integration Test
 - **Owner:** QA Engineer
 - **Effort:** 3 days
 - **Deliverable:** Full lifecycle test (Quint → BMAD)
@@ -738,7 +814,7 @@ describe('Full Quint → BMAD Lifecycle', () => {
 });
 ```
 
-#### Task 2.11: Performance Benchmarking
+#### Task 2.12: Performance Benchmarking
 - **Owner:** Performance Engineer
 - **Effort:** 2 days
 - **Deliverable:** Performance report
@@ -749,7 +825,7 @@ describe('Full Quint → BMAD Lifecycle', () => {
   - [ ] Memory usage: <500MB for full index
   - [ ] Benchmark report with graphs
 
-#### Task 2.12: User Acceptance Testing (Quint → BMAD)
+#### Task 2.13: User Acceptance Testing (Quint → BMAD)
 - **Owner:** Product Manager
 - **Effort:** 3 days
 - **Deliverable:** UAT report with feedback
@@ -760,7 +836,7 @@ describe('Full Quint → BMAD Lifecycle', () => {
   - [ ] Collect usability feedback
   - [ ] NPS score ≥7
 
-#### Task 2.13: Phase 2 Documentation
+#### Task 2.14: Phase 2 Documentation
 - **Owner:** Technical Writer
 - **Effort:** 3 days
 - **Deliverable:** User guides and tutorials
@@ -771,7 +847,7 @@ describe('Full Quint → BMAD Lifecycle', () => {
   - [ ] Video walkthrough (10 minutes)
   - [ ] FAQ document
 
-#### Task 2.14: Phase 2 Review & Sign-Off
+#### Task 2.15: Phase 2 Review & Sign-Off
 - **Owner:** Product Manager
 - **Effort:** 1 day
 - **Deliverable:** Phase completion report

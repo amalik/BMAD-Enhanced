@@ -95,6 +95,20 @@ bmad dev-story story-001
 
 ## 🏗️ Architecture
 
+### Integration Approach: BMAD-First
+
+After evaluating 3 architectural options (Quint-First, BMAD-First, Greenfield), we selected **BMAD-First Architecture** (scored 8.55/10):
+
+**Core Strategy:**
+- **Foundation:** BMAD Method's markdown-based workflow engine (41 workflows, 22 AI agents)
+- **Quint Integration:** 2,700 LOC bidirectional sync adapter connecting Quint's SQLite database to markdown artifacts
+- **Best of both worlds:** Quint's FPF reasoning + BMAD's Git-friendly collaboration
+
+**Why BMAD-First:**
+- Fastest delivery: POC Week 3, launch Week 16
+- 100% code reuse (both systems production-tested)
+- Lowest risk with phased rollout
+
 ### Four Integrated Frameworks
 
 | Framework | Purpose | Status | Key Features |
@@ -135,6 +149,12 @@ Automated quality enforcement before each deployment milestone
 4. **[BaseArtifact Contract](_bmad-output/planning-artifacts/baseartifact-contract-spec.md)** - Technical foundation
 5. **[`/align` Command](_bmad-output/planning-artifacts/align-command-prototype.md)** - Alignment validation
 6. **[Integration Roadmap](_bmad-output/planning-artifacts/integration-roadmap.md)** - 24-week implementation plan
+
+### Architecture Decision Documents
+
+7. **[Technical Deep-Dive Analysis](_bmad-output/planning-artifacts/technical-deep-dive-analysis.md)** - 50K+ word comprehensive technical analysis
+8. **[Architectural Comparison: Quint-First vs BMAD-First](_bmad-output/planning-artifacts/architectural-comparison-quint-vs-bmad-first.md)** - Options 1 & 2 detailed analysis
+9. **[Greenfield Architecture Analysis](_bmad-output/planning-artifacts/greenfield-architecture-analysis.md)** - Option 3 evaluation and 3-way comparison
 
 ---
 

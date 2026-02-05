@@ -66,6 +66,22 @@ Result: Every line of code traces back to validated user need
 | **BMAD Method** | Development Lifecycle | • 22 AI agents<br>• 41 workflows<br>• Complete SDLC | ✅ Mature v6.0 |
 | **AgentOS** | Quality Orchestration | • Quality gates<br>• Standards enforcement<br>• Multi-agent coordination | 🟡 Planned |
 
+### Integration Approach: BMAD-First Architecture
+
+**Selected Architecture:** After comprehensive analysis of 3 options (Quint-First, BMAD-First, Greenfield), we chose **BMAD-First** (scored 8.55/10):
+
+**Core Strategy:**
+- **Foundation:** BMAD Method's proven markdown-based workflow engine (41 workflows, 22 agents)
+- **Quint Integration:** 2,700 LOC bidirectional sync adapter (SQLite ↔ Markdown)
+- **Real-time synchronization:** Quint commands write to SQLite → adapter syncs to markdown for Git version control
+- **Best of both worlds:** Quint's powerful FPF reasoning + BMAD's collaboration-friendly markdown
+
+**Why BMAD-First Wins:**
+- ✅ **Fastest delivery:** POC at Week 3, full launch at Week 16 (vs 24-30 weeks Quint-First, 48+ weeks Greenfield)
+- ✅ **Lowest risk:** 100% code reuse, both systems production-tested
+- ✅ **Best ROI:** 80% of Greenfield benefits at 33% of cost
+- ✅ **Phased value:** Incremental releases, can pause/pivot at any phase
+
 ### Integration Layer: BaseArtifact Contract v2.0.0
 
 ```yaml
@@ -83,13 +99,13 @@ metadata:
 
 # Module-specific data (namespace isolation)
 bmm_data: { ... }      # BMAD Method fields
-quint_data: { ... }    # Quint FPF fields
+quint_data: { ... }    # Quint FPF fields (synced from SQLite)
 designos_data: { ... } # DesignOS fields
 agentos_data: { ... }  # AgentOS fields
 ---
 ```
 
-**Key Innovation:** Namespace isolation prevents conflicts while enabling seamless cross-framework traceability.
+**Key Innovation:** Namespace isolation prevents conflicts while enabling seamless cross-framework traceability. Quint data flows bidirectionally: SQLite (Quint native) ↔ Markdown (Git-friendly).
 
 ---
 
