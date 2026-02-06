@@ -28,9 +28,58 @@ Each framework has different technical foundations:
 ### Core Strategy
 
 - **Foundation:** BMAD Method's proven markdown-based workflow engine
-- **Quint Integration:** 2,700 LOC bidirectional sync adapter connecting Quint's SQLite to markdown artifacts
-- **DesignOS/AgentOS:** Native markdown modules following BMAD workflow patterns
-- **Synchronization:** Real-time bidirectional sync (Quint SQLite ↔ Markdown, ~200ms latency)
+- **Quint Integration:** 3,100 LOC sync adapter connecting Quint's SQLite to markdown artifacts
+- **DesignOS/AgentOS:** Native markdown modules following BMAD workflow patterns (Capabilities + Steps)
+- **Synchronization:** BMAD Markdown as master → Quint SQLite cache (~200ms latency)
+- **Orchestration:** Capabilities + Steps pattern with convention-based discovery
+- **LLM-Agnostic:** Core uses "capabilities" (portable), Claude integration exposes as "skills" (slash commands)
+
+### Framework Integration Pattern (Refined 2026-02-05)
+
+**Design Constraint:** All agents use BMAD Method architecture. Quint/DesignOS/AgentOS are capability providers.
+
+**LLM-Agnostic Architecture:** Core capabilities work with any LLM or tool. Claude integration provides optimal UX via slash commands.
+
+**File Structure:**
+```
+_bmad-enhanced/
+├── _quint/
+│   ├── capabilities/           # LLM-agnostic workflows
+│   │   ├── hypothesize.md      # Core capability
+│   │   └── validate.md         # Core capability
+│   └── steps/                  # Implementation details
+│       └── hypothesize-step-01.md
+├── _designos/
+│   ├── capabilities/
+│   │   ├── empathy-map.md      # Core capability
+│   │   └── journey-map.md      # Core capability
+│   └── steps/
+│       └── empathy-map-step-01.md
+├── _agentos/
+│   ├── capabilities/
+│   │   └── quality-gate.md     # Core capability
+│   └── steps/
+│       └── quality-gate-step-01.md
+└── .integrations/              # LLM-specific adapters
+    ├── claude/                 # Claude Code integration
+    │   └── skills/             # Slash commands
+    │       ├── quint-hypothesize.md     # /quint-hypothesize → loads capability
+    │       └── designos-empathy-map.md  # /designos-empathy-map → loads capability
+    └── api/                    # REST API (non-LLM access)
+        └── endpoints.ts
+```
+
+**How It Works:**
+1. **Claude Users:** Type `/quint-hypothesize` → Claude loads capability → Executes workflow
+2. **Other LLMs:** Directly load capability file from `_quint/capabilities/hypothesize.md`
+3. **Non-LLM Tools:** Call REST API endpoint: `POST /api/quint/hypothesize`
+4. Capabilities load framework steps: `load {quint}/steps/step-01.md`
+5. Steps execute framework logic (Quint: sync to SQLite, DesignOS: generate markdown)
+6. Results return to BMAD workflow
+
+**State Management:** BMAD Markdown is source of truth, Quint SQLite is performance cache for FPF queries
+
+**Portability:** Core architecture is LLM-agnostic. Claude integration is one adapter among many (Cursor, Copilot, API, CLI future options).
 
 ### Architecture Diagram
 
@@ -385,6 +434,14 @@ Each framework has different technical foundations:
 5. **[BaseArtifact Contract v2.0.0](_bmad-output/planning-artifacts/baseartifact-contract-spec.md)** - Technical foundation specification
 6. **[Product Brief](_bmad-output/planning-artifacts/product-brief-BMAD-Enhanced-2026-02-01.md)** - Complete product vision with ADRs
 
+### Orchestration Pattern Analysis (2026-02-05)
+
+7. **[Brainstorming Session Results](_bmad-output/brainstorming/brainstorming-session-2026-02-05.md)** - Phase 0 POC orchestration pattern exploration
+8. **[Orchestration Patterns Catalog](_bmad-output/brainstorming/orchestration-patterns-catalog.md)** - Complete reference of 100 patterns across 15 families
+9. **[Architectural Decision Framework](_bmad-output/brainstorming/architectural-decision-framework.md)** - 7 foundational dimensions for orchestration decisions
+10. **[Alignment Summary](_bmad-output/brainstorming/alignment-summary.md)** - How pattern analysis refines and validates BMAD-First Architecture
+11. **[LLM-Agnostic Architecture](_bmad-output/brainstorming/llm-agnostic-architecture.md)** - How BMAD-Enhanced remains LLM-agnostic while optimizing for Claude
+
 ---
 
 ## Approval
@@ -402,6 +459,8 @@ Each framework has different technical foundations:
 | Version | Date | Author | Changes |
 |---------|------|--------|---------|
 | 1.0.0 | 2026-02-05 | BMAD-Enhanced Team | Initial ADR - selected BMAD-First architecture after 3-option analysis |
+| 1.1.0 | 2026-02-05 | BMAD-Enhanced Team | Refined with orchestration patterns analysis (100 patterns evaluated), added Skills+Steps integration model, clarified markdown-as-master state management, updated LOC estimate to 3,100 |
+| 1.2.0 | 2026-02-05 | BMAD-Enhanced Team | Made architecture LLM-agnostic: renamed Skills→Capabilities (core), Claude integration exposes capabilities as skills (slash commands), added .integrations/ layer for multi-LLM support |
 
 ---
 
