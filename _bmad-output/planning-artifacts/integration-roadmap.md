@@ -1,8 +1,8 @@
 # BMAD-Enhanced: 6-Phase Integration Roadmap
 
-**Version:** 2.0.0
+**Version:** 3.0.0
 **Status:** Planning Phase
-**Date:** 2026-02-06
+**Date:** 2026-02-07 (Phase 0 Pivot: Agent Enhancement)
 **Owner:** BMAD-Enhanced Core Team
 **Timeline:** 27 weeks (6.75 months)
 
@@ -22,14 +22,15 @@ This document uses **Implementation Phases 0-5** (technical integration roadmap)
 - **Product Phases (product-brief):** Focus on validation and go-to-market strategy
 
 **🏗️ Architectural Approach:**
-After comprehensive analysis of 3 integration options (Quint-First, BMAD-First, Greenfield), this roadmap implements **BMAD-First Architecture** (scored 8.55/10):
-- **Core:** BMAD Method's markdown-based workflow engine with 41 existing workflows
-- **Phase 0 Focus:** Pure markdown orchestration (DesignOS + AgentOS) - validate Capabilities + Steps pattern
-- **Quint Integration (Phase 2):** Sync adapter (500 LOC) connecting Quint's SQLite to markdown artifacts
-- **Why BMAD-First:** 100% code reuse, fastest time-to-value (POC Week 3), lowest risk, proven production systems
-- **Why Phase 0:** Validates orchestration before database sync complexity (reduces risk)
-- **Comparison:** Scored higher than Quint-First (5.15/10) and Greenfield (7.85/10) on feasibility, effort, and risk
-- **See:** [architectural-decision-record.md](architectural-decision-record.md) v1.3.0 for Phase 0 scope refinement details
+After comprehensive analysis of 3 integration options (Quint-First, BMAD-First, Greenfield), this roadmap implements **BMAD-First Architecture with Agent Enhancement** (ADR v1.4.0):
+- **Core:** BMAD Method's markdown-based workflow engine with 41 existing workflows + 21 agents in production
+- **Phase 0 Focus (PIVOTED 2026-02-07):** Agent Enhancement (4 new agents inspired by DesignOS/AgentOS)
+- **Critical Discovery:** DesignOS is TypeScript web app, AgentOS is CLI tool (not markdown workflows as assumed)
+- **Pivot Rationale:** BMAD already provides 80%+ of DesignOS/AgentOS functionality via existing agents (CIS Design Thinking, TEA Test Architect)
+- **Agent Approach:** Leverage proven BMAD agent architecture (21 agents) instead of building custom orchestration engine
+- **LOC Reduction:** 500 LOC (agent enhancement) vs 1,800 LOC (custom orchestration) = 72% reduction
+- **Quint Integration (Phase 2):** Sync adapter (500 LOC) connecting Quint's SQLite to markdown artifacts (UNCHANGED)
+- **See:** [architectural-decision-record.md](architectural-decision-record.md) v1.4.0 for Phase 0 pivot details
 
 ---
 
@@ -67,235 +68,291 @@ Week 1-3     Month 1-2          Month 3-4          Month 5           Month 6-7
 
 ---
 
-## Phase 0: POC - Pure Markdown Orchestration
+## Phase 0: POC - Agent Enhancement (PIVOTED 2026-02-07)
 
 **Duration:** 3 weeks (Weeks 1-3)
-**Goal:** Validate core orchestration pattern (Capabilities + Steps) using pure markdown workflows
+**Goal:** Enhance BMAD with 4 new design and quality agents inspired by DesignOS/AgentOS capabilities
 **Dependencies:** None (foundational validation phase)
 **Team:** 1-2 engineers
-**Decision Gate:** End of Week 3 - Proceed to Phase 1 or pivot orchestration approach
+**Decision Gate:** End of Week 3 - Evaluate agent approach viability (4 options: proceed to Phase 1, enhance agents, pivot to custom orchestration, or hybrid)
 
 ### Overview
 
-Phase 0 validates the BMAD-First orchestration architecture before investing in complex database sync logic. This phase proves that BMAD can orchestrate multiple frameworks (DesignOS, AgentOS) using the Capabilities + Steps pattern with convention-based discovery.
+**MAJOR PIVOT (2026-02-07):** Deep-dive analysis revealed DesignOS and AgentOS are NOT markdown workflow systems:
+- **DesignOS:** TypeScript web application with browser UI (1.4k stars, MIT license)
+- **AgentOS:** Shell-based CLI tool for standards management (3.7k stars, MIT license)
 
-**Why Phase 0 Exists:**
-- **Risk Reduction:** If orchestration pattern fails here, we pivot before building Quint sync adapter
-- **Complexity Reduction:** 1,800 LOC (vs 3,100 LOC with Quint) is realistic for 3-week POC
-- **Clear Success Criteria:** Working capability discovery + cross-framework orchestration demo
-- **Fast Feedback:** 3 weeks to validate or invalidate core architectural assumption
+**Cannot integrate by adding `_designos/` and `_agentos/` markdown directories as originally planned.**
+
+**New Approach:** Leverage BMAD's proven agent architecture (21 agents in production) and create 4 new agents inspired by DesignOS/AgentOS capabilities.
+
+**Why Agent Enhancement?**
+- **Reality Check:** BMAD already provides 80%+ of DesignOS/AgentOS functionality (CIS Design Thinking Coach, TEA Test Architect)
+- **Proven Infrastructure:** 21 agents work reliably, established patterns
+- **Complexity Reduction:** 500 LOC (agents) vs 1,800 LOC (custom orchestration) = 72% reduction
+- **Immediate Value:** Working agents Week 1-2 vs backend-only POC
+- **Lower Risk:** Extends proven system vs building new orchestration engine
+
+**What Changed from Original Plan:**
+- ❌ **Dropped:** Capabilities + Steps pattern (hypothetical, doesn't match any framework)
+- ❌ **Dropped:** Convention-based discovery (BMAD uses explicit registration)
+- ❌ **Dropped:** Custom orchestration engine (1,800 LOC)
+- ✅ **Added:** BMAD agent pattern (proven, 500 LOC)
+- ✅ **Added:** Explicit agent registration (agent-manifest.csv)
+- ✅ **Added:** Cross-agent workflow orchestration
 
 **Out of Scope for Phase 0:**
 - ❌ Quint SQLite integration (deferred to Phase 2)
-- ❌ Database sync challenges (latency, conflicts, recovery)
-- ❌ Production-grade error handling (basic only)
+- ❌ Real DesignOS web app integration (future consideration)
+- ❌ Real AgentOS CLI integration (future consideration)
 - ❌ BaseArtifact contract implementation (deferred to Phase 1)
 
+**See:** [framework-deep-dive-analysis.md](framework-deep-dive-analysis.md) for complete analysis
+
 ---
 
-### Week 1: Foundation - Capability Discovery & Step Loading
+### Week 1: DesignOS-Inspired Agents
 
-#### Task 0.1: Implement Convention-Based Capability Discovery (Pattern B2)
+#### Task 0.1: Create Emma (Empathy Mapper) Agent
 - **Owner:** Backend Engineer
 - **Effort:** 2 days
-- **Deliverable:** Capability discovery engine
-- **LOC:** 200
+- **Deliverable:** `_bmad-enhanced/_designos/agents/empathy-mapper.md` + empathy-map workflow
+- **LOC:** 235 (100 agent + 135 workflow)
 - **Acceptance Criteria:**
-  - [ ] Scans `_designos/capabilities/*.md` and `_agentos/capabilities/*.md`
-  - [ ] Parses capability frontmatter (name, description, version)
-  - [ ] Builds capability registry in memory
-  - [ ] Handles missing directories gracefully
-  - [ ] Unit tests: 95% coverage
+  - [ ] Agent file with persona (Emma, empathetic UX expert)
+  - [ ] Menu with empathy map workflow invocation
+  - [ ] Empathy map workflow using step-file architecture (6 steps)
+  - [ ] Output: empathy-map-{date}.md artifact
+  - [ ] Register in `_bmad/_config/agent-manifest.csv`
+  - [ ] Test: `/bmad-agent-designos-empathy-mapper` slash command works
+  - [ ] End-to-end test: Create empathy map from user input
 
 **Implementation Notes:**
-- Directory structure: `_designos/capabilities/`, `_agentos/capabilities/`
-- Capability file format: Markdown with YAML frontmatter
-- Discovery runs at workflow startup (no caching in Phase 0)
+- Workflow architecture: Step-files (like Product Brief)
+- Steps: define-user, says-thinks, does-feels, pain-points, gains, complete
+- Agent persona: Empathetic, curious, asks probing questions
 
-#### Task 0.2: Implement Step Loading Mechanism (Pattern D2)
+#### Task 0.2: Create Wade (Wireframe Designer) Agent
 - **Owner:** Backend Engineer
-- **Effort:** 3 days
-- **Deliverable:** Step file loader with frontmatter state tracking
-- **LOC:** 300
+- **Effort:** 2 days
+- **Deliverable:** `_bmad-enhanced/_designos/agents/wireframe-designer.md` + wireframe workflow
+- **LOC:** 280 (100 agent + 180 workflow)
 - **Acceptance Criteria:**
-  - [ ] Loads step files from `_designos/steps/*.md`, `_agentos/steps/*.md`
-  - [ ] Parses YAML frontmatter (stepsCompleted array)
-  - [ ] Executes step instructions sequentially
-  - [ ] Updates frontmatter state after step completion
-  - [ ] Handles step file not found errors
-  - [ ] Unit tests: 90% coverage
+  - [ ] Agent file with persona (Wade, visual thinker)
+  - [ ] Menu with wireframe workflow invocation
+  - [ ] Wireframe workflow using YAML+instructions architecture
+  - [ ] Component library CSV reference
+  - [ ] Output: wireframe-{date}.md with Excalidraw diagram
+  - [ ] Register in agent-manifest.csv
+  - [ ] Test: `/bmad-agent-designos-wireframe-designer` slash command works
+  - [ ] End-to-end test: Create wireframe from screen requirements
 
 **Implementation Notes:**
-- Step files contain sequential instructions in markdown
-- Frontmatter tracks execution state (`stepsCompleted: [1, 2, 3]`)
-- Step loading is synchronous (no parallel execution in Phase 0)
+- Workflow architecture: YAML + instructions (like Design Thinking)
+- Includes component-library.csv with common UI components
+- Generates Excalidraw JSON or markdown wireframes
+
+#### Task 0.3: Week 1 Testing & Refinement
+- **Owner:** Backend Engineer
+- **Effort:** 1 day
+- **Deliverable:** Test results + bug fixes
+- **Acceptance Criteria:**
+  - [ ] Both agents tested end-to-end
+  - [ ] Slash commands work correctly
+  - [ ] Output artifacts match templates
+  - [ ] Example runs documented
+  - [ ] Any bugs fixed
 
 ---
 
-### Week 2: Capability Implementations - DesignOS & AgentOS Stubs
+### Week 2: AgentOS-Inspired Agents
 
-#### Task 0.3: Create DesignOS Empathy Map Capability (Stub)
+#### Task 0.4: Create Quinn (Quality Gatekeeper) Agent
+- **Owner:** Backend Engineer
+- **Effort:** 2 days
+- **Deliverable:** `_bmad-enhanced/_agentos/agents/quality-gatekeeper.md` + quality-gate workflow
+- **LOC:** 295 (100 agent + 195 workflow)
+- **Acceptance Criteria:**
+  - [ ] Agent file with persona (Quinn, data-driven quality expert)
+  - [ ] Menu with quality gate workflow invocation
+  - [ ] Quality gate workflow using step-file architecture (6 steps)
+  - [ ] Default quality criteria YAML file
+  - [ ] Output: quality-gate-{date}.md with PASS/FAIL/CONCERNS/WAIVED decision
+  - [ ] Register in agent-manifest.csv
+  - [ ] Test: `/bmad-agent-agentos-quality-gatekeeper` slash command works
+  - [ ] End-to-end test: Run quality gate with criteria
+
+**Implementation Notes:**
+- Workflow architecture: Step-files
+- Steps: load-criteria, gather-evidence, assess-criteria, calculate-score, make-decision, complete
+- Includes default-criteria.yaml with 6 quality criteria
+
+#### Task 0.5: Create Stan (Standards Auditor) Agent
+- **Owner:** Backend Engineer
+- **Effort:** 2 days
+- **Deliverable:** `_bmad-enhanced/_agentos/agents/standards-auditor.md` + audit-standards workflow
+- **LOC:** 380 (100 agent + 280 workflow)
+- **Acceptance Criteria:**
+  - [ ] Agent file with persona (Stan, meticulous auditor)
+  - [ ] Menu with standards audit workflow invocation
+  - [ ] Standards audit workflow using YAML+instructions architecture
+  - [ ] 4 standards files (coding, architecture, testing, documentation)
+  - [ ] Output: standards-audit-{date}.md with violations + compliance scores
+  - [ ] Register in agent-manifest.csv
+  - [ ] Test: `/bmad-agent-agentos-standards-auditor` slash command works
+  - [ ] End-to-end test: Audit code against standards
+
+**Implementation Notes:**
+- Workflow architecture: YAML + instructions
+- Standards directory with 4 markdown standards files
+- Generates violation reports with line numbers
+
+#### Task 0.6: Week 2 Testing & Refinement
 - **Owner:** Backend Engineer
 - **Effort:** 1 day
-- **Deliverable:** `_designos/capabilities/empathy-map.md` + step file
-- **LOC:** 100
+- **Deliverable:** Test results + bug fixes
 - **Acceptance Criteria:**
-  - [ ] Capability file with frontmatter (name: "empathy-map", version: "1.0.0")
-  - [ ] Loads step file: `_designos/steps/empathy-map-step-01.md`
-  - [ ] Step generates stub empathy map markdown artifact
-  - [ ] Returns artifact path to calling workflow
-  - [ ] Integration test: Capability → Step → Artifact generation
-
-**Stub Behavior:**
-- Generates hardcoded empathy map markdown (not real UX analysis)
-- Proves capability invocation → step loading → artifact creation flow
-
-#### Task 0.4: Create DesignOS Journey Map Capability (Stub)
-- **Owner:** Backend Engineer
-- **Effort:** 1 day
-- **Deliverable:** `_designos/capabilities/journey-map.md` + step file
-- **LOC:** 100
-- **Acceptance Criteria:**
-  - [ ] Capability file with frontmatter
-  - [ ] Loads step file: `_designos/steps/journey-map-step-01.md`
-  - [ ] Step generates stub journey map markdown
-  - [ ] Integration test passes
-
-#### Task 0.5: Create AgentOS Quality Gate Capability (Stub)
-- **Owner:** Backend Engineer
-- **Effort:** 1 day
-- **Deliverable:** `_agentos/capabilities/quality-gate.md` + step file
-- **LOC:** 100
-- **Acceptance Criteria:**
-  - [ ] Capability file with frontmatter
-  - [ ] Loads step file: `_agentos/steps/quality-gate-step-01.md`
-  - [ ] Step performs stub quality validation (hardcoded PASS/FAIL)
-  - [ ] Returns quality gate result to workflow
-  - [ ] Integration test passes
-
-#### Task 0.6: Create AgentOS Standards Check Capability (Stub)
-- **Owner:** Backend Engineer
-- **Effort:** 1 day
-- **Deliverable:** `_agentos/capabilities/standards-check.md` + step file
-- **LOC:** 100
-- **Acceptance Criteria:**
-  - [ ] Capability file with frontmatter
-  - [ ] Step performs stub standards validation
-  - [ ] Integration test passes
+  - [ ] Both agents tested end-to-end
+  - [ ] Slash commands work correctly
+  - [ ] Output artifacts match templates
+  - [ ] Example runs documented
+  - [ ] Any bugs fixed
 
 ---
 
-### Week 3: Orchestration Integration & Testing
+### Week 3: Integration, Testing & Decision Gate
 
-#### Task 0.7: Implement Capabilities Load Steps Pattern (H1)
-- **Owner:** Backend Engineer
-- **Effort:** 2 days
-- **Deliverable:** Orchestration glue logic
-- **LOC:** 300
-- **Acceptance Criteria:**
-  - [ ] Capabilities invoke step loading mechanism
-  - [ ] Steps execute and return results to capability
-  - [ ] Capability returns results to calling workflow
-  - [ ] Error handling: capability not found, step load failure
-  - [ ] Unit tests: 90% coverage
-
-#### Task 0.8: Implement Basic Execution Tracing (Pattern D10)
-- **Owner:** Backend Engineer
-- **Effort:** 2 days
-- **Deliverable:** Execution trace logger
-- **LOC:** 250
-- **Acceptance Criteria:**
-  - [ ] Logs capability invocations (name, timestamp, params)
-  - [ ] Logs step executions (file path, duration, status)
-  - [ ] Logs capability completion (success/failure, duration)
-  - [ ] Trace written to `_bmad-output/traces/execution-trace-{date}.log`
-  - [ ] Human-readable format
-
-#### Task 0.9: End-to-End Orchestration Tests
+#### Task 0.7: Create Cross-Agent Workflow Orchestration
 - **Owner:** Backend Engineer
 - **Effort:** 1 day
-- **Deliverable:** Integration test suite
-- **LOC:** 200
+- **Deliverable:** `_bmad-enhanced/workflows/product-development-flow.md`
+- **LOC:** 50
 - **Acceptance Criteria:**
-  - [ ] Test: Discover capabilities from both frameworks
-  - [ ] Test: Invoke DesignOS empathy-map capability
-  - [ ] Test: Invoke AgentOS quality-gate capability
-  - [ ] Test: Cross-framework orchestration (DesignOS → AgentOS)
-  - [ ] Test: Error handling (capability not found, step failure)
-  - [ ] All tests pass with 100% success rate
-
-#### Task 0.10: Create Cross-Framework Orchestration Demo
-- **Owner:** Backend Engineer
-- **Effort:** 1 day
-- **Deliverable:** Demo workflow + documentation
-- **Acceptance Criteria:**
-  - [ ] Demo workflow invokes both DesignOS and AgentOS capabilities
-  - [ ] Execution trace shows full orchestration flow
-  - [ ] Demo documentation explains what was validated
-  - [ ] Screenshots/logs of successful execution
+  - [ ] Workflow guides user through Emma → Wade → Quinn → Stan sequence
+  - [ ] Manual orchestration (user invokes each agent)
+  - [ ] Documentation explains artifact passing between agents
+  - [ ] End-to-end example run documented
+  - [ ] (Optional) Prototype automatic orchestration
 
 **Demo Scenario:**
-1. Invoke DesignOS empathy-map capability → generates artifact
-2. Invoke AgentOS quality-gate on empathy map artifact → validates quality
-3. Invoke DesignOS journey-map capability → generates artifact
-4. Invoke AgentOS standards-check on journey map → validates standards
-5. Execution trace shows all 4 capability invocations
+1. User runs Emma (empathy-mapper) → creates empathy-map.md
+2. User runs Wade (wireframe-designer) with empathy map context → creates wireframe.md
+3. User runs Quinn (quality-gatekeeper) on wireframe → creates quality-gate.md
+4. User runs Stan (standards-auditor) on wireframe → creates standards-audit.md
 
-#### Task 0.11: Phase 0 Decision Checkpoint
+#### Task 0.8: Party Mode Integration Testing
+- **Owner:** Backend Engineer
+- **Effort:** 1 day
+- **Deliverable:** Party mode test results
+- **Acceptance Criteria:**
+  - [ ] All 4 new agents appear in party mode roster (total 25 agents)
+  - [ ] Test: Party mode selects Emma for design questions
+  - [ ] Test: Party mode selects Quinn for quality questions
+  - [ ] Test: Cross-agent conversations work (Emma + Winston + Quinn)
+  - [ ] Document party mode examples
+
+#### Task 0.9: Documentation & Examples
+- **Owner:** Backend Engineer
+- **Effort:** 1 day
+- **Deliverable:** Usage documentation + examples
+- **Acceptance Criteria:**
+  - [ ] Usage guide for all 4 agents
+  - [ ] Example artifacts for each agent
+  - [ ] Cross-agent workflow documentation
+  - [ ] Screenshots/logs of successful runs
+  - [ ] Update README.md if needed
+
+#### Task 0.10: Phase 0 Decision Checkpoint
 - **Owner:** Lead Architect
 - **Effort:** 0.5 days
-- **Deliverable:** Go/No-Go decision document
+- **Deliverable:** Decision document with recommendation
 - **Acceptance Criteria:**
-  - [ ] Review: Do capabilities discover correctly?
-  - [ ] Review: Do steps load and execute correctly?
-  - [ ] Review: Does cross-framework orchestration work?
-  - [ ] Review: Are execution traces useful for debugging?
-  - [ ] Decision: Proceed to Phase 1 OR pivot orchestration pattern
+  - [ ] Review: Do all 4 agents work as expected?
+  - [ ] Review: Does agent pattern provide sufficient abstraction for framework capabilities?
+  - [ ] Review: Does cross-agent workflow orchestration scale?
+  - [ ] Review: Is explicit registration (CSV) manageable?
+  - [ ] Review: Does party mode integration add value?
+  - [ ] Decision: Choose Option A/B/C/D (see criteria below)
   - [ ] Document decision rationale
 
-**Success Criteria for Proceeding to Phase 1:**
-- ✅ Capability discovery works for both frameworks
-- ✅ Step loading executes reliably
-- ✅ Cross-framework orchestration demo succeeds
-- ✅ Execution trace provides clear visibility
-- ✅ No architectural blockers identified
+**Decision Options:**
 
-**Failure Criteria (Triggers Pivot):**
-- ❌ Capability discovery is too complex or brittle
-- ❌ Step loading has unresolvable race conditions
-- ❌ Cross-framework orchestration creates circular dependencies
-- ❌ Execution performance is unacceptable (>5s for simple workflow)
+**Option A: Proceed to Phase 1 (Contract Foundation)**
+- Agent approach proven viable
+- Continue with BaseArtifact v2.0.0 implementation
+- Plan Phase 3/4 as agent enhancements (not custom orchestration)
+
+**Option B: Enhance Agent Capabilities (Phase 1.5)**
+- Agent approach viable but needs more coverage
+- Add 4-8 more agents before Phase 1
+- Defer contract foundation until agent ecosystem mature
+
+**Option C: Pivot to Custom Orchestration (Phase 0.5)**
+- Agent approach doesn't scale
+- Build custom orchestration engine (original 1,800 LOC plan)
+- Retry Phase 0 with Capabilities + Steps pattern
+
+**Option D: Hybrid Approach**
+- Agents for user-facing features
+- Custom orchestration for backend coordination
+- Combine proven agent UX with automatic capability discovery
+
+**Success Criteria for Option A (Proceed to Phase 1):**
+- ✅ All 4 agents functional and accessible via slash commands
+- ✅ Workflows produce quality artifacts
+- ✅ Cross-agent orchestration demonstrates value
+- ✅ Agent pattern scales to 4+ agents without maintenance burden
+- ✅ No architectural blockers
+
+**Triggers for Other Options:**
+- ❌ **Option B:** Agents work well but coverage gaps identified (need journey-mapper, persona-creator, etc.)
+- ❌ **Option C:** Agent maintenance burden too high OR manual orchestration too cumbersome
+- ❌ **Option D:** Agents great for UX but backend orchestration needs automation
 
 ---
 
 ### Phase 0 Deliverables Summary
 
 **Code Deliverables:**
-- Capability discovery engine (200 LOC)
-- Step loading mechanism (300 LOC)
-- Orchestration glue (300 LOC)
-- Execution tracer (250 LOC)
-- DesignOS capabilities: empathy-map, journey-map (200 LOC)
-- AgentOS capabilities: quality-gate, standards-check (200 LOC)
-- Integration tests (350 LOC)
-- **Total:** ~1,800 LOC
+- Emma (empathy-mapper) agent + empathy map workflow (235 LOC)
+- Wade (wireframe-designer) agent + wireframe workflow (280 LOC)
+- Quinn (quality-gatekeeper) agent + quality gate workflow (295 LOC)
+- Stan (standards-auditor) agent + standards audit workflow (380 LOC)
+- Cross-agent orchestration workflow (50 LOC)
+- 4 agent registrations in agent-manifest.csv (trivial)
+- **Total:** ~1,240 LOC (vs 500 LOC estimate - includes templates/standards files)
 
 **Documentation Deliverables:**
+- Usage guide for 4 new agents
+- Example artifacts (empathy maps, wireframes, quality gates, audit reports)
+- Cross-agent workflow documentation
 - Phase 0 decision checkpoint document
-- Cross-framework orchestration demo documentation
-- Execution trace examples
 
 **Key Validations:**
-- ✅ Convention-based capability discovery is feasible
-- ✅ Capabilities + Steps pattern works across multiple frameworks
-- ✅ Hierarchical orchestration (H1) is viable
-- ✅ Execution tracing provides sufficient observability
+- ✅ BMAD agent pattern extends successfully to design and quality domains
+- ✅ Step-file and YAML+instructions architectures both work for new agents
+- ✅ Agent registration via CSV is straightforward
+- ✅ Cross-agent workflow orchestration (manual) is functional
+- ✅ Party mode integration adds value for multi-agent discussions
+- ✅ Slash command UX is intuitive for users
 
-**Deferred to Phase 2:**
+**What Changed from Original Plan:**
+- ❌ **Dropped:** Custom orchestration engine (1,800 LOC)
+- ❌ **Dropped:** Capabilities + Steps pattern (doesn't match DesignOS/AgentOS reality)
+- ❌ **Dropped:** Convention-based discovery (explicit registration simpler)
+- ✅ **Added:** 4 BMAD agents inspired by DesignOS/AgentOS capabilities
+- ✅ **Added:** Leverage proven agent architecture (21 agents in production)
+
+**Deferred to Phase 2 (UNCHANGED):**
 - Quint SQLite sync adapter (500 LOC)
 - Database conflict resolution
 - Production-grade error handling
 - Performance optimization
+
+**Deferred to Future (New):**
+- Real DesignOS web app integration (if desired)
+- Real AgentOS CLI integration (if desired)
+- Additional agents (journey-mapper, persona-creator, etc.)
 
 ---
 
