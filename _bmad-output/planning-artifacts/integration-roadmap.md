@@ -1,10 +1,10 @@
-# BMAD-Enhanced: 5-Phase Integration Roadmap
+# BMAD-Enhanced: 6-Phase Integration Roadmap
 
-**Version:** 1.0.0
+**Version:** 2.0.0
 **Status:** Planning Phase
-**Date:** 2026-02-04
+**Date:** 2026-02-06
 **Owner:** BMAD-Enhanced Core Team
-**Timeline:** 24 weeks (6 months)
+**Timeline:** 27 weeks (6.75 months)
 
 ---
 
@@ -12,57 +12,296 @@
 
 This roadmap details the phased integration of 4 frameworks (BMAD Method, Quint, DesignOS, AgentOS) into a unified BMAD-Enhanced platform with complete cross-framework traceability and alignment validation.
 
-**Total Duration:** 24 weeks (6 months)
-**Total Tasks:** 87 tasks across 5 phases
-**Critical Path:** Phase 1 → Phase 2 → Phase 5 (foundational integration)
+**Total Duration:** 27 weeks (6.75 months)
+**Total Tasks:** 95+ tasks across 6 phases
+**Critical Path:** Phase 0 (POC) → Phase 1 (Contract) → Phase 3 (Quint) → Phase 5 (Traceability)
 
 **⚠️ Phase Numbering Note:**
-This document uses **Implementation Phases 1-5** (technical integration roadmap). The Product Brief uses **Product Phases 0-3+** (validation → alpha → beta → product strategy). These are complementary but distinct numbering schemes:
-- **Implementation Phases (this doc):** Focus on technical integration milestones
+This document uses **Implementation Phases 0-5** (technical integration roadmap). The Product Brief uses **Product Phases 0-3+** (validation → alpha → beta → product strategy). These are complementary but distinct numbering schemes:
+- **Implementation Phases (this doc):** Phase 0 = POC, Phases 1-5 = Technical integration milestones
 - **Product Phases (product-brief):** Focus on validation and go-to-market strategy
 
 **🏗️ Architectural Approach:**
 After comprehensive analysis of 3 integration options (Quint-First, BMAD-First, Greenfield), this roadmap implements **BMAD-First Architecture** (scored 8.55/10):
 - **Core:** BMAD Method's markdown-based workflow engine with 41 existing workflows
-- **Quint Integration:** Bidirectional sync adapter (2,700 LOC) connecting Quint's SQLite database to markdown artifacts
+- **Phase 0 Focus:** Pure markdown orchestration (DesignOS + AgentOS) - validate Capabilities + Steps pattern
+- **Quint Integration (Phase 2):** Sync adapter (500 LOC) connecting Quint's SQLite to markdown artifacts
 - **Why BMAD-First:** 100% code reuse, fastest time-to-value (POC Week 3), lowest risk, proven production systems
+- **Why Phase 0:** Validates orchestration before database sync complexity (reduces risk)
 - **Comparison:** Scored higher than Quint-First (5.15/10) and Greenfield (7.85/10) on feasibility, effort, and risk
-- **See:** [architectural-comparison-quint-vs-bmad-first.md](architectural-comparison-quint-vs-bmad-first.md) and [greenfield-architecture-analysis.md](greenfield-architecture-analysis.md) for full analysis
+- **See:** [architectural-decision-record.md](architectural-decision-record.md) v1.3.0 for Phase 0 scope refinement details
 
 ---
 
 ## Roadmap Overview
 
 ```
-┌─────────────────────────────────────────────────────────────────────────────┐
-│                          INTEGRATION TIMELINE                               │
-└─────────────────────────────────────────────────────────────────────────────┘
+┌─────────────────────────────────────────────────────────────────────────────────┐
+│                          INTEGRATION TIMELINE                                   │
+└─────────────────────────────────────────────────────────────────────────────────┘
 
-Month 1-2          Month 3-4          Month 5           Month 6
-├────────────┬────────────┬────────────┬────────────┬────────────┬────────────┤
-│  PHASE 1   │  PHASE 2   │  PHASE 3   │  PHASE 4   │     PHASE 5            │
-│  Contract  │  Quint ↔   │  DesignOS  │  AgentOS   │  Cross-Framework       │
-│  Foundation│  BMAD      │  Implement │  Orchestr. │  Traceability          │
-│            │  Link      │            │            │                        │
-│  Week 1-4  │  Week 5-10 │  Week 11-14│  Week 15-18│  Week 19-24            │
-└────────────┴────────────┴────────────┴────────────┴────────────────────────┘
+Week 1-3     Month 1-2          Month 3-4          Month 5           Month 6-7
+├──────┬────────────┬────────────┬────────────┬────────────┬────────────┬────────┤
+│PHASE0│  PHASE 1   │  PHASE 2   │  PHASE 3   │  PHASE 4   │     PHASE 5         │
+│ POC  │  Contract  │  Quint ↔   │  DesignOS  │  AgentOS   │  Cross-Framework    │
+│Orchs-│  Foundation│  BMAD Sync │  Implement │  Orchestr. │  Traceability       │
+│trate │            │  Adapter   │            │            │                     │
+│W 1-3 │  Week 4-7  │  Week 8-13 │  Week 14-17│  Week 18-21│  Week 22-27         │
+└──────┴────────────┴────────────┴────────────┴────────────┴─────────────────────┘
+         ↑                                                          ↑
+    Decision Gate 1:                                          Decision Gate 2:
+    Orchestration works?                                      Ready for v1.0.0?
+    Yes → Phase 1                                            Yes → Launch
+    No → Pivot pattern                                       No → Extend Phase 5
 
                     ↓ Parallel tracks ↓
 
-┌─────────────────────────────────────────────────────────────────────────────┐
-│                       CONTINUOUS ACTIVITIES                                 │
-│  • Documentation updates (ongoing)                                          │
-│  • Testing and validation (after each phase)                               │
-│  • User feedback collection (Weeks 5+)                                      │
-│  • Performance optimization (Weeks 10+)                                     │
-└─────────────────────────────────────────────────────────────────────────────┘
+┌─────────────────────────────────────────────────────────────────────────────────┐
+│                       CONTINUOUS ACTIVITIES                                     │
+│  • Documentation updates (ongoing)                                              │
+│  • Testing and validation (after each phase)                                   │
+│  • User feedback collection (Weeks 8+)                                          │
+│  • Performance optimization (Weeks 13+)                                         │
+└─────────────────────────────────────────────────────────────────────────────────┘
 ```
+
+---
+
+## Phase 0: POC - Pure Markdown Orchestration
+
+**Duration:** 3 weeks (Weeks 1-3)
+**Goal:** Validate core orchestration pattern (Capabilities + Steps) using pure markdown workflows
+**Dependencies:** None (foundational validation phase)
+**Team:** 1-2 engineers
+**Decision Gate:** End of Week 3 - Proceed to Phase 1 or pivot orchestration approach
+
+### Overview
+
+Phase 0 validates the BMAD-First orchestration architecture before investing in complex database sync logic. This phase proves that BMAD can orchestrate multiple frameworks (DesignOS, AgentOS) using the Capabilities + Steps pattern with convention-based discovery.
+
+**Why Phase 0 Exists:**
+- **Risk Reduction:** If orchestration pattern fails here, we pivot before building Quint sync adapter
+- **Complexity Reduction:** 1,800 LOC (vs 3,100 LOC with Quint) is realistic for 3-week POC
+- **Clear Success Criteria:** Working capability discovery + cross-framework orchestration demo
+- **Fast Feedback:** 3 weeks to validate or invalidate core architectural assumption
+
+**Out of Scope for Phase 0:**
+- ❌ Quint SQLite integration (deferred to Phase 2)
+- ❌ Database sync challenges (latency, conflicts, recovery)
+- ❌ Production-grade error handling (basic only)
+- ❌ BaseArtifact contract implementation (deferred to Phase 1)
+
+---
+
+### Week 1: Foundation - Capability Discovery & Step Loading
+
+#### Task 0.1: Implement Convention-Based Capability Discovery (Pattern B2)
+- **Owner:** Backend Engineer
+- **Effort:** 2 days
+- **Deliverable:** Capability discovery engine
+- **LOC:** 200
+- **Acceptance Criteria:**
+  - [ ] Scans `_designos/capabilities/*.md` and `_agentos/capabilities/*.md`
+  - [ ] Parses capability frontmatter (name, description, version)
+  - [ ] Builds capability registry in memory
+  - [ ] Handles missing directories gracefully
+  - [ ] Unit tests: 95% coverage
+
+**Implementation Notes:**
+- Directory structure: `_designos/capabilities/`, `_agentos/capabilities/`
+- Capability file format: Markdown with YAML frontmatter
+- Discovery runs at workflow startup (no caching in Phase 0)
+
+#### Task 0.2: Implement Step Loading Mechanism (Pattern D2)
+- **Owner:** Backend Engineer
+- **Effort:** 3 days
+- **Deliverable:** Step file loader with frontmatter state tracking
+- **LOC:** 300
+- **Acceptance Criteria:**
+  - [ ] Loads step files from `_designos/steps/*.md`, `_agentos/steps/*.md`
+  - [ ] Parses YAML frontmatter (stepsCompleted array)
+  - [ ] Executes step instructions sequentially
+  - [ ] Updates frontmatter state after step completion
+  - [ ] Handles step file not found errors
+  - [ ] Unit tests: 90% coverage
+
+**Implementation Notes:**
+- Step files contain sequential instructions in markdown
+- Frontmatter tracks execution state (`stepsCompleted: [1, 2, 3]`)
+- Step loading is synchronous (no parallel execution in Phase 0)
+
+---
+
+### Week 2: Capability Implementations - DesignOS & AgentOS Stubs
+
+#### Task 0.3: Create DesignOS Empathy Map Capability (Stub)
+- **Owner:** Backend Engineer
+- **Effort:** 1 day
+- **Deliverable:** `_designos/capabilities/empathy-map.md` + step file
+- **LOC:** 100
+- **Acceptance Criteria:**
+  - [ ] Capability file with frontmatter (name: "empathy-map", version: "1.0.0")
+  - [ ] Loads step file: `_designos/steps/empathy-map-step-01.md`
+  - [ ] Step generates stub empathy map markdown artifact
+  - [ ] Returns artifact path to calling workflow
+  - [ ] Integration test: Capability → Step → Artifact generation
+
+**Stub Behavior:**
+- Generates hardcoded empathy map markdown (not real UX analysis)
+- Proves capability invocation → step loading → artifact creation flow
+
+#### Task 0.4: Create DesignOS Journey Map Capability (Stub)
+- **Owner:** Backend Engineer
+- **Effort:** 1 day
+- **Deliverable:** `_designos/capabilities/journey-map.md` + step file
+- **LOC:** 100
+- **Acceptance Criteria:**
+  - [ ] Capability file with frontmatter
+  - [ ] Loads step file: `_designos/steps/journey-map-step-01.md`
+  - [ ] Step generates stub journey map markdown
+  - [ ] Integration test passes
+
+#### Task 0.5: Create AgentOS Quality Gate Capability (Stub)
+- **Owner:** Backend Engineer
+- **Effort:** 1 day
+- **Deliverable:** `_agentos/capabilities/quality-gate.md` + step file
+- **LOC:** 100
+- **Acceptance Criteria:**
+  - [ ] Capability file with frontmatter
+  - [ ] Loads step file: `_agentos/steps/quality-gate-step-01.md`
+  - [ ] Step performs stub quality validation (hardcoded PASS/FAIL)
+  - [ ] Returns quality gate result to workflow
+  - [ ] Integration test passes
+
+#### Task 0.6: Create AgentOS Standards Check Capability (Stub)
+- **Owner:** Backend Engineer
+- **Effort:** 1 day
+- **Deliverable:** `_agentos/capabilities/standards-check.md` + step file
+- **LOC:** 100
+- **Acceptance Criteria:**
+  - [ ] Capability file with frontmatter
+  - [ ] Step performs stub standards validation
+  - [ ] Integration test passes
+
+---
+
+### Week 3: Orchestration Integration & Testing
+
+#### Task 0.7: Implement Capabilities Load Steps Pattern (H1)
+- **Owner:** Backend Engineer
+- **Effort:** 2 days
+- **Deliverable:** Orchestration glue logic
+- **LOC:** 300
+- **Acceptance Criteria:**
+  - [ ] Capabilities invoke step loading mechanism
+  - [ ] Steps execute and return results to capability
+  - [ ] Capability returns results to calling workflow
+  - [ ] Error handling: capability not found, step load failure
+  - [ ] Unit tests: 90% coverage
+
+#### Task 0.8: Implement Basic Execution Tracing (Pattern D10)
+- **Owner:** Backend Engineer
+- **Effort:** 2 days
+- **Deliverable:** Execution trace logger
+- **LOC:** 250
+- **Acceptance Criteria:**
+  - [ ] Logs capability invocations (name, timestamp, params)
+  - [ ] Logs step executions (file path, duration, status)
+  - [ ] Logs capability completion (success/failure, duration)
+  - [ ] Trace written to `_bmad-output/traces/execution-trace-{date}.log`
+  - [ ] Human-readable format
+
+#### Task 0.9: End-to-End Orchestration Tests
+- **Owner:** Backend Engineer
+- **Effort:** 1 day
+- **Deliverable:** Integration test suite
+- **LOC:** 200
+- **Acceptance Criteria:**
+  - [ ] Test: Discover capabilities from both frameworks
+  - [ ] Test: Invoke DesignOS empathy-map capability
+  - [ ] Test: Invoke AgentOS quality-gate capability
+  - [ ] Test: Cross-framework orchestration (DesignOS → AgentOS)
+  - [ ] Test: Error handling (capability not found, step failure)
+  - [ ] All tests pass with 100% success rate
+
+#### Task 0.10: Create Cross-Framework Orchestration Demo
+- **Owner:** Backend Engineer
+- **Effort:** 1 day
+- **Deliverable:** Demo workflow + documentation
+- **Acceptance Criteria:**
+  - [ ] Demo workflow invokes both DesignOS and AgentOS capabilities
+  - [ ] Execution trace shows full orchestration flow
+  - [ ] Demo documentation explains what was validated
+  - [ ] Screenshots/logs of successful execution
+
+**Demo Scenario:**
+1. Invoke DesignOS empathy-map capability → generates artifact
+2. Invoke AgentOS quality-gate on empathy map artifact → validates quality
+3. Invoke DesignOS journey-map capability → generates artifact
+4. Invoke AgentOS standards-check on journey map → validates standards
+5. Execution trace shows all 4 capability invocations
+
+#### Task 0.11: Phase 0 Decision Checkpoint
+- **Owner:** Lead Architect
+- **Effort:** 0.5 days
+- **Deliverable:** Go/No-Go decision document
+- **Acceptance Criteria:**
+  - [ ] Review: Do capabilities discover correctly?
+  - [ ] Review: Do steps load and execute correctly?
+  - [ ] Review: Does cross-framework orchestration work?
+  - [ ] Review: Are execution traces useful for debugging?
+  - [ ] Decision: Proceed to Phase 1 OR pivot orchestration pattern
+  - [ ] Document decision rationale
+
+**Success Criteria for Proceeding to Phase 1:**
+- ✅ Capability discovery works for both frameworks
+- ✅ Step loading executes reliably
+- ✅ Cross-framework orchestration demo succeeds
+- ✅ Execution trace provides clear visibility
+- ✅ No architectural blockers identified
+
+**Failure Criteria (Triggers Pivot):**
+- ❌ Capability discovery is too complex or brittle
+- ❌ Step loading has unresolvable race conditions
+- ❌ Cross-framework orchestration creates circular dependencies
+- ❌ Execution performance is unacceptable (>5s for simple workflow)
+
+---
+
+### Phase 0 Deliverables Summary
+
+**Code Deliverables:**
+- Capability discovery engine (200 LOC)
+- Step loading mechanism (300 LOC)
+- Orchestration glue (300 LOC)
+- Execution tracer (250 LOC)
+- DesignOS capabilities: empathy-map, journey-map (200 LOC)
+- AgentOS capabilities: quality-gate, standards-check (200 LOC)
+- Integration tests (350 LOC)
+- **Total:** ~1,800 LOC
+
+**Documentation Deliverables:**
+- Phase 0 decision checkpoint document
+- Cross-framework orchestration demo documentation
+- Execution trace examples
+
+**Key Validations:**
+- ✅ Convention-based capability discovery is feasible
+- ✅ Capabilities + Steps pattern works across multiple frameworks
+- ✅ Hierarchical orchestration (H1) is viable
+- ✅ Execution tracing provides sufficient observability
+
+**Deferred to Phase 2:**
+- Quint SQLite sync adapter (500 LOC)
+- Database conflict resolution
+- Production-grade error handling
+- Performance optimization
 
 ---
 
 ## Phase 1: BaseArtifact Contract Finalization
 
-**Duration:** 4 weeks (Weeks 1-4)
+**Duration:** 4 weeks (Weeks 4-7)
 **Goal:** Establish the foundational integration layer enabling all frameworks to share artifacts
 **Dependencies:** None (foundational phase)
 **Team:** 2-3 engineers + 1 architect
@@ -390,7 +629,167 @@ describe('BaseArtifact v2.0.0 Compliance', () => {
 
 ---
 
-## Phase 2: Quint ↔ BMAD Integration (BMAD-First Architecture)
+## Phase 2: Quint SQLite Sync Adapter
+
+**Duration:** 2 weeks (Weeks 8-9)
+**Goal:** Add Quint SQLite sync adapter to proven orchestration foundation from Phase 0
+**Dependencies:** Phase 0 (orchestration pattern validated), Phase 1 (BaseArtifact contract)
+**Team:** 1-2 engineers
+
+### Overview
+
+Phase 2 adds Quint's FPF capabilities to the BMAD-Enhanced platform by building a lightweight sync adapter (500 LOC) that connects Quint's SQLite database to BMAD markdown artifacts. This phase validates the critical assumption that markdown ↔ SQLite sync can achieve <200ms latency.
+
+**Why Phase 2 is Simpler Than Original Plan:**
+- Phase 0 already validated orchestration pattern → Focus only on sync adapter
+- Reduced scope: 500 LOC (vs original 2,700 LOC estimate)
+- Clear success criteria: Sync latency <200ms, no data loss
+
+**Key Validations:**
+- Sync latency measurement (target: <200ms)
+- Concurrent write handling
+- Conflict resolution strategy
+- Recovery from sync failures
+
+---
+
+### Week 8: Sync Adapter Core Implementation
+
+#### Task 2.1: Implement Markdown → SQLite Sync Writer
+- **Owner:** Backend Engineer
+- **Effort:** 2 days
+- **Deliverable:** Sync writer that pushes markdown artifacts to Quint SQLite
+- **LOC:** 200
+- **Acceptance Criteria:**
+  - [ ] Reads BMAD markdown artifacts (hypotheses, evidence)
+  - [ ] Writes to Quint SQLite tables (holons, evidence, relations)
+  - [ ] Maintains referential integrity
+  - [ ] Logs sync operations with timestamps
+  - [ ] Unit tests: 90% coverage
+
+#### Task 2.2: Implement SQLite → Markdown Sync Reader (FPF Results Only)
+- **Owner:** Backend Engineer
+- **Effort:** 1.5 days
+- **Deliverable:** Sync reader that pulls FPF calculation results to markdown
+- **LOC:** 150
+- **Acceptance Criteria:**
+  - [ ] Reads FPF results from Quint SQLite (fpf_state table)
+  - [ ] Updates markdown frontmatter with FPF scores
+  - [ ] Preserves markdown content (only updates frontmatter)
+  - [ ] Unit tests: 90% coverage
+
+#### Task 2.3: Implement Basic Conflict Resolution
+- **Owner:** Backend Engineer
+- **Effort:** 1 day
+- **Deliverable:** Conflict detection and resolution logic
+- **LOC:** 50
+- **Acceptance Criteria:**
+  - [ ] Detects concurrent writes to same artifact
+  - [ ] Resolution strategy: Markdown wins (BMAD is master)
+  - [ ] Logs conflicts for manual review
+  - [ ] Unit tests cover conflict scenarios
+
+#### Task 2.4: Add Retry Logic for Transient Failures
+- **Owner:** Backend Engineer
+- **Effort:** 1 day
+- **Deliverable:** Retry wrapper with exponential backoff
+- **LOC:** 100
+- **Acceptance Criteria:**
+  - [ ] Retries SQLite write failures (max 3 attempts)
+  - [ ] Exponential backoff: 100ms, 200ms, 400ms
+  - [ ] Logs retry attempts
+  - [ ] Unit tests verify retry behavior
+
+---
+
+### Week 9: Performance Validation & Integration
+
+#### Task 2.5: Measure Sync Latency
+- **Owner:** Backend Engineer
+- **Effort:** 1 day
+- **Deliverable:** Performance benchmark results
+- **Acceptance Criteria:**
+  - [ ] Benchmark: Single artifact sync latency (target: <200ms)
+  - [ ] Benchmark: Bulk sync (10 artifacts) latency (target: <500ms)
+  - [ ] Benchmark: Concurrent writes (2 workflows) behavior
+  - [ ] Document results in performance report
+
+**Success Criteria:**
+- ✅ Single artifact sync: <200ms (95th percentile)
+- ✅ Bulk sync: <500ms for 10 artifacts
+- ⚠️ If latency >500ms: Document bottleneck, propose optimization
+
+#### Task 2.6: Integration with Quint Capabilities
+- **Owner:** Backend Engineer
+- **Effort:** 2 days
+- **Deliverable:** Quint capabilities integrated with sync adapter
+- **Acceptance Criteria:**
+  - [ ] Create `_quint/capabilities/hypothesize.md`
+  - [ ] Create `_quint/steps/hypothesize-step-01.md`
+  - [ ] Step invokes sync adapter to write to SQLite
+  - [ ] Integration test: BMAD workflow → Quint capability → SQLite sync
+  - [ ] Verify data integrity in SQLite after sync
+
+#### Task 2.7: End-to-End Quint Integration Test
+- **Owner:** Backend Engineer
+- **Effort:** 1 day
+- **Deliverable:** E2E test suite
+- **Acceptance Criteria:**
+  - [ ] Test: Create hypothesis in BMAD markdown
+  - [ ] Test: Sync to Quint SQLite
+  - [ ] Test: Run FPF calculation in Quint
+  - [ ] Test: Sync FPF results back to markdown
+  - [ ] Test: Verify markdown frontmatter updated correctly
+  - [ ] All tests pass
+
+#### Task 2.8: Phase 2 Decision Checkpoint
+- **Owner:** Lead Architect
+- **Effort:** 0.5 days
+- **Deliverable:** Performance validation report + Go/No-Go decision
+- **Acceptance Criteria:**
+  - [ ] Review: Is sync latency acceptable (<200ms)?
+  - [ ] Review: Are conflicts resolved correctly?
+  - [ ] Review: Does retry logic handle failures?
+  - [ ] Decision: Proceed to Phase 3 OR optimize sync adapter
+  - [ ] Document decision rationale
+
+**Success Criteria for Proceeding to Phase 3:**
+- ✅ Sync latency <200ms (95th percentile)
+- ✅ No data loss in sync operations
+- ✅ Conflicts resolved without manual intervention
+- ✅ E2E test passes reliably
+
+**Failure Criteria (Triggers Re-Architecture):**
+- ❌ Sync latency >500ms consistently
+- ❌ Data corruption/loss in sync operations
+- ❌ Conflicts require manual resolution >10% of time
+- ❌ Quint SQLite locking causes deadlocks
+
+---
+
+### Phase 2 Deliverables Summary
+
+**Code Deliverables:**
+- Markdown → SQLite sync writer (200 LOC)
+- SQLite → Markdown sync reader (150 LOC)
+- Conflict resolution (50 LOC)
+- Retry logic (100 LOC)
+- Quint capabilities integration
+- **Total:** ~500 LOC
+
+**Documentation Deliverables:**
+- Performance benchmark report
+- Sync latency analysis
+- Conflict resolution strategy documentation
+
+**Key Validations:**
+- ✅ Sync latency is acceptable (<200ms target)
+- ✅ Data integrity maintained across sync operations
+- ✅ Conflict resolution works without manual intervention
+
+---
+
+## Phase 4: DesignOS Implementation (formerly Phase 2)
 
 **Duration:** 6 weeks (Weeks 5-10)
 **Goal:** Create bidirectional sync adapter connecting Quint's SQLite database to BMAD's markdown artifacts
@@ -860,7 +1259,7 @@ describe('Full Quint → BMAD Lifecycle', () => {
 
 ---
 
-## Phase 3: DesignOS Implementation
+## Phase 4: DesignOS Implementation
 
 **Duration:** 4 weeks (Weeks 11-14)
 **Goal:** Implement DesignOS framework with design rationale preservation and Figma integration
@@ -1157,7 +1556,7 @@ Exporting design tokens...
 
 ---
 
-## Phase 4: AgentOS Orchestration Layer
+## Phase 5: AgentOS Orchestration Layer (formerly Phase 4)
 
 **Duration:** 4 weeks (Weeks 15-18)
 **Goal:** Implement AgentOS for cross-framework orchestration, quality gates, and standards enforcement
@@ -1527,7 +1926,7 @@ describe('Complete BMAD-Enhanced Lifecycle', () => {
 
 ---
 
-## Phase 5: Cross-Framework Traceability
+## Phase 6: Cross-Framework Traceability (formerly Phase 5)
 
 **Duration:** 6 weeks (Weeks 19-24)
 **Goal:** Complete end-to-end traceability with visualization, alignment validation, and production readiness
