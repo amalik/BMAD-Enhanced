@@ -1,0 +1,984 @@
+---
+title: "Phase 0 Implementation Guide: Agent Enhancement Approach"
+date: 2026-02-07
+version: 1.0.0
+status: IMPLEMENTATION READY
+related_docs:
+  - architectural-decision-record.md (v1.4.0)
+  - framework-deep-dive-analysis.md
+  - phase-0-alternative-agent-integration.md
+---
+
+# Phase 0 Implementation Guide: Agent Enhancement Approach
+
+**Goal:** Enhance BMAD Method with 4 new design and quality agents inspired by DesignOS and AgentOS capabilities.
+
+**Timeline:** 3 weeks (Week 1-3)
+**LOC Estimate:** ~500 LOC
+**Approach:** Leverage proven BMAD agent architecture
+
+---
+
+## Table of Contents
+
+1. [Overview](#overview)
+2. [Week 1: DesignOS-Inspired Agents](#week-1-designos-inspired-agents)
+3. [Week 2: AgentOS-Inspired Agents](#week-2-agentos-inspired-agents)
+4. [Week 3: Integration & Testing](#week-3-integration--testing)
+5. [Implementation Checklist](#implementation-checklist)
+6. [Success Criteria](#success-criteria)
+7. [Decision Gate Questions](#decision-gate-questions)
+
+---
+
+## Overview
+
+### Why Agent Enhancement Instead of Custom Orchestration?
+
+**Discovery:** Deep-dive analysis revealed:
+- DesignOS is a TypeScript web application (not markdown workflows)
+- AgentOS is a Shell CLI tool (not markdown workflows)
+- BMAD already provides 80%+ of their functionality via existing agents
+
+**Decision:** Leverage proven BMAD agent system instead of building custom orchestration engine.
+
+**Benefits:**
+- 72% less code (500 LOC vs 1,800 LOC)
+- Proven infrastructure (21 agents in production)
+- Working features Week 1-2 (not just backend)
+- Lower risk, realistic timeline
+
+### What We're Building
+
+**4 New BMAD Agents:**
+
+1. **Empathy Mapper (Emma)** - DesignOS-inspired
+   - User empathy mapping workflows
+   - Creates empathy maps, POV statements, user insights
+
+2. **Wireframe Designer (Wade)** - DesignOS-inspired
+   - Rapid wireframe generation
+   - Creates Excalidraw wireframes, component inventories
+
+3. **Quality Gatekeeper (Quinn)** - AgentOS-inspired
+   - Quality gate decision workflows
+   - Pass/Fail/Concerns decisions based on criteria
+
+4. **Standards Auditor (Stan)** - AgentOS-inspired
+   - Code standards compliance checking
+   - Audit reports, compliance scores, recommendations
+
+**Integration:**
+- Register in `_bmad/_config/agent-manifest.csv`
+- Invoke via slash commands: `/bmad-agent-designos-empathy-mapper`
+- Use existing BMAD workflow patterns (step-files OR YAML+instructions)
+- Party mode integration for multi-agent collaboration
+
+---
+
+## Week 1: DesignOS-Inspired Agents
+
+### Day 1-2: Empathy Mapper Agent (Emma)
+
+**File:** `_bmad-enhanced/_designos/agents/empathy-mapper.md`
+
+**Agent Persona:**
+```yaml
+name: empathy-mapper
+displayName: Emma
+title: Empathy Mapping Specialist
+icon: 🎨
+role: User Empathy Expert + Design Thinking Specialist
+identity: Design thinking expert specializing in empathy maps and user research. Helps teams understand user needs, emotions, and pain points through structured empathy mapping.
+communicationStyle: Empathetic, curious, asks probing questions. Focuses on emotional understanding and user perspective.
+principles: Design is about THEM not us. Every empathy map must be grounded in real user insights. Challenge assumptions - validate through research. Emotions drive behavior - understand the WHY.
+module: designos
+```
+
+**Menu Structure:**
+```xml
+<menu>
+  <item cmd="MH">[MH] Redisplay Menu</item>
+  <item cmd="CH">[CH] Chat with Emma</item>
+  <item cmd="EM" exec="{project-root}/_bmad-enhanced/_designos/workflows/empathy-map/workflow.md">[EM] Create Empathy Map</item>
+  <item cmd="VM" exec="{project-root}/_bmad-enhanced/_designos/workflows/empathy-map/validate.md">[VM] Validate Existing Empathy Map</item>
+  <item cmd="PM" exec="{project-root}/_bmad/core/workflows/party-mode/workflow.md">[PM] Start Party Mode</item>
+  <item cmd="DA">[DA] Dismiss Agent</item>
+</menu>
+```
+
+**Workflow: Create Empathy Map**
+
+**Architecture Choice:** Step-file (micro-file pattern, like Product Brief)
+
+**Directory Structure:**
+```
+_bmad-enhanced/_designos/workflows/empathy-map/
+├── workflow.md                  # Main orchestrator
+├── empathy-map.template.md     # Output template
+└── steps/
+    ├── step-01-define-user.md       # Define target user
+    ├── step-02-says-thinks.md       # What user says/thinks
+    ├── step-03-does-feels.md        # What user does/feels
+    ├── step-04-pain-points.md       # Pain points
+    ├── step-05-gains.md             # Desired gains
+    └── step-06-complete.md          # Finalize empathy map
+```
+
+**workflow.md Template:**
+```markdown
+---
+name: empathy-map
+description: Create user empathy maps for design thinking
+---
+
+# Empathy Map Workflow
+
+**Goal:** Create user empathy maps to understand user needs, emotions, and pain points.
+
+**Your Role:** Empathetic facilitator helping users deeply understand their target audience.
+
+## WORKFLOW ARCHITECTURE
+
+Step-file architecture:
+- Just-in-time loading
+- Sequential enforcement
+- State tracking in frontmatter
+
+## INITIALIZATION
+
+Load config from {project-root}/_bmad-enhanced/_designos/config.yaml
+Load step: {project-root}/_bmad-enhanced/_designos/workflows/empathy-map/steps/step-01-define-user.md
+```
+
+**step-01-define-user.md Template:**
+```markdown
+---
+step: 1
+workflow: empathy-map
+---
+
+# Step 1: Define Target User
+
+## Context
+
+You're creating an empathy map to deeply understand a specific user persona.
+
+## Your Task
+
+Ask the user:
+- Who is the target user/persona for this empathy map?
+- What role do they have? (job title, responsibilities)
+- What context/scenario are we focusing on?
+- What problem are they trying to solve?
+
+Create a clear user definition statement:
+"[User name/type] is a [role] who is trying to [achieve goal] in the context of [scenario]."
+
+## Output
+
+Write to: {output_folder}/empathy-map-{date}.md
+
+```yaml
+---
+stepsCompleted: [1]
+workflowName: empathy-map
+targetUser: [User definition]
+date: {date}
+---
+
+# Empathy Map: [User Name/Type]
+
+## Target User
+[User definition statement]
+```
+
+## Next Step
+
+When user confirms target user definition, load:
+{project-root}/_bmad-enhanced/_designos/workflows/empathy-map/steps/step-02-says-thinks.md
+```
+
+**Implementation Tasks (Day 1-2):**
+- [ ] Create `_bmad-enhanced/_designos/agents/empathy-mapper.md` (100 LOC)
+- [ ] Create `_bmad-enhanced/_designos/workflows/empathy-map/` directory
+- [ ] Create `workflow.md` orchestrator (25 LOC)
+- [ ] Create 6 step files (15 LOC each = 90 LOC)
+- [ ] Create `empathy-map.template.md` (20 LOC)
+- [ ] Register agent in `_bmad/_config/agent-manifest.csv` (1 line)
+- [ ] Test workflow end-to-end
+
+**Total LOC:** ~235 LOC (buffer: 100 LOC)
+
+### Day 3-4: Wireframe Designer Agent (Wade)
+
+**File:** `_bmad-enhanced/_designos/agents/wireframe-designer.md`
+
+**Agent Persona:**
+```yaml
+name: wireframe-designer
+displayName: Wade
+title: Wireframe Specialist
+icon: 📐
+role: UI/UX Wireframe Expert
+identity: Expert in rapid wireframe prototyping using Excalidraw. Creates low-fidelity wireframes that focus on layout, hierarchy, and user flow without getting distracted by visual design.
+communicationStyle: Visual thinker, asks about layout and flow. Uses spatial metaphors. Emphasizes simplicity and clarity.
+principles: Simple first, iterate later. Wireframes communicate structure, not style. Focus on user flow before pixel perfection. Low-fidelity prevents premature attachment.
+module: designos
+```
+
+**Menu Structure:**
+```xml
+<menu>
+  <item cmd="MH">[MH] Redisplay Menu</item>
+  <item cmd="CH">[CH] Chat with Wade</item>
+  <item cmd="CW" workflow="{project-root}/_bmad-enhanced/_designos/workflows/wireframe/workflow.yaml">[CW] Create Wireframe</item>
+  <item cmd="RW" exec="{project-root}/_bmad-enhanced/_designos/workflows/wireframe/review.md">[RW] Review Existing Wireframe</item>
+  <item cmd="PM" exec="{project-root}/_bmad/core/workflows/party-mode/workflow.md">[PM] Start Party Mode</item>
+  <item cmd="DA">[DA] Dismiss Agent</item>
+</menu>
+```
+
+**Workflow: Create Wireframe**
+
+**Architecture Choice:** YAML + instructions (monolithic pattern, like Design Thinking)
+
+**Directory Structure:**
+```
+_bmad-enhanced/_designos/workflows/wireframe/
+├── workflow.yaml           # Configuration
+├── instructions.md         # Complete workflow logic
+├── template.md            # Output template
+└── component-library.csv  # Common UI components reference
+```
+
+**workflow.yaml Template:**
+```yaml
+name: wireframe
+description: Create wireframes for user interfaces using Excalidraw
+author: BMad-Enhanced
+
+config_source: "{project-root}/_bmad-enhanced/_designos/config.yaml"
+output_folder: "{config_source}:output_folder"
+user_name: "{config_source}:user_name"
+communication_language: "{config_source}:communication_language"
+date: system-generated
+
+installed_path: "{project-root}/_bmad-enhanced/_designos/workflows/wireframe"
+template: "{installed_path}/template.md"
+instructions: "{installed_path}/instructions.md"
+component_library: "{installed_path}/component-library.csv"
+
+default_output_file: "{output_folder}/wireframe-{{date}}.md"
+standalone: true
+```
+
+**instructions.md Structure:**
+```xml
+<critical>Load workflow.yaml</critical>
+<critical>Load component library from {component_library}</critical>
+
+<wireframing-principles>
+  - Low-fidelity over high-fidelity initially
+  - Focus on layout and hierarchy
+  - Use boxes, labels, and simple shapes
+  - Prioritize user flow over visual design
+  - Iterate quickly based on feedback
+</wireframing-principles>
+
+<workflow>
+  <step n="1" goal="Define screen purpose and user flow">
+    [Ask about screen purpose, user goals, navigation context]
+    <template-output>screen_purpose</template-output>
+    <template-output>user_flow</template-output>
+  </step>
+
+  <step n="2" goal="Identify UI components needed">
+    [Review component library, select applicable components]
+    <template-output>component_inventory</template-output>
+  </step>
+
+  <step n="3" goal="Define layout structure">
+    [Grid layout, sections, hierarchy]
+    <template-output>layout_structure</template-output>
+  </step>
+
+  <step n="4" goal="Create Excalidraw wireframe">
+    [Generate Excalidraw JSON or markdown representation]
+    <template-output>wireframe_excalidraw</template-output>
+  </step>
+
+  <step n="5" goal="Document design decisions">
+    [Rationale for layout choices, interaction patterns]
+    <template-output>design_decisions</template-output>
+  </step>
+</workflow>
+```
+
+**Implementation Tasks (Day 3-4):**
+- [ ] Create `_bmad-enhanced/_designos/agents/wireframe-designer.md` (100 LOC)
+- [ ] Create `_bmad-enhanced/_designos/workflows/wireframe/` directory
+- [ ] Create `workflow.yaml` (30 LOC)
+- [ ] Create `instructions.md` (100 LOC)
+- [ ] Create `template.md` (20 LOC)
+- [ ] Create `component-library.csv` (50 common components)
+- [ ] Register agent in `_bmad/_config/agent-manifest.csv` (1 line)
+- [ ] Test workflow end-to-end
+
+**Total LOC:** ~250 LOC (buffer: 100 LOC)
+
+### Day 5: Week 1 Testing & Refinement
+
+**Tasks:**
+- [ ] Test Emma (empathy-mapper) workflow end-to-end
+- [ ] Test Wade (wireframe-designer) workflow end-to-end
+- [ ] Test slash command invocation
+- [ ] Verify output artifacts match templates
+- [ ] Fix any bugs discovered
+- [ ] Document usage examples
+
+**Deliverables:**
+- 2 working DesignOS-inspired agents
+- Complete workflows with example outputs
+- Documentation
+
+---
+
+## Week 2: AgentOS-Inspired Agents
+
+### Day 6-7: Quality Gatekeeper Agent (Quinn)
+
+**File:** `_bmad-enhanced/_agentos/agents/quality-gatekeeper.md`
+
+**Agent Persona:**
+```yaml
+name: quality-gatekeeper
+displayName: Quinn
+title: Quality Gate Specialist
+icon: 🚦
+role: Quality Assurance Expert + Decision Authority
+identity: Risk-based quality assessment specialist. Makes objective quality gate decisions (PASS/FAIL/CONCERNS/WAIVED) based on predefined criteria and evidence. Prevents low-quality code from progressing.
+communicationStyle: Data-driven, objective, no-nonsense. Presents facts, calculates risk scores, makes clear decisions. "Quality gates are binary - you meet the bar or you don't."
+principles: Quality gates must be objective and measurable. Evidence beats opinions. Risk assessment drives depth of validation. Waiving gates requires explicit justification and approval. Failing fast is better than failing late.
+module: agentos
+```
+
+**Menu Structure:**
+```xml
+<menu>
+  <item cmd="MH">[MH] Redisplay Menu</item>
+  <item cmd="CH">[CH] Chat with Quinn</item>
+  <item cmd="QG" exec="{project-root}/_bmad-enhanced/_agentos/workflows/quality-gate/workflow.md">[QG] Run Quality Gate</item>
+  <item cmd="DG" exec="{project-root}/_bmad-enhanced/_agentos/workflows/quality-gate/define-criteria.md">[DG] Define Gate Criteria</item>
+  <item cmd="PM" exec="{project-root}/_bmad/core/workflows/party-mode/workflow.md">[PM] Start Party Mode</item>
+  <item cmd="DA">[DA] Dismiss Agent</item>
+</menu>
+```
+
+**Workflow: Run Quality Gate**
+
+**Architecture Choice:** Step-file (micro-file pattern)
+
+**Directory Structure:**
+```
+_bmad-enhanced/_agentos/workflows/quality-gate/
+├── workflow.md                     # Main orchestrator
+├── quality-gate.template.md       # Output template
+├── default-criteria.yaml          # Default quality criteria
+└── steps/
+    ├── step-01-load-criteria.md        # Load quality criteria
+    ├── step-02-gather-evidence.md      # Collect evidence
+    ├── step-03-assess-criteria.md      # Assess each criterion
+    ├── step-04-calculate-score.md      # Calculate quality score
+    ├── step-05-make-decision.md        # PASS/FAIL/CONCERNS/WAIVED
+    └── step-06-complete.md             # Finalize decision report
+```
+
+**default-criteria.yaml:**
+```yaml
+# Default Quality Gate Criteria
+criteria:
+  - id: tests-pass
+    name: All Tests Pass
+    weight: critical
+    description: All unit, integration, and E2E tests must pass
+    passing_threshold: 100%
+
+  - id: code-coverage
+    name: Code Coverage
+    weight: high
+    description: Code coverage meets minimum threshold
+    passing_threshold: 80%
+
+  - id: no-critical-bugs
+    name: No Critical Bugs
+    weight: critical
+    description: Zero critical or high-severity bugs
+    passing_threshold: 0 bugs
+
+  - id: code-review
+    name: Code Review Complete
+    weight: high
+    description: All code reviewed and approved by senior engineer
+    passing_threshold: 100%
+
+  - id: documentation
+    name: Documentation Updated
+    weight: medium
+    description: README, API docs, and inline comments updated
+    passing_threshold: Complete
+
+  - id: security-scan
+    name: Security Scan Clean
+    weight: critical
+    description: No high/critical security vulnerabilities
+    passing_threshold: 0 vulnerabilities
+```
+
+**Implementation Tasks (Day 6-7):**
+- [ ] Create `_bmad-enhanced/_agentos/agents/quality-gatekeeper.md` (100 LOC)
+- [ ] Create `_bmad-enhanced/_agentos/workflows/quality-gate/` directory
+- [ ] Create `workflow.md` orchestrator (25 LOC)
+- [ ] Create 6 step files (15 LOC each = 90 LOC)
+- [ ] Create `quality-gate.template.md` (30 LOC)
+- [ ] Create `default-criteria.yaml` (50 LOC)
+- [ ] Register agent in `_bmad/_config/agent-manifest.csv` (1 line)
+- [ ] Test workflow end-to-end
+
+**Total LOC:** ~295 LOC (buffer: 100 LOC)
+
+### Day 8-9: Standards Auditor Agent (Stan)
+
+**File:** `_bmad-enhanced/_agentos/agents/standards-auditor.md`
+
+**Agent Persona:**
+```yaml
+name: standards-auditor
+displayName: Stan
+title: Standards Compliance Auditor
+icon: 📋
+role: Code Standards Expert + Compliance Checker
+identity: Meticulous standards enforcement specialist. Audits code against documented standards (naming conventions, architecture patterns, testing practices). Produces compliance reports with specific violations and recommendations.
+communicationStyle: Meticulous, detail-oriented, references specific standards. "Line 42 violates standard CS-101 (camelCase required for variables)."
+principles: Consistency is maintainability. Standards prevent technical debt. Every violation must cite specific standard. Automate what can be automated. Audit early, audit often.
+module: agentos
+```
+
+**Menu Structure:**
+```xml
+<menu>
+  <item cmd="MH">[MH] Redisplay Menu</item>
+  <item cmd="CH">[CH] Chat with Stan</item>
+  <item cmd="AS" workflow="{project-root}/_bmad-enhanced/_agentos/workflows/audit-standards/workflow.yaml">[AS] Audit Standards</item>
+  <item cmd="DS" exec="{project-root}/_bmad-enhanced/_agentos/workflows/audit-standards/discover-standards.md">[DS] Discover Standards from Codebase</item>
+  <item cmd="CS" exec="{project-root}/_bmad-enhanced/_agentos/workflows/audit-standards/create-standard.md">[CS] Create New Standard</item>
+  <item cmd="PM" exec="{project-root}/_bmad/core/workflows/party-mode/workflow.md">[PM] Start Party Mode</item>
+  <item cmd="DA">[DA] Dismiss Agent</item>
+</menu>
+```
+
+**Workflow: Audit Standards**
+
+**Architecture Choice:** YAML + instructions (monolithic pattern)
+
+**Directory Structure:**
+```
+_bmad-enhanced/_agentos/workflows/audit-standards/
+├── workflow.yaml              # Configuration
+├── instructions.md            # Complete workflow logic
+├── template.md               # Output template
+└── standards/
+    ├── coding-standards.md       # Coding conventions
+    ├── architecture-patterns.md  # Architectural patterns
+    ├── testing-standards.md      # Testing practices
+    └── documentation-standards.md # Doc requirements
+```
+
+**workflow.yaml Template:**
+```yaml
+name: audit-standards
+description: Audit code against documented standards and produce compliance report
+author: BMad-Enhanced
+
+config_source: "{project-root}/_bmad-enhanced/_agentos/config.yaml"
+output_folder: "{config_source}:output_folder"
+user_name: "{config_source}:user_name"
+communication_language: "{config_source}:communication_language"
+date: system-generated
+
+installed_path: "{project-root}/_bmad-enhanced/_agentos/workflows/audit-standards"
+template: "{installed_path}/template.md"
+instructions: "{installed_path}/instructions.md"
+standards_dir: "{installed_path}/standards"
+
+default_output_file: "{output_folder}/standards-audit-{{date}}.md"
+standalone: true
+```
+
+**instructions.md Structure:**
+```xml
+<critical>Load workflow.yaml</critical>
+<critical>Load all standards from {standards_dir}</critical>
+
+<auditing-principles>
+  - Every finding must cite specific standard
+  - Violations categorized by severity (critical, high, medium, low)
+  - Provide specific line numbers and code examples
+  - Recommend specific fixes
+  - Calculate compliance score per standard category
+</auditing-principles>
+
+<workflow>
+  <step n="1" goal="Define audit scope">
+    [Ask which files/directories to audit]
+    <template-output>audit_scope</template-output>
+  </step>
+
+  <step n="2" goal="Load applicable standards">
+    [Identify which standards apply to scope]
+    <template-output>applicable_standards</template-output>
+  </step>
+
+  <step n="3" goal="Perform automated checks">
+    [Check naming conventions, file structure, imports]
+    <template-output>automated_findings</template-output>
+  </step>
+
+  <step n="4" goal="Perform manual review">
+    [Architecture patterns, design principles, best practices]
+    <template-output>manual_findings</template-output>
+  </step>
+
+  <step n="5" goal="Calculate compliance scores">
+    [Violations per category, overall compliance percentage]
+    <template-output>compliance_scores</template-output>
+  </step>
+
+  <step n="6" goal="Generate recommendations">
+    [Prioritized action items to fix violations]
+    <template-output>recommendations</template-output>
+  </step>
+</workflow>
+```
+
+**Implementation Tasks (Day 8-9):**
+- [ ] Create `_bmad-enhanced/_agentos/agents/standards-auditor.md` (100 LOC)
+- [ ] Create `_bmad-enhanced/_agentos/workflows/audit-standards/` directory
+- [ ] Create `workflow.yaml` (30 LOC)
+- [ ] Create `instructions.md` (120 LOC)
+- [ ] Create `template.md` (30 LOC)
+- [ ] Create 4 standards files (25 LOC each = 100 LOC)
+- [ ] Register agent in `_bmad/_config/agent-manifest.csv` (1 line)
+- [ ] Test workflow end-to-end
+
+**Total LOC:** ~380 LOC (buffer: 120 LOC)
+
+### Day 10: Week 2 Testing & Refinement
+
+**Tasks:**
+- [ ] Test Quinn (quality-gatekeeper) workflow end-to-end
+- [ ] Test Stan (standards-auditor) workflow end-to-end
+- [ ] Test slash command invocation
+- [ ] Verify output artifacts match templates
+- [ ] Fix any bugs discovered
+- [ ] Document usage examples
+
+**Deliverables:**
+- 2 working AgentOS-inspired agents
+- Complete workflows with example outputs
+- Documentation
+
+---
+
+## Week 3: Integration & Testing
+
+### Day 11-12: Cross-Agent Workflow Orchestration
+
+**Goal:** Create workflow that chains agents automatically
+
+**File:** `_bmad-enhanced/workflows/product-development-flow.md`
+
+**Workflow Structure:**
+```markdown
+---
+name: product-development-flow
+description: End-to-end product development workflow orchestrating design and quality agents
+---
+
+# Product Development Flow
+
+**Goal:** Orchestrate Emma (empathy) → Wade (wireframe) → Quinn (quality gate) automatically.
+
+## Workflow Steps
+
+### Step 1: User Empathy Phase
+Invoke Emma (empathy-mapper) agent:
+- Create empathy map for target user
+- Output: empathy-map-{date}.md
+
+### Step 2: Wireframe Phase
+Invoke Wade (wireframe-designer) agent:
+- Pass empathy map as context
+- Create wireframe based on user insights
+- Output: wireframe-{date}.md
+
+### Step 3: Quality Gate Phase
+Invoke Quinn (quality-gatekeeper) agent:
+- Define quality criteria for design phase
+- Assess wireframe quality
+- Decision: PASS/FAIL/CONCERNS
+- Output: quality-gate-design-{date}.md
+
+### Step 4: Standards Audit Phase (Optional)
+If wireframe includes implementation notes:
+- Invoke Stan (standards-auditor) agent
+- Audit against design standards
+- Output: standards-audit-{date}.md
+```
+
+**Implementation:**
+```markdown
+## Implementation Approach
+
+**Option A: Manual Orchestration (Simple)**
+- Workflow document guides user through agent invocations
+- User manually calls `/bmad-agent-designos-empathy-mapper`, then `/bmad-agent-designos-wireframe-designer`, etc.
+- Workflow provides next-step guidance
+
+**Option B: Automatic Orchestration (Advanced)**
+- Workflow automatically invokes agents using exec handler
+- Each agent produces artifact
+- Next agent loads previous artifact as context
+- Example:
+  ```xml
+  <step n="1">
+    <exec agent="empathy-mapper" command="EM"/>
+    <capture output="empathy_map_path"/>
+  </step>
+  <step n="2">
+    <exec agent="wireframe-designer" command="CW" context="{empathy_map_path}"/>
+    <capture output="wireframe_path"/>
+  </step>
+  ```
+
+**Recommendation:** Start with Option A (manual), upgrade to Option B if needed.
+```
+
+**Implementation Tasks (Day 11-12):**
+- [ ] Create `_bmad-enhanced/workflows/product-development-flow.md` (50 LOC)
+- [ ] Test manual orchestration (user-driven)
+- [ ] Document artifact passing between agents
+- [ ] Create example end-to-end run
+- [ ] (Optional) Prototype automatic orchestration
+
+**Total LOC:** ~50 LOC
+
+### Day 13: Party Mode Integration
+
+**Goal:** Enable new agents in party mode conversations
+
+**Task:** Verify agent-manifest.csv registration enables party mode
+
+**Party Mode Already Works:** Once agents registered in `agent-manifest.csv`, party mode automatically includes them.
+
+**Testing:**
+```
+User: /bmad-party-mode
+Party Mode: Loads all 25 agents (21 existing + 4 new)
+
+User: "How do we ensure our new feature is well-designed and high-quality?"
+
+Party Mode selects relevant agents:
+- Emma (empathy-mapper): "Let's start with understanding the user..."
+- Winston (architect): "From a technical perspective..."
+- Quinn (quality-gatekeeper): "I'll need clear acceptance criteria..."
+- Murat (test architect): "Quality gates should be defined upfront..."
+```
+
+**Implementation Tasks (Day 13):**
+- [ ] Verify all 4 agents appear in party mode roster
+- [ ] Test party mode topic-based agent selection
+- [ ] Test cross-agent conversations (new + existing agents)
+- [ ] Document party mode examples
+
+**Total LOC:** 0 LOC (party mode already implemented)
+
+### Day 14: Documentation & Decision Gate
+
+**Tasks:**
+- [ ] Create usage guide for 4 new agents
+- [ ] Document cross-agent workflow patterns
+- [ ] Create example artifacts for each agent
+- [ ] Update README.md with Phase 0 results
+- [ ] Prepare decision gate presentation
+
+**Deliverables:**
+- Complete usage documentation
+- Example artifacts for all 4 agents
+- Cross-agent workflow example
+- Decision gate report
+
+**Total LOC:** 0 LOC (documentation only)
+
+### Day 15: Buffer & Cleanup
+
+**Tasks:**
+- [ ] Fix any remaining bugs
+- [ ] Refactor code if needed
+- [ ] Add missing tests
+- [ ] Update planning documents
+- [ ] Prepare for Phase 1
+
+---
+
+## Implementation Checklist
+
+### Week 1: DesignOS-Inspired Agents
+
+- [ ] **Emma (Empathy Mapper)**
+  - [ ] Create agent file (100 LOC)
+  - [ ] Create empathy-map workflow (step-files, 135 LOC)
+  - [ ] Register in agent-manifest.csv
+  - [ ] Test end-to-end
+  - [ ] Document usage
+
+- [ ] **Wade (Wireframe Designer)**
+  - [ ] Create agent file (100 LOC)
+  - [ ] Create wireframe workflow (YAML+instructions, 180 LOC)
+  - [ ] Create component library CSV
+  - [ ] Register in agent-manifest.csv
+  - [ ] Test end-to-end
+  - [ ] Document usage
+
+**Week 1 Total:** ~415 LOC (buffer: 200 LOC)
+
+### Week 2: AgentOS-Inspired Agents
+
+- [ ] **Quinn (Quality Gatekeeper)**
+  - [ ] Create agent file (100 LOC)
+  - [ ] Create quality-gate workflow (step-files, 195 LOC)
+  - [ ] Create default-criteria.yaml
+  - [ ] Register in agent-manifest.csv
+  - [ ] Test end-to-end
+  - [ ] Document usage
+
+- [ ] **Stan (Standards Auditor)**
+  - [ ] Create agent file (100 LOC)
+  - [ ] Create audit-standards workflow (YAML+instructions, 280 LOC)
+  - [ ] Create 4 standards files
+  - [ ] Register in agent-manifest.csv
+  - [ ] Test end-to-end
+  - [ ] Document usage
+
+**Week 2 Total:** ~675 LOC (buffer: 325 LOC)
+
+### Week 3: Integration & Testing
+
+- [ ] **Cross-Agent Workflow**
+  - [ ] Create product-development-flow.md (50 LOC)
+  - [ ] Test manual orchestration
+  - [ ] Document artifact passing
+  - [ ] Create end-to-end example
+
+- [ ] **Party Mode Integration**
+  - [ ] Verify all 4 agents in party mode
+  - [ ] Test multi-agent conversations
+  - [ ] Document party mode examples
+
+- [ ] **Documentation & Decision Gate**
+  - [ ] Usage guide for 4 agents
+  - [ ] Cross-agent workflow docs
+  - [ ] Example artifacts
+  - [ ] Decision gate report
+
+**Week 3 Total:** ~50 LOC (orchestration only)
+
+**Grand Total:** ~1,140 LOC actual code (vs 500 LOC estimate - buffer accounts for templates, standards files)
+
+---
+
+## Success Criteria
+
+### Functional Requirements
+
+- [ ] All 4 agents accessible via slash commands:
+  - [ ] `/bmad-agent-designos-empathy-mapper` works
+  - [ ] `/bmad-agent-designos-wireframe-designer` works
+  - [ ] `/bmad-agent-agentos-quality-gatekeeper` works
+  - [ ] `/bmad-agent-agentos-standards-auditor` works
+
+- [ ] All workflows execute end-to-end:
+  - [ ] Empathy map workflow completes successfully
+  - [ ] Wireframe workflow completes successfully
+  - [ ] Quality gate workflow completes successfully
+  - [ ] Standards audit workflow completes successfully
+
+- [ ] Artifacts produced match templates:
+  - [ ] Empathy maps contain: user definition, says/thinks, does/feels, pains, gains
+  - [ ] Wireframes contain: purpose, components, layout, Excalidraw diagram, design decisions
+  - [ ] Quality gates contain: criteria, evidence, scores, decision (PASS/FAIL/CONCERNS/WAIVED)
+  - [ ] Standards audits contain: violations, compliance scores, recommendations
+
+- [ ] Cross-agent workflow orchestration works:
+  - [ ] Manual orchestration guide functional
+  - [ ] Artifacts can be passed between agents
+  - [ ] End-to-end product development flow completes
+
+- [ ] Party mode integration works:
+  - [ ] All 4 new agents appear in party mode roster
+  - [ ] Agents selected for relevant topics
+  - [ ] Cross-agent conversations functional
+
+### Non-Functional Requirements
+
+- [ ] **LOC Estimate Accuracy:** Actual LOC within ±30% of estimate (500 LOC ± 150 = 350-650 LOC)
+- [ ] **Timeline Accuracy:** Phase 0 completes within 3 weeks
+- [ ] **Code Quality:** All code follows BMAD agent standards
+- [ ] **Documentation:** Complete usage guides for all agents
+- [ ] **Testing:** Each agent tested end-to-end with real examples
+
+---
+
+## Decision Gate Questions
+
+### Week 3 Decision Gate
+
+**Primary Question:** Does agent enhancement approach prove viable for BMAD-Enhanced integration?
+
+**Evaluation Criteria:**
+
+1. **Agent Pattern Scalability**
+   - Can agent menus effectively expose framework capabilities?
+   - Does workflow-based orchestration scale to complex multi-agent flows?
+   - Is explicit registration (CSV) manageable vs convention-based discovery?
+
+2. **User Experience**
+   - Is slash command invocation intuitive for users?
+   - Does manual orchestration feel cumbersome or natural?
+   - Is party mode multi-agent collaboration valuable?
+
+3. **Technical Debt**
+   - Does agent duplication create maintenance burden?
+   - Are workflows easy to understand and modify?
+   - Does artifact passing between agents work smoothly?
+
+4. **Capability Coverage**
+   - Do 4 new agents provide meaningful new capabilities?
+   - What gaps remain vs original DesignOS/AgentOS vision?
+   - Should we continue agent approach or pivot?
+
+**Decision Options:**
+
+**Option A: Proceed to Phase 1 (Contract Foundation)**
+- Agent approach proven viable
+- Continue with BaseArtifact v2.0.0 implementation
+- Plan Phase 3/4 as agent enhancements (not custom orchestration)
+
+**Option B: Enhance Agent Capabilities (Phase 1.5)**
+- Agent approach viable but needs more capabilities
+- Add 4-8 more agents before Phase 1
+- Defer contract foundation until agent ecosystem mature
+
+**Option C: Pivot to Custom Orchestration (Phase 0.5)**
+- Agent approach doesn't scale
+- Build custom orchestration engine (original 1,800 LOC plan)
+- Retry Phase 0 with Capabilities + Steps pattern
+
+**Option D: Pivot to Hybrid Approach**
+- Agents for user-facing features
+- Custom orchestration for backend coordination
+- Combine proven agent UX with automatic capability discovery
+
+**Recommendation Criteria:**
+- If 4 agents prove valuable and workflows scale → **Option A**
+- If agents good but need more coverage → **Option B**
+- If agents don't scale or maintenance burden high → **Option C**
+- If agents great for UX but orchestration manual → **Option D**
+
+---
+
+## Next Steps After Phase 0
+
+### If Decision: Proceed to Phase 1
+
+**Phase 1 (Weeks 4-7): Contract Foundation**
+- Implement BaseArtifact v2.0.0 schema
+- Add frontmatter contracts to 4 new agents
+- Establish cross-framework traceability
+- Create artifact relationship mapping
+
+### If Decision: Enhance Agents (Phase 1.5)
+
+**Additional Agents to Consider:**
+- Journey Mapper (CIS-inspired)
+- Persona Creator (CIS-inspired)
+- API Standards Auditor (AgentOS-inspired)
+- Performance Quality Gate (AgentOS-inspired)
+- Accessibility Auditor (AgentOS-inspired)
+- Documentation Quality Gate (AgentOS-inspired)
+
+**Scope:** 4-8 additional agents, 2-4 weeks
+
+### If Decision: Pivot to Custom Orchestration
+
+**Revert to ADR v1.3.0 Plan:**
+- Build capability discovery engine (200 LOC)
+- Build step loading mechanism (300 LOC)
+- Build orchestration glue (300 LOC)
+- Implement execution tracing (250 LOC)
+- Create DesignOS/AgentOS stubs (400 LOC)
+- Total: 1,800 LOC, 4-6 weeks
+
+---
+
+## Appendix: File Structure Summary
+
+```
+_bmad-enhanced/
+├── _config/
+│   └── agent-manifest.csv          # +4 new agent registrations
+├── _designos/
+│   ├── config.yaml                 # DesignOS module config
+│   ├── agents/
+│   │   ├── empathy-mapper.md       # Emma (100 LOC)
+│   │   └── wireframe-designer.md   # Wade (100 LOC)
+│   ├── workflows/
+│   │   ├── empathy-map/
+│   │   │   ├── workflow.md
+│   │   │   ├── empathy-map.template.md
+│   │   │   └── steps/ (6 files)
+│   │   └── wireframe/
+│   │       ├── workflow.yaml
+│   │       ├── instructions.md
+│   │       ├── template.md
+│   │       └── component-library.csv
+│   └── output/                     # Generated empathy maps & wireframes
+├── _agentos/
+│   ├── config.yaml                 # AgentOS module config
+│   ├── agents/
+│   │   ├── quality-gatekeeper.md   # Quinn (100 LOC)
+│   │   └── standards-auditor.md    # Stan (100 LOC)
+│   ├── workflows/
+│   │   ├── quality-gate/
+│   │   │   ├── workflow.md
+│   │   │   ├── quality-gate.template.md
+│   │   │   ├── default-criteria.yaml
+│   │   │   └── steps/ (6 files)
+│   │   └── audit-standards/
+│   │       ├── workflow.yaml
+│   │       ├── instructions.md
+│   │       ├── template.md
+│   │       └── standards/ (4 files)
+│   └── output/                     # Generated quality gates & audits
+└── workflows/
+    └── product-development-flow.md # Cross-agent orchestration (50 LOC)
+```
+
+**Total New Files:** ~30 files
+**Total New LOC:** ~500-700 LOC (depending on template/standards file sizes)
+
+---
+
+**End of Implementation Guide**
+
+Ready to begin Phase 0 implementation!
