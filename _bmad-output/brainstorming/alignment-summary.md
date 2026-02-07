@@ -9,7 +9,7 @@
 
 This document reconciles the **100 orchestration patterns** discovered during brainstorming with the **BMAD-First Architecture** decision already made for BMAD-Enhanced.
 
-**Key Finding:** The brainstorming patterns VALIDATE and REFINE the BMAD-First decision, providing specific implementation patterns for the 2,700 LOC sync adapter.
+**Key Finding:** The brainstorming patterns VALIDATE and REFINE the BMAD-First decision, providing specific implementation patterns. Phase 0 scope refinement (2026-02-06) focuses on pure markdown orchestration (1,800 LOC), deferring Quint sync adapter to Phase 2 (+ 500 LOC).
 
 ---
 
@@ -21,11 +21,12 @@ From [architectural-decision-record.md](../planning-artifacts/architectural-deci
 
 **Decision:** BMAD-First Architecture (Score: 8.55/10)
 - Foundation: BMAD Method's markdown-based workflow engine
-- Quint Integration: 2,700 LOC bidirectional sync adapter
+- Phase 0 Focus: Pure markdown orchestration (DesignOS + AgentOS) - 1,800 LOC
+- Quint Integration (Phase 2): 500 LOC sync adapter connecting Quint SQLite to markdown
 - DesignOS/AgentOS: Native markdown modules following BMAD workflow patterns
-- Synchronization: Real-time bidirectional sync (Quint SQLite ↔ Markdown, ~200ms latency)
+- Synchronization: BMAD Markdown as master → Quint SQLite cache (~200ms latency, validated in Phase 2)
 
-**Critical Gap in ADR:** The ADR describes WHAT (2,700 LOC sync adapter) but not HOW frameworks expose capabilities or HOW orchestration works across all 4 frameworks.
+**Critical Gap Filled by Brainstorming:** The ADR described WHAT to build, brainstorming discovered HOW frameworks integrate (Capabilities + Steps pattern, convention-based discovery, hierarchical orchestration).
 
 ---
 
@@ -77,7 +78,7 @@ From [architectural-decision-record.md](../planning-artifacts/architectural-deci
 - **Centralized (3A)** with **BMAD Markdown as master**
 - Rationale: Aligns with "BMAD-First" philosophy, Git is version control system
 - Quint SQLite becomes a **performance cache** for FPF queries
-- 2,700 LOC adapter syncs markdown → SQLite (primary direction), SQLite → markdown (FPF results only)
+- 500 LOC adapter (Phase 2) syncs markdown → SQLite (primary direction), SQLite → markdown (FPF results only)
 
 **Impact on ADR:**
 - ✅ Clarifies sync direction and source of truth
@@ -245,33 +246,46 @@ Based on brainstorming insights, these decisions should be explicitly documented
 
 ### Original ADR Estimate: 2,700 LOC Adapter
 
-### Brainstorming Pattern-Based Estimate:
+### Revised Estimate (2026-02-06): Phased Approach
+
+**Phase 0 POC (Weeks 1-3): Pure Markdown Orchestration**
 
 | Component | Patterns | LOC Estimate |
 |-----------|----------|--------------|
-| **Skill Discovery** | B2 | 200 LOC |
+| **Capability Discovery** | B2 | 200 LOC |
 | **Step Loading** | D2, H1 | 300 LOC |
-| **State Management (Sync Adapter)** | Meta-Pattern 3A | 400 LOC |
-| **Execution Tracing** | D10 | 250 LOC |
-| **Lazy Initialization** | P2 | 150 LOC |
-| **Mock Frameworks** | C9 | 300 LOC |
-| **Quint Integration** | Adapter | 500 LOC |
-| **DesignOS Stub** | Stub | 200 LOC |
-| **AgentOS Stub** | Stub | 200 LOC |
 | **Orchestration Glue** | H1 | 300 LOC |
-| **Version Tagging** | Simple | 100 LOC |
-| **Tests** | Basic | 200 LOC |
-| **Total** | | **3,100 LOC** |
+| **Execution Tracing** | D10 | 250 LOC |
+| **DesignOS Capabilities (Stubs)** | empathy-map, journey-map | 200 LOC |
+| **AgentOS Capabilities (Stubs)** | quality-gate, standards-check | 200 LOC |
+| **Tests** | Integration + Unit | 350 LOC |
+| **Phase 0 Total** | | **1,800 LOC** |
 
-**Variance:** +400 LOC (15% over original estimate)
+**Phase 2 (Weeks 8-9): Quint SQLite Sync Adapter**
 
-**Options to Stay Within Budget:**
-1. Reduce tracing granularity (250 → 150 LOC)
-2. Simplify one framework stub (200 → 100 LOC)
-3. Defer AgentOS stub to Phase 4 (-200 LOC)
-4. Accept 15% overage (reasonable for estimates)
+| Component | Patterns | LOC Estimate |
+|-----------|----------|--------------|
+| **Markdown → SQLite Sync Writer** | Meta-Pattern 3A | 200 LOC |
+| **SQLite → Markdown Sync Reader** | FPF results only | 150 LOC |
+| **Conflict Resolution** | Markdown wins | 50 LOC |
+| **Retry Logic** | Exponential backoff | 100 LOC |
+| **Phase 2 Total** | | **500 LOC** |
 
-**Recommendation:** Accept 3,100 LOC as refined estimate based on pattern analysis. Still well under Quint-First (15K LOC) and Greenfield (52K LOC).
+**Combined Total: 2,300 LOC** (vs original 3,100 LOC estimate)
+
+**Why Phase 0 Scope Reduction Works:**
+- ✅ Removes Quint complexity from POC: -500 LOC
+- ✅ Removes lazy loading (not needed without Quint): -150 LOC
+- ✅ Removes version tagging infrastructure: -100 LOC
+- ✅ Reduces mock framework complexity: -300 LOC
+- ✅ Simplifies testing (no database scenarios): -150 LOC
+- **Total Reduction:** -1,200 LOC from Phase 0
+- **Total Deferred to Phase 2:** +500 LOC Quint adapter
+
+**Risk Mitigation Benefits:**
+- Phase 0 validates orchestration pattern BEFORE database sync challenges
+- If orchestration fails, pivot without wasted Quint adapter investment
+- 1,800 LOC is realistic for 3-week POC (vs 3,100 LOC ambitious timeline)
 
 ---
 
@@ -286,7 +300,7 @@ Based on brainstorming insights, these decisions should be explicitly documented
 - [ ] Specify State Management: "BMAD Markdown is master, Quint SQLite is performance cache"
 - [ ] Add Interface Model decision: "Skills + Steps (Convention-Based Discovery)"
 - [ ] Add Control Flow decision: "Hierarchical orchestration (Skills → Steps)"
-- [ ] Update LOC estimate: 2,700 → 3,100 LOC (with justification)
+- [x] Update LOC estimate: Phase 0 = 1,800 LOC, Phase 2 = +500 LOC (with Phase 0 scope refinement justification)
 - [ ] Add Phase 0 POC reliability patterns: D10 (Tracing), P2 (Lazy Loading), C9 (Mocking)
 
 ---
@@ -340,15 +354,17 @@ Based on brainstorming insights, these decisions should be explicitly documented
 
 ### Insight 1: Brainstorming VALIDATES ADR Decision
 The 100 patterns explored during brainstorming CONFIRM that BMAD-First Architecture is optimal:
-- Skills + Steps pattern is the most BMAD-native approach (vs Tools or pure APIs)
+- Capabilities + Steps pattern is the most BMAD-native approach (vs Tools or pure APIs)
 - Centralized state with markdown master aligns with Git-centric philosophy
-- 3,100 LOC estimate still dramatically better than alternatives (15K, 52K LOC)
+- 2,300 LOC estimate (Phase 0 + Phase 2) still dramatically better than alternatives (15K, 52K LOC)
+- Phase 0 scope refinement reduces risk by validating orchestration before database sync complexity
 
 ### Insight 2: Patterns Provide IMPLEMENTATION CLARITY
-ADR described WHAT (2,700 LOC adapter), brainstorming discovered HOW:
-- B2 + D2 + H1: Concrete file structure and orchestration flow
-- D10 + P2 + C9: Minimal reliability patterns for POC
-- Meta-Pattern 3A: Specific state management approach
+ADR described WHAT to build, brainstorming discovered HOW:
+- B2 + D2 + H1: Concrete file structure and orchestration flow (Capabilities + Steps)
+- D10: Minimal observability for POC (execution tracing)
+- Meta-Pattern 3A: Specific state management approach (markdown master)
+- Phase 0 scope refinement: Validate orchestration before Quint complexity
 
 ### Insight 3: DesignOS/AgentOS Integration Path is CLEAR
 Brainstorming removed ambiguity about "native markdown modules":
@@ -380,10 +396,11 @@ This confirms ADR's pragmatic "ship value now, optimize later" philosophy.
 ## Action Items
 
 ### Immediate (Before Phase 0 Implementation)
-1. [ ] Update ADR with State Management decision (markdown master)
-2. [ ] Update ADR with Interface Model decision (Skills + Steps)
-3. [ ] Update ADR LOC estimate (2,700 → 3,100 LOC)
-4. [ ] Create file structure template for all 4 frameworks
+1. [x] Update ADR with State Management decision (markdown master) - v1.3.0
+2. [x] Update ADR with Interface Model decision (Capabilities + Steps) - v1.2.0
+3. [x] Update ADR with Phase 0 scope refinement - v1.3.0
+4. [x] Update Integration Roadmap with Phase 0 insertion - v2.0.0
+5. [ ] Create file structure template for all 4 frameworks
 
 ### Short-Term (During Phase 0 POC)
 5. [ ] Implement B2 (Convention-Based Skill Discovery)
@@ -404,10 +421,11 @@ This confirms ADR's pragmatic "ship value now, optimize later" philosophy.
 **The brainstorming session was NOT a divergence from the ADR — it was a REFINEMENT.**
 
 **Before Brainstorming:**
-- ✅ Knew WHAT to build (BMAD-First, 2,700 LOC adapter)
+- ✅ Knew WHAT to build (BMAD-First Architecture)
 - ❌ Didn't know HOW frameworks integrate (interfaces, orchestration, state)
+- ❌ Didn't know optimal phasing strategy
 
-**After Brainstorming:**
+**After Brainstorming + Phase 0 Refinement:**
 - ✅ Know WHAT to build (unchanged: BMAD-First)
 - ✅ Know HOW to build it (B2+D2+H1 patterns, markdown master, 7 architectural dimensions)
 - ✅ Know WHAT to defer (71 advanced patterns for post-POC)
