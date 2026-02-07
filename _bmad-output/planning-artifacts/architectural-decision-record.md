@@ -28,9 +28,10 @@ Each framework has different technical foundations:
 ### Core Strategy
 
 - **Foundation:** BMAD Method's proven markdown-based workflow engine
-- **Quint Integration:** 3,100 LOC sync adapter connecting Quint's SQLite to markdown artifacts
+- **Phase 0 Focus:** Pure markdown orchestration (DesignOS + AgentOS) - 1,800 LOC
+- **Quint Integration:** Deferred to Phase 2 - 500 LOC sync adapter connecting Quint's SQLite to markdown artifacts
 - **DesignOS/AgentOS:** Native markdown modules following BMAD workflow patterns (Capabilities + Steps)
-- **Synchronization:** BMAD Markdown as master → Quint SQLite cache (~200ms latency)
+- **Synchronization:** BMAD Markdown as master → Quint SQLite cache (~200ms latency, validated in Phase 2)
 - **Orchestration:** Capabilities + Steps pattern with convention-based discovery
 - **LLM-Agnostic:** Core uses "capabilities" (portable), Claude integration exposes as "skills" (slash commands)
 
@@ -131,6 +132,52 @@ _bmad-enhanced/
 │  • Cross-framework traceability                             │
 └─────────────────────────────────────────────────────────────┘
 ```
+
+### Phase 0 Scope Refinement (2026-02-06)
+
+**Decision:** Defer Quint SQLite integration to Phase 2, focus Phase 0 POC on pure markdown orchestration.
+
+**Rationale:**
+- **Risk Reduction:** Validate core orchestration pattern (Capabilities + Steps) before tackling complex database sync
+- **Complexity Reduction:** Phase 0 drops from 3,100 LOC → 1,800 LOC (saves 1,300 LOC of Quint adapter complexity)
+- **Faster Validation:** 3-week timeline becomes realistic without database sync challenges
+- **Clear Decision Gate:** If markdown orchestration fails in Phase 0, we can pivot before investing in Quint adapter
+
+**Phase 0 POC (Weeks 1-3):** Pure Markdown Orchestration
+- **Scope:** DesignOS + AgentOS capabilities only (no Quint)
+- **Patterns:** B2 (Convention-Based Discovery), D2 (Step Loading), H1 (Capabilities Load Steps), D10 (Execution Tracing)
+- **LOC Estimate:** ~1,800 LOC
+  - Capability Discovery: 200 LOC
+  - Step Loading: 300 LOC
+  - Execution Tracing: 250 LOC
+  - Orchestration Glue: 300 LOC
+  - DesignOS Capabilities (Stubs): 200 LOC (empathy-map, journey-map)
+  - AgentOS Capabilities (Stubs): 200 LOC (quality-gate, standards-check)
+  - Tests: 350 LOC (orchestration + capability tests)
+- **Deliverables:**
+  - Working capability discovery engine
+  - DesignOS empathy-map capability (stub)
+  - AgentOS quality-gate capability (stub)
+  - Cross-framework orchestration demo
+  - Decision checkpoint: Proceed to Phase 2 or pivot
+
+**Phase 2 (Weeks 9-14):** Quint SQLite Integration
+- **Scope:** Add Quint sync adapter to proven orchestration foundation
+- **LOC Estimate:** +500 LOC
+  - Markdown reader: 150 LOC
+  - SQLite writer: 200 LOC
+  - Conflict resolution: 50 LOC
+  - Retry logic: 100 LOC
+- **Validation:** Measure actual sync latency (target: <200ms), test concurrent write scenarios
+- **Decision Gate:** If sync latency >500ms or conflicts unresolvable, re-evaluate architecture
+
+**Total LOC (Phase 0 + Phase 2):** ~2,300 LOC (vs original 3,100 LOC estimate)
+
+**Why This Reduces Risk:**
+1. **Validates orchestration first:** If Capabilities + Steps pattern doesn't work for DesignOS/AgentOS, we pivot before building Quint adapter
+2. **Defers complex sync logic:** Database conflicts, latency, recovery logic are Phase 2 concerns
+3. **Realistic 3-week POC:** 1,800 LOC is achievable in 3 weeks; 3,100 LOC was ambitious
+4. **Clear failure modes:** Phase 0 failure = pivot orchestration pattern; Phase 2 failure = re-evaluate Quint integration approach
 
 ---
 
@@ -461,6 +508,7 @@ _bmad-enhanced/
 | 1.0.0 | 2026-02-05 | BMAD-Enhanced Team | Initial ADR - selected BMAD-First architecture after 3-option analysis |
 | 1.1.0 | 2026-02-05 | BMAD-Enhanced Team | Refined with orchestration patterns analysis (100 patterns evaluated), added Skills+Steps integration model, clarified markdown-as-master state management, updated LOC estimate to 3,100 |
 | 1.2.0 | 2026-02-05 | BMAD-Enhanced Team | Made architecture LLM-agnostic: renamed Skills→Capabilities (core), Claude integration exposes capabilities as skills (slash commands), added .integrations/ layer for multi-LLM support |
+| 1.3.0 | 2026-02-06 | BMAD-Enhanced Team | Phase 0 scope refinement: Deferred Quint SQLite integration to Phase 2, focus Phase 0 on pure markdown orchestration (DesignOS + AgentOS). Updated LOC estimates: Phase 0 = 1,800 LOC, Phase 2 = +500 LOC Quint adapter. Reduces Phase 0 complexity and validates orchestration pattern before database sync challenges. |
 
 ---
 
