@@ -1,6 +1,6 @@
 # BMAD-Enhanced Planning & Brainstorming Outputs
 
-**Last Updated:** 2026-02-05
+**Last Updated:** 2026-02-06
 
 ---
 
@@ -19,8 +19,8 @@ This directory contains all planning artifacts, analysis documents, and brainsto
 ### 📋 Planning Artifacts
 
 **Core Decision Documents:**
-- [architectural-decision-record.md](./planning-artifacts/architectural-decision-record.md) ⭐ **START HERE** - BMAD-First Architecture decision (v1.1.0)
-- [integration-roadmap.md](./planning-artifacts/integration-roadmap.md) - 24-week implementation plan (Phases 0-5)
+- [architectural-decision-record.md](./planning-artifacts/architectural-decision-record.md) ⭐ **START HERE** - BMAD-First Architecture decision (v1.3.0)
+- [integration-roadmap.md](./planning-artifacts/integration-roadmap.md) - 27-week implementation plan (Phases 0-5)
 - [baseartifact-contract-spec.md](./planning-artifacts/baseartifact-contract-spec.md) - Technical foundation v2.0.0
 
 **Analysis Documents:**
@@ -53,11 +53,13 @@ This directory contains all planning artifacts, analysis documents, and brainsto
 
 ## Key Decisions Summary
 
-### Architectural Approach: BMAD-First (v1.2.0)
+### Architectural Approach: BMAD-First (v1.3.0)
 
 **Foundation:** BMAD Method's proven markdown-based workflow engine
 
-**LLM-Agnostic Design:**  Core architecture uses "capabilities" (portable to any LLM). Claude integration exposes as "skills" (slash commands).
+**LLM-Agnostic Design:** Core architecture uses "capabilities" (portable to any LLM). Claude integration exposes as "skills" (slash commands).
+
+**Phase 0 Scope Refinement (2026-02-06):** Defer Quint SQLite integration to Phase 2, focus Phase 0 on pure markdown orchestration.
 
 **Integration Strategy:**
 1. **Interface Model:** Capabilities + Steps (Convention-Based Discovery)
@@ -67,57 +69,77 @@ This directory contains all planning artifacts, analysis documents, and brainsto
    - **Non-LLM tools:** REST API endpoints
 
 2. **Control Flow:** Hierarchical Orchestration
-   - Skills → Load Steps → Execute Framework Logic → Return to Workflow
+   - Capabilities → Load Steps → Execute Framework Logic → Return to Workflow
 
 3. **State Management:** BMAD Markdown as Master
    - Markdown artifacts are source of truth (Git version control)
-   - Quint SQLite is performance cache for FPF queries
+   - Quint SQLite is performance cache for FPF queries (Phase 2)
    - Sync direction: Markdown → SQLite (primary), SQLite → Markdown (FPF results)
 
-4. **Implementation Size:** 3,100 LOC
-   - Skill Discovery (200) + Step Loading (300) + Sync Adapter (400)
-   - Tracing (250) + Lazy Loading (150) + Mocks (300)
-   - Quint Integration (500) + DesignOS Stub (200) + AgentOS Stub (200)
-   - Orchestration Glue (300) + Versioning (100) + Tests (200)
+4. **Implementation Size (Phased):**
+   - **Phase 0 (Weeks 1-3):** 1,800 LOC - Pure markdown orchestration
+     - Capability Discovery (200) + Step Loading (300) + Orchestration Glue (300)
+     - Execution Tracing (250) + DesignOS Stubs (200) + AgentOS Stubs (200)
+     - Tests (350)
+   - **Phase 2 (Weeks 8-9):** +500 LOC - Quint sync adapter
+     - MD→SQLite Writer (200) + SQLite→MD Reader (150) + Conflict Resolution (50) + Retry Logic (100)
+   - **Total:** 2,300 LOC (vs original 3,100 LOC estimate)
 
 ---
 
 ## Timeline
 
-### Phase 0: POC (Weeks 1-3) ← **CURRENT FOCUS**
-**Goal:** Validate orchestration patterns are feasible
+### Phase 0: POC - Pure Markdown Orchestration (Weeks 1-3) ← **CURRENT FOCUS**
+**Goal:** Validate core orchestration pattern (Capabilities + Steps) using pure markdown workflows
+
+**Scope:** DesignOS + AgentOS capabilities only (Quint deferred to Phase 2)
 
 **Deliverables:**
-- Build minimal sync adapter (Quint SQLite ↔ Markdown)
-- Implement Skills + Steps discovery (B2, D2, H1 patterns)
-- Implement execution tracing (D10 pattern)
-- Demo cross-framework orchestration
+- Capability discovery engine (Pattern B2)
+- Step loading mechanism (Pattern D2)
+- Orchestration glue (Pattern H1: Capabilities Load Steps)
+- Execution tracing (Pattern D10)
+- DesignOS capabilities: empathy-map, journey-map (stubs)
+- AgentOS capabilities: quality-gate, standards-check (stubs)
+- Cross-framework orchestration demo
 
-**Decision Point:** If sync latency >500ms or conflicts unresolvable → reconsider approach
+**LOC:** 1,800 LOC
+
+**Decision Gate (Week 3):** Proceed to Phase 1 or pivot orchestration pattern
 
 ---
 
-### Phase 1: Contract Foundation (Weeks 4-8)
+### Phase 1: Contract Foundation (Weeks 4-7)
 **Goal:** Establish BaseArtifact v2.0.0 foundation
 
 ---
 
-### Phase 2: Quint Integration (Weeks 9-14)
-**Goal:** Complete bidirectional sync adapter
+### Phase 2: Quint SQLite Sync Adapter (Weeks 8-9)
+**Goal:** Add Quint sync adapter to proven orchestration foundation from Phase 0
+
+**Scope:** 500 LOC sync adapter only
+
+**Key Validations:**
+- Sync latency <200ms (target)
+- Concurrent write handling
+- Conflict resolution (markdown wins)
+- Recovery from sync failures
+
+**Decision Gate (Week 9):** Proceed to Phase 3 or optimize sync adapter
 
 ---
 
-### Phase 3: DesignOS Module (Weeks 15-18)
-**Goal:** Implement DesignOS as native markdown module
+### Phase 3: DesignOS Implementation (Weeks 14-17)
+**Goal:** Replace Phase 0 stubs with full DesignOS capabilities
 
 ---
 
-### Phase 4: AgentOS Module (Weeks 19-22)
-**Goal:** Implement AgentOS quality orchestration
+### Phase 4: AgentOS Orchestration Layer (Weeks 18-21)
+**Goal:** Replace Phase 0 stubs with full AgentOS quality orchestration
 
 ---
 
-### Phase 5: Cross-Framework Traceability (Weeks 23-26)
+### Phase 5: Cross-Framework Traceability (Weeks 22-27)
 **Goal:** Complete end-to-end traceability and launch v1.0.0
 
 ---
@@ -144,17 +166,17 @@ From [brainstorming-session-2026-02-05.md](./brainstorming/brainstorming-session
 6. Multi-Tenancy Approach (How users/projects coexist)
 7. Intelligence Level (How much AI augmentation)
 
-**Key Insight:** Brainstorming VALIDATED BMAD-First decision and provided implementation clarity (HOW to build the 3,100 LOC adapter).
+**Key Insight:** Brainstorming VALIDATED BMAD-First decision and provided implementation clarity (HOW to build orchestration + Quint adapter). Phase 0 scope refinement reduces risk by validating orchestration before database sync complexity.
 
 ---
 
 ## Quick Navigation
 
 **Starting Phase 0 POC Implementation?**
-1. Read: [architectural-decision-record.md](./planning-artifacts/architectural-decision-record.md)
-2. Read: [alignment-summary.md](./brainstorming/alignment-summary.md)
-3. Reference: [orchestration-patterns-catalog.md](./brainstorming/orchestration-patterns-catalog.md) (Patterns B2, D2, H1, D10, P2, C9)
-4. Follow: [integration-roadmap.md](./planning-artifacts/integration-roadmap.md) Phase 0 tasks
+1. Read: [architectural-decision-record.md](./planning-artifacts/architectural-decision-record.md) (v1.3.0 - Phase 0 scope refinement)
+2. Read: [alignment-summary.md](./brainstorming/alignment-summary.md) (Updated LOC breakdown)
+3. Reference: [orchestration-patterns-catalog.md](./brainstorming/orchestration-patterns-catalog.md) (Patterns B2, D2, H1, D10)
+4. Follow: [integration-roadmap.md](./planning-artifacts/integration-roadmap.md) Phase 0 tasks (v2.0.0)
 
 **Need Architecture Details?**
 - Interface contracts: [baseartifact-contract-spec.md](./planning-artifacts/baseartifact-contract-spec.md)
@@ -170,9 +192,9 @@ From [brainstorming-session-2026-02-05.md](./brainstorming/brainstorming-session
 
 ## Status
 
-**Decision Status:** ✅ ACCEPTED (BMAD-First Architecture v1.1.0)
-**Implementation Status:** 🚧 Phase 0 POC (Week 1)
-**Next Milestone:** Phase 0 POC Demo (Week 3)
+**Decision Status:** ✅ ACCEPTED (BMAD-First Architecture v1.3.0)
+**Implementation Status:** 🚧 Phase 0 POC (Week 1) - Pure Markdown Orchestration
+**Next Milestone:** Phase 0 Decision Gate (Week 3) - Proceed or Pivot
 
 ---
 
@@ -192,4 +214,4 @@ All planning documents follow markdown standards with YAML frontmatter for metad
 
 **BMAD-Enhanced Core Team**
 **Project Start:** 2026-02-01
-**Latest Update:** 2026-02-05 (Brainstorming Session + ADR v1.1.0)
+**Latest Update:** 2026-02-06 (Phase 0 Scope Refinement: ADR v1.3.0 + Roadmap v2.0.0)
