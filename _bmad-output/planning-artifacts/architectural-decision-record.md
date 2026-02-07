@@ -133,51 +133,71 @@ _bmad-enhanced/
 └─────────────────────────────────────────────────────────────┘
 ```
 
-### Phase 0 Scope Refinement (2026-02-06)
+### Phase 0 Pivot: Agent Enhancement Approach (2026-02-07)
 
-**Decision:** Defer Quint SQLite integration to Phase 2, focus Phase 0 POC on pure markdown orchestration.
+**Critical Discovery:** Deep-dive analysis revealed DesignOS and AgentOS are NOT markdown workflow systems:
+- **DesignOS:** TypeScript web application with browser UI (not markdown)
+- **AgentOS:** Shell-based CLI tool for standards management (not markdown)
+- **Cannot integrate by adding `_designos/` and `_agentos/` markdown directories as originally planned**
+
+**Revised Decision:** Pivot from custom orchestration engine to agent enhancement approach.
 
 **Rationale:**
-- **Risk Reduction:** Validate core orchestration pattern (Capabilities + Steps) before tackling complex database sync
-- **Complexity Reduction:** Phase 0 drops from 3,100 LOC → 1,800 LOC (saves 1,300 LOC of Quint adapter complexity)
-- **Faster Validation:** 3-week timeline becomes realistic without database sync challenges
-- **Clear Decision Gate:** If markdown orchestration fails in Phase 0, we can pivot before investing in Quint adapter
+- **Reality Check:** Original assumption that DesignOS/AgentOS use markdown workflows was incorrect
+- **BMAD Overlap:** BMAD already provides 80%+ of DesignOS/AgentOS functionality via existing agents (CIS Design Thinking, TEA Test Architect)
+- **Proven Infrastructure:** BMAD agent system has 21 agents in production with established patterns
+- **Complexity Reduction:** Agent enhancement = 500 LOC vs custom orchestration = 1,800 LOC (72% reduction)
+- **Immediate Value:** Working agents Week 1-2 vs backend-only POC
+- **Lower Risk:** Leverages proven agent architecture vs building new orchestration engine
 
-**Phase 0 POC (Weeks 1-3):** Pure Markdown Orchestration
-- **Scope:** DesignOS + AgentOS capabilities only (no Quint)
-- **Patterns:** B2 (Convention-Based Discovery), D2 (Step Loading), H1 (Capabilities Load Steps), D10 (Execution Tracing)
-- **LOC Estimate:** ~1,800 LOC
-  - Capability Discovery: 200 LOC
-  - Step Loading: 300 LOC
-  - Execution Tracing: 250 LOC
-  - Orchestration Glue: 300 LOC
-  - DesignOS Capabilities (Stubs): 200 LOC (empathy-map, journey-map)
-  - AgentOS Capabilities (Stubs): 200 LOC (quality-gate, standards-check)
-  - Tests: 350 LOC (orchestration + capability tests)
+**Phase 0 POC (Weeks 1-3):** Agent Enhancement
+- **Scope:** Create 4 new BMAD agents inspired by DesignOS/AgentOS capabilities
+- **LOC Estimate:** ~500 LOC
+  - **Week 1:** DesignOS-inspired agents (200 LOC)
+    - `empathy-mapper.md` - User empathy mapping workflows (100 LOC)
+    - `wireframe-designer.md` - Rapid wireframe generation (100 LOC)
+  - **Week 2:** AgentOS-inspired agents (200 LOC)
+    - `quality-gatekeeper.md` - Quality gate decision workflows (100 LOC)
+    - `standards-auditor.md` - Code standards compliance checking (100 LOC)
+  - **Week 3:** Integration & Testing (100 LOC)
+    - Cross-agent workflow orchestration (50 LOC)
+    - Party mode integration (25 LOC)
+    - Agent registration (CSV entries - trivial)
+    - Integration tests (25 LOC)
 - **Deliverables:**
-  - Working capability discovery engine
-  - DesignOS empathy-map capability (stub)
-  - AgentOS quality-gate capability (stub)
-  - Cross-framework orchestration demo
-  - Decision checkpoint: Proceed to Phase 2 or pivot
+  - 4 working agents with slash commands (`/bmad-agent-designos-empathy-mapper`, etc.)
+  - Cross-agent workflow example
+  - Party mode integration
+  - Documentation
+  - Decision checkpoint: Proceed to Phase 1 or enhance agent capabilities
 
-**Phase 2 (Weeks 9-14):** Quint SQLite Integration
-- **Scope:** Add Quint sync adapter to proven orchestration foundation
+**Phase 2 (Weeks 8-9):** Quint SQLite Sync Adapter (UNCHANGED)
+- **Scope:** Add Quint sync adapter (deferred from Phase 0)
 - **LOC Estimate:** +500 LOC
-  - Markdown reader: 150 LOC
-  - SQLite writer: 200 LOC
+  - Markdown → SQLite writer: 200 LOC
+  - SQLite → Markdown reader: 150 LOC
   - Conflict resolution: 50 LOC
   - Retry logic: 100 LOC
-- **Validation:** Measure actual sync latency (target: <200ms), test concurrent write scenarios
+- **Validation:** Measure sync latency (target: <200ms), test concurrent writes
 - **Decision Gate:** If sync latency >500ms or conflicts unresolvable, re-evaluate architecture
 
-**Total LOC (Phase 0 + Phase 2):** ~2,300 LOC (vs original 3,100 LOC estimate)
+**Total LOC (Phase 0 + Phase 2):** ~1,000 LOC (vs original 2,300 LOC estimate)
 
 **Why This Reduces Risk:**
-1. **Validates orchestration first:** If Capabilities + Steps pattern doesn't work for DesignOS/AgentOS, we pivot before building Quint adapter
-2. **Defers complex sync logic:** Database conflicts, latency, recovery logic are Phase 2 concerns
-3. **Realistic 3-week POC:** 1,800 LOC is achievable in 3 weeks; 3,100 LOC was ambitious
-4. **Clear failure modes:** Phase 0 failure = pivot orchestration pattern; Phase 2 failure = re-evaluate Quint integration approach
+1. **Proven Foundation:** BMAD agent system already works (21 agents in production)
+2. **No Custom Engine:** Avoids building/debugging new orchestration infrastructure
+3. **Immediate Validation:** Working agents Week 1 prove integration approach
+4. **Realistic Timeline:** 500 LOC in 3 weeks is conservative vs 1,800 LOC ambitious
+5. **Clear Failure Modes:** Agent failure = enhance existing agents; Quint adapter failure = re-evaluate Phase 2
+
+**What Changed:**
+- ❌ Dropped: Capabilities + Steps pattern (hypothetical, doesn't match any framework)
+- ❌ Dropped: Convention-based discovery (BMAD uses explicit registration)
+- ❌ Dropped: Custom orchestration engine (1,800 LOC)
+- ✅ Added: BMAD agent pattern (proven, 500 LOC)
+- ✅ Added: Explicit agent registration (agent-manifest.csv)
+- ✅ Added: Leverages existing workflow architectures (step-files, YAML+instructions)
+- ⏸️ Deferred: Real DesignOS/AgentOS integration to Phase 6 (post-v1.0.0) if desired
 
 ---
 
@@ -509,6 +529,7 @@ _bmad-enhanced/
 | 1.1.0 | 2026-02-05 | BMAD-Enhanced Team | Refined with orchestration patterns analysis (100 patterns evaluated), added Skills+Steps integration model, clarified markdown-as-master state management, updated LOC estimate to 3,100 |
 | 1.2.0 | 2026-02-05 | BMAD-Enhanced Team | Made architecture LLM-agnostic: renamed Skills→Capabilities (core), Claude integration exposes capabilities as skills (slash commands), added .integrations/ layer for multi-LLM support |
 | 1.3.0 | 2026-02-06 | BMAD-Enhanced Team | Phase 0 scope refinement: Deferred Quint SQLite integration to Phase 2, focus Phase 0 on pure markdown orchestration (DesignOS + AgentOS). Updated LOC estimates: Phase 0 = 1,800 LOC, Phase 2 = +500 LOC Quint adapter. Reduces Phase 0 complexity and validates orchestration pattern before database sync challenges. |
+| 1.4.0 | 2026-02-07 | BMAD-Enhanced Team | **MAJOR PIVOT:** Deep-dive analysis revealed DesignOS/AgentOS are NOT markdown systems (TypeScript web app + CLI tool). Pivoted Phase 0 from custom orchestration engine (1,800 LOC) to agent enhancement approach (500 LOC) leveraging proven BMAD agent architecture. BMAD already provides 80%+ of DesignOS/AgentOS functionality. Creates 4 new agents inspired by DesignOS/AgentOS capabilities. Total LOC: Phase 0 = 500 LOC, Phase 2 = +500 LOC (1,000 LOC total vs 2,300 LOC previous). See framework-deep-dive-analysis.md for full analysis. |
 
 ---
 
