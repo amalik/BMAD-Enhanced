@@ -1,0 +1,52 @@
+---
+module_name: bme
+full_name: "BMAD Enhanced"
+description: "Enhanced design and quality agents for BMAD Method"
+version: 1.0.0
+author: "BMAD Enhanced Team"
+
+# Submodules
+submodules:
+  - _designos   # Design-focused agents (Emma, Wade)
+  - _agentos    # Quality-focused agents (Quinn, Stan)
+
+# Agents (4 total)
+agents:
+  # DesignOS-inspired
+  - empathy-mapper      # Emma - Empathy Mapping Specialist
+  - wireframe-designer  # Wade - Wireframe Specialist (coming soon)
+
+  # AgentOS-inspired
+  - quality-gatekeeper  # Quinn - Quality Gate Specialist (coming soon)
+  - standards-auditor   # Stan - Standards Compliance Auditor (coming soon)
+
+# Distribution
+distribution:
+  npm_packages:
+    - "@bmad/bme-core"              # Shared infrastructure
+    - "@bmad/bme-empathy-mapper"    # Emma (individual)
+    - "@bmad/bme-wireframe-designer" # Wade (individual)
+    - "@bmad/bme-quality-gatekeeper" # Quinn (individual)
+    - "@bmad/bme-standards-auditor"  # Stan (individual)
+    - "@bmad/bme"                    # Bundle (all 4 agents)
+
+  installation:
+    individual: "npm install -g @bmad/bme-{agent-name}"
+    bulk: "npm install -g @bmad/bme"
+
+  slash_commands:
+    format: "/bmad-agent-bme-{agent-name}"
+    examples:
+      - "/bmad-agent-bme-empathy-mapper"
+      - "/bmad-agent-bme-wireframe-designer"
+      - "/bmad-agent-bme-quality-gatekeeper"
+      - "/bmad-agent-bme-standards-auditor"
+
+# Integration
+party_mode_enabled: true
+core_integration: true
+
+# Framework
+integration_framework: "Generic Agent Integration Framework v1.0.0"
+framework_document: "_bmad-output/GENERIC-AGENT-INTEGRATION-FRAMEWORK.md"
+reference_implementation: "Emma (empathy-mapper)"
