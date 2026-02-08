@@ -1,8 +1,13 @@
 ---
 title: "BMAD-Enhanced Distribution Strategy: Installation & Upgrade Mechanism"
 date: 2026-02-07
-version: 1.0.0
-status: STRATEGIC DECISION REQUIRED
+version: 2.0.0
+status: FINALIZED
+decisions:
+  module_name: bme
+  distribution: npm packages (individual + bundle)
+  slash_commands: /bmad-agent-bme-{agent-name}
+  installation: individual or bulk
 ---
 
 # BMAD-Enhanced Distribution Strategy
@@ -653,18 +658,459 @@ bmad install bmad-enhanced
 
 ---
 
-## Questions for User
+## User Decisions (Finalized 2026-02-07)
 
-1. **Module Name:** Use `bmad-enhanced` or shorter alias like `bme`?
+1. **Module Name:** ✅ `bme` (BMAD Enhanced)
 
-2. **Installation Method:** Git clone + script (simple) or npm package (polished)?
+2. **Installation Method:** ✅ npm packages
 
-3. **Slash Command Naming:** Long form (`/bmad-agent-bmad-enhanced-empathy-mapper`) or short form (`/bmad-agent-empathy-mapper`)?
+3. **Slash Command Naming:** ✅ Explicit module prefix `/bmad-agent-bme-{agent-name}`
 
-4. **Directory Structure:** Keep `_bmad-enhanced/_designos/` and `_bmad-enhanced/_agentos/` OR flatten to `_bmad-enhanced/agents/` and `_bmad-enhanced/workflows/`?
-
-5. **BMAD Method Dependency:** Should BMAD-Enhanced check for minimum BMAD Method version (e.g., v6.0.0+)?
+4. **Installation Flexibility:** ✅ **Individual OR bulk installation**
+   - Users can install individual agents: `npm install @bmad/bme-empathy-mapper`
+   - OR install all at once: `npm install @bmad/bme`
 
 ---
 
-**End of Distribution Strategy Analysis**
+## Final Distribution Architecture (v2.0.0)
+
+### npm Package Structure
+
+**Option 1: Individual Agent Packages**
+```
+@bmad/bme-empathy-mapper     - Emma only
+@bmad/bme-wireframe-designer - Wade only
+@bmad/bme-quality-gatekeeper - Quinn only
+@bmad/bme-standards-auditor  - Stan only
+```
+
+**Option 2: Bundle Package (All Agents)**
+```
+@bmad/bme                    - All 4 agents
+```
+
+**User Choice:**
+```bash
+# Install individual agents
+npm install -g @bmad/bme-empathy-mapper
+npm install -g @bmad/bme-wireframe-designer
+
+# OR install all at once
+npm install -g @bmad/bme
+```
+
+### Installation Flow
+
+**Individual Agent Installation:**
+```bash
+npm install -g @bmad/bme-empathy-mapper
+
+# Post-install script:
+# 1. Detects BMAD Method installation
+# 2. Creates _bmad/bme/ directory (if doesn't exist)
+# 3. Copies empathy-mapper agent + workflows to _bmad/bme/_designos/
+# 4. Appends empathy-mapper entry to agent-manifest.csv
+# 5. Displays: /bmad-agent-bme-empathy-mapper ready
+
+✅ Emma (empathy-mapper) installed successfully!
+Invoke with: /bmad-agent-bme-empathy-mapper
+```
+
+**Bulk Installation:**
+```bash
+npm install -g @bmad/bme
+
+# Post-install script:
+# 1. Detects BMAD Method installation
+# 2. Creates _bmad/bme/ directory structure
+# 3. Copies all 4 agents + workflows
+# 4. Appends 4 agent entries to agent-manifest.csv
+# 5. Displays all 4 slash commands
+
+✅ BMAD Enhanced installed successfully!
+4 agents available:
+  /bmad-agent-bme-empathy-mapper      (Emma)
+  /bmad-agent-bme-wireframe-designer  (Wade)
+  /bmad-agent-bme-quality-gatekeeper  (Quinn)
+  /bmad-agent-bme-standards-auditor   (Stan)
+```
+
+### File Structure (After Installation)
+
+**Individual Agent Install (e.g., Emma only):**
+```
+_bmad/bme/
+├── _config/
+│   └── module.yaml
+├── _designos/
+│   ├── config.yaml
+│   ├── agents/
+│   │   └── empathy-mapper.md       # Emma
+│   └── workflows/
+│       └── empathy-map/            # Emma's workflow
+└── _agentos/                       # Empty (no AgentOS agents installed)
+```
+
+**Bulk Install (All 4 agents):**
+```
+_bmad/bme/
+├── _config/
+│   └── module.yaml
+├── _designos/
+│   ├── config.yaml
+│   ├── agents/
+│   │   ├── empathy-mapper.md       # Emma
+│   │   └── wireframe-designer.md   # Wade
+│   └── workflows/
+│       ├── empathy-map/
+│       └── wireframe/
+└── _agentos/
+    ├── config.yaml
+    ├── agents/
+    │   ├── quality-gatekeeper.md   # Quinn
+    │   └── standards-auditor.md    # Stan
+    └── workflows/
+        ├── quality-gate/
+        └── audit-standards/
+```
+
+### Package Dependencies
+
+**Individual Packages Depend on Core:**
+```json
+// package.json for @bmad/bme-empathy-mapper
+{
+  "name": "@bmad/bme-empathy-mapper",
+  "version": "1.0.0",
+  "description": "Emma - Empathy Mapping Specialist for BMAD Method",
+  "peerDependencies": {
+    "@bmad/bme-core": "^1.0.0"
+  }
+}
+```
+
+**Core Package (Shared Infrastructure):**
+```json
+// package.json for @bmad/bme-core
+{
+  "name": "@bmad/bme-core",
+  "version": "1.0.0",
+  "description": "BMAD Enhanced module core infrastructure",
+  "files": [
+    "_config/module.yaml",
+    "install-helper.js"
+  ]
+}
+```
+
+**Bundle Package (Meta-package):**
+```json
+// package.json for @bmad/bme
+{
+  "name": "@bmad/bme",
+  "version": "1.0.0",
+  "description": "BMAD Enhanced - All agents bundle",
+  "dependencies": {
+    "@bmad/bme-core": "^1.0.0",
+    "@bmad/bme-empathy-mapper": "^1.0.0",
+    "@bmad/bme-wireframe-designer": "^1.0.0",
+    "@bmad/bme-quality-gatekeeper": "^1.0.0",
+    "@bmad/bme-standards-auditor": "^1.0.0"
+  }
+}
+```
+
+### Uninstallation
+
+**Individual Agent:**
+```bash
+npm uninstall -g @bmad/bme-empathy-mapper
+
+# Post-uninstall script:
+# 1. Removes empathy-mapper agent file
+# 2. Removes empathy-map workflow
+# 3. Removes empathy-mapper entry from agent-manifest.csv
+# 4. If no other bme agents remain, removes _bmad/bme/ directory
+
+✅ Emma (empathy-mapper) uninstalled
+```
+
+**Bulk Uninstall:**
+```bash
+npm uninstall -g @bmad/bme
+
+# Post-uninstall script:
+# 1. Removes all 4 agents
+# 2. Removes all workflows
+# 3. Removes all 4 entries from agent-manifest.csv
+# 4. Removes _bmad/bme/ directory
+
+✅ BMAD Enhanced uninstalled (4 agents removed)
+```
+
+### Use Cases
+
+**Use Case 1: Designer Only Needs Emma**
+```bash
+# Install only empathy mapping agent
+npm install -g @bmad/bme-empathy-mapper
+
+# Use immediately
+/bmad-agent-bme-empathy-mapper
+```
+
+**Use Case 2: QA Team Needs Quality Agents**
+```bash
+# Install both quality agents
+npm install -g @bmad/bme-quality-gatekeeper
+npm install -g @bmad/bme-standards-auditor
+
+# Use quality gate
+/bmad-agent-bme-quality-gatekeeper
+```
+
+**Use Case 3: Full Product Team Needs Everything**
+```bash
+# Install all agents at once
+npm install -g @bmad/bme
+
+# All 4 agents available
+/bmad-agent-bme-empathy-mapper
+/bmad-agent-bme-wireframe-designer
+/bmad-agent-bme-quality-gatekeeper
+/bmad-agent-bme-standards-auditor
+```
+
+**Use Case 4: Gradual Adoption**
+```bash
+# Start with one agent
+npm install -g @bmad/bme-empathy-mapper
+
+# Later, add another
+npm install -g @bmad/bme-wireframe-designer
+
+# Later, upgrade to full bundle
+npm install -g @bmad/bme
+# (Skips already-installed agents, adds remaining 2)
+```
+
+---
+
+## Implementation Requirements
+
+### Phase 0 Deliverables (Updated)
+
+**Code Deliverables:**
+1. 4 agent files
+2. 8 workflow files (2 per agent)
+3. **6 npm packages** (new):
+   - `@bmad/bme-core` - Shared infrastructure
+   - `@bmad/bme-empathy-mapper` - Emma
+   - `@bmad/bme-wireframe-designer` - Wade
+   - `@bmad/bme-quality-gatekeeper` - Quinn
+   - `@bmad/bme-standards-auditor` - Stan
+   - `@bmad/bme` - Bundle (meta-package)
+
+**Package Structure (Each Individual Package):**
+```
+@bmad/bme-empathy-mapper/
+├── package.json
+├── README.md
+├── install.js           # Post-install script
+├── uninstall.js         # Post-uninstall script
+└── agent/
+    ├── empathy-mapper.md
+    └── workflows/
+        └── empathy-map/
+```
+
+**Core Package Structure:**
+```
+@bmad/bme-core/
+├── package.json
+├── install-helper.js    # Shared installation utilities
+├── _config/
+│   └── module.yaml
+└── README.md
+```
+
+**Bundle Package Structure:**
+```
+@bmad/bme/
+├── package.json         # Dependencies on all 4 agents + core
+└── README.md
+```
+
+### Installation Script Template (Per Agent)
+
+**File:** `install.js` (in each agent package)
+
+```javascript
+#!/usr/bin/env node
+const fs = require('fs');
+const path = require('path');
+const { installAgent } = require('@bmad/bme-core/install-helper');
+
+const AGENT_CONFIG = {
+  name: 'empathy-mapper',
+  displayName: 'Emma',
+  title: 'Empathy Mapping Specialist',
+  icon: '🎨',
+  module: 'bme',
+  submodule: '_designos',
+  agentFile: 'agent/empathy-mapper.md',
+  workflows: ['agent/workflows/empathy-map']
+};
+
+installAgent(AGENT_CONFIG)
+  .then(() => {
+    console.log('✅ Emma (empathy-mapper) installed successfully!');
+    console.log('Invoke with: /bmad-agent-bme-empathy-mapper');
+  })
+  .catch(err => {
+    console.error('❌ Installation failed:', err.message);
+    process.exit(1);
+  });
+```
+
+### Shared Installation Helper (Core Package)
+
+**File:** `@bmad/bme-core/install-helper.js`
+
+```javascript
+const fs = require('fs');
+const path = require('path');
+const csv = require('csv-parser');
+
+function findBmadRoot() {
+  let dir = process.cwd();
+  while (dir !== '/') {
+    if (fs.existsSync(path.join(dir, '_bmad'))) {
+      return dir;
+    }
+    dir = path.dirname(dir);
+  }
+  throw new Error('BMAD Method not found. Install BMAD Method first.');
+}
+
+async function installAgent(config) {
+  const bmadRoot = findBmadRoot();
+  const bmeDir = path.join(bmadRoot, '_bmad', 'bme');
+
+  // Create bme module directory (if doesn't exist)
+  if (!fs.existsSync(bmeDir)) {
+    fs.mkdirSync(bmeDir, { recursive: true });
+    fs.mkdirSync(path.join(bmeDir, '_config'));
+
+    // Create module.yaml
+    fs.writeFileSync(
+      path.join(bmeDir, '_config', 'module.yaml'),
+      `module_name: bme\nversion: 1.0.0\ndescription: "BMAD Enhanced Module"\n`
+    );
+  }
+
+  // Copy agent file
+  const submoduleDir = path.join(bmeDir, config.submodule, 'agents');
+  fs.mkdirSync(submoduleDir, { recursive: true });
+
+  const sourceAgent = path.join(__dirname, '..', config.agentFile);
+  const targetAgent = path.join(submoduleDir, path.basename(config.agentFile));
+  fs.copyFileSync(sourceAgent, targetAgent);
+
+  // Copy workflows
+  config.workflows.forEach(workflowPath => {
+    const sourceWorkflow = path.join(__dirname, '..', workflowPath);
+    const workflowName = path.basename(workflowPath);
+    const targetWorkflow = path.join(bmeDir, config.submodule, 'workflows', workflowName);
+
+    copyRecursive(sourceWorkflow, targetWorkflow);
+  });
+
+  // Update agent-manifest.csv
+  const manifestPath = path.join(bmadRoot, '_bmad', '_config', 'agent-manifest.csv');
+  const agentEntry = `"${config.name}","${config.displayName}","${config.title}","${config.icon}","...","${config.module}","_bmad/bme/${config.submodule}/agents/${path.basename(config.agentFile)}"\n`;
+
+  fs.appendFileSync(manifestPath, agentEntry);
+
+  return { success: true, bmadRoot, agentPath: targetAgent };
+}
+
+function copyRecursive(src, dest) {
+  if (fs.statSync(src).isDirectory()) {
+    fs.mkdirSync(dest, { recursive: true });
+    fs.readdirSync(src).forEach(file => {
+      copyRecursive(path.join(src, file), path.join(dest, file));
+    });
+  } else {
+    fs.copyFileSync(src, dest);
+  }
+}
+
+module.exports = { installAgent, findBmadRoot };
+```
+
+---
+
+## Benefits of Individual + Bulk Distribution
+
+### For Users
+
+**Flexibility:**
+- Install only what you need
+- Gradual adoption (start small, expand later)
+- Lower barrier to entry (try one agent first)
+
+**Cost Efficiency:**
+- Don't install agents you won't use
+- Smaller package downloads
+
+**Easier Evaluation:**
+- Try Emma first to see if BMAD Enhanced is valuable
+- Upgrade to full bundle if satisfied
+
+### For Project
+
+**Adoption Path:**
+- Lower friction (single agent install is quick)
+- Natural upsell (individual → bundle)
+- Better metrics (which agents are most popular?)
+
+**Maintenance:**
+- Can update individual agents independently
+- Bug fixes deployed faster (only affected package)
+- Version individual agents separately
+
+**Marketing:**
+- "Try Emma free" → "Upgrade to full BMAD Enhanced"
+- Showcase specific agents for specific use cases
+- Target different user personas (designers vs QA)
+
+---
+
+## Recommendation Summary
+
+### Final Distribution Strategy (v2.0.0)
+
+**Module Name:** `bme` (BMAD Enhanced)
+
+**Distribution:** 6 npm packages
+1. `@bmad/bme-core` - Shared infrastructure
+2. `@bmad/bme-empathy-mapper` - Individual agent (Emma)
+3. `@bmad/bme-wireframe-designer` - Individual agent (Wade)
+4. `@bmad/bme-quality-gatekeeper` - Individual agent (Quinn)
+5. `@bmad/bme-standards-auditor` - Individual agent (Stan)
+6. `@bmad/bme` - Bundle (all 4 agents)
+
+**Installation:**
+- Individual: `npm install -g @bmad/bme-empathy-mapper`
+- Bulk: `npm install -g @bmad/bme`
+
+**Slash Commands:** `/bmad-agent-bme-{agent-name}`
+
+**File Structure:** `_bmad/bme/{_designos|_agentos}/agents/`
+
+**Uninstallation:** `npm uninstall -g @bmad/bme-{agent-name}` (individual) or `npm uninstall -g @bmad/bme` (bulk)
+
+---
+
+**End of Distribution Strategy (Finalized)**
