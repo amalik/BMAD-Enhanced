@@ -1,12 +1,18 @@
 ---
 title: "Phase 0 Implementation Guide: Agent Enhancement Approach"
 date: 2026-02-07
-version: 1.0.0
+version: 1.2.0
 status: IMPLEMENTATION READY
+distribution:
+  module_name: bme
+  installation: npm packages (individual + bulk)
+  slash_command_format: /bmad-agent-bme-{agent-name}
+  flexibility: install individual agents OR all at once
 related_docs:
   - architectural-decision-record.md (v1.4.0)
   - framework-deep-dive-analysis.md
   - phase-0-alternative-agent-integration.md
+  - distribution-strategy.md (v2.0.0)
 ---
 
 # Phase 0 Implementation Guide: Agent Enhancement Approach
@@ -69,8 +75,10 @@ related_docs:
    - Audit reports, compliance scores, recommendations
 
 **Integration:**
+- Module name: `bme` (BMAD Enhanced)
+- Distribution: npm package for seamless installation
 - Register in `_bmad/_config/agent-manifest.csv`
-- Invoke via slash commands: `/bmad-agent-designos-empathy-mapper`
+- Invoke via slash commands: `/bmad-agent-bme-empathy-mapper`
 - Use existing BMAD workflow patterns (step-files OR YAML+instructions)
 - Party mode integration for multi-agent collaboration
 
@@ -80,7 +88,7 @@ related_docs:
 
 ### Day 1-2: Empathy Mapper Agent (Emma)
 
-**File:** `_bmad-enhanced/_designos/agents/empathy-mapper.md`
+**File:** `_bmad/bme/_designos/agents/empathy-mapper.md`
 
 **Agent Persona:**
 ```yaml
@@ -92,7 +100,7 @@ role: User Empathy Expert + Design Thinking Specialist
 identity: Design thinking expert specializing in empathy maps and user research. Helps teams understand user needs, emotions, and pain points through structured empathy mapping.
 communicationStyle: Empathetic, curious, asks probing questions. Focuses on emotional understanding and user perspective.
 principles: Design is about THEM not us. Every empathy map must be grounded in real user insights. Challenge assumptions - validate through research. Emotions drive behavior - understand the WHY.
-module: designos
+module: bme
 ```
 
 **Menu Structure:**
@@ -100,8 +108,8 @@ module: designos
 <menu>
   <item cmd="MH">[MH] Redisplay Menu</item>
   <item cmd="CH">[CH] Chat with Emma</item>
-  <item cmd="EM" exec="{project-root}/_bmad-enhanced/_designos/workflows/empathy-map/workflow.md">[EM] Create Empathy Map</item>
-  <item cmd="VM" exec="{project-root}/_bmad-enhanced/_designos/workflows/empathy-map/validate.md">[VM] Validate Existing Empathy Map</item>
+  <item cmd="EM" exec="{project-root}/_bmad/bme/_designos/workflows/empathy-map/workflow.md">[EM] Create Empathy Map</item>
+  <item cmd="VM" exec="{project-root}/_bmad/bme/_designos/workflows/empathy-map/validate.md">[VM] Validate Existing Empathy Map</item>
   <item cmd="PM" exec="{project-root}/_bmad/core/workflows/party-mode/workflow.md">[PM] Start Party Mode</item>
   <item cmd="DA">[DA] Dismiss Agent</item>
 </menu>
@@ -113,7 +121,7 @@ module: designos
 
 **Directory Structure:**
 ```
-_bmad-enhanced/_designos/workflows/empathy-map/
+_bmad/bme/_designos/workflows/empathy-map/
 ├── workflow.md                  # Main orchestrator
 ├── empathy-map.template.md     # Output template
 └── steps/
@@ -147,8 +155,8 @@ Step-file architecture:
 
 ## INITIALIZATION
 
-Load config from {project-root}/_bmad-enhanced/_designos/config.yaml
-Load step: {project-root}/_bmad-enhanced/_designos/workflows/empathy-map/steps/step-01-define-user.md
+Load config from {project-root}/_bmad/bme/_designos/config.yaml
+Load step: {project-root}/_bmad/bme/_designos/workflows/empathy-map/steps/step-01-define-user.md
 ```
 
 **step-01-define-user.md Template:**
@@ -196,12 +204,12 @@ date: {date}
 ## Next Step
 
 When user confirms target user definition, load:
-{project-root}/_bmad-enhanced/_designos/workflows/empathy-map/steps/step-02-says-thinks.md
+{project-root}/_bmad/bme/_designos/workflows/empathy-map/steps/step-02-says-thinks.md
 ```
 
 **Implementation Tasks (Day 1-2):**
-- [ ] Create `_bmad-enhanced/_designos/agents/empathy-mapper.md` (100 LOC)
-- [ ] Create `_bmad-enhanced/_designos/workflows/empathy-map/` directory
+- [ ] Create `_bmad/bme/_designos/agents/empathy-mapper.md` (100 LOC)
+- [ ] Create `_bmad/bme/_designos/workflows/empathy-map/` directory
 - [ ] Create `workflow.md` orchestrator (25 LOC)
 - [ ] Create 6 step files (15 LOC each = 90 LOC)
 - [ ] Create `empathy-map.template.md` (20 LOC)
@@ -212,7 +220,7 @@ When user confirms target user definition, load:
 
 ### Day 3-4: Wireframe Designer Agent (Wade)
 
-**File:** `_bmad-enhanced/_designos/agents/wireframe-designer.md`
+**File:** `_bmad/bme/_designos/agents/wireframe-designer.md`
 
 **Agent Persona:**
 ```yaml
@@ -224,7 +232,7 @@ role: UI/UX Wireframe Expert
 identity: Expert in rapid wireframe prototyping using Excalidraw. Creates low-fidelity wireframes that focus on layout, hierarchy, and user flow without getting distracted by visual design.
 communicationStyle: Visual thinker, asks about layout and flow. Uses spatial metaphors. Emphasizes simplicity and clarity.
 principles: Simple first, iterate later. Wireframes communicate structure, not style. Focus on user flow before pixel perfection. Low-fidelity prevents premature attachment.
-module: designos
+module: bme
 ```
 
 **Menu Structure:**
@@ -232,8 +240,8 @@ module: designos
 <menu>
   <item cmd="MH">[MH] Redisplay Menu</item>
   <item cmd="CH">[CH] Chat with Wade</item>
-  <item cmd="CW" workflow="{project-root}/_bmad-enhanced/_designos/workflows/wireframe/workflow.yaml">[CW] Create Wireframe</item>
-  <item cmd="RW" exec="{project-root}/_bmad-enhanced/_designos/workflows/wireframe/review.md">[RW] Review Existing Wireframe</item>
+  <item cmd="CW" workflow="{project-root}/_bmad/bme/_designos/workflows/wireframe/workflow.yaml">[CW] Create Wireframe</item>
+  <item cmd="RW" exec="{project-root}/_bmad/bme/_designos/workflows/wireframe/review.md">[RW] Review Existing Wireframe</item>
   <item cmd="PM" exec="{project-root}/_bmad/core/workflows/party-mode/workflow.md">[PM] Start Party Mode</item>
   <item cmd="DA">[DA] Dismiss Agent</item>
 </menu>
@@ -245,7 +253,7 @@ module: designos
 
 **Directory Structure:**
 ```
-_bmad-enhanced/_designos/workflows/wireframe/
+_bmad/bme/_designos/workflows/wireframe/
 ├── workflow.yaml           # Configuration
 ├── instructions.md         # Complete workflow logic
 ├── template.md            # Output template
@@ -258,13 +266,13 @@ name: wireframe
 description: Create wireframes for user interfaces using Excalidraw
 author: BMad-Enhanced
 
-config_source: "{project-root}/_bmad-enhanced/_designos/config.yaml"
+config_source: "{project-root}/_bmad/bme/_designos/config.yaml"
 output_folder: "{config_source}:output_folder"
 user_name: "{config_source}:user_name"
 communication_language: "{config_source}:communication_language"
 date: system-generated
 
-installed_path: "{project-root}/_bmad-enhanced/_designos/workflows/wireframe"
+installed_path: "{project-root}/_bmad/bme/_designos/workflows/wireframe"
 template: "{installed_path}/template.md"
 instructions: "{installed_path}/instructions.md"
 component_library: "{installed_path}/component-library.csv"
@@ -316,8 +324,8 @@ standalone: true
 ```
 
 **Implementation Tasks (Day 3-4):**
-- [ ] Create `_bmad-enhanced/_designos/agents/wireframe-designer.md` (100 LOC)
-- [ ] Create `_bmad-enhanced/_designos/workflows/wireframe/` directory
+- [ ] Create `_bmad/bme/_designos/agents/wireframe-designer.md` (100 LOC)
+- [ ] Create `_bmad/bme/_designos/workflows/wireframe/` directory
 - [ ] Create `workflow.yaml` (30 LOC)
 - [ ] Create `instructions.md` (100 LOC)
 - [ ] Create `template.md` (20 LOC)
@@ -348,7 +356,7 @@ standalone: true
 
 ### Day 6-7: Quality Gatekeeper Agent (Quinn)
 
-**File:** `_bmad-enhanced/_agentos/agents/quality-gatekeeper.md`
+**File:** `_bmad/bme/_agentos/agents/quality-gatekeeper.md`
 
 **Agent Persona:**
 ```yaml
@@ -360,7 +368,7 @@ role: Quality Assurance Expert + Decision Authority
 identity: Risk-based quality assessment specialist. Makes objective quality gate decisions (PASS/FAIL/CONCERNS/WAIVED) based on predefined criteria and evidence. Prevents low-quality code from progressing.
 communicationStyle: Data-driven, objective, no-nonsense. Presents facts, calculates risk scores, makes clear decisions. "Quality gates are binary - you meet the bar or you don't."
 principles: Quality gates must be objective and measurable. Evidence beats opinions. Risk assessment drives depth of validation. Waiving gates requires explicit justification and approval. Failing fast is better than failing late.
-module: agentos
+module: bme
 ```
 
 **Menu Structure:**
@@ -368,8 +376,8 @@ module: agentos
 <menu>
   <item cmd="MH">[MH] Redisplay Menu</item>
   <item cmd="CH">[CH] Chat with Quinn</item>
-  <item cmd="QG" exec="{project-root}/_bmad-enhanced/_agentos/workflows/quality-gate/workflow.md">[QG] Run Quality Gate</item>
-  <item cmd="DG" exec="{project-root}/_bmad-enhanced/_agentos/workflows/quality-gate/define-criteria.md">[DG] Define Gate Criteria</item>
+  <item cmd="QG" exec="{project-root}/_bmad/bme/_agentos/workflows/quality-gate/workflow.md">[QG] Run Quality Gate</item>
+  <item cmd="DG" exec="{project-root}/_bmad/bme/_agentos/workflows/quality-gate/define-criteria.md">[DG] Define Gate Criteria</item>
   <item cmd="PM" exec="{project-root}/_bmad/core/workflows/party-mode/workflow.md">[PM] Start Party Mode</item>
   <item cmd="DA">[DA] Dismiss Agent</item>
 </menu>
@@ -381,7 +389,7 @@ module: agentos
 
 **Directory Structure:**
 ```
-_bmad-enhanced/_agentos/workflows/quality-gate/
+_bmad/bme/_agentos/workflows/quality-gate/
 ├── workflow.md                     # Main orchestrator
 ├── quality-gate.template.md       # Output template
 ├── default-criteria.yaml          # Default quality criteria
@@ -436,8 +444,8 @@ criteria:
 ```
 
 **Implementation Tasks (Day 6-7):**
-- [ ] Create `_bmad-enhanced/_agentos/agents/quality-gatekeeper.md` (100 LOC)
-- [ ] Create `_bmad-enhanced/_agentos/workflows/quality-gate/` directory
+- [ ] Create `_bmad/bme/_agentos/agents/quality-gatekeeper.md` (100 LOC)
+- [ ] Create `_bmad/bme/_agentos/workflows/quality-gate/` directory
 - [ ] Create `workflow.md` orchestrator (25 LOC)
 - [ ] Create 6 step files (15 LOC each = 90 LOC)
 - [ ] Create `quality-gate.template.md` (30 LOC)
@@ -449,7 +457,7 @@ criteria:
 
 ### Day 8-9: Standards Auditor Agent (Stan)
 
-**File:** `_bmad-enhanced/_agentos/agents/standards-auditor.md`
+**File:** `_bmad/bme/_agentos/agents/standards-auditor.md`
 
 **Agent Persona:**
 ```yaml
@@ -461,7 +469,7 @@ role: Code Standards Expert + Compliance Checker
 identity: Meticulous standards enforcement specialist. Audits code against documented standards (naming conventions, architecture patterns, testing practices). Produces compliance reports with specific violations and recommendations.
 communicationStyle: Meticulous, detail-oriented, references specific standards. "Line 42 violates standard CS-101 (camelCase required for variables)."
 principles: Consistency is maintainability. Standards prevent technical debt. Every violation must cite specific standard. Automate what can be automated. Audit early, audit often.
-module: agentos
+module: bme
 ```
 
 **Menu Structure:**
@@ -469,9 +477,9 @@ module: agentos
 <menu>
   <item cmd="MH">[MH] Redisplay Menu</item>
   <item cmd="CH">[CH] Chat with Stan</item>
-  <item cmd="AS" workflow="{project-root}/_bmad-enhanced/_agentos/workflows/audit-standards/workflow.yaml">[AS] Audit Standards</item>
-  <item cmd="DS" exec="{project-root}/_bmad-enhanced/_agentos/workflows/audit-standards/discover-standards.md">[DS] Discover Standards from Codebase</item>
-  <item cmd="CS" exec="{project-root}/_bmad-enhanced/_agentos/workflows/audit-standards/create-standard.md">[CS] Create New Standard</item>
+  <item cmd="AS" workflow="{project-root}/_bmad/bme/_agentos/workflows/audit-standards/workflow.yaml">[AS] Audit Standards</item>
+  <item cmd="DS" exec="{project-root}/_bmad/bme/_agentos/workflows/audit-standards/discover-standards.md">[DS] Discover Standards from Codebase</item>
+  <item cmd="CS" exec="{project-root}/_bmad/bme/_agentos/workflows/audit-standards/create-standard.md">[CS] Create New Standard</item>
   <item cmd="PM" exec="{project-root}/_bmad/core/workflows/party-mode/workflow.md">[PM] Start Party Mode</item>
   <item cmd="DA">[DA] Dismiss Agent</item>
 </menu>
@@ -483,7 +491,7 @@ module: agentos
 
 **Directory Structure:**
 ```
-_bmad-enhanced/_agentos/workflows/audit-standards/
+_bmad/bme/_agentos/workflows/audit-standards/
 ├── workflow.yaml              # Configuration
 ├── instructions.md            # Complete workflow logic
 ├── template.md               # Output template
@@ -500,13 +508,13 @@ name: audit-standards
 description: Audit code against documented standards and produce compliance report
 author: BMad-Enhanced
 
-config_source: "{project-root}/_bmad-enhanced/_agentos/config.yaml"
+config_source: "{project-root}/_bmad/bme/_agentos/config.yaml"
 output_folder: "{config_source}:output_folder"
 user_name: "{config_source}:user_name"
 communication_language: "{config_source}:communication_language"
 date: system-generated
 
-installed_path: "{project-root}/_bmad-enhanced/_agentos/workflows/audit-standards"
+installed_path: "{project-root}/_bmad/bme/_agentos/workflows/audit-standards"
 template: "{installed_path}/template.md"
 instructions: "{installed_path}/instructions.md"
 standards_dir: "{installed_path}/standards"
@@ -562,8 +570,8 @@ standalone: true
 ```
 
 **Implementation Tasks (Day 8-9):**
-- [ ] Create `_bmad-enhanced/_agentos/agents/standards-auditor.md` (100 LOC)
-- [ ] Create `_bmad-enhanced/_agentos/workflows/audit-standards/` directory
+- [ ] Create `_bmad/bme/_agentos/agents/standards-auditor.md` (100 LOC)
+- [ ] Create `_bmad/bme/_agentos/workflows/audit-standards/` directory
 - [ ] Create `workflow.yaml` (30 LOC)
 - [ ] Create `instructions.md` (120 LOC)
 - [ ] Create `template.md` (30 LOC)
@@ -596,7 +604,7 @@ standalone: true
 
 **Goal:** Create workflow that chains agents automatically
 
-**File:** `_bmad-enhanced/workflows/product-development-flow.md`
+**File:** `_bmad/bme/workflows/product-development-flow.md`
 
 **Workflow Structure:**
 ```markdown
@@ -642,7 +650,7 @@ If wireframe includes implementation notes:
 
 **Option A: Manual Orchestration (Simple)**
 - Workflow document guides user through agent invocations
-- User manually calls `/bmad-agent-designos-empathy-mapper`, then `/bmad-agent-designos-wireframe-designer`, etc.
+- User manually calls `/bmad-agent-bme-empathy-mapper`, then `/bmad-agent-bme-wireframe-designer`, etc.
 - Workflow provides next-step guidance
 
 **Option B: Automatic Orchestration (Advanced)**
@@ -665,7 +673,7 @@ If wireframe includes implementation notes:
 ```
 
 **Implementation Tasks (Day 11-12):**
-- [ ] Create `_bmad-enhanced/workflows/product-development-flow.md` (50 LOC)
+- [ ] Create `_bmad/bme/workflows/product-development-flow.md` (50 LOC)
 - [ ] Test manual orchestration (user-driven)
 - [ ] Document artifact passing between agents
 - [ ] Create example end-to-end run
@@ -802,10 +810,10 @@ Party Mode selects relevant agents:
 ### Functional Requirements
 
 - [ ] All 4 agents accessible via slash commands:
-  - [ ] `/bmad-agent-designos-empathy-mapper` works
-  - [ ] `/bmad-agent-designos-wireframe-designer` works
-  - [ ] `/bmad-agent-agentos-quality-gatekeeper` works
-  - [ ] `/bmad-agent-agentos-standards-auditor` works
+  - [ ] `/bmad-agent-bme-empathy-mapper` works
+  - [ ] `/bmad-agent-bme-wireframe-designer` works
+  - [ ] `/bmad-agent-bme-quality-gatekeeper` works
+  - [ ] `/bmad-agent-bme-standards-auditor` works
 
 - [ ] All workflows execute end-to-end:
   - [ ] Empathy map workflow completes successfully
@@ -931,14 +939,302 @@ Party Mode selects relevant agents:
 
 ---
 
-## Appendix: File Structure Summary
+## Appendix A: Distribution & Installation
+
+### npm Package Structure
+
+**BMAD Enhanced provides flexible installation:**
+- **Individual agents**: Install only what you need
+- **Bulk installation**: Install all 4 agents at once
+
+### Package Options
+
+**Individual Agent Packages:**
+```bash
+npm install -g @bmad/bme-empathy-mapper      # Emma only
+npm install -g @bmad/bme-wireframe-designer  # Wade only
+npm install -g @bmad/bme-quality-gatekeeper  # Quinn only
+npm install -g @bmad/bme-standards-auditor   # Stan only
+```
+
+**Bundle Package (All Agents):**
+```bash
+npm install -g @bmad/bme                     # All 4 agents
+```
+
+**Core Infrastructure (Installed Automatically):**
+```bash
+@bmad/bme-core                               # Shared installation utilities
+```
+
+### Installation Examples
+
+**Example 1: Install Individual Agent (Emma)**
+```bash
+npm install -g @bmad/bme-empathy-mapper
+
+# Post-install output:
+✅ Emma (empathy-mapper) installed successfully!
+Invoke with: /bmad-agent-bme-empathy-mapper
+
+# What happened:
+# 1. Detected BMAD Method in current directory
+# 2. Created _bmad/bme/ directory (if didn't exist)
+# 3. Copied empathy-mapper.md to _bmad/bme/_designos/agents/
+# 4. Copied empathy-map/ workflow to _bmad/bme/_designos/workflows/
+# 5. Added empathy-mapper entry to _bmad/_config/agent-manifest.csv
+```
+
+**Example 2: Install All Agents at Once**
+```bash
+npm install -g @bmad/bme
+
+# Post-install output:
+✅ BMAD Enhanced installed successfully!
+4 agents available:
+  /bmad-agent-bme-empathy-mapper      (Emma - Empathy Mapping)
+  /bmad-agent-bme-wireframe-designer  (Wade - Wireframes)
+  /bmad-agent-bme-quality-gatekeeper  (Quinn - Quality Gates)
+  /bmad-agent-bme-standards-auditor   (Stan - Standards Auditing)
+
+Run '/bmad-party-mode' to see all 25 agents!
+
+# What happened:
+# 1. Installed @bmad/bme-core (shared infrastructure)
+# 2. Installed all 4 individual agent packages as dependencies
+# 3. Each agent's post-install script ran
+# 4. _bmad/bme/ directory fully populated
+# 5. All 4 entries added to agent-manifest.csv
+```
+
+**Example 3: Gradual Adoption**
+```bash
+# Day 1: Try Emma
+npm install -g @bmad/bme-empathy-mapper
+
+# Day 7: Emma is great! Add Wade
+npm install -g @bmad/bme-wireframe-designer
+
+# Day 14: Love both! Upgrade to full bundle
+npm install -g @bmad/bme
+# Skips Emma + Wade (already installed), adds Quinn + Stan
+```
+
+### Uninstallation
+
+**Uninstall Individual Agent:**
+```bash
+npm uninstall -g @bmad/bme-empathy-mapper
+
+# Post-uninstall output:
+✅ Emma (empathy-mapper) uninstalled
+
+# What happened:
+# 1. Removed empathy-mapper.md agent file
+# 2. Removed empathy-map/ workflow directory
+# 3. Removed empathy-mapper entry from agent-manifest.csv
+# 4. If no other bme agents remain, removed _bmad/bme/ directory
+```
+
+**Uninstall All Agents:**
+```bash
+npm uninstall -g @bmad/bme
+
+# Post-uninstall output:
+✅ BMAD Enhanced uninstalled (4 agents removed)
+
+# What happened:
+# 1. Triggered uninstall for all 4 agent dependencies
+# 2. Each agent's post-uninstall script ran
+# 3. Removed entire _bmad/bme/ directory
+# 4. Removed all 4 entries from agent-manifest.csv
+```
+
+### agent-manifest.csv Entries
+
+**After Individual Install (Emma only):**
+```csv
+"empathy-mapper","Emma","Empathy Mapping Specialist","🎨","User Empathy Expert + Design Thinking Specialist","Design thinking expert specializing in empathy maps...","Empathetic, curious, asks probing questions...","Design is about THEM not us...","bme","_bmad/bme/_designos/agents/empathy-mapper.md"
+```
+
+**After Bulk Install (All 4 agents):**
+```csv
+"empathy-mapper","Emma","Empathy Mapping Specialist","🎨","User Empathy Expert + Design Thinking Specialist","Design thinking expert specializing in empathy maps...","Empathetic, curious, asks probing questions...","Design is about THEM not us...","bme","_bmad/bme/_designos/agents/empathy-mapper.md"
+"wireframe-designer","Wade","Wireframe Specialist","📐","UI/UX Wireframe Expert","Expert in rapid wireframe prototyping...","Visual thinker, asks about layout...","Simple first, iterate later...","bme","_bmad/bme/_designos/agents/wireframe-designer.md"
+"quality-gatekeeper","Quinn","Quality Gate Specialist","🚦","Quality Assurance Expert + Decision Authority","Risk-based quality assessment specialist...","Data-driven, objective, no-nonsense...","Quality gates must be objective...","bme","_bmad/bme/_agentos/agents/quality-gatekeeper.md"
+"standards-auditor","Stan","Standards Compliance Auditor","📋","Code Standards Expert + Compliance Checker","Meticulous standards enforcement specialist...","Meticulous, detail-oriented...","Consistency is maintainability...","bme","_bmad/bme/_agentos/agents/standards-auditor.md"
+```
+
+### Installation Scripts
+
+**Core Package (@bmad/bme-core):**
+Shared installation utilities used by all agent packages.
+
+**File:** `install-helper.js`
+```javascript
+// Shared installation helper used by all agent packages
+const fs = require('fs');
+const path = require('path');
+
+function findBmadRoot() {
+  let dir = process.cwd();
+  while (dir !== '/') {
+    if (fs.existsSync(path.join(dir, '_bmad'))) {
+      return dir;
+    }
+    dir = path.dirname(dir);
+  }
+  throw new Error('BMAD Method not found. Install BMAD Method first.');
+}
+
+async function installAgent(config) {
+  const bmadRoot = findBmadRoot();
+  const bmeDir = path.join(bmadRoot, '_bmad', 'bme');
+
+  // Create bme module directory (if doesn't exist)
+  if (!fs.existsSync(bmeDir)) {
+    fs.mkdirSync(bmeDir, { recursive: true });
+    fs.mkdirSync(path.join(bmeDir, '_config'));
+
+    // Create module.yaml
+    fs.writeFileSync(
+      path.join(bmeDir, '_config', 'module.yaml'),
+      'module_name: bme\nversion: 1.0.0\n'
+    );
+  }
+
+  // Copy agent file
+  const submoduleDir = path.join(bmeDir, config.submodule, 'agents');
+  fs.mkdirSync(submoduleDir, { recursive: true });
+
+  const sourceAgent = path.join(__dirname, '..', config.agentFile);
+  const targetAgent = path.join(submoduleDir, path.basename(config.agentFile));
+  fs.copyFileSync(sourceAgent, targetAgent);
+
+  // Copy workflows
+  config.workflows.forEach(workflowPath => {
+    const sourceWorkflow = path.join(__dirname, '..', workflowPath);
+    const workflowName = path.basename(workflowPath);
+    const targetWorkflow = path.join(bmeDir, config.submodule, 'workflows', workflowName);
+    copyRecursive(sourceWorkflow, targetWorkflow);
+  });
+
+  // Update agent-manifest.csv
+  const manifestPath = path.join(bmadRoot, '_bmad', '_config', 'agent-manifest.csv');
+  const agentEntry = `"${config.name}","${config.displayName}","${config.title}","${config.icon}","...","${config.module}","_bmad/bme/${config.submodule}/agents/${path.basename(config.agentFile)}"\n`;
+  fs.appendFileSync(manifestPath, agentEntry);
+
+  return { success: true, bmadRoot, agentPath: targetAgent };
+}
+
+function copyRecursive(src, dest) {
+  if (fs.statSync(src).isDirectory()) {
+    fs.mkdirSync(dest, { recursive: true });
+    fs.readdirSync(src).forEach(file => {
+      copyRecursive(path.join(src, file), path.join(dest, file));
+    });
+  } else {
+    fs.copyFileSync(src, dest);
+  }
+}
+
+module.exports = { installAgent, findBmadRoot };
+```
+
+**Individual Agent Package (@bmad/bme-empathy-mapper):**
+
+**File:** `install.js` (npm post-install script)
+```javascript
+#!/usr/bin/env node
+const { installAgent } = require('@bmad/bme-core/install-helper');
+
+const AGENT_CONFIG = {
+  name: 'empathy-mapper',
+  displayName: 'Emma',
+  title: 'Empathy Mapping Specialist',
+  icon: '🎨',
+  module: 'bme',
+  submodule: '_designos',
+  agentFile: 'agent/empathy-mapper.md',
+  workflows: ['agent/workflows/empathy-map']
+};
+
+installAgent(AGENT_CONFIG)
+  .then(() => {
+    console.log('✅ Emma (empathy-mapper) installed successfully!');
+    console.log('Invoke with: /bmad-agent-bme-empathy-mapper');
+  })
+  .catch(err => {
+    console.error('❌ Installation failed:', err.message);
+    process.exit(1);
+  });
+```
+
+**Bundle Package (@bmad/bme):**
+
+**File:** `package.json` (meta-package with dependencies)
+```json
+{
+  "name": "@bmad/bme",
+  "version": "1.0.0",
+  "description": "BMAD Enhanced - All agents bundle",
+  "dependencies": {
+    "@bmad/bme-core": "^1.0.0",
+    "@bmad/bme-empathy-mapper": "^1.0.0",
+    "@bmad/bme-wireframe-designer": "^1.0.0",
+    "@bmad/bme-quality-gatekeeper": "^1.0.0",
+    "@bmad/bme-standards-auditor": "^1.0.0"
+  },
+  "scripts": {
+    "postinstall": "node install.js"
+  }
+}
+```
+
+**File:** `install.js` (bundle post-install)
+```javascript
+#!/usr/bin/env node
+// Bundle package just displays success message
+// (All agents already installed via dependencies)
+
+console.log('✅ BMAD Enhanced installed successfully!');
+console.log('4 agents available:');
+console.log('  /bmad-agent-bme-empathy-mapper      (Emma - Empathy Mapping)');
+console.log('  /bmad-agent-bme-wireframe-designer  (Wade - Wireframes)');
+console.log('  /bmad-agent-bme-quality-gatekeeper  (Quinn - Quality Gates)');
+console.log('  /bmad-agent-bme-standards-auditor   (Stan - Standards Auditing)');
+console.log('');
+console.log("Run '/bmad-party-mode' to see all 25 agents!");
+```
+
+### Slash Command Format
+
+**Pattern:** `/bmad-agent-bme-{agent-name}`
+
+**Examples:**
+- `/bmad-agent-bme-empathy-mapper` → Invokes Emma (empathy-mapper)
+- `/bmad-agent-bme-wireframe-designer` → Invokes Wade (wireframe-designer)
+- `/bmad-agent-bme-quality-gatekeeper` → Invokes Quinn (quality-gatekeeper)
+- `/bmad-agent-bme-standards-auditor` → Invokes Stan (standards-auditor)
+
+**Why Explicit Module Prefix?**
+- Clear module ownership (bme)
+- Avoids naming conflicts with future agents
+- Easy to identify BMAD Enhanced agents in party mode
+- Consistent with BMAD Method naming conventions
+
+---
+
+## Appendix B: File Structure Summary
 
 ```
-_bmad-enhanced/
+_bmad/bme/                          # BMAD Enhanced module (installed via npm)
+├── package.json                    # npm package metadata
+├── install.js                      # Post-install script
 ├── _config/
-│   └── agent-manifest.csv          # +4 new agent registrations
+│   └── module.yaml                 # Module configuration
 ├── _designos/
-│   ├── config.yaml                 # DesignOS module config
+│   ├── config.yaml                 # DesignOS sub-module config
 │   ├── agents/
 │   │   ├── empathy-mapper.md       # Emma (100 LOC)
 │   │   └── wireframe-designer.md   # Wade (100 LOC)
@@ -954,7 +1250,7 @@ _bmad-enhanced/
 │   │       └── component-library.csv
 │   └── output/                     # Generated empathy maps & wireframes
 ├── _agentos/
-│   ├── config.yaml                 # AgentOS module config
+│   ├── config.yaml                 # AgentOS sub-module config
 │   ├── agents/
 │   │   ├── quality-gatekeeper.md   # Quinn (100 LOC)
 │   │   └── standards-auditor.md    # Stan (100 LOC)
@@ -974,8 +1270,89 @@ _bmad-enhanced/
     └── product-development-flow.md # Cross-agent orchestration (50 LOC)
 ```
 
-**Total New Files:** ~30 files
-**Total New LOC:** ~500-700 LOC (depending on template/standards file sizes)
+**Total New Files:**
+- Agent + workflow files: ~30 files
+- npm package files: ~18 files (6 packages × 3 files each: package.json, install.js, README.md)
+- **Total:** ~48 files
+
+**Total New LOC:**
+- Agent + workflow code: ~500-700 LOC
+- Installation scripts: ~200 LOC (shared helper + 5 install.js scripts)
+- package.json files: ~150 LOC (6 packages)
+- **Total:** ~850-1,050 LOC
+
+**npm Package Distribution:**
+1. `@bmad/bme-core` - Shared installation utilities (install-helper.js)
+2. `@bmad/bme-empathy-mapper` - Emma (individual agent package)
+3. `@bmad/bme-wireframe-designer` - Wade (individual agent package)
+4. `@bmad/bme-quality-gatekeeper` - Quinn (individual agent package)
+5. `@bmad/bme-standards-auditor` - Stan (individual agent package)
+6. `@bmad/bme` - Bundle (meta-package with all 4 as dependencies)
+
+---
+
+## Appendix C: Use Cases for Individual vs Bulk Installation
+
+### Use Case 1: UX Designer (Emma Only)
+**Profile:** UX designer who needs empathy mapping, doesn't need quality gates.
+
+**Installation:**
+```bash
+npm install -g @bmad/bme-empathy-mapper
+```
+
+**Benefit:** Installs only Emma (235 LOC), not all 4 agents (1,240 LOC).
+
+---
+
+### Use Case 2: QA Team (Quality Agents Only)
+**Profile:** QA team needs quality gates and standards auditing.
+
+**Installation:**
+```bash
+npm install -g @bmad/bme-quality-gatekeeper
+npm install -g @bmad/bme-standards-auditor
+```
+
+**Benefit:** Installs Quinn + Stan (675 LOC), skips design agents.
+
+---
+
+### Use Case 3: Full Product Team (All Agents)
+**Profile:** Product team with designers, developers, QA - everyone needs all agents.
+
+**Installation:**
+```bash
+npm install -g @bmad/bme
+```
+
+**Benefit:** One command installs all 4 agents (1,240 LOC).
+
+---
+
+### Use Case 4: Gradual Adoption
+**Profile:** Team wants to try BMAD Enhanced before committing.
+
+**Week 1:**
+```bash
+npm install -g @bmad/bme-empathy-mapper
+# Try Emma for user research
+```
+
+**Week 2:**
+```bash
+# Emma is great! Add wireframing
+npm install -g @bmad/bme-wireframe-designer
+```
+
+**Week 3:**
+```bash
+# Love BMAD Enhanced! Upgrade to full bundle
+npm install -g @bmad/bme
+# Skips Emma + Wade (already installed), adds Quinn + Stan
+```
+
+**Benefit:** Lower barrier to entry, natural upgrade path.
 
 ---
 
