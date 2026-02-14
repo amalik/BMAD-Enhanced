@@ -1,36 +1,36 @@
 ---
-title: "Generic Agent Integration Framework: Bringing Agents from Any Framework into BMAD Method"
+title: "BMAD Agent Architecture Framework: Building Domain-Specialized Agents"
 date: 2026-02-08
-version: 1.0.0
+version: 1.1.0
 status: FRAMEWORK SPECIFICATION
-purpose: Define framework-agnostic pattern for integrating agents from any source (DesignOS, AgentOS, Quint, custom frameworks, etc.)
+purpose: Define standard pattern for creating domain-specialized agents within BMAD Method
 related_docs:
   - phase-0-implementation-guide.md (v1.2.0)
   - distribution-strategy.md (v2.0.0)
 reference_implementation: Emma (empathy-mapper) - see _bmad/bme/_designos/agents/empathy-mapper.md
 ---
 
-# Generic Agent Integration Framework
+# BMAD Agent Architecture Framework
 
-**Purpose:** This framework defines a **framework-agnostic pattern** for integrating agents from ANY source framework (DesignOS, AgentOS, Quint, custom frameworks, etc.) into BMAD Method.
+**Purpose:** This framework defines a **standard pattern** for creating domain-specialized agents within BMAD Method.
 
-**Key Principle:** BMAD Method provides the **execution environment** and **agent infrastructure**. Source frameworks provide the **agent expertise** and **workflow logic**. This framework bridges the two.
+**Key Principle:** BMAD Method provides the **execution environment** and **agent infrastructure**. Domain specialists provide the **agent expertise** and **workflow logic**. This framework defines the standard interface.
 
 ---
 
-## Overview: The Integration Bridge
+## Overview: BMAD Agent Architecture
 
 ```
 ┌─────────────────────────────────────────────────────────────┐
-│                    Source Framework                         │
-│  (DesignOS, AgentOS, Quint, Custom, etc.)                  │
+│                 Domain-Specialized Agent                    │
+│  (Empathy Mapping, Wireframing, Quality Gates, etc.)       │
 │                                                             │
 │  - Agent expertise/persona                                  │
 │  - Workflow logic                                           │
 │  - Domain knowledge                                         │
 └──────────────────┬──────────────────────────────────────────┘
                    │
-                   │ GENERIC INTEGRATION FRAMEWORK
+                   │ BMAD AGENT ARCHITECTURE FRAMEWORK
                    │ (This Document)
                    │
                    ↓
@@ -46,16 +46,16 @@ reference_implementation: Emma (empathy-mapper) - see _bmad/bme/_designos/agents
 
 **What This Framework Provides:**
 
-1. **Standard BMAD Agent Interface** - Required fields and structure for any agent
-2. **Workflow Adapter Patterns** - How to adapt different workflow architectures
-3. **npm Package Templates** - Reusable structure for any agent source
-4. **Integration Checklist** - Step-by-step process for any agent
+1. **Standard BMAD Agent Interface** - Required fields and structure for all agents
+2. **Workflow Architecture Patterns** - Different workflow styles for different use cases
+3. **npm Package Templates** - Reusable structure for agent distribution
+4. **Creation Checklist** - Step-by-step process for building new agents
 
 ---
 
 ## Part 1: Standard BMAD Agent Interface
 
-**Principle:** Every agent, regardless of source framework, must implement this standard interface to work with BMAD Method.
+**Principle:** Every BMAD agent must implement this standard interface for consistent execution and orchestration.
 
 ### Required Agent Structure
 
@@ -153,15 +153,15 @@ module: bme
 
 ---
 
-## Part 2: Workflow Adapter Patterns
+## Part 2: Workflow Architecture Patterns
 
-**Principle:** Different frameworks use different workflow architectures. This section shows how to adapt each type to BMAD Method.
+**Principle:** Different workflows benefit from different architectural styles. This section shows the available patterns.
 
-### Adapter Pattern 1: Step-File Architecture
+### Pattern 1: Step-File Architecture
 
-**Source:** Frameworks with sequential, micro-file workflows (like DesignOS empathy mapping)
+**Use Case:** Sequential workflows with distinct phases (like empathy mapping, design thinking processes)
 
-**BMAD Adaptation:**
+**BMAD Structure:**
 ```
 {module}/{submodule}/workflows/{workflow-name}/
 ├── workflow.md                  # Main orchestrator
@@ -217,11 +217,11 @@ When user confirms {completion condition}, load:
 
 **Example:** See [_bmad/bme/_designos/workflows/empathy-map/](_bmad/bme/_designos/workflows/empathy-map/)
 
-### Adapter Pattern 2: YAML + Instructions Architecture
+### Pattern 2: YAML + Instructions Architecture
 
-**Source:** Frameworks with monolithic, configuration-driven workflows (like AgentOS standards auditing)
+**Use Case:** Configuration-driven workflows with monolithic logic (like standards auditing, compliance checking)
 
-**BMAD Adaptation:**
+**BMAD Structure:**
 ```
 {module}/{submodule}/workflows/{workflow-name}/
 ├── workflow.yaml           # Configuration
@@ -280,30 +280,30 @@ type: yaml-instructions
 
 **Example:** See [_bmad/bme/_designos/workflows/wireframe/](_bmad/bme/_designos/workflows/wireframe/)
 
-### Adapter Pattern 3: Custom Framework Architecture
+### Pattern 3: Hybrid Architecture
 
-**Source:** Frameworks with unique workflow patterns (like Quint's evidence-based reasoning)
+**Use Case:** Complex workflows requiring both configuration and sequential steps (like evidence-based reasoning, multi-phase analysis)
 
-**BMAD Adaptation Strategy:**
+**Design Strategy:**
 
 1. **Identify Core Workflow Primitives:**
-   - Sequential steps → Use step-file pattern
-   - Configuration-driven → Use YAML+instructions pattern
-   - Custom logic → Create hybrid pattern
+   - Sequential phases → Use step-file pattern
+   - Configuration-driven logic → Use YAML+instructions pattern
+   - Combined needs → Create hybrid pattern
 
-2. **Map Framework Concepts to BMAD:**
-   - Framework "phases" → BMAD steps
-   - Framework "artifacts" → BMAD template sections
-   - Framework "tools" → BMAD menu items
+2. **Design Hybrid Workflow:**
+   - Process "phases" → BMAD steps
+   - Output "artifacts" → BMAD template sections
+   - Interactive "tools" → BMAD menu items
 
-3. **Create Hybrid Pattern (if needed):**
+3. **Implement Hybrid Pattern:**
    - Combine step-file + YAML patterns
    - Add custom handlers in instructions
-   - Extend template with framework-specific sections
+   - Extend template with domain-specific sections
 
-**Example: Quint Evidence-Based Reasoning Adapter**
+**Example: Evidence-Based Reasoning Workflow**
 ```
-{module}/{submodule}/workflows/quint-reasoning/
+{module}/{submodule}/workflows/evidence-reasoning/
 ├── workflow.yaml           # Configuration
 ├── instructions.md         # Reasoning logic
 ├── template.md            # Evidence report template
@@ -318,9 +318,9 @@ type: yaml-instructions
 
 ---
 
-## Part 3: npm Package Template (Reusable for Any Agent)
+## Part 3: npm Package Template (Reusable for All Agents)
 
-**Principle:** Every agent, regardless of source framework, uses the same npm package structure for distribution.
+**Principle:** All BMAD agents use the same npm package structure for distribution.
 
 ### Package Structure Template
 
@@ -344,7 +344,7 @@ type: yaml-instructions
   "name": "@bmad/{module}-{agent-name}",
   "version": "1.0.0",
   "description": "{DisplayName} - {Title} for BMAD Method",
-  "keywords": ["bmad", "agent", "{framework-name}", "{domain}"],
+  "keywords": ["bmad", "agent", "{domain}"],
   "author": "{author}",
   "license": "MIT",
   "peerDependencies": {
@@ -369,7 +369,7 @@ type: yaml-instructions
   "name": "@bmad/bme-empathy-mapper",
   "version": "1.0.0",
   "description": "Emma - Empathy Mapping Specialist for BMAD Method",
-  "keywords": ["bmad", "agent", "designos", "empathy-mapping", "ux-research"],
+  "keywords": ["bmad", "agent", "empathy-mapping", "ux-research", "design-thinking"],
   "author": "BMAD Enhanced Team",
   "license": "MIT",
   "peerDependencies": {
@@ -443,13 +443,13 @@ installAgent(AGENT_CONFIG)
 
 ---
 
-## Part 4: Integration Checklist (Step-by-Step)
+## Part 4: Agent Creation Checklist (Step-by-Step)
 
-**Use this checklist to integrate ANY agent from ANY framework into BMAD Method.**
+**Use this checklist to create new domain-specialized agents in BMAD Method.**
 
-### Step 1: Identify Agent Source
+### Step 1: Define Agent Domain
 
-- [ ] Source framework identified (DesignOS, AgentOS, Quint, Custom, etc.)
+- [ ] Domain expertise identified (empathy mapping, wireframing, quality gates, etc.)
 - [ ] Agent expertise/persona documented
 - [ ] Agent workflows identified
 - [ ] Agent domain knowledge captured
@@ -464,10 +464,10 @@ installAgent(AGENT_CONFIG)
 - [ ] Communication style documented
 - [ ] Principles articulated
 
-### Step 3: Adapt Workflows
+### Step 3: Design Workflows
 
-- [ ] Workflow architecture identified (step-file, YAML+instructions, custom)
-- [ ] Adapter pattern selected (Pattern 1, 2, or 3)
+- [ ] Workflow architecture selected (step-file, YAML+instructions, hybrid)
+- [ ] Workflow pattern chosen (Pattern 1, 2, or 3)
 - [ ] Workflow files created following pattern
 - [ ] Output templates created
 - [ ] Supporting files added (criteria, standards, etc.)
@@ -488,7 +488,7 @@ installAgent(AGENT_CONFIG)
 - [ ] Agent file copied to `agent/{agent-name}.md`
 - [ ] Workflow files copied to `agent/workflows/{workflow-name}/`
 
-### Step 6: Test Integration
+### Step 6: Test Agent
 
 - [ ] Install package: `npm install -g @bmad/{module}-{agent-name}`
 - [ ] Verify agent registered in `agent-manifest.csv`
@@ -506,13 +506,13 @@ installAgent(AGENT_CONFIG)
 
 ---
 
-## Part 5: Framework-Specific Adaptation Examples
+## Part 5: Domain-Specific Implementation Examples
 
-### Example 1: DesignOS Agent (Empathy Mapper)
+### Example 1: Empathy Mapping Agent (Emma)
 
-**Source Framework:** DesignOS (design thinking toolkit)
+**Domain:** Design thinking and user research
 
-**Adaptation:**
+**Implementation:**
 - **Agent Interface:** Emma (empathy-mapper) with design-thinking persona
 - **Workflow Pattern:** Step-file architecture (6 sequential steps)
 - **Menu Items:** Create Empathy Map, Validate Empathy Map
@@ -520,11 +520,11 @@ installAgent(AGENT_CONFIG)
 
 **See:** [Emma Reference Implementation](_bmad/bme/_designos/agents/empathy-mapper.md)
 
-### Example 2: AgentOS Agent (Quality Gatekeeper)
+### Example 2: Quality Gatekeeper Agent (Quinn)
 
-**Source Framework:** AgentOS (quality assurance toolkit)
+**Domain:** Quality assurance and standards enforcement
 
-**Adaptation:**
+**Implementation:**
 - **Agent Interface:** Quinn (quality-gatekeeper) with QA-focused persona
 - **Workflow Pattern:** Step-file architecture (6 sequential steps)
 - **Menu Items:** Run Quality Gate, Define Gate Criteria
@@ -532,37 +532,36 @@ installAgent(AGENT_CONFIG)
 
 **See:** [phase-0-implementation-guide.md](phase-0-implementation-guide.md) (Day 6-7)
 
-### Example 3: Quint Agent (Evidence-Based Reasoner)
+### Example 3: Wireframe Design Agent (Wade)
 
-**Source Framework:** Quint (epistemic reasoning framework)
+**Domain:** UI/UX wireframing and prototyping
 
-**Hypothetical Adaptation:**
-- **Agent Interface:** Quinn (evidence-reasoner) with epistemic persona
-- **Workflow Pattern:** Hybrid (YAML config + evidence step-files)
-- **Menu Items:** Generate Hypothesis, Gather Evidence, Validate Logic, Make Decision
-- **npm Package:** `@bmad/quint-evidence-reasoner`
+**Implementation:**
+- **Agent Interface:** Wade (wireframe-designer) with UX design persona
+- **Workflow Pattern:** YAML + instructions architecture
+- **Menu Items:** Create Wireframe, Validate Wireframe, Export to Figma
+- **npm Package:** `@bmad/bme-wireframe-designer`
 
 **Workflow Structure:**
 ```
-_bmad/quint/workflows/evidence-reasoning/
+_bmad/bme/_designos/workflows/wireframe/
 ├── workflow.yaml           # Configuration
-├── instructions.md         # Reasoning logic
-├── template.md            # Evidence report template
-└── evidence/
-    ├── step-01-hypothesis.md
-    ├── step-02-gather-evidence.md
-    ├── step-03-validate.md
-    └── step-04-decide.md
+├── instructions.md         # Wireframe logic
+├── template.md            # Wireframe template
+└── components/
+    ├── layout-patterns.md
+    ├── component-library.md
+    └── export-specs.md
 ```
 
-### Example 4: Custom Framework Agent
+### Example 4: Custom Domain Agent
 
-**Source Framework:** Custom internal toolkit
+**Domain:** Your specialized domain
 
-**Adaptation Strategy:**
-1. **Analyze workflow primitives** (sequential? configuration-driven? hybrid?)
-2. **Select adapter pattern** (step-file, YAML+instructions, or custom hybrid)
-3. **Map framework concepts to BMAD** (phases → steps, artifacts → template sections)
+**Creation Strategy:**
+1. **Analyze workflow needs** (sequential? configuration-driven? hybrid?)
+2. **Select architecture pattern** (step-file, YAML+instructions, or hybrid)
+3. **Design domain workflows** (phases → steps, artifacts → template sections)
 4. **Follow standard interface** (frontmatter, menu, invocation patterns)
 5. **Package using template** (package.json, install.js, README.md)
 
@@ -664,14 +663,14 @@ console.log("Run '/bmad-party-mode' to see all {total} agents!");
 
 ---
 
-## Part 8: Benefits of Generic Framework
+## Part 8: Benefits of BMAD Agent Architecture
 
 ### For Agent Creators
 
-**Framework Independence:**
-- Not locked to DesignOS/AgentOS patterns
-- Bring agents from ANY framework
-- Preserve original agent expertise
+**Standardized Development:**
+- Clear architectural patterns to follow
+- Standard agent interface for consistency
+- Reusable workflow patterns (step-file, YAML, hybrid)
 
 **Reusable Templates:**
 - Standard package.json structure
@@ -679,8 +678,8 @@ console.log("Run '/bmad-party-mode' to see all {total} agents!");
 - Standard agent interface
 
 **Clear Documentation:**
-- Integration checklist (step-by-step)
-- Adapter patterns (choose the right one)
+- Agent creation checklist (step-by-step)
+- Workflow patterns (choose the right one)
 - Reference implementations (Emma, Wade, Quinn, Stan)
 
 ### For BMAD Method Users
@@ -692,41 +691,41 @@ console.log("Run '/bmad-party-mode' to see all {total} agents!");
 
 **Flexibility:**
 - Install individual agents OR bundles
-- Mix agents from different frameworks
+- Mix agents from different domains
 - Gradual adoption path
 
 **Quality:**
-- Framework-specific expertise preserved
+- Domain-specific expertise preserved
 - No "lowest common denominator" compromise
-- Each agent optimized for its domain
+- Each agent optimized for its specialty
 
 ---
 
-## Part 9: Future Framework Integration Examples
+## Part 9: Future Agent Examples
 
-**Potential Future Agents Using This Framework:**
+**Potential Future Agents Using This Architecture:**
 
-1. **Quint Agent (Evidence-Based Reasoner)**
-   - Source: Quint framework (epistemic reasoning)
+1. **Evidence-Based Reasoning Agent**
+   - Domain: Epistemic reasoning and hypothesis validation
    - Workflow: Hybrid (YAML + evidence step-files)
-   - Package: `@bmad/quint-evidence-reasoner`
+   - Package: `@bmad/reasoning-evidence-validator`
 
-2. **Custom API Design Agent**
-   - Source: Internal API standards toolkit
+2. **API Design Standards Agent**
+   - Domain: API design and standards compliance
    - Workflow: YAML + instructions (standards-driven)
    - Package: `@bmad/api-design-standards-checker`
 
-3. **Security Analysis Agent**
-   - Source: Custom security framework
+3. **Security Threat Modeling Agent**
+   - Domain: Security analysis and threat assessment
    - Workflow: Step-file (threat modeling steps)
    - Package: `@bmad/security-threat-modeler`
 
 4. **Performance Testing Agent**
-   - Source: AgentOS (expanded capabilities)
+   - Domain: Performance testing and optimization
    - Workflow: YAML + instructions (test scenarios)
    - Package: `@bmad/bme-performance-tester`
 
-**All Use Same Framework:** Standard interface + adapter pattern + npm template
+**All Use Same Architecture:** Standard interface + workflow pattern + npm template
 
 ---
 
@@ -739,10 +738,10 @@ console.log("Run '/bmad-party-mode' to see all {total} agents!");
 - Required menu structure (MH, CH, custom items, PM, DA)
 - Workflow invocation patterns (exec, workflow handlers)
 
-**2. Workflow Adapter Patterns**
+**2. Workflow Architecture Patterns**
 - Pattern 1: Step-file architecture (sequential micro-files)
 - Pattern 2: YAML + instructions (configuration-driven)
-- Pattern 3: Custom hybrid (combine patterns)
+- Pattern 3: Hybrid architecture (combine patterns)
 
 **3. npm Package Templates**
 - Individual agent package structure
@@ -750,20 +749,20 @@ console.log("Run '/bmad-party-mode' to see all {total} agents!");
 - Bundle package structure (meta-package)
 - Installation scripts (install.js, uninstall.js)
 
-**4. Integration Checklist**
-- 7-step process for any agent from any framework
+**4. Agent Creation Checklist**
+- 7-step process for creating new domain-specialized agents
 - Validation checkpoints
 - Testing guidelines
 
 ### Key Benefits
 
-**Framework Agnostic:** Works with DesignOS, AgentOS, Quint, custom frameworks, etc.
+**Domain-Specialized:** Supports any domain expertise (design, QA, security, etc.)
 
 **Reusable:** Standard templates reduce implementation effort
 
-**Consistent:** All agents use same interface regardless of source
+**Consistent:** All agents use same interface regardless of domain
 
-**Flexible:** Supports different workflow architectures via adapter patterns
+**Flexible:** Supports different workflow architectures via pattern selection
 
 **Proven:** Emma (empathy-mapper) serves as reference implementation
 
@@ -772,7 +771,7 @@ console.log("Run '/bmad-party-mode' to see all {total} agents!");
 ## Reference Implementation
 
 **Agent:** Emma (empathy-mapper)
-**Source Framework:** DesignOS (empathy mapping)
+**Domain:** Empathy mapping and user research
 **Workflow Pattern:** Step-file architecture
 **Files:**
 - Agent: [_bmad/bme/_designos/agents/empathy-mapper.md](_bmad/bme/_designos/agents/empathy-mapper.md)
@@ -781,15 +780,15 @@ console.log("Run '/bmad-party-mode' to see all {total} agents!");
 
 **What Emma Demonstrates:**
 - Standard BMAD agent interface implementation
-- Step-file workflow adapter pattern
+- Step-file workflow architecture pattern
 - npm package template usage
-- Integration with BMAD Method
+- BMAD Method integration
 - Party mode compatibility
 
-**Use Emma as Template:** When integrating agents from other frameworks, follow Emma's structure and adapt workflows using the appropriate adapter pattern.
+**Use Emma as Template:** When creating new domain-specialized agents, follow Emma's structure and select the appropriate workflow pattern for your use case.
 
 ---
 
-**End of Generic Agent Integration Framework**
+**End of BMAD Agent Architecture Framework**
 
-**Status:** Framework specification complete - ready for reference implementation (Emma)
+**Status:** Framework specification complete - reference implementation (Emma) operational
