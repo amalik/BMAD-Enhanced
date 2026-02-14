@@ -8,26 +8,24 @@
 
 This directory contains all planning artifacts, analysis documents, and brainstorming outputs for the BMAD-Enhanced project.
 
-**Project Goal:** Integrate 4 powerful frameworks (BMAD Method, Quint FPF, DesignOS, AgentOS) into a unified platform with complete cross-framework traceability.
+**Project Goal:** Enhance BMAD Method with domain-specialized agents covering design, quality, and standards domains.
 
 **Architectural Decision:** BMAD-First Architecture with Agent Enhancement (v1.4.0)
 
 ---
 
-## 🚨 Major Update (2026-02-07): Phase 0 Pivot
+## 🚨 Major Update (2026-02-14): Domain-Specialized Agents
 
-**Critical Discovery:** DesignOS and AgentOS are NOT markdown workflow systems:
-- **DesignOS:** TypeScript web application with browser UI
-- **AgentOS:** Shell-based CLI tool for standards management
+**Current Approach:** Enhancing BMAD with domain-specialized agents using standard BMAD agent architecture.
 
-**Strategic Pivot:** Phase 0 changed from building custom orchestration engine (1,800 LOC) to enhancing BMAD with 4 new agents (500 LOC) inspired by DesignOS/AgentOS capabilities.
-
-**New Approach:**
-- Week 1: Create DesignOS-inspired agents (empathy-mapper, wireframe-designer)
-- Week 2: Create AgentOS-inspired agents (quality-gatekeeper, standards-auditor)
+**Implementation:**
+- Week 1: Design agents (empathy-mapper, wireframe-designer)
+- Week 2: Quality & standards agents (quality-gatekeeper, standards-auditor)
 - Week 3: Integration testing & decision gate
 
-**See:** [framework-deep-dive-analysis.md](./planning-artifacts/framework-deep-dive-analysis.md) for complete analysis
+**Architecture:** All agents built using BMAD Agent Architecture Framework (v1.1.0) - standardized interface supporting any domain expertise.
+
+**See:** [GENERIC-AGENT-INTEGRATION-FRAMEWORK.md](GENERIC-AGENT-INTEGRATION-FRAMEWORK.md) for architecture details
 
 ---
 
@@ -82,20 +80,22 @@ This directory contains all planning artifacts, analysis documents, and brainsto
 
 **Phase 0 Scope Refinement (2026-02-06):** Defer Quint SQLite integration to Phase 2, focus Phase 0 on pure markdown orchestration.
 
-**Integration Strategy:**
-1. **Interface Model:** Capabilities + Steps (Convention-Based Discovery)
-   - Frameworks expose capabilities via `_quint/capabilities/`, `_designos/capabilities/`, `_agentos/capabilities/`
-   - **Claude users:** Invoke via slash commands: `/quint-hypothesize`, `/designos-empathy-map`, `/agentos-quality-gate`
-   - **Other LLMs:** Direct capability file access
-   - **Non-LLM tools:** REST API endpoints
+**Agent Architecture:**
+1. **Standard Interface:** All agents use BMAD Agent Architecture Framework
+   - XML-based agent structure inside markdown code blocks
+   - Standard menu structure (MH, CH, custom workflows, PM, DA)
+   - Fuzzy command matching support
+   - Slash command invocation: `/bmad-agent-{module}-{agent-name}`
 
-2. **Control Flow:** Hierarchical Orchestration
-   - Capabilities → Load Steps → Execute Framework Logic → Return to Workflow
+2. **Workflow Patterns:** Three architectural patterns available
+   - Pattern 1: Step-file architecture (sequential workflows)
+   - Pattern 2: YAML + instructions (configuration-driven workflows)
+   - Pattern 3: Hybrid (combined approach)
 
-3. **State Management:** BMAD Markdown as Master
-   - Markdown artifacts are source of truth (Git version control)
-   - Quint SQLite is performance cache for FPF queries (Phase 2)
-   - Sync direction: Markdown → SQLite (primary), SQLite → Markdown (FPF results)
+3. **State Management:** BMAD Markdown artifacts
+   - Markdown files are source of truth (Git version control)
+   - Config-driven variables (user_name, communication_language, output_folder)
+   - Output artifacts in `_bmad-output/` directories
 
 4. **Implementation Size (Phased - REVISED 2026-02-07):**
    - **Phase 0 (Weeks 1-3):** 500 LOC - Agent Enhancement
@@ -113,16 +113,16 @@ This directory contains all planning artifacts, analysis documents, and brainsto
 
 ## Timeline
 
-### Phase 0: POC - Agent Enhancement (Weeks 1-3) ← **CURRENT FOCUS (PIVOTED 2026-02-07)**
-**Goal:** Enhance BMAD with 4 new design and quality agents inspired by DesignOS/AgentOS capabilities
+### Phase 0: POC - Domain-Specialized Agents (Weeks 1-3) ← **CURRENT FOCUS**
+**Goal:** Enhance BMAD with 4 domain-specialized agents for design and quality workflows
 
-**Scope:** DesignOS-inspired agents + AgentOS-inspired agents (leverage proven BMAD agent architecture)
+**Scope:** Design agents + Quality/standards agents using BMAD agent architecture
 
 **Deliverables:**
-- **Week 1:** DesignOS-inspired agents
+- **Week 1:** Design agents
   - Emma (empathy-mapper) - User empathy mapping workflows
   - Wade (wireframe-designer) - Rapid wireframe generation
-- **Week 2:** AgentOS-inspired agents
+- **Week 2:** Quality & standards agents
   - Quinn (quality-gatekeeper) - Quality gate decision workflows
   - Stan (standards-auditor) - Code standards compliance checking
 - **Week 3:** Integration & Testing
@@ -130,9 +130,9 @@ This directory contains all planning artifacts, analysis documents, and brainsto
   - Party mode integration
   - Documentation & decision gate
 
-**LOC:** ~500 LOC (72% reduction from 1,800 LOC custom orchestration)
+**LOC:** ~500 LOC per agent (~1,240 LOC total for 4 agents)
 
-**Decision Gate (Week 3):** Proceed to Phase 1, enhance agents (Phase 1.5), pivot to custom orchestration, or hybrid approach
+**Decision Gate (Week 3):** Evaluate agent approach success, proceed to Phase 1 or iterate on agent design
 
 ---
 
@@ -141,33 +141,13 @@ This directory contains all planning artifacts, analysis documents, and brainsto
 
 ---
 
-### Phase 2: Quint SQLite Sync Adapter (Weeks 8-9)
-**Goal:** Add Quint sync adapter to proven orchestration foundation from Phase 0
-
-**Scope:** 500 LOC sync adapter only
-
-**Key Validations:**
-- Sync latency <200ms (target)
-- Concurrent write handling
-- Conflict resolution (markdown wins)
-- Recovery from sync failures
-
-**Decision Gate (Week 9):** Proceed to Phase 3 or optimize sync adapter
+### Phase 1: Contract Foundation (Weeks 4-7)
+**Goal:** Establish BaseArtifact foundation and expand agent capabilities
 
 ---
 
-### Phase 3: DesignOS Implementation (Weeks 14-17)
-**Goal:** Replace Phase 0 stubs with full DesignOS capabilities
-
----
-
-### Phase 4: AgentOS Orchestration Layer (Weeks 18-21)
-**Goal:** Replace Phase 0 stubs with full AgentOS quality orchestration
-
----
-
-### Phase 5: Cross-Framework Traceability (Weeks 22-27)
-**Goal:** Complete end-to-end traceability and launch v1.0.0
+### Future Phases: TBD
+**Scope:** Based on Phase 0 decision gate results and user feedback
 
 ---
 
@@ -199,30 +179,30 @@ From [brainstorming-session-2026-02-05.md](./brainstorming/brainstorming-session
 
 ## Quick Navigation
 
-**Starting Phase 0 POC Implementation? (UPDATED 2026-02-07)**
-1. Read: [architectural-decision-record.md](./planning-artifacts/architectural-decision-record.md) ⭐ (v1.4.0 - Agent Enhancement Pivot)
-2. Read: [framework-deep-dive-analysis.md](./planning-artifacts/framework-deep-dive-analysis.md) ⭐ (Why pivot? How do frameworks actually work?)
-3. Follow: [phase-0-implementation-guide.md](./planning-artifacts/phase-0-implementation-guide.md) ⭐ (Complete implementation guide for 4 agents)
-4. Reference: [phase-0-alternative-agent-integration.md](./planning-artifacts/phase-0-alternative-agent-integration.md) (Agent vs orchestration comparison)
+**Starting Phase 0 POC Implementation? (UPDATED 2026-02-14)**
+1. Read: [GENERIC-AGENT-INTEGRATION-FRAMEWORK.md](GENERIC-AGENT-INTEGRATION-FRAMEWORK.md) ⭐ (BMAD Agent Architecture Framework v1.1.0)
+2. Reference: [EMMA-REFERENCE-IMPLEMENTATION-COMPLETE.md](EMMA-REFERENCE-IMPLEMENTATION-COMPLETE.md) ⭐ (Emma reference implementation)
+3. Follow: [phase-0-implementation-guide.md](./planning-artifacts/phase-0-implementation-guide.md) (Complete implementation guide for 4 agents)
+4. Test: [EMMA-TESTING-GUIDE.md](EMMA-TESTING-GUIDE.md) (Testing procedures for agents)
 
 **Need Architecture Details?**
 - Interface contracts: [baseartifact-contract-spec.md](./planning-artifacts/baseartifact-contract-spec.md)
 - Technical deep-dive: [technical-deep-dive-analysis.md](./planning-artifacts/technical-deep-dive-analysis.md)
 - Framework comparison: [4-framework-comparison-matrix.md](./planning-artifacts/4-framework-comparison-matrix.md)
 
-**Exploring Alternative Approaches?**
-- Quint-First: [architectural-comparison-quint-vs-bmad-first.md](./planning-artifacts/architectural-comparison-quint-vs-bmad-first.md)
-- Greenfield: [greenfield-architecture-analysis.md](./planning-artifacts/greenfield-architecture-analysis.md)
-- All 100 patterns: [orchestration-patterns-catalog.md](./brainstorming/orchestration-patterns-catalog.md)
+**Workflow Patterns Reference:**
+- Step-file architecture: [_bmad/bme/_designos/workflows/empathy-map/](../_bmad/bme/_designos/workflows/empathy-map/)
+- YAML + instructions: See framework documentation Part 2
+- Hybrid patterns: See framework documentation Part 2
 
 ---
 
 ## Status
 
-**Decision Status:** ✅ ACCEPTED (BMAD-First Architecture v1.4.0 - Agent Enhancement)
-**Implementation Status:** 🚧 Phase 0 POC (Week 1) - Agent Enhancement (PIVOTED 2026-02-07)
-**Latest Update:** Deep-dive analysis revealed DesignOS/AgentOS are web app + CLI tool (not markdown). Pivoted to agent enhancement approach (500 LOC vs 1,800 LOC).
-**Next Milestone:** Phase 0 Decision Gate (Week 3) - Evaluate agent approach viability
+**Decision Status:** ✅ ACCEPTED (BMAD Agent Architecture - Domain Specialization)
+**Implementation Status:** 🚧 Phase 0 POC (Week 1) - Emma created, testing in progress
+**Latest Update:** BMAD Agent Architecture Framework v1.1.0 complete. Emma (empathy-mapper) reference implementation created. Documentation cleaned of external framework references.
+**Next Milestone:** Emma testing completion, then Wade creation (Week 1)
 
 ---
 
@@ -242,4 +222,4 @@ All planning documents follow markdown standards with YAML frontmatter for metad
 
 **BMAD-Enhanced Core Team**
 **Project Start:** 2026-02-01
-**Latest Update:** 2026-02-07 (Phase 0 Pivot: ADR v1.4.0 - Agent Enhancement Approach, 72% LOC reduction)
+**Latest Update:** 2026-02-14 (Documentation cleanup: removed external framework references, clarified domain-specialized agent approach)
