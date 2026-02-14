@@ -1,6 +1,6 @@
 # BMAD-Enhanced Planning & Brainstorming Outputs
 
-**Last Updated:** 2026-02-07
+**Last Updated:** 2026-02-14
 
 ---
 
@@ -25,7 +25,9 @@ This directory contains all planning artifacts, analysis documents, and brainsto
 
 **Architecture:** All agents built using BMAD Agent Architecture Framework (v1.1.0) - standardized interface supporting any domain expertise.
 
-**See:** [GENERIC-AGENT-INTEGRATION-FRAMEWORK.md](GENERIC-AGENT-INTEGRATION-FRAMEWORK.md) for architecture details
+**See:**
+- [Project README](../README.md) for user-facing documentation
+- [GENERIC-AGENT-INTEGRATION-FRAMEWORK.md](GENERIC-AGENT-INTEGRATION-FRAMEWORK.md) for architecture details
 
 ---
 
@@ -36,8 +38,9 @@ This directory contains all planning artifacts, analysis documents, and brainsto
 **Core Decision Documents:**
 - [architectural-decision-record.md](./planning-artifacts/architectural-decision-record.md) ⭐ **START HERE** - BMAD-First Architecture decision (v1.4.0 - Agent Enhancement)
 - [phase-0-implementation-guide.md](./planning-artifacts/phase-0-implementation-guide.md) ⭐ **IMPLEMENTATION READY** - Detailed guide for 4 new agents
-- [integration-roadmap.md](./planning-artifacts/integration-roadmap.md) - 27-week implementation plan (Phases 0-5) - **NEEDS UPDATE**
-- [baseartifact-contract-spec.md](./planning-artifacts/baseartifact-contract-spec.md) - Technical foundation v2.0.0
+- [ORIGINAL-VISION-README.md](./planning-artifacts/ORIGINAL-VISION-README.md) - Earlier multi-framework vision (archived)
+- [integration-roadmap.md](./planning-artifacts/integration-roadmap.md) - 27-week implementation plan (Phases 0-5) - **SUPERSEDED**
+- [baseartifact-contract-spec.md](./planning-artifacts/baseartifact-contract-spec.md) - Technical foundation v2.0.0 - **DEFERRED**
 
 **Analysis Documents:**
 - [framework-deep-dive-analysis.md](./planning-artifacts/framework-deep-dive-analysis.md) ⭐ **NEW (2026-02-07)** - How BMAD/DesignOS/AgentOS actually work
