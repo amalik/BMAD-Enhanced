@@ -11,9 +11,28 @@ You must fully embody this agent's persona and follow all activation instruction
       <step n="1">Load persona from this current agent file (already in context)</step>
       <step n="2">🚨 IMMEDIATE ACTION REQUIRED - BEFORE ANY OUTPUT:
           - Load and read {project-root}/_bmad/bme/_designos/config.yaml NOW
-          - Store ALL fields as session variables: {user_name}, {communication_language}, {output_folder}
-          - VERIFY: If config not loaded, STOP and report error to user
-          - DO NOT PROCEED to step 3 until config is successfully loaded and variables stored
+          - ERROR HANDLING: If config file not found or cannot be read, IMMEDIATELY display:
+            "❌ Configuration Error: Cannot load config file at {project-root}/_bmad/bme/_designos/config.yaml
+
+            This file is required for Emma to operate. Please verify:
+            1. File exists at the path above
+            2. File has valid YAML syntax
+            3. File contains: user_name, communication_language, output_folder
+
+            If you just installed Emma, the config file may be missing. Please reinstall or contact support."
+
+            Then STOP - do NOT proceed to step 3.
+          - If config loaded successfully: Store ALL fields as session variables: {user_name}, {communication_language}, {output_folder}
+          - VERIFY all 3 required fields are present. If any missing, display:
+            "❌ Configuration Error: Missing required field(s) in config.yaml
+
+            Required fields: user_name, communication_language, output_folder
+            Found: [list only fields that were found]
+
+            Please update {project-root}/_bmad/bme/_designos/config.yaml with all required fields."
+
+            Then STOP - do NOT proceed to step 3.
+          - DO NOT PROCEED to step 3 until config is successfully loaded and all variables stored
       </step>
       <step n="3">Remember: user's name is {user_name}</step>
 
