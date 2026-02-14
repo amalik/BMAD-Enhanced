@@ -12,12 +12,12 @@ communication_language: "en"
 # Agents in this submodule
 agents:
   - empathy-mapper     # Emma - Empathy Mapping Specialist
-  - wireframe-designer # Wade - Wireframe Specialist (coming soon)
+  - wireframe-designer # Wade - Wireframe Specialist
 
 # Workflows available
 workflows:
   - empathy-map       # Create empathy maps
-  - wireframe         # Create wireframes (coming soon)
+  - wireframe         # Create wireframes
 
 # Integration
 party_mode_enabled: true
