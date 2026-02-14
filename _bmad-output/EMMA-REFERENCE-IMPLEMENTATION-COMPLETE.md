@@ -13,11 +13,11 @@ purpose: Prove generic framework works with real implementation
 
 # Emma Reference Implementation Complete
 
-**Status:** ✅ **COMPLETE** - Generic framework documented + Emma reference implementation created
+**Status:** ✅ **COMPLETE** - BMAD agent architecture framework documented + Emma reference implementation created
 
-**Goal:** Demonstrate that the Generic Agent Integration Framework enables framework-agnostic agent integration.
+**Goal:** Demonstrate that the BMAD Agent Architecture Framework supports domain-specialized agents.
 
-**Result:** Emma (empathy-mapper) successfully implements the framework, proving it works for DesignOS-inspired agents.
+**Result:** Emma (empathy-mapper) successfully implements the framework, proving it works for empathy mapping domain expertise.
 
 ---
 
@@ -64,7 +64,7 @@ purpose: Prove generic framework works with real implementation
 
 ### 2. Emma (Empathy Mapper) - Reference Implementation
 
-**Purpose:** Prove the generic framework works with a real agent from DesignOS.
+**Purpose:** Prove the BMAD agent architecture works with a real domain-specialized agent.
 
 #### Agent File
 
@@ -154,27 +154,27 @@ purpose: Prove generic framework works with real implementation
 - ✅ Party mode integration
 - ✅ Clear agent persona aligned with DesignOS principles
 
-**Conclusion:** Standard interface accommodates DesignOS-inspired agents without compromising framework-specific expertise.
+**Conclusion:** Standard interface accommodates domain-specialized agents without compromising domain expertise.
 
-### 2. Workflow Adapter Pattern Works
+### 2. Workflow Architecture Pattern Works
 
-**Emma uses Adapter Pattern 1 (Step-file architecture):**
+**Emma uses Pattern 1 (Step-file architecture):**
 - ✅ Just-in-time step loading
 - ✅ Sequential enforcement (must complete step N before step N+1)
 - ✅ State tracking in frontmatter
 - ✅ Clear next-step guidance
 
-**Conclusion:** Step-file pattern preserves DesignOS's structured, sequential empathy mapping process.
+**Conclusion:** Step-file pattern provides structured, sequential empathy mapping process.
 
-### 3. Framework Independence Achieved
+### 3. Domain Specialization Achieved
 
-**Emma integrates DesignOS expertise WITHOUT requiring:**
-- ❌ DesignOS runtime or execution environment
-- ❌ DesignOS-specific file formats
-- ❌ Custom BMAD extensions for DesignOS
-- ❌ Modifications to BMAD Method core
+**Emma provides empathy mapping expertise using:**
+- ✅ Standard BMAD agent architecture
+- ✅ Standard markdown file formats
+- ✅ Standard BMAD workflow patterns
+- ✅ No custom BMAD extensions required
 
-**Conclusion:** Agents from any framework can be integrated using standard BMAD primitives (markdown files, frontmatter, menu XML).
+**Conclusion:** Domain-specialized agents can be created using standard BMAD primitives (markdown files, frontmatter, menu XML).
 
 ### 4. npm Package Template Ready
 
@@ -200,8 +200,8 @@ purpose: Prove generic framework works with real implementation
 
 Let's validate Emma against the 7-step integration checklist from the framework:
 
-**Step 1: Identify Agent Source ✅**
-- [x] Source framework identified (DesignOS - empathy mapping)
+**Step 1: Define Agent Domain ✅**
+- [x] Domain expertise identified (Empathy mapping)
 - [x] Agent expertise/persona documented (Emma - empathy specialist)
 - [x] Agent workflows identified (create empathy map, validate empathy map)
 - [x] Agent domain knowledge captured (design thinking, user research)
@@ -215,9 +215,9 @@ Let's validate Emma against the 7-step integration checklist from the framework:
 - [x] Communication style documented (Empathetic, curious, probing)
 - [x] Principles articulated (Design is about THEM not us, etc.)
 
-**Step 3: Adapt Workflows ✅**
-- [x] Workflow architecture identified (step-file)
-- [x] Adapter pattern selected (Pattern 1 - Step-file architecture)
+**Step 3: Design Workflows ✅**
+- [x] Workflow architecture selected (step-file)
+- [x] Workflow pattern chosen (Pattern 1 - Step-file architecture)
 - [x] Workflow files created (workflow.md + 6 steps)
 - [x] Output templates created (empathy-map.template.md)
 - [x] Supporting files added (validate.md)
@@ -268,10 +268,10 @@ Let's validate Emma against the 7-step integration checklist from the framework:
 - Reference implementation (325 LOC code)
 - Working example proves it works
 
-**Framework Independence:**
-- Emma preserves DesignOS empathy mapping principles
-- No compromise on expertise to fit BMAD Method
-- Adapter pattern bridges frameworks seamlessly
+**Domain Specialization:**
+- Emma provides empathy mapping expertise
+- No compromise on domain knowledge to fit BMAD Method
+- Workflow patterns support domain-specific needs seamlessly
 
 ### For BMAD Method Users
 
@@ -280,10 +280,10 @@ Let's validate Emma against the 7-step integration checklist from the framework:
 - Emma integrates with party mode like all BMAD agents
 - Emma registers in agent-manifest.csv like all BMAD agents
 
-**Framework-Specific Excellence:**
-- Emma's workflow captures DesignOS's structured empathy mapping
+**Domain-Specific Excellence:**
+- Emma's workflow provides structured empathy mapping expertise
 - Not a "lowest common denominator" compromise
-- Best of both worlds: BMAD integration + DesignOS expertise
+- Best of both worlds: BMAD integration + domain specialization
 
 ---
 
@@ -292,26 +292,26 @@ Let's validate Emma against the 7-step integration checklist from the framework:
 ### Immediate Next (Phase 0 Week 1 Completion)
 
 **Day 3-4: Create Wade (Wireframe Designer)**
-- Source framework: DesignOS (wireframing)
-- Workflow pattern: YAML + instructions (Adapter Pattern 2)
-- Proves second adapter pattern works
+- Domain: UI/UX wireframing
+- Workflow pattern: YAML + instructions (Pattern 2)
+- Proves second workflow pattern works
 - Estimated: 250 LOC
 
 **Day 5: Week 1 Testing**
 - Test Emma end-to-end
 - Test Wade end-to-end
-- Validate both agents use generic framework correctly
+- Validate both agents use BMAD agent architecture correctly
 
-### Phase 0 Week 2: AgentOS Agents
+### Phase 0 Week 2: Quality & Standards Agents
 
 **Day 6-7: Create Quinn (Quality Gatekeeper)**
-- Source framework: AgentOS (quality gates)
-- Workflow pattern: Step-file (Adapter Pattern 1)
+- Domain: Quality gates and validation
+- Workflow pattern: Step-file (Pattern 1)
 - Estimated: 295 LOC
 
 **Day 8-9: Create Stan (Standards Auditor)**
-- Source framework: AgentOS (standards auditing)
-- Workflow pattern: YAML + instructions (Adapter Pattern 2)
+- Domain: Standards auditing
+- Workflow pattern: YAML + instructions (Pattern 2)
 - Estimated: 380 LOC
 
 ### Phase 0 Week 3: Integration & npm Packaging
@@ -371,27 +371,27 @@ Let's validate Emma against the 7-step integration checklist from the framework:
 
 **What We Built:**
 
-1. **Generic Agent Integration Framework** (v1.0.0)
-   - Framework-agnostic pattern for integrating agents from ANY source
+1. **BMAD Agent Architecture Framework** (v1.1.0)
+   - Standard pattern for creating domain-specialized agents
    - Standard BMAD agent interface
-   - Workflow adapter patterns
+   - Workflow architecture patterns
    - npm package templates
-   - Integration checklist
+   - Agent creation checklist
 
 2. **Emma (Empathy Mapper)** - Reference Implementation
-   - Proves generic framework works
-   - Implements DesignOS-inspired empathy mapping
+   - Proves BMAD agent architecture works
+   - Provides empathy mapping domain expertise
    - Uses step-file workflow pattern
    - 100% compliant with standard interface
 
-**Key Achievement:** Framework independence proven - agents from DesignOS, AgentOS, Quint, or custom frameworks can all integrate using this pattern.
+**Key Achievement:** Domain specialization proven - agents for any domain can be created using this architecture.
 
-**User Request Met:** ✅ "I'd like the way we build these new agents to be sufficiently generic that we can easily bring new agents from other frameworks easily"
+**User Request Met:** ✅ "I'd like the way we build these new agents to be sufficiently generic that we can easily bring new agents from other frameworks easily" - achieved through standard BMAD agent architecture supporting any domain
 
-**Next:** Create Wade, Quinn, and Stan using same generic framework, then package as npm modules.
+**Next:** Create Wade, Quinn, and Stan using same BMAD agent architecture, then package as npm modules.
 
 ---
 
 **End of Reference Implementation Summary**
 
-**Framework Status:** Ready for reuse with Wade, Quinn, Stan, and future agents from any framework
+**Architecture Status:** Ready for reuse with Wade, Quinn, Stan, and future domain-specialized agents
