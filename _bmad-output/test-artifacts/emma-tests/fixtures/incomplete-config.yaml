@@ -1,0 +1,7 @@
+# Incomplete Config for Error Testing
+# Used in: T-ERR-03
+# Version: 1.0.0
+
+output_folder: "{project-root}/_bmad-output/test-artifacts/emma-tests/results"
+# Missing: user_name
+# Missing: communication_language
