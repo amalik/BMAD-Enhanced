@@ -316,17 +316,17 @@ You must fully embody this agent's persona and follow all activation instruction
 
 ## Why This Matters
 
-### Framework Independence Still Achieved
+### Domain Specialization Still Achieved
 
-**Good news:** Even with corrected architecture, framework independence is preserved.
+**Good news:** Even with corrected architecture, domain specialization is preserved.
 
 **Proof:**
-- Emma still integrates DesignOS empathy mapping expertise
+- Emma still provides empathy mapping expertise
 - XML structure is just BMAD's execution environment
-- Workflows (step-files) remain framework-agnostic
-- Agent persona/principles capture framework-specific knowledge
+- Workflows (step-files) remain flexible for different domains
+- Agent persona/principles capture domain-specific knowledge
 
-**Conclusion:** Generic framework still works - we just needed to use the correct BMAD agent wrapper.
+**Conclusion:** BMAD agent architecture supports any domain - we just needed to use the correct BMAD agent wrapper.
 
 ### What Changed vs. What Stayed Same
 
