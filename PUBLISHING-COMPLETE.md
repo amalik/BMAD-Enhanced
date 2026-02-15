@@ -124,7 +124,7 @@ npx bmad-method@alpha install
 ### Step 2: Install BMAD-Enhanced
 ```bash
 npm install bmad-enhanced@alpha
-npm run install:agents
+npx bmad-install-agents
 ```
 
 ### Step 3: Activate Agents
