@@ -1,0 +1,39 @@
+{
+  "name": "bmad-enhanced",
+  "version": "1.0.0-alpha",
+  "description": "Domain-Specialized Agents for BMAD Method - Expert agents for design, quality, and standards workflows",
+  "main": "index.js",
+  "scripts": {
+    "install:emma": "node scripts/install-emma.js",
+    "install:wade": "node scripts/install-wade.js",
+    "install:agents": "node scripts/install-all-agents.js",
+    "postinstall": "node scripts/postinstall.js"
+  },
+  "bin": {
+    "bmad-install-emma": "./scripts/install-emma.js",
+    "bmad-install-wade": "./scripts/install-wade.js",
+    "bmad-install-agents": "./scripts/install-all-agents.js"
+  },
+  "keywords": [
+    "bmad",
+    "agents",
+    "empathy-mapping",
+    "wireframing",
+    "design",
+    "ux",
+    "ai-agents"
+  ],
+  "author": "BMAD-Enhanced Community",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/bmadhub/bmad-enhanced.git"
+  },
+  "engines": {
+    "node": ">=14.0.0"
+  },
+  "dependencies": {
+    "chalk": "^4.1.2",
+    "fs-extra": "^11.3.3"
+  }
+}
