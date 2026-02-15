@@ -362,6 +362,6 @@ npm uninstall bmad-enhanced
 
 ---
 
-**Version:** 1.0.0-alpha
+**Version:** 1.0.3-alpha
 **Last Updated:** 2026-02-15
 **Status:** Production Ready (Emma ✅, Wade ✅)
