@@ -7,6 +7,7 @@
 [![Status](https://img.shields.io/badge/status-active_development-green)]()
 [![Version](https://img.shields.io/badge/version-1.0.0--alpha-orange)]()
 [![Emma](https://img.shields.io/badge/emma-operational-brightgreen)]()
+[![Wade](https://img.shields.io/badge/wade-operational-brightgreen)]()
 [![License](https://img.shields.io/badge/license-MIT-blue)]()
 
 ---
@@ -18,14 +19,14 @@ BMAD-Enhanced extends the [BMAD Method](https://github.com/bmadhub/bmad) with **
 ```
 Design Agents              Quality & Standards Agents
 ┌─────────────┐           ┌─────────────┐
-│    Emma     │           │    Quinn    │
+│    Emma ✅  │           │    Quinn    │
 │  Empathy    │           │   Quality   │
 │   Mapper    │           │ Gatekeeper  │
 └─────────────┘           └─────────────┘
        🎨                        🧪
 
 ┌─────────────┐           ┌─────────────┐
-│    Wade     │           │    Stan     │
+│    Wade ✅  │           │    Stan     │
 │ Wireframe   │           │ Standards   │
 │  Designer   │           │  Auditor    │
 └─────────────┘           └─────────────┘
@@ -36,13 +37,51 @@ Design Agents              Quality & Standards Agents
 
 ## ⚡ Quick Start
 
+**📖 See [INSTALLATION.md](INSTALLATION.md) for complete installation guide**
+
 ### Prerequisites
 
-- Node.js 18+ or Bun
+**⚠️ IMPORTANT: BMAD Method Required**
+
+BMAD-Enhanced is an extension package. You must have [BMAD Method](https://github.com/bmadhub/bmad) installed first:
+
+```bash
+# Install BMAD Method first
+npx bmad-method@alpha install
+```
+
+**Additional Requirements:**
+- Node.js 14+ or Bun
 - Git
-- Claude Code or BMAD CLI
+- Claude Code or Claude.ai
+
+### One-Command Installation
+
+Once BMAD Method is installed:
+
+```bash
+npm install bmad-enhanced && npm run install:agents
+```
+
+That's it! Emma and Wade are now added to your BMAD installation.
 
 ### Installation
+
+**Option 1: Install from npm (Recommended)**
+
+```bash
+# Install into your project
+npm install bmad-enhanced
+
+# Install all agents (Emma + Wade)
+npm run install:agents
+
+# Or install individually
+npm run install:emma    # Install Emma (empathy-mapper)
+npm run install:wade    # Install Wade (wireframe-designer)
+```
+
+**Option 2: Clone from source**
 
 ```bash
 # Clone repository
@@ -51,32 +90,50 @@ cd BMAD-Enhanced
 
 # Install dependencies
 npm install
-# or
-bun install
 
-# Verify Emma is operational
+# Agents are already installed and operational
 cat _bmad/bme/_designos/agents/empathy-mapper.md
 ```
+
+**What gets installed:**
+- Agent definition files (`_bmad/bme/_designos/agents/`)
+- Workflow files with step-by-step processes (`_bmad/bme/_designos/workflows/`)
+- Configuration file (`_bmad/bme/_designos/config.yaml`)
+- Output directory (`_bmad-output/design-artifacts/`)
+- User guides (EMMA-USER-GUIDE.md, WADE-USER-GUIDE.md)
 
 ### Your First Empathy Map with Emma
 
 ```bash
-# Method 1: Slash command (if available in your environment)
-/bmad-agent-bme-empathy-mapper
-
-# Method 2: Direct file reading (always works)
+# Activate Emma
 cat _bmad/bme/_designos/agents/empathy-mapper.md
 ```
 
-Emma will guide you through a 6-step process to create a comprehensive empathy map:
+Emma will guide you through a 5-step process to create a comprehensive empathy map:
 1. Define Target User
 2. Says & Thinks
 3. Does & Feels
-4. Pain Points
-5. Gains
-6. Synthesize (creates artifact)
+4. Pain Points & Gains
+5. Synthesize (creates artifact)
 
 **See:** [Emma User Guide](_bmad-output/design-artifacts/EMMA-USER-GUIDE.md) for complete documentation
+
+### Your First Wireframe with Wade
+
+```bash
+# Activate Wade
+cat _bmad/bme/_designos/agents/wireframe-designer.md
+```
+
+Wade will guide you through a 6-step process to create comprehensive wireframes:
+1. Define Requirements (screen, platform, user)
+2. User Flows (entry → goal → exit)
+3. Information Architecture (visual hierarchy)
+4. Wireframe Sketch (ASCII art layouts)
+5. Components & Interactions (UI specs)
+6. Synthesize (creates artifact)
+
+**See:** [Wade User Guide](_bmad-output/design-artifacts/WADE-USER-GUIDE.md) for complete documentation
 
 ---
 
@@ -94,7 +151,7 @@ All agents built using a standard pattern:
 - **Error handling** - Robust validation with clear error messages
 - **Artifact generation** - Template-based professional output
 
-**Pattern Proven:** Emma (reference implementation) validated with 100% P0 test pass rate (18/18 tests)
+**Pattern Proven:** Emma + Wade (reference implementations) validated with 100% P0 test pass rate (18/18 tests each)
 
 ---
 
@@ -119,13 +176,19 @@ All agents built using a standard pattern:
 
 ---
 
-### Wade (wireframe-designer) - 🚧 IN DEVELOPMENT
+### Wade (wireframe-designer) - ✅ OPERATIONAL
 
-**Status:** Week 1, Days 3-7 (In Progress)
+**Status:** Production-ready (v1.0.0)
 **Domain:** Wireframe and UI design
-**Planned Workflows:** Rapid wireframe generation, design system application
+**Workflows:**
+- **Create Wireframe (WM):** 6-step guided wireframe creation process
+- **Validate Wireframe (VM):** Review wireframes against usability principles
 
-**Expected Completion:** Week 1, Day 7 (2026-02-20)
+**Commands:** WM (Create), VM (Validate), CH (Chat), MH (Menu), PM (Party Mode), DA (Dismiss)
+
+**Test Results:** [100% P0 Pass Rate](_bmad-output/test-artifacts/wade-tests/wade-p0-test-execution.md) (18/18 tests)
+
+**User Guide:** [Wade User Guide](_bmad-output/design-artifacts/WADE-USER-GUIDE.md)
 
 ---
 
@@ -565,7 +628,7 @@ They complement each other. Use BMAD Core for development, BMAD-Enhanced for spe
 
 [Get Started](#quick-start) • [Documentation](#documentation) • [Roadmap](#roadmap)
 
-**Current Status:** ✅ Emma Operational | 🚧 Wade In Progress | 📋 Quinn & Stan Planned
+**Current Status:** ✅ Emma Operational | ✅ Wade Operational | 📋 Quinn & Stan Planned
 
 Made with ❤️ by the BMAD-Enhanced community
 
