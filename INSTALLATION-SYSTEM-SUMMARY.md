@@ -20,7 +20,7 @@ cd BMAD-Enhanced
 
 **After:**
 ```bash
-npm install bmad-enhanced && npm run install:agents
+npm install bmad-enhanced && npx bmad-install-agents
 # Done! Agents installed and ready to use.
 ```
 
@@ -103,11 +103,11 @@ npm install bmad-enhanced && npm run install:agents
 ```bash
 # Install all agents (Emma + Wade)
 npm install bmad-enhanced
-npm run install:agents
+npx bmad-install-agents
 
 # Install individual agents
-npm run install:emma    # Emma only
-npm run install:wade    # Wade only
+npx bmad-install-emma    # Emma only
+npx bmad-install-wade    # Wade only
 ```
 
 ### Output Example
@@ -246,7 +246,7 @@ Added:
 ### One-Command Installation
 
 ```bash
-npm install bmad-enhanced && npm run install:agents
+npm install bmad-enhanced && npx bmad-install-agents
 ```
 
 That's it! Both Emma and Wade are ready to use.
@@ -259,9 +259,9 @@ That's it! Both Emma and Wade are ready to use.
 ### Verified Functionality
 
 ✅ `npm install` - Installs package dependencies
-✅ `npm run install:agents` - Installs both agents successfully
-✅ `npm run install:emma` - Installs Emma only
-✅ `npm run install:wade` - Installs Wade only
+✅ `npx bmad-install-agents` - Installs both agents successfully
+✅ `npx bmad-install-emma` - Installs Emma only
+✅ `npx bmad-install-wade` - Installs Wade only
 ✅ Directory structure created correctly
 ✅ Config files generated properly
 ✅ User guides copied successfully
