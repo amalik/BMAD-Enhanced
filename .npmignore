@@ -11,13 +11,6 @@ _bmad/_memory/
 _quint/
 .claude/
 
-# Exclude all _bmad-output except user guides
-_bmad-output/*
-!_bmad-output/design-artifacts/
-_bmad-output/design-artifacts/*
-!_bmad-output/design-artifacts/EMMA-USER-GUIDE.md
-!_bmad-output/design-artifacts/WADE-USER-GUIDE.md
-
 # Exclude all markdown docs except key ones
 *.md
 !README.md
@@ -26,6 +19,13 @@ _bmad-output/design-artifacts/*
 !scripts/README.md
 # Include all .md files in _bmad/bme/_designos
 !_bmad/bme/_designos/**/*.md
+
+# Exclude all _bmad-output except user guides
+_bmad-output/*
+!_bmad-output/design-artifacts/
+_bmad-output/design-artifacts/*
+!_bmad-output/design-artifacts/EMMA-USER-GUIDE.md
+!_bmad-output/design-artifacts/WADE-USER-GUIDE.md
 
 # Development files
 .git/
