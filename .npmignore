@@ -1,0 +1,35 @@
+# Test artifacts (don't publish test results)
+_bmad-output/test-artifacts/
+
+# Planning artifacts (internal documents)
+_bmad-output/planning-artifacts/
+
+# Development files
+.git/
+.github/
+.vscode/
+.idea/
+*.log
+*.tmp
+
+# Test files
+test/
+*.test.js
+*.spec.js
+
+# Documentation that's not needed in npm package
+docs/development/
+*.draft.md
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Keep these in the package:
+!_bmad/
+!_bmad-output/design-artifacts/EMMA-USER-GUIDE.md
+!_bmad-output/design-artifacts/WADE-USER-GUIDE.md
+!scripts/
+!README.md
+!LICENSE
+!package.json
