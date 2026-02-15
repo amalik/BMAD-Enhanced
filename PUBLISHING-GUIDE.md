@@ -116,7 +116,7 @@ echo "test: true" > _bmad/_config/bmad.yaml
 npm install /Users/amalikamriou/BMAD-Enhanced/bmad-enhanced-1.0.0-alpha.tgz
 
 # Test installation
-npm run install:agents
+npx bmad-install-agents
 ```
 
 **Expected output:**
@@ -254,7 +254,7 @@ Domain-specialized agents for BMAD Method - expert agents for design, quality, a
 - **Wade (wireframe-designer)** - Wireframe Design Expert
 
 ### Features
-- ✅ One-command installation (`npm install bmad-enhanced && npm run install:agents`)
+- ✅ One-command installation (`npm install bmad-enhanced && npx bmad-install-agents`)
 - ✅ BMAD Method prerequisite checking
 - ✅ 100% test pass rate (36 total tests across both agents)
 - ✅ Comprehensive user guides (16KB each)
@@ -270,7 +270,7 @@ npx bmad-method@alpha install
 **Install BMAD-Enhanced:**
 ```bash
 npm install bmad-enhanced
-npm run install:agents
+npx bmad-install-agents
 ```
 
 ## 📚 Documentation
@@ -378,7 +378,7 @@ echo "test: true" > _bmad/_config/bmad.yaml
 npm install bmad-enhanced@alpha
 
 # Test
-npm run install:agents
+npx bmad-install-agents
 ```
 
 ---
@@ -412,7 +412,7 @@ Domain-specialized agents for BMAD Method:
 - Wade: Wireframe Design Expert
 
 Install:
-npm install bmad-enhanced@alpha && npm run install:agents
+npm install bmad-enhanced@alpha && npx bmad-install-agents
 
 Docs: https://github.com/bmadhub/bmad-enhanced
 npm: https://www.npmjs.com/package/bmad-enhanced
