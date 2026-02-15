@@ -60,7 +60,7 @@ npx bmad-method@alpha install
 Once BMAD Method is installed:
 
 ```bash
-npm install bmad-enhanced && npm run install:agents
+npm install bmad-enhanced && npx bmad-install-agents
 ```
 
 That's it! Emma and Wade are now added to your BMAD installation.
@@ -74,11 +74,11 @@ That's it! Emma and Wade are now added to your BMAD installation.
 npm install bmad-enhanced
 
 # Install all agents (Emma + Wade)
-npm run install:agents
+npx bmad-install-agents
 
 # Or install individually
-npm run install:emma    # Install Emma (empathy-mapper)
-npm run install:wade    # Install Wade (wireframe-designer)
+npx bmad-install-emma    # Install Emma (empathy-mapper)
+npx bmad-install-wade    # Install Wade (wireframe-designer)
 ```
 
 **Option 2: Clone from source**
