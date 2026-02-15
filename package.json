@@ -9,11 +9,6 @@
     "install:agents": "node scripts/install-all-agents.js",
     "postinstall": "node scripts/postinstall.js"
   },
-  "bin": {
-    "bmad-install-emma": "./scripts/install-emma.js",
-    "bmad-install-wade": "./scripts/install-wade.js",
-    "bmad-install-agents": "./scripts/install-all-agents.js"
-  },
   "keywords": [
     "bmad",
     "agents",
