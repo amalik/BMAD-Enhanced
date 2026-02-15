@@ -1,8 +1,31 @@
-# Test artifacts (don't publish test results)
-_bmad-output/test-artifacts/
+# Exclude BMAD config that users get from BMAD Method
+_bmad/_config/
+_bmad/bmb/
+_bmad/bmm/
+_bmad/cis/
+_bmad/core/
+_bmad/tea/
+_bmad/_memory/
 
-# Planning artifacts (internal documents)
-_bmad-output/planning-artifacts/
+# Exclude Quint and Claude config
+_quint/
+.claude/
+
+# Exclude all _bmad-output except user guides
+_bmad-output/*
+!_bmad-output/design-artifacts/
+_bmad-output/design-artifacts/*
+!_bmad-output/design-artifacts/EMMA-USER-GUIDE.md
+!_bmad-output/design-artifacts/WADE-USER-GUIDE.md
+
+# Exclude all markdown docs except key ones
+*.md
+!README.md
+!LICENSE
+!INSTALLATION.md
+!scripts/README.md
+# Include all .md files in _bmad/bme/_designos
+!_bmad/bme/_designos/**/*.md
 
 # Development files
 .git/
@@ -17,19 +40,15 @@ test/
 *.test.js
 *.spec.js
 
-# Documentation that's not needed in npm package
-docs/development/
-*.draft.md
-
 # OS files
 .DS_Store
 Thumbs.db
 
-# Keep these in the package:
-!_bmad/
-!_bmad-output/design-artifacts/EMMA-USER-GUIDE.md
-!_bmad-output/design-artifacts/WADE-USER-GUIDE.md
-!scripts/
-!README.md
-!LICENSE
-!package.json
+# Git files
+.gitignore
+.gitattributes
+
+# Editor files
+*.swp
+*.swo
+*~
