@@ -153,7 +153,7 @@ cd bmad && npm install
 
 # Step 2: Install BMAD-Enhanced agents (extension)
 npm install bmad-enhanced
-npm run install:agents
+npx bmad-install-agents
 ```
 ```
 
@@ -165,7 +165,7 @@ npx bmad-method@alpha install
 
 # Step 2: Install BMAD-Enhanced agents (extension)
 npm install bmad-enhanced
-npm run install:agents
+npx bmad-install-agents
 ```
 ```
 
@@ -195,7 +195,7 @@ What happens:
 **Step 2: Install BMAD-Enhanced**
 ```bash
 npm install bmad-enhanced
-npm run install:agents
+npx bmad-install-agents
 ```
 
 What happens:
@@ -347,12 +347,12 @@ ls _bmad/  # Verify directory created
 
 # Test 2: BMAD-Enhanced install
 npm install bmad-enhanced
-npm run install:agents
+npx bmad-install-agents
 cat _bmad/bme/_designos/agents/empathy-mapper.md  # Verify Emma works
 
 # Test 3: Error handling
 rm -rf _bmad/
-npm run install:agents  # Should error with npx instruction
+npx bmad-install-agents  # Should error with npx instruction
 ```
 
 ---
