@@ -33,7 +33,7 @@ Once BMAD Method is installed, proceed with BMAD-Enhanced installation below.
 ```bash
 # From your project directory (where BMAD Method is installed)
 npm install bmad-enhanced
-npm run install:agents
+npx bmad-install-agents
 ```
 
 That's it! Emma and Wade are now added to your BMAD installation.
@@ -48,7 +48,7 @@ Install both Emma (empathy-mapper) and Wade (wireframe-designer) at once.
 
 ```bash
 npm install bmad-enhanced
-npm run install:agents
+npx bmad-install-agents
 ```
 
 **Output:**
@@ -97,13 +97,13 @@ Install Emma or Wade separately.
 **Install Emma only:**
 ```bash
 npm install bmad-enhanced
-npm run install:emma
+npx bmad-install-emma
 ```
 
 **Install Wade only:**
 ```bash
 npm install bmad-enhanced
-npm run install:wade
+npx bmad-install-wade
 ```
 
 ---
@@ -266,7 +266,7 @@ What would you like to do?
 **Solution:**
 ```bash
 npm install fs-extra chalk
-npm run install:agents
+npx bmad-install-agents
 ```
 
 ### Permission denied errors
@@ -274,7 +274,7 @@ npm run install:agents
 **Solution:**
 ```bash
 chmod +x scripts/*.js
-npm run install:agents
+npx bmad-install-agents
 ```
 
 ### Config file already exists
@@ -287,7 +287,7 @@ The installers are smart - they will:
 To force a clean installation:
 ```bash
 rm -rf _bmad/bme/_designos/
-npm run install:agents
+npx bmad-install-agents
 ```
 
 ### Installation succeeds but agents don't activate
