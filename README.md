@@ -460,6 +460,22 @@ We welcome contributions! Areas where we need help:
 
 **Value:** 50-60% time savings, higher quality output
 
+### For UX/UI Designers (Wade)
+
+**Before:**
+- Manual wireframe creation: 3-4 hours
+- Inconsistent information architecture
+- Missing critical UI components
+- Difficult to validate against usability principles
+
+**After:**
+- Guided 6-step process: 45-90 minutes
+- Structured wireframe with complete IA
+- Component catalog and interaction flows
+- Built-in usability validation
+
+**Value:** 60-70% time savings, comprehensive coverage, fewer design iterations
+
 ### For Development Teams (All Agents)
 
 **Domain Expertise On-Demand:**
@@ -490,6 +506,22 @@ We welcome contributions! Areas where we need help:
 
 **Performance (Measured):**
 - Complete workflow: 30-60 minutes
+- Artifact generation: <5 seconds
+
+### Wade (Operational Metrics)
+
+**Adoption (Target):**
+- 50+ teams using Wade for wireframing
+- 80%+ complete the full 6-step workflow
+- NPS ≥8
+
+**Quality (Target):**
+- 90%+ wireframes include complete information architecture
+- 95%+ artifacts include component catalog and interactions
+- 85%+ pass usability validation checklist
+
+**Performance (Measured):**
+- Complete workflow: 45-90 minutes
 - Artifact generation: <5 seconds
 
 ### Project-Wide (Target Post-Launch)
