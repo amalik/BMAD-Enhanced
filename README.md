@@ -567,15 +567,50 @@ Emma generates comprehensive empathy maps with:
 
 **See:** [Sample Empathy Map](_bmad-output/test-artifacts/emma-tests/results/empathy-map-sarah-chen-2026-02-14.md)
 
+### Wade Wireframe Artifact
+
+Wade generates comprehensive wireframes with:
+
+**Executive Summary:**
+- Product context and user goals
+- Key user flows (3-5 primary flows)
+- Design priorities and constraints
+
+**Detailed Sections:**
+- Information Architecture (sitemap, navigation hierarchy, content structure)
+- Screen Layouts (annotated wireframes for key screens)
+- Component Catalog (UI components with specifications)
+- Interaction Flows (user journey maps with screen transitions)
+- Responsive Considerations (mobile, tablet, desktop breakpoints)
+
+**Usability Validation:**
+- Navigation clarity assessment
+- Content hierarchy review
+- Interaction pattern consistency
+- Accessibility considerations
+
+**Design Handoff:**
+- Component specifications
+- Interaction states
+- Content requirements
+- Technical notes
+
+**See:** [Wade User Guide](_bmad-output/design-artifacts/WADE-USER-GUIDE.md) for examples
+
 ---
 
 ## 🎓 Learning Resources
 
 ### For Users
 
+**Emma (Empathy Mapping):**
 - **[Emma User Guide](_bmad-output/design-artifacts/EMMA-USER-GUIDE.md)** - Complete guide with examples
 - **[Sample Empathy Map](_bmad-output/test-artifacts/emma-tests/results/empathy-map-sarah-chen-2026-02-14.md)** - Real output example
 - Emma's chat mode (CH command) - Ask Emma questions about empathy mapping
+
+**Wade (Wireframing):**
+- **[Wade User Guide](_bmad-output/design-artifacts/WADE-USER-GUIDE.md)** - Complete guide with examples
+- Wade's chat mode (CH command) - Ask Wade questions about wireframe design and UI patterns
 
 ### For Developers
 
@@ -586,8 +621,8 @@ Emma generates comprehensive empathy maps with:
 ### For Stakeholders
 
 - **[Project Status Update](_bmad-output/PROJECT-STATUS-UPDATE.md)** - Current progress
-- **[Emma Stakeholder Review](_bmad-output/test-artifacts/emma-tests/STAKEHOLDER-SIGNOFF-REVIEW.md)** - Approval process
-- **[Emma Test Results](_bmad-output/test-artifacts/emma-tests/emma-p0-test-results.md)** - Quality validation
+- **[Emma Test Results](_bmad-output/test-artifacts/emma-tests/emma-p0-test-results.md)** - Emma quality validation
+- **[Wade Test Results](_bmad-output/test-artifacts/wade-tests/wade-p0-test-execution.md)** - Wade quality validation
 
 ---
 
