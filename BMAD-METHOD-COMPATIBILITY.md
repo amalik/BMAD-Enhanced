@@ -51,7 +51,7 @@ npx bmad-method@alpha install
 
 # Step 2: Install BMAD-Enhanced agents (extension)
 npm install bmad-enhanced
-npm run install:agents
+npx bmad-install-agents
 ```
 
 ### What Happens
@@ -249,7 +249,7 @@ BMAD-Enhanced follows semver:
 When new BMAD Method version releases:
 
 - [ ] Install new BMAD Method version
-- [ ] Run `npm run install:agents`
+- [ ] Run `npx bmad-install-agents`
 - [ ] Verify all files copied correctly
 - [ ] Activate Emma: `cat _bmad/bme/_designos/agents/empathy-mapper.md`
 - [ ] Test Emma workflow: Type `EM` and complete all 5 steps
