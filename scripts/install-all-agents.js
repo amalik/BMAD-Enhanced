@@ -111,7 +111,7 @@ function copyAllAgentFiles() {
     'steps/step-02-user-flows.md',
     'steps/step-03-information-architecture.md',
     'steps/step-04-wireframe-sketch.md',
-    'steps/step-05-components-interactions.md',
+    'steps/step-05-components.md',
     'steps/step-06-synthesize.md'
   ];
 

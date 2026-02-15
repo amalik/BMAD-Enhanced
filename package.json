@@ -1,6 +1,6 @@
 {
   "name": "bmad-enhanced",
-  "version": "1.0.0-alpha",
+  "version": "1.0.1-alpha",
   "description": "Domain-Specialized Agents for BMAD Method - Expert agents for design, quality, and standards workflows",
   "main": "index.js",
   "scripts": {
