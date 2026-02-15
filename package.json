@@ -22,7 +22,7 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/amalik/BMAD-Enhanced.git"
+    "url": "git+https://github.com/amalik/BMAD-Enhanced.git"
   },
   "engines": {
     "node": ">=14.0.0"
