@@ -111,7 +111,7 @@ npx bmad-method@alpha install
 Once BMAD Method is installed:
 
 ```bash
-npm install bmad-enhanced && npm run install:agents
+npm install bmad-enhanced && npx bmad-install-agents
 ```
 
 That's it! Emma and Wade are now **added to your BMAD installation**.
@@ -164,7 +164,7 @@ Comprehensive guide covering:
 
 ```bash
 npm install bmad-enhanced
-npm run install:agents
+npx bmad-install-agents
 ```
 
 **Output:**
@@ -202,7 +202,7 @@ npx bmad-method@alpha install
 
 ```bash
 npm install bmad-enhanced
-npm run install:agents
+npx bmad-install-agents
 ```
 
 **Output:**
@@ -317,13 +317,13 @@ npm run install:agents
 ### Manual Verification
 
 ✅ **Test 1: Install without BMAD Method**
-- Run `npm run install:agents` in empty directory
+- Run `npx bmad-install-agents` in empty directory
 - Expected: Error message, exit code 1
 - Result: ✅ PASS
 
 ✅ **Test 2: Install with BMAD Method**
 - Create `_bmad/` directory (simulating BMAD Method)
-- Run `npm run install:agents`
+- Run `npx bmad-install-agents`
 - Expected: Success, files installed
 - Result: ✅ PASS (would pass if BMAD Method actually installed)
 
