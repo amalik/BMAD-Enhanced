@@ -254,7 +254,7 @@ Domain-specialized agents for BMAD Method - expert agents for design, quality, a
 - **Wade (wireframe-designer)** - Wireframe Design Expert
 
 ### Features
-- ✅ One-command installation (`npm install bmad-enhanced && npx bmad-install-agents`)
+- ✅ One-command installation (`npm install bmad-enhanced@alpha && npx bmad-install-agents`)
 - ✅ BMAD Method prerequisite checking
 - ✅ 100% test pass rate (36 total tests across both agents)
 - ✅ Comprehensive user guides (16KB each)
@@ -269,7 +269,7 @@ npx bmad-method@alpha install
 
 **Install BMAD-Enhanced:**
 ```bash
-npm install bmad-enhanced
+npm install bmad-enhanced@alpha
 npx bmad-install-agents
 ```
 
