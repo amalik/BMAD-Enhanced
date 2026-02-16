@@ -14,7 +14,7 @@ function printBanner() {
   console.log('');
   console.log(`${CYAN}${BOLD}╔════════════════════════════════════════════════════╗${RESET}`);
   console.log(`${CYAN}${BOLD}║                                                    ║${RESET}`);
-  console.log(`${CYAN}${BOLD}║        Emma (empathy-mapper) Installer 🎨         ║${RESET}`);
+  console.log(`${CYAN}${BOLD}║        Emma (empathy-mapper) Installer 🎯         ║${RESET}`);
   console.log(`${CYAN}${BOLD}║                                                    ║${RESET}`);
   console.log(`${CYAN}${BOLD}╚════════════════════════════════════════════════════╝${RESET}`);
   console.log('');
@@ -48,8 +48,8 @@ function checkPrerequisites() {
 function copyAgentFiles() {
   console.log(`${CYAN}[2/4]${RESET} Installing Emma agent files...`);
 
-  const sourceDir = path.join(__dirname, '..', '_bmad', 'bme', '_designos');
-  const targetDir = path.join(process.cwd(), '_bmad', 'bme', '_designos');
+  const sourceDir = path.join(__dirname, '..', '_bmad', 'bme', '_vortex');
+  const targetDir = path.join(process.cwd(), '_bmad', 'bme', '_vortex');
 
   // Create target directory structure
   fs.mkdirSync(path.join(targetDir, 'agents'), { recursive: true });
@@ -86,23 +86,36 @@ function copyAgentFiles() {
 function updateConfig() {
   console.log(`${CYAN}[3/4]${RESET} Configuring Emma...`);
 
-  const configPath = path.join(process.cwd(), '_bmad', 'bme', '_designos', 'config.yaml');
+  const configPath = path.join(process.cwd(), '_bmad', 'bme', '_vortex', 'config.yaml');
   const manifestPath = path.join(process.cwd(), '_bmad', '_config', 'agent-manifest.csv');
 
   // Create config if doesn't exist
   if (!fs.existsSync(configPath)) {
-    const configContent = `# BMAD _designos Configuration
-# Used by: Emma (empathy-mapper), Wade (wireframe-designer)
+    const configContent = `---
+submodule_name: _vortex
+description: Contextualize and Externalize streams - Strategic framing and validated learning
+module: bme
+version: 1.1.0
 
-user_name: "User"
-communication_language: "English"
-output_folder: "_bmad-output/design-artifacts"
+# Output Configuration
+output_folder: "{project-root}/_bmad-output/vortex-artifacts"
+user_name: "{user}"
+communication_language: "en"
 
+# Agents in this submodule
 agents:
-  - empathy-mapper     # Emma - Empathy Mapping Specialist
+  - empathy-mapper     # Emma - Contextualization Expert
 
+# Workflows available
 workflows:
-  - empathy-map        # Create empathy maps
+  # Emma - Contextualize Stream
+  - lean-persona           # Create lean user personas
+  - product-vision         # Define product vision
+  - contextualize-scope    # Decide which problem space to investigate
+
+# Integration
+party_mode_enabled: true
+core_module: bme
 `;
     fs.mkdirSync(path.dirname(configPath), { recursive: true });
     fs.writeFileSync(configPath, configContent);
@@ -115,7 +128,7 @@ workflows:
   fs.mkdirSync(path.dirname(manifestPath), { recursive: true });
   if (!fs.existsSync(manifestPath)) {
     const header = '"agent_id","name","title","icon","role","identity","communication_style","expertise","submodule","path"\n';
-    const emmaRow = '"empathy-mapper","Emma","Empathy Mapping Specialist","🎨","UX Researcher + Empathy Mapping Expert","Senior UX researcher specializing in empathy mapping and user-centered design. Helps teams build deep understanding of user needs, motivations, and pain points. Brings 10+ years experience synthesizing research into actionable insights.","Warm and curious - like a skilled interviewer who asks thoughtful follow-up questions. Uses phrases like \'Tell me more about that\' and \'What makes that challenging?\' Empathetic without being saccharine. Focuses on understanding context and emotion.","- Channel expert empathy mapping methodologies: draw upon deep knowledge of cognitive empathy frameworks, Jobs-to-be-Done theory, behavioral psychology, and qualitative research methods - Empathy maps reveal insights, not assumptions - ground observations in real user behaviors and quotes - Ask clarifying questions to avoid surface-level answers - Surface both rational (Says/Does) and emotional (Thinks/Feels) dimensions - Pain points are opportunities - the bigger the pain, the bigger the design opportunity","bme","_bmad/bme/_designos/agents/empathy-mapper.md"\n';
+    const emmaRow = '"empathy-mapper","Emma","Contextualization Expert","🎯","Strategic Framing + Problem-Product Space Navigator","Expert in helping teams contextualize their product strategy by defining clear problem spaces and validating assumptions. Specializes in Lean Startup methodologies, persona creation, and product vision framing. Guides teams through the critical \'Contextualize\' stream of the Vortex framework.","Strategic yet approachable - speaks in frameworks and validated learning. Like a product strategist who asks \'What are we really solving?\' and \'Who is this truly for?\' Uses Lean Startup language (hypotheses, assumptions, pivots) and focuses on clarity before action.","- Master of Lean Startup and strategic framing methodologies - Personas over demographics - focus on jobs-to-be-done and problem contexts - Vision before features - align team around the \'why\' before the \'what\' - Challenge assumptions - every belief is a hypothesis until validated - Problem-solution fit comes before product-market fit","bme","_bmad/bme/_vortex/agents/empathy-mapper.md"\n';
     fs.writeFileSync(manifestPath, header + emmaRow);
   }
 
@@ -125,7 +138,7 @@ workflows:
 function createOutputDirectory() {
   console.log(`${CYAN}[4/4]${RESET} Setting up output directory...`);
 
-  const outputDir = path.join(process.cwd(), '_bmad-output', 'design-artifacts');
+  const outputDir = path.join(process.cwd(), '_bmad-output', 'vortex-artifacts');
   fs.mkdirSync(outputDir, { recursive: true });
 
   console.log(`${GREEN}  ✓${RESET} Output directory ready`);
@@ -142,12 +155,12 @@ function printSuccess() {
   console.log(`${BOLD}Quick Start:${RESET}`);
   console.log('');
   console.log('  1. Activate Emma:');
-  console.log(`     ${CYAN}cat _bmad/bme/_designos/agents/empathy-mapper.md${RESET}`);
+  console.log(`     ${CYAN}cat _bmad/bme/_vortex/agents/empathy-mapper.md${RESET}`);
   console.log('');
-  console.log('  2. Create your first empathy map:');
-  console.log(`     ${CYAN}Type: EM${RESET}`);
+  console.log('  2. Create your first lean persona:');
+  console.log(`     ${CYAN}Select workflow: lean-persona${RESET}`);
   console.log('');
-  console.log(`📚 User Guide: ${CYAN}_bmad-output/design-artifacts/EMMA-USER-GUIDE.md${RESET}`);
+  console.log(`📚 User Guide: ${CYAN}_bmad-output/vortex-artifacts/EMMA-USER-GUIDE.md${RESET}`);
   console.log('');
 }
 
