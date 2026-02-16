@@ -14,7 +14,7 @@ function printBanner() {
   console.log('');
   console.log(`${CYAN}${BOLD}╔════════════════════════════════════════════════════╗${RESET}`);
   console.log(`${CYAN}${BOLD}║                                                    ║${RESET}`);
-  console.log(`${CYAN}${BOLD}║      Wade (wireframe-designer) Installer 🧪       ║${RESET}`);
+  console.log(`${CYAN}${BOLD}║  Wade (lean-experiments-specialist) Installer 🧪  ║${RESET}`);
   console.log(`${CYAN}${BOLD}║                                                    ║${RESET}`);
   console.log(`${CYAN}${BOLD}╚════════════════════════════════════════════════════╝${RESET}`);
   console.log('');
@@ -57,8 +57,8 @@ function copyAgentFiles() {
 
   // Copy Wade agent file
   fs.copyFileSync(
-    path.join(sourceDir, 'agents', 'wireframe-designer.md'),
-    path.join(targetDir, 'agents', 'wireframe-designer.md')
+    path.join(sourceDir, 'agents', 'lean-experiments-specialist.md'),
+    path.join(targetDir, 'agents', 'lean-experiments-specialist.md')
   );
 
   // Copy wireframe workflow files
@@ -104,7 +104,7 @@ communication_language: "en"
 
 # Agents in this submodule
 agents:
-  - wireframe-designer # Wade - Lean Experiments Specialist
+  - lean-experiments-specialist  # Wade - Lean Experiments Specialist
 
 # Workflows available
 workflows:
@@ -124,9 +124,9 @@ core_module: bme
   } else {
     // Add Wade to existing config if not present
     let config = fs.readFileSync(configPath, 'utf-8');
-    if (!config.includes('wireframe-designer')) {
-      config = config.replace(/agents:\s*\n/, 'agents:\n  - wireframe-designer # Wade - Wireframe Specialist\n');
-      config = config.replace(/workflows:\s*\n/, 'workflows:\n  - wireframe         # Create wireframes\n');
+    if (!config.includes('lean-experiments-specialist')) {
+      config = config.replace(/agents:\s*\n/, 'agents:\n  - lean-experiments-specialist  # Wade - Lean Experiments Specialist\n');
+      config = config.replace(/workflows:\s*\n/, 'workflows:\n  - lean-experiment   # Run Build-Measure-Learn cycle\n');
       fs.writeFileSync(configPath, config);
       console.log(`${GREEN}  ✓${RESET} Updated config.yaml`);
     } else {
@@ -138,7 +138,7 @@ core_module: bme
   fs.mkdirSync(path.dirname(manifestPath), { recursive: true });
   if (!fs.existsSync(manifestPath)) {
     const header = '"agent_id","name","title","icon","role","identity","communication_style","expertise","submodule","path"\n';
-    const wadeRow = '"wireframe-designer","Wade","Lean Experiments Specialist","🧪","Lean Startup + Validated Learning Expert","Lean Startup practitioner specialized in running rapid experiments to validate product hypotheses. Helps teams move from assumptions to evidence through Build-Measure-Learn cycles. Guides teams through the \'Externalize\' stream - taking ideas into the real world to test with actual users.","Experimental and evidence-driven - speaks in hypotheses, metrics, and learning. Like a scientist who says \'Let\'s test that assumption\' and \'What would prove us wrong?\' Uses Lean language (MVPs, pivots, validated learning) and focuses on speed-to-insight over perfection.","- Master of Lean Startup and rapid experimentation - Build the smallest thing that tests the riskiest assumption - Measure what matters - focus on actionable metrics, not vanity metrics - Learn fast, pivot faster - every experiment teaches something - Proof-of-concept before proof-of-value - validate feasibility before business case - Fail fast is good, learn fast is better","bme","_bmad/bme/_vortex/agents/wireframe-designer.md"\n';
+    const wadeRow = '"lean-experiments-specialist","Wade","Lean Experiments Specialist","🧪","Lean Startup + Validated Learning Expert","Lean Startup practitioner specialized in running rapid experiments to validate product hypotheses. Helps teams move from assumptions to evidence through Build-Measure-Learn cycles. Guides teams through the \'Externalize\' stream - taking ideas into the real world to test with actual users.","Experimental and evidence-driven - speaks in hypotheses, metrics, and learning. Like a scientist who says \'Let\'s test that assumption\' and \'What would prove us wrong?\' Uses Lean language (MVPs, pivots, validated learning) and focuses on speed-to-insight over perfection.","- Master of Lean Startup and rapid experimentation - Build the smallest thing that tests the riskiest assumption - Measure what matters - focus on actionable metrics, not vanity metrics - Learn fast, pivot faster - every experiment teaches something - Proof-of-concept before proof-of-value - validate feasibility before business case - Fail fast is good, learn fast is better","bme","_bmad/bme/_vortex/agents/lean-experiments-specialist.md"\n';
     fs.writeFileSync(manifestPath, header + wadeRow);
   }
 
@@ -165,7 +165,7 @@ function printSuccess() {
   console.log(`${BOLD}Quick Start:${RESET}`);
   console.log('');
   console.log('  1. Activate Wade:');
-  console.log(`     ${CYAN}cat _bmad/bme/_vortex/agents/wireframe-designer.md${RESET}`);
+  console.log(`     ${CYAN}cat _bmad/bme/_vortex/agents/lean-experiments-specialist.md${RESET}`);
   console.log('');
   console.log('  2. Run your first lean experiment:');
   console.log(`     ${CYAN}Select workflow: lean-experiment${RESET}`);

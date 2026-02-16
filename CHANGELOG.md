@@ -7,6 +7,21 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [1.1.2] - 2026-02-17
+
+### Fixed
+- **CRITICAL: Installer scripts now reference correct agent file names**
+  - Updated `install-all-agents.js` to copy `contextualization-expert.md` and `lean-experiments-specialist.md`
+  - Updated `install-emma.js` to copy `contextualization-expert.md`
+  - Updated `install-wade.js` to copy `lean-experiments-specialist.md`
+  - Fixed config.yaml generation in all installers to use new agent names
+  - Fixed agent-manifest.csv generation to reference correct file paths
+  - Fixed Quick Start instructions in installer output
+
+**Impact:** v1.1.1 had broken installer scripts that would fail when users ran `npx bmad-install-agents`. This patch fixes the installation process.
+
+---
+
 ## [1.1.1] - 2026-02-17
 
 ### Fixed

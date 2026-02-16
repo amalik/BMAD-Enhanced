@@ -69,10 +69,10 @@ function copyAllAgentFiles() {
   fs.mkdirSync(path.join(targetDir, 'workflows', 'wireframe', 'steps'), { recursive: true });
 
   // Copy Emma agent file
-  console.log(`${CYAN}  →${RESET} Installing Emma (empathy-mapper)...`);
+  console.log(`${CYAN}  →${RESET} Installing Emma (contextualization-expert)...`);
   fs.copyFileSync(
-    path.join(sourceDir, 'agents', 'empathy-mapper.md'),
-    path.join(targetDir, 'agents', 'empathy-mapper.md')
+    path.join(sourceDir, 'agents', 'contextualization-expert.md'),
+    path.join(targetDir, 'agents', 'contextualization-expert.md')
   );
 
   // Copy Emma workflow files
@@ -97,10 +97,10 @@ function copyAllAgentFiles() {
   console.log(`${GREEN}  ✓${RESET} Emma installed`);
 
   // Copy Wade agent file
-  console.log(`${CYAN}  →${RESET} Installing Wade (wireframe-designer)...`);
+  console.log(`${CYAN}  →${RESET} Installing Wade (lean-experiments-specialist)...`);
   fs.copyFileSync(
-    path.join(sourceDir, 'agents', 'wireframe-designer.md'),
-    path.join(targetDir, 'agents', 'wireframe-designer.md')
+    path.join(sourceDir, 'agents', 'lean-experiments-specialist.md'),
+    path.join(targetDir, 'agents', 'lean-experiments-specialist.md')
   );
 
   // Copy Wade workflow files
@@ -145,8 +145,8 @@ communication_language: "en"
 
 # Agents in this submodule
 agents:
-  - empathy-mapper     # Emma - Contextualization Expert
-  - wireframe-designer # Wade - Lean Experiments Specialist
+  - contextualization-expert     # Emma - Contextualization Expert
+  - lean-experiments-specialist  # Wade - Lean Experiments Specialist
 
 # Workflows available
 workflows:
@@ -172,8 +172,8 @@ core_module: bme
   // Create manifest
   fs.mkdirSync(path.dirname(manifestPath), { recursive: true });
   const header = '"agent_id","name","title","icon","role","identity","communication_style","expertise","submodule","path"\n';
-  const emmaRow = '"empathy-mapper","Emma","Contextualization Expert","🎯","Strategic Framing + Problem-Product Space Navigator","Expert in helping teams contextualize their product strategy by defining clear problem spaces and validating assumptions. Specializes in Lean Startup methodologies, persona creation, and product vision framing. Guides teams through the critical \'Contextualize\' stream of the Vortex framework.","Strategic yet approachable - speaks in frameworks and validated learning. Like a product strategist who asks \'What are we really solving?\' and \'Who is this truly for?\' Uses Lean Startup language (hypotheses, assumptions, pivots) and focuses on clarity before action.","- Master of Lean Startup and strategic framing methodologies - Personas over demographics - focus on jobs-to-be-done and problem contexts - Vision before features - align team around the \'why\' before the \'what\' - Challenge assumptions - every belief is a hypothesis until validated - Problem-solution fit comes before product-market fit","bme","_bmad/bme/_vortex/agents/empathy-mapper.md"\n';
-  const wadeRow = '"wireframe-designer","Wade","Lean Experiments Specialist","🧪","Lean Startup + Validated Learning Expert","Lean Startup practitioner specialized in running rapid experiments to validate product hypotheses. Helps teams move from assumptions to evidence through Build-Measure-Learn cycles. Guides teams through the \'Externalize\' stream - taking ideas into the real world to test with actual users.","Experimental and evidence-driven - speaks in hypotheses, metrics, and learning. Like a scientist who says \'Let\'s test that assumption\' and \'What would prove us wrong?\' Uses Lean language (MVPs, pivots, validated learning) and focuses on speed-to-insight over perfection.","- Master of Lean Startup and rapid experimentation - Build the smallest thing that tests the riskiest assumption - Measure what matters - focus on actionable metrics, not vanity metrics - Learn fast, pivot faster - every experiment teaches something - Proof-of-concept before proof-of-value - validate feasibility before business case - Fail fast is good, learn fast is better","bme","_bmad/bme/_vortex/agents/wireframe-designer.md"\n';
+  const emmaRow = '"contextualization-expert","Emma","Contextualization Expert","🎯","Strategic Framing + Problem-Product Space Navigator","Expert in helping teams contextualize their product strategy by defining clear problem spaces and validating assumptions. Specializes in Lean Startup methodologies, persona creation, and product vision framing. Guides teams through the critical \'Contextualize\' stream of the Vortex framework.","Strategic yet approachable - speaks in frameworks and validated learning. Like a product strategist who asks \'What are we really solving?\' and \'Who is this truly for?\' Uses Lean Startup language (hypotheses, assumptions, pivots) and focuses on clarity before action.","- Master of Lean Startup and strategic framing methodologies - Personas over demographics - focus on jobs-to-be-done and problem contexts - Vision before features - align team around the \'why\' before the \'what\' - Challenge assumptions - every belief is a hypothesis until validated - Problem-solution fit comes before product-market fit","bme","_bmad/bme/_vortex/agents/contextualization-expert.md"\n';
+  const wadeRow = '"lean-experiments-specialist","Wade","Lean Experiments Specialist","🧪","Lean Startup + Validated Learning Expert","Lean Startup practitioner specialized in running rapid experiments to validate product hypotheses. Helps teams move from assumptions to evidence through Build-Measure-Learn cycles. Guides teams through the \'Externalize\' stream - taking ideas into the real world to test with actual users.","Experimental and evidence-driven - speaks in hypotheses, metrics, and learning. Like a scientist who says \'Let\'s test that assumption\' and \'What would prove us wrong?\' Uses Lean language (MVPs, pivots, validated learning) and focuses on speed-to-insight over perfection.","- Master of Lean Startup and rapid experimentation - Build the smallest thing that tests the riskiest assumption - Measure what matters - focus on actionable metrics, not vanity metrics - Learn fast, pivot faster - every experiment teaches something - Proof-of-concept before proof-of-value - validate feasibility before business case - Fail fast is good, learn fast is better","bme","_bmad/bme/_vortex/agents/lean-experiments-specialist.md"\n';
   fs.writeFileSync(manifestPath, header + emmaRow + wadeRow);
   console.log(`${GREEN}  ✓${RESET} Created agent-manifest.csv`);
 }
@@ -192,8 +192,8 @@ function verifyInstallation() {
 
   const targetDir = process.cwd();
   const checks = [
-    { path: '_bmad/bme/_vortex/agents/empathy-mapper.md', name: 'Emma agent file' },
-    { path: '_bmad/bme/_vortex/agents/wireframe-designer.md', name: 'Wade agent file' },
+    { path: '_bmad/bme/_vortex/agents/contextualization-expert.md', name: 'Emma agent file' },
+    { path: '_bmad/bme/_vortex/agents/lean-experiments-specialist.md', name: 'Wade agent file' },
     { path: '_bmad/bme/_vortex/workflows/empathy-map/workflow.md', name: 'Emma workflow' },
     { path: '_bmad/bme/_vortex/workflows/wireframe/workflow.md', name: 'Wade workflow' },
     { path: '_bmad/bme/_vortex/config.yaml', name: 'Configuration file' },
@@ -247,16 +247,16 @@ function printSuccess() {
   console.log('');
   console.log(`${BOLD}Installed Agents:${RESET}`);
   console.log('');
-  console.log(`  ${GREEN}✓${RESET} Emma (empathy-mapper) - Contextualization Expert 🎯`);
-  console.log(`  ${GREEN}✓${RESET} Wade (wireframe-designer) - Lean Experiments Specialist 🧪`);
+  console.log(`  ${GREEN}✓${RESET} Emma (contextualization-expert) - Contextualization Expert 🎯`);
+  console.log(`  ${GREEN}✓${RESET} Wade (lean-experiments-specialist) - Lean Experiments Specialist 🧪`);
   console.log('');
   console.log(`${BOLD}Quick Start:${RESET}`);
   console.log('');
   console.log('  Activate Emma:');
-  console.log(`  ${CYAN}cat _bmad/bme/_vortex/agents/empathy-mapper.md${RESET}`);
+  console.log(`  ${CYAN}cat _bmad/bme/_vortex/agents/contextualization-expert.md${RESET}`);
   console.log('');
   console.log('  Activate Wade:');
-  console.log(`  ${CYAN}cat _bmad/bme/_vortex/agents/wireframe-designer.md${RESET}`);
+  console.log(`  ${CYAN}cat _bmad/bme/_vortex/agents/lean-experiments-specialist.md${RESET}`);
   console.log('');
   console.log(`${BOLD}User Guides:${RESET}`);
   console.log(`  📚 Emma: ${CYAN}_bmad-output/vortex-artifacts/EMMA-USER-GUIDE.md${RESET}`);

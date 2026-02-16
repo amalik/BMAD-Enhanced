@@ -14,7 +14,7 @@ function printBanner() {
   console.log('');
   console.log(`${CYAN}${BOLD}╔════════════════════════════════════════════════════╗${RESET}`);
   console.log(`${CYAN}${BOLD}║                                                    ║${RESET}`);
-  console.log(`${CYAN}${BOLD}║        Emma (empathy-mapper) Installer 🎯         ║${RESET}`);
+  console.log(`${CYAN}${BOLD}║    Emma (contextualization-expert) Installer 🎯  ║${RESET}`);
   console.log(`${CYAN}${BOLD}║                                                    ║${RESET}`);
   console.log(`${CYAN}${BOLD}╚════════════════════════════════════════════════════╝${RESET}`);
   console.log('');
@@ -57,8 +57,8 @@ function copyAgentFiles() {
 
   // Copy Emma agent file
   fs.copyFileSync(
-    path.join(sourceDir, 'agents', 'empathy-mapper.md'),
-    path.join(targetDir, 'agents', 'empathy-mapper.md')
+    path.join(sourceDir, 'agents', 'contextualization-expert.md'),
+    path.join(targetDir, 'agents', 'contextualization-expert.md')
   );
 
   // Copy empathy-map workflow files
@@ -104,7 +104,7 @@ communication_language: "en"
 
 # Agents in this submodule
 agents:
-  - empathy-mapper     # Emma - Contextualization Expert
+  - contextualization-expert     # Emma - Contextualization Expert
 
 # Workflows available
 workflows:
@@ -128,7 +128,7 @@ core_module: bme
   fs.mkdirSync(path.dirname(manifestPath), { recursive: true });
   if (!fs.existsSync(manifestPath)) {
     const header = '"agent_id","name","title","icon","role","identity","communication_style","expertise","submodule","path"\n';
-    const emmaRow = '"empathy-mapper","Emma","Contextualization Expert","🎯","Strategic Framing + Problem-Product Space Navigator","Expert in helping teams contextualize their product strategy by defining clear problem spaces and validating assumptions. Specializes in Lean Startup methodologies, persona creation, and product vision framing. Guides teams through the critical \'Contextualize\' stream of the Vortex framework.","Strategic yet approachable - speaks in frameworks and validated learning. Like a product strategist who asks \'What are we really solving?\' and \'Who is this truly for?\' Uses Lean Startup language (hypotheses, assumptions, pivots) and focuses on clarity before action.","- Master of Lean Startup and strategic framing methodologies - Personas over demographics - focus on jobs-to-be-done and problem contexts - Vision before features - align team around the \'why\' before the \'what\' - Challenge assumptions - every belief is a hypothesis until validated - Problem-solution fit comes before product-market fit","bme","_bmad/bme/_vortex/agents/empathy-mapper.md"\n';
+    const emmaRow = '"contextualization-expert","Emma","Contextualization Expert","🎯","Strategic Framing + Problem-Product Space Navigator","Expert in helping teams contextualize their product strategy by defining clear problem spaces and validating assumptions. Specializes in Lean Startup methodologies, persona creation, and product vision framing. Guides teams through the critical \'Contextualize\' stream of the Vortex framework.","Strategic yet approachable - speaks in frameworks and validated learning. Like a product strategist who asks \'What are we really solving?\' and \'Who is this truly for?\' Uses Lean Startup language (hypotheses, assumptions, pivots) and focuses on clarity before action.","- Master of Lean Startup and strategic framing methodologies - Personas over demographics - focus on jobs-to-be-done and problem contexts - Vision before features - align team around the \'why\' before the \'what\' - Challenge assumptions - every belief is a hypothesis until validated - Problem-solution fit comes before product-market fit","bme","_bmad/bme/_vortex/agents/contextualization-expert.md"\n';
     fs.writeFileSync(manifestPath, header + emmaRow);
   }
 
@@ -155,7 +155,7 @@ function printSuccess() {
   console.log(`${BOLD}Quick Start:${RESET}`);
   console.log('');
   console.log('  1. Activate Emma:');
-  console.log(`     ${CYAN}cat _bmad/bme/_vortex/agents/empathy-mapper.md${RESET}`);
+  console.log(`     ${CYAN}cat _bmad/bme/_vortex/agents/contextualization-expert.md${RESET}`);
   console.log('');
   console.log('  2. Create your first lean persona:');
   console.log(`     ${CYAN}Select workflow: lean-persona${RESET}`);
