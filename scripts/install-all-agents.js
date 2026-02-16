@@ -60,8 +60,8 @@ function checkPrerequisites() {
 function copyAllAgentFiles() {
   console.log(`${CYAN}[2/6]${RESET} Installing Emma + Wade agent files...`);
 
-  const sourceDir = path.join(__dirname, '..', '_bmad', 'bme', '_designos');
-  const targetDir = path.join(process.cwd(), '_bmad', 'bme', '_designos');
+  const sourceDir = path.join(__dirname, '..', '_bmad', 'bme', '_vortex');
+  const targetDir = path.join(process.cwd(), '_bmad', 'bme', '_vortex');
 
   // Create target directory structure
   fs.mkdirSync(path.join(targetDir, 'agents'), { recursive: true });
@@ -128,24 +128,42 @@ function copyAllAgentFiles() {
 function updateConfig() {
   console.log(`${CYAN}[3/6]${RESET} Configuring agents...`);
 
-  const configPath = path.join(process.cwd(), '_bmad', 'bme', '_designos', 'config.yaml');
+  const configPath = path.join(process.cwd(), '_bmad', 'bme', '_vortex', 'config.yaml');
   const manifestPath = path.join(process.cwd(), '_bmad', '_config', 'agent-manifest.csv');
 
   // Create config
-  const configContent = `# BMAD _designos Configuration
-# Used by: Emma (empathy-mapper), Wade (wireframe-designer)
+  const configContent = `---
+submodule_name: _vortex
+description: Contextualize and Externalize streams - Strategic framing and validated learning
+module: bme
+version: 1.1.0
 
-user_name: "User"
-communication_language: "English"
-output_folder: "_bmad-output/design-artifacts"
+# Output Configuration
+output_folder: "{project-root}/_bmad-output/vortex-artifacts"
+user_name: "{user}"
+communication_language: "en"
 
+# Agents in this submodule
 agents:
-  - empathy-mapper     # Emma - Empathy Mapping Specialist
-  - wireframe-designer # Wade - Wireframe Specialist
+  - empathy-mapper     # Emma - Contextualization Expert
+  - wireframe-designer # Wade - Lean Experiments Specialist
 
+# Workflows available
 workflows:
-  - empathy-map        # Create empathy maps
-  - wireframe          # Create wireframes
+  # Emma - Contextualize Stream
+  - lean-persona           # Create lean user personas
+  - product-vision         # Define product vision
+  - contextualize-scope    # Decide which problem space to investigate
+
+  # Wade - Externalize Stream
+  - mvp                    # Design Minimum Viable Product
+  - lean-experiment        # Run Build-Measure-Learn cycle
+  - proof-of-concept       # Validate technical feasibility
+  - proof-of-value         # Validate business value
+
+# Integration
+party_mode_enabled: true
+core_module: bme
 `;
   fs.mkdirSync(path.dirname(configPath), { recursive: true });
   fs.writeFileSync(configPath, configContent);
@@ -154,8 +172,8 @@ workflows:
   // Create manifest
   fs.mkdirSync(path.dirname(manifestPath), { recursive: true });
   const header = '"agent_id","name","title","icon","role","identity","communication_style","expertise","submodule","path"\n';
-  const emmaRow = '"empathy-mapper","Emma","Empathy Mapping Specialist","🎨","UX Researcher + Empathy Mapping Expert","Senior UX researcher specializing in empathy mapping and user-centered design. Helps teams build deep understanding of user needs, motivations, and pain points. Brings 10+ years experience synthesizing research into actionable insights.","Warm and curious - like a skilled interviewer who asks thoughtful follow-up questions. Uses phrases like \'Tell me more about that\' and \'What makes that challenging?\' Empathetic without being saccharine. Focuses on understanding context and emotion.","- Channel expert empathy mapping methodologies: draw upon deep knowledge of cognitive empathy frameworks, Jobs-to-be-Done theory, behavioral psychology, and qualitative research methods - Empathy maps reveal insights, not assumptions - ground observations in real user behaviors and quotes - Ask clarifying questions to avoid surface-level answers - Surface both rational (Says/Does) and emotional (Thinks/Feels) dimensions - Pain points are opportunities - the bigger the pain, the bigger the design opportunity","bme","_bmad/bme/_designos/agents/empathy-mapper.md"\n';
-  const wadeRow = '"wireframe-designer","Wade","Wireframe Design Specialist","🎨","Wireframe Design Expert + UI Architect","Senior UI/UX designer specializing in wireframe creation and information architecture. Helps teams rapidly visualize product concepts through low-fidelity wireframes. Brings 10+ years experience in web and mobile design, with deep knowledge of responsive patterns and component libraries.","Visual and spatial - speaks in layouts, grids, and flows. Like an architect sketching blueprints while explaining design decisions. Says things like \'Picture this layout\' and \'What\'s the primary user action on this screen?\' Uses spatial language (above, below, nested, adjacent) and thinks in terms of visual hierarchy.","- Channel expert wireframe methodologies: draw upon deep knowledge of information architecture, Gestalt principles, responsive design patterns, atomic design systems, and WCAG accessibility guidelines - Wireframes are thinking tools, not art - focus on structure and flow over aesthetics - Iterate quickly, refine deliberately - low-fidelity first, high-fidelity only when structure is validated - Every screen answers three questions: Where am I? What can I do? Where can I go? - Accessibility is non-negotiable - design for all users from the wireframe stage","bme","_bmad/bme/_designos/agents/wireframe-designer.md"\n';
+  const emmaRow = '"empathy-mapper","Emma","Contextualization Expert","🎯","Strategic Framing + Problem-Product Space Navigator","Expert in helping teams contextualize their product strategy by defining clear problem spaces and validating assumptions. Specializes in Lean Startup methodologies, persona creation, and product vision framing. Guides teams through the critical \'Contextualize\' stream of the Vortex framework.","Strategic yet approachable - speaks in frameworks and validated learning. Like a product strategist who asks \'What are we really solving?\' and \'Who is this truly for?\' Uses Lean Startup language (hypotheses, assumptions, pivots) and focuses on clarity before action.","- Master of Lean Startup and strategic framing methodologies - Personas over demographics - focus on jobs-to-be-done and problem contexts - Vision before features - align team around the \'why\' before the \'what\' - Challenge assumptions - every belief is a hypothesis until validated - Problem-solution fit comes before product-market fit","bme","_bmad/bme/_vortex/agents/empathy-mapper.md"\n';
+  const wadeRow = '"wireframe-designer","Wade","Lean Experiments Specialist","🧪","Lean Startup + Validated Learning Expert","Lean Startup practitioner specialized in running rapid experiments to validate product hypotheses. Helps teams move from assumptions to evidence through Build-Measure-Learn cycles. Guides teams through the \'Externalize\' stream - taking ideas into the real world to test with actual users.","Experimental and evidence-driven - speaks in hypotheses, metrics, and learning. Like a scientist who says \'Let\'s test that assumption\' and \'What would prove us wrong?\' Uses Lean language (MVPs, pivots, validated learning) and focuses on speed-to-insight over perfection.","- Master of Lean Startup and rapid experimentation - Build the smallest thing that tests the riskiest assumption - Measure what matters - focus on actionable metrics, not vanity metrics - Learn fast, pivot faster - every experiment teaches something - Proof-of-concept before proof-of-value - validate feasibility before business case - Fail fast is good, learn fast is better","bme","_bmad/bme/_vortex/agents/wireframe-designer.md"\n';
   fs.writeFileSync(manifestPath, header + emmaRow + wadeRow);
   console.log(`${GREEN}  ✓${RESET} Created agent-manifest.csv`);
 }
@@ -163,7 +181,7 @@ workflows:
 function createOutputDirectory() {
   console.log(`${CYAN}[4/6]${RESET} Setting up output directory...`);
 
-  const outputDir = path.join(process.cwd(), '_bmad-output', 'design-artifacts');
+  const outputDir = path.join(process.cwd(), '_bmad-output', 'vortex-artifacts');
   fs.mkdirSync(outputDir, { recursive: true });
 
   console.log(`${GREEN}  ✓${RESET} Output directory ready`);
@@ -174,11 +192,11 @@ function verifyInstallation() {
 
   const targetDir = process.cwd();
   const checks = [
-    { path: '_bmad/bme/_designos/agents/empathy-mapper.md', name: 'Emma agent file' },
-    { path: '_bmad/bme/_designos/agents/wireframe-designer.md', name: 'Wade agent file' },
-    { path: '_bmad/bme/_designos/workflows/empathy-map/workflow.md', name: 'Emma workflow' },
-    { path: '_bmad/bme/_designos/workflows/wireframe/workflow.md', name: 'Wade workflow' },
-    { path: '_bmad/bme/_designos/config.yaml', name: 'Configuration file' },
+    { path: '_bmad/bme/_vortex/agents/empathy-mapper.md', name: 'Emma agent file' },
+    { path: '_bmad/bme/_vortex/agents/wireframe-designer.md', name: 'Wade agent file' },
+    { path: '_bmad/bme/_vortex/workflows/empathy-map/workflow.md', name: 'Emma workflow' },
+    { path: '_bmad/bme/_vortex/workflows/wireframe/workflow.md', name: 'Wade workflow' },
+    { path: '_bmad/bme/_vortex/config.yaml', name: 'Configuration file' },
   ];
 
   let allChecksPass = true;
@@ -204,8 +222,8 @@ function verifyInstallation() {
 function copyUserGuides() {
   console.log(`${CYAN}[6/6]${RESET} Installing user guides...`);
 
-  const sourceDir = path.join(__dirname, '..', '_bmad-output', 'design-artifacts');
-  const targetDir = path.join(process.cwd(), '_bmad-output', 'design-artifacts');
+  const sourceDir = path.join(__dirname, '..', '_bmad-output', 'vortex-artifacts');
+  const targetDir = path.join(process.cwd(), '_bmad-output', 'vortex-artifacts');
 
   // Copy user guides if they exist
   const guides = ['EMMA-USER-GUIDE.md', 'WADE-USER-GUIDE.md'];
@@ -229,20 +247,20 @@ function printSuccess() {
   console.log('');
   console.log(`${BOLD}Installed Agents:${RESET}`);
   console.log('');
-  console.log(`  ${GREEN}✓${RESET} Emma (empathy-mapper) - Empathy Mapping Specialist 🎨`);
-  console.log(`  ${GREEN}✓${RESET} Wade (wireframe-designer) - Wireframe Design Expert 🎨`);
+  console.log(`  ${GREEN}✓${RESET} Emma (empathy-mapper) - Contextualization Expert 🎯`);
+  console.log(`  ${GREEN}✓${RESET} Wade (wireframe-designer) - Lean Experiments Specialist 🧪`);
   console.log('');
   console.log(`${BOLD}Quick Start:${RESET}`);
   console.log('');
   console.log('  Activate Emma:');
-  console.log(`  ${CYAN}cat _bmad/bme/_designos/agents/empathy-mapper.md${RESET}`);
+  console.log(`  ${CYAN}cat _bmad/bme/_vortex/agents/empathy-mapper.md${RESET}`);
   console.log('');
   console.log('  Activate Wade:');
-  console.log(`  ${CYAN}cat _bmad/bme/_designos/agents/wireframe-designer.md${RESET}`);
+  console.log(`  ${CYAN}cat _bmad/bme/_vortex/agents/wireframe-designer.md${RESET}`);
   console.log('');
   console.log(`${BOLD}User Guides:${RESET}`);
-  console.log(`  📚 Emma: ${CYAN}_bmad-output/design-artifacts/EMMA-USER-GUIDE.md${RESET}`);
-  console.log(`  📚 Wade: ${CYAN}_bmad-output/design-artifacts/WADE-USER-GUIDE.md${RESET}`);
+  console.log(`  📚 Emma: ${CYAN}_bmad-output/vortex-artifacts/EMMA-USER-GUIDE.md${RESET}`);
+  console.log(`  📚 Wade: ${CYAN}_bmad-output/vortex-artifacts/WADE-USER-GUIDE.md${RESET}`);
   console.log('');
 }
 
