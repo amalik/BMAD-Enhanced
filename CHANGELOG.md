@@ -7,7 +7,29 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
-## [1.0.3-alpha] - 2026-02-15
+## [1.0.4-alpha] - 2026-02-16
+
+### Fixed
+- **Documentation:** All installation commands now correctly use `npm install bmad-enhanced@alpha` instead of `npm install bmad-enhanced`
+- Updated installation instructions across all documentation files:
+  - README.md
+  - INSTALLATION.md
+  - BMAD-METHOD-COMPATIBILITY.md
+  - PUBLISHING-GUIDE.md
+  - scripts/README.md
+  - index.js
+
+### Changed
+- Updated CLI output in index.js to show npx commands instead of npm run commands
+- Updated version references from 1.0.3-alpha to 1.0.4-alpha
+
+### Notes
+- v1.0.3-alpha was unpublished due to incorrect installation documentation
+- This release contains the same functionality as 1.0.3-alpha with corrected docs
+
+---
+
+## [1.0.3-alpha] - 2026-02-15 (Unpublished)
 
 ### Added
 - **npx bin commands** for user-friendly installation

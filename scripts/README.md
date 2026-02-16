@@ -190,5 +190,5 @@ To add a new agent installer:
 
 ---
 
-**Version:** 1.0.3-alpha
+**Version:** 1.0.4-alpha
 **Last Updated:** 2026-02-16

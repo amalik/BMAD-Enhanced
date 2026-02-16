@@ -88,7 +88,7 @@ your-project/
 
 ### Current Version
 
-**BMAD-Enhanced v1.0.3-alpha**
+**BMAD-Enhanced v1.0.4-alpha**
 - Compatible with: BMAD Method v1.x
 - Requires: `_bmad/` directory exists
 - Optional check: `_bmad/_config/bmad.yaml` exists
@@ -161,7 +161,8 @@ Then run this installer again.
 
 | BMAD-Enhanced Version | Compatible BMAD Method Versions | Notes |
 |----------------------|--------------------------------|-------|
-| 1.0.3-alpha          | 1.x (assumed)                  | Current release with npx bin commands |
+| 1.0.4-alpha          | 1.x (assumed)                  | Current release - Fixed installation docs to use @alpha tag |
+| 1.0.3-alpha          | 1.x (assumed)                  | Unpublished - npx bin commands |
 | 1.0.2-alpha          | 1.x (assumed)                  | Fixed user guides inclusion |
 | 1.0.1-alpha          | 1.x (assumed)                  | Fixed Wade workflow file naming |
 | 1.0.0-alpha          | 1.x (assumed)                  | Initial release |
@@ -404,6 +405,6 @@ function checkBMADMethodVersion() {
 
 ---
 
-**Version:** 1.0.3-alpha
+**Version:** 1.0.4-alpha
 **Last Updated:** 2026-02-16
 **Status:** Living Document (update as needed)

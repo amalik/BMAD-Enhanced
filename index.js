@@ -17,7 +17,7 @@
  *   - Emma User Guide: _bmad-output/design-artifacts/EMMA-USER-GUIDE.md
  *   - Wade User Guide: _bmad-output/design-artifacts/WADE-USER-GUIDE.md
  *
- * @version 1.0.3-alpha
+ * @version 1.0.4-alpha
  * @license MIT
  */
 
@@ -50,7 +50,7 @@ function main() {
 
 // Export installation functions for programmatic use
 module.exports = {
-  version: '1.0.3-alpha',
+  version: '1.0.4-alpha',
   agents: {
     emma: {
       id: 'empathy-mapper',

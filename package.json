@@ -1,12 +1,12 @@
 {
   "name": "bmad-enhanced",
-  "version": "1.0.3-alpha",
+  "version": "1.0.4-alpha",
   "description": "Domain-Specialized Agents for BMAD Method - Expert agents for design, quality, and standards workflows",
   "main": "index.js",
   "bin": {
-    "bmad-install-agents": "./scripts/install-all-agents.js",
-    "bmad-install-emma": "./scripts/install-emma.js",
-    "bmad-install-wade": "./scripts/install-wade.js"
+    "bmad-install-agents": "scripts/install-all-agents.js",
+    "bmad-install-emma": "scripts/install-emma.js",
+    "bmad-install-wade": "scripts/install-wade.js"
   },
   "scripts": {
     "install:emma": "node scripts/install-emma.js",
