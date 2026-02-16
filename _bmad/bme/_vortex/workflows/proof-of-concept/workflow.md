@@ -54,7 +54,7 @@ While waiting for v1.2.0, you can use Wade's chat mode to plan proof-of-concepts
 
 ```bash
 # Activate Wade
-cat _bmad/bme/_vortex/agents/wireframe-designer.md
+cat _bmad/bme/_vortex/agents/lean-experiments-specialist.md
 
 # Select chat mode and ask:
 "Help me design a proof-of-concept for [technical question]"
