@@ -2,7 +2,7 @@
 workflow: wireframe
 type: step-file
 description: Create wireframes through structured 6-step process
-author: Wade (wireframe-designer)
+author: Wade (lean-experiments-specialist)
 ---
 
 # Create Wireframe Workflow
