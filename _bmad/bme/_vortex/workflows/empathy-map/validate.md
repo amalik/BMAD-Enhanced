@@ -2,7 +2,7 @@
 workflow: validate-empathy-map
 type: single-file
 description: Validate an existing empathy map against user research evidence
-author: Emma (empathy-mapper)
+author: Emma (contextualization-expert)
 ---
 
 # Validate Existing Empathy Map
