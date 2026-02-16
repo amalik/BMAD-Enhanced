@@ -192,7 +192,7 @@ All agents built using a standard pattern:
 
 ---
 
-### Quinn (quality-gatekeeper) - 📋 PLANNED
+### Sage (quality-gatekeeper) - 📋 PLANNED
 
 **Status:** Week 2, Days 1-3 (Planned)
 **Domain:** Quality gates and decision workflows
@@ -219,7 +219,7 @@ All agents built using a standard pattern:
 **Progress:**
 - ✅ Emma (empathy-mapper) - COMPLETE (100% tested, documented, published)
 - ✅ Wade (wireframe-designer) - COMPLETE (100% tested, documented, published)
-- 📋 Quinn (quality-gatekeeper) - Planned Week 2
+- 📋 Sage (quality-gatekeeper) - Planned Week 2
 - 📋 Stan (standards-auditor) - Planned Week 2
 
 **Timeline:**
@@ -397,7 +397,7 @@ Clear, comprehensive documentation:
 - ✅ Day 3-7: Wade (wireframe-designer) - COMPLETE
 
 **Week 2:**
-- 📋 Day 1-3: Quinn (quality-gatekeeper)
+- 📋 Day 1-3: Sage (quality-gatekeeper)
 - 📋 Day 4-7: Stan (standards-auditor)
 
 **Week 3:**

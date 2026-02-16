@@ -25,7 +25,7 @@
 │  - Domain-specialized agents                    │
 │  - Emma (empathy-mapper)                        │
 │  - Wade (wireframe-designer)                    │
-│  - Quinn (quality-gatekeeper) - planned         │
+│  - Sage (quality-gatekeeper) - planned         │
 │  - Stan (standards-auditor) - planned           │
 └─────────────────────────────────────────────────┘
 ```

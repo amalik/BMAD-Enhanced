@@ -244,7 +244,7 @@ cat _bmad/bme/_designos/agents/wireframe-designer.md
 ## 🎯 What's Next
 
 ### Upcoming Features
-- Quinn (quality-gatekeeper) - Quality Gates & Decision Workflows
+- Sage (quality-gatekeeper) - Quality Gates & Decision Workflows
 - Stan (standards-auditor) - Standards Compliance & Audit
 
 ### Future Enhancements

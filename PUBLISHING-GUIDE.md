@@ -293,7 +293,7 @@ npx bmad-install-agents
 ## 🚀 What's Next
 
 Upcoming agents:
-- Quinn (quality-gatekeeper) - Quality Gates & Decision Workflows
+- Sage (quality-gatekeeper) - Quality Gates & Decision Workflows
 - Stan (standards-auditor) - Standards Compliance & Audit
 
 ---

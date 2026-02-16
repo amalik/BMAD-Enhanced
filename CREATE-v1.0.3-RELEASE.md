@@ -262,7 +262,7 @@ npm view bmad-enhanced@alpha
    - Respond to questions promptly
 
 2. **Plan Next Version:**
-   - Quinn (quality-gatekeeper) agent
+   - Sage (quality-gatekeeper) agent
    - Stan (standards-auditor) agent
 
 3. **Consider Promotion:**
