@@ -32,7 +32,7 @@ Once BMAD Method is installed, proceed with BMAD-Enhanced installation below.
 
 ```bash
 # From your project directory (where BMAD Method is installed)
-npm install bmad-enhanced
+npm install bmad-enhanced@alpha
 npx bmad-install-agents
 ```
 
@@ -47,7 +47,7 @@ That's it! Emma and Wade are now added to your BMAD installation.
 Install both Emma (empathy-mapper) and Wade (wireframe-designer) at once.
 
 ```bash
-npm install bmad-enhanced
+npm install bmad-enhanced@alpha
 npx bmad-install-agents
 ```
 
@@ -96,13 +96,13 @@ Install Emma or Wade separately.
 
 **Install Emma only:**
 ```bash
-npm install bmad-enhanced
+npm install bmad-enhanced@alpha
 npx bmad-install-emma
 ```
 
 **Install Wade only:**
 ```bash
-npm install bmad-enhanced
+npm install bmad-enhanced@alpha
 npx bmad-install-wade
 ```
 
