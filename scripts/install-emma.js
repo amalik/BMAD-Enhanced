@@ -160,7 +160,7 @@ function printSuccess() {
   console.log('  2. Create your first lean persona:');
   console.log(`     ${CYAN}Select workflow: lean-persona${RESET}`);
   console.log('');
-  console.log(`📚 User Guide: ${CYAN}_bmad-output/vortex-artifacts/EMMA-USER-GUIDE.md${RESET}`);
+  console.log(`${YELLOW}Note: User guides being updated for v1.2.0${RESET}`);
   console.log('');
 }
 

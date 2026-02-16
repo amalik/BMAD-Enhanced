@@ -20,6 +20,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 **Impact:** v1.1.1 had broken installer scripts that would fail when users ran `npx bmad-install-agents`. This patch fixes the installation process.
 
+### Known Issues
+- User guides still reference v1.0.0 content and will be updated in v1.2.0
+
 ---
 
 ## [1.1.1] - 2026-02-17

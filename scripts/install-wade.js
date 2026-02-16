@@ -170,7 +170,7 @@ function printSuccess() {
   console.log('  2. Run your first lean experiment:');
   console.log(`     ${CYAN}Select workflow: lean-experiment${RESET}`);
   console.log('');
-  console.log(`📚 User Guide: ${CYAN}_bmad-output/vortex-artifacts/WADE-USER-GUIDE.md${RESET}`);
+  console.log(`${YELLOW}Note: User guides being updated for v1.2.0${RESET}`);
   console.log('');
 }
 

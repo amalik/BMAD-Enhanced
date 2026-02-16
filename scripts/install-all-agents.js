@@ -258,9 +258,7 @@ function printSuccess() {
   console.log('  Activate Wade:');
   console.log(`  ${CYAN}cat _bmad/bme/_vortex/agents/lean-experiments-specialist.md${RESET}`);
   console.log('');
-  console.log(`${BOLD}User Guides:${RESET}`);
-  console.log(`  📚 Emma: ${CYAN}_bmad-output/vortex-artifacts/EMMA-USER-GUIDE.md${RESET}`);
-  console.log(`  📚 Wade: ${CYAN}_bmad-output/vortex-artifacts/WADE-USER-GUIDE.md${RESET}`);
+  console.log(`${YELLOW}Note: User guides being updated for v1.2.0${RESET}`);
   console.log('');
 }
 
