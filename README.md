@@ -94,7 +94,7 @@ cd BMAD-Enhanced
 npm install
 
 # Agents are already installed and operational
-cat _bmad/bme/_designos/agents/empathy-mapper.md
+cat _bmad/bme/_vortex/agents/contextualization-expert.md
 ```
 
 **What gets installed:**
@@ -108,7 +108,7 @@ cat _bmad/bme/_designos/agents/empathy-mapper.md
 
 ```bash
 # Activate Emma
-cat _bmad/bme/_vortex/agents/empathy-mapper.md
+cat _bmad/bme/_vortex/agents/contextualization-expert.md
 ```
 
 Emma will guide you through strategic contextualization:
@@ -122,7 +122,7 @@ Emma will guide you through strategic contextualization:
 
 ```bash
 # Activate Wade
-cat _bmad/bme/_vortex/agents/wireframe-designer.md
+cat _bmad/bme/_vortex/agents/lean-experiments-specialist.md
 ```
 
 Wade will guide you through validated learning:
@@ -155,7 +155,7 @@ All agents built using a standard pattern:
 
 ## 🚀 Agents
 
-### Emma (empathy-mapper) - ✅ REPOSITIONED
+### Emma (contextualization-expert) - ✅ REPOSITIONED
 
 **Status:** Repositioned in v1.1.0 - Workflows coming in v1.2.0
 **Title:** Contextualization Expert 🎯
@@ -180,7 +180,7 @@ All agents built using a standard pattern:
 
 ---
 
-### Wade (wireframe-designer) - ✅ REPOSITIONED
+### Wade (lean-experiments-specialist) - ✅ REPOSITIONED
 
 **Status:** Repositioned in v1.1.0 - Workflows coming in v1.2.0
 **Title:** Lean Experiments Specialist 🧪
@@ -316,7 +316,7 @@ Clear, comprehensive documentation:
 
 1. **Clone Emma's structure:**
    ```bash
-   cp -r _bmad/bme/_designos/agents/empathy-mapper.md \
+   cp -r _bmad/bme/_vortex/agents/contextualization-expert.md \
          _bmad/bme/_designos/agents/your-agent.md
    ```
 
@@ -400,8 +400,8 @@ Clear, comprehensive documentation:
 ### Current Focus: Week 1-2 (Agent Development)
 
 **Week 1:**
-- ✅ Day 1-2: Emma (empathy-mapper) - COMPLETE
-- ✅ Day 3-7: Wade (wireframe-designer) - COMPLETE
+- ✅ Day 1-2: Emma (contextualization-expert) - COMPLETE
+- ✅ Day 3-7: Wade (lean-experiments-specialist) - COMPLETE
 
 **Week 2:**
 - 📋 Day 1-3: Sage (quality-gatekeeper)

@@ -7,6 +7,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [1.1.1] - 2026-02-17
+
+### Fixed
+- **Agent file naming consistency:** Renamed agent files to match BMM module naming convention
+  - `empathy-mapper.md` → `contextualization-expert.md`
+  - `wireframe-designer.md` → `lean-experiments-specialist.md`
+- Updated all workflow references to use new agent file names
+- Updated config.yaml agent list with new names
+- Fixed migration guide in v1.1.0 to reference correct agent file names
+
+---
+
 ## [1.1.0] - 2026-02-16
 
 ### MAJOR REPOSITIONING: From Design Agents to Vortex Framework
@@ -48,8 +60,8 @@ This release represents a fundamental repositioning of BMAD-Enhanced from design
    - New: `_bmad-output/vortex-artifacts/`
 
 3. **Agent activation paths updated:**
-   - Emma: `cat _bmad/bme/_vortex/agents/empathy-mapper.md`
-   - Wade: `cat _bmad/bme/_vortex/agents/wireframe-designer.md`
+   - Emma: `cat _bmad/bme/_vortex/agents/contextualization-expert.md`
+   - Wade: `cat _bmad/bme/_vortex/agents/lean-experiments-specialist.md`
 
 4. **Workflows replaced:**
    - Emma's empathy-map workflow → lean-persona workflow (coming in v1.2.0)
