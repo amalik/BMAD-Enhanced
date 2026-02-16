@@ -8,9 +8,9 @@ This directory contains npm-based installation scripts for BMAD-Enhanced agents.
 Installs Emma (empathy-mapper) agent into your project.
 
 **What it does:**
-- Creates `_bmad/bme/_designos/` directory structure
+- Creates `_bmad/bme/_vortex/` directory structure
 - Copies Emma agent file (`empathy-mapper.md`)
-- Copies empathy-map workflow files (6 steps + template)
+- Copies Emma workflow files (lean-persona, product-vision, contextualize-scope)
 - Creates/updates `config.yaml`
 - Updates `agent-manifest.csv`
 - Creates output directory
@@ -26,9 +26,9 @@ npm run install:emma
 Installs Wade (wireframe-designer) agent into your project.
 
 **What it does:**
-- Creates `_bmad/bme/_designos/` directory structure
+- Creates `_bmad/bme/_vortex/` directory structure
 - Copies Wade agent file (`wireframe-designer.md`)
-- Copies wireframe workflow files (6 steps + template)
+- Copies Wade workflow files (mvp, lean-experiment, proof-of-concept, proof-of-value)
 - Creates/updates `config.yaml`
 - Updates `agent-manifest.csv`
 - Creates output directory
@@ -97,26 +97,37 @@ Success! Agents ready to use
 your-project/
 ├── _bmad/
 │   ├── bme/
-│   │   └── _designos/
+│   │   └── _vortex/
 │   │       ├── agents/
 │   │       │   ├── empathy-mapper.md
 │   │       │   └── wireframe-designer.md
 │   │       ├── workflows/
-│   │       │   ├── empathy-map/
+│   │       │   ├── lean-persona/
 │   │       │   │   ├── workflow.md
-│   │       │   │   ├── empathy-map.template.md
-│   │       │   │   └── steps/
-│   │       │   │       └── step-01 through step-06.md
-│   │       │   └── wireframe/
+│   │       │   │   └── validate.md
+│   │       │   ├── product-vision/
+│   │       │   │   ├── workflow.md
+│   │       │   │   └── validate.md
+│   │       │   ├── contextualize-scope/
+│   │       │   │   ├── workflow.md
+│   │       │   │   └── validate.md
+│   │       │   ├── mvp/
+│   │       │   │   ├── workflow.md
+│   │       │   │   └── validate.md
+│   │       │   ├── lean-experiment/
+│   │       │   │   ├── workflow.md
+│   │       │   │   └── validate.md
+│   │       │   ├── proof-of-concept/
+│   │       │   │   ├── workflow.md
+│   │       │   │   └── validate.md
+│   │       │   └── proof-of-value/
 │   │       │       ├── workflow.md
-│   │       │       ├── wireframe.template.md
-│   │       │       └── steps/
-│   │       │           └── step-01 through step-06.md
+│   │       │       └── validate.md
 │   │       └── config.yaml
 │   └── _config/
 │       └── agent-manifest.csv
 └── _bmad-output/
-    └── design-artifacts/
+    └── vortex-artifacts/
         ├── EMMA-USER-GUIDE.md
         └── WADE-USER-GUIDE.md
 ```
@@ -127,17 +138,38 @@ your-project/
 
 ### config.yaml
 ```yaml
-user_name: "User"
-communication_language: "English"
-output_folder: "_bmad-output/design-artifacts"
+---
+submodule_name: _vortex
+description: Contextualize and Externalize streams - Strategic framing and validated learning
+module: bme
+version: 1.1.0
 
+# Output Configuration
+output_folder: "{project-root}/_bmad-output/vortex-artifacts"
+user_name: "{user}"
+communication_language: "en"
+
+# Agents in this submodule
 agents:
-  - empathy-mapper     # Emma
-  - wireframe-designer # Wade
+  - empathy-mapper     # Emma - Contextualization Expert
+  - wireframe-designer # Wade - Lean Experiments Specialist
 
+# Workflows available
 workflows:
-  - empathy-map        # Create empathy maps
-  - wireframe          # Create wireframes
+  # Emma - Contextualize Stream
+  - lean-persona           # Create lean user personas
+  - product-vision         # Define product vision
+  - contextualize-scope    # Decide which problem space to investigate
+
+  # Wade - Externalize Stream
+  - mvp                    # Design Minimum Viable Product
+  - lean-experiment        # Run Build-Measure-Learn cycle
+  - proof-of-concept       # Validate technical feasibility
+  - proof-of-value         # Validate business value
+
+# Integration
+party_mode_enabled: true
+core_module: bme
 ```
 
 You can customize these values after installation.
@@ -190,5 +222,5 @@ To add a new agent installer:
 
 ---
 
-**Version:** 1.0.4-alpha
+**Version:** 1.1.0
 **Last Updated:** 2026-02-16
