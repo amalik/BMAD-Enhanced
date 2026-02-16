@@ -9,15 +9,15 @@
  * - Wade (wireframe-designer) - Wireframe Design Expert
  *
  * Installation:
- *   npm install bmad-enhanced
- *   npm run install:agents
+ *   npm install bmad-enhanced@alpha
+ *   npx bmad-install-agents
  *
  * Documentation:
  *   - Installation Guide: INSTALLATION.md
  *   - Emma User Guide: _bmad-output/design-artifacts/EMMA-USER-GUIDE.md
  *   - Wade User Guide: _bmad-output/design-artifacts/WADE-USER-GUIDE.md
  *
- * @version 1.0.0-alpha
+ * @version 1.0.3-alpha
  * @license MIT
  */
 
@@ -38,9 +38,9 @@ function main() {
   console.log(`  ${GREEN}✓${RESET} Wade (wireframe-designer) - Wireframe Design Expert`);
   console.log('');
   console.log('To install agents:');
-  console.log(`  ${CYAN}npm run install:agents${RESET} - Install all agents`);
-  console.log(`  ${CYAN}npm run install:emma${RESET}   - Install Emma only`);
-  console.log(`  ${CYAN}npm run install:wade${RESET}   - Install Wade only`);
+  console.log(`  ${CYAN}npx bmad-install-agents${RESET} - Install all agents`);
+  console.log(`  ${CYAN}npx bmad-install-emma${RESET}   - Install Emma only`);
+  console.log(`  ${CYAN}npx bmad-install-wade${RESET}   - Install Wade only`);
   console.log('');
   console.log('Documentation:');
   console.log(`  ${CYAN}INSTALLATION.md${RESET} - Complete installation guide`);
@@ -50,7 +50,7 @@ function main() {
 
 // Export installation functions for programmatic use
 module.exports = {
-  version: '1.0.0-alpha',
+  version: '1.0.3-alpha',
   agents: {
     emma: {
       id: 'empathy-mapper',
