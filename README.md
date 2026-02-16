@@ -1,37 +1,39 @@
 # BMAD-Enhanced
 
-**Domain-Specialized Agents for BMAD Method**
+**Vortex Framework - Contextualize and Externalize for Lean Startup Validation**
 
-> Enhance BMAD with expert agents for design, quality, and standards workflows
+> Strategic framing and validated learning through Emma and Wade
 
-[![Status](https://img.shields.io/badge/status-active_development-green)]()
-[![Version](https://img.shields.io/badge/version-1.0.0--alpha-orange)]()
-[![Emma](https://img.shields.io/badge/emma-operational-brightgreen)]()
-[![Wade](https://img.shields.io/badge/wade-operational-brightgreen)]()
+[![Status](https://img.shields.io/badge/status-v1.1.0--repositioned-green)]()
+[![Version](https://img.shields.io/badge/version-1.1.0-blue)]()
+[![Emma](https://img.shields.io/badge/emma-contextualization_expert-brightgreen)]()
+[![Wade](https://img.shields.io/badge/wade-lean_experiments_specialist-brightgreen)]()
 [![License](https://img.shields.io/badge/license-MIT-blue)]()
 
 ---
 
 ## 🎯 What is BMAD-Enhanced?
 
-BMAD-Enhanced extends the [BMAD Method](https://github.com/bmadhub/bmad) with **4 domain-specialized agents** that bring expert-level capabilities to design, quality, and standards workflows.
+BMAD-Enhanced extends the [BMAD Method](https://github.com/bmadhub/bmad) with the **Vortex framework** - a Lean Startup validation approach with two specialized agents:
 
 ```
-Design Agents              Quality & Standards Agents
-┌─────────────┐           ┌─────────────┐
-│    Emma ✅  │           │    Quinn    │
-│  Empathy    │           │   Quality   │
-│   Mapper    │           │ Gatekeeper  │
-└─────────────┘           └─────────────┘
-       🎨                        🧪
+VORTEX FRAMEWORK
 
+Contextualize Stream       Externalize Stream
 ┌─────────────┐           ┌─────────────┐
-│    Wade ✅  │           │    Stan     │
-│ Wireframe   │           │ Standards   │
-│  Designer   │           │  Auditor    │
+│    Emma 🎯  │           │    Wade 🧪  │
+│             │           │             │
+│ Strategic   │  ─────>   │   Lean      │
+│  Framing    │           │ Experiments │
+│             │           │             │
+│ • Personas  │           │ • MVPs      │
+│ • Vision    │           │ • Tests     │
+│ • Scope     │           │ • Proof     │
 └─────────────┘           └─────────────┘
-       🎨                        📋
 ```
+
+**Contextualize (Emma):** Frame the right problem before building
+**Externalize (Wade):** Test assumptions with real users through experiments
 
 ---
 
@@ -60,10 +62,10 @@ npx bmad-method@alpha install
 Once BMAD Method is installed:
 
 ```bash
-npm install bmad-enhanced@alpha && npx bmad-install-agents
+npm install bmad-enhanced@1.1.0 && npx bmad-install-agents
 ```
 
-That's it! Emma and Wade are now added to your BMAD installation.
+That's it! Emma and Wade (Vortex framework) are now added to your BMAD installation.
 
 ### Installation
 
@@ -71,14 +73,14 @@ That's it! Emma and Wade are now added to your BMAD installation.
 
 ```bash
 # Install into your project
-npm install bmad-enhanced@alpha
+npm install bmad-enhanced@1.1.0
 
 # Install all agents (Emma + Wade)
 npx bmad-install-agents
 
 # Or install individually
-npx bmad-install-emma    # Install Emma (empathy-mapper)
-npx bmad-install-wade    # Install Wade (wireframe-designer)
+npx bmad-install-emma    # Install Emma (Contextualization Expert)
+npx bmad-install-wade    # Install Wade (Lean Experiments Specialist)
 ```
 
 **Option 2: Clone from source**
@@ -96,44 +98,40 @@ cat _bmad/bme/_designos/agents/empathy-mapper.md
 ```
 
 **What gets installed:**
-- Agent definition files (`_bmad/bme/_designos/agents/`)
-- Workflow files with step-by-step processes (`_bmad/bme/_designos/workflows/`)
-- Configuration file (`_bmad/bme/_designos/config.yaml`)
-- Output directory (`_bmad-output/design-artifacts/`)
-- User guides (EMMA-USER-GUIDE.md, WADE-USER-GUIDE.md)
+- Agent definition files (`_bmad/bme/_vortex/agents/`)
+- Workflow files (7 workflows: lean-persona, product-vision, contextualize-scope, mvp, lean-experiment, proof-of-concept, proof-of-value)
+- Configuration file (`_bmad/bme/_vortex/config.yaml`)
+- Output directory (`_bmad-output/vortex-artifacts/`)
+- User guides (coming in v1.2.0)
 
-### Your First Empathy Map with Emma
+### Your First Lean Persona with Emma
 
 ```bash
 # Activate Emma
-cat _bmad/bme/_designos/agents/empathy-mapper.md
+cat _bmad/bme/_vortex/agents/empathy-mapper.md
 ```
 
-Emma will guide you through a 5-step process to create a comprehensive empathy map:
-1. Define Target User
-2. Says & Thinks
-3. Does & Feels
-4. Pain Points & Gains
-5. Synthesize (creates artifact)
+Emma will guide you through strategic contextualization:
+- **Lean Persona:** Jobs-to-be-done focused user personas (coming in v1.2.0)
+- **Product Vision:** Align team around the "why" before the "what" (coming in v1.2.0)
+- **Contextualize Scope:** Decide which problem space to investigate (coming in v1.2.0)
 
-**See:** [Emma User Guide](_bmad-output/design-artifacts/EMMA-USER-GUIDE.md) for complete documentation
+**Current Status:** Workflows coming in v1.2.0. Use Emma's chat mode for strategic framing guidance.
 
-### Your First Wireframe with Wade
+### Your First Lean Experiment with Wade
 
 ```bash
 # Activate Wade
-cat _bmad/bme/_designos/agents/wireframe-designer.md
+cat _bmad/bme/_vortex/agents/wireframe-designer.md
 ```
 
-Wade will guide you through a 6-step process to create comprehensive wireframes:
-1. Define Requirements (screen, platform, user)
-2. User Flows (entry → goal → exit)
-3. Information Architecture (visual hierarchy)
-4. Wireframe Sketch (ASCII art layouts)
-5. Components & Interactions (UI specs)
-6. Synthesize (creates artifact)
+Wade will guide you through validated learning:
+- **MVP:** Design Minimum Viable Product to test riskiest assumptions (coming in v1.2.0)
+- **Lean Experiment:** Run Build-Measure-Learn cycles (coming in v1.2.0)
+- **Proof-of-Concept:** Validate technical feasibility (coming in v1.2.0)
+- **Proof-of-Value:** Validate business value (coming in v1.2.0)
 
-**See:** [Wade User Guide](_bmad-output/design-artifacts/WADE-USER-GUIDE.md) for complete documentation
+**Current Status:** Workflows coming in v1.2.0. Use Wade's chat mode for experiment design guidance.
 
 ---
 
@@ -157,84 +155,85 @@ All agents built using a standard pattern:
 
 ## 🚀 Agents
 
-### Emma (empathy-mapper) - ✅ OPERATIONAL
+### Emma (empathy-mapper) - ✅ REPOSITIONED
 
-**Status:** Production-ready (v1.0.0)
-**Domain:** User empathy mapping and design research
-**Workflows:** 6-step empathy map creation, validation
+**Status:** Repositioned in v1.1.0 - Workflows coming in v1.2.0
+**Title:** Contextualization Expert 🎯
+**Stream:** Contextualize
+**Domain:** Strategic framing, problem-product space navigation
 
-**Key Features:**
-- Guided empathy mapping process
-- Research-backed insights (Says/Thinks/Does/Feels)
-- Pain points and gains analysis
-- Design implications and feature prioritization
-- Professional markdown artifact output
+**New Workflows (v1.2.0):**
+- **Lean Persona:** Create jobs-to-be-done focused personas
+- **Product Vision:** Define clear product vision and strategic direction
+- **Contextualize Scope:** Decide which problem space to investigate
 
-**Documentation:** [Emma User Guide](_bmad-output/design-artifacts/EMMA-USER-GUIDE.md)
+**Key Positioning:**
+- Helps teams frame the right problem before building solutions
+- Focus on Lean Startup methodologies and validated assumptions
+- Guides teams through strategic clarity before tactical execution
 
-**Test Results:** [100% P0 Pass Rate](_bmad-output/test-artifacts/emma-tests/emma-p0-test-results.md) (18/18 tests)
+**Differentiation:**
+- **Emma vs Maya:** Emma contextualizes (problem space), Maya creates (solution space)
+- Emma answers "What should we solve?" before Maya answers "How should we solve it?"
 
----
-
-### Wade (wireframe-designer) - ✅ OPERATIONAL
-
-**Status:** Production-ready (v1.0.0)
-**Domain:** Wireframe and UI design
-**Workflows:**
-- **Create Wireframe (WM):** 6-step guided wireframe creation process
-- **Validate Wireframe (VM):** Review wireframes against usability principles
-
-**Commands:** WM (Create), VM (Validate), CH (Chat), MH (Menu), PM (Party Mode), DA (Dismiss)
-
-**Test Results:** [100% P0 Pass Rate](_bmad-output/test-artifacts/wade-tests/wade-p0-test-execution.md) (18/18 tests)
-
-**User Guide:** [Wade User Guide](_bmad-output/design-artifacts/WADE-USER-GUIDE.md)
+**Current Status:** Chat mode available for strategic guidance. Workflows coming March 2026.
 
 ---
 
-### Sage (quality-gatekeeper) - 📋 PLANNED
+### Wade (wireframe-designer) - ✅ REPOSITIONED
 
-**Status:** Week 2, Days 1-3 (Planned)
-**Domain:** Quality gates and decision workflows
-**Planned Workflows:** Quality gate evaluation, release readiness assessment
+**Status:** Repositioned in v1.1.0 - Workflows coming in v1.2.0
+**Title:** Lean Experiments Specialist 🧪
+**Stream:** Externalize
+**Domain:** Lean Startup experimentation, validated learning
 
-**Expected Completion:** Week 2, Day 3 (2026-02-26)
+**New Workflows (v1.2.0):**
+- **MVP:** Design Minimum Viable Product to test riskiest assumptions
+- **Lean Experiment:** Run Build-Measure-Learn cycles
+- **Proof-of-Concept:** Validate technical feasibility
+- **Proof-of-Value:** Validate business value
 
----
+**Key Positioning:**
+- Helps teams test assumptions with real users through rapid experiments
+- Focus on validated learning over perfection
+- Guides teams from hypotheses to evidence
 
-### Stan (standards-auditor) - 📋 PLANNED
+**Differentiation:**
+- **Wade vs Sally:** Wade externalizes (test with users), Sally internalizes (test with code)
+- Wade answers "Should we build this?" before Sally answers "How do we build this well?"
 
-**Status:** Week 2, Days 4-7 (Planned)
-**Domain:** Code standards and compliance
-**Planned Workflows:** Standards compliance checking, automated code review
-
-**Expected Completion:** Week 2, Day 7 (2026-03-01)
+**Current Status:** Chat mode available for experiment design. Workflows coming March 2026.
 
 ---
 
 ## 📊 Project Status
 
-**Current Phase:** Week 1, Day 2 - Emma & Wade Complete ✅
+**Current Version:** v1.1.0 - Vortex Framework Repositioning
 
 **Progress:**
-- ✅ Emma (empathy-mapper) - COMPLETE (100% tested, documented, published)
-- ✅ Wade (wireframe-designer) - COMPLETE (100% tested, documented, published)
-- 📋 Sage (quality-gatekeeper) - Planned Week 2
-- 📋 Stan (standards-auditor) - Planned Week 2
+- ✅ Emma - REPOSITIONED to Contextualization Expert (v1.1.0)
+- ✅ Wade - REPOSITIONED to Lean Experiments Specialist (v1.1.0)
+- 📋 New workflows - Coming in v1.2.0 (March 2026)
 
-**Timeline:**
+**What Changed in v1.1.0:**
+- Module renamed: `_designos` → `_vortex`
+- Emma: Empathy Mapping → Strategic Framing & Contextualization
+- Wade: Wireframe Design → Lean Experiments & Validated Learning
+- 7 new workflows defined (implementation in v1.2.0)
+
+**Roadmap:**
 ```
-WEEK 1              WEEK 2              WEEK 3
-├──────────────┬───────────────┬──────────────────┤
-│  Emma ✅     │  Quinn 📋     │  Integration 📋  │
-│  Wade ✅     │  Stan 📋      │  Testing 📋      │
-│  Days 1-2    │  Days 1-7     │  Decision Gate   │
-└──────────────┴───────────────┴──────────────────┘
+v1.1.0               v1.2.0              v2.0.0
+├─────────────────┬──────────────────┬──────────────────┤
+│ Repositioning ✅ │  Workflows 📋    │  Advanced 📋     │
+│ • New identity  │  • 7 workflows   │  • Multi-agent   │
+│ • Framework     │  • Templates     │  • Integration   │
+│ • Structure     │  • User guides   │  • Analytics     │
+└─────────────────┴──────────────────┴──────────────────┘
+   Feb 2026           Mar 2026           Q2 2026
 ```
 
-**Schedule Status:** ✅ AHEAD (Emma & Wade complete Day 2, planned for Days 1-7)
-
-**See:** [Project Status Update](_bmad-output/PROJECT-STATUS-UPDATE.md) for detailed progress
+**See:** [CHANGELOG.md](CHANGELOG.md) for complete version history
 
 ---
 
@@ -266,21 +265,29 @@ WEEK 1              WEEK 2              WEEK 3
 
 ## 💡 Key Features
 
-### ✅ Production-Ready Quality
+### 🎯 Lean Startup Validation Framework
 
-Emma demonstrates the BMAD-Enhanced standard:
-- **100% P0 test pass rate** (18/18 critical tests)
-- **6/6 quality gates passed** (coverage, pass rate, critical path, risk mitigation, usability, documentation)
-- **Zero defects found** in code
-- **Comprehensive error handling** with clear, actionable messages
+The Vortex framework brings structured validation to product development:
+- **Contextualize Stream (Emma):** Frame the right problem before building
+- **Externalize Stream (Wade):** Test assumptions with real users
+- **Integrated Approach:** Strategic clarity → Validated learning → Implementation
 
-### 🎨 Domain Expertise
+### 🔄 Clear Agent Differentiation
 
-Each agent brings specialized knowledge:
-- **Emma:** 10+ years UX research, empathy mapping, Jobs-to-be-Done framework
-- **Wade:** UI/UX design patterns, wireframe best practices (coming soon)
-- **Quinn:** Quality engineering, test strategy, release management (coming soon)
-- **Stan:** Code standards, compliance frameworks, best practices (coming soon)
+**Emma vs Maya:**
+- Emma: Contextualizes (What problem should we solve?)
+- Maya: Creates (How should we solve it?)
+
+**Wade vs Sally:**
+- Wade: Externalizes (Should we build this? - test with users)
+- Sally: Internalizes (Are we building it well? - test with code)
+
+### 🚀 Strategic Positioning
+
+BMAD-Enhanced now focuses on the critical pre-implementation phase:
+1. **Emma:** Frame strategy and define problem space
+2. **Wade:** Validate assumptions through experiments
+3. **Hand off to BMAD Core:** Let PM/Dev/QA agents implement
 
 ### 🔄 Reusable Patterns
 
@@ -446,48 +453,49 @@ We welcome contributions! Areas where we need help:
 
 ## 💼 Business Value
 
-### For UX Researchers (Emma)
+### For Product Managers & Strategists (Emma)
 
 **Before:**
-- Manual empathy map creation: 2-3 hours
-- Inconsistent structure across maps
-- Hard to share and update
+- Unclear problem definition
+- Assumptions presented as facts
+- No validation plan for strategy
+- Weeks of strategic discussion
 
-**After:**
-- Guided 6-step process: 30-60 minutes
-- Standardized professional output
-- Markdown format (easy to version control and share)
+**After (v1.2.0):**
+- Clear problem space framing: 1-2 hours
+- Explicit assumption mapping
+- Built-in validation planning
+- Strategic alignment in days
 
-**Value:** 50-60% time savings, higher quality output
+**Value:** Faster strategic clarity, reduced risk of building the wrong thing
 
-### For UX/UI Designers (Wade)
+### For Innovation Teams (Wade)
 
 **Before:**
-- Manual wireframe creation: 3-4 hours
-- Inconsistent information architecture
-- Missing critical UI components
-- Difficult to validate against usability principles
+- Long development cycles before user feedback
+- High investment in unvalidated ideas
+- No structured experiment process
+- 6-12 months to market validation
 
-**After:**
-- Guided 6-step process: 45-90 minutes
-- Structured wireframe with complete IA
-- Component catalog and interaction flows
-- Built-in usability validation
+**After (v1.2.0):**
+- Rapid experiment design: 2-3 hours
+- Minimal investment in learning
+- Structured Build-Measure-Learn cycles
+- 2-4 weeks to validated learning
 
-**Value:** 60-70% time savings, comprehensive coverage, fewer design iterations
+**Value:** 70-80% faster validation, 90% lower validation cost, data-driven decisions
 
-### For Development Teams (All Agents)
+### For Startups & Product Teams
 
-**Domain Expertise On-Demand:**
-- Emma: User research and empathy mapping
-- Wade: Wireframe and UI design
-- Quinn: Quality gates and release decisions
-- Stan: Code standards and compliance
+**Lean Startup in Practice:**
+- Emma: Strategic framing and problem-solution fit
+- Wade: Validated learning and product-market fit
+- BMAD Core: Implementation and delivery
 
 **Impact:**
-- Faster onboarding (agents teach best practices)
-- Consistent quality (standardized workflows)
-- Reduced rework (catch issues early)
+- Validate before building (avoid waste)
+- Learn fast, pivot faster (reduce risk)
+- Data-driven decisions (evidence over opinions)
 
 ---
 
@@ -692,38 +700,59 @@ Built on:
 
 **Current approach:** Build 4 expert agents using BMAD Agent Architecture Framework (Emma, Wade, Quinn, Stan).
 
-### Can I still use Emma without the other agents?
+### What happened to empathy mapping and wireframing?
 
-**Yes!** Each agent is standalone. Emma works independently. You can use just Emma for empathy mapping without needing Wade/Quinn/Stan.
+**They were repositioned in v1.1.0.** Emma and Wade now focus on Lean Startup validation rather than traditional design deliverables.
 
-### Will you add more agents?
+**Old positioning (v1.0.x):**
+- Emma: Empathy Mapping Specialist
+- Wade: Wireframe Design Specialist
 
-**Yes, after Week 3 decision gate.** We'll evaluate the 4-agent approach and decide on:
-- Additional domain-specialized agents
-- Community-contributed agents
-- Advanced workflows for existing agents
+**New positioning (v1.1.0+):**
+- Emma: Contextualization Expert (strategic framing, lean personas, product vision)
+- Wade: Lean Experiments Specialist (MVPs, experiments, proof-of-concept/value)
+
+**Why?** To create clear differentiation from BMAD core agents (Maya for design, Sally for quality) and focus on the critical pre-implementation validation phase.
+
+### Can I still use Emma and Wade independently?
+
+**Yes!** Each agent works standalone:
+- Use Emma alone for strategic framing and problem space definition
+- Use Wade alone for experiment design and validation
+- Use both together for complete Contextualize → Externalize flow
+
+### When will the new workflows be ready?
+
+**v1.2.0 in March 2026.** The 7 workflows (lean-persona, product-vision, contextualize-scope, mvp, lean-experiment, proof-of-concept, proof-of-value) are currently in development.
+
+**Current state:** Emma and Wade's chat modes are available for guidance while workflows are being built.
 
 ### How is this different from BMAD core agents?
 
-**Domain specialization vs. development lifecycle.**
+**Pre-implementation validation vs. implementation.**
 
-**BMAD Core agents:** Focus on software development lifecycle (PM, Architect, Dev, QA, SM, etc.)
+**BMAD-Enhanced (Vortex):** Pre-implementation - validate before building
+- Emma: Strategic framing (what problem should we solve?)
+- Wade: Validated learning (should we build this?)
 
-**BMAD-Enhanced agents:** Focus on specialized domains (UX research, design, quality gates, standards compliance)
+**BMAD Core:** Implementation - build and deliver
+- Maya: Solution design (how should we solve it?)
+- Dev/Arch: Implementation
+- Sally/QA: Quality validation (are we building it well?)
 
-They complement each other. Use BMAD Core for development, BMAD-Enhanced for specialized workflows.
+**Flow:** Emma → Wade → BMAD Core agents for implementation
 
 ---
 
 <div align="center">
 
-**BMAD-Enhanced**
+**BMAD-Enhanced - Vortex Framework**
 
-*Domain-Specialized Agents for Design, Quality, and Standards*
+*Contextualize and Externalize for Lean Startup Validation*
 
 [Get Started](#quick-start) • [Documentation](#documentation) • [Roadmap](#roadmap)
 
-**Current Status:** ✅ Emma Operational | ✅ Wade Operational | 📋 Quinn & Stan Planned
+**Current Status:** ✅ v1.1.0 Repositioned | 📋 v1.2.0 Workflows Coming March 2026
 
 Made with ❤️ by the BMAD-Enhanced community
 
