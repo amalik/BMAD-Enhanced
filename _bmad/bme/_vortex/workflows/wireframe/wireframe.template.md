@@ -4,7 +4,7 @@ version: 1.0.0
 created: {date}
 screen: {screen_name}
 platform: {platform}
-author: Wade (wireframe-designer)
+author: Wade (lean-experiments-specialist)
 ---
 
 # Wireframe: {screen_name}
@@ -12,7 +12,7 @@ author: Wade (wireframe-designer)
 **Platform:** {platform}
 **Target User:** {target_user}
 **Created:** {date}
-**Designer:** Wade (wireframe-designer)
+**Designer:** Wade (lean-experiments-specialist)
 
 ---
 
@@ -259,7 +259,7 @@ author: Wade (wireframe-designer)
 
 **Document Version:** 1.0.0
 **Last Updated:** {date}
-**Designer:** Wade (wireframe-designer)
+**Designer:** Wade (lean-experiments-specialist)
 **Status:** Draft for Review
 
 ---
