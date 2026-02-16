@@ -1,7 +1,7 @@
 {
   "name": "bmad-enhanced",
-  "version": "1.0.4-alpha",
-  "description": "Domain-Specialized Agents for BMAD Method - Expert agents for design, quality, and standards workflows",
+  "version": "1.1.0",
+  "description": "Vortex Framework - Contextualize and Externalize streams for Lean Startup validation",
   "main": "index.js",
   "bin": {
     "bmad-install-agents": "scripts/install-all-agents.js",
@@ -17,10 +17,13 @@
   "keywords": [
     "bmad",
     "agents",
-    "empathy-mapping",
-    "wireframing",
-    "design",
-    "ux",
+    "lean-startup",
+    "validated-learning",
+    "vortex",
+    "contextualize",
+    "externalize",
+    "mvp",
+    "product-strategy",
     "ai-agents"
   ],
   "author": "BMAD-Enhanced Community",
