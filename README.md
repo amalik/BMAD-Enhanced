@@ -60,7 +60,7 @@ npx bmad-method@alpha install
 Once BMAD Method is installed:
 
 ```bash
-npm install bmad-enhanced && npx bmad-install-agents
+npm install bmad-enhanced@alpha && npx bmad-install-agents
 ```
 
 That's it! Emma and Wade are now added to your BMAD installation.
@@ -71,7 +71,7 @@ That's it! Emma and Wade are now added to your BMAD installation.
 
 ```bash
 # Install into your project
-npm install bmad-enhanced
+npm install bmad-enhanced@alpha
 
 # Install all agents (Emma + Wade)
 npx bmad-install-agents
