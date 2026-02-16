@@ -54,7 +54,7 @@ While waiting for v1.2.0, you can use Emma's chat mode to explore scope decision
 
 ```bash
 # Activate Emma
-cat _bmad/bme/_vortex/agents/empathy-mapper.md
+cat _bmad/bme/_vortex/agents/contextualization-expert.md
 
 # Select chat mode and ask:
 "Help me decide which problem space to investigate: [list your options]"
