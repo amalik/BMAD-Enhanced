@@ -2,7 +2,7 @@
 workflow: empathy-map
 type: step-file
 description: Create user empathy maps through structured 6-step process
-author: Emma (empathy-mapper)
+author: Emma (contextualization-expert)
 ---
 
 # Create Empathy Map Workflow
