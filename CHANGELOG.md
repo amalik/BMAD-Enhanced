@@ -7,6 +7,92 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [1.1.0] - 2026-02-16
+
+### MAJOR REPOSITIONING: From Design Agents to Vortex Framework
+
+This release represents a fundamental repositioning of BMAD-Enhanced from design-focused agents (empathy mapping, wireframing) to a Lean Startup validation framework.
+
+### Changed
+- **BREAKING:** Renamed module from `_designos` to `_vortex`
+- **BREAKING:** Emma repositioned from "Empathy Mapping Specialist" to "Contextualization Expert" (icon: 🎯)
+  - Focus: Strategic framing, lean personas, product vision, problem space navigation
+  - Role: Guides teams through the "Contextualize" stream
+  - New workflows: lean-persona, product-vision, contextualize-scope (empathy-map deprecated)
+- **BREAKING:** Wade repositioned from "Wireframe Design Specialist" to "Lean Experiments Specialist" (icon: 🧪)
+  - Focus: Build-Measure-Learn cycles, MVPs, validated learning
+  - Role: Guides teams through the "Externalize" stream
+  - New workflows: mvp, lean-experiment, proof-of-concept, proof-of-value (wireframe deprecated)
+- **BREAKING:** Output folder changed from `_bmad-output/design-artifacts` to `_bmad-output/vortex-artifacts`
+- Updated all installer scripts to reflect new module name and agent descriptions
+- Updated config.yaml structure to version 1.1.0 with Vortex framework metadata
+- Updated agent-manifest.csv with new agent identities and expertise
+
+### Added
+- Vortex framework structure with Contextualize and Externalize streams
+- 7 new workflow placeholders (v1.2.0):
+  - Emma (Contextualize): lean-persona, product-vision, contextualize-scope
+  - Wade (Externalize): mvp, lean-experiment, proof-of-concept, proof-of-value
+- Version field in config.yaml for better version tracking
+
+### Migration Guide
+
+**For existing users upgrading from 1.0.x:**
+
+1. **Module path changed:**
+   - Old: `_bmad/bme/_designos/`
+   - New: `_bmad/bme/_vortex/`
+
+2. **Output folder changed:**
+   - Old: `_bmad-output/design-artifacts/`
+   - New: `_bmad-output/vortex-artifacts/`
+
+3. **Agent activation paths updated:**
+   - Emma: `cat _bmad/bme/_vortex/agents/empathy-mapper.md`
+   - Wade: `cat _bmad/bme/_vortex/agents/wireframe-designer.md`
+
+4. **Workflows replaced:**
+   - Emma's empathy-map workflow → lean-persona workflow (coming in v1.2.0)
+   - Wade's wireframe workflow → lean-experiment workflow (coming in v1.2.0)
+
+5. **Clean reinstall recommended:**
+   ```bash
+   # Backup any custom configs
+   # Remove old installation
+   rm -rf _bmad/bme/_designos
+   rm -rf _bmad-output/design-artifacts
+
+   # Install v1.1.0
+   npm install bmad-enhanced@1.1.0
+   npx bmad-install-agents
+   ```
+
+### Positioning Rationale
+
+**Why this change?**
+
+The repositioning aligns Emma and Wade with Lean Startup and validated learning principles:
+
+- **Emma (Contextualize):** Helps teams frame the right problem before building solutions
+  - Differentiation: Emma contextualizes (problem space), Maya creates (solution space)
+- **Wade (Externalize):** Helps teams validate assumptions through rapid experimentation
+  - Differentiation: Wade externalizes (test with users), Sally internalizes (test with code)
+
+This creates a clear value proposition: Use Emma + Wade for Lean Startup validation, then hand off to BMAD core agents for implementation.
+
+### Technical Details
+- Module version: 1.1.0
+- Config structure: Updated with submodule metadata
+- Backward compatibility: NONE (breaking changes require migration)
+- Package size: ~55KB (unchanged)
+
+### Notes
+- v1.0.x workflows (empathy-map, wireframe) are deprecated
+- New workflows (lean-persona, mvp, etc.) will be fully implemented in v1.2.0
+- User guides will be updated in v1.2.0 to reflect new positioning
+
+---
+
 ## [1.0.4-alpha] - 2026-02-16
 
 ### Fixed
