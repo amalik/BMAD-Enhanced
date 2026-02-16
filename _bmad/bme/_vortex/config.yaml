@@ -1,0 +1,32 @@
+---
+submodule_name: _vortex
+description: Contextualize and Externalize streams - Strategic framing and validated learning
+module: bme
+version: 1.1.0
+
+# Output Configuration
+output_folder: "{project-root}/_bmad-output/vortex-artifacts"
+user_name: "{user}"
+communication_language: "en"
+
+# Agents in this submodule
+agents:
+  - empathy-mapper     # Emma - Contextualization Expert
+  - wireframe-designer # Wade - Lean Experiments Specialist
+
+# Workflows available
+workflows:
+  # Emma - Contextualize Stream
+  - lean-persona           # Create lean user personas
+  - product-vision         # Define product vision
+  - contextualize-scope    # Decide which problem space to investigate
+
+  # Wade - Externalize Stream
+  - mvp                    # Design Minimum Viable Product
+  - lean-experiment        # Run Build-Measure-Learn cycle
+  - proof-of-concept       # Validate technical feasibility
+  - proof-of-value         # Validate business value
+
+# Integration
+party_mode_enabled: true
+core_module: bme
