@@ -56,7 +56,7 @@ While waiting for v1.2.0, you can use Emma's chat mode to draft product visions:
 
 ```bash
 # Activate Emma
-cat _bmad/bme/_vortex/agents/empathy-mapper.md
+cat _bmad/bme/_vortex/agents/contextualization-expert.md
 
 # Select chat mode and ask:
 "Help me define a product vision for [your product idea]"
