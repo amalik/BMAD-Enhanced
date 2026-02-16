@@ -1,7 +1,7 @@
 ---
 title: "Empathy Map: {user-name}"
 date: {date}
-created-by: {user-name} with Emma (empathy-mapper)
+created-by: {user-name} with Emma (contextualization-expert)
 research-sources: {research-sources}
 status: DRAFT
 ---
@@ -133,7 +133,7 @@ status: DRAFT
 ---
 
 **Created by:** {creator-name}
-**Created with:** Emma (empathy-mapper) - BMAD Enhanced
+**Created with:** Emma (contextualization-expert) - BMAD Enhanced
 **Date:** {creation-date}
 **Version:** 1.0
 **Status:** {status}
