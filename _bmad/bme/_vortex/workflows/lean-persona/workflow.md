@@ -55,7 +55,7 @@ While waiting for v1.2.0, you can use Emma's chat mode to create lean personas:
 
 ```bash
 # Activate Emma
-cat _bmad/bme/_vortex/agents/empathy-mapper.md
+cat _bmad/bme/_vortex/agents/contextualization-expert.md
 
 # Select chat mode and ask:
 "Help me create a lean persona for [your user type] who is trying to [job-to-be-done]"
