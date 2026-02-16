@@ -11,8 +11,8 @@ communication_language: "en"
 
 # Agents in this submodule
 agents:
-  - empathy-mapper     # Emma - Contextualization Expert
-  - wireframe-designer # Wade - Lean Experiments Specialist
+  - contextualization-expert     # Emma - Contextualization Expert
+  - lean-experiments-specialist  # Wade - Lean Experiments Specialist
 
 # Workflows available
 workflows:
