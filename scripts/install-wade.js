@@ -14,7 +14,7 @@ function printBanner() {
   console.log('');
   console.log(`${CYAN}${BOLD}╔════════════════════════════════════════════════════╗${RESET}`);
   console.log(`${CYAN}${BOLD}║                                                    ║${RESET}`);
-  console.log(`${CYAN}${BOLD}║      Wade (wireframe-designer) Installer 🎨       ║${RESET}`);
+  console.log(`${CYAN}${BOLD}║      Wade (wireframe-designer) Installer 🧪       ║${RESET}`);
   console.log(`${CYAN}${BOLD}║                                                    ║${RESET}`);
   console.log(`${CYAN}${BOLD}╚════════════════════════════════════════════════════╝${RESET}`);
   console.log('');
@@ -48,8 +48,8 @@ function checkPrerequisites() {
 function copyAgentFiles() {
   console.log(`${CYAN}[2/4]${RESET} Installing Wade agent files...`);
 
-  const sourceDir = path.join(__dirname, '..', '_bmad', 'bme', '_designos');
-  const targetDir = path.join(process.cwd(), '_bmad', 'bme', '_designos');
+  const sourceDir = path.join(__dirname, '..', '_bmad', 'bme', '_vortex');
+  const targetDir = path.join(process.cwd(), '_bmad', 'bme', '_vortex');
 
   // Create target directory structure
   fs.mkdirSync(path.join(targetDir, 'agents'), { recursive: true });
@@ -86,23 +86,37 @@ function copyAgentFiles() {
 function updateConfig() {
   console.log(`${CYAN}[3/4]${RESET} Configuring Wade...`);
 
-  const configPath = path.join(process.cwd(), '_bmad', 'bme', '_designos', 'config.yaml');
+  const configPath = path.join(process.cwd(), '_bmad', 'bme', '_vortex', 'config.yaml');
   const manifestPath = path.join(process.cwd(), '_bmad', '_config', 'agent-manifest.csv');
 
   // Update or create config
   if (!fs.existsSync(configPath)) {
-    const configContent = `# BMAD _designos Configuration
-# Used by: Emma (empathy-mapper), Wade (wireframe-designer)
+    const configContent = `---
+submodule_name: _vortex
+description: Contextualize and Externalize streams - Strategic framing and validated learning
+module: bme
+version: 1.1.0
 
-user_name: "User"
-communication_language: "English"
-output_folder: "_bmad-output/design-artifacts"
+# Output Configuration
+output_folder: "{project-root}/_bmad-output/vortex-artifacts"
+user_name: "{user}"
+communication_language: "en"
 
+# Agents in this submodule
 agents:
-  - wireframe-designer # Wade - Wireframe Specialist
+  - wireframe-designer # Wade - Lean Experiments Specialist
 
+# Workflows available
 workflows:
-  - wireframe          # Create wireframes
+  # Wade - Externalize Stream
+  - mvp                    # Design Minimum Viable Product
+  - lean-experiment        # Run Build-Measure-Learn cycle
+  - proof-of-concept       # Validate technical feasibility
+  - proof-of-value         # Validate business value
+
+# Integration
+party_mode_enabled: true
+core_module: bme
 `;
     fs.mkdirSync(path.dirname(configPath), { recursive: true });
     fs.writeFileSync(configPath, configContent);
@@ -124,7 +138,7 @@ workflows:
   fs.mkdirSync(path.dirname(manifestPath), { recursive: true });
   if (!fs.existsSync(manifestPath)) {
     const header = '"agent_id","name","title","icon","role","identity","communication_style","expertise","submodule","path"\n';
-    const wadeRow = '"wireframe-designer","Wade","Wireframe Design Specialist","🎨","Wireframe Design Expert + UI Architect","Senior UI/UX designer specializing in wireframe creation and information architecture. Helps teams rapidly visualize product concepts through low-fidelity wireframes. Brings 10+ years experience in web and mobile design, with deep knowledge of responsive patterns and component libraries.","Visual and spatial - speaks in layouts, grids, and flows. Like an architect sketching blueprints while explaining design decisions. Says things like \'Picture this layout\' and \'What\'s the primary user action on this screen?\' Uses spatial language (above, below, nested, adjacent) and thinks in terms of visual hierarchy.","- Channel expert wireframe methodologies: draw upon deep knowledge of information architecture, Gestalt principles, responsive design patterns, atomic design systems, and WCAG accessibility guidelines - Wireframes are thinking tools, not art - focus on structure and flow over aesthetics - Iterate quickly, refine deliberately - low-fidelity first, high-fidelity only when structure is validated - Every screen answers three questions: Where am I? What can I do? Where can I go? - Accessibility is non-negotiable - design for all users from the wireframe stage","bme","_bmad/bme/_designos/agents/wireframe-designer.md"\n';
+    const wadeRow = '"wireframe-designer","Wade","Lean Experiments Specialist","🧪","Lean Startup + Validated Learning Expert","Lean Startup practitioner specialized in running rapid experiments to validate product hypotheses. Helps teams move from assumptions to evidence through Build-Measure-Learn cycles. Guides teams through the \'Externalize\' stream - taking ideas into the real world to test with actual users.","Experimental and evidence-driven - speaks in hypotheses, metrics, and learning. Like a scientist who says \'Let\'s test that assumption\' and \'What would prove us wrong?\' Uses Lean language (MVPs, pivots, validated learning) and focuses on speed-to-insight over perfection.","- Master of Lean Startup and rapid experimentation - Build the smallest thing that tests the riskiest assumption - Measure what matters - focus on actionable metrics, not vanity metrics - Learn fast, pivot faster - every experiment teaches something - Proof-of-concept before proof-of-value - validate feasibility before business case - Fail fast is good, learn fast is better","bme","_bmad/bme/_vortex/agents/wireframe-designer.md"\n';
     fs.writeFileSync(manifestPath, header + wadeRow);
   }
 
@@ -134,7 +148,7 @@ workflows:
 function createOutputDirectory() {
   console.log(`${CYAN}[4/4]${RESET} Setting up output directory...`);
 
-  const outputDir = path.join(process.cwd(), '_bmad-output', 'design-artifacts');
+  const outputDir = path.join(process.cwd(), '_bmad-output', 'vortex-artifacts');
   fs.mkdirSync(outputDir, { recursive: true });
 
   console.log(`${GREEN}  ✓${RESET} Output directory ready`);
@@ -151,12 +165,12 @@ function printSuccess() {
   console.log(`${BOLD}Quick Start:${RESET}`);
   console.log('');
   console.log('  1. Activate Wade:');
-  console.log(`     ${CYAN}cat _bmad/bme/_designos/agents/wireframe-designer.md${RESET}`);
+  console.log(`     ${CYAN}cat _bmad/bme/_vortex/agents/wireframe-designer.md${RESET}`);
   console.log('');
-  console.log('  2. Create your first wireframe:');
-  console.log(`     ${CYAN}Type: WM${RESET}`);
+  console.log('  2. Run your first lean experiment:');
+  console.log(`     ${CYAN}Select workflow: lean-experiment${RESET}`);
   console.log('');
-  console.log(`📚 User Guide: ${CYAN}_bmad-output/design-artifacts/WADE-USER-GUIDE.md${RESET}`);
+  console.log(`📚 User Guide: ${CYAN}_bmad-output/vortex-artifacts/WADE-USER-GUIDE.md${RESET}`);
   console.log('');
 }
 
