@@ -64,7 +64,7 @@ Runs automatically after `npm install` to display installation instructions.
 ## Installation Flow
 
 ```
-npm install bmad-enhanced
+npm install bmad-enhanced@alpha
        ↓
 postinstall.js runs
        ↓
@@ -190,5 +190,5 @@ To add a new agent installer:
 
 ---
 
-**Version:** 1.0.0-alpha
-**Last Updated:** 2026-02-15
+**Version:** 1.0.3-alpha
+**Last Updated:** 2026-02-16
