@@ -7,6 +7,196 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [1.3.0] - 2026-02-17
+
+### Major Release: Automatic Update/Migration System
+
+This release introduces a comprehensive update/migration system that makes it safe and easy to upgrade BMAD-Enhanced from previous versions.
+
+### Added
+
+**🔄 Automatic Update System:**
+- **bmad-update** - Main update CLI with dry-run support
+  - Preview changes before applying: `npx bmad-update --dry-run`
+  - Interactive confirmation (or `--yes` to skip)
+  - Automatic backup before every migration
+  - Automatic rollback on failure
+  - Detailed progress indicators
+
+- **bmad-version** - Version information CLI
+  - Shows current vs. latest version
+  - Displays migration history
+  - Update availability status
+  - Example: `npx bmad-version`
+
+- **bmad-migrate** - Manual migration control (advanced users)
+  - Run specific migrations
+  - List available migrations
+  - Example: `npx bmad-migrate 1.1.x-to-1.2.0`
+
+**📦 Migration Framework:**
+- Version detector with fallback strategies
+- Backup manager with automatic cleanup (keeps last 5)
+- Config merger preserving user preferences
+- Migration registry with version matching
+- Installation validator with comprehensive checks
+- Migration runner with orchestration and error handling
+
+**🛡️ Data Safety:**
+- Automatic backups before every migration
+- Backup location: `_bmad-output/.backups/backup-{version}-{timestamp}/`
+- Automatic rollback if migration fails
+- Migration history tracking in config.yaml
+- Migration logs in `_bmad-output/.logs/`
+- Lock file prevents concurrent migrations
+
+**📋 Migrations Implemented:**
+- `1.1.x-to-1.2.0` - Minor update (no breaking changes)
+  - Updates version, refreshes agent files, verifies structure
+- `1.0.x-to-1.2.0` - Breaking change migration
+  - Moves empathy-map → _deprecated/
+  - Installs all 7 new workflows
+  - Updates config and agent manifest
+  - Preserves all user data
+
+**📚 Documentation:**
+- **UPDATE-GUIDE.md** - Comprehensive update documentation
+  - Quick update instructions
+  - Migration paths (v1.1.x and v1.0.x)
+  - Data safety guarantees
+  - Troubleshooting guide
+  - FAQs
+- **README.md** - Added update section
+  - Version checking
+  - Update commands
+  - Migration paths
+  - Troubleshooting
+- **CHANGELOG.md** - This entry!
+
+### Changed
+
+**🎨 Enhanced Postinstall Experience:**
+- Now detects upgrades automatically
+- Shows breaking changes warnings
+- Prompts to run `npx bmad-update`
+- Displays current → new version
+- Does NOT auto-migrate (requires user consent)
+
+**⚙️ Package.json:**
+- Added `js-yaml` dependency for config parsing
+- Added 3 new bin commands:
+  - `bmad-update`
+  - `bmad-version`
+  - `bmad-migrate`
+
+**📁 File Structure:**
+- New `scripts/update/` directory:
+  - `lib/` - Shared migration logic (6 modules)
+  - `migrations/` - Individual migration files + registry
+  - `bmad-update.js`, `bmad-version.js`, `bmad-migrate.js` - CLI commands
+
+### Migration Features
+
+**Preserved During Updates:**
+- All user data in `_bmad-output/` (except documentation guides)
+- User preferences (user_name, communication_language)
+- Custom config settings (output_folder, party_mode_enabled)
+- BMAD Method files (never touched)
+- Deprecated workflows (remain functional in `_deprecated/`)
+
+**Updated During Migrations:**
+- Agent definition files
+- Workflow files
+- Config.yaml (with preference preservation)
+- User guides (documentation)
+- Agent manifest
+
+**Version Tracking:**
+- New `migration_history` field in config.yaml
+- Tracks: timestamp, from_version, to_version, migrations_applied
+- Prevents re-running migrations
+- Useful for debugging and support
+
+### User Experience
+
+**Before Update:**
+```bash
+npm install bmad-enhanced@1.3.0
+# Postinstall shows:
+# ⚠ UPGRADE DETECTED
+# Current version: 1.1.0
+# New version: 1.3.0
+# Run: npx bmad-update --dry-run (to preview)
+```
+
+**Preview Changes:**
+```bash
+npx bmad-update --dry-run
+# Shows detailed preview of changes without applying
+```
+
+**Apply Update:**
+```bash
+npx bmad-update
+# [1/5] Creating backup...
+# [2/5] Running migrations...
+# [3/5] Updating configuration...
+# [4/5] Validating installation...
+# [5/5] Cleanup...
+# ✓ Migration completed successfully!
+```
+
+### Technical Implementation
+
+**Core Components:**
+- **version-detector.js** - Detects versions, determines migration path
+- **backup-manager.js** - Creates backups, handles rollback
+- **config-merger.js** - Smart YAML merging preserving user settings
+- **migration-runner.js** - Orchestrates migrations, handles errors
+- **validator.js** - Validates installation integrity
+- **registry.js** - Tracks available migrations
+
+**Migration Flow:**
+1. Detect current/target versions
+2. Get applicable migrations
+3. Create backup
+4. Execute migrations sequentially
+5. Update config and migration history
+6. Validate installation
+7. Cleanup old backups
+8. Create migration log
+
+**Error Handling:**
+- Automatic rollback on any failure
+- Detailed error logs
+- Migration lock prevents concurrent runs
+- Validation checks after migration
+
+### Backwards Compatibility
+
+- v1.1.x users: Smooth upgrade, no breaking changes
+- v1.0.x users: Breaking changes handled automatically
+- Fresh installs: Unaffected, install normally
+- Manual migration: Fallback instructions provided
+- All migrations preserve user data
+
+### Future-Proof
+
+- Extensible migration registry
+- Easy to add new migrations (just add to registry.js)
+- Supports chained migrations (e.g., 1.0 → 1.1 → 1.2 → 1.3)
+- Version range matching (1.0.x, 1.1.x patterns)
+
+### Notes
+
+- This is a MAJOR infrastructure release
+- Sets foundation for future seamless updates
+- Users on v1.0.x or v1.1.x can safely upgrade
+- Update system tested with comprehensive migration scenarios
+- v1.4.0+ updates will use this system for smooth upgrades
+
+---
+
 ## [1.2.0] - 2026-02-17
 
 ### Major Release: Complete Vortex Framework Implementation
