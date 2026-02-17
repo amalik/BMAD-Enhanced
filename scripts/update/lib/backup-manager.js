@@ -1,0 +1,279 @@
+#!/usr/bin/env node
+
+const fs = require('fs-extra');
+const path = require('path');
+
+/**
+ * Backup Manager for BMAD-Enhanced
+ * Creates backups before migrations and restores on failure
+ */
+
+/**
+ * Create a backup of critical installation files
+ * @param {string} version - Current version being backed up
+ * @returns {Promise<object>} Backup metadata
+ */
+async function createBackup(version) {
+  const timestamp = Date.now();
+  const backupDir = path.join(
+    process.cwd(),
+    '_bmad-output/.backups',
+    `backup-${version}-${timestamp}`
+  );
+
+  console.log(`Creating backup in: ${backupDir}`);
+
+  // Ensure backup directory exists
+  await ensureBackupDirectory();
+
+  // Create backup directory
+  await fs.ensureDir(backupDir);
+
+  const filesToBackup = getFilesToBackup();
+  const backedUpFiles = [];
+
+  // Copy each file/directory to backup
+  for (const file of filesToBackup) {
+    const sourcePath = path.join(process.cwd(), file.path);
+
+    if (!fs.existsSync(sourcePath)) {
+      console.log(`  Skipping ${file.path} (does not exist)`);
+      continue;
+    }
+
+    const destPath = path.join(backupDir, file.name);
+
+    try {
+      if (file.type === 'file') {
+        await fs.copy(sourcePath, destPath);
+      } else if (file.type === 'directory') {
+        await fs.copy(sourcePath, destPath);
+      }
+
+      backedUpFiles.push(file.path);
+      console.log(`  ✓ Backed up: ${file.path}`);
+    } catch (error) {
+      console.error(`  ✗ Failed to backup ${file.path}:`, error.message);
+      throw error;
+    }
+  }
+
+  // Count user data files (for integrity check)
+  const userDataCount = await countUserDataFiles();
+
+  // Create backup manifest
+  const manifest = {
+    version,
+    timestamp: new Date().toISOString(),
+    timestampMs: timestamp,
+    files_backed_up: backedUpFiles,
+    user_data_count: userDataCount,
+    backup_dir: backupDir
+  };
+
+  await fs.writeJson(path.join(backupDir, 'backup-manifest.json'), manifest, { spaces: 2 });
+
+  console.log(`  ✓ Backup manifest created`);
+  console.log(`  ✓ Backup complete: ${backedUpFiles.length} items backed up`);
+
+  return manifest;
+}
+
+/**
+ * Restore from backup after migration failure
+ * @param {object} backupMetadata - Metadata from createBackup
+ * @returns {Promise<void>}
+ */
+async function restoreBackup(backupMetadata) {
+  const backupDir = backupMetadata.backup_dir;
+
+  console.log('');
+  console.log(`Restoring from backup: ${backupDir}`);
+
+  if (!fs.existsSync(backupDir)) {
+    throw new Error(`Backup directory not found: ${backupDir}`);
+  }
+
+  const filesToRestore = getFilesToBackup();
+
+  for (const file of filesToRestore) {
+    const sourcePath = path.join(backupDir, file.name);
+
+    if (!fs.existsSync(sourcePath)) {
+      console.log(`  Skipping ${file.name} (not in backup)`);
+      continue;
+    }
+
+    const destPath = path.join(process.cwd(), file.path);
+
+    try {
+      // Remove existing file/directory first
+      if (fs.existsSync(destPath)) {
+        await fs.remove(destPath);
+      }
+
+      // Restore from backup
+      await fs.copy(sourcePath, destPath);
+      console.log(`  ✓ Restored: ${file.path}`);
+    } catch (error) {
+      console.error(`  ✗ Failed to restore ${file.path}:`, error.message);
+      throw error;
+    }
+  }
+
+  console.log(`  ✓ Restoration complete`);
+}
+
+/**
+ * List available backups
+ * @returns {Promise<Array>} List of backup metadata
+ */
+async function listBackups() {
+  const backupsDir = path.join(process.cwd(), '_bmad-output/.backups');
+
+  if (!fs.existsSync(backupsDir)) {
+    return [];
+  }
+
+  const entries = await fs.readdir(backupsDir);
+  const backups = [];
+
+  for (const entry of entries) {
+    const backupPath = path.join(backupsDir, entry);
+    const manifestPath = path.join(backupPath, 'backup-manifest.json');
+
+    if (fs.existsSync(manifestPath)) {
+      try {
+        const manifest = await fs.readJson(manifestPath);
+        backups.push(manifest);
+      } catch (error) {
+        console.warn(`Could not read manifest for ${entry}:`, error.message);
+      }
+    }
+  }
+
+  // Sort by timestamp (newest first)
+  backups.sort((a, b) => b.timestampMs - a.timestampMs);
+
+  return backups;
+}
+
+/**
+ * Clean up old backups, keeping only the most recent N
+ * @param {number} keepCount - Number of backups to keep
+ * @returns {Promise<number>} Number of backups deleted
+ */
+async function cleanupOldBackups(keepCount = 5) {
+  const backups = await listBackups();
+
+  if (backups.length <= keepCount) {
+    return 0; // Nothing to clean up
+  }
+
+  const toDelete = backups.slice(keepCount);
+  let deletedCount = 0;
+
+  for (const backup of toDelete) {
+    try {
+      await fs.remove(backup.backup_dir);
+      console.log(`  Deleted old backup: ${path.basename(backup.backup_dir)}`);
+      deletedCount++;
+    } catch (error) {
+      console.warn(`  Could not delete backup ${backup.backup_dir}:`, error.message);
+    }
+  }
+
+  return deletedCount;
+}
+
+/**
+ * Ensure backup directory exists
+ * @returns {Promise<void>}
+ */
+async function ensureBackupDirectory() {
+  const backupDir = path.join(process.cwd(), '_bmad-output/.backups');
+
+  if (!fs.existsSync(backupDir)) {
+    const outputDir = path.join(process.cwd(), '_bmad-output');
+
+    if (!fs.existsSync(outputDir)) {
+      throw new Error('_bmad-output directory not found. Is BMAD Method installed?');
+    }
+
+    await fs.ensureDir(backupDir);
+  }
+}
+
+/**
+ * Get list of files/directories to backup
+ * @returns {Array} List of file/directory definitions
+ */
+function getFilesToBackup() {
+  return [
+    {
+      name: 'config.yaml',
+      path: '_bmad/bme/_vortex/config.yaml',
+      type: 'file'
+    },
+    {
+      name: 'agents',
+      path: '_bmad/bme/_vortex/agents',
+      type: 'directory'
+    },
+    {
+      name: 'workflows',
+      path: '_bmad/bme/_vortex/workflows',
+      type: 'directory'
+    },
+    {
+      name: 'agent-manifest.csv',
+      path: '_bmad/_config/agent-manifest.csv',
+      type: 'file'
+    }
+  ];
+}
+
+/**
+ * Count user data files in _bmad-output (for integrity check)
+ * @returns {Promise<number>} Number of user files
+ */
+async function countUserDataFiles() {
+  const outputDir = path.join(process.cwd(), '_bmad-output');
+
+  if (!fs.existsSync(outputDir)) {
+    return 0;
+  }
+
+  let count = 0;
+
+  async function countRecursive(dir) {
+    const entries = await fs.readdir(dir, { withFileTypes: true });
+
+    for (const entry of entries) {
+      const fullPath = path.join(dir, entry.name);
+
+      // Skip .backups and .logs directories
+      if (entry.name === '.backups' || entry.name === '.logs') {
+        continue;
+      }
+
+      if (entry.isDirectory()) {
+        await countRecursive(fullPath);
+      } else if (entry.isFile()) {
+        count++;
+      }
+    }
+  }
+
+  await countRecursive(outputDir);
+  return count;
+}
+
+module.exports = {
+  createBackup,
+  restoreBackup,
+  listBackups,
+  cleanupOldBackups,
+  ensureBackupDirectory,
+  countUserDataFiles
+};
