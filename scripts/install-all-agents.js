@@ -65,8 +65,8 @@ function copyAllAgentFiles() {
 
   // Create target directory structure
   fs.mkdirSync(path.join(targetDir, 'agents'), { recursive: true });
-  fs.mkdirSync(path.join(targetDir, 'workflows', 'empathy-map', 'steps'), { recursive: true });
-  fs.mkdirSync(path.join(targetDir, 'workflows', 'wireframe', 'steps'), { recursive: true });
+  fs.mkdirSync(path.join(targetDir, 'workflows', '_deprecated', 'empathy-map', 'steps'), { recursive: true });
+  fs.mkdirSync(path.join(targetDir, 'workflows', '_deprecated', 'wireframe', 'steps'), { recursive: true });
 
   // Copy Emma agent file
   console.log(`${CYAN}  →${RESET} Installing Emma (contextualization-expert)...`);
@@ -89,8 +89,8 @@ function copyAllAgentFiles() {
 
   emmaWorkflowFiles.forEach(file => {
     fs.copyFileSync(
-      path.join(sourceDir, 'workflows', 'empathy-map', file),
-      path.join(targetDir, 'workflows', 'empathy-map', file)
+      path.join(sourceDir, 'workflows', '_deprecated', 'empathy-map', file),
+      path.join(targetDir, 'workflows', '_deprecated', 'empathy-map', file)
     );
   });
 
@@ -117,8 +117,8 @@ function copyAllAgentFiles() {
 
   wadeWorkflowFiles.forEach(file => {
     fs.copyFileSync(
-      path.join(sourceDir, 'workflows', 'wireframe', file),
-      path.join(targetDir, 'workflows', 'wireframe', file)
+      path.join(sourceDir, 'workflows', '_deprecated', 'wireframe', file),
+      path.join(targetDir, 'workflows', '_deprecated', 'wireframe', file)
     );
   });
 
@@ -136,7 +136,7 @@ function updateConfig() {
 submodule_name: _vortex
 description: Contextualize and Externalize streams - Strategic framing and validated learning
 module: bme
-version: 1.1.0
+version: 1.2.0
 
 # Output Configuration
 output_folder: "{project-root}/_bmad-output/vortex-artifacts"
@@ -194,8 +194,8 @@ function verifyInstallation() {
   const checks = [
     { path: '_bmad/bme/_vortex/agents/contextualization-expert.md', name: 'Emma agent file' },
     { path: '_bmad/bme/_vortex/agents/lean-experiments-specialist.md', name: 'Wade agent file' },
-    { path: '_bmad/bme/_vortex/workflows/empathy-map/workflow.md', name: 'Emma workflow' },
-    { path: '_bmad/bme/_vortex/workflows/wireframe/workflow.md', name: 'Wade workflow' },
+    { path: '_bmad/bme/_vortex/workflows/_deprecated/empathy-map/workflow.md', name: 'Emma workflow (legacy)' },
+    { path: '_bmad/bme/_vortex/workflows/_deprecated/wireframe/workflow.md', name: 'Wade workflow (legacy)' },
     { path: '_bmad/bme/_vortex/config.yaml', name: 'Configuration file' },
   ];
 
