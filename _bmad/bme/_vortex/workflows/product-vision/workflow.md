@@ -1,69 +1,55 @@
-# Product Vision Workflow
+---
+workflow: product-vision
+type: step-file
+description: Define product vision and strategic alignment before building
+author: Emma (contextualization-expert)
+version: 1.2.0
+---
 
-**Status:** Coming in v1.2.0
+# Create Product Vision Workflow
 
-**Agent:** Emma (Contextualization Expert)
+This workflow guides you through defining a clear, compelling product vision that aligns your team around the "why" before you build the "what."
 
-**Stream:** Contextualize
+## What is a Product Vision?
 
-## Overview
+A product vision is a strategic statement that articulates:
+- **Why this product should exist** - The problem it solves and impact it creates
+- **Who it's for** - The specific users/market it serves
+- **What makes it different** - The unique approach or advantage
+- **Where it's headed** - The long-term direction (3-5 years)
 
-This workflow helps you define a clear, compelling product vision that aligns your team around the "why" before diving into the "what" or "how."
+A good product vision:
+- **Inspires** - Gets people excited to build it
+- **Focuses** - Helps say "no" to distractions
+- **Aligns** - Ensures everyone is rowing in the same direction
+- **Guides decisions** - When in doubt, does this serve the vision?
 
-## What You'll Create
+## Workflow Structure
 
-A product vision artifact that captures:
-- Vision statement (the future you're creating)
-- Problem statement (what's broken today)
-- Target users and their jobs-to-be-done
-- Success metrics (how you'll know you've succeeded)
-- Strategic assumptions (what must be true for this to work)
+**Step-file architecture:**
+- Just-in-time loading (each step loads only when needed)
+- Sequential enforcement (must complete step N before step N+1)
+- State tracking in frontmatter (progress preserved)
 
-## Workflow Steps
+## Steps Overview
 
-This workflow will guide you through 5 steps:
+1. **Define the Problem** - What problem are we solving? Why does it matter?
+2. **Identify Target Market** - Who specifically are we serving?
+3. **Articulate Unique Approach** - What makes our solution different/better?
+4. **Envision Future State** - What does success look like in 3-5 years?
+5. **Align on Principles** - What won't we compromise on?
+6. **Synthesize** - Create the final product vision document
 
-1. **Envision the Future** - What world are you trying to create?
-2. **Define the Problem** - What's preventing that future today?
-3. **Identify Target Users** - Who experiences this problem most acutely?
-4. **Define Success** - What metrics prove you've achieved the vision?
-5. **Map Assumptions** - What assumptions underpin this vision?
+## Output
 
-## Coming Soon
+**Artifact:** Product vision document in `{output_folder}/product-vision-{product-name}-{date}.md`
 
-This workflow is currently in development and will be available in BMAD-Enhanced v1.2.0 (planned for March 2026).
+**Template:** Uses [product-vision.template.md](product-vision.template.md)
 
-### What's Being Built
+---
 
-- Step-by-step guided workflow
-- Vision canvas template
-- Alignment exercises for team workshops
-- Integration with contextualize-scope workflow
-- Sample product visions for reference
+## INITIALIZATION
 
-### Why Wait?
+Load config from {project-root}/_bmad/bme/_vortex/config.yaml
 
-We're building a comprehensive strategic framing toolkit that includes:
-- Vision definition (this workflow)
-- Persona creation (lean-persona)
-- Scope decision-making (contextualize-scope)
-
-These workflows need to work together seamlessly, which requires careful design and testing.
-
-## Temporary Alternative
-
-While waiting for v1.2.0, you can use Emma's chat mode to draft product visions:
-
-```bash
-# Activate Emma
-cat _bmad/bme/_vortex/agents/contextualization-expert.md
-
-# Select chat mode and ask:
-"Help me define a product vision for [your product idea]"
-```
-
-## Questions?
-
-For questions or to request early access:
-- GitHub Issues: https://github.com/amalik/BMAD-Enhanced/issues
-- Tag with: `workflow:product-vision` and `v1.2.0`
+Load step: {project-root}/_bmad/bme/_vortex/workflows/product-vision/steps/step-01-define-problem.md
