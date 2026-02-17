@@ -53,7 +53,7 @@ function copyAgentFiles() {
 
   // Create target directory structure
   fs.mkdirSync(path.join(targetDir, 'agents'), { recursive: true });
-  fs.mkdirSync(path.join(targetDir, 'workflows', 'wireframe', 'steps'), { recursive: true });
+  fs.mkdirSync(path.join(targetDir, 'workflows', '_deprecated', 'wireframe', 'steps'), { recursive: true });
 
   // Copy Wade agent file
   fs.copyFileSync(
@@ -75,8 +75,8 @@ function copyAgentFiles() {
 
   workflowFiles.forEach(file => {
     fs.copyFileSync(
-      path.join(sourceDir, 'workflows', 'wireframe', file),
-      path.join(targetDir, 'workflows', 'wireframe', file)
+      path.join(sourceDir, 'workflows', '_deprecated', 'wireframe', file),
+      path.join(targetDir, 'workflows', '_deprecated', 'wireframe', file)
     );
   });
 
@@ -95,7 +95,7 @@ function updateConfig() {
 submodule_name: _vortex
 description: Contextualize and Externalize streams - Strategic framing and validated learning
 module: bme
-version: 1.1.0
+version: 1.2.0
 
 # Output Configuration
 output_folder: "{project-root}/_bmad-output/vortex-artifacts"
