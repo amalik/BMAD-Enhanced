@@ -4,8 +4,8 @@
 
 > Strategic framing and validated learning through Emma and Wade
 
-[![Status](https://img.shields.io/badge/status-v1.2.0--complete-success)]()
-[![Version](https://img.shields.io/badge/version-1.2.0-blue)]()
+[![Status](https://img.shields.io/badge/status-v1.3.0--complete-success)]()
+[![Version](https://img.shields.io/badge/version-1.3.0-blue)]()
 [![Workflows](https://img.shields.io/badge/workflows-7_implemented-success)]()
 [![Emma](https://img.shields.io/badge/emma-3_workflows-brightgreen)]()
 [![Wade](https://img.shields.io/badge/wade-4_workflows-brightgreen)]()
@@ -63,7 +63,7 @@ npx bmad-method@alpha install
 Once BMAD Method is installed:
 
 ```bash
-npm install bmad-enhanced@1.2.0 && npx bmad-install-agents
+npm install bmad-enhanced@1.3.0 && npx bmad-install-agents
 ```
 
 That's it! Emma and Wade (Vortex framework) with all 7 workflows are now added to your BMAD installation.
@@ -74,7 +74,7 @@ That's it! Emma and Wade (Vortex framework) with all 7 workflows are now added t
 
 ```bash
 # Install into your project
-npm install bmad-enhanced@1.2.0
+npm install bmad-enhanced@1.3.0
 
 # Install all agents (Emma + Wade) with all 7 workflows
 npx bmad-install-agents
@@ -159,6 +159,85 @@ Wade will guide you through validated learning with 4 workflows:
   - Test "Should we build it?" (business case)
   - Willingness to pay and market demand experiments
   - Output: Business case and build/pivot/kill decision
+
+---
+
+## 🔄 Updating BMAD-Enhanced
+
+### Check Version
+
+```bash
+npx bmad-version
+```
+
+**Output shows:**
+- Current installed version
+- Latest package version
+- Update availability status
+- Migration history
+
+### Update to Latest Version
+
+```bash
+# Update the package
+npm install bmad-enhanced@latest
+
+# Preview changes (dry run)
+npx bmad-update --dry-run
+
+# Apply the update
+npx bmad-update
+```
+
+**Your data is automatically backed up before any changes.**
+
+### Update Commands
+
+- `npx bmad-update` - Apply updates and migrations
+- `npx bmad-update --dry-run` - Preview changes without applying
+- `npx bmad-update --yes` - Skip confirmation prompt
+- `npx bmad-version` - Show current version and status
+
+### Data Safety
+
+**Automatic backups before every update:**
+- Location: `_bmad-output/.backups/backup-{version}-{timestamp}/`
+- Automatic rollback if migration fails
+- Keeps last 5 backups
+
+**Never touched:**
+- All user data in `_bmad-output/`
+- User preferences (name, language)
+- Custom configurations
+
+### Migration Paths
+
+**From v1.1.x to v1.3.0:**
+- No breaking changes
+- Agent files refreshed (bug fixes)
+- User guides updated
+
+**From v1.0.x to v1.3.0:**
+- ⚠️ Breaking: empathy-map → lean-persona
+- Old workflows preserved in `_deprecated/`
+- 7 new workflows installed
+
+### Troubleshooting
+
+If update fails:
+
+```bash
+# Check migration logs
+ls _bmad-output/.logs/
+
+# Restore from backup
+cp -r _bmad-output/.backups/backup-{version}-{timestamp}/* _bmad/bme/_vortex/
+
+# Reinstall (preserves user data)
+npx bmad-install-agents
+```
+
+**📖 See [UPDATE-GUIDE.md](UPDATE-GUIDE.md) for comprehensive update documentation**
 
 ---
 
