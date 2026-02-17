@@ -1,69 +1,36 @@
-# MVP (Minimum Viable Product) Workflow
+---
+workflow: mvp
+type: step-file
+description: Design Minimum Viable Product specifications using Build-Measure-Learn
+author: Wade (lean-experiments-specialist)
+version: 1.2.0
+---
 
-**Status:** Coming in v1.2.0
+# Design MVP Workflow
 
-**Agent:** Wade (Lean Experiments Specialist)
+This workflow guides you through designing a Minimum Viable Product that tests your riskiest assumptions.
 
-**Stream:** Externalize
+## What is an MVP?
 
-## Overview
+An MVP is NOT a feature-light product. It's the smallest thing that tests your riskiest assumption and enables validated learning.
 
-This workflow helps you design a Minimum Viable Product that tests your riskiest assumptions with the minimum amount of effort.
+## Steps Overview
 
-## What You'll Create
+1. **Identify Riskiest Assumption** - What could kill this idea?
+2. **Define Success Criteria** - How will you know if it worked?
+3. **Design Smallest Test** - What's the minimum to test the assumption?
+4. **Scope MVP Features** - What's absolutely necessary?
+5. **Plan Build-Measure-Learn** - How will you learn?
+6. **Synthesize** - Create MVP specification document
 
-An MVP specification artifact that captures:
-- Core value proposition being tested
-- Riskiest assumptions to validate
-- MVP feature set (what's in, what's out)
-- Success metrics and validation criteria
-- Build plan and timeline
+## Output
 
-## Workflow Steps
+**Artifact:** MVP spec in `{output_folder}/mvp-spec-{mvp-name}-{date}.md`
 
-This workflow will guide you through 6 steps:
+---
 
-1. **Define Value Proposition** - What core value are you testing?
-2. **Identify Risky Assumptions** - What must be true for this to work?
-3. **Design MVP Scope** - What's the minimum to test those assumptions?
-4. **Define Success Metrics** - How will you know if it worked?
-5. **Plan Build** - What's the fastest path to testing?
-6. **Document Learnings** - What did you expect to learn?
+## INITIALIZATION
 
-## Coming Soon
+Load config from {project-root}/_bmad/bme/_vortex/config.yaml
 
-This workflow is currently in development and will be available in BMAD-Enhanced v1.2.0 (planned for March 2026).
-
-### What's Being Built
-
-- Step-by-step guided workflow
-- MVP canvas template
-- Feature prioritization framework
-- Integration with lean-experiment workflow
-- Sample MVPs for reference
-
-### Why Wait?
-
-We're repositioning Wade from wireframe design to lean experimentation. This requires:
-- New step files aligned with Build-Measure-Learn principles
-- Templates focused on assumption testing
-- Integration with proof-of-concept and proof-of-value workflows
-- Testing and documentation
-
-## Temporary Alternative
-
-While waiting for v1.2.0, you can use Wade's chat mode to design MVPs:
-
-```bash
-# Activate Wade
-cat _bmad/bme/_vortex/agents/lean-experiments-specialist.md
-
-# Select chat mode and ask:
-"Help me design an MVP to test [your riskiest assumption]"
-```
-
-## Questions?
-
-For questions or to request early access:
-- GitHub Issues: https://github.com/amalik/BMAD-Enhanced/issues
-- Tag with: `workflow:mvp` and `v1.2.0`
+Load step: {project-root}/_bmad/bme/_vortex/workflows/mvp/steps/step-01-riskiest-assumption.md
