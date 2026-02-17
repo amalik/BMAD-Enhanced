@@ -7,6 +7,98 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [1.2.0] - 2026-02-17
+
+### Major Release: Complete Vortex Framework Implementation
+
+This release completes the Vortex Framework by implementing all 7 new Lean Startup workflows, updating documentation, and cleaning up deprecated workflows.
+
+### Added
+
+**🎯 Emma's Contextualize Stream Workflows (3 workflows):**
+- **lean-persona** - Create lean user personas focused on jobs-to-be-done (not demographics)
+  - 6-step workflow from job definition through validation planning
+  - Hypothesis-driven approach with riskiest assumptions identified
+  - Integrates with Wade's lean-experiment workflow
+
+- **product-vision** - Define strategic product vision and alignment
+  - 6-step workflow from problem definition through synthesis
+  - Vision statement formula, future state (3-5 years), guiding principles
+  - Strategic assumptions identification and validation planning
+
+- **contextualize-scope** - Decide which problem space to investigate
+  - 6-step workflow using systematic opportunity evaluation
+  - Scoring matrix with weighted criteria
+  - Clear scope boundaries (what's in, what's out)
+
+**🧪 Wade's Externalize Stream Workflows (4 workflows):**
+- **mvp** - Design Minimum Viable Product specifications
+  - Focus on testing riskiest assumptions, not building feature-light products
+  - Build-Measure-Learn cycle planning
+  - Success criteria and MVP scope definition
+
+- **lean-experiment** - Execute Build-Measure-Learn cycles
+  - Hypothesis-driven experimentation framework
+  - Metrics definition and experiment design
+  - Pivot or persevere decision framework
+
+- **proof-of-concept** - Validate technical feasibility
+  - Test that you CAN build it before validating you SHOULD
+  - Technical risk assessment and PoC scoping
+  - Feasibility evaluation and findings documentation
+
+- **proof-of-value** - Validate business value and market demand
+  - Test that you SHOULD build it (business case)
+  - Willingness to pay experiments
+  - Business case calculation and build/pivot/kill decisions
+
+**📚 Documentation Updates:**
+- **Emma User Guide v1.2.0** - Updated to reflect Contextualization Expert role
+  - Focuses on Lean Startup methodologies and strategic framing
+  - Documents legacy empathy-map workflow (still functional)
+  - Documents all 3 new Contextualize stream workflows
+  - Location: `_bmad-output/vortex-artifacts/EMMA-USER-GUIDE.md`
+
+- **Wade User Guide v1.2.0** - Updated to reflect Lean Experiments Specialist role
+  - Focuses on Build-Measure-Learn cycles and validated learning
+  - Documents legacy wireframe workflow (still functional)
+  - Documents all 4 new Externalize stream workflows
+  - Location: `_bmad-output/vortex-artifacts/WADE-USER-GUIDE.md`
+
+### Changed
+- User guides moved from `design-artifacts/` to `vortex-artifacts/`
+- Deprecated workflows archived to `_bmad/bme/_vortex/workflows/_deprecated/`
+  - `empathy-map/` moved to `_deprecated/empathy-map/` (still functional)
+  - `wireframe/` moved to `_deprecated/wireframe/` (still functional)
+- Installer scripts updated to reference deprecated workflow locations
+- Config.yaml version bumped to 1.2.0
+- All installer scripts now install user guides from vortex-artifacts location
+
+### Documentation
+- Emma positioned as Lean Startup expert (not design thinking)
+- Wade positioned as experimentation specialist (not wireframe designer)
+- Comprehensive migration guides added to both user guides
+- Roadmap section added documenting v1.3.0 and v1.4.0+ plans
+
+### Backwards Compatibility
+- Legacy workflows (empathy-map, wireframe) remain functional
+- Old artifacts from v1.0.x-v1.1.x continue to work
+- Migration path documented for users on previous versions
+
+### Technical Details
+- **Total files created:** 56 workflow files (7 workflows × 8 files each)
+- **Workflow architecture:** Step-file based with just-in-time loading
+- **Output templates:** Markdown-based artifact templates for each workflow
+- **Integration:** Workflows reference each other (e.g., lean-persona → mvp → lean-experiment)
+
+### Notes
+- All 7 Vortex workflows now fully implemented and ready to use
+- Legacy workflows (empathy-map, wireframe) remain in `_deprecated/` for backwards compatibility
+- Update/migration tooling planned for v1.3.0
+- This is a MAJOR feature release, not just documentation cleanup
+
+---
+
 ## [1.1.3] - 2026-02-17
 
 ### Fixed
