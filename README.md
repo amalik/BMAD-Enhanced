@@ -4,10 +4,11 @@
 
 > Strategic framing and validated learning through Emma and Wade
 
-[![Status](https://img.shields.io/badge/status-v1.1.0--repositioned-green)]()
-[![Version](https://img.shields.io/badge/version-1.1.0-blue)]()
-[![Emma](https://img.shields.io/badge/emma-contextualization_expert-brightgreen)]()
-[![Wade](https://img.shields.io/badge/wade-lean_experiments_specialist-brightgreen)]()
+[![Status](https://img.shields.io/badge/status-v1.2.0--complete-success)]()
+[![Version](https://img.shields.io/badge/version-1.2.0-blue)]()
+[![Workflows](https://img.shields.io/badge/workflows-7_implemented-success)]()
+[![Emma](https://img.shields.io/badge/emma-3_workflows-brightgreen)]()
+[![Wade](https://img.shields.io/badge/wade-4_workflows-brightgreen)]()
 [![License](https://img.shields.io/badge/license-MIT-blue)]()
 
 ---
@@ -62,10 +63,10 @@ npx bmad-method@alpha install
 Once BMAD Method is installed:
 
 ```bash
-npm install bmad-enhanced@1.1.0 && npx bmad-install-agents
+npm install bmad-enhanced@1.2.0 && npx bmad-install-agents
 ```
 
-That's it! Emma and Wade (Vortex framework) are now added to your BMAD installation.
+That's it! Emma and Wade (Vortex framework) with all 7 workflows are now added to your BMAD installation.
 
 ### Installation
 
@@ -73,14 +74,14 @@ That's it! Emma and Wade (Vortex framework) are now added to your BMAD installat
 
 ```bash
 # Install into your project
-npm install bmad-enhanced@1.1.0
+npm install bmad-enhanced@1.2.0
 
-# Install all agents (Emma + Wade)
+# Install all agents (Emma + Wade) with all 7 workflows
 npx bmad-install-agents
 
 # Or install individually
-npx bmad-install-emma    # Install Emma (Contextualization Expert)
-npx bmad-install-wade    # Install Wade (Lean Experiments Specialist)
+npx bmad-install-emma    # Install Emma (3 Contextualize workflows)
+npx bmad-install-wade    # Install Wade (4 Externalize workflows)
 ```
 
 **Option 2: Clone from source**
@@ -99,10 +100,12 @@ cat _bmad/bme/_vortex/agents/contextualization-expert.md
 
 **What gets installed:**
 - Agent definition files (`_bmad/bme/_vortex/agents/`)
-- Workflow files (7 workflows: lean-persona, product-vision, contextualize-scope, mvp, lean-experiment, proof-of-concept, proof-of-value)
+- **7 complete workflows** (56 files):
+  - Emma: lean-persona, product-vision, contextualize-scope
+  - Wade: mvp, lean-experiment, proof-of-concept, proof-of-value
 - Configuration file (`_bmad/bme/_vortex/config.yaml`)
 - Output directory (`_bmad-output/vortex-artifacts/`)
-- User guides (coming in v1.2.0)
+- User guides (Emma & Wade v1.2.0)
 
 ### Your First Lean Persona with Emma
 
@@ -111,12 +114,22 @@ cat _bmad/bme/_vortex/agents/contextualization-expert.md
 cat _bmad/bme/_vortex/agents/contextualization-expert.md
 ```
 
-Emma will guide you through strategic contextualization:
-- **Lean Persona:** Jobs-to-be-done focused user personas (coming in v1.2.0)
-- **Product Vision:** Align team around the "why" before the "what" (coming in v1.2.0)
-- **Contextualize Scope:** Decide which problem space to investigate (coming in v1.2.0)
+Emma will guide you through strategic contextualization with 3 workflows:
 
-**Current Status:** Workflows coming in v1.2.0. Use Emma's chat mode for strategic framing guidance.
+- **[LP] Lean Persona** - Create jobs-to-be-done focused user personas
+  - 6-step guided workflow
+  - Hypothesis-driven with validation planning
+  - Output: Lean persona document with riskiest assumptions identified
+
+- **[PV] Product Vision** - Define strategic product vision
+  - Vision statement, future state (3-5 years), guiding principles
+  - Strategic assumptions and validation plan
+  - Output: Complete product vision document
+
+- **[CS] Contextualize Scope** - Decide which problem space to investigate
+  - Systematic opportunity evaluation with scoring matrix
+  - Clear scope boundaries (what's in, what's out)
+  - Output: Scope decision document with rationale
 
 ### Your First Lean Experiment with Wade
 
@@ -125,13 +138,27 @@ Emma will guide you through strategic contextualization:
 cat _bmad/bme/_vortex/agents/lean-experiments-specialist.md
 ```
 
-Wade will guide you through validated learning:
-- **MVP:** Design Minimum Viable Product to test riskiest assumptions (coming in v1.2.0)
-- **Lean Experiment:** Run Build-Measure-Learn cycles (coming in v1.2.0)
-- **Proof-of-Concept:** Validate technical feasibility (coming in v1.2.0)
-- **Proof-of-Value:** Validate business value (coming in v1.2.0)
+Wade will guide you through validated learning with 4 workflows:
 
-**Current Status:** Workflows coming in v1.2.0. Use Wade's chat mode for experiment design guidance.
+- **[MVP] Minimum Viable Product** - Design MVPs to test riskiest assumptions
+  - Not feature-light products - smallest thing to test assumptions
+  - Build-Measure-Learn cycle planning
+  - Output: MVP specification document
+
+- **[LE] Lean Experiment** - Execute Build-Measure-Learn cycles
+  - Hypothesis-driven experimentation framework
+  - Metrics definition and pivot-or-persevere decisions
+  - Output: Experiment results and learning documentation
+
+- **[POC] Proof-of-Concept** - Validate technical feasibility
+  - Test "Can we build it?" before "Should we build it?"
+  - Technical risk assessment and PoC scoping
+  - Output: Feasibility evaluation document
+
+- **[POV] Proof-of-Value** - Validate business value
+  - Test "Should we build it?" (business case)
+  - Willingness to pay and market demand experiments
+  - Output: Business case and build/pivot/kill decision
 
 ---
 
@@ -155,82 +182,85 @@ All agents built using a standard pattern:
 
 ## 🚀 Agents
 
-### Emma (contextualization-expert) - ✅ REPOSITIONED
+### Emma (contextualization-expert) - ✅ COMPLETE
 
-**Status:** Repositioned in v1.1.0 - Workflows coming in v1.2.0
+**Status:** v1.2.0 - All 3 workflows implemented and ready to use
 **Title:** Contextualization Expert 🎯
 **Stream:** Contextualize
 **Domain:** Strategic framing, problem-product space navigation
 
-**New Workflows (v1.2.0):**
-- **Lean Persona:** Create jobs-to-be-done focused personas
-- **Product Vision:** Define clear product vision and strategic direction
-- **Contextualize Scope:** Decide which problem space to investigate
+**Workflows Available Now:**
+- **lean-persona** - Create jobs-to-be-done focused personas (6 steps)
+- **product-vision** - Define clear product vision and strategic direction (6 steps)
+- **contextualize-scope** - Decide which problem space to investigate (6 steps)
 
 **Key Positioning:**
 - Helps teams frame the right problem before building solutions
 - Focus on Lean Startup methodologies and validated assumptions
 - Guides teams through strategic clarity before tactical execution
+- Hypothesis-driven with built-in validation planning
 
 **Differentiation:**
 - **Emma vs Maya:** Emma contextualizes (problem space), Maya creates (solution space)
 - Emma answers "What should we solve?" before Maya answers "How should we solve it?"
 
-**Current Status:** Chat mode available for strategic guidance. Workflows coming March 2026.
+**Output:** Lean personas, product visions, and scope decisions in `_bmad-output/vortex-artifacts/`
 
 ---
 
-### Wade (lean-experiments-specialist) - ✅ REPOSITIONED
+### Wade (lean-experiments-specialist) - ✅ COMPLETE
 
-**Status:** Repositioned in v1.1.0 - Workflows coming in v1.2.0
+**Status:** v1.2.0 - All 4 workflows implemented and ready to use
 **Title:** Lean Experiments Specialist 🧪
 **Stream:** Externalize
 **Domain:** Lean Startup experimentation, validated learning
 
-**New Workflows (v1.2.0):**
-- **MVP:** Design Minimum Viable Product to test riskiest assumptions
-- **Lean Experiment:** Run Build-Measure-Learn cycles
-- **Proof-of-Concept:** Validate technical feasibility
-- **Proof-of-Value:** Validate business value
+**Workflows Available Now:**
+- **mvp** - Design Minimum Viable Product to test riskiest assumptions (6 steps)
+- **lean-experiment** - Run Build-Measure-Learn cycles (6 steps)
+- **proof-of-concept** - Validate technical feasibility (6 steps)
+- **proof-of-value** - Validate business value (6 steps)
 
 **Key Positioning:**
 - Helps teams test assumptions with real users through rapid experiments
 - Focus on validated learning over perfection
 - Guides teams from hypotheses to evidence
+- Build-Measure-Learn cycles with pivot-or-persevere decisions
 
 **Differentiation:**
 - **Wade vs Sally:** Wade externalizes (test with users), Sally internalizes (test with code)
 - Wade answers "Should we build this?" before Sally answers "How do we build this well?"
 
-**Current Status:** Chat mode available for experiment design. Workflows coming March 2026.
+**Output:** MVP specs, experiment results, PoC/PoV evaluations in `_bmad-output/vortex-artifacts/`
 
 ---
 
 ## 📊 Project Status
 
-**Current Version:** v1.1.0 - Vortex Framework Repositioning
+**Current Version:** v1.2.0 - Complete Vortex Framework Implementation ✅
 
 **Progress:**
-- ✅ Emma - REPOSITIONED to Contextualization Expert (v1.1.0)
-- ✅ Wade - REPOSITIONED to Lean Experiments Specialist (v1.1.0)
-- 📋 New workflows - Coming in v1.2.0 (March 2026)
+- ✅ Emma - 3 Contextualize workflows IMPLEMENTED (v1.2.0)
+- ✅ Wade - 4 Externalize workflows IMPLEMENTED (v1.2.0)
+- ✅ 56 workflow files created (7 workflows × 8 files each)
+- ✅ User guides updated to v1.2.0
 
-**What Changed in v1.1.0:**
-- Module renamed: `_designos` → `_vortex`
-- Emma: Empathy Mapping → Strategic Framing & Contextualization
-- Wade: Wireframe Design → Lean Experiments & Validated Learning
-- 7 new workflows defined (implementation in v1.2.0)
+**What's New in v1.2.0:**
+- **7 complete workflows** - lean-persona, product-vision, contextualize-scope (Emma) + mvp, lean-experiment, proof-of-concept, proof-of-value (Wade)
+- **Lean Startup methodology** - Hypothesis-driven, Build-Measure-Learn cycles
+- **Updated documentation** - Emma & Wade user guides v1.2.0
+- **Deprecated workflows archived** - empathy-map and wireframe moved to `_deprecated/` (still functional)
 
 **Roadmap:**
 ```
-v1.1.0               v1.2.0              v2.0.0
-├─────────────────┬──────────────────┬──────────────────┤
-│ Repositioning ✅ │  Workflows 📋    │  Advanced 📋     │
-│ • New identity  │  • 7 workflows   │  • Multi-agent   │
-│ • Framework     │  • Templates     │  • Integration   │
-│ • Structure     │  • User guides   │  • Analytics     │
-└─────────────────┴──────────────────┴──────────────────┘
-   Feb 2026           Mar 2026           Q2 2026
+v1.1.0               v1.2.0                  v1.3.0              v2.0.0
+├─────────────────┬────────────────────────┬──────────────────┬──────────────────┤
+│ Repositioning ✅ │  Workflows ✅          │  Tooling 📋      │  Advanced 📋     │
+│ • New identity  │  • 7 workflows         │  • Update tools  │  • Multi-agent   │
+│ • Framework     │  • Templates           │  • Migration     │  • Integration   │
+│ • Structure     │  • User guides         │  • Automation    │  • Analytics     │
+└─────────────────┴────────────────────────┴──────────────────┴──────────────────┘
+   Feb 2026            Feb 2026                Q2 2026             Q3 2026
 ```
 
 **See:** [CHANGELOG.md](CHANGELOG.md) for complete version history
@@ -721,11 +751,22 @@ Built on:
 - Use Wade alone for experiment design and validation
 - Use both together for complete Contextualize → Externalize flow
 
-### When will the new workflows be ready?
+### Are the new workflows ready?
 
-**v1.2.0 in March 2026.** The 7 workflows (lean-persona, product-vision, contextualize-scope, mvp, lean-experiment, proof-of-concept, proof-of-value) are currently in development.
+**Yes! v1.2.0 released February 2026.** All 7 workflows are fully implemented and ready to use:
 
-**Current state:** Emma and Wade's chat modes are available for guidance while workflows are being built.
+**Emma (Contextualize):**
+- lean-persona (6-step workflow)
+- product-vision (6-step workflow)
+- contextualize-scope (6-step workflow)
+
+**Wade (Externalize):**
+- mvp (6-step workflow)
+- lean-experiment (6-step workflow)
+- proof-of-concept (6-step workflow)
+- proof-of-value (6-step workflow)
+
+Each workflow includes templates, step files, and comprehensive guidance.
 
 ### How is this different from BMAD core agents?
 
