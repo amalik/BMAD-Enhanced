@@ -12,19 +12,27 @@ const yaml = require('js-yaml');
 // Registry of all available migrations
 const MIGRATIONS = [
   {
-    name: '1.0.x-to-1.2.0',
+    name: '1.0.x-to-1.3.0',
     fromVersion: '1.0.x',
-    toVersion: '1.2.0',
+    toVersion: '1.3.0',
     breaking: true,
     description: 'Migrate empathy-map workflow to lean-persona',
     module: null // Loaded on demand
   },
   {
-    name: '1.1.x-to-1.2.0',
+    name: '1.1.x-to-1.3.0',
     fromVersion: '1.1.x',
-    toVersion: '1.2.0',
+    toVersion: '1.3.0',
     breaking: false,
     description: 'Archive deprecated workflows, update agents',
+    module: null // Loaded on demand
+  },
+  {
+    name: '1.2.x-to-1.3.0',
+    fromVersion: '1.2.x',
+    toVersion: '1.3.0',
+    breaking: false,
+    description: 'Update to v1.3.0 with migration system',
     module: null // Loaded on demand
   }
 ];
