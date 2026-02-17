@@ -1,67 +1,59 @@
+---
+workflow: contextualize-scope
+type: step-file
+description: Decide which problem space to investigate using strategic evaluation
+author: Emma (contextualization-expert)
+version: 1.2.0
+---
+
 # Contextualize Scope Workflow
 
-**Status:** Coming in v1.2.0
+This workflow guides you through deciding which problem space to investigate by evaluating opportunities systematically.
 
-**Agent:** Emma (Contextualization Expert)
+## What is Scope Contextualization?
 
-**Stream:** Contextualize
+Scope contextualization is the strategic decision of where to focus your investigation. You likely have multiple problems you could solve - this workflow helps you choose wisely by:
 
-## Overview
+- **Identifying all opportunities** - What problems are on the table?
+- **Defining evaluation criteria** - What matters most (impact, feasibility, strategic fit)?
+- **Scoring systematically** - Rate each opportunity against criteria
+- **Deciding with rationale** - Choose one, document why
+- **De-scoping intentionally** - Say "no" to others (for now)
 
-This workflow helps you decide which problem space to investigate by evaluating multiple opportunities and selecting the most promising one to pursue.
+## Why This Matters
 
-## What You'll Create
+Choosing the wrong problem space wastes months of effort. This workflow ensures:
+- You're solving a problem worth solving
+- You pick the problem you can actually solve
+- You don't spread resources across too many problems
+- You can defend your choice with evidence
 
-A scope decision artifact that captures:
-- Problem opportunities identified
-- Evaluation criteria (impact, feasibility, strategic fit)
-- Scoring matrix for each opportunity
-- Selected problem space with rationale
-- De-scoped opportunities (and why)
+## Workflow Structure
 
-## Workflow Steps
+**Step-file architecture:**
+- Just-in-time loading (each step loads only when needed)
+- Sequential enforcement (must complete step N before step N+1)
+- State tracking in frontmatter (progress preserved)
 
-This workflow will guide you through 5 steps:
+## Steps Overview
 
-1. **List Opportunities** - What problems could you solve?
-2. **Define Criteria** - How will you evaluate opportunities?
-3. **Score Opportunities** - Rate each against your criteria
-4. **Make Decision** - Which problem space will you investigate?
-5. **Document Rationale** - Why this one? Why not the others?
+1. **List Problem Opportunities** - What problems could you solve?
+2. **Define Evaluation Criteria** - How will you choose?
+3. **Evaluate Each Opportunity** - Score against criteria
+4. **Define Scope Boundaries** - What's in? What's out?
+5. **Validate Strategic Fit** - Does this align with vision/resources?
+6. **Synthesize** - Create scope decision document
 
-## Coming Soon
+## Output
 
-This workflow is currently in development and will be available in BMAD-Enhanced v1.2.0 (planned for March 2026).
+**Artifact:** Scope decision document in `{output_folder}/scope-decision-{scope-name}-{date}.md`
 
-### What's Being Built
+**Template:** Uses [contextualize-scope.template.md](contextualize-scope.template.md)
 
-- Step-by-step guided workflow
-- Opportunity scoring templates
-- Decision framework (ICE, RICE, or custom)
-- Integration with product-vision workflow
-- Sample scope decisions for reference
+---
 
-### Why Wait?
+## INITIALIZATION
 
-Strategic scoping is a critical decision point that bridges contextualization (Emma) and externalization (Wade). We're ensuring this workflow:
-- Uses proven decision frameworks
-- Captures rationale for future reference
-- Sets up clean handoff to Wade's experiment workflows
+Load config from {project-root}/_bmad/bme/_vortex/config.yaml
 
-## Temporary Alternative
-
-While waiting for v1.2.0, you can use Emma's chat mode to explore scope decisions:
-
-```bash
-# Activate Emma
-cat _bmad/bme/_vortex/agents/contextualization-expert.md
-
-# Select chat mode and ask:
-"Help me decide which problem space to investigate: [list your options]"
-```
-
-## Questions?
-
-For questions or to request early access:
-- GitHub Issues: https://github.com/amalik/BMAD-Enhanced/issues
-- Tag with: `workflow:contextualize-scope` and `v1.2.0`
+Load step: {project-root}/_bmad/bme/_vortex/workflows/contextualize-scope/steps/step-01-list-opportunities.md
