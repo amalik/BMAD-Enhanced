@@ -7,6 +7,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [1.1.3] - 2026-02-17
+
+### Fixed
+- Removed outdated user guide references from installer output
+  - Replaced with "User guides being updated for v1.2.0" message in all 3 installers
+
+---
+
 ## [1.1.2] - 2026-02-17
 
 ### Fixed
