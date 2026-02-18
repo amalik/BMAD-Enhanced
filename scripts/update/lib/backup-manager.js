@@ -2,6 +2,7 @@
 
 const fs = require('fs-extra');
 const path = require('path');
+const { countUserDataFiles } = require('./utils');
 
 /**
  * Backup Manager for BMAD-Enhanced
@@ -11,12 +12,13 @@ const path = require('path');
 /**
  * Create a backup of critical installation files
  * @param {string} version - Current version being backed up
+ * @param {string} projectRoot - Absolute path to project root
  * @returns {Promise<object>} Backup metadata
  */
-async function createBackup(version) {
+async function createBackup(version, projectRoot) {
   const timestamp = Date.now();
   const backupDir = path.join(
-    process.cwd(),
+    projectRoot,
     '_bmad-output/.backups',
     `backup-${version}-${timestamp}`
   );
@@ -24,7 +26,7 @@ async function createBackup(version) {
   console.log(`Creating backup in: ${backupDir}`);
 
   // Ensure backup directory exists
-  await ensureBackupDirectory();
+  await ensureBackupDirectory(projectRoot);
 
   // Create backup directory
   await fs.ensureDir(backupDir);
@@ -34,7 +36,7 @@ async function createBackup(version) {
 
   // Copy each file/directory to backup
   for (const file of filesToBackup) {
-    const sourcePath = path.join(process.cwd(), file.path);
+    const sourcePath = path.join(projectRoot, file.path);
 
     if (!fs.existsSync(sourcePath)) {
       console.log(`  Skipping ${file.path} (does not exist)`);
@@ -44,12 +46,7 @@ async function createBackup(version) {
     const destPath = path.join(backupDir, file.name);
 
     try {
-      if (file.type === 'file') {
-        await fs.copy(sourcePath, destPath);
-      } else if (file.type === 'directory') {
-        await fs.copy(sourcePath, destPath);
-      }
-
+      await fs.copy(sourcePath, destPath);
       backedUpFiles.push(file.path);
       console.log(`  ✓ Backed up: ${file.path}`);
     } catch (error) {
@@ -59,7 +56,7 @@ async function createBackup(version) {
   }
 
   // Count user data files (for integrity check)
-  const userDataCount = await countUserDataFiles();
+  const userDataCount = await countUserDataFiles(projectRoot);
 
   // Create backup manifest
   const manifest = {
@@ -82,9 +79,10 @@ async function createBackup(version) {
 /**
  * Restore from backup after migration failure
  * @param {object} backupMetadata - Metadata from createBackup
+ * @param {string} projectRoot - Absolute path to project root
  * @returns {Promise<void>}
  */
-async function restoreBackup(backupMetadata) {
+async function restoreBackup(backupMetadata, projectRoot) {
   const backupDir = backupMetadata.backup_dir;
 
   console.log('');
@@ -104,7 +102,7 @@ async function restoreBackup(backupMetadata) {
       continue;
     }
 
-    const destPath = path.join(process.cwd(), file.path);
+    const destPath = path.join(projectRoot, file.path);
 
     try {
       // Remove existing file/directory first
@@ -126,10 +124,11 @@ async function restoreBackup(backupMetadata) {
 
 /**
  * List available backups
+ * @param {string} projectRoot - Absolute path to project root
  * @returns {Promise<Array>} List of backup metadata
  */
-async function listBackups() {
-  const backupsDir = path.join(process.cwd(), '_bmad-output/.backups');
+async function listBackups(projectRoot) {
+  const backupsDir = path.join(projectRoot, '_bmad-output/.backups');
 
   if (!fs.existsSync(backupsDir)) {
     return [];
@@ -161,10 +160,11 @@ async function listBackups() {
 /**
  * Clean up old backups, keeping only the most recent N
  * @param {number} keepCount - Number of backups to keep
+ * @param {string} projectRoot - Absolute path to project root
  * @returns {Promise<number>} Number of backups deleted
  */
-async function cleanupOldBackups(keepCount = 5) {
-  const backups = await listBackups();
+async function cleanupOldBackups(keepCount = 5, projectRoot) {
+  const backups = await listBackups(projectRoot);
 
   if (backups.length <= keepCount) {
     return 0; // Nothing to clean up
@@ -188,13 +188,14 @@ async function cleanupOldBackups(keepCount = 5) {
 
 /**
  * Ensure backup directory exists
+ * @param {string} projectRoot - Absolute path to project root
  * @returns {Promise<void>}
  */
-async function ensureBackupDirectory() {
-  const backupDir = path.join(process.cwd(), '_bmad-output/.backups');
+async function ensureBackupDirectory(projectRoot) {
+  const backupDir = path.join(projectRoot, '_bmad-output/.backups');
 
   if (!fs.existsSync(backupDir)) {
-    const outputDir = path.join(process.cwd(), '_bmad-output');
+    const outputDir = path.join(projectRoot, '_bmad-output');
 
     if (!fs.existsSync(outputDir)) {
       throw new Error('_bmad-output directory not found. Is BMAD Method installed?');
@@ -233,47 +234,10 @@ function getFilesToBackup() {
   ];
 }
 
-/**
- * Count user data files in _bmad-output (for integrity check)
- * @returns {Promise<number>} Number of user files
- */
-async function countUserDataFiles() {
-  const outputDir = path.join(process.cwd(), '_bmad-output');
-
-  if (!fs.existsSync(outputDir)) {
-    return 0;
-  }
-
-  let count = 0;
-
-  async function countRecursive(dir) {
-    const entries = await fs.readdir(dir, { withFileTypes: true });
-
-    for (const entry of entries) {
-      const fullPath = path.join(dir, entry.name);
-
-      // Skip .backups and .logs directories
-      if (entry.name === '.backups' || entry.name === '.logs') {
-        continue;
-      }
-
-      if (entry.isDirectory()) {
-        await countRecursive(fullPath);
-      } else if (entry.isFile()) {
-        count++;
-      }
-    }
-  }
-
-  await countRecursive(outputDir);
-  return count;
-}
-
 module.exports = {
   createBackup,
   restoreBackup,
   listBackups,
   cleanupOldBackups,
-  ensureBackupDirectory,
-  countUserDataFiles
+  ensureBackupDirectory
 };
