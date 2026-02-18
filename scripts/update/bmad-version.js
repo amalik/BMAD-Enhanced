@@ -21,11 +21,37 @@ async function main() {
   console.log('');
 
   // Fresh install - not installed yet
-  if (scenario === 'fresh' || !currentVersion) {
+  if (scenario === 'fresh') {
     console.log(chalk.yellow('Status:           Not installed'));
     console.log(`Package version:  ${chalk.cyan(targetVersion)}`);
     console.log('');
     console.log('Run: ' + chalk.cyan('npx bmad-install-agents'));
+    console.log('');
+    return;
+  }
+
+  // Partial installation - config.yaml missing but some files exist
+  if (scenario === 'partial' || !currentVersion) {
+    console.log(chalk.red('Status:           Partial installation (config.yaml missing)'));
+    console.log(`Package version:  ${chalk.cyan(targetVersion)}`);
+    console.log('');
+    console.log(chalk.yellow('This indicates an installation error.'));
+    console.log('');
+    console.log('Try running: ' + chalk.cyan('npx bmad-install-agents'));
+    console.log('');
+    console.log('If the problem persists, check the installation logs.');
+    console.log('');
+    return;
+  }
+
+  // Corrupted installation
+  if (scenario === 'corrupted') {
+    console.log(chalk.red('Status:           Corrupted installation (missing required files)'));
+    console.log(`Package version:  ${chalk.cyan(targetVersion)}`);
+    console.log('');
+    console.log(chalk.yellow('Some required files are missing.'));
+    console.log('');
+    console.log('Run: ' + chalk.cyan('npx bmad-install-agents') + ' to reinstall');
     console.log('');
     return;
   }
