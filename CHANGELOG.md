@@ -7,6 +7,31 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [1.3.1] - 2026-02-18
+
+### Fixed
+
+**🚨 CRITICAL Package Bug:**
+- Fixed `.npmignore` excluding Vortex framework files from published package
+- Agent files (`contextualization-expert.md`, `lean-experiments-specialist.md`) now included in package
+- All workflow template files now included in package
+- `CHANGELOG.md` and `UPDATE-GUIDE.md` now included in package
+- User guides in both `vortex-artifacts/` and `design-artifacts/` now included
+- **This was blocking all installations and migrations in v1.3.0** ❌
+
+**🐛 Migration Bug:**
+- Fixed issue where deprecated agent files (`empathy-mapper.md`, `wireframe-designer.md`) were not being removed during migration
+- All three migrations (1.0.x, 1.1.x, 1.2.x → 1.3.0) now properly remove deprecated agents before copying new ones
+- Users upgrading from v1.0.x or v1.1.x will now see only the correct agent files
+- Migration preview output now explicitly shows which deprecated files will be removed
+
+**⚠️ If you installed v1.3.0:**
+- v1.3.0 was broken due to missing files in npm package
+- Please upgrade to v1.3.1: `npm install bmad-enhanced@1.3.1`
+- Then run: `npx bmad-update` (if upgrading from older version)
+
+---
+
 ## [1.3.0] - 2026-02-17
 
 ### Major Release: Automatic Update/Migration System
@@ -51,12 +76,15 @@ This release introduces a comprehensive update/migration system that makes it sa
 - Lock file prevents concurrent migrations
 
 **📋 Migrations Implemented:**
-- `1.1.x-to-1.2.0` - Minor update (no breaking changes)
-  - Updates version, refreshes agent files, verifies structure
-- `1.0.x-to-1.2.0` - Breaking change migration
+- `1.2.x-to-1.3.0` - Minor update (adds migration system)
+  - Updates version, removes deprecated agents, refreshes agent files, verifies structure
+- `1.1.x-to-1.3.0` - Minor update (no breaking changes)
+  - Updates version, removes deprecated agents, refreshes agent files, verifies structure
+- `1.0.x-to-1.3.0` - Breaking change migration
   - Moves empathy-map → _deprecated/
   - Installs all 7 new workflows
   - Updates config and agent manifest
+  - Removes deprecated agent files
   - Preserves all user data
 
 **📚 Documentation:**
