@@ -189,44 +189,10 @@ function addMigrationHistory(config, fromVersion, toVersion, migrationsApplied) 
   return config;
 }
 
-/**
- * Get default config template for a version
- * @param {string} version - Version to generate template for
- * @returns {object} Default config template
- */
-function getDefaultConfig(version) {
-  return {
-    submodule_name: '_vortex',
-    description: 'Contextualize and Externalize streams - Strategic framing and validated learning',
-    module: 'bme',
-    version,
-    output_folder: '{project-root}/_bmad-output/vortex-artifacts',
-    user_name: '{user}',
-    communication_language: 'en',
-    agents: [
-      'contextualization-expert',
-      'lean-experiments-specialist'
-    ],
-    workflows: [
-      'lean-persona',
-      'product-vision',
-      'contextualize-scope',
-      'mvp',
-      'lean-experiment',
-      'proof-of-concept',
-      'proof-of-value'
-    ],
-    party_mode_enabled: true,
-    core_module: 'bme',
-    migration_history: []
-  };
-}
-
 module.exports = {
   mergeConfig,
   extractUserPreferences,
   validateConfig,
   writeConfig,
-  addMigrationHistory,
-  getDefaultConfig
+  addMigrationHistory
 };
