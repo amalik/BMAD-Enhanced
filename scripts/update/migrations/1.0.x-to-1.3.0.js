@@ -31,6 +31,7 @@ module.exports = {
         'Install 6 new workflows (product-vision, contextualize-scope, mvp, lean-experiment, proof-of-concept, proof-of-value)',
         'Update config.yaml: agents and workflows lists',
         'Update agent-manifest.csv: agent names/roles',
+        'Remove deprecated agent files (empathy-mapper.md, wireframe-designer.md)',
         'Update agent files (Emma → Contextualization Expert, Wade → Lean Experiments Specialist)',
         'Preserve all user data in _bmad-output/'
       ]
@@ -180,11 +181,26 @@ async function copyAgentFiles(sourceDir, targetDir) {
     'lean-experiments-specialist.md'
   ];
 
+  const deprecatedAgents = [
+    'empathy-mapper.md',
+    'wireframe-designer.md'
+  ];
+
   const agentsSourceDir = path.join(sourceDir, 'agents');
   const agentsTargetDir = path.join(targetDir, 'agents');
 
   await fs.ensureDir(agentsTargetDir);
 
+  // Remove deprecated agent files
+  for (const file of deprecatedAgents) {
+    const targetPath = path.join(agentsTargetDir, file);
+    if (fs.existsSync(targetPath)) {
+      await fs.remove(targetPath);
+      console.log(`    Removed deprecated: ${file}`);
+    }
+  }
+
+  // Copy new agent files
   for (const file of agentFiles) {
     const sourcePath = path.join(agentsSourceDir, file);
     const targetPath = path.join(agentsTargetDir, file);
