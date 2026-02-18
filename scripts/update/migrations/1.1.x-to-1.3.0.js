@@ -17,7 +17,7 @@ const configMerger = require('../lib/config-merger');
 module.exports = {
   name: '1.1.x-to-1.3.0',
   fromVersion: '1.1.x',
-  toVersion: '1.3.0',
+  toVersion: '1.3.4',
   breaking: false,
 
   /**
@@ -27,7 +27,7 @@ module.exports = {
   async preview() {
     return {
       actions: [
-        'Update version: 1.1.x → 1.3.0',
+        'Update version: 1.1.x → 1.3.4',
         'Verify deprecated workflows archived',
         'Remove legacy _designos directory (pre-Vortex structure)',
         'Remove deprecated agent files (empathy-mapper.md, wireframe-designer.md)',
@@ -47,8 +47,8 @@ module.exports = {
     const targetDir = path.join(process.cwd(), '_bmad/bme/_vortex');
 
     // 1. Update version in config.yaml
-    await updateConfigVersion('1.3.0');
-    changes.push('Updated version to 1.3.0');
+    await updateConfigVersion('1.3.4');
+    changes.push('Updated version to 1.3.4');
 
     // 2. Verify deprecated structure exists
     await ensureDeprecatedStructure(targetDir);
