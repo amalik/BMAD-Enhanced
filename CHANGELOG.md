@@ -7,6 +7,24 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [1.3.5] - 2026-02-18
+
+### Fixed
+
+**🚨 CRITICAL Install Script Bug:**
+- Fixed `bmad-install-agents` only copying deprecated workflows, not the 7 new workflows
+- Fixed hardcoded version 1.2.0 (now correctly uses 1.3.5)
+- Install script now copies all 7 Vortex workflows: lean-persona, product-vision, contextualize-scope, mvp, lean-experiment, proof-of-concept, proof-of-value
+- **This was causing "folders are still a mess" issue - workflows were listed in config but never installed**
+
+**What was broken in v1.3.4 and earlier:**
+- Fresh installs only got deprecated workflows (empathy-map, wireframe)
+- Config.yaml listed 7 workflows that didn't exist
+- Version was always set to 1.2.0 regardless of package version
+- Validation failed because workflow.md files were missing
+
+---
+
 ## [1.3.4] - 2026-02-18
 
 ### Fixed
