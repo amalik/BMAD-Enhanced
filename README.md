@@ -4,8 +4,8 @@
 
 > Strategic framing and validated learning through Emma and Wade
 
-[![Status](https://img.shields.io/badge/status-v1.3.0--complete-success)]()
-[![Version](https://img.shields.io/badge/version-1.3.0-blue)]()
+[![Status](https://img.shields.io/badge/status-v1.3.8--stable-success)]()
+[![Version](https://img.shields.io/badge/version-1.3.8-blue)]()
 [![Workflows](https://img.shields.io/badge/workflows-7_implemented-success)]()
 [![Emma](https://img.shields.io/badge/emma-3_workflows-brightgreen)]()
 [![Wade](https://img.shields.io/badge/wade-4_workflows-brightgreen)]()
@@ -44,29 +44,19 @@ Contextualize Stream       Externalize Stream
 
 ### Prerequisites
 
-**⚠️ IMPORTANT: BMAD Method Required**
-
-BMAD-Enhanced is an extension package. You must have [BMAD Method](https://github.com/bmadhub/bmad) installed first:
-
-```bash
-# Install BMAD Method first
-npx bmad-method@alpha install
-```
-
-**Additional Requirements:**
 - Node.js 14+ or Bun
 - Git
 - Claude Code or Claude.ai
 
+**Optional:** [BMAD Method](https://github.com/bmadhub/bmad) - BMAD-Enhanced works standalone or as an extension to BMAD Method.
+
 ### One-Command Installation
 
-Once BMAD Method is installed:
-
 ```bash
-npm install bmad-enhanced@1.3.0 && npx bmad-install-agents
+npm install bmad-enhanced && npx bmad-install-agents
 ```
 
-That's it! Emma and Wade (Vortex framework) with all 7 workflows are now added to your BMAD installation.
+That's it! Emma and Wade (Vortex framework) with all 7 workflows are installed.
 
 ### Installation
 
@@ -74,7 +64,7 @@ That's it! Emma and Wade (Vortex framework) with all 7 workflows are now added t
 
 ```bash
 # Install into your project
-npm install bmad-enhanced@1.3.0
+npm install bmad-enhanced
 
 # Install all agents (Emma + Wade) with all 7 workflows
 npx bmad-install-agents
@@ -105,7 +95,7 @@ cat _bmad/bme/_vortex/agents/contextualization-expert.md
   - Wade: mvp, lean-experiment, proof-of-concept, proof-of-value
 - Configuration file (`_bmad/bme/_vortex/config.yaml`)
 - Output directory (`_bmad-output/vortex-artifacts/`)
-- User guides (Emma & Wade v1.2.0)
+- User guides (Emma & Wade)
 
 ### Your First Lean Persona with Emma
 
@@ -212,13 +202,14 @@ npx bmad-update
 
 ### Migration Paths
 
-**From v1.1.x to v1.3.0:**
+**From v1.1.x or v1.2.x to v1.3.x:**
 - No breaking changes
 - Agent files refreshed (bug fixes)
+- Legacy `_designos` directory removed
 - User guides updated
 
-**From v1.0.x to v1.3.0:**
-- ⚠️ Breaking: empathy-map → lean-persona
+**From v1.0.x to v1.3.x:**
+- Breaking: empathy-map → lean-persona
 - Old workflows preserved in `_deprecated/`
 - 7 new workflows installed
 
@@ -263,7 +254,7 @@ All agents built using a standard pattern:
 
 ### Emma (contextualization-expert) - ✅ COMPLETE
 
-**Status:** v1.2.0 - All 3 workflows implemented and ready to use
+**Status:** v1.3.8 - All 3 workflows implemented and ready to use
 **Title:** Contextualization Expert 🎯
 **Stream:** Contextualize
 **Domain:** Strategic framing, problem-product space navigation
@@ -289,7 +280,7 @@ All agents built using a standard pattern:
 
 ### Wade (lean-experiments-specialist) - ✅ COMPLETE
 
-**Status:** v1.2.0 - All 4 workflows implemented and ready to use
+**Status:** v1.3.8 - All 4 workflows implemented and ready to use
 **Title:** Lean Experiments Specialist 🧪
 **Stream:** Externalize
 **Domain:** Lean Startup experimentation, validated learning
@@ -316,30 +307,32 @@ All agents built using a standard pattern:
 
 ## 📊 Project Status
 
-**Current Version:** v1.2.0 - Complete Vortex Framework Implementation ✅
+**Current Version:** v1.3.8 - Complete Vortex Framework + Update/Migration System ✅
 
 **Progress:**
-- ✅ Emma - 3 Contextualize workflows IMPLEMENTED (v1.2.0)
-- ✅ Wade - 4 Externalize workflows IMPLEMENTED (v1.2.0)
+- ✅ Emma - 3 Contextualize workflows IMPLEMENTED
+- ✅ Wade - 4 Externalize workflows IMPLEMENTED
 - ✅ 56 workflow files created (7 workflows × 8 files each)
-- ✅ User guides updated to v1.2.0
+- ✅ Update/migration system with backup and rollback
+- ✅ Standalone installation support (no BMAD Method required)
 
-**What's New in v1.2.0:**
-- **7 complete workflows** - lean-persona, product-vision, contextualize-scope (Emma) + mvp, lean-experiment, proof-of-concept, proof-of-value (Wade)
-- **Lean Startup methodology** - Hypothesis-driven, Build-Measure-Learn cycles
-- **Updated documentation** - Emma & Wade user guides v1.2.0
-- **Deprecated workflows archived** - empathy-map and wireframe moved to `_deprecated/` (still functional)
+**What's New in v1.3.x:**
+- **Update/migration system** - `npx bmad-update`, `npx bmad-version`, `npx bmad-migrate`
+- **Automatic backups** - Before every migration, with rollback on failure
+- **Standalone support** - Works without BMAD Method installed
+- **Legacy cleanup** - Removes deprecated `_designos` directory and old agents
+- **Migration paths** - Supports upgrade from v1.0.x, v1.1.x, v1.2.x
 
 **Roadmap:**
 ```
-v1.1.0               v1.2.0                  v1.3.0              v2.0.0
+v1.1.0               v1.2.0                  v1.3.x ✅            v2.0.0
 ├─────────────────┬────────────────────────┬──────────────────┬──────────────────┤
-│ Repositioning ✅ │  Workflows ✅          │  Tooling 📋      │  Advanced 📋     │
+│ Repositioning ✅ │  Workflows ✅          │  Tooling ✅       │  Advanced 📋     │
 │ • New identity  │  • 7 workflows         │  • Update tools  │  • Multi-agent   │
 │ • Framework     │  • Templates           │  • Migration     │  • Integration   │
 │ • Structure     │  • User guides         │  • Automation    │  • Analytics     │
 └─────────────────┴────────────────────────┴──────────────────┴──────────────────┘
-   Feb 2026            Feb 2026                Q2 2026             Q3 2026
+   Feb 2026            Feb 2026                Feb 2026            Q3 2026
 ```
 
 **See:** [CHANGELOG.md](CHANGELOG.md) for complete version history
@@ -350,10 +343,8 @@ v1.1.0               v1.2.0                  v1.3.0              v2.0.0
 
 ### User Guides
 
-- **[Emma User Guide](_bmad-output/design-artifacts/EMMA-USER-GUIDE.md)** - Complete guide to empathy mapping with Emma
-- Wade User Guide - Coming Week 1, Day 7
-- Quinn User Guide - Coming Week 2, Day 3
-- Stan User Guide - Coming Week 2, Day 7
+- **[Emma User Guide](_bmad-output/vortex-artifacts/EMMA-USER-GUIDE.md)** - Complete guide to strategic contextualization with Emma
+- **[Wade User Guide](_bmad-output/vortex-artifacts/WADE-USER-GUIDE.md)** - Complete guide to lean experiments with Wade
 
 ### Technical Documentation
 
@@ -425,8 +416,8 @@ Clear, comprehensive documentation:
 
 1. **Clone Emma's structure:**
    ```bash
-   cp -r _bmad/bme/_vortex/agents/contextualization-expert.md \
-         _bmad/bme/_designos/agents/your-agent.md
+   cp _bmad/bme/_vortex/agents/contextualization-expert.md \
+      _bmad/bme/_vortex/agents/your-agent.md
    ```
 
 2. **Customize the agent:**
@@ -872,7 +863,7 @@ Each workflow includes templates, step files, and comprehensive guidance.
 
 [Get Started](#quick-start) • [Documentation](#documentation) • [Roadmap](#roadmap)
 
-**Current Status:** ✅ v1.1.0 Repositioned | 📋 v1.2.0 Workflows Coming March 2026
+**Current Status:** ✅ v1.3.8 Stable - Vortex Framework Complete
 
 Made with ❤️ by the BMAD-Enhanced community
 
