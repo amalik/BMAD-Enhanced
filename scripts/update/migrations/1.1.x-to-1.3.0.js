@@ -29,6 +29,7 @@ module.exports = {
       actions: [
         'Update version: 1.1.x → 1.3.0',
         'Verify deprecated workflows archived',
+        'Remove deprecated agent files (empathy-mapper.md, wireframe-designer.md)',
         'Update agent files to latest (bug fixes/improvements)',
         'Refresh user guides (EMMA-USER-GUIDE.md, WADE-USER-GUIDE.md)'
       ]
