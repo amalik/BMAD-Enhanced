@@ -16,7 +16,7 @@ const configMerger = require('../lib/config-merger');
 module.exports = {
   name: '1.0.x-to-1.3.0',
   fromVersion: '1.0.x',
-  toVersion: '1.3.5',
+  toVersion: '1.3.8',
   breaking: true,
 
   /**
@@ -65,7 +65,7 @@ module.exports = {
     changes.push('Installed 7 new Vortex Framework workflows');
 
     // 5. Update config.yaml with new structure
-    await updateConfig(targetDir, '1.3.5');
+    await updateConfig(targetDir, '1.3.8');
     changes.push('Updated config.yaml');
 
     // 6. Update agent files
@@ -289,12 +289,21 @@ async function copyUserGuides() {
  * Remove old _designos directory (pre-Vortex structure)
  */
 async function removeOldDesignosDirectory() {
-  const designosPath = path.join(process.cwd(), '_bmad/bme/_designos');
+  const legacyPaths = [
+    path.join(process.cwd(), '_bmad/bme/_designos'),
+    path.join(process.cwd(), '_bmad/_designos'),
+  ];
 
-  if (fs.existsSync(designosPath)) {
-    await fs.remove(designosPath);
-    console.log('    Removed legacy _designos directory');
-  } else {
+  let removed = false;
+  for (const designosPath of legacyPaths) {
+    if (fs.existsSync(designosPath)) {
+      await fs.remove(designosPath);
+      console.log(`    Removed legacy directory: ${path.relative(process.cwd(), designosPath)}`);
+      removed = true;
+    }
+  }
+
+  if (!removed) {
     console.log('    No legacy _designos directory found (OK)');
   }
 }
