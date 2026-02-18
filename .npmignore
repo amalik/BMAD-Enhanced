@@ -16,9 +16,15 @@ _quint/
 !README.md
 !LICENSE
 !INSTALLATION.md
+!CHANGELOG.md
+!UPDATE-GUIDE.md
 !scripts/README.md
 # Include all .md files in _bmad/bme/_designos
 !_bmad/bme/_designos/**/*.md
+# Include all Vortex framework files (agents, workflows, templates)
+!_bmad/bme/_vortex/**/*.md
+!_bmad/bme/_vortex/**/*.yaml
+!_bmad/bme/_vortex/**/*.csv
 
 # Exclude all _bmad-output except user guides
 _bmad-output/*
@@ -26,6 +32,10 @@ _bmad-output/*
 _bmad-output/design-artifacts/*
 !_bmad-output/design-artifacts/EMMA-USER-GUIDE.md
 !_bmad-output/design-artifacts/WADE-USER-GUIDE.md
+!_bmad-output/vortex-artifacts/
+_bmad-output/vortex-artifacts/*
+!_bmad-output/vortex-artifacts/EMMA-USER-GUIDE.md
+!_bmad-output/vortex-artifacts/WADE-USER-GUIDE.md
 
 # Development files
 .git/
