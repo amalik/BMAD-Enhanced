@@ -2,6 +2,7 @@
 
 const fs = require('fs-extra');
 const path = require('path');
+const { refreshInstallation } = require('./update/lib/refresh-installation');
 
 const BOLD = '\x1b[1m';
 const RESET = '\x1b[0m';
@@ -17,17 +18,16 @@ function printBanner() {
   console.log(`${MAGENTA}${BOLD}║                                                    ║${RESET}`);
   console.log(`${MAGENTA}${BOLD}║        BMAD-Enhanced Complete Installer 🚀        ║${RESET}`);
   console.log(`${MAGENTA}${BOLD}║                                                    ║${RESET}`);
-  console.log(`${MAGENTA}${BOLD}║     Installing Emma + Wade Design Agents          ║${RESET}`);
+  console.log(`${MAGENTA}${BOLD}║     Installing Emma + Wade Vortex Agents          ║${RESET}`);
   console.log(`${MAGENTA}${BOLD}║                                                    ║${RESET}`);
   console.log(`${MAGENTA}${BOLD}╚════════════════════════════════════════════════════╝${RESET}`);
   console.log('');
 }
 
-function checkPrerequisites() {
+function checkPrerequisites(projectRoot) {
   console.log(`${CYAN}[1/6]${RESET} Checking prerequisites...`);
 
-  const targetDir = process.cwd();
-  const bmadDir = path.join(targetDir, '_bmad');
+  const bmadDir = path.join(projectRoot, '_bmad');
 
   // Create _bmad directory if it doesn't exist
   if (!fs.existsSync(bmadDir)) {
@@ -48,160 +48,54 @@ function checkPrerequisites() {
   console.log(`${GREEN}  ✓${RESET} Prerequisites met`);
 }
 
-function copyAllAgentFiles() {
-  console.log(`${CYAN}[2/6]${RESET} Installing Emma + Wade agent files...`);
+function archiveDeprecatedWorkflows(projectRoot) {
+  console.log(`${CYAN}[2/6]${RESET} Archiving deprecated workflows...`);
 
   const sourceDir = path.join(__dirname, '..', '_bmad', 'bme', '_vortex');
-  const targetDir = path.join(process.cwd(), '_bmad', 'bme', '_vortex');
+  const targetDir = path.join(projectRoot, '_bmad', 'bme', '_vortex');
 
-  // Create target directory structure
-  fs.mkdirSync(path.join(targetDir, 'agents'), { recursive: true });
-  fs.mkdirSync(path.join(targetDir, 'workflows', '_deprecated', 'empathy-map', 'steps'), { recursive: true });
-  fs.mkdirSync(path.join(targetDir, 'workflows', '_deprecated', 'wireframe', 'steps'), { recursive: true });
+  // Create deprecated workflow archive directories
+  const deprecatedWorkflows = ['empathy-map', 'wireframe'];
 
-  // Copy Emma agent file
-  console.log(`${CYAN}  →${RESET} Installing Emma (contextualization-expert)...`);
-  fs.copyFileSync(
-    path.join(sourceDir, 'agents', 'contextualization-expert.md'),
-    path.join(targetDir, 'agents', 'contextualization-expert.md')
-  );
-
-  // Copy Emma workflow files
-  const emmaWorkflowFiles = [
-    'workflow.md',
-    'empathy-map.template.md',
-    'steps/step-01-define-user.md',
-    'steps/step-02-says-thinks.md',
-    'steps/step-03-does-feels.md',
-    'steps/step-04-pain-points.md',
-    'steps/step-05-gains.md',
-    'steps/step-06-synthesize.md'
-  ];
-
-  emmaWorkflowFiles.forEach(file => {
-    fs.copyFileSync(
-      path.join(sourceDir, 'workflows', '_deprecated', 'empathy-map', file),
-      path.join(targetDir, 'workflows', '_deprecated', 'empathy-map', file)
-    );
-  });
-
-  console.log(`${GREEN}  ✓${RESET} Emma installed`);
-
-  // Copy Wade agent file
-  console.log(`${CYAN}  →${RESET} Installing Wade (lean-experiments-specialist)...`);
-  fs.copyFileSync(
-    path.join(sourceDir, 'agents', 'lean-experiments-specialist.md'),
-    path.join(targetDir, 'agents', 'lean-experiments-specialist.md')
-  );
-
-  // Copy Wade workflow files
-  const wadeWorkflowFiles = [
-    'workflow.md',
-    'wireframe.template.md',
-    'steps/step-01-define-requirements.md',
-    'steps/step-02-user-flows.md',
-    'steps/step-03-information-architecture.md',
-    'steps/step-04-wireframe-sketch.md',
-    'steps/step-05-components.md',
-    'steps/step-06-synthesize.md'
-  ];
-
-  wadeWorkflowFiles.forEach(file => {
-    fs.copyFileSync(
-      path.join(sourceDir, 'workflows', '_deprecated', 'wireframe', file),
-      path.join(targetDir, 'workflows', '_deprecated', 'wireframe', file)
-    );
-  });
-
-  console.log(`${GREEN}  ✓${RESET} Wade installed`);
-
-  // Copy all 7 new workflow directories
-  console.log(`${CYAN}  →${RESET} Installing Vortex Framework workflows...`);
-  const workflows = [
-    'lean-persona',
-    'product-vision',
-    'contextualize-scope',
-    'mvp',
-    'lean-experiment',
-    'proof-of-concept',
-    'proof-of-value'
-  ];
-
-  workflows.forEach(workflow => {
-    const workflowSourceDir = path.join(sourceDir, 'workflows', workflow);
-    const workflowTargetDir = path.join(targetDir, 'workflows', workflow);
+  for (const workflow of deprecatedWorkflows) {
+    const workflowSourceDir = path.join(sourceDir, 'workflows', '_deprecated', workflow);
+    const workflowTargetDir = path.join(targetDir, 'workflows', '_deprecated', workflow);
 
     if (fs.existsSync(workflowSourceDir)) {
       fs.copySync(workflowSourceDir, workflowTargetDir);
-      console.log(`${GREEN}    ✓${RESET} ${workflow}`);
-    } else {
-      console.log(`${YELLOW}    ⚠${RESET} ${workflow} not found in package (skipping)`);
+      console.log(`${GREEN}  ✓${RESET} Archived ${workflow} to _deprecated/`);
     }
-  });
-
-  console.log(`${GREEN}  ✓${RESET} All workflows installed`);
-}
-
-function updateConfig() {
-  console.log(`${CYAN}[3/6]${RESET} Configuring agents...`);
-
-  const configPath = path.join(process.cwd(), '_bmad', 'bme', '_vortex', 'config.yaml');
-  const manifestPath = path.join(process.cwd(), '_bmad', '_config', 'agent-manifest.csv');
-
-  console.log(`${CYAN}  →${RESET} Config path: ${configPath}`);
-
-  // Create config
-  const configContent = `---
-submodule_name: _vortex
-description: Contextualize and Externalize streams - Strategic framing and validated learning
-module: bme
-version: 1.3.8
-
-# Output Configuration
-output_folder: "{project-root}/_bmad-output/vortex-artifacts"
-user_name: "{user}"
-communication_language: "en"
-
-# Agents in this submodule
-agents:
-  - contextualization-expert     # Emma - Contextualization Expert
-  - lean-experiments-specialist  # Wade - Lean Experiments Specialist
-
-# Workflows available
-workflows:
-  # Emma - Contextualize Stream
-  - lean-persona           # Create lean user personas
-  - product-vision         # Define product vision
-  - contextualize-scope    # Decide which problem space to investigate
-
-  # Wade - Externalize Stream
-  - mvp                    # Design Minimum Viable Product
-  - lean-experiment        # Run Build-Measure-Learn cycle
-  - proof-of-concept       # Validate technical feasibility
-  - proof-of-value         # Validate business value
-
-# Integration
-party_mode_enabled: true
-core_module: bme
-`;
-
-  try {
-    fs.mkdirSync(path.dirname(configPath), { recursive: true });
-    fs.writeFileSync(configPath, configContent);
-
-    // Verify file was created
-    if (fs.existsSync(configPath)) {
-      console.log(`${GREEN}  ✓${RESET} Created config.yaml`);
-    } else {
-      console.error(`${RED}  ✗${RESET} Config file not found after write!`);
-    }
-  } catch (error) {
-    console.error(`${RED}  ✗${RESET} Error creating config.yaml:`, error.message);
-    throw error;
   }
 
-  // Create manifest
+  // Legacy cleanup
+  cleanupLegacyFiles(projectRoot);
+}
+
+function cleanupLegacyFiles(projectRoot) {
+  console.log(`${CYAN}  →${RESET} Cleaning up legacy files...`);
+
+  // Remove _designos directory (pre-Vortex structure) from all possible locations
+  const legacyPaths = [
+    path.join(projectRoot, '_bmad', 'bme', '_designos'),
+    path.join(projectRoot, '_bmad', '_designos'),
+  ];
+
+  for (const legacyPath of legacyPaths) {
+    if (fs.existsSync(legacyPath)) {
+      fs.removeSync(legacyPath);
+      console.log(`${GREEN}    ✓${RESET} Removed legacy directory: ${path.relative(projectRoot, legacyPath)}`);
+    }
+  }
+
+  console.log(`${GREEN}  ✓${RESET} Legacy cleanup complete`);
+}
+
+function createAgentManifest(projectRoot) {
+  console.log(`${CYAN}[3/6]${RESET} Creating agent manifest...`);
+
+  const manifestPath = path.join(projectRoot, '_bmad', '_config', 'agent-manifest.csv');
   fs.mkdirSync(path.dirname(manifestPath), { recursive: true });
+
   const header = '"agent_id","name","title","icon","role","identity","communication_style","expertise","submodule","path"\n';
   const emmaRow = '"contextualization-expert","Emma","Contextualization Expert","🎯","Strategic Framing + Problem-Product Space Navigator","Expert in helping teams contextualize their product strategy by defining clear problem spaces and validating assumptions. Specializes in Lean Startup methodologies, persona creation, and product vision framing. Guides teams through the critical \'Contextualize\' stream of the Vortex framework.","Strategic yet approachable - speaks in frameworks and validated learning. Like a product strategist who asks \'What are we really solving?\' and \'Who is this truly for?\' Uses Lean Startup language (hypotheses, assumptions, pivots) and focuses on clarity before action.","- Master of Lean Startup and strategic framing methodologies - Personas over demographics - focus on jobs-to-be-done and problem contexts - Vision before features - align team around the \'why\' before the \'what\' - Challenge assumptions - every belief is a hypothesis until validated - Problem-solution fit comes before product-market fit","bme","_bmad/bme/_vortex/agents/contextualization-expert.md"\n';
   const wadeRow = '"lean-experiments-specialist","Wade","Lean Experiments Specialist","🧪","Lean Startup + Validated Learning Expert","Lean Startup practitioner specialized in running rapid experiments to validate product hypotheses. Helps teams move from assumptions to evidence through Build-Measure-Learn cycles. Guides teams through the \'Externalize\' stream - taking ideas into the real world to test with actual users.","Experimental and evidence-driven - speaks in hypotheses, metrics, and learning. Like a scientist who says \'Let\'s test that assumption\' and \'What would prove us wrong?\' Uses Lean language (MVPs, pivots, validated learning) and focuses on speed-to-insight over perfection.","- Master of Lean Startup and rapid experimentation - Build the smallest thing that tests the riskiest assumption - Measure what matters - focus on actionable metrics, not vanity metrics - Learn fast, pivot faster - every experiment teaches something - Proof-of-concept before proof-of-value - validate feasibility before business case - Fail fast is good, learn fast is better","bme","_bmad/bme/_vortex/agents/lean-experiments-specialist.md"\n';
@@ -209,30 +103,27 @@ core_module: bme
   console.log(`${GREEN}  ✓${RESET} Created agent-manifest.csv`);
 }
 
-function createOutputDirectory() {
+function createOutputDirectory(projectRoot) {
   console.log(`${CYAN}[4/6]${RESET} Setting up output directory...`);
 
-  const outputDir = path.join(process.cwd(), '_bmad-output', 'vortex-artifacts');
+  const outputDir = path.join(projectRoot, '_bmad-output', 'vortex-artifacts');
   fs.mkdirSync(outputDir, { recursive: true });
 
   console.log(`${GREEN}  ✓${RESET} Output directory ready`);
 }
 
-function verifyInstallation() {
-  console.log(`${CYAN}[5/6]${RESET} Verifying installation...`);
+function verifyInstallation(projectRoot) {
+  console.log(`${CYAN}[6/6]${RESET} Verifying installation...`);
 
-  const targetDir = process.cwd();
   const checks = [
     { path: '_bmad/bme/_vortex/agents/contextualization-expert.md', name: 'Emma agent file' },
     { path: '_bmad/bme/_vortex/agents/lean-experiments-specialist.md', name: 'Wade agent file' },
-    { path: '_bmad/bme/_vortex/workflows/_deprecated/empathy-map/workflow.md', name: 'Emma workflow (legacy)' },
-    { path: '_bmad/bme/_vortex/workflows/_deprecated/wireframe/workflow.md', name: 'Wade workflow (legacy)' },
     { path: '_bmad/bme/_vortex/config.yaml', name: 'Configuration file' },
   ];
 
   let allChecksPass = true;
   checks.forEach(check => {
-    const fullPath = path.join(targetDir, check.path);
+    const fullPath = path.join(projectRoot, check.path);
     if (fs.existsSync(fullPath)) {
       console.log(`${GREEN}  ✓${RESET} ${check.name}`);
     } else {
@@ -248,24 +139,6 @@ function verifyInstallation() {
   }
 
   console.log(`${GREEN}  ✓${RESET} All files installed successfully`);
-}
-
-function copyUserGuides() {
-  console.log(`${CYAN}[6/6]${RESET} Installing user guides...`);
-
-  const sourceDir = path.join(__dirname, '..', '_bmad-output', 'vortex-artifacts');
-  const targetDir = path.join(process.cwd(), '_bmad-output', 'vortex-artifacts');
-
-  // Copy user guides if they exist
-  const guides = ['EMMA-USER-GUIDE.md', 'WADE-USER-GUIDE.md'];
-  guides.forEach(guide => {
-    const sourcePath = path.join(sourceDir, guide);
-    if (fs.existsSync(sourcePath)) {
-      fs.copyFileSync(sourcePath, path.join(targetDir, guide));
-    }
-  });
-
-  console.log(`${GREEN}  ✓${RESET} User guides installed`);
 }
 
 function printSuccess() {
@@ -289,51 +162,24 @@ function printSuccess() {
   console.log('  Activate Wade:');
   console.log(`  ${CYAN}cat _bmad/bme/_vortex/agents/lean-experiments-specialist.md${RESET}`);
   console.log('');
-  console.log(`${YELLOW}Note: User guides being updated for v1.2.0${RESET}`);
-  console.log('');
-}
-
-function cleanupLegacyFiles() {
-  console.log(`${CYAN}  →${RESET} Cleaning up legacy files...`);
-
-  // Remove _designos directory (pre-Vortex structure) from all possible locations
-  const legacyPaths = [
-    path.join(process.cwd(), '_bmad', 'bme', '_designos'),
-    path.join(process.cwd(), '_bmad', '_designos'),
-  ];
-
-  for (const legacyPath of legacyPaths) {
-    if (fs.existsSync(legacyPath)) {
-      fs.removeSync(legacyPath);
-      console.log(`${GREEN}    ✓${RESET} Removed legacy directory: ${path.relative(process.cwd(), legacyPath)}`);
-    }
-  }
-
-  // Remove deprecated agent files from _vortex/agents
-  const agentsDir = path.join(process.cwd(), '_bmad', 'bme', '_vortex', 'agents');
-  const deprecatedAgents = ['empathy-mapper.md', 'wireframe-designer.md'];
-
-  for (const agent of deprecatedAgents) {
-    const agentPath = path.join(agentsDir, agent);
-    if (fs.existsSync(agentPath)) {
-      fs.removeSync(agentPath);
-      console.log(`${GREEN}    ✓${RESET} Removed deprecated agent: ${agent}`);
-    }
-  }
-
-  console.log(`${GREEN}  ✓${RESET} Legacy cleanup complete`);
 }
 
 async function main() {
   try {
+    const projectRoot = process.cwd();
+
     printBanner();
-    checkPrerequisites();
-    copyAllAgentFiles();
-    cleanupLegacyFiles();
-    updateConfig();
-    createOutputDirectory();
-    verifyInstallation();
-    copyUserGuides();
+    checkPrerequisites(projectRoot);
+    archiveDeprecatedWorkflows(projectRoot);
+    createAgentManifest(projectRoot);
+    createOutputDirectory(projectRoot);
+
+    // Use refreshInstallation for agents, workflows, config, and user guides
+    console.log(`${CYAN}[5/6]${RESET} Installing agents, workflows, config, and guides...`);
+    await refreshInstallation(projectRoot, { backupGuides: false });
+    console.log(`${GREEN}  ✓${RESET} Installation refreshed`);
+
+    verifyInstallation(projectRoot);
     printSuccess();
   } catch (error) {
     console.error(`${RED}✗ Installation failed:${RESET}`, error.message);
