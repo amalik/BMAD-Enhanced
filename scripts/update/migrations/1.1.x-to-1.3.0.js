@@ -17,7 +17,7 @@ const configMerger = require('../lib/config-merger');
 module.exports = {
   name: '1.1.x-to-1.3.0',
   fromVersion: '1.1.x',
-  toVersion: '1.3.5',
+  toVersion: '1.3.8',
   breaking: false,
 
   /**
@@ -27,7 +27,7 @@ module.exports = {
   async preview() {
     return {
       actions: [
-        'Update version: 1.1.x → 1.3.5',
+        'Update version: 1.1.x → 1.3.8',
         'Verify deprecated workflows archived',
         'Remove legacy _designos directory (pre-Vortex structure)',
         'Remove deprecated agent files (empathy-mapper.md, wireframe-designer.md)',
@@ -47,8 +47,8 @@ module.exports = {
     const targetDir = path.join(process.cwd(), '_bmad/bme/_vortex');
 
     // 1. Update version in config.yaml
-    await updateConfigVersion('1.3.5');
-    changes.push('Updated version to 1.3.5');
+    await updateConfigVersion('1.3.8');
+    changes.push('Updated version to 1.3.8');
 
     // 2. Verify deprecated structure exists
     await ensureDeprecatedStructure(targetDir);
@@ -190,12 +190,21 @@ async function copyUserGuides() {
  * Remove old _designos directory (pre-Vortex structure)
  */
 async function removeOldDesignosDirectory() {
-  const designosPath = path.join(process.cwd(), '_bmad/bme/_designos');
+  const legacyPaths = [
+    path.join(process.cwd(), '_bmad/bme/_designos'),
+    path.join(process.cwd(), '_bmad/_designos'),
+  ];
 
-  if (fs.existsSync(designosPath)) {
-    await fs.remove(designosPath);
-    console.log('    Removed legacy _designos directory');
-  } else {
+  let removed = false;
+  for (const designosPath of legacyPaths) {
+    if (fs.existsSync(designosPath)) {
+      await fs.remove(designosPath);
+      console.log(`    Removed legacy directory: ${path.relative(process.cwd(), designosPath)}`);
+      removed = true;
+    }
+  }
+
+  if (!removed) {
     console.log('    No legacy _designos directory found (OK)');
   }
 }
