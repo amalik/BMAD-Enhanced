@@ -7,7 +7,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
-## [1.3.1] - 2026-02-18
+## [1.3.2] - 2026-02-18
 
 ### Fixed
 
@@ -17,7 +17,23 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - All workflow template files now included in package
 - `CHANGELOG.md` and `UPDATE-GUIDE.md` now included in package
 - User guides in both `vortex-artifacts/` and `design-artifacts/` now included
-- **This was blocking all installations and migrations in v1.3.0** ❌
+- **This was blocking all installations and migrations in v1.3.0 and v1.3.1** ❌
+
+**Package now includes:**
+- 113 files (was 27 in v1.3.0/v1.3.1)
+- 116.1 kB (was 55.0 kB in v1.3.0/v1.3.1)
+- All necessary agent and workflow files
+
+**⚠️ Action Required:**
+- If you installed v1.3.0 or v1.3.1: `npm install bmad-enhanced@1.3.2`
+- Fresh installations now work: `npx bmad-install-agents`
+- Migrations now work: `npx bmad-update`
+
+---
+
+## [1.3.1] - 2026-02-18
+
+### Fixed
 
 **🐛 Migration Bug:**
 - Fixed issue where deprecated agent files (`empathy-mapper.md`, `wireframe-designer.md`) were not being removed during migration
@@ -25,10 +41,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Users upgrading from v1.0.x or v1.1.x will now see only the correct agent files
 - Migration preview output now explicitly shows which deprecated files will be removed
 
-**⚠️ If you installed v1.3.0:**
-- v1.3.0 was broken due to missing files in npm package
-- Please upgrade to v1.3.1: `npm install bmad-enhanced@1.3.1`
-- Then run: `npx bmad-update` (if upgrading from older version)
+**⚠️ Note:** v1.3.1 still had the critical `.npmignore` bug from v1.3.0. Use v1.3.2 instead.
 
 ---
 
