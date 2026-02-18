@@ -3,6 +3,7 @@
 const fs = require('fs-extra');
 const path = require('path');
 const yaml = require('js-yaml');
+const { findProjectRoot, compareVersions, getPackageVersion } = require('./utils');
 
 /**
  * Version Detector for BMAD-Enhanced
@@ -11,11 +12,19 @@ const yaml = require('js-yaml');
 
 /**
  * Get current installed version from config.yaml
+ * @param {string} [projectRoot] - Project root (auto-detected if omitted)
  * @returns {string|null} Version string or null if not found
  */
-function getCurrentVersion() {
+function getCurrentVersion(projectRoot) {
+  if (!projectRoot) {
+    projectRoot = findProjectRoot();
+  }
+  if (!projectRoot) {
+    return null; // Not in a BMAD project
+  }
+
   try {
-    const configPath = path.join(process.cwd(), '_bmad/bme/_vortex/config.yaml');
+    const configPath = path.join(projectRoot, '_bmad/bme/_vortex/config.yaml');
 
     if (!fs.existsSync(configPath)) {
       return null; // No config = fresh install
@@ -30,20 +39,28 @@ function getCurrentVersion() {
 
     // Fallback: Check for deprecated folder structure to guess version
     console.warn('Warning: config.yaml exists but has no version field');
-    return guessVersionFromFileStructure();
+    return guessVersionFromFileStructure(projectRoot);
 
   } catch (error) {
     console.warn('Warning: Could not read config.yaml:', error.message);
-    return guessVersionFromFileStructure();
+    return guessVersionFromFileStructure(projectRoot);
   }
 }
 
 /**
  * Guess version from file structure (fallback method)
+ * @param {string} [projectRoot] - Project root (auto-detected if omitted)
  * @returns {string|null} Guessed version or null
  */
-function guessVersionFromFileStructure() {
-  const vortexDir = path.join(process.cwd(), '_bmad/bme/_vortex');
+function guessVersionFromFileStructure(projectRoot) {
+  if (!projectRoot) {
+    projectRoot = findProjectRoot();
+  }
+  if (!projectRoot) {
+    return null;
+  }
+
+  const vortexDir = path.join(projectRoot, '_bmad/bme/_vortex');
 
   if (!fs.existsSync(vortexDir)) {
     return null; // No installation
@@ -61,8 +78,8 @@ function guessVersionFromFileStructure() {
     return '1.0.0'; // Has empathy-map in workflows = v1.0.0
   }
 
-  // Has vortex dir but can't determine version
-  return '1.0.0'; // Default to oldest version
+  // Has vortex dir but can't determine version - return null instead of guessing
+  return null;
 }
 
 /**
@@ -70,15 +87,7 @@ function guessVersionFromFileStructure() {
  * @returns {string} Target version
  */
 function getTargetVersion() {
-  try {
-    const packagePath = path.join(__dirname, '../../../package.json');
-    const packageContent = fs.readFileSync(packagePath, 'utf8');
-    const packageJson = JSON.parse(packageContent);
-
-    return packageJson.version;
-  } catch (error) {
-    throw new Error(`Could not read package.json: ${error.message}`);
-  }
+  return getPackageVersion();
 }
 
 /**
@@ -131,10 +140,18 @@ function getMigrationPath(currentVersion, targetVersion) {
 
 /**
  * Detect installation scenario
+ * @param {string} [projectRoot] - Project root (auto-detected if omitted)
  * @returns {string} Scenario: 'fresh' | 'partial' | 'complete' | 'corrupted'
  */
-function detectInstallationScenario() {
-  const vortexDir = path.join(process.cwd(), '_bmad/bme/_vortex');
+function detectInstallationScenario(projectRoot) {
+  if (!projectRoot) {
+    projectRoot = findProjectRoot();
+  }
+  if (!projectRoot) {
+    return 'fresh';
+  }
+
+  const vortexDir = path.join(projectRoot, '_bmad/bme/_vortex');
   const configPath = path.join(vortexDir, 'config.yaml');
   const agentsDir = path.join(vortexDir, 'agents');
   const workflowsDir = path.join(vortexDir, 'workflows');
@@ -173,27 +190,6 @@ function detectInstallationScenario() {
   }
 
   return 'complete';
-}
-
-/**
- * Compare two semantic versions
- * @param {string} v1 - First version
- * @param {string} v2 - Second version
- * @returns {number} -1 if v1 < v2, 0 if equal, 1 if v1 > v2
- */
-function compareVersions(v1, v2) {
-  const parts1 = v1.split('.').map(Number);
-  const parts2 = v2.split('.').map(Number);
-
-  for (let i = 0; i < Math.max(parts1.length, parts2.length); i++) {
-    const part1 = parts1[i] || 0;
-    const part2 = parts2[i] || 0;
-
-    if (part1 < part2) return -1;
-    if (part1 > part2) return 1;
-  }
-
-  return 0;
 }
 
 /**
@@ -239,7 +235,6 @@ module.exports = {
   getTargetVersion,
   getMigrationPath,
   detectInstallationScenario,
-  compareVersions,
   isBreakingChange,
   getVersionRange,
   guessVersionFromFileStructure
