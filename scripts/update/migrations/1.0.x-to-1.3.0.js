@@ -16,7 +16,7 @@ const configMerger = require('../lib/config-merger');
 module.exports = {
   name: '1.0.x-to-1.3.0',
   fromVersion: '1.0.x',
-  toVersion: '1.3.0',
+  toVersion: '1.3.4',
   breaking: true,
 
   /**
@@ -65,7 +65,7 @@ module.exports = {
     changes.push('Installed 7 new Vortex Framework workflows');
 
     // 5. Update config.yaml with new structure
-    await updateConfig(targetDir, '1.3.0');
+    await updateConfig(targetDir, '1.3.4');
     changes.push('Updated config.yaml');
 
     // 6. Update agent files
