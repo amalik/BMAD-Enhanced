@@ -4,6 +4,7 @@ const fs = require('fs-extra');
 const path = require('path');
 const yaml = require('js-yaml');
 const configMerger = require('./config-merger');
+const { countUserDataFiles } = require('./utils');
 
 /**
  * Validator for BMAD-Enhanced
@@ -12,33 +13,32 @@ const configMerger = require('./config-merger');
 
 /**
  * Validate entire installation
- * @param {object} preM
-
-igrationData - Data from before migration for comparison
+ * @param {object} preMigrationData - Data from before migration for comparison
+ * @param {string} projectRoot - Absolute path to project root
  * @returns {Promise<object>} Validation result
  */
-async function validateInstallation(preMigrationData = {}) {
+async function validateInstallation(preMigrationData = {}, projectRoot) {
   const checks = [];
 
   // 1. Config structure validation
-  checks.push(await validateConfigStructure());
+  checks.push(await validateConfigStructure(projectRoot));
 
   // 2. Agent files validation
-  checks.push(await validateAgentFiles());
+  checks.push(await validateAgentFiles(projectRoot));
 
   // 3. Workflow files validation
-  checks.push(await validateWorkflows());
+  checks.push(await validateWorkflows(projectRoot));
 
   // 4. Manifest consistency validation
-  checks.push(await validateManifest());
+  checks.push(await validateManifest(projectRoot));
 
   // 5. User data integrity validation
-  if (preMigrationData.userDataCount) {
-    checks.push(await validateUserDataIntegrity(preMigrationData.userDataCount));
+  if (preMigrationData.user_data_count) {
+    checks.push(await validateUserDataIntegrity(preMigrationData.user_data_count, projectRoot));
   }
 
   // 6. Deprecated workflows validation (if applicable)
-  checks.push(await validateDeprecatedWorkflows());
+  checks.push(await validateDeprecatedWorkflows(projectRoot));
 
   const allPassed = checks.every(c => c.passed);
 
@@ -50,9 +50,10 @@ async function validateInstallation(preMigrationData = {}) {
 
 /**
  * Validate config.yaml structure
+ * @param {string} projectRoot - Absolute path to project root
  * @returns {Promise<object>} Validation check result
  */
-async function validateConfigStructure() {
+async function validateConfigStructure(projectRoot) {
   const check = {
     name: 'Config structure',
     passed: false,
@@ -60,7 +61,7 @@ async function validateConfigStructure() {
   };
 
   try {
-    const configPath = path.join(process.cwd(), '_bmad/bme/_vortex/config.yaml');
+    const configPath = path.join(projectRoot, '_bmad/bme/_vortex/config.yaml');
 
     if (!fs.existsSync(configPath)) {
       check.error = 'config.yaml not found';
@@ -88,9 +89,10 @@ async function validateConfigStructure() {
 
 /**
  * Validate agent files exist
+ * @param {string} projectRoot - Absolute path to project root
  * @returns {Promise<object>} Validation check result
  */
-async function validateAgentFiles() {
+async function validateAgentFiles(projectRoot) {
   const check = {
     name: 'Agent files',
     passed: false,
@@ -98,7 +100,7 @@ async function validateAgentFiles() {
   };
 
   try {
-    const agentsDir = path.join(process.cwd(), '_bmad/bme/_vortex/agents');
+    const agentsDir = path.join(projectRoot, '_bmad/bme/_vortex/agents');
     const requiredAgents = [
       'contextualization-expert.md',
       'lean-experiments-specialist.md'
@@ -132,9 +134,10 @@ async function validateAgentFiles() {
 
 /**
  * Validate workflow files exist
+ * @param {string} projectRoot - Absolute path to project root
  * @returns {Promise<object>} Validation check result
  */
-async function validateWorkflows() {
+async function validateWorkflows(projectRoot) {
   const check = {
     name: 'Workflow files',
     passed: false,
@@ -142,7 +145,7 @@ async function validateWorkflows() {
   };
 
   try {
-    const workflowsDir = path.join(process.cwd(), '_bmad/bme/_vortex/workflows');
+    const workflowsDir = path.join(projectRoot, '_bmad/bme/_vortex/workflows');
     const requiredWorkflows = [
       'lean-persona',
       'product-vision',
@@ -181,9 +184,10 @@ async function validateWorkflows() {
 
 /**
  * Validate agent manifest consistency
+ * @param {string} projectRoot - Absolute path to project root
  * @returns {Promise<object>} Validation check result
  */
-async function validateManifest() {
+async function validateManifest(projectRoot) {
   const check = {
     name: 'Agent manifest',
     passed: false,
@@ -191,7 +195,7 @@ async function validateManifest() {
   };
 
   try {
-    const manifestPath = path.join(process.cwd(), '_bmad/_config/agent-manifest.csv');
+    const manifestPath = path.join(projectRoot, '_bmad/_config/agent-manifest.csv');
 
     if (!fs.existsSync(manifestPath)) {
       // Manifest is optional, so this is not a failure
@@ -222,9 +226,10 @@ async function validateManifest() {
 /**
  * Validate user data integrity
  * @param {number} expectedCount - Expected file count
+ * @param {string} projectRoot - Absolute path to project root
  * @returns {Promise<object>} Validation check result
  */
-async function validateUserDataIntegrity(expectedCount) {
+async function validateUserDataIntegrity(expectedCount, projectRoot) {
   const check = {
     name: 'User data preserved',
     passed: false,
@@ -232,14 +237,14 @@ async function validateUserDataIntegrity(expectedCount) {
   };
 
   try {
-    const outputDir = path.join(process.cwd(), '_bmad-output');
+    const outputDir = path.join(projectRoot, '_bmad-output');
 
     if (!fs.existsSync(outputDir)) {
       check.error = '_bmad-output/ directory not found';
       return check;
     }
 
-    const currentCount = await countUserDataFiles(outputDir);
+    const currentCount = await countUserDataFiles(projectRoot);
 
     // Allow for slight variation (user guides may have been updated)
     if (currentCount >= expectedCount - 2) {
@@ -257,9 +262,10 @@ async function validateUserDataIntegrity(expectedCount) {
 
 /**
  * Validate deprecated workflows structure
+ * @param {string} projectRoot - Absolute path to project root
  * @returns {Promise<object>} Validation check result
  */
-async function validateDeprecatedWorkflows() {
+async function validateDeprecatedWorkflows(projectRoot) {
   const check = {
     name: 'Deprecated workflows',
     passed: true, // Not required, so pass by default
@@ -267,7 +273,7 @@ async function validateDeprecatedWorkflows() {
   };
 
   try {
-    const deprecatedDir = path.join(process.cwd(), '_bmad/bme/_vortex/workflows/_deprecated');
+    const deprecatedDir = path.join(projectRoot, '_bmad/bme/_vortex/workflows/_deprecated');
 
     if (!fs.existsSync(deprecatedDir)) {
       check.info = 'No deprecated workflows (fresh installation)';
@@ -293,131 +299,6 @@ async function validateDeprecatedWorkflows() {
   return check;
 }
 
-/**
- * Count user data files in _bmad-output
- * @param {string} outputDir - Output directory path
- * @returns {Promise<number>} File count
- */
-async function countUserDataFiles(outputDir) {
-  let count = 0;
-
-  async function countRecursive(dir) {
-    const entries = await fs.readdir(dir, { withFileTypes: true });
-
-    for (const entry of entries) {
-      const fullPath = path.join(dir, entry.name);
-
-      // Skip .backups and .logs directories
-      if (entry.name === '.backups' || entry.name === '.logs') {
-        continue;
-      }
-
-      if (entry.isDirectory()) {
-        await countRecursive(fullPath);
-      } else if (entry.isFile()) {
-        count++;
-      }
-    }
-  }
-
-  await countRecursive(outputDir);
-  return count;
-}
-
-/**
- * Run smoke tests after migration
- * @returns {Promise<object>} Smoke test result
- */
-async function runSmokeTests() {
-  const tests = [];
-
-  // Test 1: Can read Emma agent file
-  tests.push(await testReadAgentFile('contextualization-expert.md', 'Emma'));
-
-  // Test 2: Can read Wade agent file
-  tests.push(await testReadAgentFile('lean-experiments-specialist.md', 'Wade'));
-
-  // Test 3: Can read a workflow template
-  tests.push(await testReadWorkflowTemplate('lean-persona'));
-
-  // Test 4: Config.yaml is parseable
-  tests.push(await testConfigParseable());
-
-  const allPassed = tests.every(t => t.passed);
-
-  return {
-    passed: allPassed,
-    tests
-  };
-}
-
-/**
- * Test reading an agent file
- */
-async function testReadAgentFile(filename, agentName) {
-  const test = { name: `Read ${agentName} agent file`, passed: false };
-
-  try {
-    const agentPath = path.join(process.cwd(), '_bmad/bme/_vortex/agents', filename);
-    const content = await fs.readFile(agentPath, 'utf8');
-
-    if (content.length > 0) {
-      test.passed = true;
-    }
-  } catch (error) {
-    test.error = error.message;
-  }
-
-  return test;
-}
-
-/**
- * Test reading a workflow template
- */
-async function testReadWorkflowTemplate(workflowName) {
-  const test = { name: `Read ${workflowName} template`, passed: false };
-
-  try {
-    const templatePath = path.join(
-      process.cwd(),
-      '_bmad/bme/_vortex/workflows',
-      workflowName,
-      `${workflowName}.template.md`
-    );
-
-    const content = await fs.readFile(templatePath, 'utf8');
-
-    if (content.length > 0) {
-      test.passed = true;
-    }
-  } catch (error) {
-    test.error = error.message;
-  }
-
-  return test;
-}
-
-/**
- * Test config.yaml parseability
- */
-async function testConfigParseable() {
-  const test = { name: 'Parse config.yaml', passed: false };
-
-  try {
-    const configPath = path.join(process.cwd(), '_bmad/bme/_vortex/config.yaml');
-    const content = await fs.readFile(configPath, 'utf8');
-    const config = yaml.load(content);
-
-    if (config && config.version) {
-      test.passed = true;
-    }
-  } catch (error) {
-    test.error = error.message;
-  }
-
-  return test;
-}
-
 module.exports = {
   validateInstallation,
   validateConfigStructure,
@@ -425,6 +306,5 @@ module.exports = {
   validateWorkflows,
   validateManifest,
   validateUserDataIntegrity,
-  validateDeprecatedWorkflows,
-  runSmokeTests
+  validateDeprecatedWorkflows
 };
