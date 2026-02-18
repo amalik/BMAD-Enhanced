@@ -2,6 +2,9 @@
 
 const chalk = require('chalk');
 const registry = require('./migrations/registry');
+const backupManager = require('./lib/backup-manager');
+const { refreshInstallation } = require('./lib/refresh-installation');
+const { findProjectRoot } = require('./lib/utils');
 
 /**
  * BMAD-Enhanced Migrate CLI
@@ -10,6 +13,15 @@ const registry = require('./migrations/registry');
 
 async function main() {
   const args = process.argv.slice(2);
+
+  // Validate project root
+  const projectRoot = findProjectRoot();
+  if (!projectRoot) {
+    console.error('');
+    console.error(chalk.red('Not in a BMAD project. Could not find _bmad/ directory.'));
+    console.error('');
+    process.exit(1);
+  }
 
   // No args - show available migrations
   if (args.length === 0) {
@@ -32,6 +44,15 @@ async function main() {
     process.exit(1);
   }
 
+  // Check if already applied
+  const configPath = require('path').join(projectRoot, '_bmad/bme/_vortex/config.yaml');
+  if (registry.hasMigrationBeenApplied(migrationName, configPath)) {
+    console.log('');
+    console.log(chalk.yellow(`Migration '${migrationName}' has already been applied.`));
+    console.log('');
+    process.exit(0);
+  }
+
   // Load migration module
   if (!migration.module) {
     try {
@@ -44,22 +65,37 @@ async function main() {
     }
   }
 
-  // Run migration
+  // Run migration with backup and refresh
   console.log('');
   console.log(chalk.cyan.bold(`Running migration: ${migration.name}`));
   console.log(chalk.gray(migration.description));
   console.log('');
 
+  let backupMetadata = null;
+
   try {
-    const changes = await migration.module.apply();
+    // Create backup before running delta
+    console.log(chalk.cyan('Creating backup...'));
+    backupMetadata = await backupManager.createBackup('manual', projectRoot);
+    console.log(chalk.green(`✓ Backup created: ${require('path').basename(backupMetadata.backup_dir)}`));
+    console.log('');
+
+    // Run the delta
+    const changes = await migration.module.apply(projectRoot);
 
     console.log('');
-    console.log(chalk.green.bold('✓ Migration completed'));
+    console.log(chalk.green.bold('✓ Migration delta completed'));
     console.log('');
-    console.log(chalk.cyan('Changes:'));
+    console.log(chalk.cyan('Delta changes:'));
     changes.forEach(change => {
       console.log(chalk.gray(`  - ${change}`));
     });
+    console.log('');
+
+    // Refresh installation after delta
+    console.log(chalk.cyan('Refreshing installation files...'));
+    const refreshChanges = await refreshInstallation(projectRoot);
+    console.log(chalk.green('✓ Installation refreshed'));
     console.log('');
 
   } catch (error) {
@@ -67,6 +103,23 @@ async function main() {
     console.error(chalk.red.bold('✗ Migration failed'));
     console.error(chalk.red(error.message));
     console.error('');
+
+    // Rollback if we have a backup
+    if (backupMetadata) {
+      console.log(chalk.yellow('Restoring from backup...'));
+      try {
+        await backupManager.restoreBackup(backupMetadata, projectRoot);
+        console.log(chalk.green('✓ Installation restored from backup'));
+        console.log('');
+      } catch (restoreError) {
+        console.error(chalk.red('✗ Restore failed!'));
+        console.error(chalk.red(restoreError.message));
+        console.error('');
+        console.error(chalk.yellow(`Manual restore may be needed from: ${backupMetadata.backup_dir}`));
+        console.error('');
+      }
+    }
+
     if (error.stack) {
       console.error(chalk.gray(error.stack));
       console.error('');
@@ -95,7 +148,7 @@ function showAvailableMigrations() {
     const breaking = m.breaking ? chalk.red('[BREAKING]') : chalk.green('[SAFE]');
     console.log(`  ${index + 1}. ${chalk.cyan(m.name)} ${breaking}`);
     console.log(`     ${chalk.gray(m.description)}`);
-    console.log(`     ${chalk.gray(`${m.fromVersion} → ${m.toVersion}`)}`);
+    console.log(`     ${chalk.gray(`From: ${m.fromVersion}`)}`);
     console.log('');
   });
 
