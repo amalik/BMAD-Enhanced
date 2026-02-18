@@ -3,26 +3,34 @@
 const fs = require('fs-extra');
 const path = require('path');
 const chalk = require('chalk');
+const yaml = require('js-yaml');
+const { findProjectRoot, getPackageVersion } = require('./utils');
 const backupManager = require('./backup-manager');
-const versionDetector = require('./version-detector');
 const configMerger = require('./config-merger');
 const validator = require('./validator');
+const { refreshInstallation } = require('./refresh-installation');
 const registry = require('../migrations/registry');
 
 /**
  * Migration Runner for BMAD-Enhanced
- * Core orchestration: executes migrations, handles backups, manages rollback
+ * Core orchestration: executes migration deltas, refreshes installation, handles backups and rollback.
  */
 
 /**
- * Run migrations from current version to target version
- * @param {string} fromVersion - Current version
- * @param {string} toVersion - Target version
+ * Run migrations from current version to the current package version.
+ * @param {string} fromVersion - Current installed version
  * @param {object} options - Options { dryRun, verbose }
  * @returns {Promise<object>} Migration result
  */
-async function runMigrations(fromVersion, toVersion, options = {}) {
+async function runMigrations(fromVersion, options = {}) {
   const { dryRun = false, verbose = false } = options;
+  const toVersion = getPackageVersion();
+
+  // Resolve project root
+  const projectRoot = findProjectRoot();
+  if (!projectRoot) {
+    throw new Error('Not in a BMAD project. Could not find _bmad/ directory.');
+  }
 
   console.log('');
   if (dryRun) {
@@ -31,8 +39,8 @@ async function runMigrations(fromVersion, toVersion, options = {}) {
     console.log('');
   }
 
-  // 1. Get applicable migrations
-  const migrations = registry.getMigrationsFor(fromVersion, toVersion);
+  // 1. Get applicable migration deltas
+  const migrations = registry.getMigrationsFor(fromVersion);
 
   if (migrations.length === 0) {
     console.log(chalk.yellow('No migrations needed'));
@@ -52,7 +60,7 @@ async function runMigrations(fromVersion, toVersion, options = {}) {
   }
 
   // 2. Acquire migration lock
-  await acquireMigrationLock();
+  await acquireMigrationLock(projectRoot);
 
   let backupMetadata = null;
   const results = [];
@@ -60,20 +68,18 @@ async function runMigrations(fromVersion, toVersion, options = {}) {
   try {
     // 3. Create backup
     console.log(chalk.cyan('[1/5] Creating backup...'));
-    const userDataCount = await backupManager.countUserDataFiles();
-    backupMetadata = await backupManager.createBackup(fromVersion);
-    backupMetadata.userDataCount = userDataCount;
+    backupMetadata = await backupManager.createBackup(fromVersion, projectRoot);
     console.log(chalk.green(`✓ Backup created: ${path.basename(backupMetadata.backup_dir)}`));
     console.log('');
 
-    // 4. Execute migrations sequentially
-    console.log(chalk.cyan('[2/5] Running migrations...'));
+    // 4. Execute migration deltas sequentially
+    console.log(chalk.cyan('[2/5] Running migration deltas...'));
     for (let i = 0; i < migrations.length; i++) {
       const migration = migrations[i];
       console.log(chalk.cyan(`\nMigration ${i + 1}/${migrations.length}: ${migration.name}`));
 
       try {
-        const changes = await executeMigration(migration, { verbose });
+        const changes = await executeMigration(migration, projectRoot, { verbose });
         results.push({
           name: migration.name,
           success: true,
@@ -87,20 +93,30 @@ async function runMigrations(fromVersion, toVersion, options = {}) {
       }
     }
     console.log('');
-    console.log(chalk.green('✓ All migrations completed'));
+    console.log(chalk.green('✓ All migration deltas completed'));
     console.log('');
 
-    // 5. Update configuration and migration history
-    console.log(chalk.cyan('[3/5] Updating configuration...'));
-    await updateMigrationHistory(fromVersion, toVersion, results);
+    // 5. Refresh installation (copy latest files from package)
+    console.log(chalk.cyan('[3/5] Refreshing installation files...'));
+    const refreshChanges = await refreshInstallation(projectRoot);
+    results.push({
+      name: 'refresh-installation',
+      success: true,
+      changes: refreshChanges
+    });
+    console.log(chalk.green('✓ Installation refreshed'));
+    console.log('');
+
+    // 6. Update migration history in config.yaml
+    console.log(chalk.cyan('[4/5] Updating configuration...'));
+    await updateMigrationHistory(projectRoot, fromVersion, toVersion, results);
     console.log(chalk.green('✓ Migration history updated'));
     console.log('');
 
-    // 6. Validate installation
-    console.log(chalk.cyan('[4/5] Validating installation...'));
-    const validationResult = await validator.validateInstallation(backupMetadata);
+    // 7. Validate installation
+    console.log(chalk.cyan('[5/5] Validating installation...'));
+    const validationResult = await validator.validateInstallation(backupMetadata, projectRoot);
 
-    // Display validation results
     validationResult.checks.forEach(check => {
       if (check.passed) {
         console.log(chalk.green(`  ✓ ${check.name}`));
@@ -123,21 +139,17 @@ async function runMigrations(fromVersion, toVersion, options = {}) {
     console.log(chalk.green('✓ Installation validated'));
     console.log('');
 
-    // 7. Cleanup old backups
-    console.log(chalk.cyan('[5/5] Cleanup...'));
-    const deletedCount = await backupManager.cleanupOldBackups(5);
+    // 8. Cleanup old backups
+    const deletedCount = await backupManager.cleanupOldBackups(5, projectRoot);
     if (deletedCount > 0) {
       console.log(chalk.green(`✓ Cleaned up ${deletedCount} old backup(s)`));
-    } else {
-      console.log(chalk.green('✓ No old backups to clean up'));
     }
-    console.log('');
 
     // Release lock
-    await releaseMigrationLock();
+    await releaseMigrationLock(projectRoot);
 
     // Create migration log
-    await createMigrationLog(fromVersion, toVersion, results, backupMetadata);
+    await createMigrationLog(projectRoot, fromVersion, toVersion, results, backupMetadata);
 
     return {
       success: true,
@@ -158,7 +170,7 @@ async function runMigrations(fromVersion, toVersion, options = {}) {
     if (backupMetadata) {
       console.log(chalk.yellow('Restoring from backup...'));
       try {
-        await backupManager.restoreBackup(backupMetadata);
+        await backupManager.restoreBackup(backupMetadata, projectRoot);
         console.log(chalk.green('✓ Installation restored from backup'));
         console.log('');
       } catch (restoreError) {
@@ -171,10 +183,10 @@ async function runMigrations(fromVersion, toVersion, options = {}) {
     }
 
     // Release lock
-    await releaseMigrationLock();
+    await releaseMigrationLock(projectRoot);
 
     // Create error log
-    await createErrorLog(fromVersion, toVersion, error, backupMetadata);
+    await createErrorLog(projectRoot, fromVersion, toVersion, error, backupMetadata);
 
     throw error;
   }
@@ -182,8 +194,6 @@ async function runMigrations(fromVersion, toVersion, options = {}) {
 
 /**
  * Preview migrations without applying
- * @param {Array} migrations - Migrations to preview
- * @returns {Promise<object>} Preview result
  */
 async function previewMigrations(migrations) {
   const previews = [];
@@ -199,40 +209,35 @@ async function previewMigrations(migrations) {
       preview.actions.forEach(action => {
         console.log(chalk.gray(`  - ${action}`));
       });
-
-      previews.push({
-        name: migration.name,
-        preview
-      });
+      previews.push({ name: migration.name, preview });
     }
   }
 
+  console.log('');
+  console.log(chalk.white('After deltas, installation will be refreshed:'));
+  console.log(chalk.gray('  - Refresh agent files'));
+  console.log(chalk.gray('  - Refresh 7 workflow directories'));
+  console.log(chalk.gray('  - Update config.yaml (preserving user preferences)'));
+  console.log(chalk.gray('  - Update user guides (with .bak backup)'));
   console.log('');
   console.log(chalk.green('To apply these changes, run:'));
   console.log(chalk.cyan('  npx bmad-update'));
   console.log('');
 
-  return {
-    success: true,
-    dryRun: true,
-    previews
-  };
+  return { success: true, dryRun: true, previews };
 }
 
 /**
- * Execute a single migration
- * @param {object} migration - Migration to execute
- * @param {object} options - Options { verbose }
- * @returns {Promise<Array<string>>} Changes made
+ * Execute a single migration delta
  */
-async function executeMigration(migration, options = {}) {
+async function executeMigration(migration, projectRoot, options = {}) {
   const { verbose = false } = options;
 
   if (!migration.module || !migration.module.apply) {
     throw new Error(`Migration ${migration.name} has no apply function`);
   }
 
-  const changes = await migration.module.apply();
+  const changes = await migration.module.apply(projectRoot);
 
   if (verbose) {
     changes.forEach(change => {
@@ -245,45 +250,35 @@ async function executeMigration(migration, options = {}) {
 
 /**
  * Update migration history in config.yaml
- * @param {string} fromVersion - Version migrated from
- * @param {string} toVersion - Version migrated to
- * @param {Array} results - Migration results
  */
-async function updateMigrationHistory(fromVersion, toVersion, results) {
-  const configPath = path.join(process.cwd(), '_bmad/bme/_vortex/config.yaml');
+async function updateMigrationHistory(projectRoot, fromVersion, toVersion, results) {
+  const configPath = path.join(projectRoot, '_bmad/bme/_vortex/config.yaml');
 
   if (!fs.existsSync(configPath)) {
-    throw new Error('config.yaml not found');
+    throw new Error('config.yaml not found after refresh');
   }
 
   const configContent = fs.readFileSync(configPath, 'utf8');
-  const yaml = require('js-yaml');
   const config = yaml.load(configContent);
 
-  // Add migration history entry
-  const migrationsApplied = results.map(r => r.name);
+  const migrationsApplied = results
+    .filter(r => r.name !== 'refresh-installation')
+    .map(r => r.name);
+
   const updatedConfig = configMerger.addMigrationHistory(
-    config,
-    fromVersion,
-    toVersion,
-    migrationsApplied
+    config, fromVersion, toVersion, migrationsApplied
   );
 
-  // Write config
   await configMerger.writeConfig(configPath, updatedConfig);
 }
 
-/**
- * Acquire migration lock to prevent concurrent migrations
- */
-async function acquireMigrationLock() {
-  const lockFile = path.join(process.cwd(), '_bmad-output/.migration-lock');
+async function acquireMigrationLock(projectRoot) {
+  const lockFile = path.join(projectRoot, '_bmad-output/.migration-lock');
 
   if (fs.existsSync(lockFile)) {
     const lock = await fs.readJson(lockFile);
     const age = Date.now() - lock.timestamp;
 
-    // Stale lock (older than 5 minutes)
     if (age > 5 * 60 * 1000) {
       console.log(chalk.yellow('Removing stale migration lock'));
       await fs.remove(lockFile);
@@ -292,39 +287,22 @@ async function acquireMigrationLock() {
     }
   }
 
-  // Create lock
-  await fs.ensureDir(path.join(process.cwd(), '_bmad-output'));
-  await fs.writeJson(lockFile, {
-    timestamp: Date.now(),
-    pid: process.pid
-  });
+  await fs.ensureDir(path.join(projectRoot, '_bmad-output'));
+  await fs.writeJson(lockFile, { timestamp: Date.now(), pid: process.pid });
 }
 
-/**
- * Release migration lock
- */
-async function releaseMigrationLock() {
-  const lockFile = path.join(process.cwd(), '_bmad-output/.migration-lock');
-
+async function releaseMigrationLock(projectRoot) {
+  const lockFile = path.join(projectRoot, '_bmad-output/.migration-lock');
   if (fs.existsSync(lockFile)) {
     await fs.remove(lockFile);
   }
 }
 
-/**
- * Create migration log
- * @param {string} fromVersion - Version migrated from
- * @param {string} toVersion - Version migrated to
- * @param {Array} results - Migration results
- * @param {object} backupMetadata - Backup metadata
- */
-async function createMigrationLog(fromVersion, toVersion, results, backupMetadata) {
-  const logsDir = path.join(process.cwd(), '_bmad-output/.logs');
+async function createMigrationLog(projectRoot, fromVersion, toVersion, results, backupMetadata) {
+  const logsDir = path.join(projectRoot, '_bmad-output/.logs');
   await fs.ensureDir(logsDir);
 
-  const timestamp = Date.now();
-  const logFile = path.join(logsDir, `migration-${timestamp}.log`);
-
+  const logFile = path.join(logsDir, `migration-${Date.now()}.log`);
   const logContent = [
     `BMAD-Enhanced Migration Log`,
     `Date: ${new Date().toISOString()}`,
@@ -345,20 +323,11 @@ async function createMigrationLog(fromVersion, toVersion, results, backupMetadat
   await fs.writeFile(logFile, logContent, 'utf8');
 }
 
-/**
- * Create error log
- * @param {string} fromVersion - Version migrated from
- * @param {string} toVersion - Version migrated to
- * @param {Error} error - Error that occurred
- * @param {object} backupMetadata - Backup metadata (if exists)
- */
-async function createErrorLog(fromVersion, toVersion, error, backupMetadata) {
-  const logsDir = path.join(process.cwd(), '_bmad-output/.logs');
+async function createErrorLog(projectRoot, fromVersion, toVersion, error, backupMetadata) {
+  const logsDir = path.join(projectRoot, '_bmad-output/.logs');
   await fs.ensureDir(logsDir);
 
-  const timestamp = Date.now();
-  const logFile = path.join(logsDir, `migration-error-${timestamp}.log`);
-
+  const logFile = path.join(logsDir, `migration-error-${Date.now()}.log`);
   const logContent = [
     `BMAD-Enhanced Migration Error Log`,
     `Date: ${new Date().toISOString()}`,
@@ -373,18 +342,13 @@ async function createErrorLog(fromVersion, toVersion, error, backupMetadata) {
     backupMetadata ? `Backup: ${backupMetadata.backup_dir}` : 'No backup created',
     backupMetadata ? 'Status: ROLLED BACK' : 'Status: FAILED (no backup)',
     '',
-    'Please report this issue at: https://github.com/amalik/BMAD-Enhanced/issues',
-    'Include this log file when reporting.'
+    'Please report this issue at: https://github.com/amalik/BMAD-Enhanced/issues'
   ].join('\n');
 
   await fs.writeFile(logFile, logContent, 'utf8');
-
   console.log(chalk.gray(`Migration log: ${logFile}`));
 }
 
-/**
- * Custom error for migration failures
- */
 class MigrationError extends Error {
   constructor(migrationName, originalError) {
     super(`Migration ${migrationName} failed: ${originalError.message}`);
