@@ -5,6 +5,7 @@ const path = require('path');
 const chalk = require('chalk');
 const yaml = require('js-yaml');
 const versionDetector = require('./lib/version-detector');
+const { findProjectRoot, compareVersions } = require('./lib/utils');
 
 /**
  * BMAD-Enhanced Version CLI
@@ -12,13 +13,25 @@ const versionDetector = require('./lib/version-detector');
  */
 
 async function main() {
-  const currentVersion = versionDetector.getCurrentVersion();
+  const projectRoot = findProjectRoot();
   const targetVersion = versionDetector.getTargetVersion();
-  const scenario = versionDetector.detectInstallationScenario();
 
   console.log('');
   console.log(chalk.bold('BMAD-Enhanced Version Information'));
   console.log('');
+
+  // Not in a BMAD project
+  if (!projectRoot) {
+    console.log(chalk.yellow('Status:           Not in a BMAD project'));
+    console.log(`Package version:  ${chalk.cyan(targetVersion)}`);
+    console.log('');
+    console.log('Run: ' + chalk.cyan('npx bmad-install-agents'));
+    console.log('');
+    return;
+  }
+
+  const currentVersion = versionDetector.getCurrentVersion(projectRoot);
+  const scenario = versionDetector.detectInstallationScenario(projectRoot);
 
   // Fresh install - not installed yet
   if (scenario === 'fresh') {
@@ -64,7 +77,7 @@ async function main() {
   // Status
   if (currentVersion === targetVersion) {
     console.log(chalk.green('Status: ✓ Up to date'));
-  } else if (versionDetector.compareVersions(currentVersion, targetVersion) < 0) {
+  } else if (compareVersions(currentVersion, targetVersion) < 0) {
     console.log(chalk.yellow('Status: ⚠ Update available'));
     console.log('');
     console.log('Run: ' + chalk.cyan('npx bmad-update --dry-run') + ' (to preview)');
@@ -74,7 +87,7 @@ async function main() {
   }
 
   // Show migration history
-  const migrationHistory = await getMigrationHistory();
+  const migrationHistory = await getMigrationHistory(projectRoot);
   if (migrationHistory && migrationHistory.length > 0) {
     console.log('');
     console.log(chalk.cyan('Migration History:'));
@@ -94,10 +107,11 @@ async function main() {
 
 /**
  * Get migration history from config.yaml
+ * @param {string} projectRoot - Project root
  * @returns {Promise<Array|null>} Migration history or null
  */
-async function getMigrationHistory() {
-  const configPath = path.join(process.cwd(), '_bmad/bme/_vortex/config.yaml');
+async function getMigrationHistory(projectRoot) {
+  const configPath = path.join(projectRoot, '_bmad/bme/_vortex/config.yaml');
 
   if (!fs.existsSync(configPath)) {
     return null;
