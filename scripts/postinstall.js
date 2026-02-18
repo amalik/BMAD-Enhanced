@@ -27,9 +27,12 @@ async function main() {
     const versionDetector = require('./update/lib/version-detector');
     const registry = require('./update/migrations/registry');
 
-    const currentVersion = versionDetector.getCurrentVersion();
+    const { findProjectRoot, compareVersions } = require('./update/lib/utils');
+    const projectRoot = findProjectRoot();
+
+    const currentVersion = versionDetector.getCurrentVersion(projectRoot);
     const targetVersion = versionDetector.getTargetVersion();
-    const scenario = versionDetector.detectInstallationScenario();
+    const scenario = versionDetector.detectInstallationScenario(projectRoot);
 
     // Fresh install
     if (scenario === 'fresh' || !currentVersion) {
@@ -52,7 +55,7 @@ async function main() {
     }
 
     // Upgrade detected
-    if (versionDetector.compareVersions(currentVersion, targetVersion) < 0) {
+    if (compareVersions(currentVersion, targetVersion) < 0) {
       console.log(`${YELLOW}${BOLD}⚠ UPGRADE DETECTED${RESET}`);
       console.log('');
       console.log(`  Current version: ${RED}${currentVersion}${RESET}`);
@@ -60,7 +63,7 @@ async function main() {
       console.log('');
 
       // Check for breaking changes
-      const breakingChanges = registry.getBreakingChanges(currentVersion, targetVersion);
+      const breakingChanges = registry.getBreakingChanges(currentVersion);
       if (breakingChanges.length > 0) {
         console.log(`${RED}${BOLD}  ⚠ Breaking changes detected!${RESET}`);
         console.log('');
@@ -83,7 +86,7 @@ async function main() {
     }
 
     // Downgrade (shouldn't happen normally)
-    if (versionDetector.compareVersions(currentVersion, targetVersion) > 0) {
+    if (compareVersions(currentVersion, targetVersion) > 0) {
       console.log(`${YELLOW}Note: Package version (${targetVersion}) is older than installed version (${currentVersion})${RESET}`);
       console.log('');
       return;
@@ -95,8 +98,8 @@ async function main() {
     console.log(`  ${CYAN}npx bmad-install-agents${RESET}  - Install all agents (Emma + Wade)`);
     console.log('');
     console.log('Or install individually:');
-    console.log(`  ${CYAN}npx bmad-install-emma${RESET}    - Install Emma (empathy-mapper)`);
-    console.log(`  ${CYAN}npx bmad-install-wade${RESET}    - Install Wade (wireframe-designer)`);
+    console.log(`  ${CYAN}npx bmad-install-emma${RESET}    - Install Emma (contextualization-expert)`);
+    console.log(`  ${CYAN}npx bmad-install-wade${RESET}    - Install Wade (lean-experiments-specialist)`);
     console.log('');
   }
 }
