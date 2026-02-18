@@ -1,6 +1,6 @@
 {
   "name": "bmad-enhanced",
-  "version": "1.3.4",
+  "version": "1.3.5",
   "description": "Vortex Framework - Contextualize and Externalize streams for Lean Startup validation",
   "main": "index.js",
   "bin": {
