@@ -7,6 +7,24 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [1.3.4] - 2026-02-18
+
+### Fixed
+
+**🔧 CRITICAL Migration Bug:**
+- Fixed migration system not detecting migrations from 1.2.0 to 1.3.x
+- Updated all migrations to target version 1.3.4 (was 1.3.0)
+- Migrations now correctly run when upgrading from 1.0.x, 1.1.x, or 1.2.x
+- **This fixes the "No migrations needed (versions compatible)" error**
+- Now properly removes deprecated agents and legacy `_designos` directory
+
+**What was broken in v1.3.3:**
+- Users on v1.2.0 saw "No migrations needed" but weren't upgraded
+- Deprecated agents and `_designos` directory weren't removed
+- Version remained at 1.2.0 instead of updating to 1.3.x
+
+---
+
 ## [1.3.3] - 2026-02-18
 
 ### Fixed
