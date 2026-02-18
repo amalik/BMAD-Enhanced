@@ -123,6 +123,32 @@ function copyAllAgentFiles() {
   });
 
   console.log(`${GREEN}  ✓${RESET} Wade installed`);
+
+  // Copy all 7 new workflow directories
+  console.log(`${CYAN}  →${RESET} Installing Vortex Framework workflows...`);
+  const workflows = [
+    'lean-persona',
+    'product-vision',
+    'contextualize-scope',
+    'mvp',
+    'lean-experiment',
+    'proof-of-concept',
+    'proof-of-value'
+  ];
+
+  workflows.forEach(workflow => {
+    const workflowSourceDir = path.join(sourceDir, 'workflows', workflow);
+    const workflowTargetDir = path.join(targetDir, 'workflows', workflow);
+
+    if (fs.existsSync(workflowSourceDir)) {
+      fs.copySync(workflowSourceDir, workflowTargetDir);
+      console.log(`${GREEN}    ✓${RESET} ${workflow}`);
+    } else {
+      console.log(`${YELLOW}    ⚠${RESET} ${workflow} not found in package (skipping)`);
+    }
+  });
+
+  console.log(`${GREEN}  ✓${RESET} All workflows installed`);
 }
 
 function updateConfig() {
@@ -136,7 +162,7 @@ function updateConfig() {
 submodule_name: _vortex
 description: Contextualize and Externalize streams - Strategic framing and validated learning
 module: bme
-version: 1.2.0
+version: 1.3.4
 
 # Output Configuration
 output_folder: "{project-root}/_bmad-output/vortex-artifacts"
