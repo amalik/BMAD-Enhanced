@@ -5,6 +5,7 @@ const chalk = require('chalk');
 const versionDetector = require('./lib/version-detector');
 const migrationRunner = require('./lib/migration-runner');
 const registry = require('./migrations/registry');
+const { findProjectRoot } = require('./lib/utils');
 
 /**
  * BMAD-Enhanced Update CLI
@@ -15,7 +16,6 @@ async function main() {
   const args = process.argv.slice(2);
   const dryRun = args.includes('--dry-run');
   const yes = args.includes('--yes') || args.includes('-y');
-  const force = args.includes('--force');
   const verbose = args.includes('--verbose') || args.includes('-v');
 
   // Header
@@ -25,10 +25,20 @@ async function main() {
   console.log(chalk.bold.magenta('╚════════════════════════════════════════╝'));
   console.log('');
 
+  // Validate project root
+  const projectRoot = findProjectRoot();
+  if (!projectRoot) {
+    console.log(chalk.red('Not in a BMAD project. Could not find _bmad/ directory.'));
+    console.log('');
+    console.log('Run: ' + chalk.cyan('npx bmad-install-agents'));
+    console.log('');
+    process.exit(1);
+  }
+
   // 1. Detect current state
-  const currentVersion = versionDetector.getCurrentVersion();
+  const currentVersion = versionDetector.getCurrentVersion(projectRoot);
   const targetVersion = versionDetector.getTargetVersion();
-  const scenario = versionDetector.detectInstallationScenario();
+  const scenario = versionDetector.detectInstallationScenario(projectRoot);
 
   // Handle different scenarios
   if (scenario === 'fresh') {
@@ -88,7 +98,7 @@ async function main() {
   console.log(`  To:   ${chalk.green(targetVersion)}`);
   console.log('');
 
-  const migrations = registry.getMigrationsFor(currentVersion, targetVersion);
+  const migrations = registry.getMigrationsFor(currentVersion);
 
   if (migrations.length === 0) {
     console.log(chalk.yellow('No migrations needed (versions compatible)'));
@@ -104,7 +114,7 @@ async function main() {
   console.log('');
 
   // 3. Show breaking changes warning
-  const breakingChanges = registry.getBreakingChanges(currentVersion, targetVersion);
+  const breakingChanges = registry.getBreakingChanges(currentVersion);
   if (breakingChanges.length > 0) {
     console.log(chalk.red.bold('⚠ BREAKING CHANGES:'));
     breakingChanges.forEach(change => {
@@ -119,7 +129,7 @@ async function main() {
     console.log('');
 
     try {
-      await migrationRunner.runMigrations(currentVersion, targetVersion, { dryRun: true, verbose });
+      await migrationRunner.runMigrations(currentVersion, { dryRun: true, verbose });
     } catch (error) {
       console.error(chalk.red('Error during preview:'), error.message);
       process.exit(1);
@@ -148,7 +158,7 @@ async function main() {
   console.log(chalk.cyan.bold('Starting migration...'));
 
   try {
-    const result = await migrationRunner.runMigrations(currentVersion, targetVersion, { verbose });
+    const result = await migrationRunner.runMigrations(currentVersion, { verbose });
 
     // 7. Show success report
     console.log('');
