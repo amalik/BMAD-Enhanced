@@ -29,6 +29,7 @@ module.exports = {
       actions: [
         'Update version: 1.2.x → 1.3.0',
         'Verify deprecated workflows archived',
+        'Remove legacy _designos directory (pre-Vortex structure)',
         'Remove deprecated agent files (empathy-mapper.md, wireframe-designer.md)',
         'Update agent files to latest (bug fixes/improvements)',
         'Refresh user guides (EMMA-USER-GUIDE.md, WADE-USER-GUIDE.md)'
@@ -53,11 +54,15 @@ module.exports = {
     await ensureDeprecatedStructure(targetDir);
     changes.push('Verified deprecated workflow structure');
 
-    // 3. Update agent files (in case of bug fixes or improvements)
+    // 3. Remove old _designos directory (pre-Vortex structure)
+    await removeOldDesignosDirectory();
+    changes.push('Removed legacy _designos directory');
+
+    // 4. Update agent files (in case of bug fixes or improvements)
     await copyAgentFiles(sourceDir, targetDir);
     changes.push('Refreshed agent files');
 
-    // 4. Update user guides
+    // 5. Update user guides
     await copyUserGuides();
     changes.push('Updated user guides');
 
@@ -178,5 +183,19 @@ async function copyUserGuides() {
     } else {
       console.warn(`    Warning: ${guide} not found in package`);
     }
+  }
+}
+
+/**
+ * Remove old _designos directory (pre-Vortex structure)
+ */
+async function removeOldDesignosDirectory() {
+  const designosPath = path.join(process.cwd(), '_bmad/bme/_designos');
+
+  if (fs.existsSync(designosPath)) {
+    await fs.remove(designosPath);
+    console.log('    Removed legacy _designos directory');
+  } else {
+    console.log('    No legacy _designos directory found (OK)');
   }
 }
