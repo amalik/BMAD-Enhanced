@@ -4,8 +4,8 @@
 
 > Strategic framing and validated learning through Emma and Wade
 
-[![Status](https://img.shields.io/badge/status-v1.3.8--stable-success)]()
-[![Version](https://img.shields.io/badge/version-1.3.8-blue)]()
+[![Status](https://img.shields.io/badge/status-v1.4.0--stable-success)]()
+[![Version](https://img.shields.io/badge/version-1.4.0-blue)]()
 [![Workflows](https://img.shields.io/badge/workflows-7_implemented-success)]()
 [![Emma](https://img.shields.io/badge/emma-3_workflows-brightgreen)]()
 [![Wade](https://img.shields.io/badge/wade-4_workflows-brightgreen)]()
@@ -202,13 +202,12 @@ npx bmad-update
 
 ### Migration Paths
 
-**From v1.1.x or v1.2.x to v1.3.x:**
+**From v1.1.x, v1.2.x, or v1.3.x to v1.4.0:**
 - No breaking changes
-- Agent files refreshed (bug fixes)
-- Legacy `_designos` directory removed
-- User guides updated
+- Internal architecture refactor (no user-facing changes)
+- Agent files and workflows refreshed
 
-**From v1.0.x to v1.3.x:**
+**From v1.0.x to v1.4.0:**
 - Breaking: empathy-map → lean-persona
 - Old workflows preserved in `_deprecated/`
 - 7 new workflows installed
@@ -254,7 +253,7 @@ All agents built using a standard pattern:
 
 ### Emma (contextualization-expert) - ✅ COMPLETE
 
-**Status:** v1.3.8 - All 3 workflows implemented and ready to use
+**Status:** v1.4.0 - All 3 workflows implemented and ready to use
 **Title:** Contextualization Expert 🎯
 **Stream:** Contextualize
 **Domain:** Strategic framing, problem-product space navigation
@@ -280,7 +279,7 @@ All agents built using a standard pattern:
 
 ### Wade (lean-experiments-specialist) - ✅ COMPLETE
 
-**Status:** v1.3.8 - All 4 workflows implemented and ready to use
+**Status:** v1.4.0 - All 4 workflows implemented and ready to use
 **Title:** Lean Experiments Specialist 🧪
 **Stream:** Externalize
 **Domain:** Lean Startup experimentation, validated learning
@@ -307,7 +306,7 @@ All agents built using a standard pattern:
 
 ## 📊 Project Status
 
-**Current Version:** v1.3.8 - Complete Vortex Framework + Update/Migration System ✅
+**Current Version:** v1.4.0 - Complete Vortex Framework + Refactored Update System ✅
 
 **Progress:**
 - ✅ Emma - 3 Contextualize workflows IMPLEMENTED
@@ -316,23 +315,28 @@ All agents built using a standard pattern:
 - ✅ Update/migration system with backup and rollback
 - ✅ Standalone installation support (no BMAD Method required)
 
-**What's New in v1.3.x:**
-- **Update/migration system** - `npx bmad-update`, `npx bmad-version`, `npx bmad-migrate`
-- **Automatic backups** - Before every migration, with rollback on failure
-- **Standalone support** - Works without BMAD Method installed
-- **Legacy cleanup** - Removes deprecated `_designos` directory and old agents
-- **Migration paths** - Supports upgrade from v1.0.x, v1.1.x, v1.2.x
+**What's New in v1.4.0:**
+- **Architecture refactor** - Single source of truth for version, no hardcoded strings
+- **Project root detection** - Commands work from any subdirectory
+- **Safer migrations** - `bmad-migrate` now creates backups with automatic rollback
+- **Cleaner codebase** - Dead code removed, shared refresh mechanism, append-only registry
+
+**v1.3.x highlights:**
+- Update/migration system (`npx bmad-update`, `npx bmad-version`, `npx bmad-migrate`)
+- Automatic backups before every migration, with rollback on failure
+- Standalone support (works without BMAD Method installed)
+- Migration paths from v1.0.x, v1.1.x, v1.2.x
 
 **Roadmap:**
 ```
-v1.1.0               v1.2.0                  v1.3.x ✅            v2.0.0
-├─────────────────┬────────────────────────┬──────────────────┬──────────────────┤
-│ Repositioning ✅ │  Workflows ✅          │  Tooling ✅       │  Advanced 📋     │
-│ • New identity  │  • 7 workflows         │  • Update tools  │  • Multi-agent   │
-│ • Framework     │  • Templates           │  • Migration     │  • Integration   │
-│ • Structure     │  • User guides         │  • Automation    │  • Analytics     │
-└─────────────────┴────────────────────────┴──────────────────┴──────────────────┘
-   Feb 2026            Feb 2026                Feb 2026            Q3 2026
+v1.1.0               v1.2.0              v1.3.x ✅         v1.4.0 ✅          v2.0.0
+├─────────────────┬──────────────────┬──────────────────┬──────────────────┬──────────┤
+│ Repositioning ✅ │  Workflows ✅    │  Tooling ✅       │  Refactor ✅      │ Advanced │
+│ • New identity  │  • 7 workflows   │  • Update tools  │  • Architecture  │ • Multi  │
+│ • Framework     │  • Templates     │  • Migration     │  • Safety        │ • Integ  │
+│ • Structure     │  • User guides   │  • Automation    │  • Clean code    │ • Stats  │
+└─────────────────┴──────────────────┴──────────────────┴──────────────────┴──────────┘
+   Feb 2026          Feb 2026           Feb 2026           Feb 2026          Q3 2026
 ```
 
 **See:** [CHANGELOG.md](CHANGELOG.md) for complete version history
@@ -502,6 +506,7 @@ Clear, comprehensive documentation:
 - ✅ **v1.1.0** - Vortex Framework repositioning (Emma + Wade)
 - ✅ **v1.2.0** - All 7 workflows implemented (56 files)
 - ✅ **v1.3.x** - Update/migration system with backup and rollback
+- ✅ **v1.4.0** - Architecture refactor (single source of truth, project root detection, safer migrations)
 
 ### Future (v2.0.0+)
 
@@ -551,7 +556,7 @@ We welcome contributions! Areas where we need help:
 - No validation plan for strategy
 - Weeks of strategic discussion
 
-**After (v1.3.x):**
+**After (v1.4.0):**
 - Clear problem space framing: 1-2 hours
 - Explicit assumption mapping
 - Built-in validation planning
@@ -567,7 +572,7 @@ We welcome contributions! Areas where we need help:
 - No structured experiment process
 - 6-12 months to market validation
 
-**After (v1.3.x):**
+**After (v1.4.0):**
 - Rapid experiment design: 2-3 hours
 - Minimal investment in learning
 - Structured Build-Measure-Learn cycles
@@ -851,7 +856,7 @@ Each workflow includes templates, step files, and comprehensive guidance.
 
 [Get Started](#quick-start) • [Documentation](#documentation) • [Roadmap](#roadmap)
 
-**Current Status:** ✅ v1.3.8 Stable - Vortex Framework Complete
+**Current Status:** ✅ v1.4.0 Stable - Vortex Framework Complete
 
 Made with ❤️ by the BMAD-Enhanced community
 
