@@ -7,6 +7,32 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [1.3.6] - 2026-02-18
+
+### Fixed
+
+**🔍 Improved Installation Diagnostics:**
+- Added detailed debugging output to config.yaml creation in install script
+- Shows exact file path where config.yaml will be created
+- Verifies file existence immediately after write
+- Catches and displays any errors during config creation
+- Better error handling with try-catch blocks
+
+**📊 Improved Version Check Messaging:**
+- `bmad-version` now distinguishes between "fresh", "partial", and "corrupted" installations
+- "Partial installation" message when config.yaml is missing but other files exist
+- "Corrupted installation" message when required agent files are missing
+- Each scenario now provides specific next steps for resolution
+- No longer shows generic "Not installed" for all cases
+
+**What this helps with:**
+- Easier troubleshooting when installations fail
+- Clear indication of what's wrong with partial installations
+- Better guidance on how to fix installation issues
+- More detailed logs for support/debugging
+
+---
+
 ## [1.3.5] - 2026-02-18
 
 ### Fixed
