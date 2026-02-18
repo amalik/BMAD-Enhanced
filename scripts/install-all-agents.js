@@ -29,29 +29,20 @@ function checkPrerequisites() {
   const targetDir = process.cwd();
   const bmadDir = path.join(targetDir, '_bmad');
 
-  // Check if BMAD Method is installed
+  // Create _bmad directory if it doesn't exist
   if (!fs.existsSync(bmadDir)) {
-    console.log('');
-    console.error(`${RED}${BOLD}✗ BMAD Method not found!${RESET}`);
-    console.log('');
-    console.log(`${YELLOW}BMAD-Enhanced requires BMAD Method to be installed first.${RESET}`);
-    console.log('');
-    console.log('Please install BMAD Method:');
-    console.log(`  ${CYAN}npx bmad-method@alpha install${RESET}`);
-    console.log('');
-    console.log('Then run this installer again.');
-    console.log('');
-    process.exit(1);
+    console.log(`${YELLOW}  ⚠${RESET} _bmad directory not found - creating it`);
+    fs.mkdirSync(bmadDir, { recursive: true });
+  } else {
+    console.log(`${GREEN}  ✓${RESET} BMAD directory detected`);
   }
 
-  console.log(`${GREEN}  ✓${RESET} BMAD Method detected`);
-
-  // Check for BMAD version/compatibility (optional but recommended)
+  // Check for BMAD Method configuration (optional)
   const bmadConfigPath = path.join(bmadDir, '_config', 'bmad.yaml');
   if (fs.existsSync(bmadConfigPath)) {
-    console.log(`${GREEN}  ✓${RESET} BMAD configuration found`);
+    console.log(`${GREEN}  ✓${RESET} BMAD Method configuration found`);
   } else {
-    console.log(`${YELLOW}  ⚠${RESET} BMAD configuration not found (continuing anyway)`);
+    console.log(`${YELLOW}  ⚠${RESET} BMAD Method not detected (BMAD-Enhanced will install standalone)`);
   }
 
   console.log(`${GREEN}  ✓${RESET} Prerequisites met`);
@@ -157,12 +148,14 @@ function updateConfig() {
   const configPath = path.join(process.cwd(), '_bmad', 'bme', '_vortex', 'config.yaml');
   const manifestPath = path.join(process.cwd(), '_bmad', '_config', 'agent-manifest.csv');
 
+  console.log(`${CYAN}  →${RESET} Config path: ${configPath}`);
+
   // Create config
   const configContent = `---
 submodule_name: _vortex
 description: Contextualize and Externalize streams - Strategic framing and validated learning
 module: bme
-version: 1.3.4
+version: 1.3.8
 
 # Output Configuration
 output_folder: "{project-root}/_bmad-output/vortex-artifacts"
@@ -191,9 +184,21 @@ workflows:
 party_mode_enabled: true
 core_module: bme
 `;
-  fs.mkdirSync(path.dirname(configPath), { recursive: true });
-  fs.writeFileSync(configPath, configContent);
-  console.log(`${GREEN}  ✓${RESET} Created config.yaml`);
+
+  try {
+    fs.mkdirSync(path.dirname(configPath), { recursive: true });
+    fs.writeFileSync(configPath, configContent);
+
+    // Verify file was created
+    if (fs.existsSync(configPath)) {
+      console.log(`${GREEN}  ✓${RESET} Created config.yaml`);
+    } else {
+      console.error(`${RED}  ✗${RESET} Config file not found after write!`);
+    }
+  } catch (error) {
+    console.error(`${RED}  ✗${RESET} Error creating config.yaml:`, error.message);
+    throw error;
+  }
 
   // Create manifest
   fs.mkdirSync(path.dirname(manifestPath), { recursive: true });
@@ -288,11 +293,43 @@ function printSuccess() {
   console.log('');
 }
 
+function cleanupLegacyFiles() {
+  console.log(`${CYAN}  →${RESET} Cleaning up legacy files...`);
+
+  // Remove _designos directory (pre-Vortex structure) from all possible locations
+  const legacyPaths = [
+    path.join(process.cwd(), '_bmad', 'bme', '_designos'),
+    path.join(process.cwd(), '_bmad', '_designos'),
+  ];
+
+  for (const legacyPath of legacyPaths) {
+    if (fs.existsSync(legacyPath)) {
+      fs.removeSync(legacyPath);
+      console.log(`${GREEN}    ✓${RESET} Removed legacy directory: ${path.relative(process.cwd(), legacyPath)}`);
+    }
+  }
+
+  // Remove deprecated agent files from _vortex/agents
+  const agentsDir = path.join(process.cwd(), '_bmad', 'bme', '_vortex', 'agents');
+  const deprecatedAgents = ['empathy-mapper.md', 'wireframe-designer.md'];
+
+  for (const agent of deprecatedAgents) {
+    const agentPath = path.join(agentsDir, agent);
+    if (fs.existsSync(agentPath)) {
+      fs.removeSync(agentPath);
+      console.log(`${GREEN}    ✓${RESET} Removed deprecated agent: ${agent}`);
+    }
+  }
+
+  console.log(`${GREEN}  ✓${RESET} Legacy cleanup complete`);
+}
+
 async function main() {
   try {
     printBanner();
     checkPrerequisites();
     copyAllAgentFiles();
+    cleanupLegacyFiles();
     updateConfig();
     createOutputDirectory();
     verifyInstallation();
