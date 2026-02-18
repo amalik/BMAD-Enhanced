@@ -3,53 +3,52 @@
 const fs = require('fs-extra');
 const path = require('path');
 const yaml = require('js-yaml');
+const { compareVersions } = require('../lib/utils');
 
 /**
  * Migration Registry for BMAD-Enhanced
- * Tracks available migrations and determines execution order
+ *
+ * APPEND-ONLY: Add new migrations at the bottom. Never edit old entries.
+ * No toVersion needed - target is always the current package version at runtime.
  */
 
-// Registry of all available migrations
 const MIGRATIONS = [
   {
     name: '1.0.x-to-1.3.0',
     fromVersion: '1.0.x',
-    toVersion: '1.3.8',
     breaking: true,
-    description: 'Migrate empathy-map workflow to lean-persona',
-    module: null // Loaded on demand
+    description: 'Archive deprecated empathy-map/wireframe workflows, rename agents in manifest',
+    module: null
   },
   {
     name: '1.1.x-to-1.3.0',
     fromVersion: '1.1.x',
-    toVersion: '1.3.8',
     breaking: false,
-    description: 'Archive deprecated workflows, update agents',
-    module: null // Loaded on demand
+    description: 'No-op delta (refresh handles all file updates)',
+    module: null
   },
   {
     name: '1.2.x-to-1.3.0',
     fromVersion: '1.2.x',
-    toVersion: '1.3.8',
     breaking: false,
-    description: 'Update to v1.3.0 with migration system',
-    module: null // Loaded on demand
+    description: 'No-op delta (refresh handles all file updates)',
+    module: null
   }
+  // Future migrations: append here. Only add delta logic for version-specific changes.
 ];
 
 /**
- * Get migrations applicable for version upgrade
- * @param {string} fromVersion - Current version
- * @param {string} toVersion - Target version
- * @returns {Array} List of applicable migrations
+ * Get migrations applicable for upgrading from a given version.
+ * Target version is always the current package version (read at runtime).
+ *
+ * @param {string} fromVersion - Current installed version (e.g., "1.0.5")
+ * @returns {Array} List of applicable migrations with loaded modules
  */
-function getMigrationsFor(fromVersion, toVersion) {
+function getMigrationsFor(fromVersion) {
   const applicable = [];
 
   for (const migration of MIGRATIONS) {
-    if (matchesVersionRange(fromVersion, migration.fromVersion) &&
-        matchesVersionRange(toVersion, migration.toVersion)) {
-
+    if (matchesVersionRange(fromVersion, migration.fromVersion)) {
       // Lazy load the migration module
       if (!migration.module) {
         try {
@@ -64,11 +63,11 @@ function getMigrationsFor(fromVersion, toVersion) {
     }
   }
 
-  // Sort by version order (oldest to newest)
+  // Sort by version order (oldest fromVersion first)
   applicable.sort((a, b) => {
-    const aVersion = a.fromVersion.replace('.x', '.0');
-    const bVersion = b.fromVersion.replace('.x', '.0');
-    return compareVersions(aVersion, bVersion);
+    const aV = a.fromVersion.replace('.x', '.0');
+    const bV = b.fromVersion.replace('.x', '.0');
+    return compareVersions(aV, bV);
   });
 
   return applicable;
@@ -103,13 +102,12 @@ function hasMigrationBeenApplied(migrationName, configPath) {
 }
 
 /**
- * Get breaking changes for version upgrade
- * @param {string} fromVersion - Current version
- * @param {string} toVersion - Target version
+ * Get breaking changes for upgrading from a given version.
+ * @param {string} fromVersion - Current installed version
  * @returns {Array<string>} List of breaking change descriptions
  */
-function getBreakingChanges(fromVersion, toVersion) {
-  const migrations = getMigrationsFor(fromVersion, toVersion);
+function getBreakingChanges(fromVersion) {
+  const migrations = getMigrationsFor(fromVersion);
   const breakingChanges = [];
 
   for (const migration of migrations) {
@@ -137,7 +135,6 @@ function matchesVersionRange(version, pattern) {
     const patternParts = pattern.split('.');
     const versionParts = version.split('.');
 
-    // Match major.minor, ignore patch
     return patternParts[0] === versionParts[0] &&
            patternParts[1] === versionParts[1];
   }
@@ -146,29 +143,8 @@ function matchesVersionRange(version, pattern) {
 }
 
 /**
- * Compare two semantic versions
- * @param {string} v1 - First version
- * @param {string} v2 - Second version
- * @returns {number} -1 if v1 < v2, 0 if equal, 1 if v1 > v2
- */
-function compareVersions(v1, v2) {
-  const parts1 = v1.split('.').map(Number);
-  const parts2 = v2.split('.').map(Number);
-
-  for (let i = 0; i < Math.max(parts1.length, parts2.length); i++) {
-    const part1 = parts1[i] || 0;
-    const part2 = parts2[i] || 0;
-
-    if (part1 < part2) return -1;
-    if (part1 > part2) return 1;
-  }
-
-  return 0;
-}
-
-/**
  * Get all registered migrations
- * @returns {Array} All migrations
+ * @returns {Array} All migrations (shallow copy)
  */
 function getAllMigrations() {
   return [...MIGRATIONS];
@@ -180,6 +156,5 @@ module.exports = {
   hasMigrationBeenApplied,
   getBreakingChanges,
   matchesVersionRange,
-  compareVersions,
   getAllMigrations
 };
