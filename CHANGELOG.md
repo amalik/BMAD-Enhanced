@@ -7,6 +7,21 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [1.3.3] - 2026-02-18
+
+### Fixed
+
+**🧹 Legacy Directory Cleanup:**
+- Added automatic removal of old `_designos` directory (pre-Vortex structure) in all migrations
+- Users with installations from very old versions will now have the legacy directory removed automatically
+- Migration preview now shows when legacy directory will be removed
+- Removed obsolete `_designos` reference from `.npmignore`
+
+**Updated migrations:**
+- `1.0.x-to-1.3.0`, `1.1.x-to-1.3.0`, `1.2.x-to-1.3.0` all now remove `_bmad/bme/_designos/` if present
+
+---
+
 ## [1.3.2] - 2026-02-18
 
 ### Fixed
