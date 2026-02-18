@@ -29,6 +29,7 @@ module.exports = {
         'BREAKING: Move empathy-map workflow to _deprecated/',
         'Install new lean-persona workflow',
         'Install 6 new workflows (product-vision, contextualize-scope, mvp, lean-experiment, proof-of-concept, proof-of-value)',
+        'Remove legacy _designos directory (pre-Vortex structure)',
         'Update config.yaml: agents and workflows lists',
         'Update agent-manifest.csv: agent names/roles',
         'Remove deprecated agent files (empathy-mapper.md, wireframe-designer.md)',
@@ -55,19 +56,23 @@ module.exports = {
     await moveToDeprecated(targetDir, 'wireframe');
     changes.push('Archived wireframe workflow to _deprecated/');
 
-    // 3. Install all new workflow files
+    // 3. Remove old _designos directory (pre-Vortex structure)
+    await removeOldDesignosDirectory();
+    changes.push('Removed legacy _designos directory');
+
+    // 4. Install all new workflow files
     await copyAllWorkflows(sourceDir, targetDir);
     changes.push('Installed 7 new Vortex Framework workflows');
 
-    // 4. Update config.yaml with new structure
+    // 5. Update config.yaml with new structure
     await updateConfig(targetDir, '1.3.0');
     changes.push('Updated config.yaml');
 
-    // 5. Update agent files
+    // 6. Update agent files
     await copyAgentFiles(sourceDir, targetDir);
     changes.push('Updated agent files');
 
-    // 6. Update agent manifest
+    // 7. Update agent manifest
     await updateAgentManifest();
     changes.push('Updated agent manifest');
 
@@ -277,5 +282,19 @@ async function copyUserGuides() {
     } else {
       console.warn(`    Warning: ${guide} not found in package`);
     }
+  }
+}
+
+/**
+ * Remove old _designos directory (pre-Vortex structure)
+ */
+async function removeOldDesignosDirectory() {
+  const designosPath = path.join(process.cwd(), '_bmad/bme/_designos');
+
+  if (fs.existsSync(designosPath)) {
+    await fs.remove(designosPath);
+    console.log('    Removed legacy _designos directory');
+  } else {
+    console.log('    No legacy _designos directory found (OK)');
   }
 }
