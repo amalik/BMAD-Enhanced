@@ -497,28 +497,18 @@ Clear, comprehensive documentation:
 
 ## 📈 Roadmap
 
-### Current Focus: Week 1-2 (Agent Development)
+### Completed
 
-**Week 1:**
-- ✅ Day 1-2: Emma (contextualization-expert) - COMPLETE
-- ✅ Day 3-7: Wade (lean-experiments-specialist) - COMPLETE
+- ✅ **v1.1.0** - Vortex Framework repositioning (Emma + Wade)
+- ✅ **v1.2.0** - All 7 workflows implemented (56 files)
+- ✅ **v1.3.x** - Update/migration system with backup and rollback
 
-**Week 2:**
-- 📋 Day 1-3: Sage (quality-gatekeeper)
-- 📋 Day 4-7: Stan (standards-auditor)
+### Future (v2.0.0+)
 
-**Week 3:**
-- 📋 Integration testing (all 4 agents)
-- 📋 Party mode validation
-- 📋 Decision gate (evaluate success, plan next phase)
-
-### Future Phases (TBD)
-
-Based on Week 3 decision gate results:
-- Phase 1: Contract foundation (BaseArtifact)
-- Phase 2: Additional agent capabilities
-- Phase 3: Cross-agent collaboration patterns
-- Phase 4: Community agents (open for contributions)
+- 📋 Multi-agent collaboration patterns
+- 📋 Cross-agent workflow integration
+- 📋 Analytics and reporting
+- 📋 Community agent contributions
 
 ---
 
@@ -561,7 +551,7 @@ We welcome contributions! Areas where we need help:
 - No validation plan for strategy
 - Weeks of strategic discussion
 
-**After (v1.2.0):**
+**After (v1.3.x):**
 - Clear problem space framing: 1-2 hours
 - Explicit assumption mapping
 - Built-in validation planning
@@ -577,7 +567,7 @@ We welcome contributions! Areas where we need help:
 - No structured experiment process
 - 6-12 months to market validation
 
-**After (v1.2.0):**
+**After (v1.3.x):**
 - Rapid experiment design: 2-3 hours
 - Minimal investment in learning
 - Structured Build-Measure-Learn cycles
@@ -604,13 +594,13 @@ We welcome contributions! Areas where we need help:
 ### Emma (Operational Metrics)
 
 **Adoption (Target):**
-- 50+ teams using Emma for empathy mapping
+- 50+ teams using Emma for strategic contextualization
 - 80%+ complete the full 6-step workflow
 - NPS ≥8
 
 **Quality (Target):**
-- 90%+ empathy maps grounded in research evidence
-- 95%+ artifacts include all required sections
+- 90%+ lean personas grounded in research evidence
+- 95%+ artifacts include all required sections (assumptions, validation plan)
 
 **Performance (Measured):**
 - Complete workflow: 30-60 minutes
@@ -619,14 +609,14 @@ We welcome contributions! Areas where we need help:
 ### Wade (Operational Metrics)
 
 **Adoption (Target):**
-- 50+ teams using Wade for wireframing
+- 50+ teams using Wade for lean experiments
 - 80%+ complete the full 6-step workflow
 - NPS ≥8
 
 **Quality (Target):**
-- 90%+ wireframes include complete information architecture
-- 95%+ artifacts include component catalog and interactions
-- 85%+ pass usability validation checklist
+- 90%+ experiments include clear hypothesis and success metrics
+- 95%+ artifacts include pivot-or-persevere decision criteria
+- 85%+ pass validated learning checklist
 
 **Performance (Measured):**
 - Complete workflow: 45-90 minutes
@@ -636,7 +626,7 @@ We welcome contributions! Areas where we need help:
 
 **Adoption:**
 - 100+ teams using BMAD-Enhanced agents
-- 4/4 agents in production
+- 2/2 Vortex agents in production
 - Community agents contributed
 
 **Quality:**
@@ -647,63 +637,62 @@ We welcome contributions! Areas where we need help:
 
 ## 🔍 Sample Output
 
-### Emma Empathy Map Artifact
+### Emma Lean Persona Artifact
 
-Emma generates comprehensive empathy maps with:
+Emma generates comprehensive lean personas with:
 
 **Executive Summary:**
-- 3-5 key insights from research
-- Top 3 pain points
-- Top 3 desired gains
+- Jobs-to-be-done identification
+- Top riskiest assumptions
+- Validation plan priorities
 
 **Detailed Sections:**
-- Target user profile (demographics, job-to-be-done, context)
-- Says & Thinks (quotes + inferred thoughts)
-- Does & Feels (actions + emotions)
+- Target user profile (demographics, context, goals)
+- Jobs-to-be-done (functional, emotional, social)
 - Pain points (prioritized: HIGH/MEDIUM/LOW)
-- Desired gains (prioritized: HIGH/MEDIUM/LOW)
+- Current alternatives and workarounds
+- Riskiest assumptions (ranked by impact and uncertainty)
 
-**Design Implications:**
-- What to prioritize
-- What to avoid
-- What to focus on
+**Validation Planning:**
+- Which assumptions to test first
+- Suggested experiment types
+- Success/failure criteria
 
-**Feature Prioritization Matrix:**
-| Pain Point | Desired Gain | Design Opportunity | Priority |
-|------------|--------------|-------------------|----------|
-| Multi-step auth | Seamless biometric | Face ID-only login | HIGH |
+**Assumption Prioritization Matrix:**
+| Assumption | Risk Level | Experiment Type | Priority |
+|------------|-----------|-----------------|----------|
+| Users want X | HIGH | Interview | P0 |
 
-**See:** [Sample Empathy Map](_bmad-output/test-artifacts/emma-tests/results/empathy-map-sarah-chen-2026-02-14.md)
+**See:** [Emma User Guide](_bmad-output/vortex-artifacts/EMMA-USER-GUIDE.md) for examples
 
-### Wade Wireframe Artifact
+### Wade MVP Specification Artifact
 
-Wade generates comprehensive wireframes with:
+Wade generates comprehensive MVP specs with:
 
 **Executive Summary:**
-- Product context and user goals
-- Key user flows (3-5 primary flows)
-- Design priorities and constraints
+- Riskiest assumption to test
+- MVP type and scope
+- Build-Measure-Learn cycle plan
 
 **Detailed Sections:**
-- Information Architecture (sitemap, navigation hierarchy, content structure)
-- Screen Layouts (annotated wireframes for key screens)
-- Component Catalog (UI components with specifications)
-- Interaction Flows (user journey maps with screen transitions)
-- Responsive Considerations (mobile, tablet, desktop breakpoints)
+- Hypothesis statement (testable, falsifiable)
+- MVP scope (minimum needed to test assumption)
+- Success metrics (quantitative thresholds)
+- Measurement plan (how to collect data)
+- Timeline and resource requirements
 
-**Usability Validation:**
-- Navigation clarity assessment
-- Content hierarchy review
-- Interaction pattern consistency
-- Accessibility considerations
+**Experiment Design:**
+- Target audience and sample size
+- Data collection methods
+- Analysis approach
+- Pivot-or-persevere decision criteria
 
-**Design Handoff:**
-- Component specifications
-- Interaction states
-- Content requirements
-- Technical notes
+**Decision Framework:**
+- Evidence thresholds for persevere
+- Evidence thresholds for pivot
+- Kill criteria
 
-**See:** [Wade User Guide](_bmad-output/design-artifacts/WADE-USER-GUIDE.md) for examples
+**See:** [Wade User Guide](_bmad-output/vortex-artifacts/WADE-USER-GUIDE.md) for examples
 
 ---
 
@@ -711,14 +700,13 @@ Wade generates comprehensive wireframes with:
 
 ### For Users
 
-**Emma (Empathy Mapping):**
-- **[Emma User Guide](_bmad-output/design-artifacts/EMMA-USER-GUIDE.md)** - Complete guide with examples
-- **[Sample Empathy Map](_bmad-output/test-artifacts/emma-tests/results/empathy-map-sarah-chen-2026-02-14.md)** - Real output example
-- Emma's chat mode (CH command) - Ask Emma questions about empathy mapping
+**Emma (Strategic Contextualization):**
+- **[Emma User Guide](_bmad-output/vortex-artifacts/EMMA-USER-GUIDE.md)** - Complete guide with examples
+- Emma's chat mode (CH command) - Ask Emma questions about lean personas, product vision, and scope
 
-**Wade (Wireframing):**
-- **[Wade User Guide](_bmad-output/design-artifacts/WADE-USER-GUIDE.md)** - Complete guide with examples
-- Wade's chat mode (CH command) - Ask Wade questions about wireframe design and UI patterns
+**Wade (Lean Experiments):**
+- **[Wade User Guide](_bmad-output/vortex-artifacts/WADE-USER-GUIDE.md)** - Complete guide with examples
+- Wade's chat mode (CH command) - Ask Wade questions about MVPs, experiments, and validated learning
 
 ### For Developers
 
@@ -738,7 +726,7 @@ Wade generates comprehensive wireframes with:
 
 ### 1. Domain Specialization Over Generic Tools
 
-Each agent brings deep expertise in a specific domain (UX research, design, quality, standards) rather than generic capabilities.
+Each agent brings deep expertise in a specific domain (strategic framing, lean experimentation) rather than generic capabilities.
 
 ### 2. Standard Interface, Diverse Expertise
 
@@ -746,7 +734,7 @@ All agents use BMAD Agent Architecture Framework for consistency, but each has u
 
 ### 3. Research-Driven Design
 
-Workflows based on proven frameworks (Jobs-to-be-Done, design thinking, quality engineering, compliance standards).
+Workflows based on proven frameworks (Jobs-to-be-Done, Lean Startup, Build-Measure-Learn).
 
 ### 4. Test-First Development
 
@@ -798,7 +786,7 @@ Built on:
 
 **Original vision (archived):** [ORIGINAL-VISION-README.md](_bmad-output/planning-artifacts/ORIGINAL-VISION-README.md)
 
-**Current approach:** Build 4 expert agents using BMAD Agent Architecture Framework (Emma, Wade, Quinn, Stan).
+**Current approach:** Vortex Framework with 2 specialized agents (Emma, Wade) using BMAD Agent Architecture Framework.
 
 ### What happened to empathy mapping and wireframing?
 
@@ -823,7 +811,7 @@ Built on:
 
 ### Are the new workflows ready?
 
-**Yes! v1.2.0 released February 2026.** All 7 workflows are fully implemented and ready to use:
+**Yes! All 7 workflows are fully implemented (since v1.2.0) and ready to use:**
 
 **Emma (Contextualize):**
 - lean-persona (6-step workflow)
