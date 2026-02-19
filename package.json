@@ -3,6 +3,16 @@
   "version": "1.4.0",
   "description": "Vortex Framework - Contextualize and Externalize streams for Lean Startup validation",
   "main": "index.js",
+  "files": [
+    "index.js",
+    "scripts/",
+    "_bmad/",
+    "INSTALLATION.md",
+    "UPDATE-GUIDE.md",
+    "CHANGELOG.md",
+    "LICENSE",
+    "README.md"
+  ],
   "bin": {
     "bmad-install-agents": "scripts/install-all-agents.js",
     "bmad-install-emma": "scripts/install-emma.js",
@@ -15,7 +25,10 @@
     "install:emma": "node scripts/install-emma.js",
     "install:wade": "node scripts/install-wade.js",
     "install:agents": "node scripts/install-all-agents.js",
-    "postinstall": "node scripts/postinstall.js"
+    "postinstall": "node scripts/postinstall.js",
+    "test": "node --test tests/unit/*.test.js",
+    "test:integration": "node --test tests/integration/*.test.js",
+    "test:all": "node --test tests/**/*.test.js"
   },
   "keywords": [
     "bmad",
@@ -36,7 +49,7 @@
     "url": "git+https://github.com/amalik/BMAD-Enhanced.git"
   },
   "engines": {
-    "node": ">=14.0.0"
+    "node": ">=18.0.0"
   },
   "dependencies": {
     "chalk": "^4.1.2",
