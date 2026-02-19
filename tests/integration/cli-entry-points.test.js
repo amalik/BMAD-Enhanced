@@ -32,6 +32,17 @@ describe('index.js entry point', () => {
     const { stdout } = await run(path.join(projectRoot, 'index.js'));
     assert.ok(stdout.includes('bmad-install-agents'), 'should list install command');
     assert.ok(stdout.includes('bmad-update'), 'should list update command');
+    assert.ok(stdout.includes('bmad-doctor'), 'should list doctor command');
+  });
+});
+
+describe('bmad-doctor CLI', () => {
+  it('runs and produces check results', async () => {
+    const { stdout } = await run(path.join(projectRoot, 'scripts/bmad-doctor.js'));
+    assert.ok(stdout.includes('BMAD-Enhanced Doctor'), 'should show doctor header');
+    assert.ok(stdout.includes('Project root'), 'should check project root');
+    assert.ok(stdout.includes('Config file'), 'should check config');
+    assert.ok(stdout.includes('Agent files'), 'should check agents');
   });
 });
 
