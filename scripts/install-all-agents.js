@@ -3,6 +3,7 @@
 const fs = require('fs-extra');
 const path = require('path');
 const { refreshInstallation } = require('./update/lib/refresh-installation');
+const { findProjectRoot } = require('./update/lib/utils');
 
 const BOLD = '\x1b[1m';
 const RESET = '\x1b[0m';
@@ -166,7 +167,8 @@ function printSuccess() {
 
 async function main() {
   try {
-    const projectRoot = process.cwd();
+    // Use findProjectRoot for existing projects, fall back to cwd for fresh installs
+    const projectRoot = findProjectRoot() || process.cwd();
 
     printBanner();
     checkPrerequisites(projectRoot);
