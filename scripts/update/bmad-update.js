@@ -177,7 +177,7 @@ async function main() {
     console.log(chalk.gray(`Backup location: ${result.backupMetadata.backup_dir}`));
     console.log('');
 
-  } catch (error) {
+  } catch (_error) {
     // Error already logged by migration-runner
     process.exit(1);
   }
