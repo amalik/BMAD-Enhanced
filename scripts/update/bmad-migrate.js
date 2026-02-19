@@ -94,7 +94,7 @@ async function main() {
 
     // Refresh installation after delta
     console.log(chalk.cyan('Refreshing installation files...'));
-    const refreshChanges = await refreshInstallation(projectRoot);
+    await refreshInstallation(projectRoot);
     console.log(chalk.green('✓ Installation refreshed'));
     console.log('');
 
