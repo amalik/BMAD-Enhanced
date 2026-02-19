@@ -1,0 +1,9 @@
+{
+  "check-coverage": true,
+  "lines": 60,
+  "functions": 60,
+  "branches": 50,
+  "reporter": ["text", "text-summary"],
+  "include": ["scripts/**/*.js", "index.js"],
+  "exclude": ["tests/**", "node_modules/**"]
+}
