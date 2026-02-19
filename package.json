@@ -19,7 +19,8 @@
     "bmad-install-wade": "scripts/install-wade.js",
     "bmad-update": "scripts/update/bmad-update.js",
     "bmad-version": "scripts/update/bmad-version.js",
-    "bmad-migrate": "scripts/update/bmad-migrate.js"
+    "bmad-migrate": "scripts/update/bmad-migrate.js",
+    "bmad-doctor": "scripts/bmad-doctor.js"
   },
   "scripts": {
     "install:emma": "node scripts/install-emma.js",
