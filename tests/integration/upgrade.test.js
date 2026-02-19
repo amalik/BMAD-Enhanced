@@ -6,7 +6,6 @@ const os = require('os');
 const yaml = require('js-yaml');
 
 const { refreshInstallation } = require('../../scripts/update/lib/refresh-installation');
-const configMerger = require('../../scripts/update/lib/config-merger');
 const versionDetector = require('../../scripts/update/lib/version-detector');
 const registry = require('../../scripts/update/migrations/registry');
 
