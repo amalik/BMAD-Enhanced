@@ -122,7 +122,7 @@ async function getMigrationHistory(projectRoot) {
     const config = yaml.load(configContent);
 
     return config.migration_history || null;
-  } catch (error) {
+  } catch (_error) {
     return null;
   }
 }
