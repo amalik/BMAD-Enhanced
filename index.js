@@ -10,6 +10,7 @@
  *   npx bmad-install-wade     – Install Wade (Lean Experiments Specialist)
  *   npx bmad-update            – Check for and apply updates
  *   npx bmad-version           – Show installed vs latest version
+ *   npx bmad-doctor            – Diagnose installation issues
  *
  * @license MIT
  */
@@ -46,6 +47,7 @@ if (require.main === module) {
   console.log(`  ${CYAN}npx bmad-install-wade${RESET}    Install Wade only`);
   console.log(`  ${CYAN}npx bmad-update${RESET}          Check for updates`);
   console.log(`  ${CYAN}npx bmad-version${RESET}         Show version info`);
+  console.log(`  ${CYAN}npx bmad-doctor${RESET}          Diagnose issues`);
   console.log('');
 }
 
