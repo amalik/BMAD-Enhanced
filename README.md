@@ -4,11 +4,11 @@
 
 > Strategic framing and validated learning through Emma and Wade
 
-[![Status](https://img.shields.io/badge/status-v1.4.0--stable-success)]()
-[![Version](https://img.shields.io/badge/version-1.4.0-blue)]()
+[![Status](https://img.shields.io/badge/status-v1.4.1--stable-success)]()
+[![Version](https://img.shields.io/badge/version-1.4.1-blue)]()
+[![Tests](https://img.shields.io/badge/tests-120_passing-brightgreen)]()
+[![Coverage](https://img.shields.io/badge/coverage-65%25_lines-yellow)]()
 [![Workflows](https://img.shields.io/badge/workflows-7_implemented-success)]()
-[![Emma](https://img.shields.io/badge/emma-3_workflows-brightgreen)]()
-[![Wade](https://img.shields.io/badge/wade-4_workflows-brightgreen)]()
 [![License](https://img.shields.io/badge/license-MIT-blue)]()
 
 ---
@@ -44,7 +44,7 @@ Contextualize Stream       Externalize Stream
 
 ### Prerequisites
 
-- Node.js 14+ or Bun
+- Node.js 18+ or Bun
 - Git
 - Claude Code or Claude.ai
 
@@ -187,6 +187,7 @@ npx bmad-update
 - `npx bmad-update --dry-run` - Preview changes without applying
 - `npx bmad-update --yes` - Skip confirmation prompt
 - `npx bmad-version` - Show current version and status
+- `npx bmad-doctor` - Diagnose installation issues
 
 ### Data Safety
 
@@ -213,6 +214,13 @@ npx bmad-update
 - 7 new workflows installed
 
 ### Troubleshooting
+
+```bash
+# Run diagnostics
+npx bmad-doctor
+```
+
+The doctor checks project root, config validity, agent files, workflows, output directory permissions, migration lock status, and version consistency — with actionable fix suggestions for each issue.
 
 If update fails:
 
@@ -253,7 +261,7 @@ All agents built using a standard pattern:
 
 ### Emma (contextualization-expert) - ✅ COMPLETE
 
-**Status:** v1.4.0 - All 3 workflows implemented and ready to use
+**Status:** v1.4.1 - All 3 workflows implemented and ready to use
 **Title:** Contextualization Expert 🎯
 **Stream:** Contextualize
 **Domain:** Strategic framing, problem-product space navigation
@@ -279,7 +287,7 @@ All agents built using a standard pattern:
 
 ### Wade (lean-experiments-specialist) - ✅ COMPLETE
 
-**Status:** v1.4.0 - All 4 workflows implemented and ready to use
+**Status:** v1.4.1 - All 4 workflows implemented and ready to use
 **Title:** Lean Experiments Specialist 🧪
 **Stream:** Externalize
 **Domain:** Lean Startup experimentation, validated learning
@@ -306,7 +314,7 @@ All agents built using a standard pattern:
 
 ## 📊 Project Status
 
-**Current Version:** v1.4.0 - Complete Vortex Framework + Refactored Update System ✅
+**Current Version:** v1.4.1 - Complete Vortex Framework + Industrial-Grade Tooling ✅
 
 **Progress:**
 - ✅ Emma - 3 Contextualize workflows IMPLEMENTED
@@ -314,6 +322,14 @@ All agents built using a standard pattern:
 - ✅ 56 workflow files created (7 workflows × 8 files each)
 - ✅ Update/migration system with backup and rollback
 - ✅ Standalone installation support (no BMAD Method required)
+- ✅ 120 automated tests (unit + integration), 6-job CI pipeline
+- ✅ `npx bmad-doctor` diagnostic CLI
+
+**What's New in v1.4.1:**
+- **`npx bmad-doctor`** - Diagnostic CLI with 7 checks and actionable fix suggestions
+- **Publish-on-tag CI** - Automated npm publish on `v*` tags, gated behind all quality jobs
+- **ESLint architecture rules** - `process.cwd()` banned in scripts, preventing regression of fixed bugs
+- **120 automated tests** - Unit tests for all core modules, integration tests for install/upgrade/CLI
 
 **What's New in v1.4.0:**
 - **Architecture refactor** - Single source of truth for version, no hardcoded strings
@@ -329,12 +345,12 @@ All agents built using a standard pattern:
 
 **Roadmap:**
 ```
-v1.1.0               v1.2.0              v1.3.x ✅         v1.4.0 ✅          v2.0.0
+v1.1.0               v1.2.0              v1.3.x ✅         v1.4.x ✅          v2.0.0
 ├─────────────────┬──────────────────┬──────────────────┬──────────────────┬──────────┤
-│ Repositioning ✅ │  Workflows ✅    │  Tooling ✅       │  Refactor ✅      │ Advanced │
-│ • New identity  │  • 7 workflows   │  • Update tools  │  • Architecture  │ • Multi  │
-│ • Framework     │  • Templates     │  • Migration     │  • Safety        │ • Integ  │
-│ • Structure     │  • User guides   │  • Automation    │  • Clean code    │ • Stats  │
+│ Repositioning ✅ │  Workflows ✅    │  Tooling ✅       │  Quality ✅       │ Advanced │
+│ • New identity  │  • 7 workflows   │  • Update tools  │  • Refactor      │ • Multi  │
+│ • Framework     │  • Templates     │  • Migration     │  • 120 tests     │ • Integ  │
+│ • Structure     │  • User guides   │  • Automation    │  • CI/CD + lint  │ • Stats  │
 └─────────────────┴──────────────────┴──────────────────┴──────────────────┴──────────┘
    Feb 2026          Feb 2026           Feb 2026           Feb 2026          Q3 2026
 ```
@@ -446,6 +462,41 @@ Clear, comprehensive documentation:
 
 ## 🧪 Testing
 
+### Automated Test Suite
+
+**120 tests, 0 failures** — zero-dependency test runner (`node:test`)
+
+| Suite | Tests | Coverage |
+|-------|-------|----------|
+| utils | ~15 | compareVersions, getPackageVersion, findProjectRoot |
+| registry | ~15 | getMigrationsFor, getBreakingChanges, hasMigrationBeenApplied |
+| version-detector | ~20 | getCurrentVersion, detectInstallationScenario |
+| config-merger | ~15 | mergeConfig, validateConfig, addMigrationHistory |
+| backup-manager | 10 | createBackup, restoreBackup, cleanupOldBackups |
+| migration-runner | 10 | executeMigration, previewMigrations, MigrationError |
+| fresh-install (integration) | ~10 | refreshInstallation end-to-end |
+| upgrade (integration) | ~15 | v1.0.x→1.4.x, v1.3.x→1.4.x upgrade paths |
+| cli-entry-points (integration) | 10 | index.js, bmad-version, bmad-update, bmad-doctor |
+
+**CI Pipeline (6 jobs):**
+
+| Job | What it does |
+|-----|-------------|
+| `lint` | ESLint with architecture rules (no `process.cwd()`) |
+| `test` | Node 18/20/22 matrix, unit + integration |
+| `coverage` | c8 with threshold enforcement (60% lines, 50% branches) |
+| `security` | `npm audit --omit=dev` |
+| `package-check` | `npm pack --dry-run` + `node index.js` |
+| `publish` | Automated npm publish on `v*` tags |
+
+```bash
+npm test                 # Unit tests
+npm run test:integration # Integration tests
+npm run test:all         # All tests
+npm run test:coverage    # Tests with coverage thresholds
+npm run lint             # ESLint
+```
+
 ### Emma Test Results
 
 **P0 Test Suite:** 18/18 PASSED (100%)
@@ -507,6 +558,7 @@ Clear, comprehensive documentation:
 - ✅ **v1.2.0** - All 7 workflows implemented (56 files)
 - ✅ **v1.3.x** - Update/migration system with backup and rollback
 - ✅ **v1.4.0** - Architecture refactor (single source of truth, project root detection, safer migrations)
+- ✅ **v1.4.1** - Industrial-grade tooling (120 tests, CI/CD, ESLint, bmad-doctor, publish-on-tag)
 
 ### Future (v2.0.0+)
 
@@ -556,7 +608,7 @@ We welcome contributions! Areas where we need help:
 - No validation plan for strategy
 - Weeks of strategic discussion
 
-**After (v1.4.0):**
+**After (v1.4.1):**
 - Clear problem space framing: 1-2 hours
 - Explicit assumption mapping
 - Built-in validation planning
@@ -572,7 +624,7 @@ We welcome contributions! Areas where we need help:
 - No structured experiment process
 - 6-12 months to market validation
 
-**After (v1.4.0):**
+**After (v1.4.1):**
 - Rapid experiment design: 2-3 hours
 - Minimal investment in learning
 - Structured Build-Measure-Learn cycles
@@ -856,7 +908,7 @@ Each workflow includes templates, step files, and comprehensive guidance.
 
 [Get Started](#quick-start) • [Documentation](#documentation) • [Roadmap](#roadmap)
 
-**Current Status:** ✅ v1.4.0 Stable - Vortex Framework Complete
+**Current Status:** ✅ v1.4.1 Stable - Vortex Framework Complete
 
 Made with ❤️ by the BMAD-Enhanced community
 
