@@ -1,7 +1,6 @@
 #!/usr/bin/env node
 
 const fs = require('fs-extra');
-const path = require('path');
 const yaml = require('js-yaml');
 
 /**
@@ -24,7 +23,7 @@ async function mergeConfig(currentConfigPath, newVersion, updates = {}) {
     try {
       const currentContent = fs.readFileSync(currentConfigPath, 'utf8');
       current = yaml.load(currentContent);
-    } catch (error) {
+    } catch (_error) {
       console.warn('Warning: Could not parse current config.yaml, using defaults');
       current = {};
     }
@@ -80,7 +79,7 @@ function extractUserPreferences(config) {
     prefs.output_folder = config.output_folder;
   }
 
-  if (config.hasOwnProperty('party_mode_enabled')) {
+  if (Object.prototype.hasOwnProperty.call(config, 'party_mode_enabled')) {
     prefs.party_mode_enabled = config.party_mode_enabled;
   }
 
@@ -111,7 +110,7 @@ function validateConfig(config) {
   ];
 
   for (const field of requiredFields) {
-    if (!config.hasOwnProperty(field)) {
+    if (!Object.prototype.hasOwnProperty.call(config, field)) {
       errors.push(`Missing required field: ${field}`);
     }
   }
