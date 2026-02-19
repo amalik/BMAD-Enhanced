@@ -23,7 +23,7 @@ module.exports = {
    * @param {string} projectRoot - Absolute path to project root
    * @returns {Promise<Array<string>>} List of changes made
    */
-  async apply(projectRoot) {
+  async apply(_projectRoot) {
     return ['No version-specific delta needed'];
   }
 };
