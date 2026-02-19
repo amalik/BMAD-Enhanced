@@ -9,7 +9,6 @@ const { refreshInstallation } = require('../../scripts/update/lib/refresh-instal
 
 describe('Fresh Install (refreshInstallation on empty project)', () => {
   let tmpDir;
-  const packageRoot = path.join(__dirname, '..', '..');
 
   before(async () => {
     tmpDir = await fs.mkdtemp(path.join(os.tmpdir(), 'bmad-fresh-'));
