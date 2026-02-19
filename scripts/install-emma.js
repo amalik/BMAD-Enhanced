@@ -2,6 +2,7 @@
 
 const fs = require('fs-extra');
 const path = require('path');
+const { findProjectRoot } = require('./update/lib/utils');
 
 const BOLD = '\x1b[1m';
 const RESET = '\x1b[0m';
@@ -20,11 +21,10 @@ function printBanner() {
   console.log('');
 }
 
-function checkPrerequisites() {
+function checkPrerequisites(projectRoot) {
   console.log(`${CYAN}[1/4]${RESET} Checking prerequisites...`);
 
-  const targetDir = process.cwd();
-  const bmadDir = path.join(targetDir, '_bmad');
+  const bmadDir = path.join(projectRoot, '_bmad');
 
   // Check if BMAD Method is installed
   if (!fs.existsSync(bmadDir)) {
@@ -45,11 +45,11 @@ function checkPrerequisites() {
   console.log(`${GREEN}  ✓${RESET} Prerequisites met`);
 }
 
-function copyAgentFiles() {
+function copyAgentFiles(projectRoot) {
   console.log(`${CYAN}[2/4]${RESET} Installing Emma agent files...`);
 
   const sourceDir = path.join(__dirname, '..', '_bmad', 'bme', '_vortex');
-  const targetDir = path.join(process.cwd(), '_bmad', 'bme', '_vortex');
+  const targetDir = path.join(projectRoot, '_bmad', 'bme', '_vortex');
 
   // Create target directory structure
   fs.mkdirSync(path.join(targetDir, 'agents'), { recursive: true });
@@ -83,11 +83,11 @@ function copyAgentFiles() {
   console.log(`${GREEN}  ✓${RESET} Agent files installed`);
 }
 
-function updateConfig() {
+function updateConfig(projectRoot) {
   console.log(`${CYAN}[3/4]${RESET} Configuring Emma...`);
 
-  const configPath = path.join(process.cwd(), '_bmad', 'bme', '_vortex', 'config.yaml');
-  const manifestPath = path.join(process.cwd(), '_bmad', '_config', 'agent-manifest.csv');
+  const configPath = path.join(projectRoot, '_bmad', 'bme', '_vortex', 'config.yaml');
+  const manifestPath = path.join(projectRoot, '_bmad', '_config', 'agent-manifest.csv');
 
   // Create config if doesn't exist
   if (!fs.existsSync(configPath)) {
@@ -135,10 +135,10 @@ core_module: bme
   console.log(`${GREEN}  ✓${RESET} Configuration complete`);
 }
 
-function createOutputDirectory() {
+function createOutputDirectory(projectRoot) {
   console.log(`${CYAN}[4/4]${RESET} Setting up output directory...`);
 
-  const outputDir = path.join(process.cwd(), '_bmad-output', 'vortex-artifacts');
+  const outputDir = path.join(projectRoot, '_bmad-output', 'vortex-artifacts');
   fs.mkdirSync(outputDir, { recursive: true });
 
   console.log(`${GREEN}  ✓${RESET} Output directory ready`);
@@ -166,11 +166,14 @@ function printSuccess() {
 
 async function main() {
   try {
+    // Use findProjectRoot for existing projects, fall back to cwd for fresh installs
+    const projectRoot = findProjectRoot() || process.cwd();
+
     printBanner();
-    checkPrerequisites();
-    copyAgentFiles();
-    updateConfig();
-    createOutputDirectory();
+    checkPrerequisites(projectRoot);
+    copyAgentFiles(projectRoot);
+    updateConfig(projectRoot);
+    createOutputDirectory(projectRoot);
     printSuccess();
   } catch (error) {
     console.error(`${RED}✗ Installation failed:${RESET}`, error.message);
