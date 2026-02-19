@@ -33,6 +33,28 @@ export default [
     }
   },
   {
+    files: ["scripts/**/*.js"],
+    rules: {
+      "no-restricted-syntax": ["error",
+        {
+          "selector": "CallExpression[callee.object.name='process'][callee.property.name='cwd']",
+          "message": "Avoid process.cwd(). Use findProjectRoot() from lib/utils.js instead. Only utils.js and installer main() fallbacks may use process.cwd()."
+        }
+      ]
+    }
+  },
+  {
+    files: [
+      "scripts/update/lib/utils.js",
+      "scripts/install-all-agents.js",
+      "scripts/install-emma.js",
+      "scripts/install-wade.js"
+    ],
+    rules: {
+      "no-restricted-syntax": "off"
+    }
+  },
+  {
     ignores: ["node_modules/", "_bmad/", "_bmad-output/", "_quint/", "coverage/"]
   }
 ];
