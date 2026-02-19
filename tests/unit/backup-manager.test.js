@@ -7,6 +7,14 @@ const yaml = require('js-yaml');
 
 const backupManager = require('../../scripts/update/lib/backup-manager');
 
+// Silence console output during tests to prevent node:test IPC serialization
+// issues on Node 20 (V8 structured clone deserialization bug)
+const _log = console.log;
+const _warn = console.warn;
+const _error = console.error;
+before(() => { console.log = console.warn = console.error = () => {}; });
+after(() => { console.log = _log; console.warn = _warn; console.error = _error; });
+
 describe('createBackup', () => {
   let tmpDir;
 
