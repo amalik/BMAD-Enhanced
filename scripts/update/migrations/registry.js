@@ -32,6 +32,20 @@ const MIGRATIONS = [
     breaking: false,
     description: 'No-op delta (refresh handles all file updates)',
     module: null
+  },
+  {
+    name: '1.3.x-to-1.5.0',
+    fromVersion: '1.3.x',
+    breaking: false,
+    description: 'No-op delta (refresh handles Wave 2 agents and workflows)',
+    module: null
+  },
+  {
+    name: '1.4.x-to-1.5.0',
+    fromVersion: '1.4.x',
+    breaking: false,
+    description: 'No-op delta (refresh handles Wave 2 agents and workflows)',
+    module: null
   }
   // Future migrations: append here. Only add delta logic for version-specific changes.
 ];

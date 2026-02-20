@@ -25,9 +25,13 @@ describe('Fresh Install (refreshInstallation on empty project)', () => {
 
     const emmaPath = path.join(tmpDir, '_bmad/bme/_vortex/agents/contextualization-expert.md');
     const wadePath = path.join(tmpDir, '_bmad/bme/_vortex/agents/lean-experiments-specialist.md');
+    const islaPath = path.join(tmpDir, '_bmad/bme/_vortex/agents/discovery-empathy-expert.md');
+    const maxPath = path.join(tmpDir, '_bmad/bme/_vortex/agents/learning-decision-expert.md');
 
     assert.ok(fs.existsSync(emmaPath), 'Emma agent file should exist');
     assert.ok(fs.existsSync(wadePath), 'Wade agent file should exist');
+    assert.ok(fs.existsSync(islaPath), 'Isla agent file should exist');
+    assert.ok(fs.existsSync(maxPath), 'Max agent file should exist');
   });
 
   it('creates config.yaml with correct version', async () => {
@@ -46,9 +50,11 @@ describe('Fresh Install (refreshInstallation on empty project)', () => {
     assert.ok(Array.isArray(config.agents), 'agents should be an array');
     assert.ok(config.agents.includes('contextualization-expert'));
     assert.ok(config.agents.includes('lean-experiments-specialist'));
+    assert.ok(config.agents.includes('discovery-empathy-expert'));
+    assert.ok(config.agents.includes('learning-decision-expert'));
 
     assert.ok(Array.isArray(config.workflows), 'workflows should be an array');
-    assert.ok(config.workflows.length >= 1, 'should have at least 1 workflow');
+    assert.ok(config.workflows.length >= 13, 'should have at least 13 workflows');
   });
 
   it('creates workflow directories if source exists', async () => {
@@ -104,6 +110,28 @@ describe('Fresh Install agent content matches package source', () => {
       const src = fs.readFileSync(srcPath, 'utf8');
       const dst = fs.readFileSync(dstPath, 'utf8');
       assert.equal(dst, src, 'Installed Wade should match package source');
+    }
+  });
+
+  it('installed Isla matches package source', async () => {
+    const srcPath = path.join(packageRoot, '_bmad/bme/_vortex/agents/discovery-empathy-expert.md');
+    const dstPath = path.join(tmpDir, '_bmad/bme/_vortex/agents/discovery-empathy-expert.md');
+
+    if (fs.existsSync(srcPath)) {
+      const src = fs.readFileSync(srcPath, 'utf8');
+      const dst = fs.readFileSync(dstPath, 'utf8');
+      assert.equal(dst, src, 'Installed Isla should match package source');
+    }
+  });
+
+  it('installed Max matches package source', async () => {
+    const srcPath = path.join(packageRoot, '_bmad/bme/_vortex/agents/learning-decision-expert.md');
+    const dstPath = path.join(tmpDir, '_bmad/bme/_vortex/agents/learning-decision-expert.md');
+
+    if (fs.existsSync(srcPath)) {
+      const src = fs.readFileSync(srcPath, 'utf8');
+      const dst = fs.readFileSync(dstPath, 'utf8');
+      assert.equal(dst, src, 'Installed Max should match package source');
     }
   });
 });

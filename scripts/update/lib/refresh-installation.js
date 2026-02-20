@@ -15,22 +15,36 @@ const configMerger = require('./config-merger');
 
 const AGENT_FILES = [
   'contextualization-expert.md',
-  'lean-experiments-specialist.md'
+  'lean-experiments-specialist.md',
+  'discovery-empathy-expert.md',
+  'learning-decision-expert.md'
 ];
 
 const WORKFLOWS = [
+  // Emma — Contextualize Stream
   'lean-persona',
   'product-vision',
   'contextualize-scope',
+  // Wade — Externalize Stream
   'mvp',
   'lean-experiment',
   'proof-of-concept',
-  'proof-of-value'
+  'proof-of-value',
+  // Isla — Empathize Stream
+  'empathy-map',
+  'user-interview',
+  'user-discovery',
+  // Max — Systematize Stream
+  'learning-card',
+  'pivot-patch-persevere',
+  'vortex-navigation'
 ];
 
 const USER_GUIDES = [
   'EMMA-USER-GUIDE.md',
-  'WADE-USER-GUIDE.md'
+  'WADE-USER-GUIDE.md',
+  'ISLA-USER-GUIDE.md',
+  'MAX-USER-GUIDE.md'
 ];
 
 /**
@@ -94,7 +108,7 @@ async function refreshInstallation(projectRoot, options = {}) {
   await fs.ensureDir(path.dirname(configPath));
 
   const updates = {
-    agents: ['contextualization-expert', 'lean-experiments-specialist'],
+    agents: ['contextualization-expert', 'lean-experiments-specialist', 'discovery-empathy-expert', 'learning-decision-expert'],
     workflows: WORKFLOWS
   };
 

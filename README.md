@@ -1,40 +1,41 @@
 # BMAD-Enhanced
 
-**Vortex Framework - Contextualize and Externalize for Lean Startup Validation**
+**Vortex Framework - Product Discovery through Lean Startup Validation**
 
-> Strategic framing and validated learning through Emma and Wade
+> Four specialized agents: Emma, Wade, Isla, and Max
 
-[![Status](https://img.shields.io/badge/status-v1.4.1--stable-success)]()
-[![Version](https://img.shields.io/badge/version-1.4.1-blue)]()
-[![Tests](https://img.shields.io/badge/tests-120_passing-brightgreen)]()
-[![Coverage](https://img.shields.io/badge/coverage-65%25_lines-yellow)]()
-[![Workflows](https://img.shields.io/badge/workflows-7_implemented-success)]()
+[![Status](https://img.shields.io/badge/status-v1.5.0--stable-success)]()
+[![Version](https://img.shields.io/badge/version-1.5.0-blue)]()
+[![Agents](https://img.shields.io/badge/agents-4-brightgreen)]()
+[![Workflows](https://img.shields.io/badge/workflows-13_implemented-success)]()
 [![License](https://img.shields.io/badge/license-MIT-blue)]()
 
 ---
 
 ## 🎯 What is BMAD-Enhanced?
 
-BMAD-Enhanced extends the [BMAD Method](https://github.com/bmadhub/bmad) with the **Vortex framework** - a Lean Startup validation approach with two specialized agents:
+BMAD-Enhanced extends the [BMAD Method](https://github.com/bmadhub/bmad) with the **Vortex framework** - a Lean Startup validation approach with four specialized agents across four Vortex streams:
 
 ```
 VORTEX FRAMEWORK
 
-Contextualize Stream       Externalize Stream
-┌─────────────┐           ┌─────────────┐
-│    Emma 🎯  │           │    Wade 🧪  │
-│             │           │             │
-│ Strategic   │  ─────>   │   Lean      │
-│  Framing    │           │ Experiments │
-│             │           │             │
-│ • Personas  │           │ • MVPs      │
-│ • Vision    │           │ • Tests     │
-│ • Scope     │           │ • Proof     │
-└─────────────┘           └─────────────┘
+Contextualize        Empathize           Externalize         Systematize
+┌─────────────┐    ┌─────────────┐    ┌─────────────┐    ┌─────────────┐
+│   Emma 🎯   │    │   Isla 🔍   │    │   Wade 🧪   │    │   Max  🧭   │
+│             │    │             │    │             │    │             │
+│  Strategic  │───>│  Discovery  │───>│    Lean     │───>│  Learning   │
+│   Framing   │    │  & Empathy  │    │ Experiments │    │ & Decisions │
+│             │    │             │    │             │    │             │
+│ • Personas  │    │ • Empathy   │    │ • MVPs      │    │ • Learning  │
+│ • Vision    │    │ • Interview │    │ • Tests     │    │ • Pivot/    │
+│ • Scope     │    │ • Discovery │    │ • Proof     │    │   Persevere │
+└─────────────┘    └─────────────┘    └─────────────┘    └─────────────┘
 ```
 
 **Contextualize (Emma):** Frame the right problem before building
+**Empathize (Isla):** Understand users through research and empathy mapping
 **Externalize (Wade):** Test assumptions with real users through experiments
+**Systematize (Max):** Capture learnings and navigate between Vortex streams
 
 ---
 
@@ -53,10 +54,10 @@ Contextualize Stream       Externalize Stream
 ### One-Command Installation
 
 ```bash
-npm install bmad-enhanced && npx bmad-install-agents
+npm install bmad-enhanced && npx bmad-install-vortex-agents
 ```
 
-That's it! Emma and Wade (Vortex framework) with all 7 workflows are installed.
+That's it! All 4 Vortex agents (Emma, Isla, Wade, Max) with 13 workflows are installed.
 
 ### Installation
 
@@ -66,12 +67,8 @@ That's it! Emma and Wade (Vortex framework) with all 7 workflows are installed.
 # Install into your project
 npm install bmad-enhanced
 
-# Install all agents (Emma + Wade) with all 7 workflows
-npx bmad-install-agents
-
-# Or install individually
-npx bmad-install-emma    # Install Emma (3 Contextualize workflows)
-npx bmad-install-wade    # Install Wade (4 Externalize workflows)
+# Install all Vortex agents with all 13 workflows
+npx bmad-install-vortex-agents
 ```
 
 **Option 2: Clone from source**
@@ -90,19 +87,26 @@ cat _bmad/bme/_vortex/agents/contextualization-expert.md
 
 **What gets installed:**
 - Agent definition files (`_bmad/bme/_vortex/agents/`)
-- **7 complete workflows** (56 files):
+- **13 complete workflows** (104 files):
   - Emma: lean-persona, product-vision, contextualize-scope
+  - Isla: empathy-map, user-interview, user-discovery
   - Wade: mvp, lean-experiment, proof-of-concept, proof-of-value
+  - Max: learning-card, pivot-patch-persevere, vortex-navigation
 - Configuration file (`_bmad/bme/_vortex/config.yaml`)
 - Output directory (`_bmad-output/vortex-artifacts/`)
-- User guides (Emma & Wade)
+- User guides (Emma, Isla, Wade & Max)
 
-### Your First Lean Persona with Emma
+### Getting Started with the Agents
 
 ```bash
-# Activate Emma
-cat _bmad/bme/_vortex/agents/contextualization-expert.md
+# Activate any agent by reading their definition file
+cat _bmad/bme/_vortex/agents/contextualization-expert.md    # Emma
+cat _bmad/bme/_vortex/agents/discovery-empathy-expert.md    # Isla
+cat _bmad/bme/_vortex/agents/lean-experiments-specialist.md  # Wade
+cat _bmad/bme/_vortex/agents/learning-decision-expert.md     # Max
 ```
+
+### Emma - Contextualize Stream (3 workflows)
 
 Emma will guide you through strategic contextualization with 3 workflows:
 
@@ -121,12 +125,26 @@ Emma will guide you through strategic contextualization with 3 workflows:
   - Clear scope boundaries (what's in, what's out)
   - Output: Scope decision document with rationale
 
-### Your First Lean Experiment with Wade
+### Isla - Empathize Stream (3 workflows)
 
-```bash
-# Activate Wade
-cat _bmad/bme/_vortex/agents/lean-experiments-specialist.md
-```
+Isla will guide you through user discovery and empathy with 3 workflows:
+
+- **[EM] Empathy Map** - Build deep user understanding through empathy mapping
+  - 5-step guided workflow
+  - Maps what users think, feel, say, do, and experience
+  - Output: Empathy map artifact with pain/gain analysis
+
+- **[UI] User Interview** - Design and conduct effective user interviews
+  - 6-step guided workflow
+  - Interview script design with findings capture
+  - Output: Interview findings with patterns and insights
+
+- **[UD] User Discovery** - Plan and execute discovery research
+  - 6-step guided workflow
+  - Research planning, execution, and synthesis
+  - Output: Discovery research report with key findings
+
+### Wade - Externalize Stream (4 workflows)
 
 Wade will guide you through validated learning with 4 workflows:
 
@@ -149,6 +167,25 @@ Wade will guide you through validated learning with 4 workflows:
   - Test "Should we build it?" (business case)
   - Willingness to pay and market demand experiments
   - Output: Business case and build/pivot/kill decision
+
+### Max - Systematize Stream (3 workflows)
+
+Max will guide you through learning capture and strategic navigation with 3 workflows:
+
+- **[LC] Learning Card** - Capture what was tested, learned, and decided
+  - 6-step guided workflow
+  - Structured learning documentation from experiments
+  - Output: Learning card artifact with evidence and decisions
+
+- **[PPP] Pivot, Patch, or Persevere** - Make evidence-based decisions after experiments
+  - 6-step guided workflow
+  - Decision framework with evidence evaluation
+  - Output: Decision document with rationale and next steps
+
+- **[VN] Vortex Navigation** - Decide which Vortex stream to focus on next
+  - 6-step guided workflow
+  - Assess progress across all streams, identify gaps
+  - Output: Navigation recommendation with action plan
 
 ---
 
@@ -203,6 +240,11 @@ npx bmad-update
 
 ### Migration Paths
 
+**From v1.3.x or v1.4.x to v1.5.0:**
+- No breaking changes
+- Adds Isla (Discovery & Empathy Expert) and Max (Learning & Decision Expert)
+- 6 new workflows installed, empathy-map resurrected for Isla
+
 **From v1.1.x, v1.2.x, or v1.3.x to v1.4.0:**
 - No breaking changes
 - Internal architecture refactor (no user-facing changes)
@@ -232,7 +274,7 @@ ls _bmad-output/.logs/
 cp -r _bmad-output/.backups/backup-{version}-{timestamp}/* _bmad/bme/_vortex/
 
 # Reinstall (preserves user data)
-npx bmad-install-agents
+npx bmad-install-vortex-agents
 ```
 
 **📖 See [UPDATE-GUIDE.md](UPDATE-GUIDE.md) for comprehensive update documentation**
@@ -261,7 +303,7 @@ All agents built using a standard pattern:
 
 ### Emma (contextualization-expert) - ✅ COMPLETE
 
-**Status:** v1.4.1 - All 3 workflows implemented and ready to use
+**Status:** v1.5.0 - All 3 workflows implemented and ready to use
 **Title:** Contextualization Expert 🎯
 **Stream:** Contextualize
 **Domain:** Strategic framing, problem-product space navigation
@@ -285,9 +327,35 @@ All agents built using a standard pattern:
 
 ---
 
+### Isla (discovery-empathy-expert) - ✅ COMPLETE
+
+**Status:** v1.5.0 - All 3 workflows implemented and ready to use
+**Title:** Discovery & Empathy Expert 🔍
+**Stream:** Empathize
+**Domain:** User research, empathy mapping, discovery
+
+**Workflows Available Now:**
+- **empathy-map** - Build deep user understanding through empathy mapping (5 steps)
+- **user-interview** - Design interview scripts and capture findings (6 steps)
+- **user-discovery** - Plan and execute discovery research (6 steps)
+
+**Key Positioning:**
+- Helps teams deeply understand users before designing solutions
+- Focus on evidence-based user insights over assumptions
+- Guides teams through structured discovery and empathy practices
+- Bridges the gap between strategic framing and experimentation
+
+**Differentiation:**
+- **Isla vs Emma:** Isla empathizes (understand users), Emma contextualizes (frame the problem)
+- Isla answers "Who are our users and what do they need?" to inform Emma's strategic framing
+
+**Output:** Empathy maps, interview findings, discovery reports in `_bmad-output/vortex-artifacts/`
+
+---
+
 ### Wade (lean-experiments-specialist) - ✅ COMPLETE
 
-**Status:** v1.4.1 - All 4 workflows implemented and ready to use
+**Status:** v1.5.0 - All 4 workflows implemented and ready to use
 **Title:** Lean Experiments Specialist 🧪
 **Stream:** Externalize
 **Domain:** Lean Startup experimentation, validated learning
@@ -312,47 +380,64 @@ All agents built using a standard pattern:
 
 ---
 
+### Max (learning-decision-expert) - ✅ COMPLETE
+
+**Status:** v1.5.0 - All 3 workflows implemented and ready to use
+**Title:** Learning & Decision Expert 🧭
+**Stream:** Systematize
+**Domain:** Learning capture, decision frameworks, Vortex navigation
+
+**Workflows Available Now:**
+- **learning-card** - Capture what was tested, learned, and decided (6 steps)
+- **pivot-patch-persevere** - Evidence-based decision framework after experiments (6 steps)
+- **vortex-navigation** - Decide which Vortex stream to focus on next (6 steps)
+
+**Key Positioning:**
+- Helps teams systematize learnings and make evidence-based decisions
+- Focus on capturing validated learning as organizational knowledge
+- Guides teams through pivot/patch/persevere decisions
+- Navigates between Vortex streams based on evidence and gaps
+
+**Differentiation:**
+- **Max vs Wade:** Max systematizes (what did we learn?), Wade externalizes (test with users)
+- Max answers "What should we do next?" based on accumulated evidence
+
+**Output:** Learning cards, decision documents, navigation recommendations in `_bmad-output/vortex-artifacts/`
+
+---
+
 ## 📊 Project Status
 
-**Current Version:** v1.4.1 - Complete Vortex Framework + Industrial-Grade Tooling ✅
+**Current Version:** v1.5.0 - Wave 2: Four Vortex Agents ✅
 
 **Progress:**
 - ✅ Emma - 3 Contextualize workflows IMPLEMENTED
+- ✅ Isla - 3 Empathize workflows IMPLEMENTED (NEW in v1.5.0)
 - ✅ Wade - 4 Externalize workflows IMPLEMENTED
-- ✅ 56 workflow files created (7 workflows × 8 files each)
+- ✅ Max - 3 Systematize workflows IMPLEMENTED (NEW in v1.5.0)
+- ✅ 104 workflow files created (13 workflows × 8 files each)
 - ✅ Update/migration system with backup and rollback
 - ✅ Standalone installation support (no BMAD Method required)
-- ✅ 120 automated tests (unit + integration), 6-job CI pipeline
 - ✅ `npx bmad-doctor` diagnostic CLI
+- ✅ CI pipeline with lint, test matrix, coverage, security, publish-on-tag
 
-**What's New in v1.4.1:**
-- **`npx bmad-doctor`** - Diagnostic CLI with 7 checks and actionable fix suggestions
-- **Publish-on-tag CI** - Automated npm publish on `v*` tags, gated behind all quality jobs
-- **ESLint architecture rules** - `process.cwd()` banned in scripts, preventing regression of fixed bugs
-- **120 automated tests** - Unit tests for all core modules, integration tests for install/upgrade/CLI
-
-**What's New in v1.4.0:**
-- **Architecture refactor** - Single source of truth for version, no hardcoded strings
-- **Project root detection** - Commands work from any subdirectory
-- **Safer migrations** - `bmad-migrate` now creates backups with automatic rollback
-- **Cleaner codebase** - Dead code removed, shared refresh mechanism, append-only registry
-
-**v1.3.x highlights:**
-- Update/migration system (`npx bmad-update`, `npx bmad-version`, `npx bmad-migrate`)
-- Automatic backups before every migration, with rollback on failure
-- Standalone support (works without BMAD Method installed)
-- Migration paths from v1.0.x, v1.1.x, v1.2.x
+**What's New in v1.5.0:**
+- **Isla (Discovery & Empathy Expert)** - Empathize stream with empathy-map, user-interview, user-discovery workflows
+- **Max (Learning & Decision Expert)** - Systematize stream with learning-card, pivot-patch-persevere, vortex-navigation workflows
+- **`npx bmad-install-vortex-agents`** - New primary installer for all 4 Vortex agents
+- **Empathy-map resurrected** - Moved from deprecated back to active, now owned by Isla
+- **Legacy installer deprecation** - `install-emma`/`install-wade` now show deprecation warnings
 
 **Roadmap:**
 ```
-v1.1.0               v1.2.0              v1.3.x ✅         v1.4.x ✅          v2.0.0
-├─────────────────┬──────────────────┬──────────────────┬──────────────────┬──────────┤
-│ Repositioning ✅ │  Workflows ✅    │  Tooling ✅       │  Quality ✅       │ Advanced │
-│ • New identity  │  • 7 workflows   │  • Update tools  │  • Refactor      │ • Multi  │
-│ • Framework     │  • Templates     │  • Migration     │  • 120 tests     │ • Integ  │
-│ • Structure     │  • User guides   │  • Automation    │  • CI/CD + lint  │ • Stats  │
-└─────────────────┴──────────────────┴──────────────────┴──────────────────┴──────────┘
-   Feb 2026          Feb 2026           Feb 2026           Feb 2026          Q3 2026
+v1.1.0             v1.3.x ✅        v1.4.x ✅        v1.5.0 ✅          v2.0.0
+├────────────────┬────────────────┬────────────────┬────────────────┬──────────┤
+│ Foundation ✅   │ Tooling ✅      │ Quality ✅      │ Wave 2 ✅       │ Advanced │
+│ • Emma + Wade  │ • Update tools │ • Refactor     │ • Isla + Max   │ • Wave 3 │
+│ • 7 workflows  │ • Migration    │ • 120 tests    │ • 13 workflows │ • Multi  │
+│ • Framework    │ • Automation   │ • CI/CD + lint │ • 4 streams    │ • Stats  │
+└────────────────┴────────────────┴────────────────┴────────────────┴──────────┘
+   Feb 2026         Feb 2026         Feb 2026         Feb 2026         Q3 2026
 ```
 
 **See:** [CHANGELOG.md](CHANGELOG.md) for complete version history
@@ -364,7 +449,9 @@ v1.1.0               v1.2.0              v1.3.x ✅         v1.4.x ✅          
 ### User Guides
 
 - **[Emma User Guide](_bmad-output/vortex-artifacts/EMMA-USER-GUIDE.md)** - Complete guide to strategic contextualization with Emma
+- **[Isla User Guide](_bmad-output/vortex-artifacts/ISLA-USER-GUIDE.md)** - Complete guide to discovery and empathy with Isla
 - **[Wade User Guide](_bmad-output/vortex-artifacts/WADE-USER-GUIDE.md)** - Complete guide to lean experiments with Wade
+- **[Max User Guide](_bmad-output/vortex-artifacts/MAX-USER-GUIDE.md)** - Complete guide to learning and decisions with Max
 
 ### Technical Documentation
 
@@ -389,8 +476,10 @@ v1.1.0               v1.2.0              v1.3.x ✅         v1.4.x ✅          
 
 The Vortex framework brings structured validation to product development:
 - **Contextualize Stream (Emma):** Frame the right problem before building
+- **Empathize Stream (Isla):** Understand users through research and empathy
 - **Externalize Stream (Wade):** Test assumptions with real users
-- **Integrated Approach:** Strategic clarity → Validated learning → Implementation
+- **Systematize Stream (Max):** Capture learnings and navigate between streams
+- **Integrated Approach:** Strategic clarity → User empathy → Validated learning → Systematic decisions
 
 ### 🔄 Clear Agent Differentiation
 
@@ -406,8 +495,10 @@ The Vortex framework brings structured validation to product development:
 
 BMAD-Enhanced now focuses on the critical pre-implementation phase:
 1. **Emma:** Frame strategy and define problem space
-2. **Wade:** Validate assumptions through experiments
-3. **Hand off to BMAD Core:** Let PM/Dev/QA agents implement
+2. **Isla:** Understand users through research and empathy
+3. **Wade:** Validate assumptions through experiments
+4. **Max:** Capture learnings and decide what to do next
+5. **Hand off to BMAD Core:** Let PM/Dev/QA agents implement
 
 ### 🔄 Reusable Patterns
 
@@ -464,7 +555,7 @@ Clear, comprehensive documentation:
 
 ### Automated Test Suite
 
-**120 tests, 0 failures** — zero-dependency test runner (`node:test`)
+Zero-dependency test runner (`node:test`)
 
 | Suite | Tests | Coverage |
 |-------|-------|----------|
@@ -559,8 +650,12 @@ npm run lint             # ESLint
 - ✅ **v1.3.x** - Update/migration system with backup and rollback
 - ✅ **v1.4.0** - Architecture refactor (single source of truth, project root detection, safer migrations)
 - ✅ **v1.4.1** - Industrial-grade tooling (120 tests, CI/CD, ESLint, bmad-doctor, publish-on-tag)
+- ✅ **v1.5.0** - Wave 2: Isla + Max agents, 13 workflows, 4 Vortex streams
 
-### Future (v2.0.0+)
+### Future (v1.6.0 / v2.0.0+)
+
+- 📋 Wave 3: Synthesize, Hypothesize, Sensitize streams (3 more agents)
+- 📋 Data-driven agent/workflow registry (replace hardcoded arrays)
 
 - 📋 Multi-agent collaboration patterns
 - 📋 Cross-agent workflow integration
@@ -683,7 +778,7 @@ We welcome contributions! Areas where we need help:
 
 **Adoption:**
 - 100+ teams using BMAD-Enhanced agents
-- 2/2 Vortex agents in production
+- 4/4 Vortex agents in production (Wave 2)
 - Community agents contributed
 
 **Quality:**
@@ -761,9 +856,17 @@ Wade generates comprehensive MVP specs with:
 - **[Emma User Guide](_bmad-output/vortex-artifacts/EMMA-USER-GUIDE.md)** - Complete guide with examples
 - Emma's chat mode (CH command) - Ask Emma questions about lean personas, product vision, and scope
 
+**Isla (Discovery & Empathy):**
+- **[Isla User Guide](_bmad-output/vortex-artifacts/ISLA-USER-GUIDE.md)** - Complete guide with examples
+- Isla's chat mode (CH command) - Ask Isla questions about empathy maps, interviews, and user discovery
+
 **Wade (Lean Experiments):**
 - **[Wade User Guide](_bmad-output/vortex-artifacts/WADE-USER-GUIDE.md)** - Complete guide with examples
 - Wade's chat mode (CH command) - Ask Wade questions about MVPs, experiments, and validated learning
+
+**Max (Learning & Decisions):**
+- **[Max User Guide](_bmad-output/vortex-artifacts/MAX-USER-GUIDE.md)** - Complete guide with examples
+- Max's chat mode (CH command) - Ask Max questions about learning cards, decisions, and Vortex navigation
 
 ### For Developers
 
@@ -843,7 +946,7 @@ Built on:
 
 **Original vision (archived):** [ORIGINAL-VISION-README.md](_bmad-output/planning-artifacts/ORIGINAL-VISION-README.md)
 
-**Current approach:** Vortex Framework with 2 specialized agents (Emma, Wade) using BMAD Agent Architecture Framework.
+**Current approach:** Vortex Framework with 4 specialized agents (Emma, Isla, Wade, Max) using BMAD Agent Architecture Framework.
 
 ### What happened to empathy mapping and wireframing?
 
@@ -859,27 +962,23 @@ Built on:
 
 **Why?** To create clear differentiation from BMAD core agents (Maya for design, Sally for quality) and focus on the critical pre-implementation validation phase.
 
-### Can I still use Emma and Wade independently?
+### Can I use agents independently?
 
 **Yes!** Each agent works standalone:
 - Use Emma alone for strategic framing and problem space definition
+- Use Isla alone for user research and empathy mapping
 - Use Wade alone for experiment design and validation
-- Use both together for complete Contextualize → Externalize flow
+- Use Max alone for learning capture and decision-making
+- Use all four together for the complete Vortex flow: Contextualize → Empathize → Externalize → Systematize
 
-### Are the new workflows ready?
+### Are the workflows ready?
 
-**Yes! All 7 workflows are fully implemented (since v1.2.0) and ready to use:**
+**Yes! All 13 workflows are fully implemented and ready to use:**
 
-**Emma (Contextualize):**
-- lean-persona (6-step workflow)
-- product-vision (6-step workflow)
-- contextualize-scope (6-step workflow)
-
-**Wade (Externalize):**
-- mvp (6-step workflow)
-- lean-experiment (6-step workflow)
-- proof-of-concept (6-step workflow)
-- proof-of-value (6-step workflow)
+**Emma (Contextualize):** lean-persona, product-vision, contextualize-scope
+**Isla (Empathize):** empathy-map, user-interview, user-discovery
+**Wade (Externalize):** mvp, lean-experiment, proof-of-concept, proof-of-value
+**Max (Systematize):** learning-card, pivot-patch-persevere, vortex-navigation
 
 Each workflow includes templates, step files, and comprehensive guidance.
 
@@ -889,14 +988,16 @@ Each workflow includes templates, step files, and comprehensive guidance.
 
 **BMAD-Enhanced (Vortex):** Pre-implementation - validate before building
 - Emma: Strategic framing (what problem should we solve?)
+- Isla: User empathy (who are our users and what do they need?)
 - Wade: Validated learning (should we build this?)
+- Max: Systematic decisions (what did we learn? what's next?)
 
 **BMAD Core:** Implementation - build and deliver
 - Maya: Solution design (how should we solve it?)
 - Dev/Arch: Implementation
 - Sally/QA: Quality validation (are we building it well?)
 
-**Flow:** Emma → Wade → BMAD Core agents for implementation
+**Flow:** Emma → Isla → Wade → Max → BMAD Core agents for implementation
 
 ---
 
@@ -904,11 +1005,11 @@ Each workflow includes templates, step files, and comprehensive guidance.
 
 **BMAD-Enhanced - Vortex Framework**
 
-*Contextualize and Externalize for Lean Startup Validation*
+*Contextualize, Empathize, Externalize, and Systematize for Lean Startup Validation*
 
 [Get Started](#quick-start) • [Documentation](#documentation) • [Roadmap](#roadmap)
 
-**Current Status:** ✅ v1.4.1 Stable - Vortex Framework Complete
+**Current Status:** ✅ v1.5.0 Stable - 4 Vortex Agents, 13 Workflows
 
 Made with ❤️ by the BMAD-Enhanced community
 

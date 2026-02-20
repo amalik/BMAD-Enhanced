@@ -22,15 +22,17 @@ describe('index.js entry point', () => {
     assert.ok(stdout.includes(pkg.version), 'should show package version');
   });
 
-  it('shows agent names', async () => {
+  it('shows all agent names', async () => {
     const { stdout } = await run(path.join(projectRoot, 'index.js'));
     assert.ok(stdout.includes('Emma'), 'should mention Emma');
+    assert.ok(stdout.includes('Isla'), 'should mention Isla');
     assert.ok(stdout.includes('Wade'), 'should mention Wade');
+    assert.ok(stdout.includes('Max'), 'should mention Max');
   });
 
   it('shows available commands', async () => {
     const { stdout } = await run(path.join(projectRoot, 'index.js'));
-    assert.ok(stdout.includes('bmad-install-agents'), 'should list install command');
+    assert.ok(stdout.includes('bmad-install-vortex-agents'), 'should list primary install command');
     assert.ok(stdout.includes('bmad-update'), 'should list update command');
     assert.ok(stdout.includes('bmad-doctor'), 'should list doctor command');
   });

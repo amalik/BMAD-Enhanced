@@ -1,12 +1,13 @@
 {
   "name": "bmad-enhanced",
-  "version": "1.4.1",
-  "description": "Vortex Framework - Contextualize and Externalize streams for Lean Startup validation",
+  "version": "1.5.0",
+  "description": "Vortex Framework - Contextualize, Empathize, Externalize, and Systematize streams for Lean Startup validation",
   "main": "index.js",
   "files": [
     "index.js",
     "scripts/",
     "_bmad/",
+    "_bmad-output/",
     "INSTALLATION.md",
     "UPDATE-GUIDE.md",
     "CHANGELOG.md",
@@ -14,6 +15,7 @@
     "README.md"
   ],
   "bin": {
+    "bmad-install-vortex-agents": "scripts/install-vortex-agents.js",
     "bmad-install-agents": "scripts/install-all-agents.js",
     "bmad-install-emma": "scripts/install-emma.js",
     "bmad-install-wade": "scripts/install-wade.js",
@@ -41,6 +43,10 @@
     "vortex",
     "contextualize",
     "externalize",
+    "empathize",
+    "systematize",
+    "user-research",
+    "decision-making",
     "mvp",
     "product-strategy",
     "ai-agents"

@@ -7,6 +7,32 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [1.5.0] - 2026-02-20
+
+### Added
+
+- **Isla** (discovery-empathy-expert) - Discovery & Empathy Expert for the Empathize stream
+- **Max** (learning-decision-expert) - Learning & Decision Expert for the Systematize stream
+- New primary installer: `bmad-install-vortex-agents`
+- Workflows for Isla: `empathy-map`, `user-interview`, `user-discovery`
+- Workflows for Max: `learning-card`, `pivot-patch-persevere`, `vortex-navigation`
+- `ISLA-USER-GUIDE.md` and `MAX-USER-GUIDE.md` in vortex-artifacts
+- Migration path: 1.3.x and 1.4.x to 1.5.0 (non-breaking)
+
+### Changed
+
+- `bmad-install-agents` now delegates to `install-vortex-agents.js` (umbrella wrapper)
+- `bmad-install-emma` and `bmad-install-wade` are now deprecation wrappers
+- Package description updated to include Empathize and Systematize streams
+- `bmad-doctor` now checks for all 4 agents and 13 workflows
+
+### Fixed
+
+- `empathy-map` workflow `_designos` path references corrected to `_vortex`
+- `validate.md` and `empathy-map.template.md` author attribution corrected from Emma to Isla
+
+---
+
 ## [1.3.6] - 2026-02-18
 
 ### Fixed

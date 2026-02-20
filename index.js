@@ -2,15 +2,14 @@
 
 /**
  * BMAD-Enhanced – Vortex Framework
- * Lean Startup validation through Contextualize and Externalize streams.
+ * Product discovery through Contextualize, Empathize, Externalize, and Systematize streams.
  *
  * This is a CLI-first package. Use the bin commands:
- *   npx bmad-install-agents   – Install all Vortex agents
- *   npx bmad-install-emma     – Install Emma (Contextualization Expert)
- *   npx bmad-install-wade     – Install Wade (Lean Experiments Specialist)
- *   npx bmad-update            – Check for and apply updates
- *   npx bmad-version           – Show installed vs latest version
- *   npx bmad-doctor            – Diagnose installation issues
+ *   npx bmad-install-vortex-agents – Install all Vortex agents (primary)
+ *   npx bmad-install-agents        – Install all agents (umbrella alias)
+ *   npx bmad-update                – Check for and apply updates
+ *   npx bmad-version               – Show installed vs latest version
+ *   npx bmad-doctor                – Diagnose installation issues
  *
  * @license MIT
  */
@@ -32,6 +31,7 @@ if (require.main === module) {
   const RESET = '\x1b[0m';
   const CYAN = '\x1b[36m';
   const GREEN = '\x1b[32m';
+  const GRAY = '\x1b[90m';
 
   console.log('');
   console.log(`${BOLD}${info.name}${RESET} v${info.version}`);
@@ -40,14 +40,15 @@ if (require.main === module) {
   console.log(`${GREEN}Agents:${RESET}`);
   console.log(`  Emma ${CYAN}🎯${RESET} – Contextualization Expert`);
   console.log(`  Wade ${CYAN}🧪${RESET} – Lean Experiments Specialist`);
+  console.log(`  Isla ${CYAN}🔍${RESET} – Discovery & Empathy Expert`);
+  console.log(`  Max  ${CYAN}🧭${RESET} – Learning & Decision Expert`);
   console.log('');
   console.log(`${GREEN}Commands:${RESET}`);
-  console.log(`  ${CYAN}npx bmad-install-agents${RESET}  Install all agents`);
-  console.log(`  ${CYAN}npx bmad-install-emma${RESET}    Install Emma only`);
-  console.log(`  ${CYAN}npx bmad-install-wade${RESET}    Install Wade only`);
-  console.log(`  ${CYAN}npx bmad-update${RESET}          Check for updates`);
-  console.log(`  ${CYAN}npx bmad-version${RESET}         Show version info`);
-  console.log(`  ${CYAN}npx bmad-doctor${RESET}          Diagnose issues`);
+  console.log(`  ${CYAN}npx bmad-install-vortex-agents${RESET}  Install all Vortex agents`);
+  console.log(`  ${CYAN}npx bmad-install-agents${RESET}         Install all agents ${GRAY}(alias)${RESET}`);
+  console.log(`  ${CYAN}npx bmad-update${RESET}                 Check for updates`);
+  console.log(`  ${CYAN}npx bmad-version${RESET}                Show version info`);
+  console.log(`  ${CYAN}npx bmad-doctor${RESET}                 Diagnose issues`);
   console.log('');
 }
 

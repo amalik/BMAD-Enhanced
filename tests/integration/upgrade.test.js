@@ -119,9 +119,10 @@ describe('Upgrade from v1.3.x (simulated)', () => {
     assert.equal(version, '1.3.8');
   });
 
-  it('reports no applicable migrations for v1.3.8', () => {
+  it('finds applicable migration for v1.3.8', () => {
     const migrations = registry.getMigrationsFor('1.3.8');
-    assert.equal(migrations.length, 0);
+    assert.ok(migrations.length >= 1, 'should have at least 1 migration');
+    assert.equal(migrations[0].name, '1.3.x-to-1.5.0');
   });
 
   it('reports no breaking changes for v1.3.8', () => {
@@ -155,6 +156,14 @@ describe('Upgrade from v1.3.x (simulated)', () => {
 
     // Should no longer be our stub content
     assert.notEqual(content, '# Emma v1.3');
+  });
+
+  it('refreshInstallation adds Wave 2 agents', async () => {
+    const islaPath = path.join(tmpDir, '_bmad/bme/_vortex/agents/discovery-empathy-expert.md');
+    const maxPath = path.join(tmpDir, '_bmad/bme/_vortex/agents/learning-decision-expert.md');
+
+    assert.ok(fs.existsSync(islaPath), 'Isla should be installed after upgrade');
+    assert.ok(fs.existsSync(maxPath), 'Max should be installed after upgrade');
   });
 });
 
@@ -210,6 +219,82 @@ describe('User guide backup during upgrade', () => {
     }
 
     await fs.remove(tmpDir2);
+  });
+});
+
+describe('Upgrade from v1.4.x (simulated)', () => {
+  let tmpDir;
+
+  before(async () => {
+    tmpDir = await fs.mkdtemp(path.join(os.tmpdir(), 'bmad-upgrade-1.4-'));
+
+    // Simulate a v1.4.x installation (has Emma + Wade, 7 workflows)
+    const vortexDir = path.join(tmpDir, '_bmad/bme/_vortex');
+    await fs.ensureDir(path.join(vortexDir, 'agents'));
+    await fs.ensureDir(path.join(vortexDir, 'workflows'));
+
+    await fs.writeFile(path.join(vortexDir, 'agents/contextualization-expert.md'), '# Emma v1.4');
+    await fs.writeFile(path.join(vortexDir, 'agents/lean-experiments-specialist.md'), '# Wade v1.4');
+    await fs.writeFile(path.join(vortexDir, 'config.yaml'), yaml.dump({
+      version: '1.4.1',
+      user_name: 'Bob',
+      submodule_name: 'vortex',
+      description: 'test',
+      module: 'bme',
+      output_folder: '_bmad-output/vortex-artifacts',
+      agents: ['contextualization-expert', 'lean-experiments-specialist'],
+      workflows: ['lean-persona', 'product-vision', 'contextualize-scope', 'mvp', 'lean-experiment', 'proof-of-concept', 'proof-of-value']
+    }));
+  });
+
+  after(async () => {
+    await fs.remove(tmpDir);
+  });
+
+  it('detects v1.4.1 from config', () => {
+    const version = versionDetector.getCurrentVersion(tmpDir);
+    assert.equal(version, '1.4.1');
+  });
+
+  it('finds applicable migration for v1.4.1', () => {
+    const migrations = registry.getMigrationsFor('1.4.1');
+    assert.ok(migrations.length >= 1);
+    assert.equal(migrations[0].name, '1.4.x-to-1.5.0');
+    assert.equal(migrations[0].breaking, false);
+  });
+
+  it('refreshInstallation adds Isla and Max agents', async () => {
+    await refreshInstallation(tmpDir, { backupGuides: false, verbose: false });
+
+    assert.ok(fs.existsSync(path.join(tmpDir, '_bmad/bme/_vortex/agents/discovery-empathy-expert.md')));
+    assert.ok(fs.existsSync(path.join(tmpDir, '_bmad/bme/_vortex/agents/learning-decision-expert.md')));
+  });
+
+  it('preserves user_name after upgrade', async () => {
+    const configPath = path.join(tmpDir, '_bmad/bme/_vortex/config.yaml');
+    const config = yaml.load(fs.readFileSync(configPath, 'utf8'));
+    assert.equal(config.user_name, 'Bob');
+  });
+
+  it('updates config to include all 4 agents and 13 workflows', async () => {
+    const configPath = path.join(tmpDir, '_bmad/bme/_vortex/config.yaml');
+    const config = yaml.load(fs.readFileSync(configPath, 'utf8'));
+
+    assert.ok(config.agents.includes('discovery-empathy-expert'));
+    assert.ok(config.agents.includes('learning-decision-expert'));
+    assert.ok(config.workflows.length >= 13, 'should have at least 13 workflows');
+  });
+
+  it('installs Wave 2 workflows', async () => {
+    const workflowsDir = path.join(tmpDir, '_bmad/bme/_vortex/workflows');
+    const wave2Workflows = ['empathy-map', 'user-interview', 'user-discovery', 'learning-card', 'pivot-patch-persevere', 'vortex-navigation'];
+
+    for (const wf of wave2Workflows) {
+      assert.ok(
+        fs.existsSync(path.join(workflowsDir, wf, 'workflow.md')),
+        `${wf}/workflow.md should exist after upgrade`
+      );
+    }
   });
 });
 

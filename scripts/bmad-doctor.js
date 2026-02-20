@@ -116,14 +116,14 @@ function checkConfig(projectRoot) {
 
 function checkAgents(projectRoot) {
   const agentsDir = path.join(projectRoot, '_bmad/bme/_vortex/agents');
-  const required = ['contextualization-expert.md', 'lean-experiments-specialist.md'];
+  const required = ['contextualization-expert.md', 'lean-experiments-specialist.md', 'discovery-empathy-expert.md', 'learning-decision-expert.md'];
 
   if (!fs.existsSync(agentsDir)) {
     return {
       name: 'Agent files',
       passed: false,
       error: 'agents/ directory not found',
-      fix: 'Run: npx bmad-install-agents'
+      fix: 'Run: npx bmad-install-vortex-agents'
     };
   }
 
@@ -134,7 +134,7 @@ function checkAgents(projectRoot) {
       name: 'Agent files',
       passed: false,
       error: `Missing: ${missing.join(', ')}`,
-      fix: `Run: npx bmad-install-emma (or bmad-install-wade) to reinstall`
+      fix: 'Run: npx bmad-install-vortex-agents to reinstall'
     };
   }
 
@@ -160,7 +160,9 @@ function checkWorkflows(projectRoot) {
   const workflowsDir = path.join(projectRoot, '_bmad/bme/_vortex/workflows');
   const required = [
     'lean-persona', 'product-vision', 'contextualize-scope',
-    'mvp', 'lean-experiment', 'proof-of-concept', 'proof-of-value'
+    'mvp', 'lean-experiment', 'proof-of-concept', 'proof-of-value',
+    'empathy-map', 'user-interview', 'user-discovery',
+    'learning-card', 'pivot-patch-persevere', 'vortex-navigation'
   ];
 
   if (!fs.existsSync(workflowsDir)) {

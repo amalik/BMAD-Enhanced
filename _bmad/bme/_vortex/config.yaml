@@ -1,8 +1,8 @@
 ---
 submodule_name: _vortex
-description: Contextualize and Externalize streams - Strategic framing and validated learning
+description: Vortex Framework - Contextualize, Empathize, Externalize, and Systematize streams
 module: bme
-version: 1.1.0
+version: 1.5.0
 
 # Output Configuration
 output_folder: "{project-root}/_bmad-output/vortex-artifacts"
@@ -11,8 +11,10 @@ communication_language: "en"
 
 # Agents in this submodule
 agents:
-  - contextualization-expert     # Emma - Contextualization Expert
-  - lean-experiments-specialist  # Wade - Lean Experiments Specialist
+  - contextualization-expert     # Emma - Contextualize Stream
+  - lean-experiments-specialist  # Wade - Externalize Stream
+  - discovery-empathy-expert     # Isla - Empathize Stream
+  - learning-decision-expert     # Max - Systematize Stream
 
 # Workflows available
 workflows:
@@ -26,6 +28,16 @@ workflows:
   - lean-experiment        # Run Build-Measure-Learn cycle
   - proof-of-concept       # Validate technical feasibility
   - proof-of-value         # Validate business value
+
+  # Isla - Empathize Stream
+  - empathy-map            # Create user empathy maps
+  - user-interview         # Design and conduct user interviews
+  - user-discovery         # Plan and execute discovery research
+
+  # Max - Systematize Stream
+  - learning-card          # Capture validated learnings
+  - pivot-patch-persevere  # Decision framework after experiments
+  - vortex-navigation      # Navigate between Vortex streams
 
 # Integration
 party_mode_enabled: true
