@@ -7,6 +7,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [1.5.1] - 2026-02-20
+
+### Added
+
+- **Vortex Compass** — Evidence-driven cross-stream navigation in every workflow's final step
+  - Conditional "If you learned X → go to Y" tables replace fixed "Next suggested workflow" links
+  - Each compass points to workflows across different agents, creating true vortex loops
+  - All 12 workflow endpoints now interconnect (vortex-navigation excluded — it IS the navigator)
+  - Always includes Max's Vortex Navigation as escape hatch for full gap analysis
+
+---
+
 ## [1.5.0] - 2026-02-20
 
 ### Added
