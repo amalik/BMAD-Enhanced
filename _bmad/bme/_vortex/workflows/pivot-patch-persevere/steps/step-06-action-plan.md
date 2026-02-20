@@ -172,4 +172,14 @@ After creating the action plan, your PPP decision artifact will include:
 - Concrete action plan with owners, timelines, and success metrics
 - Risk mitigation strategies
 
-Next suggested workflow: **Wade's lean-experiment** to design and run the next experiment, or **Max's learning-card** to capture results when the next experiment completes.
+## Vortex Compass
+
+Based on what you just completed, here are your evidence-driven options:
+
+| If you learned... | Consider next... | Agent | Why |
+|---|---|---|---|
+| Pivoting — new direction | contextualize-scope | Emma 🎯 | Re-contextualize for the pivot |
+| Patching — adjust approach | lean-experiment | Wade 🧪 | Test the adjusted approach |
+| Persevering — need deeper insight | user-discovery | Isla 🔍 | Strengthen your understanding of users |
+
+**Or run Max's [VN] Vortex Navigation** for a full gap analysis across all streams.
