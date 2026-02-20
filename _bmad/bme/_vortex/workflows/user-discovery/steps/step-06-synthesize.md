@@ -143,12 +143,14 @@ Once you confirm, I'll create:
 
 ---
 
-## What's Next?
+## Vortex Compass
 
-After completing this discovery report, you might:
+Based on what you just completed, here are your evidence-driven options:
 
-1. **Create empathy maps** for key user segments discovered (use the empathy-map workflow)
-2. **Design experiments** to test opportunity area hypotheses (invoke Wade for lean experiments)
-3. **Update personas** based on new understanding
-4. **Present to stakeholders** to align on priorities
-5. **Plan the next research cycle** to address gaps identified in this round
+| If you learned... | Consider next... | Agent | Why |
+|---|---|---|---|
+| Problem space needs reframing | contextualize-scope | Emma 🎯 | Re-scope based on discovery findings |
+| Ready to test hypotheses | lean-experiment | Wade 🧪 | Design experiments from discovery insights |
+| Need deeper empathy for key users | empathy-map | Isla 🔍 | Map the users you discovered in depth |
+
+**Or run Max's [VN] Vortex Navigation** for a full gap analysis across all streams.
