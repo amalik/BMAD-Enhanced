@@ -113,4 +113,14 @@ After synthesis, your lean persona artifact will include:
 - Validation experiments ready to run
 - Revision history to track what you learn
 
-Next suggested workflow: **Wade's lean-experiment** to run your validation experiments.
+## Vortex Compass
+
+Based on what you just completed, here are your evidence-driven options:
+
+| If you learned... | Consider next... | Agent | Why |
+|---|---|---|---|
+| Riskiest assumptions identified | lean-experiment | Wade 🧪 | Test your riskiest assumption with real users |
+| User needs unclear | user-interview | Isla 🔍 | Validate persona assumptions with actual users |
+| Multiple user segments | empathy-map | Isla 🔍 | Build deeper understanding of each segment |
+
+**Or run Max's [VN] Vortex Navigation** for a full gap analysis across all streams.
