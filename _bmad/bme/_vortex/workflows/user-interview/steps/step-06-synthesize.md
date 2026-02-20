@@ -153,6 +153,16 @@ Your artifact will include:
 - Recommendations and next actions
 - Research quality assessment
 
-**Next suggested workflows:**
-- **Emma's lean-persona** to build personas from your interview insights
-- **Wade's lean-experiment** to test your riskiest insights with experiments
+---
+
+## Vortex Compass
+
+Based on what you just completed, here are your evidence-driven options:
+
+| If you learned... | Consider next... | Agent | Why |
+|---|---|---|---|
+| Insights suggest different problem | contextualize-scope | Emma 🎯 | Re-scope based on what users actually said |
+| Riskiest insights identified | lean-experiment | Wade 🧪 | Test your riskiest insight with an experiment |
+| Want to synthesize across users | empathy-map | Isla 🔍 | Map patterns across all interview subjects |
+
+**Or run Max's [VN] Vortex Navigation** for a full gap analysis across all streams.
