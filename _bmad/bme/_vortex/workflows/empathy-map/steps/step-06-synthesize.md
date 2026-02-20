@@ -91,14 +91,14 @@ Once you confirm, I'll create:
 
 ---
 
-## What's Next?
+## Vortex Compass
 
-After creating this empathy map, you might:
+Based on what you just completed, here are your evidence-driven options:
 
-1. **Validate with users** - Show the empathy map to actual users and ask if it resonates
-2. **Share with team** - Get stakeholder alignment on user needs
-3. **Create wireframes** - Use insights to inform design decisions (invoke Wade!)
-4. **Prioritize features** - Focus on gains that address the biggest pain points
-5. **Define success metrics** - Use gain metrics to track if solutions work
+| If you learned... | Consider next... | Agent | Why |
+|---|---|---|---|
+| Pain points need validation | lean-experiment | Wade 🧪 | Test if pain points drive real behavior |
+| New user segment discovered | lean-persona | Emma 🎯 | Re-contextualize for the new segment |
+| Deeper understanding needed | user-interview | Isla 🔍 | Follow up with targeted interviews |
 
-Great work! This empathy map will be a valuable tool for user-centered decision making. 🎨
+**Or run Max's [VN] Vortex Navigation** for a full gap analysis across all streams.
