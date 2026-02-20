@@ -486,6 +486,7 @@ The Vortex framework brings structured validation to product development:
 - **Externalize Stream (Wade):** Test assumptions with real users
 - **Systematize Stream (Max):** Capture learnings and navigate between streams
 - **Integrated Approach:** Strategic clarity → User empathy → Validated learning → Systematic decisions
+- **Vortex Compass:** Every workflow ends with evidence-driven navigation — "If you learned X → go to Y" — creating non-linear loops across all streams
 
 ### 🔄 Clear Agent Differentiation
 
