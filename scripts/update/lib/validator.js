@@ -103,7 +103,9 @@ async function validateAgentFiles(projectRoot) {
     const agentsDir = path.join(projectRoot, '_bmad/bme/_vortex/agents');
     const requiredAgents = [
       'contextualization-expert.md',
-      'lean-experiments-specialist.md'
+      'lean-experiments-specialist.md',
+      'discovery-empathy-expert.md',
+      'learning-decision-expert.md'
     ];
 
     if (!fs.existsSync(agentsDir)) {
