@@ -153,3 +153,15 @@ After synthesis, your product vision document will include:
 - Team alignment status
 
 This becomes your strategic foundation for all product decisions.
+
+## Vortex Compass
+
+Based on what you just completed, here are your evidence-driven options:
+
+| If you learned... | Consider next... | Agent | Why |
+|---|---|---|---|
+| Vision is clear, users are not | lean-persona | Emma 🎯 | Define who you're building for |
+| Strategic assumptions need testing | lean-experiment | Wade 🧪 | Validate your biggest strategic bet |
+| User needs are assumed, not researched | user-discovery | Isla 🔍 | Ground your vision in real user evidence |
+
+**Or run Max's [VN] Vortex Navigation** for a full gap analysis across all streams.
