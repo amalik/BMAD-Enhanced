@@ -32,8 +32,16 @@ async function mergeConfig(currentConfigPath, newVersion, updates = {}) {
   // Extract user preferences
   const userPrefs = extractUserPreferences(current);
 
-  // Start with current config
-  const merged = { ...current };
+  // Seed with required structural defaults for fresh installs
+  const defaults = {
+    submodule_name: '_vortex',
+    description: 'Vortex Framework - Contextualize, Empathize, Externalize, and Systematize streams',
+    module: 'bme',
+    output_folder: '{project-root}/_bmad-output/vortex-artifacts'
+  };
+
+  // Start with defaults, overlay current config (preserves existing values)
+  const merged = { ...defaults, ...current };
 
   // Update version (system field)
   merged.version = newVersion;
