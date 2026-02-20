@@ -105,4 +105,14 @@ After synthesis, your learning card artifact will include:
 - Links to related learnings and discoverability tags
 - Revision history for future updates as you learn more
 
-Next suggested workflow: **Max's pivot-patch-persevere** if this learning triggers a strategic decision, or **Wade's lean-experiment** to run follow-up experiments.
+## Vortex Compass
+
+Based on what you just completed, here are your evidence-driven options:
+
+| If you learned... | Consider next... | Agent | Why |
+|---|---|---|---|
+| Learning triggers strategic decision | pivot-patch-persevere | Max 🧭 | Decide: pivot, patch, or persevere |
+| Need more data | lean-experiment | Wade 🧪 | Run follow-up experiments |
+| Assumptions invalidated | contextualize-scope | Emma 🎯 | Re-frame the problem based on evidence |
+
+**Or run Max's [VN] Vortex Navigation** for a full gap analysis across all streams.
