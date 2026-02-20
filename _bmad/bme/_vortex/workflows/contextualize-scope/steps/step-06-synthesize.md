@@ -20,11 +20,14 @@ Provide final decision summary:
 
 ## Workflow Complete
 
-Next suggested workflows:
-- **lean-persona** to understand your target user
-- **Wade's mvp** to design your minimum viable product
-- **Wade's lean-experiment** to validate assumptions
+## Vortex Compass
 
----
+Based on what you just completed, here are your evidence-driven options:
 
-**Created with:** BMAD-Enhanced v1.2.0
+| If you learned... | Consider next... | Agent | Why |
+|---|---|---|---|
+| Scope is defined, users unknown | lean-persona | Emma 🎯 | Understand who exists in this problem space |
+| Scope chosen, need user validation | user-interview | Isla 🔍 | Confirm real users care about this scope |
+| Ready to test assumptions | mvp | Wade 🧪 | Design the smallest test for your scope decision |
+
+**Or run Max's [VN] Vortex Navigation** for a full gap analysis across all streams.
