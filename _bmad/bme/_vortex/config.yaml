@@ -2,7 +2,7 @@
 submodule_name: _vortex
 description: Vortex Framework - Contextualize, Empathize, Externalize, and Systematize streams
 module: bme
-version: 1.5.0
+version: 1.5.1
 
 # Output Configuration
 output_folder: "{project-root}/_bmad-output/vortex-artifacts"
