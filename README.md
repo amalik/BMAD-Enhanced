@@ -434,7 +434,7 @@ v1.1.0             v1.3.x ✅        v1.4.x ✅        v1.5.0 ✅          v2.0.
 ├────────────────┬────────────────┬────────────────┬────────────────┬──────────┤
 │ Foundation ✅   │ Tooling ✅      │ Quality ✅      │ Wave 2 ✅       │ Advanced │
 │ • Emma + Wade  │ • Update tools │ • Refactor     │ • Isla + Max   │ • Wave 3 │
-│ • 7 workflows  │ • Migration    │ • 120 tests    │ • 13 workflows │ • Multi  │
+│ • 7 workflows  │ • Migration    │ • 183 tests    │ • 13 workflows │ • Multi  │
 │ • Framework    │ • Automation   │ • CI/CD + lint │ • 4 streams    │ • Stats  │
 └────────────────┴────────────────┴────────────────┴────────────────┴──────────┘
    Feb 2026         Feb 2026         Feb 2026         Feb 2026         Q3 2026
@@ -566,16 +566,20 @@ Zero-dependency test runner (`node:test`)
 
 | Suite | Tests | Coverage |
 |-------|-------|----------|
-| utils | ~15 | compareVersions, getPackageVersion, findProjectRoot |
-| registry | ~15 | getMigrationsFor, getBreakingChanges, hasMigrationBeenApplied |
-| version-detector | ~20 | getCurrentVersion, detectInstallationScenario |
-| config-merger | ~15 | mergeConfig, validateConfig, addMigrationHistory |
-| backup-manager | 10 | createBackup, restoreBackup, cleanupOldBackups |
+| utils | 12 | compareVersions, getPackageVersion, findProjectRoot |
+| registry | 19 | getMigrationsFor, getBreakingChanges, hasMigrationBeenApplied |
+| version-detector | 23 | getCurrentVersion, detectInstallationScenario |
+| config-merger | 17 | mergeConfig, validateConfig, addMigrationHistory |
+| backup-manager | 11 | createBackup, restoreBackup, cleanupOldBackups |
 | migration-runner | 10 | executeMigration, previewMigrations, MigrationError |
-| migration-1.x-to-1.5.0 | 6 | 1.3.x and 1.4.x migration metadata, preview, apply |
-| fresh-install (integration) | ~10 | refreshInstallation end-to-end (all 4 agents) |
-| upgrade (integration) | ~20 | v1.0.x→1.5.0, v1.3.x→1.5.0, v1.4.x→1.5.0 upgrade paths |
-| cli-entry-points (integration) | 10 | index.js, bmad-version, bmad-update, bmad-doctor |
+| migration-runner-orchestration | 9 | runMigrations full cycle, dry-run, skip, lock conflict, error handling |
+| validator | 23 | validateInstallation, config, agents, workflows, manifest, user data, deprecated |
+| migrations-to-1.5.0 | 6 | 1.3.x and 1.4.x migration metadata, preview, apply |
+| fresh-install (integration) | 9 | refreshInstallation end-to-end (all 4 agents) |
+| upgrade (integration) | 22 | v1.0.x→1.5.0, v1.3.x→1.5.0, v1.4.x→1.5.0 upgrade paths |
+| cli-entry-points (integration) | 8 | index.js, bmad-version, bmad-update, bmad-doctor |
+| installer-e2e (integration) | 7 | install-vortex-agents CLI end-to-end, idempotency |
+| bmad-doctor (integration) | 7 | negative paths: no project, missing config, invalid YAML, missing agents, stale/corrupt lock, version mismatch |
 
 **CI Pipeline (6 jobs):**
 
@@ -679,7 +683,7 @@ Max follows the same agent architecture as Emma and Wade. Infrastructure validat
 - ✅ **v1.2.0** - All 7 workflows implemented (56 files)
 - ✅ **v1.3.x** - Update/migration system with backup and rollback
 - ✅ **v1.4.0** - Architecture refactor (single source of truth, project root detection, safer migrations)
-- ✅ **v1.4.1** - Industrial-grade tooling (120 tests, CI/CD, ESLint, bmad-doctor, publish-on-tag)
+- ✅ **v1.4.1** - Industrial-grade tooling (183 tests, CI/CD, ESLint, bmad-doctor, publish-on-tag)
 - ✅ **v1.5.0** - Wave 2: Isla + Max agents, 13 workflows, 4 Vortex streams
 
 ### Future (v1.6.0 / v2.0.0+)
@@ -883,7 +887,7 @@ We welcome contributions! Areas where we need help:
 **Quality:**
 - 100% P0 test pass rate for all agents
 - All quality gates passed before release
-- 120+ automated tests across unit and integration suites
+- 180+ automated tests across unit and integration suites
 
 ---
 
