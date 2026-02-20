@@ -4,8 +4,8 @@
 
 > Four specialized agents: Emma, Wade, Isla, and Max
 
-[![Status](https://img.shields.io/badge/status-v1.5.0--stable-success)]()
-[![Version](https://img.shields.io/badge/version-1.5.0-blue)]()
+[![Status](https://img.shields.io/badge/status-v1.5.2--stable-success)]()
+[![Version](https://img.shields.io/badge/version-1.5.2-blue)]()
 [![Agents](https://img.shields.io/badge/agents-4-brightgreen)]()
 [![Workflows](https://img.shields.io/badge/workflows-13_implemented-success)]()
 [![License](https://img.shields.io/badge/license-MIT-blue)]()
