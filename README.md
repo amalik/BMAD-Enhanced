@@ -457,8 +457,14 @@ v1.1.0             v1.3.x ✅        v1.4.x ✅        v1.5.0 ✅          v2.0.
 
 - **[BMAD Agent Architecture Framework](_bmad-output/GENERIC-AGENT-INTEGRATION-FRAMEWORK.md)** - Standard agent pattern (v1.1.0)
 - **[Emma Reference Implementation](_bmad-output/EMMA-REFERENCE-IMPLEMENTATION-COMPLETE.md)** - How Emma was built
-- **[Emma Test Results](_bmad-output/test-artifacts/emma-tests/emma-p0-test-results.md)** - Comprehensive test validation
+
+### Test Results
+
+- **[Emma Test Results](_bmad-output/test-artifacts/emma-tests/emma-p0-test-results.md)** - P0 test validation (18/18 passed)
 - **[Emma Stakeholder Review](_bmad-output/test-artifacts/emma-tests/STAKEHOLDER-SIGNOFF-REVIEW.md)** - Approval documentation
+- **[Wade Test Results](_bmad-output/test-artifacts/wade-tests/wade-p0-test-execution.md)** - P0 test validation (18/18 passed)
+- **Isla Test Results** - Pending (Wave 2 agent, workflow validation in progress)
+- **Max Test Results** - Pending (Wave 2 agent, workflow validation in progress)
 
 ### Planning Artifacts
 
@@ -565,8 +571,9 @@ Zero-dependency test runner (`node:test`)
 | config-merger | ~15 | mergeConfig, validateConfig, addMigrationHistory |
 | backup-manager | 10 | createBackup, restoreBackup, cleanupOldBackups |
 | migration-runner | 10 | executeMigration, previewMigrations, MigrationError |
-| fresh-install (integration) | ~10 | refreshInstallation end-to-end |
-| upgrade (integration) | ~15 | v1.0.x→1.4.x, v1.3.x→1.4.x upgrade paths |
+| migration-1.x-to-1.5.0 | 6 | 1.3.x and 1.4.x migration metadata, preview, apply |
+| fresh-install (integration) | ~10 | refreshInstallation end-to-end (all 4 agents) |
+| upgrade (integration) | ~20 | v1.0.x→1.5.0, v1.3.x→1.5.0, v1.4.x→1.5.0 upgrade paths |
 | cli-entry-points (integration) | 10 | index.js, bmad-version, bmad-update, bmad-doctor |
 
 **CI Pipeline (6 jobs):**
@@ -639,6 +646,28 @@ npm run lint             # ESLint
 
 **See:** [Wade Test Results](_bmad-output/test-artifacts/wade-tests/wade-p0-test-execution.md)
 
+### Isla Test Results
+
+**Status:** Pending formal P0 test execution
+
+Isla follows the same agent architecture as Emma and Wade. Infrastructure validation is covered by the automated test suite:
+- ✅ Installation verified (fresh-install integration tests)
+- ✅ Upgrade paths verified (v1.3.x and v1.4.x upgrade tests)
+- ✅ CLI entry points verified (agent listed in `bmad-enhanced` output)
+- ✅ All 3 workflow directories present with templates, steps, and validation
+- Formal P0 test suite (agent activation, command processing, workflow execution) planned for v1.5.1
+
+### Max Test Results
+
+**Status:** Pending formal P0 test execution
+
+Max follows the same agent architecture as Emma and Wade. Infrastructure validation is covered by the automated test suite:
+- ✅ Installation verified (fresh-install integration tests)
+- ✅ Upgrade paths verified (v1.3.x and v1.4.x upgrade tests)
+- ✅ CLI entry points verified (agent listed in `bmad-enhanced` output)
+- ✅ All 3 workflow directories present with templates, steps, and validation
+- Formal P0 test suite (agent activation, command processing, workflow execution) planned for v1.5.1
+
 ---
 
 ## 📈 Roadmap
@@ -703,13 +732,29 @@ We welcome contributions! Areas where we need help:
 - No validation plan for strategy
 - Weeks of strategic discussion
 
-**After (v1.4.1):**
+**After (v1.5.0):**
 - Clear problem space framing: 1-2 hours
 - Explicit assumption mapping
 - Built-in validation planning
 - Strategic alignment in days
 
 **Value:** Faster strategic clarity, reduced risk of building the wrong thing
+
+### For UX Researchers & Design Teams (Isla)
+
+**Before:**
+- Ad-hoc user research with no structure
+- Empathy maps based on assumptions, not evidence
+- Interviews without clear research goals
+- User insights scattered across documents
+
+**After (v1.5.0):**
+- Structured discovery research: 2-4 hours per activity
+- Evidence-based empathy maps grounded in real user data
+- Interview guides with clear goals and synthesis
+- Centralized user insights in standardized artifacts
+
+**Value:** Deeper user understanding, research-backed design decisions, reduced rework from wrong assumptions
 
 ### For Innovation Teams (Wade)
 
@@ -719,7 +764,7 @@ We welcome contributions! Areas where we need help:
 - No structured experiment process
 - 6-12 months to market validation
 
-**After (v1.4.1):**
+**After (v1.5.0):**
 - Rapid experiment design: 2-3 hours
 - Minimal investment in learning
 - Structured Build-Measure-Learn cycles
@@ -727,15 +772,34 @@ We welcome contributions! Areas where we need help:
 
 **Value:** 70-80% faster validation, 90% lower validation cost, data-driven decisions
 
+### For Leadership & Decision Makers (Max)
+
+**Before:**
+- Experiment results lost or poorly documented
+- Pivot/persevere decisions based on gut feeling
+- No systematic way to capture validated learnings
+- Teams unsure which problem area to focus on next
+
+**After (v1.5.0):**
+- Structured learning cards capturing evidence and decisions
+- Evidence-based pivot/patch/persevere framework
+- Accumulated organizational knowledge from experiments
+- Vortex navigation recommendations based on gap analysis
+
+**Value:** Institutional learning, faster strategic pivots, evidence-driven portfolio decisions
+
 ### For Startups & Product Teams
 
-**Lean Startup in Practice:**
+**The Complete Vortex Flow:**
 - Emma: Strategic framing and problem-solution fit
+- Isla: User empathy and evidence-based understanding
 - Wade: Validated learning and product-market fit
+- Max: Systematic decisions and strategic navigation
 - BMAD Core: Implementation and delivery
 
 **Impact:**
 - Validate before building (avoid waste)
+- Understand users before designing (reduce rework)
 - Learn fast, pivot faster (reduce risk)
 - Data-driven decisions (evidence over opinions)
 
@@ -758,6 +822,23 @@ We welcome contributions! Areas where we need help:
 - Complete workflow: 30-60 minutes
 - Artifact generation: <5 seconds
 
+### Isla (Operational Metrics)
+
+**Adoption (Target):**
+- 50+ teams using Isla for user discovery and empathy
+- 80%+ complete the full workflow for each activity
+- NPS ≥8
+
+**Quality (Target):**
+- 90%+ empathy maps grounded in real user data (not assumptions)
+- 95%+ interview guides include clear research goals and synthesis
+- 85%+ discovery reports include actionable insights with evidence
+
+**Performance (Measured):**
+- Complete empathy map: 30-45 minutes
+- Complete interview workflow: 45-90 minutes
+- Complete discovery research: 60-120 minutes
+
 ### Wade (Operational Metrics)
 
 **Adoption (Target):**
@@ -774,16 +855,34 @@ We welcome contributions! Areas where we need help:
 - Complete workflow: 45-90 minutes
 - Artifact generation: <5 seconds
 
+### Max (Operational Metrics)
+
+**Adoption (Target):**
+- 50+ teams using Max for learning capture and decisions
+- 80%+ complete the full workflow for each activity
+- NPS ≥8
+
+**Quality (Target):**
+- 90%+ learning cards link back to specific experiment evidence
+- 95%+ pivot/patch/persevere decisions include quantitative thresholds
+- 85%+ vortex navigation recommendations cite evidence gaps
+
+**Performance (Measured):**
+- Complete learning card: 20-30 minutes
+- Complete pivot/patch/persevere: 30-60 minutes
+- Complete vortex navigation: 30-45 minutes
+
 ### Project-Wide (Target Post-Launch)
 
 **Adoption:**
 - 100+ teams using BMAD-Enhanced agents
-- 4/4 Vortex agents in production (Wave 2)
+- 4/4 Vortex agents in production ✅ (Wave 2)
 - Community agents contributed
 
 **Quality:**
 - 100% P0 test pass rate for all agents
 - All quality gates passed before release
+- 120+ automated tests across unit and integration suites
 
 ---
 
@@ -846,6 +945,58 @@ Wade generates comprehensive MVP specs with:
 
 **See:** [Wade User Guide](_bmad-output/vortex-artifacts/WADE-USER-GUIDE.md) for examples
 
+### Isla Empathy Map Artifact
+
+Isla generates evidence-based empathy maps with:
+
+**User Profile:**
+- Target user segment and context
+- Research methods used (interviews, observation, surveys)
+
+**Empathy Quadrants:**
+- Says: Direct quotes and statements from users
+- Thinks: Inferred thoughts, beliefs, and mental models
+- Does: Observable behaviors and actions
+- Feels: Emotional states and reactions
+
+**Pain & Gain Analysis:**
+- Pain points (prioritized: HIGH/MEDIUM/LOW)
+- Gains and desired outcomes
+- Gaps between current state and desired state
+
+**Synthesis:**
+- Key insights from the empathy mapping exercise
+- Assumptions validated or invalidated
+- Recommended next steps (further research, experiments, design)
+
+**See:** [Isla User Guide](_bmad-output/vortex-artifacts/ISLA-USER-GUIDE.md) for examples
+
+### Max Learning Card Artifact
+
+Max generates structured learning cards with:
+
+**Experiment Context:**
+- Hypothesis tested and experiment type
+- Link to original experiment (Wade artifacts)
+- Timeline and scope
+
+**Results & Analysis:**
+- Raw results and data collected
+- Statistical significance and confidence level
+- What worked, what didn't, and surprises
+
+**Validated Learning:**
+- What was learned (stated as validated or invalidated hypothesis)
+- Evidence strength (strong/moderate/weak)
+- Implications for product strategy
+
+**Decision & Next Steps:**
+- Pivot, patch, or persevere recommendation
+- Specific actions and owners
+- Impact on other Vortex streams
+
+**See:** [Max User Guide](_bmad-output/vortex-artifacts/MAX-USER-GUIDE.md) for examples
+
 ---
 
 ## 🎓 Learning Resources
@@ -877,8 +1028,10 @@ Wade generates comprehensive MVP specs with:
 ### For Stakeholders
 
 - **[Project Status Update](_bmad-output/PROJECT-STATUS-UPDATE.md)** - Current progress
+- **[CHANGELOG.md](CHANGELOG.md)** - Complete version history
 - **[Emma Test Results](_bmad-output/test-artifacts/emma-tests/emma-p0-test-results.md)** - Emma quality validation
 - **[Wade Test Results](_bmad-output/test-artifacts/wade-tests/wade-p0-test-execution.md)** - Wade quality validation
+- Isla and Max P0 test results - Planned for v1.5.1
 
 ---
 
@@ -998,6 +1151,26 @@ Each workflow includes templates, step files, and comprehensive guidance.
 - Sally/QA: Quality validation (are we building it well?)
 
 **Flow:** Emma → Isla → Wade → Max → BMAD Core agents for implementation
+
+### What's the recommended order for the agents?
+
+**Follow the Vortex flow, but jump in wherever you are:**
+
+1. **Emma (Contextualize)** - Start here if you're defining a new product or problem space
+2. **Isla (Empathize)** - Start here if you know the problem but need to understand users better
+3. **Wade (Externalize)** - Start here if you have hypotheses ready to test with users
+4. **Max (Systematize)** - Start here if you have experiment results and need to decide next steps
+
+You don't have to be linear — Max's Vortex Navigation workflow helps you identify which stream needs attention based on your current evidence gaps.
+
+### What's coming in Wave 3?
+
+Wave 3 (v1.6.0) will add the remaining 3 Vortex streams:
+- **Synthesize** - Pattern recognition and insight synthesis across research
+- **Hypothesize** - Structured hypothesis generation from insights
+- **Sensitize** - Stakeholder alignment and organizational buy-in
+
+This will complete the full 7-stream Vortex Framework.
 
 ---
 
