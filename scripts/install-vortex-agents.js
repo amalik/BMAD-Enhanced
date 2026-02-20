@@ -174,7 +174,6 @@ function printSuccess() {
 async function main() {
   try {
     // Use findProjectRoot for existing projects, fall back to cwd for fresh installs
-    // eslint-disable-next-line no-restricted-syntax -- fresh install has no _bmad/ dir to detect
     const projectRoot = findProjectRoot() || process.cwd();
 
     printBanner();
