@@ -77,14 +77,12 @@ describe('bmad-update CLI (dry-run)', () => {
   });
 });
 
-describe('bmad-version from non-project directory', () => {
-  it('shows not-in-project message from /tmp', async () => {
+describe('bmad-version smoke test', () => {
+  it('does not crash when run from project root', async () => {
     const { exitCode } = await run(
       path.join(projectRoot, 'scripts/update/bmad-version.js'),
       [],
     );
-    // When run from projectRoot it should find the project
-    // This test verifies it doesn't crash
     assert.equal(exitCode, 0);
   });
 });
