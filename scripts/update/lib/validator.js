@@ -5,6 +5,7 @@ const path = require('path');
 const yaml = require('js-yaml');
 const configMerger = require('./config-merger');
 const { countUserDataFiles } = require('./utils');
+const { AGENT_FILES, AGENT_IDS, WORKFLOW_NAMES } = require('./agent-registry');
 
 /**
  * Validator for BMAD-Enhanced
@@ -101,12 +102,7 @@ async function validateAgentFiles(projectRoot) {
 
   try {
     const agentsDir = path.join(projectRoot, '_bmad/bme/_vortex/agents');
-    const requiredAgents = [
-      'contextualization-expert.md',
-      'lean-experiments-specialist.md',
-      'discovery-empathy-expert.md',
-      'learning-decision-expert.md'
-    ];
+    const requiredAgents = AGENT_FILES;
 
     if (!fs.existsSync(agentsDir)) {
       check.error = 'agents/ directory not found';
@@ -148,15 +144,7 @@ async function validateWorkflows(projectRoot) {
 
   try {
     const workflowsDir = path.join(projectRoot, '_bmad/bme/_vortex/workflows');
-    const requiredWorkflows = [
-      'lean-persona',
-      'product-vision',
-      'contextualize-scope',
-      'mvp',
-      'lean-experiment',
-      'proof-of-concept',
-      'proof-of-value'
-    ];
+    const requiredWorkflows = WORKFLOW_NAMES;
 
     if (!fs.existsSync(workflowsDir)) {
       check.error = 'workflows/ directory not found';
@@ -208,12 +196,11 @@ async function validateManifest(projectRoot) {
 
     const manifestContent = fs.readFileSync(manifestPath, 'utf8');
 
-    // Check for BMAD-Enhanced agents
-    const hasEmma = manifestContent.includes('contextualization-expert');
-    const hasWade = manifestContent.includes('lean-experiments-specialist');
+    // Check for all BMAD-Enhanced agents
+    const missingFromManifest = AGENT_IDS.filter(id => !manifestContent.includes(id));
 
-    if (!hasEmma || !hasWade) {
-      check.error = 'Agent manifest missing BMAD-Enhanced agents';
+    if (missingFromManifest.length > 0) {
+      check.error = `Agent manifest missing: ${missingFromManifest.join(', ')}`;
       return check;
     }
 
