@@ -10,6 +10,7 @@ const configMerger = require('./config-merger');
 const validator = require('./validator');
 const { refreshInstallation } = require('./refresh-installation');
 const registry = require('../migrations/registry');
+const { WORKFLOW_NAMES } = require('./agent-registry');
 
 /**
  * Migration Runner for BMAD-Enhanced
@@ -216,7 +217,7 @@ async function previewMigrations(migrations) {
   console.log('');
   console.log(chalk.white('After deltas, installation will be refreshed:'));
   console.log(chalk.gray('  - Refresh agent files'));
-  console.log(chalk.gray('  - Refresh 7 workflow directories'));
+  console.log(chalk.gray(`  - Refresh ${WORKFLOW_NAMES.length} workflow directories`));
   console.log(chalk.gray('  - Update config.yaml (preserving user preferences)'));
   console.log(chalk.gray('  - Update user guides (with .bak backup)'));
   console.log('');
