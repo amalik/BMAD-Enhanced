@@ -4,6 +4,7 @@ const fs = require('fs-extra');
 const path = require('path');
 const { refreshInstallation } = require('./update/lib/refresh-installation');
 const { findProjectRoot } = require('./update/lib/utils');
+const { AGENTS } = require('./update/lib/agent-registry');
 
 const BOLD = '\x1b[1m';
 const RESET = '\x1b[0m';
@@ -19,7 +20,7 @@ function printBanner() {
   console.log(`${MAGENTA}${BOLD}║                                                    ║${RESET}`);
   console.log(`${MAGENTA}${BOLD}║        BMAD-Enhanced Vortex Installer 🌀          ║${RESET}`);
   console.log(`${MAGENTA}${BOLD}║                                                    ║${RESET}`);
-  console.log(`${MAGENTA}${BOLD}║   Installing Emma + Wade + Isla + Max Agents      ║${RESET}`);
+  console.log(`${MAGENTA}${BOLD}║   Installing ${AGENTS.map(a => a.name).join(' + ')} Agents${' '.repeat(Math.max(0, 6 - AGENTS.length))}║${RESET}`);
   console.log(`${MAGENTA}${BOLD}║                                                    ║${RESET}`);
   console.log(`${MAGENTA}${BOLD}╚════════════════════════════════════════════════════╝${RESET}`);
   console.log('');
@@ -119,10 +120,7 @@ function verifyInstallation(projectRoot) {
   console.log(`${CYAN}[6/6]${RESET} Verifying installation...`);
 
   const checks = [
-    { path: '_bmad/bme/_vortex/agents/contextualization-expert.md', name: 'Emma agent file' },
-    { path: '_bmad/bme/_vortex/agents/lean-experiments-specialist.md', name: 'Wade agent file' },
-    { path: '_bmad/bme/_vortex/agents/discovery-empathy-expert.md', name: 'Isla agent file' },
-    { path: '_bmad/bme/_vortex/agents/learning-decision-expert.md', name: 'Max agent file' },
+    ...AGENTS.map(a => ({ path: `_bmad/bme/_vortex/agents/${a.id}.md`, name: `${a.name} agent file` })),
     { path: '_bmad/bme/_vortex/config.yaml', name: 'Configuration file' },
   ];
 
@@ -156,18 +154,16 @@ function printSuccess() {
   console.log('');
   console.log(`${BOLD}Installed Agents:${RESET}`);
   console.log('');
-  console.log(`  ${GREEN}✓${RESET} Emma (contextualization-expert) - Contextualization Expert 🎯`);
-  console.log(`  ${GREEN}✓${RESET} Wade (lean-experiments-specialist) - Lean Experiments Specialist 🧪`);
-  console.log(`  ${GREEN}✓${RESET} Isla (discovery-empathy-expert) - Discovery & Empathy Expert 🔍`);
-  console.log(`  ${GREEN}✓${RESET} Max (learning-decision-expert) - Learning & Decision Expert 🧭`);
+  for (const agent of AGENTS) {
+    console.log(`  ${GREEN}✓${RESET} ${agent.name} (${agent.id}) - ${agent.title} ${agent.icon}`);
+  }
   console.log('');
   console.log(`${BOLD}Quick Start:${RESET}`);
   console.log('');
   console.log('  Activate an agent by reading their file:');
-  console.log(`  ${CYAN}cat _bmad/bme/_vortex/agents/contextualization-expert.md${RESET}  (Emma)`);
-  console.log(`  ${CYAN}cat _bmad/bme/_vortex/agents/lean-experiments-specialist.md${RESET}  (Wade)`);
-  console.log(`  ${CYAN}cat _bmad/bme/_vortex/agents/discovery-empathy-expert.md${RESET}  (Isla)`);
-  console.log(`  ${CYAN}cat _bmad/bme/_vortex/agents/learning-decision-expert.md${RESET}  (Max)`);
+  for (const agent of AGENTS) {
+    console.log(`  ${CYAN}cat _bmad/bme/_vortex/agents/${agent.id}.md${RESET}  (${agent.name})`);
+  }
   console.log('');
 }
 
