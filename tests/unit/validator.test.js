@@ -23,8 +23,13 @@ function fullConfig(overrides = {}) {
     module: 'bme',
     version: '1.5.0',
     output_folder: '{project-root}/_bmad-output/vortex-artifacts',
-    agents: ['contextualization-expert', 'lean-experiments-specialist'],
-    workflows: ['lean-persona', 'product-vision', 'contextualize-scope', 'mvp', 'lean-experiment', 'proof-of-concept', 'proof-of-value'],
+    agents: ['contextualization-expert', 'discovery-empathy-expert', 'lean-experiments-specialist', 'learning-decision-expert'],
+    workflows: [
+      'lean-persona', 'product-vision', 'contextualize-scope',
+      'empathy-map', 'user-interview', 'user-discovery',
+      'mvp', 'lean-experiment', 'proof-of-concept', 'proof-of-value',
+      'learning-card', 'pivot-patch-persevere', 'vortex-navigation'
+    ],
     ...overrides
   };
 }
@@ -181,11 +186,8 @@ describe('validateWorkflows', () => {
 
   it('passes when all required workflows exist', async () => {
     const workflowsDir = path.join(tmpDir, '_bmad/bme/_vortex/workflows');
-    const required = [
-      'product-vision', 'contextualize-scope', 'mvp',
-      'lean-experiment', 'proof-of-concept', 'proof-of-value'
-    ];
-    for (const wf of required) {
+    const { WORKFLOW_NAMES } = require('../../scripts/update/lib/agent-registry');
+    for (const wf of WORKFLOW_NAMES) {
       const wfDir = path.join(workflowsDir, wf);
       await fs.ensureDir(wfDir);
       await fs.writeFile(path.join(wfDir, 'workflow.md'), `# ${wf}`, 'utf8');
@@ -229,11 +231,11 @@ describe('validateManifest', () => {
     assert.ok(result.error.includes('missing'));
   });
 
-  it('passes when manifest contains both agents', async () => {
+  it('passes when manifest contains all agents', async () => {
     const manifestPath = path.join(tmpDir, '_bmad/_config/agent-manifest.csv');
     await fs.writeFile(
       manifestPath,
-      '"agent_id"\n"contextualization-expert"\n"lean-experiments-specialist"\n',
+      '"agent_id"\n"contextualization-expert"\n"discovery-empathy-expert"\n"lean-experiments-specialist"\n"learning-decision-expert"\n',
       'utf8'
     );
 
