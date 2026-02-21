@@ -4,6 +4,7 @@ const fs = require('fs-extra');
 const path = require('path');
 const { getPackageVersion } = require('./utils');
 const configMerger = require('./config-merger');
+const { AGENT_FILES, AGENT_IDS, WORKFLOW_NAMES, USER_GUIDES } = require('./agent-registry');
 
 /**
  * Refresh Installation for BMAD-Enhanced
@@ -12,40 +13,6 @@ const configMerger = require('./config-merger');
  * package to the project. Called ONCE after all migration deltas have run,
  * or directly by the install script.
  */
-
-const AGENT_FILES = [
-  'contextualization-expert.md',
-  'lean-experiments-specialist.md',
-  'discovery-empathy-expert.md',
-  'learning-decision-expert.md'
-];
-
-const WORKFLOWS = [
-  // Emma — Contextualize Stream
-  'lean-persona',
-  'product-vision',
-  'contextualize-scope',
-  // Wade — Externalize Stream
-  'mvp',
-  'lean-experiment',
-  'proof-of-concept',
-  'proof-of-value',
-  // Isla — Empathize Stream
-  'empathy-map',
-  'user-interview',
-  'user-discovery',
-  // Max — Systematize Stream
-  'learning-card',
-  'pivot-patch-persevere',
-  'vortex-navigation'
-];
-
-const USER_GUIDES = [
-  'EMMA-USER-GUIDE.md',
-  'WADE-USER-GUIDE.md',
-  'ISLA-USER-GUIDE.md',
-  'MAX-USER-GUIDE.md'
-];
 
 /**
  * Refresh all installation files from the package to the project.
@@ -94,7 +61,7 @@ async function refreshInstallation(projectRoot, options = {}) {
   const workflowsTarget = path.join(targetVortex, 'workflows');
   await fs.ensureDir(workflowsTarget);
 
-  for (const wf of WORKFLOWS) {
+  for (const wf of WORKFLOW_NAMES) {
     const src = path.join(workflowsSource, wf);
     if (fs.existsSync(src)) {
       await fs.copy(src, path.join(workflowsTarget, wf), { overwrite: true });
@@ -108,8 +75,8 @@ async function refreshInstallation(projectRoot, options = {}) {
   await fs.ensureDir(path.dirname(configPath));
 
   const updates = {
-    agents: ['contextualization-expert', 'lean-experiments-specialist', 'discovery-empathy-expert', 'learning-decision-expert'],
-    workflows: WORKFLOWS
+    agents: AGENT_IDS,
+    workflows: WORKFLOW_NAMES
   };
 
   const merged = await configMerger.mergeConfig(configPath, version, updates);
