@@ -15,6 +15,7 @@
  */
 
 const path = require('path');
+const { AGENTS } = require('./scripts/update/lib/agent-registry');
 
 function getPackageInfo() {
   const pkg = require(path.join(__dirname, 'package.json'));
@@ -38,10 +39,10 @@ if (require.main === module) {
   console.log(info.description);
   console.log('');
   console.log(`${GREEN}Agents:${RESET}`);
-  console.log(`  Emma ${CYAN}🎯${RESET} – Contextualization Expert`);
-  console.log(`  Wade ${CYAN}🧪${RESET} – Lean Experiments Specialist`);
-  console.log(`  Isla ${CYAN}🔍${RESET} – Discovery & Empathy Expert`);
-  console.log(`  Max  ${CYAN}🧭${RESET} – Learning & Decision Expert`);
+  for (const agent of AGENTS) {
+    const padded = agent.name.padEnd(5);
+    console.log(`  ${padded}${CYAN}${agent.icon}${RESET} – ${agent.title}`);
+  }
   console.log('');
   console.log(`${GREEN}Commands:${RESET}`);
   console.log(`  ${CYAN}npx bmad-install-vortex-agents${RESET}  Install all Vortex agents`);
