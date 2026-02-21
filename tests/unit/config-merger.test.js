@@ -28,9 +28,9 @@ describe('extractUserPreferences', () => {
     assert.equal(prefs.communication_language, 'fr');
   });
 
-  it('ignores default English language', () => {
+  it('preserves English language setting', () => {
     const prefs = configMerger.extractUserPreferences({ communication_language: 'en' });
-    assert.equal(prefs.communication_language, undefined);
+    assert.equal(prefs.communication_language, 'en');
   });
 
   it('preserves party_mode_enabled', () => {
