@@ -79,7 +79,7 @@ function extractUserPreferences(config) {
     prefs.user_name = config.user_name;
   }
 
-  if (config.communication_language && config.communication_language !== 'en') {
+  if (config.communication_language) {
     prefs.communication_language = config.communication_language;
   }
 
