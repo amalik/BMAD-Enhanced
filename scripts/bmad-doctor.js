@@ -5,6 +5,7 @@ const path = require('path');
 const chalk = require('chalk');
 const yaml = require('js-yaml');
 const { findProjectRoot, getPackageVersion } = require('./update/lib/utils');
+const { AGENT_FILES, WORKFLOW_NAMES } = require('./update/lib/agent-registry');
 
 /**
  * bmad-doctor — Diagnose common BMAD-Enhanced installation issues.
@@ -116,7 +117,7 @@ function checkConfig(projectRoot) {
 
 function checkAgents(projectRoot) {
   const agentsDir = path.join(projectRoot, '_bmad/bme/_vortex/agents');
-  const required = ['contextualization-expert.md', 'lean-experiments-specialist.md', 'discovery-empathy-expert.md', 'learning-decision-expert.md'];
+  const required = AGENT_FILES;
 
   if (!fs.existsSync(agentsDir)) {
     return {
@@ -158,12 +159,7 @@ function checkAgents(projectRoot) {
 
 function checkWorkflows(projectRoot) {
   const workflowsDir = path.join(projectRoot, '_bmad/bme/_vortex/workflows');
-  const required = [
-    'lean-persona', 'product-vision', 'contextualize-scope',
-    'mvp', 'lean-experiment', 'proof-of-concept', 'proof-of-value',
-    'empathy-map', 'user-interview', 'user-discovery',
-    'learning-card', 'pivot-patch-persevere', 'vortex-navigation'
-  ];
+  const required = WORKFLOW_NAMES;
 
   if (!fs.existsSync(workflowsDir)) {
     return {
