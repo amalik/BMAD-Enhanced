@@ -7,7 +7,36 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [1.5.2] - 2026-02-22
+
+### Changed
+
+- **Registry-driven postinstall** — `postinstall.js` now imports from `agent-registry.js` instead of hardcoding agent names; agent list stays current automatically
+- **Removed deprecated installer wrappers** — Deleted `install-emma.js` and `install-wade.js`; removed `bmad-install-emma` / `bmad-install-wade` bin entries and `install:emma` / `install:wade` scripts
+- **Manifest persona data moved to registry** — `createAgentManifest()` now reads role, identity, communication_style, and expertise from `agent-registry.js` instead of hardcoded CSV strings
+- **Formalized config schema** — `validateConfig()` rewritten to iterate a declarative `CONFIG_SCHEMA`; added type checks for `submodule_name`, `module`, `output_folder`, `communication_language`, `party_mode_enabled`, and array-item types for `agents`/`workflows`
+
+### Fixed
+
+- CHANGELOG.md backfilled with missing v1.4.0, v1.4.1, and v1.5.1 entries
+
+---
+
 ## [1.5.1] - 2026-02-20
+
+### Added
+
+- **Test hardening** — 184 tests (130 unit + 54 integration), all green
+- Line coverage raised to 83.4% (up from 68%)
+- `validator.js` coverage: 96% (was 21%)
+- `migration-runner.js` coverage: 81% (was 28%)
+- Installer E2E test (CLI as child process)
+- `bmad-doctor` negative-path tests (8 scenarios)
+
+### Fixed
+
+- Validator now checks all 4 agents (was only 2)
+- `mergeConfig` seeds structural defaults for fresh installs so config and validation stay consistent
 
 ### Added
 
@@ -42,6 +71,40 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - `empathy-map` workflow `_designos` path references corrected to `_vortex`
 - `validate.md` and `empathy-map.template.md` author attribution corrected from Emma to Isla
+
+---
+
+## [1.4.1] - 2026-02-19
+
+### Added
+
+- CI pipeline with GitHub Actions (lint + test on Node 18/20/22)
+- ESLint configuration and full lint pass
+- `bmad-doctor` diagnostic CLI with 7 installation checks
+- 112 tests (82 unit + 30 integration)
+- `.c8rc.json` for coverage configuration
+
+### Fixed
+
+- Silenced console in tests that trigger heavy source-code logging (Node 20 IPC bug)
+
+---
+
+## [1.4.0] - 2026-02-18
+
+### Changed
+
+- **Architecture refactor** — Centralized agent/workflow data into `agent-registry.js`
+  - Single source of truth consumed by validator, refresh-installation, bmad-doctor, migration-runner, and index.js
+  - To add a new agent: push one entry to `AGENTS` + its workflows to `WORKFLOWS`; all consumers pick up the change automatically
+- **`refresh-installation.js`** — Shared refresh logic extracted; copies agents, workflows, config, and user guides from package to project
+- **`migration-runner.js`** — Rewritten as 8-step orchestration (deltas → refresh → validate) with lock file, backup, and rollback
+- **`validator.js`** — Data-driven validation using registry arrays instead of hardcoded checks
+- **`config-merger.js`** — Seeds structural defaults (`submodule_name`, `description`, `module`, `output_folder`) so fresh installs pass validation
+
+### Removed
+
+- Hardcoded agent/workflow arrays throughout codebase (replaced by registry imports)
 
 ---
 
