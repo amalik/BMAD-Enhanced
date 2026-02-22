@@ -1,5 +1,5 @@
 ---
-stepsCompleted: [1, 2, 3]
+stepsCompleted: [1, 2, 3, 4, 5]
 inputDocuments:
   - docs/agents.md
   - scripts/update/lib/agent-registry.js
@@ -138,3 +138,41 @@ The user journey for Wave 3 is an extension of the existing Vortex journey, not 
 - Sensitize: "I can see that the metric Wade validated is trending differently in production, and I know exactly which experiment to reference."
 
 **Long-term:** Sensitize becomes the most-used Wave 3 agent over time. Synthesize and Hypothesize are used in bursts during discovery/ideation cycles. Sensitize runs continuously as a production intelligence partner. Max's decisions get sharper because Sensitize feeds him Vortex-contextualized signals instead of raw dashboard numbers.
+
+---
+
+## Success Metrics
+
+### Release Quality Gates (Measurable — must pass before publish)
+
+| Gate | Criteria | Measurement |
+|------|----------|-------------|
+| **Agent file integrity** | All 7 agent .md files present with valid frontmatter (name, title, icon, stream) | `bmad-doctor` validation — binary pass/fail |
+| **Workflow completeness** | Each Wave 3 agent ships with 2-3 workflows following step-file architecture | File count + structure validation in `bmad-doctor` |
+| **Vortex Compass integration** | Every workflow ends with Compass routing that includes all 7 agents | Manual review checklist — every workflow file checked |
+| **Handoff contract coverage** | All 9 declared handoff contracts from the product brief have corresponding Compass triggers | Contract-to-trigger mapping — each contract verified |
+| **Registry consistency** | `agent-registry.js` contains all 7 agents with complete persona data; manifest CSV generation produces valid output | Unit test + integration test coverage |
+| **Test suite** | All existing tests pass; new agents covered by validator; no regression | `npm test` — zero failures |
+| **Install flow** | `npx bmad-install-agents` installs all 7 agents, generates correct manifest, config validates | Installer E2E test |
+| **User guides** | Each Wave 3 agent has a user guide following existing naming convention | File presence check |
+
+### Adoption Signals (Directional — tracked post-release, no specific targets)
+
+| Signal | What it tells us | How we'll see it |
+|--------|-----------------|------------------|
+| **npm downloads trend** | Whether Wave 3 release changes the download trajectory | npm stats — compare weekly downloads before/after v1.6.0 |
+| **GitHub stars** | General interest and visibility | GitHub repo metrics |
+| **GitHub Discussions activity** | Whether users are engaging with the new agents | Discussion volume and topic analysis |
+| **Vortex completion usage** | Whether users progress through all 7 streams vs. stopping at 4 | Community feedback, issue reports, discussion threads |
+| **Agent-specific mentions** | Which Wave 3 agents get traction first | GitHub issues, discussions, and community channels |
+
+### What We're NOT Measuring
+
+- No per-agent adoption targets — Wave 3 is a completeness play, not a growth play
+- No time-based milestones — the Vortex is complete when it ships, adoption follows naturally
+- No quality comparison between agents — all agents meet the same release quality gates
+- No A/B testing of agent designs — ship the vision, iterate based on feedback
+
+### Business Objectives
+
+Wave 3's business objective is singular: **complete the Vortex**. The framework's value proposition depends on covering all 7 Innovation Vortex streams. Four of seven is a framework with gaps. Seven of seven is the product. Adoption parity with existing agents is the long-term bar — Wave 3 agents should eventually see comparable usage to Emma, Isla, Wade, and Max within their respective lifecycle stages.
