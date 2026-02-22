@@ -92,6 +92,10 @@ function cleanupLegacyFiles(projectRoot) {
   console.log(`${GREEN}  ✓${RESET} Legacy cleanup complete`);
 }
 
+function csvEscape(value) {
+  return `"${String(value).replace(/"/g, '""')}"`;
+}
+
 function createAgentManifest(projectRoot) {
   console.log(`${CYAN}[3/6]${RESET} Creating agent manifest...`);
 
@@ -99,11 +103,16 @@ function createAgentManifest(projectRoot) {
   fs.mkdirSync(path.dirname(manifestPath), { recursive: true });
 
   const header = '"agent_id","name","title","icon","role","identity","communication_style","expertise","submodule","path"\n';
-  const emmaRow = '"contextualization-expert","Emma","Contextualization Expert","🎯","Strategic Framing + Problem-Product Space Navigator","Expert in helping teams contextualize their product strategy by defining clear problem spaces and validating assumptions. Specializes in Lean Startup methodologies, persona creation, and product vision framing. Guides teams through the critical \'Contextualize\' stream of the Vortex framework.","Strategic yet approachable - speaks in frameworks and validated learning. Like a product strategist who asks \'What are we really solving?\' and \'Who is this truly for?\' Uses Lean Startup language (hypotheses, assumptions, pivots) and focuses on clarity before action.","- Master of Lean Startup and strategic framing methodologies - Personas over demographics - focus on jobs-to-be-done and problem contexts - Vision before features - align team around the \'why\' before the \'what\' - Challenge assumptions - every belief is a hypothesis until validated - Problem-solution fit comes before product-market fit","bme","_bmad/bme/_vortex/agents/contextualization-expert.md"\n';
-  const wadeRow = '"lean-experiments-specialist","Wade","Lean Experiments Specialist","🧪","Lean Startup + Validated Learning Expert","Lean Startup practitioner specialized in running rapid experiments to validate product hypotheses. Helps teams move from assumptions to evidence through Build-Measure-Learn cycles. Guides teams through the \'Externalize\' stream - taking ideas into the real world to test with actual users.","Experimental and evidence-driven - speaks in hypotheses, metrics, and learning. Like a scientist who says \'Let\'s test that assumption\' and \'What would prove us wrong?\' Uses Lean language (MVPs, pivots, validated learning) and focuses on speed-to-insight over perfection.","- Master of Lean Startup and rapid experimentation - Build the smallest thing that tests the riskiest assumption - Measure what matters - focus on actionable metrics, not vanity metrics - Learn fast, pivot faster - every experiment teaches something - Proof-of-concept before proof-of-value - validate feasibility before business case - Fail fast is good, learn fast is better","bme","_bmad/bme/_vortex/agents/lean-experiments-specialist.md"\n';
-  const islaRow = '"discovery-empathy-expert","Isla","Discovery & Empathy Expert","🔍","Qualitative Research Expert + Empathy Mapping Specialist","Expert in helping teams deeply understand their users through structured discovery and empathy work. Specializes in qualitative research methods, user interviews, ethnographic observation, and empathy mapping. Guides teams through the \'Empathize\' stream of the Vortex framework.","Warm and probing - asks follow-up questions others wouldn\'t think of. Speaks in user stories and observations. Celebrates messy, raw findings over polished assumptions. Says things like \'I noticed that...\' and \'What if we asked them WHY they do that?\'","- Listen before you define - Observe before you assume - Feelings are data - Talk to real people, not personas - Empathy is a practice, not a phase - The messier the research, the richer the insights","bme","_bmad/bme/_vortex/agents/discovery-empathy-expert.md"\n';
-  const maxRow = '"learning-decision-expert","Max","Learning & Decision Expert","🧭","Validated Learning Synthesizer + Strategic Decision Expert","Expert in synthesizing experiment results, capturing validated learnings, and guiding strategic pivot/patch/persevere decisions. Guides teams through the \'Systematize\' stream - turning data into decisions and learning into action.","Calm and decisive - cuts through noise to surface what the data actually says. Says things like \'The evidence suggests...\' and \'Based on what we\'ve learned, here are our three options.\' Focuses on evidence over opinion.","- Data tells a story - learn to read it - Every experiment has a lesson, even failed ones - Decide and move - analysis paralysis kills innovation - Pivot is not failure, it is intelligence - Systematize what you learn so the next team doesn\'t start from zero","bme","_bmad/bme/_vortex/agents/learning-decision-expert.md"\n';
-  fs.writeFileSync(manifestPath, header + emmaRow + wadeRow + islaRow + maxRow);
+  const rows = AGENTS.map(a => {
+    const p = a.persona;
+    return [
+      a.id, a.name, a.title, a.icon,
+      p.role, p.identity, p.communication_style, p.expertise,
+      'bme', `_bmad/bme/_vortex/agents/${a.id}.md`,
+    ].map(csvEscape).join(',');
+  }).join('\n') + '\n';
+
+  fs.writeFileSync(manifestPath, header + rows);
   console.log(`${GREEN}  ✓${RESET} Created agent-manifest.csv`);
 }
 
