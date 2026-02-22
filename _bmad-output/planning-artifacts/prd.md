@@ -1,5 +1,5 @@
 ---
-stepsCompleted: [step-01-init, step-02-discovery, step-03-success]
+stepsCompleted: [step-01-init, step-02-discovery, step-03-success, step-04-journeys]
 inputDocuments:
   - _bmad-output/planning-artifacts/product-brief-BMAD-Enhanced-2026-02-22.md
   - docs/agents.md
