@@ -12,6 +12,60 @@ const { findProjectRoot } = require('./lib/utils');
  * Main update command for users
  */
 
+/**
+ * Assess the current installation and determine what update action is needed.
+ * Pure logic — no I/O, no process.exit. Returns a structured decision object.
+ *
+ * @param {string|null} projectRoot - Project root path (null if not found)
+ * @returns {object} Assessment result with action, versions, migrations, breakingChanges
+ */
+function assessUpdate(projectRoot) {
+  if (!projectRoot) {
+    return { action: 'no-project' };
+  }
+
+  const currentVersion = versionDetector.getCurrentVersion(projectRoot);
+  const targetVersion = versionDetector.getTargetVersion();
+  const scenario = versionDetector.detectInstallationScenario(projectRoot);
+
+  if (scenario === 'fresh') {
+    return { action: 'fresh', scenario };
+  }
+
+  if (scenario === 'partial' || scenario === 'corrupted') {
+    return { action: 'broken', scenario };
+  }
+
+  if (!currentVersion) {
+    return { action: 'no-version', scenario };
+  }
+
+  const migrationPath = versionDetector.getMigrationPath(currentVersion, targetVersion);
+
+  if (migrationPath.type === 'up-to-date') {
+    return { action: 'up-to-date', currentVersion, targetVersion };
+  }
+
+  if (migrationPath.type === 'downgrade') {
+    return { action: 'downgrade', currentVersion, targetVersion };
+  }
+
+  const migrations = registry.getMigrationsFor(currentVersion);
+  const breakingChanges = registry.getBreakingChanges(currentVersion);
+
+  if (migrations.length === 0) {
+    return { action: 'no-migrations', currentVersion, targetVersion };
+  }
+
+  return {
+    action: 'upgrade',
+    currentVersion,
+    targetVersion,
+    migrations,
+    breakingChanges
+  };
+}
+
 async function main() {
   const args = process.argv.slice(2);
   const dryRun = args.includes('--dry-run');
@@ -25,111 +79,102 @@ async function main() {
   console.log(chalk.bold.magenta('╚════════════════════════════════════════╝'));
   console.log('');
 
-  // Validate project root
   const projectRoot = findProjectRoot();
-  if (!projectRoot) {
-    console.log(chalk.red('Not in a BMAD project. Could not find _bmad/ directory.'));
-    console.log('');
-    console.log('Run: ' + chalk.cyan('npx bmad-install-agents'));
-    console.log('');
-    process.exit(1);
+  const assessment = assessUpdate(projectRoot);
+
+  switch (assessment.action) {
+    case 'no-project':
+      console.log(chalk.red('Not in a BMAD project. Could not find _bmad/ directory.'));
+      console.log('');
+      console.log('Run: ' + chalk.cyan('npx bmad-install-agents'));
+      console.log('');
+      process.exit(1);
+      break;
+
+    case 'fresh':
+      console.log(chalk.yellow('No previous installation detected.'));
+      console.log('');
+      console.log('Run: ' + chalk.cyan('npx bmad-install-agents'));
+      console.log('');
+      process.exit(0);
+      break;
+
+    case 'broken':
+      console.log(chalk.red('Installation appears incomplete or corrupted.'));
+      console.log('');
+      console.log('Recommend running: ' + chalk.cyan('npx bmad-install-agents'));
+      console.log('');
+      process.exit(1);
+      break;
+
+    case 'no-version':
+      console.log(chalk.yellow('Could not detect current version.'));
+      console.log('');
+      console.log('Run: ' + chalk.cyan('npx bmad-install-agents'));
+      console.log('');
+      process.exit(0);
+      break;
+
+    case 'up-to-date':
+      console.log(chalk.green(`✓ Already up to date! (v${assessment.currentVersion})`));
+      console.log('');
+      process.exit(0);
+      break;
+
+    case 'downgrade':
+      console.log(chalk.red.bold('⚠ DOWNGRADE DETECTED'));
+      console.log('');
+      console.log(`  Current version: ${assessment.currentVersion}`);
+      console.log(`  Package version: ${assessment.targetVersion}`);
+      console.log('');
+      console.log(chalk.yellow('Downgrades are not officially supported.'));
+      console.log('');
+      console.log('If you want to downgrade, please:');
+      console.log('  1. Backup your installation');
+      console.log('  2. Uninstall current version');
+      console.log('  3. Install desired version');
+      console.log('');
+      process.exit(1);
+      break;
+
+    case 'no-migrations':
+      console.log(chalk.yellow('No migrations needed (versions compatible)'));
+      console.log('');
+      process.exit(0);
+      break;
+
+    case 'upgrade':
+      break; // Continue below
   }
 
-  // 1. Detect current state
-  const currentVersion = versionDetector.getCurrentVersion(projectRoot);
-  const targetVersion = versionDetector.getTargetVersion();
-  const scenario = versionDetector.detectInstallationScenario(projectRoot);
-
-  // Handle different scenarios
-  if (scenario === 'fresh') {
-    console.log(chalk.yellow('No previous installation detected.'));
-    console.log('');
-    console.log('Run: ' + chalk.cyan('npx bmad-install-agents'));
-    console.log('');
-    process.exit(0);
-  }
-
-  if (scenario === 'partial' || scenario === 'corrupted') {
-    console.log(chalk.red('Installation appears incomplete or corrupted.'));
-    console.log('');
-    console.log('Recommend running: ' + chalk.cyan('npx bmad-install-agents'));
-    console.log('');
-    process.exit(1);
-  }
-
-  if (!currentVersion) {
-    console.log(chalk.yellow('Could not detect current version.'));
-    console.log('');
-    console.log('Run: ' + chalk.cyan('npx bmad-install-agents'));
-    console.log('');
-    process.exit(0);
-  }
-
-  // Get migration path
-  const migrationPath = versionDetector.getMigrationPath(currentVersion, targetVersion);
-
-  // Already up to date
-  if (migrationPath.type === 'up-to-date') {
-    console.log(chalk.green(`✓ Already up to date! (v${currentVersion})`));
-    console.log('');
-    process.exit(0);
-  }
-
-  // Downgrade attempt
-  if (migrationPath.type === 'downgrade') {
-    console.log(chalk.red.bold('⚠ DOWNGRADE DETECTED'));
-    console.log('');
-    console.log(`  Current version: ${currentVersion}`);
-    console.log(`  Package version: ${targetVersion}`);
-    console.log('');
-    console.log(chalk.yellow('Downgrades are not officially supported.'));
-    console.log('');
-    console.log('If you want to downgrade, please:');
-    console.log('  1. Backup your installation');
-    console.log('  2. Uninstall current version');
-    console.log('  3. Install desired version');
-    console.log('');
-    process.exit(1);
-  }
-
-  // 2. Show migration plan
+  // Show migration plan
   console.log(chalk.cyan('Migration Plan:'));
-  console.log(`  From: ${chalk.red(currentVersion)}`);
-  console.log(`  To:   ${chalk.green(targetVersion)}`);
+  console.log(`  From: ${chalk.red(assessment.currentVersion)}`);
+  console.log(`  To:   ${chalk.green(assessment.targetVersion)}`);
   console.log('');
 
-  const migrations = registry.getMigrationsFor(currentVersion);
-
-  if (migrations.length === 0) {
-    console.log(chalk.yellow('No migrations needed (versions compatible)'));
-    console.log('');
-    process.exit(0);
-  }
-
   console.log(chalk.cyan('Migrations to apply:'));
-  migrations.forEach((m, i) => {
+  assessment.migrations.forEach((m, i) => {
     const icon = m.breaking ? chalk.red('⚠') : chalk.green('✓');
     console.log(`  ${i + 1}. ${icon} ${m.description}`);
   });
   console.log('');
 
-  // 3. Show breaking changes warning
-  const breakingChanges = registry.getBreakingChanges(currentVersion);
-  if (breakingChanges.length > 0) {
+  if (assessment.breakingChanges.length > 0) {
     console.log(chalk.red.bold('⚠ BREAKING CHANGES:'));
-    breakingChanges.forEach(change => {
+    assessment.breakingChanges.forEach(change => {
       console.log(chalk.yellow(`  - ${change}`));
     });
     console.log('');
   }
 
-  // 4. Dry run - preview only
+  // Dry run - preview only
   if (dryRun) {
     console.log(chalk.yellow.bold('DRY RUN - Previewing changes'));
     console.log('');
 
     try {
-      await migrationRunner.runMigrations(currentVersion, { dryRun: true, verbose });
+      await migrationRunner.runMigrations(assessment.currentVersion, { dryRun: true, verbose });
     } catch (error) {
       console.error(chalk.red('Error during preview:'), error.message);
       process.exit(1);
@@ -138,7 +183,7 @@ async function main() {
     process.exit(0);
   }
 
-  // 5. Confirm with user (unless --yes)
+  // Confirm with user (unless --yes)
   if (!yes) {
     console.log(chalk.cyan('Your data will be backed up automatically before migration.'));
     console.log('');
@@ -153,14 +198,13 @@ async function main() {
     }
   }
 
-  // 6. Run migrations
+  // Run migrations
   console.log('');
   console.log(chalk.cyan.bold('Starting migration...'));
 
   try {
-    const result = await migrationRunner.runMigrations(currentVersion, { verbose });
+    const result = await migrationRunner.runMigrations(assessment.currentVersion, { verbose });
 
-    // 7. Show success report
     console.log('');
     console.log(chalk.green.bold('✓ Migration completed successfully!'));
     console.log('');
@@ -202,15 +246,20 @@ async function confirm(message) {
   });
 }
 
-// Run main
-main().catch(error => {
-  console.error('');
-  console.error(chalk.red.bold('Unexpected error:'));
-  console.error(chalk.red(error.message));
-  console.error('');
-  if (error.stack) {
-    console.error(chalk.gray(error.stack));
+// Export assessUpdate for testing
+module.exports = { assessUpdate };
+
+// Run main when executed directly
+if (require.main === module) {
+  main().catch(error => {
     console.error('');
-  }
-  process.exit(1);
-});
+    console.error(chalk.red.bold('Unexpected error:'));
+    console.error(chalk.red(error.message));
+    console.error('');
+    if (error.stack) {
+      console.error(chalk.gray(error.stack));
+      console.error('');
+    }
+    process.exit(1);
+  });
+}
