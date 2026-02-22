@@ -14,53 +14,7 @@ const {
   validateUserDataIntegrity,
   validateDeprecatedWorkflows
 } = require('../../scripts/update/lib/validator');
-
-// Full config matching real installations (all required fields)
-function fullConfig(overrides = {}) {
-  return {
-    submodule_name: '_vortex',
-    description: 'Vortex Framework',
-    module: 'bme',
-    version: '1.5.0',
-    output_folder: '{project-root}/_bmad-output/vortex-artifacts',
-    agents: ['contextualization-expert', 'discovery-empathy-expert', 'lean-experiments-specialist', 'learning-decision-expert'],
-    workflows: [
-      'lean-persona', 'product-vision', 'contextualize-scope',
-      'empathy-map', 'user-interview', 'user-discovery',
-      'mvp', 'lean-experiment', 'proof-of-concept', 'proof-of-value',
-      'learning-card', 'pivot-patch-persevere', 'vortex-navigation'
-    ],
-    ...overrides
-  };
-}
-
-// Helper: create a minimal valid installation in a temp dir
-async function createValidInstallation(tmpDir) {
-  const vortexDir = path.join(tmpDir, '_bmad/bme/_vortex');
-  const agentsDir = path.join(vortexDir, 'agents');
-  const workflowsDir = path.join(vortexDir, 'workflows');
-
-  await fs.ensureDir(agentsDir);
-
-  // Config with all required fields
-  const config = fullConfig();
-  await fs.writeFile(path.join(vortexDir, 'config.yaml'), yaml.dump(config), 'utf8');
-
-  // Agent files (all 4 required)
-  await fs.writeFile(path.join(agentsDir, 'contextualization-expert.md'), '# Emma', 'utf8');
-  await fs.writeFile(path.join(agentsDir, 'lean-experiments-specialist.md'), '# Wade', 'utf8');
-  await fs.writeFile(path.join(agentsDir, 'discovery-empathy-expert.md'), '# Isla', 'utf8');
-  await fs.writeFile(path.join(agentsDir, 'learning-decision-expert.md'), '# Max', 'utf8');
-
-  // Workflow dirs with workflow.md
-  for (const wf of config.workflows) {
-    const wfDir = path.join(workflowsDir, wf);
-    await fs.ensureDir(wfDir);
-    await fs.writeFile(path.join(wfDir, 'workflow.md'), `# ${wf}`, 'utf8');
-  }
-
-  return vortexDir;
-}
+const { fullConfig, createValidInstallation } = require('../helpers');
 
 // === validateConfigStructure ===
 
