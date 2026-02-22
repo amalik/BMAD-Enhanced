@@ -17,16 +17,12 @@
   "bin": {
     "bmad-install-vortex-agents": "scripts/install-vortex-agents.js",
     "bmad-install-agents": "scripts/install-all-agents.js",
-    "bmad-install-emma": "scripts/install-emma.js",
-    "bmad-install-wade": "scripts/install-wade.js",
     "bmad-update": "scripts/update/bmad-update.js",
     "bmad-version": "scripts/update/bmad-version.js",
     "bmad-migrate": "scripts/update/bmad-migrate.js",
     "bmad-doctor": "scripts/bmad-doctor.js"
   },
   "scripts": {
-    "install:emma": "node scripts/install-emma.js",
-    "install:wade": "node scripts/install-wade.js",
     "install:agents": "node scripts/install-all-agents.js",
     "postinstall": "node scripts/postinstall.js",
     "test": "node --test tests/unit/*.test.js",
