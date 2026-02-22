@@ -2,6 +2,7 @@
 
 const path = require('path');
 const fs = require('fs');
+const { AGENTS } = require('./update/lib/agent-registry');
 
 // Check if update system is available
 const versionDetectorPath = path.join(__dirname, 'update/lib/version-detector.js');
@@ -36,13 +37,10 @@ async function main() {
 
     // Fresh install
     if (scenario === 'fresh' || !currentVersion) {
+      const agentNames = AGENTS.map(a => a.name).join(' + ');
       console.log('To install agents into your project, run:');
       console.log('');
-      console.log(`  ${CYAN}npx bmad-install-agents${RESET}  - Install all agents (Emma + Wade)`);
-      console.log('');
-      console.log('Or install individually:');
-      console.log(`  ${CYAN}npx bmad-install-emma${RESET}    - Install Emma (contextualization-expert)`);
-      console.log(`  ${CYAN}npx bmad-install-wade${RESET}    - Install Wade (lean-experiments-specialist)`);
+      console.log(`  ${CYAN}npx bmad-install-agents${RESET}  - Install all agents (${agentNames})`);
       console.log('');
       return;
     }
@@ -93,13 +91,10 @@ async function main() {
     }
   } else {
     // Fallback to original message if update system not available
+    const agentNames = AGENTS.map(a => a.name).join(' + ');
     console.log('To install agents into your project, run:');
     console.log('');
-    console.log(`  ${CYAN}npx bmad-install-agents${RESET}  - Install all agents (Emma + Wade)`);
-    console.log('');
-    console.log('Or install individually:');
-    console.log(`  ${CYAN}npx bmad-install-emma${RESET}    - Install Emma (contextualization-expert)`);
-    console.log(`  ${CYAN}npx bmad-install-wade${RESET}    - Install Wade (lean-experiments-specialist)`);
+    console.log(`  ${CYAN}npx bmad-install-agents${RESET}  - Install all agents (${agentNames})`);
     console.log('');
   }
 }
