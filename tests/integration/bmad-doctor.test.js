@@ -1,19 +1,14 @@
 const { describe, it, before, after } = require('node:test');
 const assert = require('node:assert/strict');
-const { execFile } = require('node:child_process');
 const path = require('path');
 const fs = require('fs-extra');
 const os = require('os');
+const { runScript, PACKAGE_ROOT } = require('../helpers');
 
-const packageRoot = path.join(__dirname, '..', '..');
-const doctorScript = path.join(packageRoot, 'scripts/bmad-doctor.js');
+const doctorScript = path.join(PACKAGE_ROOT, 'scripts/bmad-doctor.js');
 
 function runDoctor(cwd) {
-  return new Promise((resolve) => {
-    execFile('node', [doctorScript], { cwd, timeout: 10000 }, (err, stdout, stderr) => {
-      resolve({ exitCode: err ? err.code : 0, stdout, stderr });
-    });
-  });
+  return runScript(doctorScript, [], { cwd });
 }
 
 describe('bmad-doctor: no project root', () => {
