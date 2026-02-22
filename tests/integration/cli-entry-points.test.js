@@ -1,16 +1,12 @@
 const { describe, it } = require('node:test');
 const assert = require('node:assert/strict');
-const { execFile } = require('node:child_process');
 const path = require('path');
+const { runScript, PACKAGE_ROOT } = require('../helpers');
 
-const projectRoot = path.join(__dirname, '..', '..');
+const projectRoot = PACKAGE_ROOT;
 
 function run(script, args = []) {
-  return new Promise((resolve) => {
-    execFile('node', [script, ...args], { cwd: projectRoot, timeout: 10000 }, (err, stdout, stderr) => {
-      resolve({ exitCode: err ? err.code : 0, stdout, stderr });
-    });
-  });
+  return runScript(script, args);
 }
 
 describe('index.js entry point', () => {
