@@ -100,6 +100,34 @@ function extractUserPreferences(config) {
 }
 
 /**
+ * Declarative config schema.
+ * Each entry declares a field's type, whether it's required, and an optional
+ * validation function that receives the value and returns an error string or null.
+ */
+const CONFIG_SCHEMA = [
+  { field: 'submodule_name', type: 'string', required: true },
+  { field: 'description',   type: 'string', required: true },
+  { field: 'module',        type: 'string', required: true },
+  { field: 'version',       type: 'string', required: true,
+    validate: v => /^\d+\.\d+\.\d+$/.test(v) ? null : `Invalid version format: ${v} (expected x.x.x)` },
+  { field: 'output_folder', type: 'string', required: true },
+  { field: 'agents',        type: 'array',  required: true, items: 'string' },
+  { field: 'workflows',     type: 'array',  required: true, items: 'string' },
+  { field: 'communication_language', type: 'string',  required: false },
+  { field: 'party_mode_enabled',     type: 'boolean', required: false },
+  { field: 'migration_history',      type: 'array',   required: false,
+    validate: (arr) => {
+      for (let i = 0; i < arr.length; i++) {
+        const e = arr[i];
+        if (!e.timestamp || !e.from_version || !e.to_version) {
+          return `migration_history[${i}] missing required fields`;
+        }
+      }
+      return null;
+    }},
+];
+
+/**
  * Validate merged config structure
  * @param {object} config - Config to validate
  * @returns {object} Validation result { valid: boolean, errors: [] }
@@ -107,48 +135,39 @@ function extractUserPreferences(config) {
 function validateConfig(config) {
   const errors = [];
 
-  // Required fields
-  const requiredFields = [
-    'submodule_name',
-    'description',
-    'module',
-    'version',
-    'output_folder',
-    'agents',
-    'workflows'
-  ];
+  for (const rule of CONFIG_SCHEMA) {
+    const has = Object.prototype.hasOwnProperty.call(config, rule.field);
 
-  for (const field of requiredFields) {
-    if (!Object.prototype.hasOwnProperty.call(config, field)) {
-      errors.push(`Missing required field: ${field}`);
+    if (!has) {
+      if (rule.required) errors.push(`Missing required field: ${rule.field}`);
+      continue;
     }
-  }
 
-  // Validate version format (x.x.x)
-  if (config.version && !/^\d+\.\d+\.\d+$/.test(config.version)) {
-    errors.push(`Invalid version format: ${config.version} (expected x.x.x)`);
-  }
+    const value = config[rule.field];
 
-  // Validate agents is array
-  if (config.agents && !Array.isArray(config.agents)) {
-    errors.push('agents must be an array');
-  }
-
-  // Validate workflows is array
-  if (config.workflows && !Array.isArray(config.workflows)) {
-    errors.push('workflows must be an array');
-  }
-
-  // Validate migration_history structure
-  if (config.migration_history) {
-    if (!Array.isArray(config.migration_history)) {
-      errors.push('migration_history must be an array');
-    } else {
-      config.migration_history.forEach((entry, index) => {
-        if (!entry.timestamp || !entry.from_version || !entry.to_version) {
-          errors.push(`migration_history[${index}] missing required fields`);
+    // Type check
+    if (rule.type === 'array') {
+      if (!Array.isArray(value)) {
+        errors.push(`${rule.field} must be an array`);
+        continue;
+      }
+      // Item type check
+      if (rule.items) {
+        for (let i = 0; i < value.length; i++) {
+          if (typeof value[i] !== rule.items) {
+            errors.push(`${rule.field}[${i}] must be a ${rule.items}`);
+          }
         }
-      });
+      }
+    } else if (typeof value !== rule.type) {
+      errors.push(`${rule.field} must be a ${rule.type}`);
+      continue;
+    }
+
+    // Custom validation
+    if (rule.validate) {
+      const err = rule.validate(value);
+      if (err) errors.push(err);
     }
   }
 
@@ -198,6 +217,7 @@ function addMigrationHistory(config, fromVersion, toVersion, migrationsApplied) 
 }
 
 module.exports = {
+  CONFIG_SCHEMA,
   mergeConfig,
   extractUserPreferences,
   validateConfig,
