@@ -22,7 +22,8 @@ async function mergeConfig(currentConfigPath, newVersion, updates = {}) {
   if (fs.existsSync(currentConfigPath)) {
     try {
       const currentContent = fs.readFileSync(currentConfigPath, 'utf8');
-      current = yaml.load(currentContent);
+      const parsed = yaml.load(currentContent);
+      current = (parsed && typeof parsed === 'object') ? parsed : {};
     } catch (_error) {
       console.warn('Warning: Could not parse current config.yaml, using defaults');
       current = {};
