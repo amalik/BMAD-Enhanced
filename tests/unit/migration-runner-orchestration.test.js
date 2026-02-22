@@ -6,33 +6,7 @@ const path = require('path');
 const yaml = require('js-yaml');
 
 const { runMigrations } = require('../../scripts/update/lib/migration-runner');
-const { refreshInstallation } = require('../../scripts/update/lib/refresh-installation');
-
-// Silence console output during heavy orchestration tests
-const originalLog = console.log;
-const originalError = console.error;
-
-function silenceConsole() {
-  console.log = () => {};
-  console.error = () => {};
-}
-
-function restoreConsole() {
-  console.log = originalLog;
-  console.error = originalError;
-}
-
-// Helper: create a pre-existing installation and override version
-async function createInstallation(tmpDir, version) {
-  await fs.ensureDir(path.join(tmpDir, '_bmad'));
-  await refreshInstallation(tmpDir, { backupGuides: false, verbose: false });
-
-  // Override version to simulate older installation
-  const configPath = path.join(tmpDir, '_bmad/bme/_vortex/config.yaml');
-  const config = yaml.load(fs.readFileSync(configPath, 'utf8'));
-  config.version = version;
-  fs.writeFileSync(configPath, yaml.dump(config), 'utf8');
-}
+const { createInstallation, silenceConsole, restoreConsole } = require('../helpers');
 
 describe('runMigrations orchestration', () => {
   let tmpDir;
