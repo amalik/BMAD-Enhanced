@@ -176,3 +176,87 @@ The user journey for Wave 3 is an extension of the existing Vortex journey, not 
 ### Business Objectives
 
 Wave 3's business objective is singular: **complete the Vortex**. The framework's value proposition depends on covering all 7 Innovation Vortex streams. Four of seven is a framework with gaps. Seven of seven is the product. Adoption parity with existing agents is the long-term bar — Wave 3 agents should eventually see comparable usage to Emma, Isla, Wade, and Max within their respective lifecycle stages.
+
+---
+
+## MVP Scope
+
+### Core Features
+
+**v1.6.0 ships the complete Vortex — no phasing, no cuts.**
+
+#### 3 New Agents (Full Scope)
+
+| Agent | Name | Stream | Workflows | Key Deliverables |
+|-------|------|--------|-----------|-----------------|
+| Synthesize | Mila | Synthesize | 2-3 workflows | JTBD convergence, Pains & Gains, problem definition output |
+| Hypothesize | Liam | Hypothesize | 2-3 workflows | Structured ideation, 4-field hypothesis contract output |
+| Sensitize | Noah | Sensitize | 2-3 workflows | Signal interpretation, experiment-aware monitoring, growth optimization |
+
+Each agent includes:
+- Agent .md file with full frontmatter (name, title, icon, stream, persona)
+- 2-3 workflows following step-file architecture
+- Vortex Compass integration routing to all 7 agents
+- User guide (MILA-USER-GUIDE.md, LIAM-USER-GUIDE.md, NOAH-USER-GUIDE.md)
+- Registry entry in `agent-registry.js` with complete persona data
+
+#### All 9 Handoff Contracts Implemented
+
+Every handoff contract declared in the product brief has corresponding Compass triggers:
+- Isla → Mila (empathy artifacts → convergence)
+- Mila → Liam (problem definition → hypothesis engineering)
+- Liam → Wade (4-field hypothesis contract)
+- Liam → Isla (unvalidated assumption backflow)
+- Wade → Noah (graduated experiment context)
+- Noah → Max (signal + context + trend)
+- Noah → Isla (unexpected behavior discovery)
+- Max → Mila (pivot → problem redefinition)
+- Max → Emma (zoom-out → recontextualize)
+
+#### Existing Agent Compass Updates
+
+Emma, Isla, Wade, and Max receive Compass updates to route to Wave 3 agents:
+- **Isla** gains routing to Mila ("ready to converge research")
+- **Wade** gains routing to Noah ("experiment graduating to production")
+- **Max** gains routing to Mila ("pivot — redefine within known space") — distinct from existing Emma routing
+- **Emma** — no new outbound routes needed (existing routes sufficient)
+
+#### Party Mode Integration
+
+All 3 new agents (Mila, Liam, Noah) appear in Party Mode from day one, with full personality data from the agent manifest.
+
+#### Infrastructure Updates
+
+- `agent-registry.js` expanded to 7 agents with complete persona data
+- `validator.js` updated to check all 7 agents and expanded workflow count
+- `bmad-doctor` validates the full 7-agent Vortex
+- Manifest CSV generation produces all 7 agents
+- Config updated with new workflow entries
+
+### Out of Scope for MVP
+
+- **Cross-agent orchestration workflows** — A guided "full Vortex run" that chains all 7 agents sequentially is a future design exercise, not part of v1.6.0. Each agent operates independently with Compass routing between them.
+- **New framework development** — v1.6.0 completes the Vortex. The next horizon is a new framework entirely; Vortex may receive minor updates but no major additions.
+- **Workflow template variations** — Each agent ships with its core 2-3 workflows. Additional workflow variants (e.g., "quick synthesis" or "deep ideation") are post-v1.6.0 iterations.
+- **Analytics integration** — Noah (Sensitize) helps users interpret signals and set up monitoring frameworks, but does not integrate directly with analytics platforms (Mixpanel, Amplitude, etc.). The agent works with whatever data the user brings.
+- **Automated artifact passing** — Handoff contracts define what's passed between agents, but the user manually initiates each agent with the appropriate input. Automated pipeline execution is future scope.
+
+### MVP Success Criteria
+
+MVP success = all Release Quality Gates from the Success Metrics section pass:
+1. All 7 agent files present with valid frontmatter — `bmad-doctor` passes
+2. All Wave 3 workflows follow step-file architecture — structure validated
+3. All 9 handoff contracts have Compass triggers — contract-to-trigger mapping complete
+4. All existing tests pass + new agents covered — `npm test` zero failures
+5. Install flow works end-to-end — 7 agents installed, manifest valid, config validates
+6. User guides present for Mila, Liam, Noah
+
+The go/no-go decision is binary: all gates pass → publish v1.6.0. Any gate fails → fix before release.
+
+### Future Vision
+
+**v1.6.0 completes the Vortex. What comes next is a new framework.**
+
+The Vortex may receive minor post-v1.6.0 updates — workflow refinements, Compass routing improvements based on user feedback, additional ideation techniques for Liam, deeper signal interpretation patterns for Noah. But the 7-stream architecture is final.
+
+The next major horizon is beyond the Vortex: a new framework that builds on the foundation of 7 complete streams of guided product discovery. The Vortex becomes the stable base that future innovation builds upon.
