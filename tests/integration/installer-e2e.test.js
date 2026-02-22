@@ -1,20 +1,15 @@
 const { describe, it, before, after } = require('node:test');
 const assert = require('node:assert/strict');
-const { execFile } = require('node:child_process');
 const path = require('path');
 const fs = require('fs-extra');
 const os = require('os');
 const yaml = require('js-yaml');
+const { runScript, PACKAGE_ROOT } = require('../helpers');
 
-const packageRoot = path.join(__dirname, '..', '..');
-const installerScript = path.join(packageRoot, 'scripts/install-vortex-agents.js');
+const installerScript = path.join(PACKAGE_ROOT, 'scripts/install-vortex-agents.js');
 
 function runInstaller(cwd) {
-  return new Promise((resolve) => {
-    execFile('node', [installerScript], { cwd, timeout: 15000 }, (err, stdout, stderr) => {
-      resolve({ exitCode: err ? err.code : 0, stdout, stderr });
-    });
-  });
+  return runScript(installerScript, [], { cwd });
 }
 
 describe('install-vortex-agents CLI E2E', () => {
