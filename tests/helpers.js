@@ -98,14 +98,8 @@ async function createValidInstallation(tmpDir) {
   await fs.writeFile(path.join(vortexDir, 'config.yaml'), yaml.dump(config), 'utf8');
 
   // Agent files (all from registry)
-  const agentStubs = {
-    'contextualization-expert': '# Emma',
-    'discovery-empathy-expert': '# Isla',
-    'lean-experiments-specialist': '# Wade',
-    'learning-decision-expert': '# Max'
-  };
-  for (const [id, content] of Object.entries(agentStubs)) {
-    await fs.writeFile(path.join(agentsDir, `${id}.md`), content, 'utf8');
+  for (const agentId of AGENT_IDS) {
+    await fs.writeFile(path.join(agentsDir, `${agentId}.md`), `# ${agentId}`, 'utf8');
   }
 
   // Workflow dirs with workflow.md
