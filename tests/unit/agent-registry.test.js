@@ -7,7 +7,8 @@ const {
   AGENT_FILES,
   AGENT_IDS,
   WORKFLOW_NAMES,
-  USER_GUIDES
+  USER_GUIDES,
+  WAVE3_WORKFLOW_NAMES
 } = require('../../scripts/update/lib/agent-registry');
 
 describe('agent-registry', () => {
@@ -98,6 +99,18 @@ describe('agent-registry', () => {
         assert.match(guide, /^[A-Z]+-USER-GUIDE\.md$/);
       }
       assert.equal(USER_GUIDES.length, AGENTS.length);
+    });
+
+    it('WAVE3_WORKFLOW_NAMES contains only Synthesize/Hypothesize/Sensitize workflows', () => {
+      assert.ok(WAVE3_WORKFLOW_NAMES instanceof Set);
+      assert.equal(WAVE3_WORKFLOW_NAMES.size, 9);
+      // Verify all Wave 3 workflows are present
+      assert.ok(WAVE3_WORKFLOW_NAMES.has('research-convergence'));
+      assert.ok(WAVE3_WORKFLOW_NAMES.has('hypothesis-engineering'));
+      assert.ok(WAVE3_WORKFLOW_NAMES.has('signal-interpretation'));
+      // Verify Wave 1/2 workflows are NOT present
+      assert.ok(!WAVE3_WORKFLOW_NAMES.has('lean-persona'));
+      assert.ok(!WAVE3_WORKFLOW_NAMES.has('mvp'));
     });
   });
 });
