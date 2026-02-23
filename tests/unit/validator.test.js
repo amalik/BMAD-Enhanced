@@ -12,7 +12,8 @@ const {
   validateWorkflows,
   validateManifest,
   validateUserDataIntegrity,
-  validateDeprecatedWorkflows
+  validateDeprecatedWorkflows,
+  validateWorkflowStepStructure
 } = require('../../scripts/update/lib/validator');
 const { fullConfig, createValidInstallation } = require('../helpers');
 
@@ -280,6 +281,110 @@ describe('validateDeprecatedWorkflows', () => {
     const result = await validateDeprecatedWorkflows(tmpDir);
     assert.equal(result.passed, true);
     assert.ok(result.info);
+  });
+});
+
+// === validateWorkflowStepStructure ===
+
+describe('validateWorkflowStepStructure', () => {
+  // Helper: create an isolated tmpDir with a single workflow + steps
+  async function createStepFixture(workflowName, stepFiles) {
+    const tmpDir = await fs.mkdtemp(path.join(os.tmpdir(), 'bmad-steps-'));
+    const workflowsDir = path.join(tmpDir, '_bmad/bme/_vortex/workflows');
+    const wfDir = path.join(workflowsDir, workflowName);
+    await fs.ensureDir(wfDir);
+    await fs.writeFile(path.join(wfDir, 'workflow.md'), `# ${workflowName}`, 'utf8');
+
+    if (stepFiles && stepFiles.length > 0) {
+      const stepsDir = path.join(wfDir, 'steps');
+      await fs.ensureDir(stepsDir);
+      for (const f of stepFiles) {
+        await fs.writeFile(path.join(stepsDir, f), `# ${f}`, 'utf8');
+      }
+    }
+    return tmpDir;
+  }
+
+  it('passes for workflows without steps/ directory (placeholder)', async () => {
+    const tmpDir = await createStepFixture('lean-persona', null);
+    const result = await validateWorkflowStepStructure(tmpDir);
+    assert.equal(result.passed, true);
+    await fs.remove(tmpDir);
+  });
+
+  it('passes with 4 step files (minimum)', async () => {
+    const tmpDir = await createStepFixture('lean-persona', [
+      'step-01-setup.md', 'step-02-context.md', 'step-03-work.md', 'step-04-synthesize.md'
+    ]);
+    const result = await validateWorkflowStepStructure(tmpDir);
+    assert.equal(result.passed, true);
+    await fs.remove(tmpDir);
+  });
+
+  it('passes with 6 step files (maximum)', async () => {
+    const tmpDir = await createStepFixture('lean-persona', [
+      'step-01-setup.md', 'step-02-context.md', 'step-03-work.md',
+      'step-04-deep.md', 'step-05-extra.md', 'step-06-synthesize.md'
+    ]);
+    const result = await validateWorkflowStepStructure(tmpDir);
+    assert.equal(result.passed, true);
+    await fs.remove(tmpDir);
+  });
+
+  it('fails with 3 step files (below minimum)', async () => {
+    const tmpDir = await createStepFixture('contextualize-scope', [
+      'step-01-setup.md', 'step-02-context.md', 'step-03-synthesize.md'
+    ]);
+    const result = await validateWorkflowStepStructure(tmpDir);
+    assert.equal(result.passed, false);
+    assert.ok(result.error.includes('contextualize-scope'));
+    assert.ok(result.error.includes('3'));
+    await fs.remove(tmpDir);
+  });
+
+  it('fails with 7 step files (above maximum)', async () => {
+    const tmpDir = await createStepFixture('contextualize-scope', [
+      'step-01-setup.md', 'step-02-context.md', 'step-03-work.md',
+      'step-04-work.md', 'step-05-work.md', 'step-06-work.md', 'step-07-synthesize.md'
+    ]);
+    const result = await validateWorkflowStepStructure(tmpDir);
+    assert.equal(result.passed, false);
+    assert.ok(result.error.includes('contextualize-scope'));
+    assert.ok(result.error.includes('7'));
+    await fs.remove(tmpDir);
+  });
+
+  it('fails when step-01-setup.md is missing (Wave 3 workflow)', async () => {
+    // research-convergence belongs to Mila/Synthesize (Wave 3)
+    const tmpDir = await createStepFixture('research-convergence', [
+      'step-01-intro.md', 'step-02-context.md', 'step-03-work.md', 'step-04-synthesize.md'
+    ]);
+    const result = await validateWorkflowStepStructure(tmpDir);
+    assert.equal(result.passed, false);
+    assert.ok(result.error.includes('step-01-setup.md'));
+    await fs.remove(tmpDir);
+  });
+
+  it('fails when step-02-context.md is missing (Wave 3 workflow)', async () => {
+    // hypothesis-engineering belongs to Liam/Hypothesize (Wave 3)
+    const tmpDir = await createStepFixture('hypothesis-engineering', [
+      'step-01-setup.md', 'step-02-gather.md', 'step-03-work.md', 'step-04-synthesize.md'
+    ]);
+    const result = await validateWorkflowStepStructure(tmpDir);
+    assert.equal(result.passed, false);
+    assert.ok(result.error.includes('step-02-context.md'));
+    await fs.remove(tmpDir);
+  });
+
+  it('fails when no *-synthesize.md file exists (Wave 3 workflow)', async () => {
+    // signal-interpretation belongs to Noah/Sensitize (Wave 3)
+    const tmpDir = await createStepFixture('signal-interpretation', [
+      'step-01-setup.md', 'step-02-context.md', 'step-03-work.md', 'step-04-wrap.md'
+    ]);
+    const result = await validateWorkflowStepStructure(tmpDir);
+    assert.equal(result.passed, false);
+    assert.ok(result.error.includes('synthesize'));
+    await fs.remove(tmpDir);
   });
 });
 
