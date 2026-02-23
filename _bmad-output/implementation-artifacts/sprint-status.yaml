@@ -1,0 +1,85 @@
+# generated: 2026-02-23
+# project: BMAD-Enhanced
+# project_key: NOKEY
+# tracking_system: file-system
+# story_location: _bmad-output/implementation-artifacts
+
+# STATUS DEFINITIONS:
+# ==================
+# Epic Status:
+#   - backlog: Epic not yet started
+#   - in-progress: Epic actively being worked on
+#   - done: All stories in epic completed
+#
+# Epic Status Transitions:
+#   - backlog → in-progress: Automatically when first story is created (via create-story)
+#   - in-progress → done: Manually when all stories reach 'done' status
+#
+# Story Status:
+#   - backlog: Story only exists in epic file
+#   - ready-for-dev: Story file created in stories folder
+#   - in-progress: Developer actively working on implementation
+#   - review: Implementation complete, ready for review
+#   - done: Story completed
+#
+# Retrospective Status:
+#   - optional: Can be completed but not required
+#   - done: Retrospective has been completed
+#
+# WORKFLOW NOTES:
+# ===============
+# - Epic transitions to 'in-progress' automatically when first story is created
+# - Stories can be worked in parallel if team capacity allows
+# - SM typically creates next story after previous one is 'done' to incorporate learnings
+# - Dev moves story to 'review', then runs code-review (fresh context, different LLM recommended)
+
+generated: 2026-02-23
+project: BMAD-Enhanced
+project_key: NOKEY
+tracking_system: file-system
+story_location: _bmad-output/implementation-artifacts
+
+development_status:
+  # Epic 1: Vortex Foundation — Contracts, Routing & Infrastructure
+  epic-1: in-progress
+  1-1-expand-agent-registry-to-7-agents: in-progress
+  1-2-update-validator-config-merger-doctor-for-7-agents: backlog
+  1-3-create-migration-delta-installer-updates: backlog
+  1-4-define-handoff-contract-schemas-hc1-hc5: backlog
+  1-5-create-compass-routing-reference-document: backlog
+  epic-1-retrospective: optional
+
+  # Epic 2: Mila — Research Convergence & Problem Definition
+  epic-2: backlog
+  2-1-design-milas-agent-definition-persona: backlog
+  2-2-create-research-convergence-workflow: backlog
+  2-3-create-pivot-resynthesis-workflow: backlog
+  2-4-create-pattern-mapping-workflow: backlog
+  2-5-create-mila-user-guide-example-artifacts: backlog
+  epic-2-retrospective: optional
+
+  # Epic 3: Liam — Hypothesis Engineering & Experiment Design
+  epic-3: backlog
+  3-1-design-liams-agent-definition-persona: backlog
+  3-2-create-hypothesis-engineering-workflow: backlog
+  3-3-create-assumption-mapping-workflow: backlog
+  3-4-create-experiment-design-workflow: backlog
+  3-5-create-liam-user-guide-example-artifacts: backlog
+  epic-3-retrospective: optional
+
+  # Epic 4: Noah — Production Intelligence & Signal Interpretation
+  epic-4: backlog
+  4-1-design-noahs-agent-definition-persona: backlog
+  4-2-create-signal-interpretation-workflow: backlog
+  4-3-create-behavior-analysis-workflow: backlog
+  4-4-create-production-monitoring-workflow: backlog
+  4-5-create-noah-user-guide-example-artifacts: backlog
+  epic-4-retrospective: optional
+
+  # Epic 5: Vortex Integration — Cross-Agent Routing & Documentation
+  epic-5: backlog
+  5-1-update-islas-compass-routes-to-mila: backlog
+  5-2-update-wades-maxs-compass-routes: backlog
+  5-3-update-documentation-for-complete-7-agent-vortex: backlog
+  5-4-add-ci-dead-end-detection-final-version-bump: backlog
+  epic-5-retrospective: optional
