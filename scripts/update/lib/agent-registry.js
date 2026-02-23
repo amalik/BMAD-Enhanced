@@ -128,6 +128,11 @@ const AGENT_IDS = AGENTS.map(a => a.id);
 const WORKFLOW_NAMES = WORKFLOWS.map(w => w.name);
 const USER_GUIDES = AGENTS.map(a => `${a.name.toUpperCase()}-USER-GUIDE.md`);
 
+// Wave 3 streams use standardized step filenames (P20)
+const WAVE3_STREAMS = new Set(['Synthesize', 'Hypothesize', 'Sensitize']);
+const _wave3AgentIds = new Set(AGENTS.filter(a => WAVE3_STREAMS.has(a.stream)).map(a => a.id));
+const WAVE3_WORKFLOW_NAMES = new Set(WORKFLOWS.filter(w => _wave3AgentIds.has(w.agent)).map(w => w.name));
+
 module.exports = {
   AGENTS,
   WORKFLOWS,
@@ -135,4 +140,5 @@ module.exports = {
   AGENT_IDS,
   WORKFLOW_NAMES,
   USER_GUIDES,
+  WAVE3_WORKFLOW_NAMES,
 };
