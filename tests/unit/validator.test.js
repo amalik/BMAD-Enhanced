@@ -97,9 +97,10 @@ describe('validateAgentFiles', () => {
 
   it('passes when all required agents exist', async () => {
     const agentsDir = path.join(tmpDir, '_bmad/bme/_vortex/agents');
-    await fs.writeFile(path.join(agentsDir, 'lean-experiments-specialist.md'), '# Wade', 'utf8');
-    await fs.writeFile(path.join(agentsDir, 'discovery-empathy-expert.md'), '# Isla', 'utf8');
-    await fs.writeFile(path.join(agentsDir, 'learning-decision-expert.md'), '# Max', 'utf8');
+    const { AGENT_IDS } = require('../../scripts/update/lib/agent-registry');
+    for (const id of AGENT_IDS) {
+      await fs.writeFile(path.join(agentsDir, `${id}.md`), `# ${id}`, 'utf8');
+    }
 
     const result = await validateAgentFiles(tmpDir);
     assert.equal(result.passed, true);
@@ -187,11 +188,9 @@ describe('validateManifest', () => {
 
   it('passes when manifest contains all agents', async () => {
     const manifestPath = path.join(tmpDir, '_bmad/_config/agent-manifest.csv');
-    await fs.writeFile(
-      manifestPath,
-      '"agent_id"\n"contextualization-expert"\n"discovery-empathy-expert"\n"lean-experiments-specialist"\n"learning-decision-expert"\n',
-      'utf8'
-    );
+    const { AGENT_IDS } = require('../../scripts/update/lib/agent-registry');
+    const csvRows = ['"agent_id"', ...AGENT_IDS.map(id => `"${id}"`)].join('\n') + '\n';
+    await fs.writeFile(manifestPath, csvRows, 'utf8');
 
     const result = await validateManifest(tmpDir);
     assert.equal(result.passed, true);
