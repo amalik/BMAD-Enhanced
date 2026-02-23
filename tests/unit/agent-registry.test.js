@@ -12,8 +12,8 @@ const {
 
 describe('agent-registry', () => {
   describe('AGENTS', () => {
-    it('contains 4 agents', () => {
-      assert.equal(AGENTS.length, 4);
+    it('contains 7 agents', () => {
+      assert.equal(AGENTS.length, 7);
     });
 
     it('each agent has required fields', () => {
@@ -35,11 +35,29 @@ describe('agent-registry', () => {
       const names = AGENTS.map(a => a.name);
       assert.equal(new Set(names).size, names.length);
     });
+
+    it('is ordered by Vortex stream number (Architecture D3)', () => {
+      const expectedOrder = [
+        'Contextualize', 'Empathize', 'Synthesize', 'Hypothesize',
+        'Externalize', 'Sensitize', 'Systematize'
+      ];
+      assert.deepEqual(AGENTS.map(a => a.stream), expectedOrder);
+    });
+
+    it('each agent has persona with required sub-fields', () => {
+      for (const agent of AGENTS) {
+        assert.ok(agent.persona, `agent ${agent.id} missing persona`);
+        assert.ok(agent.persona.role, `agent ${agent.id} missing persona.role`);
+        assert.ok(agent.persona.identity, `agent ${agent.id} missing persona.identity`);
+        assert.ok(agent.persona.communication_style, `agent ${agent.id} missing persona.communication_style`);
+        assert.ok(agent.persona.expertise, `agent ${agent.id} missing persona.expertise`);
+      }
+    });
   });
 
   describe('WORKFLOWS', () => {
-    it('contains 13 workflows', () => {
-      assert.equal(WORKFLOWS.length, 13);
+    it('contains 22 workflows', () => {
+      assert.equal(WORKFLOWS.length, 22);
     });
 
     it('each workflow has name and agent', () => {
