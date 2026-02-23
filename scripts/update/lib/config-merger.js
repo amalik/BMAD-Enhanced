@@ -2,6 +2,7 @@
 
 const fs = require('fs-extra');
 const yaml = require('js-yaml');
+const { AGENT_IDS, WORKFLOW_NAMES } = require('./agent-registry');
 
 /**
  * Config Merger for BMAD-Enhanced
@@ -36,9 +37,11 @@ async function mergeConfig(currentConfigPath, newVersion, updates = {}) {
   // Seed with required structural defaults for fresh installs
   const defaults = {
     submodule_name: '_vortex',
-    description: 'Vortex Framework - Contextualize, Empathize, Externalize, and Systematize streams',
+    description: 'Vortex Framework - Contextualize, Empathize, Synthesize, Hypothesize, Externalize, Sensitize, and Systematize streams',
     module: 'bme',
-    output_folder: '{project-root}/_bmad-output/vortex-artifacts'
+    output_folder: '{project-root}/_bmad-output/vortex-artifacts',
+    agents: [...AGENT_IDS],
+    workflows: [...WORKFLOW_NAMES]
   };
 
   // Start with defaults, overlay current config (preserves existing values)
