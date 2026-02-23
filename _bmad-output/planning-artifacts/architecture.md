@@ -1,5 +1,5 @@
 ---
-stepsCompleted: [1, 2]
+stepsCompleted: [1, 2, 3]
 inputDocuments:
   - _bmad-output/planning-artifacts/prd.md
   - _bmad-output/planning-artifacts/product-brief-BMAD-Enhanced-2026-02-22.md
@@ -74,3 +74,36 @@ _This document builds collaboratively through step-by-step discovery. Sections a
 - Separate routing manifest for contract topology (not in agent registry)
 - Isla re-entry mode for flag-triggered re-investigation
 - Workflow naming convention resolution (blocker)
+
+## Starter Template Evaluation
+
+### Primary Technology Domain
+
+**Brownfield Extension** — BMAD-Enhanced is an existing Node.js CLI/content platform (npm package). Wave 3 extends the current codebase rather than scaffolding a new project.
+
+### Existing Stack (Continuation)
+
+| Layer | Technology | Status |
+|-------|-----------|--------|
+| Language | JavaScript (ES2020+, no TypeScript) | Unchanged |
+| Runtime | Node.js | Unchanged |
+| Package manager | npm | Unchanged |
+| Testing | `node:test` + c8 coverage | Unchanged |
+| Linting | ESLint | Unchanged |
+| Build tooling | None (raw JS, no transpilation) | Unchanged |
+| Distribution | npm (`bmad-enhanced`) | Unchanged |
+| Content format | Markdown (.md) with YAML frontmatter | Unchanged |
+
+### Starter Decision: No New Scaffolding Required
+
+**Rationale:** Wave 3 is primarily a content release (3 agents, ~8 workflows) with infrastructure updates to existing JS modules (registry, validator, migration, manifest). All new code extends established patterns. No new frameworks, dependencies, or tooling changes are warranted.
+
+**What Wave 3 adds to the existing stack:**
+- 3 new agent `.md` files following established naming conventions
+- ~8 new workflow step `.md` files following 6-step pattern
+- Registry entries for 3 new agents (extend `AGENTS` array)
+- Validator expectations for 7 agents (up from 4)
+- Migration entry for 1.5.x → 1.6.0 upgrade path
+- Manifest CSV generation for 7 agent personas
+
+**Note:** First implementation story should be registry expansion + validator update, not project initialization.
