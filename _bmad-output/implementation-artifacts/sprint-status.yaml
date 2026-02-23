@@ -42,7 +42,7 @@ story_location: _bmad-output/implementation-artifacts
 development_status:
   # Epic 1: Vortex Foundation — Contracts, Routing & Infrastructure
   epic-1: in-progress
-  1-1-expand-agent-registry-to-7-agents: in-progress
+  1-1-expand-agent-registry-to-7-agents: done
   1-2-update-validator-config-merger-doctor-for-7-agents: backlog
   1-3-create-migration-delta-installer-updates: backlog
   1-4-define-handoff-contract-schemas-hc1-hc5: backlog
