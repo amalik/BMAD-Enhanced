@@ -5,7 +5,7 @@ const path = require('path');
 const yaml = require('js-yaml');
 const configMerger = require('./config-merger');
 const { countUserDataFiles } = require('./utils');
-const { AGENT_FILES, AGENT_IDS, WORKFLOW_NAMES } = require('./agent-registry');
+const { AGENT_FILES, AGENT_IDS, WORKFLOW_NAMES, WAVE3_WORKFLOW_NAMES } = require('./agent-registry');
 
 /**
  * Validator for BMAD-Enhanced
@@ -40,6 +40,9 @@ async function validateInstallation(preMigrationData = {}, projectRoot) {
 
   // 6. Deprecated workflows validation (if applicable)
   checks.push(await validateDeprecatedWorkflows(projectRoot));
+
+  // 7. Workflow step structure validation (P17 count + P20 filenames)
+  checks.push(await validateWorkflowStepStructure(projectRoot));
 
   const allPassed = checks.every(c => c.passed);
 
@@ -288,6 +291,63 @@ async function validateDeprecatedWorkflows(projectRoot) {
   return check;
 }
 
+/**
+ * Validate workflow step structure (P17 count + P20 filenames)
+ * @param {string} projectRoot - Absolute path to project root
+ * @returns {Promise<object>} Validation check result
+ */
+async function validateWorkflowStepStructure(projectRoot) {
+  const check = {
+    name: 'Workflow step structure',
+    passed: true,
+    error: null
+  };
+
+  try {
+    const workflowsDir = path.join(projectRoot, '_bmad/bme/_vortex/workflows');
+    const issues = [];
+
+    for (const workflow of WORKFLOW_NAMES) {
+      const stepsDir = path.join(workflowsDir, workflow, 'steps');
+
+      if (!fs.existsSync(stepsDir)) {
+        continue; // Placeholder workflows without steps/ are valid
+      }
+
+      const files = fs.readdirSync(stepsDir).filter(f => f.endsWith('.md'));
+
+      // P17: step count must be 4-6
+      if (files.length < 4 || files.length > 6) {
+        issues.push(`${workflow}: ${files.length} step files (expected 4-6)`);
+        continue;
+      }
+
+      // P20: standardized filenames (Wave 3 workflows only)
+      if (WAVE3_WORKFLOW_NAMES.has(workflow)) {
+        if (!files.includes('step-01-setup.md')) {
+          issues.push(`${workflow}: missing step-01-setup.md`);
+        }
+        if (!files.includes('step-02-context.md')) {
+          issues.push(`${workflow}: missing step-02-context.md`);
+        }
+        if (!files.some(f => f.endsWith('-synthesize.md'))) {
+          issues.push(`${workflow}: missing *-synthesize.md final step`);
+        }
+      }
+    }
+
+    if (issues.length > 0) {
+      check.passed = false;
+      check.error = `Step structure issues: ${issues.join('; ')}`;
+    }
+  } catch (error) {
+    check.error = error.message;
+    check.passed = false;
+  }
+
+  return check;
+}
+
 module.exports = {
   validateInstallation,
   validateConfigStructure,
@@ -295,5 +355,6 @@ module.exports = {
   validateWorkflows,
   validateManifest,
   validateUserDataIntegrity,
-  validateDeprecatedWorkflows
+  validateDeprecatedWorkflows,
+  validateWorkflowStepStructure
 };
