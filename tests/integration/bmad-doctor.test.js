@@ -115,14 +115,9 @@ describe('bmad-doctor: empty agent files', () => {
       'version: "1.5.0"\nagents:\n  - contextualization-expert\n',
       'utf8'
     );
-    // Create all 4 agent files, but make them empty (0 bytes)
-    const agents = [
-      'contextualization-expert.md',
-      'lean-experiments-specialist.md',
-      'discovery-empathy-expert.md',
-      'learning-decision-expert.md'
-    ];
-    for (const agent of agents) {
+    // Create all 7 agent files, but make them empty (0 bytes)
+    const { AGENT_FILES } = require('../../scripts/update/lib/agent-registry');
+    for (const agent of AGENT_FILES) {
       await fs.writeFile(path.join(agentsDir, agent), '', 'utf8');
     }
   });
