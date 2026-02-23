@@ -141,6 +141,108 @@ describe('mergeConfig', () => {
   });
 });
 
+describe('mergeConfig — fresh install seeding', () => {
+  let tmpDir;
+
+  before(async () => {
+    tmpDir = await fs.mkdtemp(path.join(os.tmpdir(), 'bmad-seed-'));
+  });
+
+  after(async () => {
+    await fs.remove(tmpDir);
+  });
+
+  it('seeds agents from registry when no updates.agents provided', async () => {
+    const { AGENT_IDS } = require('../../scripts/update/lib/agent-registry');
+    const merged = await configMerger.mergeConfig(
+      path.join(tmpDir, 'nonexistent.yaml'),
+      '1.5.2',
+      {} // no agents in updates
+    );
+    assert.deepEqual(merged.agents, AGENT_IDS);
+    assert.equal(merged.agents.length, 7);
+  });
+
+  it('seeds workflows from registry when no updates.workflows provided', async () => {
+    const { WORKFLOW_NAMES } = require('../../scripts/update/lib/agent-registry');
+    const merged = await configMerger.mergeConfig(
+      path.join(tmpDir, 'nonexistent.yaml'),
+      '1.5.2',
+      {} // no workflows in updates
+    );
+    assert.deepEqual(merged.workflows, WORKFLOW_NAMES);
+    assert.equal(merged.workflows.length, 22);
+  });
+
+  it('updates.agents overrides default seeding', async () => {
+    const merged = await configMerger.mergeConfig(
+      path.join(tmpDir, 'nonexistent.yaml'),
+      '1.5.2',
+      { agents: ['custom-agent'] }
+    );
+    assert.deepEqual(merged.agents, ['custom-agent']);
+  });
+
+  it('updates.workflows overrides default seeding', async () => {
+    const merged = await configMerger.mergeConfig(
+      path.join(tmpDir, 'nonexistent.yaml'),
+      '1.5.2',
+      { workflows: ['custom-workflow'] }
+    );
+    assert.deepEqual(merged.workflows, ['custom-workflow']);
+  });
+
+  it('description reflects all 7 Vortex streams', async () => {
+    const merged = await configMerger.mergeConfig(
+      path.join(tmpDir, 'nonexistent.yaml'),
+      '1.5.2',
+      {}
+    );
+    assert.ok(merged.description.includes('Contextualize'));
+    assert.ok(merged.description.includes('Empathize'));
+    assert.ok(merged.description.includes('Synthesize'));
+    assert.ok(merged.description.includes('Hypothesize'));
+    assert.ok(merged.description.includes('Externalize'));
+    assert.ok(merged.description.includes('Sensitize'));
+    assert.ok(merged.description.includes('Systematize'));
+  });
+});
+
+describe('validateConfig — agent count acceptance', () => {
+  const baseConfig = {
+    submodule_name: '_vortex',
+    description: 'test',
+    module: 'bme',
+    version: '1.5.2',
+    output_folder: '_bmad-output'
+  };
+
+  it('accepts config with 4 agents (pre-migration)', () => {
+    const config = { ...baseConfig, agents: ['a', 'b', 'c', 'd'], workflows: ['w1'] };
+    const result = configMerger.validateConfig(config);
+    assert.equal(result.valid, true);
+  });
+
+  it('accepts config with 7 agents (post-migration)', () => {
+    const config = { ...baseConfig, agents: ['a', 'b', 'c', 'd', 'e', 'f', 'g'], workflows: ['w1'] };
+    const result = configMerger.validateConfig(config);
+    assert.equal(result.valid, true);
+  });
+
+  it('accepts config with empty agents array', () => {
+    const config = { ...baseConfig, agents: [], workflows: [] };
+    const result = configMerger.validateConfig(config);
+    assert.equal(result.valid, true);
+  });
+
+  it('rejects agents with non-string items', () => {
+    const config = { ...baseConfig, agents: [123], workflows: [] };
+    const result = configMerger.validateConfig(config);
+    assert.equal(result.valid, false);
+    assert.ok(result.errors.some(e => e.includes('agents[0]')));
+  });
+});
+
 describe('addMigrationHistory', () => {
   it('creates migration_history if not present', () => {
     const config = {};
