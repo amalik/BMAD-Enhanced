@@ -1,5 +1,5 @@
 ---
-stepsCompleted: [step-01-init, step-02-discovery, step-03-success, step-04-journeys, step-05-domain, step-06-innovation, step-07-project-type, step-08-scoping, step-09-functional, step-10-nonfunctional, step-11-polish]
+stepsCompleted: [step-01-init, step-02-discovery, step-03-success, step-04-journeys, step-05-domain, step-06-innovation, step-07-project-type, step-08-scoping, step-09-functional, step-10-nonfunctional, step-11-polish, step-12-complete]
 inputDocuments:
   - _bmad-output/planning-artifacts/product-brief-BMAD-Enhanced-2026-02-22.md
   - docs/agents.md
@@ -26,7 +26,7 @@ version: "1.6.0"
 
 ## Executive Summary
 
-BMAD-Enhanced v1.6.0 completes the Vortex Framework — the first AI-guided product discovery framework covering all 7 streams of the Shiftup Innovation Vortex. Wave 3 adds three agents: **Mila** (Synthesize — research convergence), **Liam** (Hypothesize — hypothesis engineering), and **Noah** (Sensitize — production intelligence), joining the existing Emma, Isla, Wade, and Max. The release ships 9 handoff contracts with declared artifact schemas and a Compass routing decision matrix that enables non-sequential, evidence-driven navigation across all 7 agents. Together they form a Double Diamond structure: Emma and Isla discover the problem space, Mila and Liam converge on solutions, Wade externalizes through experiments, Noah monitors production, and Max drives decisions. This is a brownfield content platform expansion delivered via npm, with targeted infrastructure updates to the agent registry, validator, manifest, and migration system.
+BMAD-Enhanced v1.6.0 completes the Vortex Framework — the first AI-guided product discovery framework covering all 7 streams of the Shiftup Innovation Vortex. Wave 3 adds three agents: **Mila** (Synthesize — research convergence), **Liam** (Hypothesize — hypothesis engineering), and **Noah** (Sensitize — production intelligence), joining the existing Emma, Isla, Wade, and Max. The release ships 10 handoff contracts with declared artifact schemas and a Compass routing decision matrix that enables non-sequential, evidence-driven navigation across all 7 agents. Together they form a Double Diamond structure: Emma and Isla discover the problem space, Mila and Liam converge on solutions, Wade externalizes through experiments, Noah monitors production, and Max drives decisions. This is a brownfield content platform expansion delivered via npm, with targeted infrastructure updates to the agent registry, validator, manifest, and migration system.
 
 **Target users:** Product managers, solo founders, and product teams using AI-assisted product discovery. Secondary users: module developers extending the framework and team leads reviewing Vortex artifacts.
 
@@ -62,10 +62,10 @@ BMAD-Enhanced v1.6.0 completes the Vortex Framework — the first AI-guided prod
 | Outcome | Measurement | Target |
 |---------|-------------|--------|
 | All 7 agents installed and functional | `bmad-doctor` validation | Pass |
-| All 9 handoff contracts have Compass triggers | Contract-to-trigger audit | 9/9 |
+| All 10 handoff contracts have Compass triggers | Contract-to-trigger audit | 10/10 |
 | All existing tests pass + new coverage | `npm test` | Zero failures |
 | Install flow end-to-end | Installer E2E test | Pass |
-| Agent output → downstream input compatibility | Manual handoff walkthrough per contract | 9/9 seamless |
+| Agent output → downstream input compatibility | Manual handoff walkthrough per contract | 10/10 seamless |
 | Existing agent workflows unaffected | Regression test | Zero regressions |
 
 ## Scope & Implementation Strategy
@@ -74,7 +74,7 @@ BMAD-Enhanced v1.6.0 completes the Vortex Framework — the first AI-guided prod
 
 **MVP Approach:** Completeness MVP — v1.6.0 ships all 7 Vortex streams as a single release. The framework's value proposition depends on wholeness; shipping 5/7 or 6/7 agents would undermine the "first framework to cover all 7 Innovation Vortex streams" positioning.
 
-**Core insight:** The 9 handoff contracts and Compass routing matrix are the **actual product**. Agents and workflows are the delivery mechanism. Wave 3 is primarily a **content project** with infrastructure support, not the reverse.
+**Core insight:** The 10 handoff contracts and Compass routing matrix are the **actual product**. Agents and workflows are the delivery mechanism. Wave 3 is primarily a **content project** with infrastructure support, not the reverse.
 
 **Resource Requirements:** Single developer (Amalik) with AI-assisted development. The bottleneck is designing step files with consistent personas and correct handoff formats.
 
@@ -83,7 +83,7 @@ BMAD-Enhanced v1.6.0 completes the Vortex Framework — the first AI-guided prod
 **Must-Have Capabilities (build order reflects priority):**
 
 **First — The Product (contracts + routing):**
-- **9 handoff contract schemas** — Exact artifact schema for each contract (fields, format, required sections). Schemas define artifact types generically (e.g., "problem definition schema"), not agent-coupled outputs. Any agent — or the user directly — can produce a schema-compliant artifact.
+- **10 handoff contract schemas** — Exact artifact schema for each contract (fields, format, required sections). Schemas define artifact types generically (e.g., "problem definition schema"), not agent-coupled outputs. Any agent — or the user directly — can produce a schema-compliant artifact.
 - **Compass routing decision matrix** — Pre-implementation deliverable mapping every workflow exit to every possible next agent with selection criteria, including the three-way distinction (new problem space → Emma, reframe within known space → Mila, zoom out → Emma's Contextualize Scope)
 
 **Second — The Delivery (agents + content):**
@@ -103,7 +103,7 @@ BMAD-Enhanced v1.6.0 completes the Vortex Framework — the first AI-guided prod
 
 No phasing for the release — but a deliberate build sequence:
 
-1. **Contract schemas + routing matrix first** — Define all 9 handoff contract schemas and the Compass routing decision matrix before any step files are written. Schemas define artifact types generically so downstream agents accept input from any source — preserving the Vortex's non-sequential nature.
+1. **Contract schemas + routing matrix first** — Define all 10 handoff contract schemas and the Compass routing decision matrix before any step files are written. Schemas define artifact types generically so downstream agents accept input from any source — preserving the Vortex's non-sequential nature.
 2. **Mila second** — Has the hardest routing distinction (Mila vs. Emma: when to converge vs. recontextualize). If that distinction doesn't work in practice, the Compass model needs revision before Liam and Noah are built.
 3. **Liam third** — Consumes the "problem definition" schema (not Mila-specific output). Liam's output (4-field hypothesis contract) feeds Wade's existing input expectations — lower risk.
 4. **Noah last** — Depends on Wade's existing output, not on Wave 3 agents. Most independent, least risky.
@@ -144,7 +144,7 @@ No phasing for the release — but a deliberate build sequence:
 
 Defined **before implementation begins**. User Journeys 1-5 serve as structured test scripts. **Prioritized by cost-to-fix post-release** (hardest to patch first).
 
-**Pre-Implementation Deliverable:** Handoff contract schemas — the exact artifact schema for each of the 9 contracts (fields, format, required sections). These serve as both design artifacts and test fixtures.
+**Pre-Implementation Deliverable:** Handoff contract schemas — the exact artifact schema for each of the 10 contracts (fields, format, required sections). These serve as both design artifacts and test fixtures.
 
 | Priority | Validation | Method | Maps to Journey | Why This Order |
 |----------|-----------|--------|----------------|----------------|
@@ -283,14 +283,14 @@ Each Wave 3 agent follows the established pattern from Emma, Isla, Wade, Max:
 
 | Component | Convention | Wave 3 Deliverables |
 |-----------|-----------|-------------------|
-| Agent definition | `_bmad/bme/_vortex/agents/{role-name}.md` | 3 new agent files (role titles must be finalized before implementation) |
+| Agent definition | `_bmad/bme/_vortex/agents/{role-name}.md` | `research-convergence-specialist.md`, `hypothesis-engineer.md`, `production-intelligence-specialist.md` |
 | Workflows | `_bmad/bme/_vortex/workflows/{workflow-name}/` | 6-9 new workflow directories |
 | Step files | `workflows/{name}/steps/step-{nn}-{name}.md` | 30+ step files |
 | Templates | `workflows/{name}/template/` | Output templates per workflow |
 | User guide | `_bmad-output/vortex-artifacts/{NAME}-USER-GUIDE.md` | MILA, LIAM, NOAH guides |
 | Example artifacts | Committed to repo in `_bmad-output/vortex-artifacts/` | Sample outputs per agent (repo-only, not installed) |
 
-**File Naming Decision Required:** Role titles from product brief — "Research Convergence Specialist" (Mila), "Hypothesis Engineer" (Liam), "Vortex-Aware Production Intelligence" (Noah) — must be finalized into file names (e.g., `research-convergence-specialist.md`) before implementation.
+**File Naming (Resolved):** `research-convergence-specialist.md` (Mila), `hypothesis-engineer.md` (Liam), `production-intelligence-specialist.md` (Noah).
 
 ### Example Artifacts
 
@@ -385,7 +385,22 @@ Migration appends to existing config — user customizations preserved.
 
 ### Handoff Contracts
 
-- FR25: Each of the 9 handoff contracts has a defined artifact schema (fields, format, required sections) including a required `sourceArtifact` reference field
+**Contract Inventory (10 contracts):**
+
+| # | Source | Target | Artifact Type | PRD Evidence |
+|---|--------|--------|--------------|-------------|
+| HC1 | Isla → | Mila | Empathy artifacts (maps, syntheses, observations) | Journey 1, FR1 |
+| HC2 | Mila → | Liam | Problem definition (JTBD + Pains & Gains) | Journey 2, FR4→FR7 |
+| HC3 | Liam → | Wade | Hypothesis contract (4-field) | Journey 2, FR9 |
+| HC4 | Wade → | Noah | Graduated experiment context (results, criteria, metrics) | Journey 3, FR12 |
+| HC5 | Noah → | Max | Signal report (signal + context + trend) | Journey 3, FR14 |
+| HC6 | Max → | Mila | Pivot decision + original evidence | Journey 5, FR32 |
+| HC7 | Max → | Isla | Evidence gap routing (go discover) | Journey 4, FR23 |
+| HC8 | Max → | Emma | Recontextualize routing (new problem space) | FR20 |
+| HC9 | Liam → | Isla | Unvalidated assumption for validation | Journey 2, FR10 |
+| HC10 | Noah → | Isla | Anomalous behavior for discovery research | Journey 3, FR16 |
+
+- FR25: Each of the 10 handoff contracts has a defined artifact schema (fields, format, required sections) including a required `sourceArtifact` reference field
 - FR26: Each agent's output artifact conforms to the declared contract schema for that handoff
 - FR27: Each receiving agent can consume a schema-compliant artifact without manual reshaping
 - FR28: Handoff contracts define artifact types generically (e.g., "problem definition") — any producer (agent or user) can create schema-compliant input
