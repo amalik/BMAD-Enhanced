@@ -45,7 +45,7 @@ development_status:
   1-1-expand-agent-registry-to-7-agents: done
   1-2-update-validator-config-merger-doctor-for-7-agents: done
   1-3-create-migration-delta-installer-updates: done
-  1-4-define-handoff-contract-schemas-hc1-hc5: backlog
+  1-4-define-handoff-contract-schemas-hc1-hc5: done
   1-5-create-compass-routing-reference-document: backlog
   epic-1-retrospective: optional
 
