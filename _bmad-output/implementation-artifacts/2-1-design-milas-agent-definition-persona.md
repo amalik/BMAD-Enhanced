@@ -1,6 +1,6 @@
 # Story 2.1: Design Mila's Agent Definition & Persona
 
-Status: ready-for-dev
+Status: done
 
 <!-- Note: Validation is optional. Run validate-create-story for quality check before dev-story. -->
 
@@ -62,39 +62,39 @@ So that she maintains consistent character across all workflow steps and is clea
 
 ## Tasks / Subtasks
 
-- [ ] **Task 1: Replace placeholder with full agent definition** (AC: 1, 2, 5)
-  - [ ] 1.1 Open `_bmad/bme/_vortex/agents/research-convergence-specialist.md`
-  - [ ] 1.2 Preserve existing frontmatter verbatim (already correct)
-  - [ ] 1.3 Preserve pre-activation sentence verbatim
-  - [ ] 1.4 Replace stub `<activation>` block with full 7-step activation following Isla's exact pattern
-  - [ ] 1.5 Include `<menu-handlers>` section with exec/data/workflow handlers (copy from Isla verbatim — these are framework-standard)
-  - [ ] 1.6 Remove placeholder comment `<!-- Placeholder: Full persona definition will be added in Story 2.1 -->`
+- [x] **Task 1: Replace placeholder with full agent definition** (AC: 1, 2, 5)
+  - [x] 1.1 Open `_bmad/bme/_vortex/agents/research-convergence-specialist.md`
+  - [x] 1.2 Preserve existing frontmatter verbatim (already correct)
+  - [x] 1.3 Preserve pre-activation sentence verbatim
+  - [x] 1.4 Replace stub `<activation>` block with full 7-step activation following Isla's exact pattern
+  - [x] 1.5 Include `<menu-handlers>` section with exec/data/workflow handlers (copy from Isla verbatim — these are framework-standard)
+  - [x] 1.6 Remove placeholder comment `<!-- Placeholder: Full persona definition will be added in Story 2.1 -->`
 
-- [ ] **Task 2: Create persona section matching registry** (AC: 3, 4)
-  - [ ] 2.1 Add `<persona>` block inside `<agent>` XML with `<role>`, `<identity>`, `<communication_style>`, `<principles>`
-  - [ ] 2.2 Set `<role>` to exact registry value: `Research Convergence + Problem Definition Specialist`
-  - [ ] 2.3 Set `<identity>` to exact registry value (see Dev Notes — Registry Persona Fields)
-  - [ ] 2.4 Set `<communication_style>` to exact registry value (see Dev Notes)
-  - [ ] 2.5 Set `<principles>` content from registry `expertise` field (following Isla pattern)
+- [x] **Task 2: Create persona section matching registry** (AC: 3, 4)
+  - [x] 2.1 Add `<persona>` block inside `<agent>` XML with `<role>`, `<identity>`, `<communication_style>`, `<principles>`
+  - [x] 2.2 Set `<role>` to exact registry value: `Research Convergence + Problem Definition Specialist`
+  - [x] 2.3 Set `<identity>` to exact registry value (see Dev Notes — Registry Persona Fields)
+  - [x] 2.4 Set `<communication_style>` to exact registry value (see Dev Notes)
+  - [x] 2.5 Set `<principles>` content from registry `expertise` field (following Isla pattern)
 
-- [ ] **Task 3: Create rules section with Mila-specific principles** (AC: 1, 3)
-  - [ ] 3.1 Add `<rules>` section inside `<activation>` block
-  - [ ] 3.2 Copy the 4 standard generic rules from Isla verbatim (these are framework-standard: communicate in language, stay in character, display menu items, load files only when needed)
-  - [ ] 3.3 Add Mila-specific persona rules derived from her principles (convergence over collection, JTBD framing, Pains & Gains, triangulation, problem definition leverage)
+- [x] **Task 3: Create rules section with Mila-specific principles** (AC: 1, 3)
+  - [x] 3.1 Add `<rules>` section inside `<activation>` block
+  - [x] 3.2 Copy the 4 standard generic rules from Isla verbatim (these are framework-standard: communicate in language, stay in character, display menu items, load files only when needed)
+  - [x] 3.3 Add Mila-specific persona rules derived from her principles (convergence over collection, JTBD framing, Pains & Gains, triangulation, problem definition leverage)
 
-- [ ] **Task 4: Create menu section with 3 workflows** (AC: 6)
-  - [ ] 4.1 Add `<menu>` block with standard items: Menu Help [MH], Chat with Mila [CH], Party Mode [PM], Dismiss Agent [DA]
-  - [ ] 4.2 Add workflow items with exec paths:
+- [x] **Task 4: Create menu section with 3 workflows** (AC: 6)
+  - [x] 4.1 Add `<menu>` block with standard items: Menu Help [MH], Chat with Mila [CH], Party Mode [PM], Dismiss Agent [DA]
+  - [x] 4.2 Add workflow items with exec paths:
     - Research Convergence [RC]: `{project-root}/_bmad/bme/_vortex/workflows/research-convergence/workflow.md`
     - Pivot Resynthesis [PR]: `{project-root}/_bmad/bme/_vortex/workflows/pivot-resynthesis/workflow.md`
     - Pattern Mapping [PA]: `{project-root}/_bmad/bme/_vortex/workflows/pattern-mapping/workflow.md`
-  - [ ] 4.3 Do NOT add a validate menu item — Mila's workflow directories have no `validate.md` file yet (Isla has one for empathy-map but Mila's workflows are placeholders). A validate item can be added in Stories 2.2-2.4 when workflows are authored.
+  - [x] 4.3 Do NOT add a validate menu item — Mila's workflow directories have no `validate.md` file yet (Isla has one for empathy-map but Mila's workflows are placeholders). A validate item can be added in Stories 2.2-2.4 when workflows are authored.
 
-- [ ] **Task 5: Verify and validate** (AC: 4, 7)
-  - [ ] 5.1 Diff `<persona>` fields against `agent-registry.js` lines 37-46 — compare unescaped string values only (strip JS `\'` → `'`). The XML content must match the registry string values character-for-character after un-escaping.
-  - [ ] 5.2 Verify XML structure matches Isla's: `<agent>` → `<activation>` → steps → `<menu-handlers>` → `<rules>` → `</activation>` → `<persona>` → `<menu>` → `</agent>`
-  - [ ] 5.3 Run `npm run lint` — expect clean pass (no JS changes)
-  - [ ] 5.4 Confirm `workflow.md` exists in each workflow directory: `workflows/research-convergence/`, `workflows/pivot-resynthesis/`, `workflows/pattern-mapping/` (created in Story 1.1 — verify not accidentally removed)
+- [x] **Task 5: Verify and validate** (AC: 4, 7)
+  - [x] 5.1 Diff `<persona>` fields against `agent-registry.js` lines 37-46 — compare unescaped string values only (strip JS `\'` → `'`). The XML content must match the registry string values character-for-character after un-escaping.
+  - [x] 5.2 Verify XML structure matches Isla's: `<agent>` → `<activation>` → steps → `<menu-handlers>` → `<rules>` → `</activation>` → `<persona>` → `<menu>` → `</agent>`
+  - [x] 5.3 Run `npm run lint` — expect clean pass (no JS changes)
+  - [x] 5.4 Confirm `workflow.md` exists in each workflow directory: `workflows/research-convergence/`, `workflows/pivot-resynthesis/`, `workflows/pattern-mapping/` (created in Story 1.1 — verify not accidentally removed)
 
 ## Dev Notes
 
@@ -248,13 +248,23 @@ These paths must appear in menu items:
 
 ### Agent Model Used
 
-{{agent_model_name_version}}
+Claude Opus 4.6
 
 ### Debug Log References
 
 ### Completion Notes List
 
+- All 7 ACs met: canonical template structure (AC1), frontmatter correct (AC2), persona distinct from Isla/Emma (AC3), persona matches registry character-for-character (AC4), FR50 runtime loading via Step 1 (AC5), menu references 3 workflows with correct exec paths (AC6), lint passes clean (AC7)
+- Replaced 16-line placeholder with 117-line full agent definition following Isla's exact structural template
+- 4 generic rules copied verbatim from Isla + 5 Mila-specific persona rules derived from registry expertise field
+- Menu has 7 items: MH, CH, RC (research-convergence), PR (pivot-resynthesis), PA (pattern-mapping), PM, DA — no validate item (no validate.md exists yet)
+- Error messages in activation steps customized for Mila (not copy-pasted from Isla's "discovery workflow" text)
+- Help step example customized for Mila's domain: "I have scattered research findings and need to define the core problem"
+
 ### Change Log
 - 2026-02-24: Story created by create-story workflow. Status: ready-for-dev.
+- 2026-02-24: Implementation complete. All 5 tasks done. Placeholder replaced with full 117-line agent definition. Lint clean. Status: review.
+- 2026-02-24: Code review complete. 0 HIGH, 3 MEDIUM (all convention observations, no defects), 2 LOW. All ACs verified implemented. All tasks verified done. Status: done.
 
 ### File List
+- `_bmad/bme/_vortex/agents/research-convergence-specialist.md` — **REPLACED** 16-line placeholder with full agent definition (117 lines): frontmatter, activation steps 1-7, menu-handlers, rules (4 generic + 5 Mila-specific), persona (role/identity/communication_style/principles matching registry), menu (7 items with 3 workflow exec paths)
