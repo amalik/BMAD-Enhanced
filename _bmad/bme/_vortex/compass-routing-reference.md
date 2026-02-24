@@ -182,9 +182,9 @@ This compact table maps every workflow to its recommended routing targets.
 
 | Workflow | Route 1 | Route 2 | Route 3 |
 |----------|---------|---------|---------|
-| `contextualize-scope` | → Emma 🎯 `lean-persona` — Scope defined, understand who exists in this space | → Isla 🔍 `user-interview` — Scope chosen, validate with real users (HC1) | → Wade 🧪 `mvp` — Ready to test scope assumptions |
-| `lean-persona` | → Wade 🧪 `lean-experiment` — Riskiest persona assumptions identified | → Isla 🔍 `user-interview` — Validate persona with actual users (HC1) | → Isla 🔍 `empathy-map` — Multiple segments need deeper understanding (HC1) |
-| `product-vision` | → Emma 🎯 `lean-persona` — Vision clear, users are not | → Wade 🧪 `lean-experiment` — Strategic assumptions need testing | → Isla 🔍 `user-discovery` — User needs assumed, not researched (HC1) |
+| `contextualize-scope` | → Emma 🎯 `lean-persona` — Scope defined, understand who exists in this space | → Isla 🔍 `user-interview` — Scope chosen, validate with real users | → Wade 🧪 `mvp` — Ready to test scope assumptions |
+| `lean-persona` | → Wade 🧪 `lean-experiment` — Riskiest persona assumptions identified | → Isla 🔍 `user-interview` — Validate persona with actual users | → Isla 🔍 `empathy-map` — Multiple segments need deeper understanding |
+| `product-vision` | → Emma 🎯 `lean-persona` — Vision clear, users are not | → Wade 🧪 `lean-experiment` — Strategic assumptions need testing | → Isla 🔍 `user-discovery` — User needs assumed, not researched |
 
 ### Isla 🔍 — Empathize (Stream 2)
 
@@ -228,8 +228,10 @@ This compact table maps every workflow to its recommended routing targets.
 | Workflow | Route 1 | Route 2 | Route 3 |
 |----------|---------|---------|---------|
 | `signal-interpretation` | → Max 🧭 `learning-card` — Signal report ready for decision (HC5) | → Isla 🔍 `user-discovery` — ⚡ Anomalous behavior detected (HC10) | |
-| `behavior-analysis` | → Max 🧭 `pivot-patch-persevere` — Behavior indicates decision needed (HC5) | → Isla 🔍 `user-discovery` — Novel behavior warrants discovery (HC10) | → Noah 📡 `signal-interpretation` — Deeper signal analysis needed |
-| `production-monitoring` | → Max 🧭 `learning-card` — Portfolio-level signals ready (HC5) | → Isla 🔍 `user-discovery` — Anomalies across experiments (HC10) | → Noah 📡 `signal-interpretation` — Deep dive on specific signal |
+| `behavior-analysis` | → Max 🧭 `pivot-patch-persevere` — Behavioral signal report triggers decision (HC5) | → Isla 🔍 `user-discovery` — Novel behavior warrants discovery (HC10) | → Noah 📡 `signal-interpretation` — Deeper signal analysis needed |
+| `production-monitoring` | → Max 🧭 `learning-card` — Portfolio signal report ready (HC5) | → Isla 🔍 `user-discovery` — Anomalies across experiments (HC10) | → Noah 📡 `signal-interpretation` — Deep dive on specific signal |
+
+**Note:** All three Noah workflows produce HC5-compliant signal reports when routing to Max. `signal-interpretation` produces focused single-signal reports, `behavior-analysis` produces behavioral signal reports, and `production-monitoring` produces portfolio-level signal reports. All conform to the HC5 schema.
 
 ### Max 🧭 — Systematize (Stream 7)
 
@@ -253,11 +255,13 @@ Every agent must have at least one inbound route. This table verifies completene
 | **Isla 🔍** | Max (HC7), Liam (HC9), Noah (HC10), various workflows for discovery | HC7, HC9, HC10 + organic routing |
 | **Mila 🔬** | Isla (HC1), Max (HC6) | HC1, HC6 |
 | **Liam 💡** | Mila (HC2) | HC2 |
-| **Wade 🧪** | Liam (HC3), various workflows for experimentation | HC3 + organic routing |
+| **Wade 🧪** | Liam (HC3), Max (patch decisions), various workflows for experimentation | HC3 + organic routing |
 | **Noah 📡** | Wade (HC4) | HC4 |
 | **Max 🧭** | Noah (HC5), Wade (learning-card), various workflows for decisions | HC5 + organic routing |
 
 **Isla is the routing gravity well (G1):** 3 formal inbound contracts (HC7, HC9, HC10) plus organic routing from multiple workflows. She handles re-entry naturally through existing workflow context (D5).
+
+**Architecture snapshot note:** The routing table in `architecture.md` line 257 lists Max's targets as "Emma, Mila, Liam" — this is incorrect. HC7 routes Max→**Isla** (evidence gap), not Max→Liam. This document is authoritative (P22); the architecture table is a snapshot only.
 
 ---
 
@@ -283,7 +287,7 @@ Based on what you just completed, here are your evidence-driven options:
 ```
 
 **Rules:**
-- Exactly **3 rows** per Compass table (established convention)
+- **2–3 rows** per Compass table (3 is the established convention; 2 is acceptable when only two natural routes exist)
 - Agent display format: `AgentName Icon` (e.g., `Emma 🎯`, `Mila 🔬`)
 - Routing type distinction lives in row content, not table structure (D4)
 - Flag-driven routes (HC9, HC10) use ⚡ prefix to signal special attention
@@ -308,4 +312,5 @@ Based on what you just completed, here are your evidence-driven options:
 
 | Version | Date | Changes |
 |---------|------|---------|
+| 1.0.1 | 2026-02-24 | Code review fixes: removed erroneous HC1 labels from Emma→Isla routes, relaxed 3-row rule to 2-3, noted architecture.md HC7 snapshot error, clarified HC5 scope across Noah workflows, added Max to Wade inbound summary |
 | 1.0 | 2026-02-24 | Initial creation — all 10 contracts, 22 workflows, 7 agents |
