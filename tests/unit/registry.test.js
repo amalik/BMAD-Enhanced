@@ -57,10 +57,10 @@ describe('getMigrationsFor', () => {
     assert.equal(migrations[0].name, '1.4.x-to-1.5.0');
   });
 
-  it('returns empty for current version (no applicable migrations)', () => {
-    const pkg = require('../../package.json');
-    const migrations = registry.getMigrationsFor(pkg.version);
-    assert.equal(migrations.length, 0);
+  it('returns migration for 1.5.x versions to 1.6.0', () => {
+    const migrations = registry.getMigrationsFor('1.5.2');
+    assert.ok(migrations.length >= 1);
+    assert.equal(migrations[0].name, '1.5.x-to-1.6.0');
   });
 
   it('returns empty for unknown future version', () => {
@@ -96,7 +96,7 @@ describe('getAllMigrations', () => {
   it('returns a copy of all migrations', () => {
     const all = registry.getAllMigrations();
     assert.ok(Array.isArray(all));
-    assert.ok(all.length >= 5);
+    assert.ok(all.length >= 6);
     // Verify it is a copy
     all.push({ name: 'fake' });
     assert.ok(registry.getAllMigrations().length < all.length);
