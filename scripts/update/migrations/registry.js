@@ -46,6 +46,13 @@ const MIGRATIONS = [
     breaking: false,
     description: 'No-op delta (refresh handles Wave 2 agents and workflows)',
     module: null
+  },
+  {
+    name: '1.5.x-to-1.6.0',
+    fromVersion: '1.5.x',
+    breaking: false,
+    description: 'Add Wave 3 agents (Mila, Liam, Noah) and 9 workflows to config',
+    module: null
   }
   // Future migrations: append here. Only add delta logic for version-specific changes.
 ];
