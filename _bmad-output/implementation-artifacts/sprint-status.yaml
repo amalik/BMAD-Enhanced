@@ -41,17 +41,17 @@ story_location: _bmad-output/implementation-artifacts
 
 development_status:
   # Epic 1: Vortex Foundation — Contracts, Routing & Infrastructure
-  epic-1: in-progress
+  epic-1: done
   1-1-expand-agent-registry-to-7-agents: done
   1-2-update-validator-config-merger-doctor-for-7-agents: done
   1-3-create-migration-delta-installer-updates: done
   1-4-define-handoff-contract-schemas-hc1-hc5: done
   1-5-create-compass-routing-reference-document: done
-  epic-1-retrospective: optional
+  epic-1-retrospective: done
 
   # Epic 2: Mila — Research Convergence & Problem Definition
-  epic-2: backlog
-  2-1-design-milas-agent-definition-persona: backlog
+  epic-2: in-progress
+  2-1-design-milas-agent-definition-persona: ready-for-dev
   2-2-create-research-convergence-workflow: backlog
   2-3-create-pivot-resynthesis-workflow: backlog
   2-4-create-pattern-mapping-workflow: backlog
