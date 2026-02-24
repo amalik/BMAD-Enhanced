@@ -1,6 +1,6 @@
 # Story 1.5: Create Compass Routing Reference Document
 
-Status: review
+Status: done
 
 <!-- Note: Validation is optional. Run validate-create-story for quality check before dev-story. -->
 
@@ -318,6 +318,7 @@ Claude Opus 4.6
 ### Change Log
 - 2026-02-24: Story created by create-story workflow. Status: ready-for-dev.
 - 2026-02-24: Implementation complete. All 8 tasks done. Compass routing reference document created, cross-validated. Status: review.
+- 2026-02-24: Code review complete. 5 issues found and fixed: (1) relaxed 3-row rule to 2-3, (2) noted architecture.md HC7 snapshot error, (3) removed erroneous HC1 from Emma→Isla routes, (4) added Max to Wade inbound summary, (5) clarified HC5 scope across all Noah workflows. Status: done.
 
 ### File List
 - `_bmad/bme/_vortex/compass-routing-reference.md` — **NEW** Authoritative Compass routing reference document
