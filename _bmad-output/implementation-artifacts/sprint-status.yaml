@@ -59,13 +59,13 @@ development_status:
   epic-2-retrospective: done
 
   # Epic 3: Liam — Hypothesis Engineering & Experiment Design
-  epic-3: in-progress
+  epic-3: done
   3-1-design-liams-agent-definition-persona: done
   3-2-create-hypothesis-engineering-workflow: done
   3-3-create-assumption-mapping-workflow: done
   3-4-create-experiment-design-workflow: done
   3-5-create-liam-user-guide-example-artifacts: done
-  epic-3-retrospective: optional
+  epic-3-retrospective: done
 
   # Epic 4: Noah — Production Intelligence & Signal Interpretation
   epic-4: backlog
