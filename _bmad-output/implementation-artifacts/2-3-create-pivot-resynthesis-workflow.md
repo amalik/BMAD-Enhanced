@@ -1,6 +1,6 @@
 # Story 2.3: Create Pivot-Resynthesis Workflow
 
-Status: ready-for-dev
+Status: done
 
 <!-- Note: Validation is optional. Run validate-create-story for quality check before dev-story. -->
 
@@ -111,76 +111,76 @@ So that I iterate within the known problem space rather than starting over with 
 
 ## Tasks / Subtasks
 
-- [ ] **Task 1: Create workflow directory and workflow.md** (AC: 11)
-  - [ ] 1.1 Create directory `_bmad/bme/_vortex/workflows/pivot-resynthesis/`
-  - [ ] 1.2 Create `workflow.md` with YAML frontmatter: `workflow: pivot-resynthesis`, `type: step-file`, `description`, `author: Mila (research-convergence-specialist)`, `version: 1.6.0`
-  - [ ] 1.3 Include "What is Pivot Resynthesis?" section explaining: re-synthesis after failed experiments — iterate within known problem space, not restart; the JTBD is right but the pains/gains framing needs revision based on what experiments revealed
-  - [ ] 1.4 Include steps overview listing all step files with brief descriptions
-  - [ ] 1.5 Include output section describing HC2 artifact output to `{output_folder}/vortex-artifacts/`, with `Template: None` line
-  - [ ] 1.6 Include initialization block: load config from `{project-root}/_bmad/bme/_vortex/config.yaml`, then load step-01-setup.md
+- [x]**Task 1: Create workflow directory and workflow.md** (AC: 11)
+  - [x]1.1 Create directory `_bmad/bme/_vortex/workflows/pivot-resynthesis/`
+  - [x]1.2 Create `workflow.md` with YAML frontmatter: `workflow: pivot-resynthesis`, `type: step-file`, `description`, `author: Mila (research-convergence-specialist)`, `version: 1.6.0`
+  - [x]1.3 Include "What is Pivot Resynthesis?" section explaining: re-synthesis after failed experiments — iterate within known problem space, not restart; the JTBD is right but the pains/gains framing needs revision based on what experiments revealed
+  - [x]1.4 Include steps overview listing all step files with brief descriptions
+  - [x]1.5 Include output section describing HC2 artifact output to `{output_folder}/vortex-artifacts/`, with `Template: None` line
+  - [x]1.6 Include initialization block: load config from `{project-root}/_bmad/bme/_vortex/config.yaml`, then load step-01-setup.md
 
-- [ ] **Task 2: Create steps/ directory and step-01-setup.md** (AC: 1, 2, 3)
-  - [ ] 2.1 Create directory `_bmad/bme/_vortex/workflows/pivot-resynthesis/steps/`
-  - [ ] 2.2 Create `step-01-setup.md` with frontmatter: `step: 1`, `workflow: pivot-resynthesis`, `title: Setup & Input Validation`
-  - [ ] 2.3 Explain the pivot context: Max decided "pivot" — the solution direction failed, but the problem definition is right. Mila re-synthesizes, not restarts
-  - [ ] 2.4 List expected dual inputs: (a) Original HC1 artifacts (empathy maps, interview syntheses, observation reports); (b) Experiment evidence — HC4 experiment context from Wade or informal experiment results; (c) Prior HC2 problem definition (optional) — original converged problem that preceded the failed experiment
-  - [ ] 2.5 Include HC4 validation guidance: HC4 frontmatter fields to check (`contract: HC4`, `type: artifact`, `source_agent`, `source_workflow`, `target_agents`, `input_artifacts`, `created`) and HC4 body sections (Experiment Summary, Hypothesis Tested, Experiment Method, Pre-Defined Success Criteria, Confirmed/Rejected Hypotheses, Strategic Context, and Production Readiness — conditional, required only for graduated experiments). Reference HC4 contract: `{project-root}/_bmad/bme/_vortex/contracts/hc4-experiment-context.md`
-  - [ ] 2.6 Include HC1 validation guidance: same as research-convergence step-01, including check that HC1 `target_agents` field contains `mila` (confirming artifacts are intended for synthesis). Reference HC1 contract: `{project-root}/_bmad/bme/_vortex/contracts/hc1-empathy-artifacts.md`
-  - [ ] 2.7 Non-conforming input guidance (FR17): accept and guide, don't reject
-  - [ ] 2.8 End with next-step loading: `{project-root}/_bmad/bme/_vortex/workflows/pivot-resynthesis/steps/step-02-context.md`
+- [x]**Task 2: Create steps/ directory and step-01-setup.md** (AC: 1, 2, 3)
+  - [x]2.1 Create directory `_bmad/bme/_vortex/workflows/pivot-resynthesis/steps/`
+  - [x]2.2 Create `step-01-setup.md` with frontmatter: `step: 1`, `workflow: pivot-resynthesis`, `title: Setup & Input Validation`
+  - [x]2.3 Explain the pivot context: Max decided "pivot" — the solution direction failed, but the problem definition is right. Mila re-synthesizes, not restarts
+  - [x]2.4 List expected dual inputs: (a) Original HC1 artifacts (empathy maps, interview syntheses, observation reports); (b) Experiment evidence — HC4 experiment context from Wade or informal experiment results; (c) Prior HC2 problem definition (optional) — original converged problem that preceded the failed experiment
+  - [x]2.5 Include HC4 validation guidance: HC4 frontmatter fields to check (`contract: HC4`, `type: artifact`, `source_agent`, `source_workflow`, `target_agents`, `input_artifacts`, `created`) and HC4 body sections (Experiment Summary, Hypothesis Tested, Experiment Method, Pre-Defined Success Criteria, Confirmed/Rejected Hypotheses, Strategic Context, and Production Readiness — conditional, required only for graduated experiments). Reference HC4 contract: `{project-root}/_bmad/bme/_vortex/contracts/hc4-experiment-context.md`
+  - [x]2.6 Include HC1 validation guidance: same as research-convergence step-01, including check that HC1 `target_agents` field contains `mila` (confirming artifacts are intended for synthesis). Reference HC1 contract: `{project-root}/_bmad/bme/_vortex/contracts/hc1-empathy-artifacts.md`
+  - [x]2.7 Non-conforming input guidance (FR17): accept and guide, don't reject
+  - [x]2.8 End with next-step loading: `{project-root}/_bmad/bme/_vortex/workflows/pivot-resynthesis/steps/step-02-context.md`
 
-- [ ] **Task 3: Create step-02-context.md** (AC: 1, 2, 4)
-  - [ ] 3.1 Create `step-02-context.md` with frontmatter: `step: 2`, `workflow: pivot-resynthesis`, `title: Context Loading & Analysis`
-  - [ ] 3.2 Guide user to load and review all input artifacts — both original HC1 and experiment HC4
-  - [ ] 3.3 Facilitate pivot context analysis: (a) What was the original problem definition? (b) What hypothesis was tested? (c) What did the experiment reveal — what failed and why? (d) What unexpected findings emerged?
-  - [ ] 3.4 Guide the "What Still Holds?" assessment: identify which parts of the original problem definition remain valid (JTBD core, validated pains) vs. which need revision (invalidated pains, new pains revealed by experiment, gain priority shifts)
-  - [ ] 3.5 Include example of pivot context analysis
-  - [ ] 3.6 End with next-step loading to step-03
+- [x]**Task 3: Create step-02-context.md** (AC: 1, 2, 4)
+  - [x]3.1 Create `step-02-context.md` with frontmatter: `step: 2`, `workflow: pivot-resynthesis`, `title: Context Loading & Analysis`
+  - [x]3.2 Guide user to load and review all input artifacts — both original HC1 and experiment HC4
+  - [x]3.3 Facilitate pivot context analysis: (a) What was the original problem definition? (b) What hypothesis was tested? (c) What did the experiment reveal — what failed and why? (d) What unexpected findings emerged?
+  - [x]3.4 Guide the "What Still Holds?" assessment: identify which parts of the original problem definition remain valid (JTBD core, validated pains) vs. which need revision (invalidated pains, new pains revealed by experiment, gain priority shifts)
+  - [x]3.5 Include example of pivot context analysis
+  - [x]3.6 End with next-step loading to step-03
 
-- [ ] **Task 4: Create step-03-jtbd-reframing.md** (AC: 1, 2, 5)
-  - [ ] 4.1 Create `step-03-jtbd-reframing.md` with frontmatter: `step: 3`, `workflow: pivot-resynthesis`, `title: JTBD Re-Framing`
-  - [ ] 4.2 Guide JTBD re-framing — NOT from scratch: start from the original JTBD and assess whether situation/motivation/outcome need revision based on experiment evidence
-  - [ ] 4.3 Help user assess: Does the Functional Job change? Did the experiment reveal a different Emotional Job? Did Social Job assumptions fail?
-  - [ ] 4.4 Emphasize the "revise, don't restart" principle: the JTBD core should remain stable when Max's pivot was "problem correct, solution wrong"
-  - [ ] 4.5 Include A/P/C decision point (FR52) after the user has drafted their revised JTBD
-  - [ ] 4.6 End with next-step loading to step-04
+- [x]**Task 4: Create step-03-jtbd-reframing.md** (AC: 1, 2, 5)
+  - [x]4.1 Create `step-03-jtbd-reframing.md` with frontmatter: `step: 3`, `workflow: pivot-resynthesis`, `title: JTBD Re-Framing`
+  - [x]4.2 Guide JTBD re-framing — NOT from scratch: start from the original JTBD and assess whether situation/motivation/outcome need revision based on experiment evidence
+  - [x]4.3 Help user assess: Does the Functional Job change? Did the experiment reveal a different Emotional Job? Did Social Job assumptions fail?
+  - [x]4.4 Emphasize the "revise, don't restart" principle: the JTBD core should remain stable when Max's pivot was "problem correct, solution wrong"
+  - [x]4.5 Include A/P/C decision point (FR52) after the user has drafted their revised JTBD
+  - [x]4.6 End with next-step loading to step-04
 
-- [ ] **Task 5: Create step-04-pains-gains-revision.md** (AC: 1, 2, 5)
-  - [ ] 5.1 Create `step-04-pains-gains-revision.md` with frontmatter: `step: 4`, `workflow: pivot-resynthesis`, `title: Pains & Gains Revision`
-  - [ ] 5.2 Guide Pains revision: (a) Retain pains validated by experiment; (b) Remove or deprioritize pains invalidated by evidence; (c) Add new pains revealed by experiment failure; (d) Update frequency/intensity based on what experiments showed
-  - [ ] 5.3 Guide Gains revision: (a) Revise expected impact based on experiment results; (b) Reprioritize gains based on new evidence; (c) Add new gains suggested by pivot direction
-  - [ ] 5.4 Cross-reference revised pains and gains against JTBD from step-03: verify each revised pain/gain still connects logically to the refined JTBD — if a pain no longer applies to the job, remove it
-  - [ ] 5.5 Include A/P/C decision point (FR52)
-  - [ ] 5.6 End with next-step loading to step-05
+- [x]**Task 5: Create step-04-pains-gains-revision.md** (AC: 1, 2, 5)
+  - [x]5.1 Create `step-04-pains-gains-revision.md` with frontmatter: `step: 4`, `workflow: pivot-resynthesis`, `title: Pains & Gains Revision`
+  - [x]5.2 Guide Pains revision: (a) Retain pains validated by experiment; (b) Remove or deprioritize pains invalidated by evidence; (c) Add new pains revealed by experiment failure; (d) Update frequency/intensity based on what experiments showed
+  - [x]5.3 Guide Gains revision: (a) Revise expected impact based on experiment results; (b) Reprioritize gains based on new evidence; (c) Add new gains suggested by pivot direction
+  - [x]5.4 Cross-reference revised pains and gains against JTBD from step-03: verify each revised pain/gain still connects logically to the refined JTBD — if a pain no longer applies to the job, remove it
+  - [x]5.5 Include A/P/C decision point (FR52)
+  - [x]5.6 End with next-step loading to step-05
 
-- [ ] **Task 6: Create step-05-synthesize.md (final step)** (AC: 1, 2, 6, 7, 8, 9, 10)
-  - [ ] 6.1 Create `step-05-synthesize.md` with frontmatter: `step: 5`, `workflow: pivot-resynthesis`, `title: Synthesize & Route`
-  - [ ] 6.2 Guide convergence into revised Converged Problem Statement with confidence level — explicitly noting what changed from the original and why. Confidence may increase (we eliminated wrong directions) or decrease (experiment revealed we misunderstood pains) — the HC2 output should reflect actual confidence based on total evidence (original + experiment)
-  - [ ] 6.3 Guide Evidence Summary with sub-prompts: (a) Artifacts Analyzed — count both HC1 and HC4 inputs; (b) Total Evidence Points — across original artifacts AND experiment results; (c) Convergence Assessment — how strongly does the revised evidence converge; (d) Contradictions — where original research and experiment evidence conflict (how resolved); (e) Evidence Gaps — what's still missing
-  - [ ] 6.4 Guide Assumptions listing — note which assumptions were validated/invalidated by the experiment, and which new assumptions emerged from the pivot
-  - [ ] 6.5 Produce the HC2 artifact with correct frontmatter: `contract: HC2`, `source_agent: mila`, `source_workflow: pivot-resynthesis`, `target_agents: [liam]`, `input_artifacts` referencing both HC1 and HC4 inputs, `created` in YYYY-MM-DD format
-  - [ ] 6.6 Include all 6 HC2 required body sections: Converged Problem Statement, JTBD, Pains, Gains, Evidence Summary, Assumptions
-  - [ ] 6.7 Ensure HC2 frontmatter `input_artifacts` lists every artifact used (FR29), and Evidence Summary notes which pains/gains were revised vs. retained with provenance
-  - [ ] 6.8 Explicit save-to path: `{output_folder}/vortex-artifacts/hc2-problem-definition-{date}.md`
-  - [ ] 6.9 Add Compass routing table with D4 format and two routes per routing reference:
+- [x]**Task 6: Create step-05-synthesize.md (final step)** (AC: 1, 2, 6, 7, 8, 9, 10)
+  - [x]6.1 Create `step-05-synthesize.md` with frontmatter: `step: 5`, `workflow: pivot-resynthesis`, `title: Synthesize & Route`
+  - [x]6.2 Guide convergence into revised Converged Problem Statement with confidence level — explicitly noting what changed from the original and why. Confidence may increase (we eliminated wrong directions) or decrease (experiment revealed we misunderstood pains) — the HC2 output should reflect actual confidence based on total evidence (original + experiment)
+  - [x]6.3 Guide Evidence Summary with sub-prompts: (a) Artifacts Analyzed — count both HC1 and HC4 inputs; (b) Total Evidence Points — across original artifacts AND experiment results; (c) Convergence Assessment — how strongly does the revised evidence converge; (d) Contradictions — where original research and experiment evidence conflict (how resolved); (e) Evidence Gaps — what's still missing
+  - [x]6.4 Guide Assumptions listing — note which assumptions were validated/invalidated by the experiment, and which new assumptions emerged from the pivot
+  - [x]6.5 Produce the HC2 artifact with correct frontmatter: `contract: HC2`, `source_agent: mila`, `source_workflow: pivot-resynthesis`, `target_agents: [liam]`, `input_artifacts` referencing both HC1 and HC4 inputs, `created` in YYYY-MM-DD format
+  - [x]6.6 Include all 6 HC2 required body sections: Converged Problem Statement, JTBD, Pains, Gains, Evidence Summary, Assumptions
+  - [x]6.7 Ensure HC2 frontmatter `input_artifacts` lists every artifact used (FR29), and Evidence Summary notes which pains/gains were revised vs. retained with provenance
+  - [x]6.8 Explicit save-to path: `{output_folder}/vortex-artifacts/hc2-problem-definition-{date}.md`
+  - [x]6.9 Add Compass routing table with D4 format and two routes per routing reference:
     - Route 1: Revised problem ready → Liam 💡 `hypothesis-engineering` (HC2)
     - Route 2: Assumptions from pivot need validation → Isla 🔍 `user-interview`
-  - [ ] 6.10 Add ⚠️ Insufficient Evidence for Routing block (FR18) with workflow-specific triggers: (a) revised problem statement is low-confidence → Isla for more evidence; (b) experiment evidence contradicts all original pains → more discovery needed; (c) JTBD itself is questioned → consider Emma for re-scoping
-  - [ ] 6.11 Add user override note (FR22): `> **Note:** These are evidence-based recommendations. You can navigate to any Vortex agent at any time based on your judgment.` followed by `**Or run Max's [VN] Vortex Navigation** for a full gap analysis across all streams.`
-  - [ ] 6.12 Include A/P/C decision point after Evidence Summary and Assumptions sections but before Compass routing table (FR52)
+  - [x]6.10 Add ⚠️ Insufficient Evidence for Routing block (FR18) with workflow-specific triggers: (a) revised problem statement is low-confidence → Isla for more evidence; (b) experiment evidence contradicts all original pains → more discovery needed; (c) JTBD itself is questioned → consider Emma for re-scoping
+  - [x]6.11 Add user override note (FR22): `> **Note:** These are evidence-based recommendations. You can navigate to any Vortex agent at any time based on your judgment.` followed by `**Or run Max's [VN] Vortex Navigation** for a full gap analysis across all streams.`
+  - [x]6.12 Include A/P/C decision point after Evidence Summary and Assumptions sections but before Compass routing table (FR52)
 
-- [ ] **Task 7: Verify Mila's voice and consistency** (AC: 12)
-  - [ ] 7.1 Review all step files for Mila's communication style: warm but analytically precise, convergence language
-  - [ ] 7.2 Verify pivot-specific Mila phrases: "The experiment told us something important...", "The original research still holds — here's what we're revising...", evidence-grounded revision language
-  - [ ] 7.3 Verify language is distinct from Isla (no ambiguity-embracing phrases) and Emma (no strategic-framing phrases)
+- [x]**Task 7: Verify Mila's voice and consistency** (AC: 12)
+  - [x]7.1 Review all step files for Mila's communication style: warm but analytically precise, convergence language
+  - [x]7.2 Verify pivot-specific Mila phrases: "The experiment told us something important...", "The original research still holds — here's what we're revising...", evidence-grounded revision language
+  - [x]7.3 Verify language is distinct from Isla (no ambiguity-embracing phrases) and Emma (no strategic-framing phrases)
 
-- [ ] **Task 8: Validate and lint** (AC: 1, 13)
-  - [ ] 8.1 Verify step count is 4-6 (P17) — expecting 5 steps
-  - [ ] 8.2 Verify standardized filenames: `step-01-setup.md`, `step-02-context.md`, final `step-05-synthesize.md` (P20)
-  - [ ] 8.3 Verify all frontmatter has `step`, `workflow: pivot-resynthesis`, `title` fields (FR46)
-  - [ ] 8.4 Verify each step ends with next-step loading path (FR51) — final step has Compass instead
-  - [ ] 8.5 Content validation: verify all step files have canonical structure (Step N heading, "Why This Matters", "Your Task", "Your Turn", "Next Step" sections) and spot-check for Isla/Emma phrases that shouldn't appear
-  - [ ] 8.6 Run `npm run lint` — expect clean pass (no JS changes)
+- [x]**Task 8: Validate and lint** (AC: 1, 13)
+  - [x]8.1 Verify step count is 4-6 (P17) — expecting 5 steps
+  - [x]8.2 Verify standardized filenames: `step-01-setup.md`, `step-02-context.md`, final `step-05-synthesize.md` (P20)
+  - [x]8.3 Verify all frontmatter has `step`, `workflow: pivot-resynthesis`, `title` fields (FR46)
+  - [x]8.4 Verify each step ends with next-step loading path (FR51) — final step has Compass instead
+  - [x]8.5 Content validation: verify all step files have canonical structure (Step N heading, "Why This Matters", "Your Task", "Your Turn", "Next Step" sections) and spot-check for Isla/Emma phrases that shouldn't appear
+  - [x]8.6 Run `npm run lint` — expect clean pass (no JS changes)
 
 ## Dev Notes
 
@@ -354,18 +354,58 @@ All step content must use Mila's established persona with pivot-specific extensi
 - [Source: _bmad/bme/_vortex/compass-routing-reference.md — Pivot-resynthesis routing table, line 204]
 - [Source: _bmad-output/implementation-artifacts/2-2-create-research-convergence-workflow.md — Previous story learnings]
 
+## Senior Developer Review (AI)
+
+**Reviewer:** Amalik on 2026-02-25
+**Model:** Claude Opus 4.6
+
+**Issues Found:** 1 High, 2 Medium, 2 Low
+**Issues Fixed:** 3 (all HIGH + MEDIUM)
+**Action Items:** 0
+
+### Fixes Applied
+
+1. **H1 (Fixed):** step-05 Assumptions table used `Invalidated` status not in HC2 schema. Removed `Invalidated` from status values and added pivot-resynthesis note explaining invalidated assumptions belong in Evidence Summary provenance, not the assumptions table.
+2. **M1 (Fixed):** step-02 "What Still Holds?" table used inconsistent vocabulary (`Validated`/`Invalidated`) vs step-04's revision vocabulary (`Retained`/`Revised`/`Removed`/`New`). Aligned step-02 pain and gain status values to match step-04 vocabulary.
+3. **M4 (Fixed):** step-04 gains revision table was missing `Removed` status despite the text instructions explicitly mentioning "Remove: Gains that the experiment showed users don't actually want." Added `Removed` to gains status values.
+
+### Low Issues (Not Fixed — Accepted)
+
+- **L1:** Step-02 worked example uses informal vocabulary ("Invalidated") rather than formal table status values. Acceptable — example is illustrative.
+- **L2:** Minor scaffolding overlap between step-02 "Revised problem shape" and step-03 formal JTBD re-framing. Intentional pedagogical design.
+
 ## Dev Agent Record
 
 ### Agent Model Used
 
-{{agent_model_name_version}}
+Claude Opus 4.6 (claude-opus-4-6)
 
 ### Debug Log References
 
 ### Completion Notes List
 
+- Replaced workflow.md placeholder (3 lines) with full 52-line entry point following research-convergence canonical pattern
+- Created steps/ directory and 5 step files (step-01 through step-05)
+- All step files follow canonical structure: frontmatter (step/workflow/title), Step N heading, Why This Matters, Your Task, Your Turn, Next Step
+- Step-01-setup includes dual input validation: HC1 frontmatter/body checklist (7 fields, 7 sections) AND HC4 frontmatter/body checklist (7 fields, 7 sections with conditional Production Readiness). Pivot context explanation and non-conforming guidance included
+- Step-02-context includes pivot context analysis (4 questions), "What Still Holds?" assessment table, worked example of pivot context analysis, and synthesis inventory
+- Step-03-jtbd-reframing guides revision (not creation) with situation/motivation/outcome assessment, functional/emotional/social job review, evidence grounding guidance, and A/P/C decision point
+- Step-04-pains-gains-revision guides retain/remove/add/update framework for both pains and gains, cross-reference against revised JTBD, and A/P/C decision point
+- Step-05-synthesize includes HC2 artifact generation guidance with dual-source frontmatter template (HC1+HC4), all 6 required body sections, "What Changed" provenance, Compass routing (D4 format, 2 routes: Liam/Isla), ⚠️ Insufficient Evidence block with 3 workflow-specific triggers, user override note, and A/P/C menu
+- Mila's voice verified across all files: "The data shows..." (6x), "The experiment told us something important" (2x), "The original research still holds" (2x), "Three patterns converge" (2x), "Here's what the research is telling us" (1x). Zero Isla/Emma phrases detected
+- All 5 step files chain correctly: workflow.md → step-01 → step-02 → step-03 → step-04 → step-05 (Compass)
+- npm run lint passes clean (content-only story, no JS changes)
+
 ### Change Log
 - 2026-02-25: Story created by create-story workflow. Status: ready-for-dev.
 - 2026-02-25: Quality review applied 12 fixes (1C, 4E, 5O, 2S): explained WHY no Emma route in AC7 (C1), added HC4 evidence links to AC6 Evidence Summary (E2), added worked example requirement to AC4 (E3), clarified pivot context explanation in AC3 (E5), added operational clarity to Task 5.4 cross-reference (E6), clarified A/P/C placement in Task 6.12 (O3), highlighted Learning #6 as critical for pivot (O5), explained 2-route rationale in Dev Notes (O7), added confidence guidance to Task 6.2 (O8), added exact override note template to Task 6.11 (O9), noted HC4 Production Readiness is conditional (S1), added HC1 target_agents validation (S2).
+- 2026-02-25: Implementation complete. All 8 tasks done. Status: review.
+- 2026-02-25: Code review complete. 5 issues found (1H, 2M, 2L). 3 fixed (H1: HC2 schema compliance, M1: vocabulary consistency, M4: missing Removed status). 2 LOW accepted. Status: done.
 
 ### File List
+- `_bmad/bme/_vortex/workflows/pivot-resynthesis/workflow.md` — REPLACED placeholder with full entry point (52 lines)
+- `_bmad/bme/_vortex/workflows/pivot-resynthesis/steps/step-01-setup.md` — NEW (97 lines)
+- `_bmad/bme/_vortex/workflows/pivot-resynthesis/steps/step-02-context.md` — NEW (88 lines)
+- `_bmad/bme/_vortex/workflows/pivot-resynthesis/steps/step-03-jtbd-reframing.md` — NEW (90 lines)
+- `_bmad/bme/_vortex/workflows/pivot-resynthesis/steps/step-04-pains-gains-revision.md` — NEW (78 lines)
+- `_bmad/bme/_vortex/workflows/pivot-resynthesis/steps/step-05-synthesize.md` — NEW (147 lines)
