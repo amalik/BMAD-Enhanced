@@ -50,12 +50,12 @@ development_status:
   epic-1-retrospective: done
 
   # Epic 2: Mila — Research Convergence & Problem Definition
-  epic-2: in-progress
+  epic-2: done
   2-1-design-milas-agent-definition-persona: done
   2-2-create-research-convergence-workflow: done
-  2-3-create-pivot-resynthesis-workflow: backlog
-  2-4-create-pattern-mapping-workflow: backlog
-  2-5-create-mila-user-guide-example-artifacts: backlog
+  2-3-create-pivot-resynthesis-workflow: done
+  2-4-create-pattern-mapping-workflow: done
+  2-5-create-mila-user-guide-example-artifacts: done
   epic-2-retrospective: optional
 
   # Epic 3: Liam — Hypothesis Engineering & Experiment Design
