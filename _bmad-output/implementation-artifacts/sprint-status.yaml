@@ -62,9 +62,9 @@ development_status:
   epic-3: in-progress
   3-1-design-liams-agent-definition-persona: done
   3-2-create-hypothesis-engineering-workflow: done
-  3-3-create-assumption-mapping-workflow: backlog
-  3-4-create-experiment-design-workflow: backlog
-  3-5-create-liam-user-guide-example-artifacts: backlog
+  3-3-create-assumption-mapping-workflow: done
+  3-4-create-experiment-design-workflow: done
+  3-5-create-liam-user-guide-example-artifacts: done
   epic-3-retrospective: optional
 
   # Epic 4: Noah — Production Intelligence & Signal Interpretation
