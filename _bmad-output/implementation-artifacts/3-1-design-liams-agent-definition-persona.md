@@ -1,6 +1,6 @@
 # Story 3.1: Design Liam's Agent Definition & Persona
 
-Status: ready-for-dev
+Status: done
 
 <!-- Note: Validation is optional. Run validate-create-story for quality check before dev-story. -->
 
@@ -62,40 +62,40 @@ So that he maintains consistent character across all workflow steps and is clear
 
 ## Tasks / Subtasks
 
-- [ ] **Task 1: Replace placeholder with full agent definition** (AC: 1, 2, 5)
-  - [ ] 1.1 Open `_bmad/bme/_vortex/agents/hypothesis-engineer.md`
-  - [ ] 1.2 Preserve existing frontmatter verbatim (already correct: `name: "hypothesis engineer"`, `description: "Hypothesis Engineer"`)
-  - [ ] 1.3 Preserve pre-activation sentence verbatim ("You must fully embody...")
-  - [ ] 1.4 Replace stub `<activation>` block with full 7-step activation following Isla's exact pattern
-  - [ ] 1.5 Include `<menu-handlers>` section with exec/data/workflow handlers (copy from Isla verbatim — these are framework-standard)
-  - [ ] 1.6 Remove placeholder comment `<!-- Placeholder: Full persona definition will be added in Story 3.1 -->`
+- [x] **Task 1: Replace placeholder with full agent definition** (AC: 1, 2, 5)
+  - [x] 1.1 Open `_bmad/bme/_vortex/agents/hypothesis-engineer.md`
+  - [x] 1.2 Preserve existing frontmatter verbatim (already correct: `name: "hypothesis engineer"`, `description: "Hypothesis Engineer"`)
+  - [x] 1.3 Preserve pre-activation sentence verbatim ("You must fully embody...")
+  - [x] 1.4 Replace stub `<activation>` block with full 7-step activation following Isla's exact pattern
+  - [x] 1.5 Include `<menu-handlers>` section with exec/data/workflow handlers (copy from Isla verbatim — these are framework-standard)
+  - [x] 1.6 Remove placeholder comment `<!-- Placeholder: Full persona definition will be added in Story 3.1 -->`
 
-- [ ] **Task 2: Create persona section matching registry** (AC: 3, 4)
-  - [ ] 2.1 Add `<persona>` block inside `<agent>` XML with `<role>`, `<identity>`, `<communication_style>`, `<principles>`
-  - [ ] 2.2 Set `<role>` to exact registry value: `Creative Ideation + Hypothesis Engineering Specialist`
-  - [ ] 2.3 Set `<identity>` to exact registry value (see Dev Notes — Registry Persona Fields)
-  - [ ] 2.4 Set `<communication_style>` to exact registry value (see Dev Notes)
-  - [ ] 2.5 Set `<principles>` content from registry `expertise` field (following Isla pattern)
+- [x] **Task 2: Create persona section matching registry** (AC: 3, 4)
+  - [x] 2.1 Add `<persona>` block inside `<agent>` XML with `<role>`, `<identity>`, `<communication_style>`, `<principles>`
+  - [x] 2.2 Set `<role>` to exact registry value: `Creative Ideation + Hypothesis Engineering Specialist`
+  - [x] 2.3 Set `<identity>` to exact registry value (see Dev Notes — Registry Persona Fields)
+  - [x] 2.4 Set `<communication_style>` to exact registry value (see Dev Notes)
+  - [x] 2.5 Set `<principles>` content from registry `expertise` field (following Isla pattern)
 
-- [ ] **Task 3: Create rules section with Liam-specific principles** (AC: 1, 3)
-  - [ ] 3.1 Add `<rules>` section inside `<activation>` block
-  - [ ] 3.2 Copy the 4 standard generic rules from Isla verbatim (these are framework-standard: communicate in language, stay in character, display menu items, load files only when needed)
-  - [ ] 3.3 Add Liam-specific persona rules derived from his principles (structured brainwriting, 4-field contracts, assumption mapping, riskiest assumption first, falsifiable hypotheses)
+- [x] **Task 3: Create rules section with Liam-specific principles** (AC: 1, 3)
+  - [x] 3.1 Add `<rules>` section inside `<activation>` block
+  - [x] 3.2 Copy the 4 standard generic rules from Isla verbatim (these are framework-standard: communicate in language, stay in character, display menu items, load files only when needed)
+  - [x] 3.3 Add Liam-specific persona rules derived from his principles (structured brainwriting, 4-field contracts, assumption mapping, riskiest assumption first, falsifiable hypotheses)
 
-- [ ] **Task 4: Create menu section with 3 workflows** (AC: 6)
-  - [ ] 4.1 Add `<menu>` block with standard items: Menu Help [MH], Chat with Liam [CH], Party Mode [PM], Dismiss Agent [DA]
-  - [ ] 4.2 Add workflow items with exec paths:
+- [x] **Task 4: Create menu section with 3 workflows** (AC: 6)
+  - [x] 4.1 Add `<menu>` block with standard items: Menu Help [MH], Chat with Liam [CH], Party Mode [PM], Dismiss Agent [DA]
+  - [x] 4.2 Add workflow items with exec paths:
     - Hypothesis Engineering [HE]: `{project-root}/_bmad/bme/_vortex/workflows/hypothesis-engineering/workflow.md`
     - Assumption Mapping [AM]: `{project-root}/_bmad/bme/_vortex/workflows/assumption-mapping/workflow.md`
     - Experiment Design [ED]: `{project-root}/_bmad/bme/_vortex/workflows/experiment-design/workflow.md`
-  - [ ] 4.3 Do NOT add a validate menu item — Liam's workflow directories have no `validate.md` file yet. A validate item can be added in Stories 3.2-3.4 when workflows are authored.
+  - [x] 4.3 Do NOT add a validate menu item — Liam's workflow directories have no `validate.md` file yet. A validate item can be added in Stories 3.2-3.4 when workflows are authored.
 
-- [ ] **Task 5: Verify and validate** (AC: 4, 7)
-  - [ ] 5.1 Diff `<persona>` fields against `agent-registry.js` lines 48-56 — compare unescaped string values only (strip JS `\'` → `'`). The XML content must match the registry string values character-for-character after un-escaping.
-  - [ ] 5.2 Verify XML structure matches Isla's: `<agent>` → `<activation>` → steps → `<menu-handlers>` → `<rules>` → `</activation>` → `<persona>` → `<menu>` → `</agent>`
-  - [ ] 5.3 Run `npm run lint` — expect clean pass (no JS changes)
-  - [ ] 5.4 Confirm `workflow.md` exists in each workflow directory: `workflows/hypothesis-engineering/`, `workflows/assumption-mapping/`, `workflows/experiment-design/` (created in Story 1.1 — verify not accidentally removed)
-  - [ ] 5.5 Verify contract/schema paths against actual filesystem before referencing (Epic 2 learning)
+- [x] **Task 5: Verify and validate** (AC: 4, 7)
+  - [x] 5.1 Diff `<persona>` fields against `agent-registry.js` lines 48-56 — compare unescaped string values only (strip JS `\'` → `'`). The XML content must match the registry string values character-for-character after un-escaping.
+  - [x] 5.2 Verify XML structure matches Isla's: `<agent>` → `<activation>` → steps → `<menu-handlers>` → `<rules>` → `</activation>` → `<persona>` → `<menu>` → `</agent>`
+  - [x] 5.3 Run `npm run lint` — expect clean pass (no JS changes)
+  - [x] 5.4 Confirm `workflow.md` exists in each workflow directory: `workflows/hypothesis-engineering/`, `workflows/assumption-mapping/`, `workflows/experiment-design/` (created in Story 1.1 — verify not accidentally removed)
+  - [x] 5.5 Verify contract/schema paths against actual filesystem before referencing (Epic 2 learning)
 
 ## Dev Notes
 
@@ -280,11 +280,22 @@ Claude Opus 4.6 (claude-opus-4-6)
 ### Debug Log References
 
 ### Completion Notes List
+- Replaced 17-line placeholder with full 117-line agent definition following Isla's canonical template exactly
+- All 4 persona fields match agent-registry.js character-for-character (enforcement guideline #6 verified)
+- 4 generic rules + 5 Liam-specific persona rules (structured brainwriting, 4-field contracts, assumption mapping, riskiest-first, falsifiability)
+- 3 workflow menu items with verified exec paths (hypothesis-engineering, assumption-mapping, experiment-design)
+- Error messages customized for Liam (not copy-pasted from Isla/Mila)
+- Help step example reflects Liam's domain
+- No validate menu item (no validate.md exists yet — deferred to Stories 3.2-3.4)
+- No voice bleed: zero Isla/Mila/Wade phrases detected
+- Lint passes clean (no JS changes — regression check only)
 
 ### Change Log
 - 2026-02-25: Story created by create-story workflow. Status: ready-for-dev.
+- 2026-02-25: Implementation complete. Replaced placeholder with full agent definition. All 7 ACs satisfied. Status: review.
+- 2026-02-25: Code review passed (0H/0M-after-downgrade/3L). All ACs verified against implementation. Registry persona match confirmed character-for-character. Zero voice bleed. Status: done.
 
 ### File List
 | File | Action | ACs |
 |------|--------|-----|
-| `_bmad/bme/_vortex/agents/hypothesis-engineer.md` | REPLACE placeholder | AC1, AC2, AC3, AC4, AC5, AC6 |
+| `_bmad/bme/_vortex/agents/hypothesis-engineer.md` | REPLACED placeholder with full 117-line agent definition | AC1, AC2, AC3, AC4, AC5, AC6 |
