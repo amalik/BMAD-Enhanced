@@ -56,7 +56,7 @@ development_status:
   2-3-create-pivot-resynthesis-workflow: done
   2-4-create-pattern-mapping-workflow: done
   2-5-create-mila-user-guide-example-artifacts: done
-  epic-2-retrospective: optional
+  epic-2-retrospective: done
 
   # Epic 3: Liam — Hypothesis Engineering & Experiment Design
   epic-3: backlog
