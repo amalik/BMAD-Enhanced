@@ -30,7 +30,7 @@ async function createTempDir(prefix = 'bmad-test-') {
 function fullConfig(overrides = {}) {
   return {
     submodule_name: '_vortex',
-    description: 'Vortex Framework',
+    description: 'Vortex Pattern',
     module: 'bme',
     version: '1.5.0',
     output_folder: '{project-root}/_bmad-output/vortex-artifacts',
