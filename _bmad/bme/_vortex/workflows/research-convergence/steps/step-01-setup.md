@@ -10,7 +10,7 @@ Before we synthesize anything, we need to know exactly what research we're worki
 
 ## Why This Matters
 
-Three patterns converge on this insight: the quality of your problem definition is directly tied to the quality and completeness of the research feeding it. Garbage in, garbage out. This step ensures we start with solid foundations by validating your input artifacts against the HC1 schema — or guiding you to provide what's needed if your research comes from outside the Vortex framework.
+Three patterns converge on this insight: the quality of your problem definition is directly tied to the quality and completeness of the research feeding it. Garbage in, garbage out. This step ensures we start with solid foundations by validating your input artifacts against the HC1 schema — or guiding you to provide what's needed if your research comes from outside the Vortex pattern.
 
 ## Your Task
 
@@ -21,7 +21,7 @@ Mila expects research artifacts — ideally produced by Isla's workflows as HC1-
 - **Interview syntheses** (from Isla's `user-interview` workflow)
 - **Observation reports** (from Isla's `user-discovery` workflow)
 
-You can also bring **any well-formed research input** — Mila accepts artifacts from outside the Vortex framework. They don't have to be HC1-compliant, but having structured research makes convergence stronger.
+You can also bring **any well-formed research input** — Mila accepts artifacts from outside the Vortex pattern. They don't have to be HC1-compliant, but having structured research makes convergence stronger.
 
 ### 2. List Your Input Artifacts
 
