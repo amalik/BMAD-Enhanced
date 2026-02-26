@@ -149,8 +149,11 @@ Based on what you just completed, here are your evidence-driven options:
 
 | If you learned... | Consider next... | Agent | Why |
 |---|---|---|---|
-| Problem space needs reframing | contextualize-scope | Emma 🎯 | Re-scope based on discovery findings |
+| Discovery findings ready for convergence | research-convergence | Mila 🔬 | Converge discovery findings into problem definition (HC1) |
 | Ready to test hypotheses | lean-experiment | Wade 🧪 | Design experiments from discovery insights |
 | Need deeper empathy for key users | empathy-map | Isla 🔍 | Map the users you discovered in depth |
+
+> **Note:** These are evidence-based recommendations. You can navigate to any Vortex agent
+> at any time based on your judgment.
 
 **Or run Max's [VN] Vortex Navigation** for a full gap analysis across all streams.
