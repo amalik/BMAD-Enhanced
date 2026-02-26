@@ -98,10 +98,10 @@ BMAD-Enhanced/
 │       ├── lib/             # Update system modules
 │       └── migrations/      # Migration registry + delta files
 ├── tests/
-│   ├── unit/                # 130 unit tests
-│   └── integration/         # 54 integration tests
+│   ├── unit/                # 208 unit tests
+│   └── integration/         # 60 integration tests
 ├── docs/                    # Documentation (you're here)
-├── package.json             # v1.5.2
+├── package.json             # v1.6.0
 ├── CHANGELOG.md             # Version history
 └── UPDATE-GUIDE.md          # Migration documentation
 ```
