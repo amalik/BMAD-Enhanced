@@ -219,8 +219,6 @@ This compact table maps every workflow to its recommended routing targets.
 | `proof-of-value` | → Max 🧭 `learning-card` — Business value validated, capture evidence | → Isla 🔍 `user-interview` — Value unclear, understand willingness | → Max 🧭 `pivot-patch-persevere` — Pivot decision needed |
 | `mvp` | → Wade 🧪 `lean-experiment` — MVP designed, execute build-measure-learn | → Isla 🔍 `user-interview` — Validate user need before building | → Max 🧭 `learning-card` — MVP results available, capture learnings |
 
-**Note:** Wade's existing step-06 files currently route to Max/Emma/Isla. The Noah route (HC4) is added by Epic 5 Story 5.2 (FR31). The routes above represent the **target state** after Epic 5.
-
 ### Noah 📡 — Sensitize (Stream 6)
 
 | Workflow | Route 1 | Route 2 | Route 3 |
@@ -238,8 +236,6 @@ This compact table maps every workflow to its recommended routing targets.
 | `learning-card` | → Max 🧭 `pivot-patch-persevere` — Learning triggers strategic decision | → Wade 🧪 `lean-experiment` — Need more experimental data | → Emma 🎯 `contextualize-scope` — Assumptions invalidated, re-frame (HC8) |
 | `pivot-patch-persevere` | → Mila 🔬 `pivot-resynthesis` — **Pivot:** problem correct, solution wrong (HC6) | → Wade 🧪 `lean-experiment` — **Patch:** adjust approach and re-test | → Isla 🔍 `user-discovery` — **Persevere** but need deeper insight (HC7) |
 | `vortex-navigation` | _(No Compass table — this IS the terminal navigation tool. Routes to any agent based on 7-stream gap analysis.)_ | | |
-
-**Note:** Max's existing `pivot-patch-persevere` step-06 currently routes Pivot to Emma. Epic 5 Story 5.2 changes this to Mila (HC6, FR32). The routes above represent the **target state** after Epic 5.
 
 ---
 
@@ -310,6 +306,7 @@ Based on what you just completed, here are your evidence-driven options:
 
 | Version | Date | Changes |
 |---------|------|---------|
+| 1.0.3 | 2026-02-26 | Story 5.2: Removed Wade and Max implementation-pending notes (step files now implement Noah HC4, Mila HC6, HC7, HC8 routes, FR22 notes) |
 | 1.0.2 | 2026-02-26 | Story 5.1: Removed Isla section implementation-pending note (step files now implement Mila routes) |
 | 1.0.1 | 2026-02-24 | Code review fixes: removed erroneous HC1 labels from Emma→Isla routes, relaxed 3-row rule to 2-3, noted architecture.md HC7 snapshot error, clarified HC5 scope across Noah workflows, added Max to Wade inbound summary |
 | 1.0 | 2026-02-24 | Initial creation — all 10 contracts, 22 workflows, 7 agents |
