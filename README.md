@@ -81,10 +81,10 @@ your-project/
 │   ├── agents/           # 7 agent definition files
 │   ├── workflows/        # 22 workflows
 │   ├── contracts/        # 5 artifact contract schemas (HC1-HC5)
-│   ├── guides/           # User guides (Mila, Liam, Noah)
+│   ├── guides/           # User guides (all 7 agents)
 │   └── config.yaml       # Configuration
 └── _bmad-output/
-    └── vortex-artifacts/  # Generated artifacts + user guides (Emma, Isla, Wade, Max)
+    └── vortex-artifacts/  # Generated artifacts
 ```
 
 ---
@@ -120,13 +120,13 @@ Max's **Vortex Navigation** workflow helps identify which stream needs attention
 
 For detailed workflow descriptions and usage examples, see the [Agent Guide](docs/agents.md) and the individual user guides:
 
-- [Emma User Guide](_bmad-output/vortex-artifacts/EMMA-USER-GUIDE.md)
-- [Isla User Guide](_bmad-output/vortex-artifacts/ISLA-USER-GUIDE.md)
+- [Emma User Guide](_bmad/bme/_vortex/guides/EMMA-USER-GUIDE.md)
+- [Isla User Guide](_bmad/bme/_vortex/guides/ISLA-USER-GUIDE.md)
 - [Mila User Guide](_bmad/bme/_vortex/guides/MILA-USER-GUIDE.md)
 - [Liam User Guide](_bmad/bme/_vortex/guides/LIAM-USER-GUIDE.md)
-- [Wade User Guide](_bmad-output/vortex-artifacts/WADE-USER-GUIDE.md)
+- [Wade User Guide](_bmad/bme/_vortex/guides/WADE-USER-GUIDE.md)
 - [Noah User Guide](_bmad/bme/_vortex/guides/NOAH-USER-GUIDE.md)
-- [Max User Guide](_bmad-output/vortex-artifacts/MAX-USER-GUIDE.md)
+- [Max User Guide](_bmad/bme/_vortex/guides/MAX-USER-GUIDE.md)
 
 ---
 
@@ -190,9 +190,51 @@ MIT License — see [LICENSE](LICENSE)
 ## Acknowledgments
 
 - [BMAD Method v6.0.0](https://github.com/bmadhub/bmad) — Foundation for agent architecture
+- [Innovation Vortex](https://unfix.com/innovation-vortex) — Pattern from the [unFIX model](https://unfix.com/) by [Jurgen Appelo](https://jurgenappelo.com/)
 - Claude (Anthropic) — AI reasoning and agent development
-- Murat (tea agent) — Test architecture and validation
-- BMAD Core Team — Framework and infrastructure
+
+### Agents
+
+Every agent below contributed to the design, implementation, testing, or documentation of this release.
+
+**Core**
+- BMad Master 🧙 — Orchestration and agent coordination
+
+**BMM — BMAD Method Module**
+- Mary 📊 Analyst — Requirements analysis and product briefs
+- Winston 🏗️ Architect — Architecture decisions and technical design
+- Amelia 💻 Dev — Implementation and code delivery
+- John 📋 PM — Product management and PRD creation
+- Barry 🚀 Quick Flow — Rapid solo development
+- Quinn 🧪 QA — Quality assurance and test validation
+- Bob 🏃 SM — Sprint management and retrospectives
+- Paige 📚 Tech Writer — Documentation and editorial review
+- Sally 🎨 UX Designer — User experience design
+
+**BME — Vortex Pattern Agents**
+- Emma 🎯 Contextualize — Problem framing and product vision
+- Isla 🔍 Empathize — User research and empathy mapping
+- Mila 🔬 Synthesize — Research convergence and problem definition
+- Liam 💡 Hypothesize — Hypothesis engineering and assumption mapping
+- Wade 🧪 Externalize — Lean experiments and MVP testing
+- Noah 📡 Sensitize — Production intelligence and signal interpretation
+- Max 🧭 Systematize — Learning capture and pivot/persevere decisions
+
+**CIS — Creative & Innovation Strategies**
+- Carson 🧠 Brainstorming Coach — Creative ideation facilitation
+- Dr. Quinn 🔬 Problem Solver — Systematic problem-solving
+- Maya 🎨 Design Thinking Coach — Human-centered design
+- Victor ⚡ Innovation Strategist — Business model innovation
+- Caravaggio 🎨 Presentation Master — Visual communication
+- Sophia 📖 Storyteller — Narrative and storytelling
+
+**BMB — BMAD Builder Module**
+- Bond 🤖 Agent Builder — Agent creation and configuration
+- Morgan 🏗️ Module Builder — Module architecture
+- Wendy 🔄 Workflow Builder — Workflow design and validation
+
+**TEA — Test Engineering & Architecture**
+- Murat 🧪 Test Architect — Test framework, CI pipeline, and quality gates
 
 ---
 
