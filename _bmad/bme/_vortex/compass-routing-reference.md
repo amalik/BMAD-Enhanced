@@ -194,8 +194,6 @@ This compact table maps every workflow to its recommended routing targets.
 | `user-discovery` | → Mila 🔬 `research-convergence` — Discovery findings ready for convergence (HC1) | → Wade 🧪 `lean-experiment` — Ready to test hypotheses from discovery | → Isla 🔍 `empathy-map` — Map key users discovered in depth |
 | `user-interview` | → Mila 🔬 `research-convergence` — Interview insights ready for synthesis (HC1) | → Wade 🧪 `lean-experiment` — Riskiest insight ready for testing | → Isla 🔍 `empathy-map` — Synthesize patterns across interview subjects |
 
-**Note:** Isla's existing step-06 files currently route to Emma/Wade/Isla. The Mila route (HC1) is added by Epic 5 Story 5.1 (FR30). The routes above represent the **target state** after Epic 5.
-
 ### Mila 🔬 — Synthesize (Stream 3)
 
 | Workflow | Route 1 | Route 2 | Route 3 |
@@ -312,5 +310,6 @@ Based on what you just completed, here are your evidence-driven options:
 
 | Version | Date | Changes |
 |---------|------|---------|
+| 1.0.2 | 2026-02-26 | Story 5.1: Removed Isla section implementation-pending note (step files now implement Mila routes) |
 | 1.0.1 | 2026-02-24 | Code review fixes: removed erroneous HC1 labels from Emma→Isla routes, relaxed 3-row rule to 2-3, noted architecture.md HC7 snapshot error, clarified HC5 scope across Noah workflows, added Max to Wade inbound summary |
 | 1.0 | 2026-02-24 | Initial creation — all 10 contracts, 22 workflows, 7 agents |
