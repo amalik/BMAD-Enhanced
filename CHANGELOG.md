@@ -225,7 +225,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 
 **🚨 CRITICAL Package Bug:**
-- Fixed `.npmignore` excluding Vortex framework files from published package
+- Fixed `.npmignore` excluding Vortex pattern files from published package
 - Agent files (`contextualization-expert.md`, `lean-experiments-specialist.md`) now included in package
 - All workflow template files now included in package
 - `CHANGELOG.md` and `UPDATE-GUIDE.md` now included in package
@@ -453,9 +453,9 @@ npx bmad-update
 
 ## [1.2.0] - 2026-02-17
 
-### Major Release: Complete Vortex Framework Implementation
+### Major Release: Complete Vortex Pattern Implementation
 
-This release completes the Vortex Framework by implementing all 7 new Lean Startup workflows, updating documentation, and cleaning up deprecated workflows.
+This release completes the Vortex Pattern by implementing all 7 new Lean Startup workflows, updating documentation, and cleaning up deprecated workflows.
 
 ### Added
 
@@ -583,7 +583,7 @@ This release completes the Vortex Framework by implementing all 7 new Lean Start
 
 ## [1.1.0] - 2026-02-16
 
-### MAJOR REPOSITIONING: From Design Agents to Vortex Framework
+### MAJOR REPOSITIONING: From Design Agents to Vortex Pattern
 
 This release represents a fundamental repositioning of BMAD-Enhanced from design-focused agents (empathy mapping, wireframing) to a Lean Startup validation framework.
 
@@ -599,11 +599,11 @@ This release represents a fundamental repositioning of BMAD-Enhanced from design
   - New workflows: mvp, lean-experiment, proof-of-concept, proof-of-value (wireframe deprecated)
 - **BREAKING:** Output folder changed from `_bmad-output/design-artifacts` to `_bmad-output/vortex-artifacts`
 - Updated all installer scripts to reflect new module name and agent descriptions
-- Updated config.yaml structure to version 1.1.0 with Vortex framework metadata
+- Updated config.yaml structure to version 1.1.0 with Vortex pattern metadata
 - Updated agent-manifest.csv with new agent identities and expertise
 
 ### Added
-- Vortex framework structure with Contextualize and Externalize streams
+- Vortex pattern structure with Contextualize and Externalize streams
 - 7 new workflow placeholders (v1.2.0):
   - Emma (Contextualize): lean-persona, product-vision, contextualize-scope
   - Wade (Externalize): mvp, lean-experiment, proof-of-concept, proof-of-value
