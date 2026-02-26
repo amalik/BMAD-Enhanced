@@ -1,4 +1,4 @@
-# Vortex Framework Module
+# Vortex Pattern Module
 
 Technical inventory for the `_bmad/bme/_vortex` module — the complete 7-stream product discovery framework.
 
