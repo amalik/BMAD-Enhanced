@@ -172,7 +172,7 @@ Use the diagram from compass-routing-reference.md as the authoritative visualiza
 
 ```
                     ┌─────────────────────────────────────────────┐
-                    │            VORTEX FRAMEWORK                 │
+                    │            VORTEX PATTERN                  │
                     │         7 Streams · 7 Agents                │
                     └─────────────────────────────────────────────┘
 
