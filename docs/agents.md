@@ -1,4 +1,4 @@
-# Vortex Framework - Agent Guide
+# Vortex Pattern - Agent Guide
 
 Detailed reference for all seven Vortex agents, their workflows, positioning, and how they work together in the complete 7-stream product discovery framework.
 
