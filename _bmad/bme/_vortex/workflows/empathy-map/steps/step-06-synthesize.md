@@ -97,8 +97,11 @@ Based on what you just completed, here are your evidence-driven options:
 
 | If you learned... | Consider next... | Agent | Why |
 |---|---|---|---|
+| Multiple artifacts ready for synthesis | research-convergence | Mila 🔬 | Converge empathy findings into problem definition (HC1) |
 | Pain points need validation | lean-experiment | Wade 🧪 | Test if pain points drive real behavior |
-| New user segment discovered | lean-persona | Emma 🎯 | Re-contextualize for the new segment |
 | Deeper understanding needed | user-interview | Isla 🔍 | Follow up with targeted interviews |
+
+> **Note:** These are evidence-based recommendations. You can navigate to any Vortex agent
+> at any time based on your judgment.
 
 **Or run Max's [VN] Vortex Navigation** for a full gap analysis across all streams.
