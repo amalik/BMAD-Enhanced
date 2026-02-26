@@ -20,7 +20,7 @@ Liam expects a hypothesis contract — ideally produced by the hypothesis-engine
 - **HC3 Hypothesis Contract** (from Liam's `hypothesis-engineering` workflow)
 - **Enriched HC3** (from Liam's `assumption-mapping` workflow, with deepened risk analysis)
 
-You can also bring **any well-formed hypothesis** — Liam accepts input from outside the Vortex framework. It doesn't have to be HC3-compliant, but having a structured hypothesis with a clear riskiest assumption makes experiment design dramatically sharper.
+You can also bring **any well-formed hypothesis** — Liam accepts input from outside the Vortex pattern. It doesn't have to be HC3-compliant, but having a structured hypothesis with a clear riskiest assumption makes experiment design dramatically sharper.
 
 ### 2. Provide Your Input
 
