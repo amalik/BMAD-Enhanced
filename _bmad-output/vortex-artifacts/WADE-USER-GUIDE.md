@@ -2,7 +2,7 @@
 
 **Agent:** Wade (lean-experiments-specialist)
 **Version:** 1.2.0
-**Module:** BMAD Enhanced (bme) - Vortex Framework
+**Module:** BMAD Enhanced (bme) - Vortex Pattern
 **Last Updated:** 2026-02-17
 
 ---
@@ -10,7 +10,7 @@
 ## Quick Start
 
 **Who is Wade?**
-Wade is a Lean Startup practitioner specialized in running rapid experiments to validate product hypotheses. He helps teams move from assumptions to evidence through Build-Measure-Learn cycles. Wade guides teams through the "Externalize" stream of the Vortex framework - taking ideas into the real world to test with actual users.
+Wade is a Lean Startup practitioner specialized in running rapid experiments to validate product hypotheses. He helps teams move from assumptions to evidence through Build-Measure-Learn cycles. Wade guides teams through the "Externalize" stream of the Vortex pattern - taking ideas into the real world to test with actual users.
 
 **When to use Wade:**
 - Designing Minimum Viable Products (MVPs)
@@ -102,7 +102,7 @@ Externalization means taking ideas into the real world to test with actual users
 4. **Actionable metrics, not vanity metrics** (What drives decisions?)
 5. **Proof-of-concept before proof-of-value** (Technical feasibility before business case)
 
-### The Externalize Stream (Vortex Framework)
+### The Externalize Stream (Vortex Pattern)
 
 Wade guides teams through the "Externalize" stream:
 - **Build the smallest thing that tests the riskiest assumption**
@@ -140,7 +140,7 @@ Wade guides you through creating comprehensive wireframes for web and mobile app
 
 **Time:** 20-30 minutes
 
-**Important:** This workflow uses traditional wireframe design methodology. For Lean Startup-focused workflows aligned with the Vortex framework, see "Coming in v1.4.0+" section below.
+**Important:** This workflow uses traditional wireframe design methodology. For Lean Startup-focused workflows aligned with the Vortex pattern, see "Coming in v1.4.0+" section below.
 
 ---
 
@@ -176,7 +176,7 @@ Validate business value and market demand.
 **Focus:** Should we build this? Business case validation, market validation
 **Principle:** Technical feasibility doesn't guarantee business success
 
-**Note:** These workflows are being designed to fully align with Lean Startup methodologies and the Vortex framework's Externalize stream.
+**Note:** These workflows are being designed to fully align with Lean Startup methodologies and the Vortex pattern's Externalize stream.
 
 ---
 
@@ -351,7 +351,7 @@ Failure is only valuable if you learn from it. Document what you learned, why ex
 - Focus: Wireframe design, UX, information architecture
 - Output: `_bmad-output/design-artifacts/`
 
-**v1.2.0 (Vortex Framework):**
+**v1.2.0 (Vortex Pattern):**
 - Agent: lean-experiments-specialist
 - Module: `_bmad/bme/_vortex/`
 - Focus: Lean Startup, experimentation, validated learning
@@ -389,7 +389,7 @@ Failure is only valuable if you learn from it. Document what you learned, why ex
 
 **v1.2.0 (Current):**
 - ✅ Agent repositioned as Lean Experiments Specialist
-- ✅ Module renamed to _vortex (Vortex Framework)
+- ✅ Module renamed to _vortex (Vortex Pattern)
 - ✅ Legacy wireframe workflow maintained
 - ✅ User guide updated
 
@@ -403,7 +403,7 @@ Failure is only valuable if you learn from it. Document what you learned, why ex
   - [LE] Lean Experiment
   - [POC] Proof-of-Concept
   - [POV] Proof-of-Value
-- Full Vortex Framework implementation
+- Full Vortex Pattern implementation
 
 ---
 
@@ -440,7 +440,7 @@ Failure is only valuable if you learn from it. Document what you learned, why ex
 
 **v1.2.0 (2026-02-17)**
 - Agent repositioned as Lean Experiments Specialist (Lean Startup focus)
-- Module renamed from _designos to _vortex (Vortex Framework)
+- Module renamed from _designos to _vortex (Vortex Pattern)
 - Output folder moved to vortex-artifacts
 - Updated documentation to reflect experimentation and validated learning
 - Legacy wireframe workflow maintained for backwards compatibility
@@ -462,7 +462,7 @@ Failure is only valuable if you learn from it. Document what you learned, why ex
 
 **Agent:** Wade (lean-experiments-specialist)
 **Module:** BMAD Enhanced (bme)
-**Submodule:** Vortex Framework (_vortex)
+**Submodule:** Vortex Pattern (_vortex)
 **Framework:** BMAD Agent Architecture Framework v1.1.0
 **Methodology:** Lean Startup, Build-Measure-Learn
 
