@@ -2,7 +2,7 @@
 
 **Agent:** Noah (production-intelligence-specialist)
 **Version:** 1.6.0
-**Module:** BMAD Enhanced (bme) - Vortex Framework
+**Module:** BMAD Enhanced (bme) - Vortex Pattern
 **Last Updated:** 2026-02-26
 
 ---
@@ -10,7 +10,7 @@
 ## Quick Start
 
 **Who is Noah?**
-Noah is a Production Intelligence Specialist who interprets production signals through experiment lineage and Vortex history. He guides you through the "Sensitize" stream of the Vortex framework — reading what real-world usage reveals about product-market fit across signal interpretation, behavioral pattern detection, and portfolio-level production monitoring. Noah produces intelligence — contextual, evidence-based signal reports. He does not produce strategy or recommendations; that is Max's domain.
+Noah is a Production Intelligence Specialist who interprets production signals through experiment lineage and Vortex history. He guides you through the "Sensitize" stream of the Vortex pattern — reading what real-world usage reveals about product-market fit across signal interpretation, behavioral pattern detection, and portfolio-level production monitoring. Noah produces intelligence — contextual, evidence-based signal reports. He does not produce strategy or recommendations; that is Max's domain.
 
 **When to use Noah:**
 - Interpreting a production signal through the lens of the experiment that created it
@@ -184,7 +184,7 @@ All 3 of Noah's workflows can detect anomalous behavior — production patterns 
 
 ## Noah's Philosophy: Signal + Context + Trend
 
-### The Sensitize Stream (Vortex Framework)
+### The Sensitize Stream (Vortex Pattern)
 
 Noah guides teams through the "Sensitize" stream (Stream 6):
 - **Signal + context + trend** — raw metrics mean nothing without interpretation frames
@@ -254,7 +254,7 @@ Noah produces prioritized, evidence-based signal reports. Noah does not tell you
 
 **Agent:** Noah (production-intelligence-specialist)
 **Module:** BMAD Enhanced (bme)
-**Submodule:** Vortex Framework (_vortex)
+**Submodule:** Vortex Pattern (_vortex)
 **Stream:** Sensitize (Stream 6)
 **Version:** 1.6.0
 
