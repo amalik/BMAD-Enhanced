@@ -2,7 +2,7 @@
 
 **Agent:** Emma (contextualization-expert)
 **Version:** 1.2.0
-**Module:** BMAD Enhanced (bme) - Vortex Framework
+**Module:** BMAD Enhanced (bme) - Vortex Pattern
 **Last Updated:** 2026-02-17
 
 ---
@@ -10,7 +10,7 @@
 ## Quick Start
 
 **Who is Emma?**
-Emma is a Lean Startup expert who helps teams contextualize their product strategy by defining clear problem spaces and validating assumptions. She guides you through strategic framing, problem-product space navigation, and the critical "Contextualize" stream of the Vortex framework.
+Emma is a Lean Startup expert who helps teams contextualize their product strategy by defining clear problem spaces and validating assumptions. She guides you through strategic framing, problem-product space navigation, and the critical "Contextualize" stream of the Vortex pattern.
 
 **When to use Emma:**
 - Defining product vision and strategy
@@ -101,7 +101,7 @@ Contextualization means defining clear problem and product spaces before buildin
 3. **Why does this matter?** (Strategic vision and alignment)
 4. **What assumptions need validation?** (Every belief is a hypothesis until tested)
 
-### The Contextualize Stream (Vortex Framework)
+### The Contextualize Stream (Vortex Pattern)
 
 Emma guides teams through the "Contextualize" stream:
 - **Problem-solution fit before product-market fit**
@@ -139,7 +139,7 @@ Emma guides you through creating comprehensive empathy maps for target users usi
 
 **Time:** 30-60 minutes
 
-**Important:** This workflow uses traditional empathy mapping methodology. For Lean Startup-focused workflows aligned with the Vortex framework, see "Coming in v1.4.0+" section below.
+**Important:** This workflow uses traditional empathy mapping methodology. For Lean Startup-focused workflows aligned with the Vortex pattern, see "Coming in v1.4.0+" section below.
 
 ---
 
@@ -165,7 +165,7 @@ Decide which problem space to investigate and define boundaries.
 **Output:** Problem scope document
 **Focus:** Problem space boundaries, scope definition, assumption identification
 
-**Note:** These workflows are being designed to fully align with Lean Startup methodologies and the Vortex framework's Contextualize stream.
+**Note:** These workflows are being designed to fully align with Lean Startup methodologies and the Vortex pattern's Contextualize stream.
 
 ---
 
@@ -335,7 +335,7 @@ Unclear product strategy wastes everyone's time. Be specific about problem space
 - Focus: Empathy mapping, design thinking
 - Output: `_bmad-output/design-artifacts/`
 
-**v1.2.0 (Vortex Framework):**
+**v1.2.0 (Vortex Pattern):**
 - Agent: contextualization-expert
 - Module: `_bmad/bme/_vortex/`
 - Focus: Lean Startup, strategic framing, contextualization
@@ -373,7 +373,7 @@ Unclear product strategy wastes everyone's time. Be specific about problem space
 
 **v1.2.0 (Current):**
 - ✅ Agent repositioned as Contextualization Expert
-- ✅ Module renamed to _vortex (Vortex Framework)
+- ✅ Module renamed to _vortex (Vortex Pattern)
 - ✅ Legacy empathy-map workflow maintained
 - ✅ User guide updated
 
@@ -386,7 +386,7 @@ Unclear product strategy wastes everyone's time. Be specific about problem space
   - [LP] Lean Persona
   - [PV] Product Vision
   - [CS] Contextualize Scope
-- Full Vortex Framework implementation
+- Full Vortex Pattern implementation
 
 ---
 
@@ -421,7 +421,7 @@ Unclear product strategy wastes everyone's time. Be specific about problem space
 
 **v1.2.0 (2026-02-17)**
 - Agent repositioned as Contextualization Expert (Lean Startup focus)
-- Module renamed from _designos to _vortex (Vortex Framework)
+- Module renamed from _designos to _vortex (Vortex Pattern)
 - Output folder moved to vortex-artifacts
 - Updated documentation to reflect strategic framing and contextualization
 - Legacy empathy-map workflow maintained for backwards compatibility
@@ -441,7 +441,7 @@ Unclear product strategy wastes everyone's time. Be specific about problem space
 
 **Agent:** Emma (contextualization-expert)
 **Module:** BMAD Enhanced (bme)
-**Submodule:** Vortex Framework (_vortex)
+**Submodule:** Vortex Pattern (_vortex)
 **Framework:** BMAD Agent Architecture Framework v1.1.0
 **Methodology:** Lean Startup, Jobs-to-be-Done
 
