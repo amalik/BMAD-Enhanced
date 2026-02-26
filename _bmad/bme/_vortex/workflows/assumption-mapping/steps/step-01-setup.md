@@ -20,7 +20,7 @@ Liam expects hypothesis contracts — ideally produced by the hypothesis-enginee
 - **HC3 Hypothesis Contract** (from Liam's `hypothesis-engineering` workflow)
 - **Multiple HC3 artifacts** (from different hypothesis engineering sessions)
 
-You can also bring **any well-formed hypothesis set** — Liam accepts input from outside the Vortex framework. It doesn't have to be HC3-compliant, but having structured hypotheses with explicit 4-field contracts (Expected Outcome, Target Behavior Change, Rationale, Riskiest Assumption) makes assumption mapping dramatically stronger.
+You can also bring **any well-formed hypothesis set** — Liam accepts input from outside the Vortex pattern. It doesn't have to be HC3-compliant, but having structured hypotheses with explicit 4-field contracts (Expected Outcome, Target Behavior Change, Rationale, Riskiest Assumption) makes assumption mapping dramatically stronger.
 
 ### 2. Provide Your Input
 
