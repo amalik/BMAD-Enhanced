@@ -6,7 +6,7 @@ Status: done
 
 ## Story
 
-As a maintainer of the Vortex framework,
+As a maintainer of the Vortex pattern,
 I want CI to detect dead-end Compass routes and the version bumped to 1.6.0,
 So that any broken routing is caught automatically and the release is properly versioned.
 
