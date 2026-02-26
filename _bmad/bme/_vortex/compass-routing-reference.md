@@ -12,7 +12,7 @@ The Vortex Pattern has 7 agents across 7 streams, connected by 10 handoff contra
 
 ```
                         ┌─────────────────────────────────────────────┐
-                        │            VORTEX FRAMEWORK                 │
+                        │            VORTEX PATTERN                  │
                         │         7 Streams · 7 Agents                │
                         └─────────────────────────────────────────────┘
 
