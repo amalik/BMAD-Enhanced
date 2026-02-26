@@ -1,6 +1,6 @@
 # FAQ
 
-Common questions about BMAD-Enhanced and the Vortex Framework.
+Common questions about BMAD-Enhanced and the Vortex Pattern.
 
 ---
 
@@ -70,7 +70,7 @@ v1.6.0 will add the remaining three Vortex streams:
 - **Hypothesize** — Structured hypothesis generation from insights
 - **Sensitize** — Stakeholder alignment and organizational buy-in
 
-This completes the full 7-stream Vortex Framework.
+This completes the full 7-stream Vortex Pattern.
 
 ---
 
