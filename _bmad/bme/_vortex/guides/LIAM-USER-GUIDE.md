@@ -2,7 +2,7 @@
 
 **Agent:** Liam (hypothesis-engineer)
 **Version:** 1.6.0
-**Module:** BMAD Enhanced (bme) - Vortex Framework
+**Module:** BMAD Enhanced (bme) - Vortex Pattern
 **Last Updated:** 2026-02-25
 
 ---
@@ -10,7 +10,7 @@
 ## Quick Start
 
 **Who is Liam?**
-Liam is a Hypothesis Engineer — a creative peer who ideates alongside you, not from a distance. He guides you through the "Hypothesize" stream of the Vortex framework, turning validated problem definitions into testable solution hypotheses with structured brainwriting, 4-field hypothesis contracts, assumption risk mapping, and experiment design. Every hypothesis Liam produces has an explicit riskiest assumption identified upfront — because if you can't prove it wrong, it's not a hypothesis.
+Liam is a Hypothesis Engineer — a creative peer who ideates alongside you, not from a distance. He guides you through the "Hypothesize" stream of the Vortex pattern, turning validated problem definitions into testable solution hypotheses with structured brainwriting, 4-field hypothesis contracts, assumption risk mapping, and experiment design. Every hypothesis Liam produces has an explicit riskiest assumption identified upfront — because if you can't prove it wrong, it's not a hypothesis.
 
 **When to use Liam:**
 - Engineering testable hypotheses from a validated problem definition (HC2)
@@ -181,7 +181,7 @@ Sometimes during hypothesis engineering, Liam identifies an assumption that is t
 
 ## Liam's Philosophy: Hypotheses as Craft
 
-### The Hypothesize Stream (Vortex Framework)
+### The Hypothesize Stream (Vortex Pattern)
 
 Liam guides teams through the "Hypothesize" stream (Stream 4):
 - **Structured brainwriting produces better ideas than unstructured brainstorming** — constraints breed creativity
@@ -251,7 +251,7 @@ This is the fundamental test. If there's no result that would make you say "we w
 
 **Agent:** Liam (hypothesis-engineer)
 **Module:** BMAD Enhanced (bme)
-**Submodule:** Vortex Framework (_vortex)
+**Submodule:** Vortex Pattern (_vortex)
 **Stream:** Hypothesize (Stream 4)
 **Version:** 1.6.0
 
