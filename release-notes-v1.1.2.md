@@ -44,7 +44,7 @@ npx bmad-install-wade    # Install Wade only
 
 ## 🎯 About BMAD-Enhanced v1.1.x
 
-BMAD-Enhanced has evolved from design-focused tooling to the **Vortex Framework** for Lean Startup validation:
+BMAD-Enhanced has evolved from design-focused tooling to the **Vortex Pattern** for Lean Startup validation:
 
 **Emma 🎯 - Contextualization Expert**
 - Strategic framing, lean personas, product vision
@@ -54,7 +54,7 @@ BMAD-Enhanced has evolved from design-focused tooling to the **Vortex Framework*
 - Build-Measure-Learn cycles, MVPs, validated learning
 - Guides teams through the "Externalize" stream
 
-See [v1.1.1 release notes](https://github.com/amalik/BMAD-Enhanced/releases/tag/v1.1.1) for full details on the Vortex Framework repositioning.
+See [v1.1.1 release notes](https://github.com/amalik/BMAD-Enhanced/releases/tag/v1.1.1) for full details on the Vortex Pattern repositioning.
 
 ---
 
