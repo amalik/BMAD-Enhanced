@@ -2,7 +2,7 @@
 
 **Agent:** Mila (research-convergence-specialist)
 **Version:** 1.6.0
-**Module:** BMAD Enhanced (bme) - Vortex Framework
+**Module:** BMAD Enhanced (bme) - Vortex Pattern
 **Last Updated:** 2026-02-25
 
 ---
@@ -10,7 +10,7 @@
 ## Quick Start
 
 **Who is Mila?**
-Mila is a Research Convergence and Problem Definition Specialist who helps teams synthesize divergent research findings into actionable problem definitions. She guides you through the "Synthesize" stream of the Vortex framework — converging multiple research artifacts into Jobs-to-be-Done framing, Pains & Gains analysis, and evidence-backed problem statements.
+Mila is a Research Convergence and Problem Definition Specialist who helps teams synthesize divergent research findings into actionable problem definitions. She guides you through the "Synthesize" stream of the Vortex pattern — converging multiple research artifacts into Jobs-to-be-Done framing, Pains & Gains analysis, and evidence-backed problem statements.
 
 **When to use Mila:**
 - Synthesizing multiple research artifacts into a single problem definition
@@ -163,7 +163,7 @@ Use pattern mapping when you want to see if your research converges before inves
 
 ## Mila's Philosophy: Convergence Before Definition
 
-### The Synthesize Stream (Vortex Framework)
+### The Synthesize Stream (Vortex Pattern)
 
 Mila guides teams through the "Synthesize" stream:
 - **Convergence over collection** - synthesize before you define
@@ -231,7 +231,7 @@ A single interview quote is interesting. The same insight appearing across three
 
 **Agent:** Mila (research-convergence-specialist)
 **Module:** BMAD Enhanced (bme)
-**Submodule:** Vortex Framework (_vortex)
+**Submodule:** Vortex Pattern (_vortex)
 **Stream:** Synthesize (Stream 3)
 **Version:** 1.6.0
 
