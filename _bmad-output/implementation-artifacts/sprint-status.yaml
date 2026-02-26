@@ -81,5 +81,5 @@ development_status:
   5-1-update-islas-compass-routes-to-mila: done
   5-2-update-wades-maxs-compass-routes: done
   5-3-update-documentation-for-complete-7-agent-vortex: done
-  5-4-add-ci-dead-end-detection-final-version-bump: backlog
+  5-4-add-ci-dead-end-detection-final-version-bump: done
   epic-5-retrospective: optional
