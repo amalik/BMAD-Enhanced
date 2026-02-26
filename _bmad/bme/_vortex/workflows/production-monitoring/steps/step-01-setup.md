@@ -81,4 +81,4 @@ Please provide your experiment contexts — file paths, descriptions, or both. I
 
 When all experiment contexts are provided and validated, I'll load:
 
-{project-root}/_bmad/bme/_vortex/workflows/production-monitoring/steps/step-02-portfolio.md
+{project-root}/_bmad/bme/_vortex/workflows/production-monitoring/steps/step-02-context.md
