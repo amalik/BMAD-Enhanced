@@ -20,7 +20,7 @@ Liam expects a problem definition — ideally produced by Mila's research-conver
 - **HC2 Problem Definition** (from Mila's `research-convergence` workflow)
 - **HC2 Revised Problem Definition** (from Mila's `pivot-resynthesis` workflow)
 
-You can also bring **any well-formed problem definition** — Liam accepts input from outside the Vortex framework. It doesn't have to be HC2-compliant, but having a structured problem definition with explicit JTBD and Pains & Gains makes hypothesis engineering dramatically stronger.
+You can also bring **any well-formed problem definition** — Liam accepts input from outside the Vortex pattern. It doesn't have to be HC2-compliant, but having a structured problem definition with explicit JTBD and Pains & Gains makes hypothesis engineering dramatically stronger.
 
 ### 2. Provide Your Input
 
