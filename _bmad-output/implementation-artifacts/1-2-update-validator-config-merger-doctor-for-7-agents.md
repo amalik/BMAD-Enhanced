@@ -107,7 +107,7 @@ Current state of `config-merger.js`:
 - Fresh installs where `updates` is empty will have no `agents`/`workflows` in the merged config
 - **Fix:** Import registry lists and seed them as defaults, so fresh installs always have the full agent/workflow set
 
-Current `description` default (line 39): `'Vortex Framework - Contextualize, Empathize, Externalize, and Systematize streams'`
+Current `description` default (line 39): `'Vortex Pattern - Contextualize, Empathize, Externalize, and Systematize streams'`
 → Must update to include all 7 streams.
 
 ### Step Structure Validation (Tasks 2-3)
