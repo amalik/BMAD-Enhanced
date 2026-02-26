@@ -15,7 +15,7 @@ scope: "Wave 3 — Synthesize, Hypothesize, Sensitize agents"
 ## Executive Summary
 
 **The Gap:**
-The Vortex Framework covers 4 of 7 Innovation Vortex streams. Teams can frame problems (Emma), understand users (Isla), test assumptions (Wade), and make strategic decisions (Max). But three critical capabilities are missing: no convergence step to distill divergent research into a single actionable problem definition, no hypothesis engineering to produce testable solution concepts from defined problems, and no Vortex-aware production intelligence to connect what happens at scale back to the experiments that validated the direction. Teams make cognitive leaps between understanding users and testing solutions, and they lose the thread once experiments graduate to real usage.
+The Vortex Pattern covers 4 of 7 Innovation Vortex streams. Teams can frame problems (Emma), understand users (Isla), test assumptions (Wade), and make strategic decisions (Max). But three critical capabilities are missing: no convergence step to distill divergent research into a single actionable problem definition, no hypothesis engineering to produce testable solution concepts from defined problems, and no Vortex-aware production intelligence to connect what happens at scale back to the experiments that validated the direction. Teams make cognitive leaps between understanding users and testing solutions, and they lose the thread once experiments graduate to real usage.
 
 **The Solution:**
 Wave 3 completes the Vortex by adding three agents that fill the gaps between the existing four — following the double diamond model where Emma + Isla own the problem space (Diamond 1) and Synthesize + Hypothesize own the solution space (Diamond 2), with Wade externalizing, Sensitize monitoring, and Max deciding:
@@ -33,7 +33,7 @@ A complete 7-stream Innovation Vortex where every phase of product discovery has
 
 ### Problem Statement
 
-Product teams using the Vortex Framework hit three walls:
+Product teams using the Vortex Pattern hit three walls:
 
 1. **The Convergence Gap** — Emma diverges into problem spaces. Isla diverges into user research. But nobody converges. Teams accumulate empathy maps, interview transcripts, and persona cards with no structured process to synthesize them into a single, actionable problem definition. Diamond 1 has all divergence and no convergence. When Max's Pivot/Patch/Persevere results in a pivot, teams need tactical problem redefinition within a known space — but there's no agent for that. They're sent back to Emma (strategic framing) when they actually need evidence-grounded re-synthesis.
 
