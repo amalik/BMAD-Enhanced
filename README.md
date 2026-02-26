@@ -7,7 +7,7 @@
 [![Workflows](https://img.shields.io/badge/workflows-22-success)](docs/agents.md)
 [![License](https://img.shields.io/badge/license-MIT-blue)](LICENSE)
 
-BMAD-Enhanced extends the [BMAD Method](https://github.com/bmadhub/bmad) with the **Vortex Pattern** — seven specialized agents that guide teams through Lean Startup validation before building anything. The [Innovation Vortex](https://unfix.com/innovation-vortex) is a pattern from the [unFIX model](https://unfix.com/) by [Jurgen Appelo](https://jurgenappelo.com/).
+BMAD-Enhanced extends the [BMAD Method](https://github.com/bmadhub/bmad) with domain-specialized agents. First batch of agents cover the [Innovation Vortex](https://unfix.com/innovation-vortex) pattern from [unFIX model](https://unfix.com/) by [Jurgen Appelo](https://jurgenappelo.com/). Seven specialized agents will guide teams through full product discovery validation before building anything.
 
 ```
                     VORTEX PATTERN — 7 Streams · 7 Agents
