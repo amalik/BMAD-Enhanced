@@ -72,7 +72,7 @@ development_status:
   4-1-design-noahs-agent-definition-persona: done
   4-2-create-signal-interpretation-workflow: done
   4-3-create-behavior-analysis-workflow: done
-  4-4-create-production-monitoring-workflow: backlog
+  4-4-create-production-monitoring-workflow: done
   4-5-create-noah-user-guide-example-artifacts: backlog
   epic-4-retrospective: optional
 
