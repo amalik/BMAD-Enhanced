@@ -1,13 +1,13 @@
 # BMAD-Enhanced
 
-**Vortex Framework - Product Discovery through Lean Startup Validation**
+**Vortex Pattern - Product Discovery through Lean Startup Validation**
 
 [![Version](https://img.shields.io/badge/version-1.6.0-blue)](https://github.com/amalik/BMAD-Enhanced)
 [![Agents](https://img.shields.io/badge/agents-7-brightgreen)](docs/agents.md)
 [![Workflows](https://img.shields.io/badge/workflows-22-success)](docs/agents.md)
 [![License](https://img.shields.io/badge/license-MIT-blue)](LICENSE)
 
-BMAD-Enhanced extends the [BMAD Method](https://github.com/bmadhub/bmad) with the **Vortex Framework** — seven specialized agents that guide teams through Lean Startup validation before building anything.
+BMAD-Enhanced extends the [BMAD Method](https://github.com/bmadhub/bmad) with the **Vortex Pattern** — seven specialized agents that guide teams through Lean Startup validation before building anything.
 
 ```
                     VORTEX FRAMEWORK — 7 Streams · 7 Agents
@@ -198,7 +198,7 @@ MIT License — see [LICENSE](LICENSE)
 
 <div align="center">
 
-**Vortex Framework** — *Validate before you build*
+**Vortex Pattern** — *Validate before you build*
 
 [Get Started](#quick-start) | [Agents](docs/agents.md) | [Docs](#documentation) | [Roadmap](#roadmap)
 
