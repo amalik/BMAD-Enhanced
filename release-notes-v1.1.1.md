@@ -1,6 +1,6 @@
-# v1.1.1: Agent Naming Consistency + Vortex Framework
+# v1.1.1: Agent Naming Consistency + Vortex Pattern
 
-This patch release fixes agent file naming consistency and builds on v1.1.0's **major repositioning** from design-focused agents to the **Vortex Framework** for Lean Startup validation.
+This patch release fixes agent file naming consistency and builds on v1.1.0's **major repositioning** from design-focused agents to the **Vortex Pattern** for Lean Startup validation.
 
 ## 🎯 What's New in v1.1.x
 
@@ -17,7 +17,7 @@ BMAD-Enhanced has evolved from design-focused tooling to a **Lean Startup valida
 - **Role:** Guides teams through the "Externalize" stream - creating experiments for validated learning
 - **New workflows:** mvp, lean-experiment, proof-of-concept, proof-of-value
 
-**Module renamed:** `_designos` → `_vortex` (Vortex Framework)
+**Module renamed:** `_designos` → `_vortex` (Vortex Pattern)
 
 ## 🔧 Fixed in v1.1.1
 
