@@ -22,4 +22,7 @@ Based on what you just completed, here are your evidence-driven options:
 | Unsure about user needs | user-interview | Isla 🔍 | Validate user need before building |
 | MVP results available | learning-card | Max 🧭 | Capture what you learned from the MVP |
 
+> **Note:** These are evidence-based recommendations. You can navigate to any Vortex agent
+> at any time based on your judgment.
+
 **Or run Max's [VN] Vortex Navigation** for a full gap analysis across all streams.
