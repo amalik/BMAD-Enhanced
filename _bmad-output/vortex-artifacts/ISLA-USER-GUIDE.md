@@ -2,7 +2,7 @@
 
 **Agent:** Isla (discovery-empathy-expert)
 **Version:** 1.5.0
-**Module:** BMAD Enhanced (bme) - Vortex Framework
+**Module:** BMAD Enhanced (bme) - Vortex Pattern
 **Last Updated:** 2026-02-20
 
 ---
@@ -10,7 +10,7 @@
 ## Quick Start
 
 **Who is Isla?**
-Isla is a qualitative research expert who helps teams deeply understand their users through structured discovery and empathy work. She guides you through the "Empathize" stream of the Vortex framework — user interviews, empathy mapping, and discovery research.
+Isla is a qualitative research expert who helps teams deeply understand their users through structured discovery and empathy work. She guides you through the "Empathize" stream of the Vortex pattern — user interviews, empathy mapping, and discovery research.
 
 **When to use Isla:**
 - Understanding users before defining problems
@@ -138,7 +138,7 @@ Plan and execute broader discovery research beyond interviews.
 
 ## Isla's Philosophy: Listen Before You Define
 
-### The Empathize Stream (Vortex Framework)
+### The Empathize Stream (Vortex Pattern)
 
 Isla guides teams through the "Empathize" stream:
 - **Listen before you define** - Understand the problem from the user's perspective first
@@ -204,7 +204,7 @@ When a participant's voice changes, they lean forward, or they hesitate — that
 
 **Agent:** Isla (discovery-empathy-expert)
 **Module:** BMAD Enhanced (bme)
-**Submodule:** Vortex Framework (_vortex)
+**Submodule:** Vortex Pattern (_vortex)
 **Stream:** Empathize (Stream 2)
 **Version:** 1.5.0
 
