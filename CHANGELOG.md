@@ -7,6 +7,41 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [1.6.0] - 2026-02-26
+
+### Added
+
+- **Mila — Research Convergence Specialist** (Stream 3: Synthesize) — New agent that converges divergent research into actionable problem definitions using JTBD framing and Pains & Gains analysis
+  - `research-convergence` workflow — Synthesize multiple research artifacts into a single problem definition
+  - `pivot-resynthesis` workflow — Re-synthesize problem definition after failed experiments
+  - `pattern-mapping` workflow — Surface convergent patterns across research sources
+- **Liam — Hypothesis Engineer** (Stream 4: Hypothesize) — New agent that engineers testable hypotheses from validated problem definitions using structured brainwriting and assumption mapping
+  - `hypothesis-engineering` workflow — Produce testable hypotheses in 4-field contract format
+  - `assumption-mapping` workflow — Classify hidden assumptions by risk level
+  - `experiment-design` workflow — Design experiments targeting riskiest assumptions first
+- **Noah — Production Intelligence Specialist** (Stream 6: Sensitize) — New agent that interprets production signals through experiment lineage context
+  - `signal-interpretation` workflow — Contextual interpretation of production signals
+  - `behavior-analysis` workflow — Behavioral pattern analysis against experiment baselines
+  - `production-monitoring` workflow — Multi-signal monitoring across active experiments
+- **10 Handoff Contracts (HC1-HC10)** — Structured information flow between all 7 agents
+  - HC1-HC5: Artifact contracts with schema definitions in `_bmad/bme/_vortex/contracts/`
+  - HC6-HC8: Decision-driven routing contracts (Max → Mila/Isla/Emma)
+  - HC9-HC10: Flag-driven routing contracts (Liam → Isla, Noah → Isla)
+- **Compass Routing** — Every workflow's final step includes evidence-driven routing table with agent recommendations
+- **Compass Routing Reference** — Authoritative routing document (`_bmad/bme/_vortex/compass-routing-reference.md`) defining all routes across 22 workflows
+- **Cross-agent routing for existing agents** — Emma, Isla, Wade, and Max now route to Mila, Liam, and Noah where appropriate
+- **Module README** — Technical inventory at `_bmad/bme/_vortex/README.md` with complete agent, workflow, and contract listings
+- **Extensibility documentation** — 4-step pattern for adding new agents (registry → agent file → workflows → guide) validates NFR9/E4
+
+### Changed
+
+- **README.md** — Updated from 4-agent to 7-agent framework with non-linear Vortex diagram, 10 HC contracts, and Compass routing
+- **docs/agents.md** — Expanded from 4-agent reference to comprehensive 7-agent practitioner guide with user journeys, handoff contracts, and Compass documentation
+- **Agent registry** — Now contains 7 agents and 22 workflows (was 4 agents, 13 workflows)
+- **Roadmap** — v1.6.0 marked as current release; Wave 3 complete
+
+---
+
 ## [1.5.2] - 2026-02-22
 
 ### Changed
