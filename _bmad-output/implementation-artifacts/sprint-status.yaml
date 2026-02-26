@@ -77,8 +77,8 @@ development_status:
   epic-4-retrospective: done
 
   # Epic 5: Vortex Integration — Cross-Agent Routing & Documentation
-  epic-5: backlog
-  5-1-update-islas-compass-routes-to-mila: backlog
+  epic-5: in-progress
+  5-1-update-islas-compass-routes-to-mila: ready-for-dev
   5-2-update-wades-maxs-compass-routes: backlog
   5-3-update-documentation-for-complete-7-agent-vortex: backlog
   5-4-add-ci-dead-end-detection-final-version-bump: backlog
