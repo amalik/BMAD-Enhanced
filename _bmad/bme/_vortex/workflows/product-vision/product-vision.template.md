@@ -142,6 +142,6 @@ version: 1.0
 
 ---
 
-**Created with:** BMAD-Enhanced v1.2.0 - Vortex Framework (Contextualize Stream)
+**Created with:** BMAD-Enhanced v1.2.0 - Vortex Pattern (Contextualize Stream)
 **Agent:** Emma (Contextualization Expert)
 **Workflow:** product-vision
