@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 
 /**
- * BMAD-Enhanced – Vortex Framework
+ * BMAD-Enhanced – Vortex Pattern
  * Product discovery through Contextualize, Empathize, Externalize, and Systematize streams.
  *
  * This is a CLI-first package. Use the bin commands:
