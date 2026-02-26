@@ -1,6 +1,6 @@
 # Vortex Pattern - Agent Guide
 
-Detailed reference for all seven Vortex agents, their workflows, positioning, and how they work together in the complete 7-stream product discovery framework.
+Detailed reference for all seven Vortex agents, their workflows, positioning, and how they work together in the complete 7-stream product discovery pattern. The [Innovation Vortex](https://unfix.com/innovation-vortex) is a pattern from the [unFIX model](https://unfix.com/) by [Jurgen Appelo](https://jurgenappelo.com/).
 
 ---
 
@@ -220,7 +220,7 @@ Max turns Wade's experiment results into organizational knowledge and strategic 
 The Vortex is **non-linear by design**. While there's a natural forward flow (Isla → Mila → Liam → Wade → Noah → Max), agents route back to each other based on evidence. Ten handoff contracts ensure structured information flows at every transition.
 
 ```
-                    VORTEX FRAMEWORK — 7 Streams · 7 Agents
+                    VORTEX PATTERN — 7 Streams · 7 Agents
 
   ┌──────────┐  HC1  ┌──────────┐  HC2  ┌──────────┐  HC3  ┌──────────┐
   │  Isla 🔍  │─────▶│  Mila 🔬  │─────▶│  Liam 💡  │─────▶│  Wade 🧪  │
