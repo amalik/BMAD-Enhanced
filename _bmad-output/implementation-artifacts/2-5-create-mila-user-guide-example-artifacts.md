@@ -88,7 +88,7 @@ So that I understand Mila's role in the Vortex and what her output looks like.
   - [x]1.10 Write Chatting with Mila section with example questions (e.g., "How do I frame a good JTBD statement?", "When should I use pattern mapping vs. full convergence?", "How many artifacts do I need for strong convergence?", "What if my research contradicts itself?")
   - [x]1.11 Write Troubleshooting section (config error, workflow error — same patterns as Isla guide)
   - [x]1.12 Write Tips from Mila section (3-4 tips in Mila's voice about synthesis, convergence, evidence-based problem definition)
-  - [x]1.13 Write Credits section: Agent: Mila (research-convergence-specialist), Module: BMAD Enhanced (bme), Submodule: Vortex Framework (_vortex), Stream: Synthesize (Stream 3), Version: 1.6.0
+  - [x]1.13 Write Credits section: Agent: Mila (research-convergence-specialist), Module: BMAD Enhanced (bme), Submodule: Vortex Pattern (_vortex), Stream: Synthesize (Stream 3), Version: 1.6.0
 
 - [x]**Task 2: Create examples/ directory and HC2 example artifact** (AC: 5)
   - [x]2.1 Create directory `_bmad/bme/_vortex/examples/` if it doesn't exist
