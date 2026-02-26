@@ -35,6 +35,6 @@ version: 1.0
 
 ---
 
-**Created with:** BMAD-Enhanced v1.2.0 - Vortex Framework (Externalize Stream)
+**Created with:** BMAD-Enhanced v1.2.0 - Vortex Pattern (Externalize Stream)
 **Agent:** Wade (Lean Experiments Specialist)
 **Workflow:** mvp
