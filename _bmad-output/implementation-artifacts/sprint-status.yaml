@@ -68,13 +68,13 @@ development_status:
   epic-3-retrospective: done
 
   # Epic 4: Noah — Production Intelligence & Signal Interpretation
-  epic-4: in-progress
+  epic-4: done
   4-1-design-noahs-agent-definition-persona: done
   4-2-create-signal-interpretation-workflow: done
   4-3-create-behavior-analysis-workflow: done
   4-4-create-production-monitoring-workflow: done
-  4-5-create-noah-user-guide-example-artifacts: backlog
-  epic-4-retrospective: optional
+  4-5-create-noah-user-guide-example-artifacts: done
+  epic-4-retrospective: done
 
   # Epic 5: Vortex Integration — Cross-Agent Routing & Documentation
   epic-5: backlog
