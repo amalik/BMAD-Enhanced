@@ -178,8 +178,11 @@ Based on what you just completed, here are your evidence-driven options:
 
 | If you learned... | Consider next... | Agent | Why |
 |---|---|---|---|
-| Pivoting — new direction | contextualize-scope | Emma 🎯 | Re-contextualize for the pivot |
+| Pivoting — problem correct, solution wrong | pivot-resynthesis | Mila 🔬 | Re-synthesize pains and gains for new direction (HC6) |
 | Patching — adjust approach | lean-experiment | Wade 🧪 | Test the adjusted approach |
-| Persevering — need deeper insight | user-discovery | Isla 🔍 | Strengthen your understanding of users |
+| Persevering — need deeper insight | user-discovery | Isla 🔍 | Strengthen your understanding of users (HC7) |
+
+> **Note:** These are evidence-based recommendations. You can navigate to any Vortex agent
+> at any time based on your judgment.
 
 **Or run Max's [VN] Vortex Navigation** for a full gap analysis across all streams.
