@@ -137,6 +137,6 @@ For each insight, ask: "If a product manager read this, what would they do on Mo
 
 ---
 
-**Created with:** BMAD-Enhanced v1.5.0 - Vortex Framework (Empathize Stream)
+**Created with:** BMAD-Enhanced v1.5.0 - Vortex Pattern (Empathize Stream)
 **Agent:** Isla (Discovery & Empathy Expert)
 **Workflow:** user-interview
