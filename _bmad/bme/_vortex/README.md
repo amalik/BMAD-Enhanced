@@ -1,6 +1,6 @@
 # Vortex Pattern Module
 
-Technical inventory for the `_bmad/bme/_vortex` module — the complete 7-stream product discovery framework.
+Technical inventory for the `_bmad/bme/_vortex` module — the complete 7-stream product discovery pattern. The [Innovation Vortex](https://unfix.com/innovation-vortex) is a pattern from the [unFIX model](https://unfix.com/) by [Jurgen Appelo](https://jurgenappelo.com/).
 
 ## Agents (7)
 
