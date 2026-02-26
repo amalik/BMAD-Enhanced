@@ -91,7 +91,7 @@ So that I understand Noah's role and what his output looks like.
   - [x] 1.9 Write Chatting with Noah section: topics and 6-8 example questions (e.g., "What does this production signal mean in context of my experiment?", "How do I classify this behavior pattern?", "When should I use signal-interpretation vs. behavior-analysis vs. production-monitoring?")
   - [x] 1.10 Write Troubleshooting section: common config/workflow errors (same patterns as Mila/Liam guides)
   - [x] 1.11 Write Tips from Noah section: 3-4 tips in Noah's calm, observational voice
-  - [x] 1.12 Write Credits section: Agent: Noah (production-intelligence-specialist), Module: BMAD Enhanced (bme), Submodule: Vortex Framework (_vortex), Stream: Sensitize (Stream 6), Version: 1.6.0
+  - [x] 1.12 Write Credits section: Agent: Noah (production-intelligence-specialist), Module: BMAD Enhanced (bme), Submodule: Vortex Pattern (_vortex), Stream: Sensitize (Stream 6), Version: 1.6.0
 
 - [x] **Task 2: Create HC5 example artifact** (AC: 5, 6, 7)
   - [x] 2.1 Create `_bmad/bme/_vortex/examples/hc5-example-signal-report.md`
