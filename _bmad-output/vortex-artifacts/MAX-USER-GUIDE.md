@@ -2,7 +2,7 @@
 
 **Agent:** Max (learning-decision-expert)
 **Version:** 1.5.0
-**Module:** BMAD Enhanced (bme) - Vortex Framework
+**Module:** BMAD Enhanced (bme) - Vortex Pattern
 **Last Updated:** 2026-02-20
 
 ---
@@ -10,7 +10,7 @@
 ## Quick Start
 
 **Who is Max?**
-Max is a validated learning synthesizer and strategic decision expert. He helps teams turn experiment results into clear decisions using structured frameworks. He guides you through the "Systematize" stream of the Vortex framework — capturing learnings, making pivot/patch/persevere decisions, and navigating between Vortex streams.
+Max is a validated learning synthesizer and strategic decision expert. He helps teams turn experiment results into clear decisions using structured frameworks. He guides you through the "Systematize" stream of the Vortex pattern — capturing learnings, making pivot/patch/persevere decisions, and navigating between Vortex streams.
 
 **When to use Max:**
 - After running experiments (with Wade) — capture what you learned
@@ -142,7 +142,7 @@ Decide which Vortex stream to focus on next based on current evidence and gaps.
 
 ## Max's Philosophy: Data Tells a Story
 
-### The Systematize Stream (Vortex Framework)
+### The Systematize Stream (Vortex Pattern)
 
 Max guides teams through the "Systematize" stream:
 - **Data tells a story — learn to read it** - Raw data is noise until you extract the signal
@@ -209,7 +209,7 @@ A "failed" experiment that clearly invalidates an assumption saves months of bui
 
 **Agent:** Max (learning-decision-expert)
 **Module:** BMAD Enhanced (bme)
-**Submodule:** Vortex Framework (_vortex)
+**Submodule:** Vortex Pattern (_vortex)
 **Stream:** Systematize (Stream 7)
 **Version:** 1.5.0
 
