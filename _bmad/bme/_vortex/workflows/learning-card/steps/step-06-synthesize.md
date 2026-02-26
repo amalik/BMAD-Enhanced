@@ -113,6 +113,9 @@ Based on what you just completed, here are your evidence-driven options:
 |---|---|---|---|
 | Learning triggers strategic decision | pivot-patch-persevere | Max 🧭 | Decide: pivot, patch, or persevere |
 | Need more data | lean-experiment | Wade 🧪 | Run follow-up experiments |
-| Assumptions invalidated | contextualize-scope | Emma 🎯 | Re-frame the problem based on evidence |
+| Assumptions invalidated | contextualize-scope | Emma 🎯 | Re-frame the problem based on evidence (HC8) |
+
+> **Note:** These are evidence-based recommendations. You can navigate to any Vortex agent
+> at any time based on your judgment.
 
 **Or run Max's [VN] Vortex Navigation** for a full gap analysis across all streams.
