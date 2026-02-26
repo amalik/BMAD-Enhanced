@@ -161,8 +161,11 @@ Based on what you just completed, here are your evidence-driven options:
 
 | If you learned... | Consider next... | Agent | Why |
 |---|---|---|---|
-| Insights suggest different problem | contextualize-scope | Emma 🎯 | Re-scope based on what users actually said |
+| Interview insights ready for synthesis | research-convergence | Mila 🔬 | Converge interview findings into problem definition (HC1) |
 | Riskiest insights identified | lean-experiment | Wade 🧪 | Test your riskiest insight with an experiment |
 | Want to synthesize across users | empathy-map | Isla 🔍 | Map patterns across all interview subjects |
+
+> **Note:** These are evidence-based recommendations. You can navigate to any Vortex agent
+> at any time based on your judgment.
 
 **Or run Max's [VN] Vortex Navigation** for a full gap analysis across all streams.
