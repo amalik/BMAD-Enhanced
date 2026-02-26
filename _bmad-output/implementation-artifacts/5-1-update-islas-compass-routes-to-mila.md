@@ -1,6 +1,6 @@
 # Story 5.1: Update Isla's Compass Routes to Mila
 
-Status: ready-for-dev
+Status: done
 
 ## Story
 
@@ -21,29 +21,29 @@ so that I can flow naturally from divergent discovery to convergent problem defi
 
 ## Tasks / Subtasks
 
-- [ ] **Task 1: Read and document current state of all 3 step files** (AC: #4, Retro Action Item: read-before-edit mandate)
-  - [ ] 1.1 Read `_bmad/bme/_vortex/workflows/empathy-map/steps/step-06-synthesize.md` — document current Compass table (lines ~98-102)
-  - [ ] 1.2 Read `_bmad/bme/_vortex/workflows/user-interview/steps/step-06-synthesize.md` — document current Compass table (lines ~162-166)
-  - [ ] 1.3 Read `_bmad/bme/_vortex/workflows/user-discovery/steps/step-06-synthesize.md` — document current Compass table (lines ~150-154)
-  - [ ] 1.4 Read `_bmad/bme/_vortex/compass-routing-reference.md` — confirm target state for Isla's section (lines ~189-197)
-  - [ ] 1.5 Document current vs. target state in Dev Notes
+- [x] **Task 1: Read and document current state of all 3 step files** (AC: #4, Retro Action Item: read-before-edit mandate)
+  - [x] 1.1 Read `_bmad/bme/_vortex/workflows/empathy-map/steps/step-06-synthesize.md` — document current Compass table (lines ~98-102)
+  - [x] 1.2 Read `_bmad/bme/_vortex/workflows/user-interview/steps/step-06-synthesize.md` — document current Compass table (lines ~162-166)
+  - [x] 1.3 Read `_bmad/bme/_vortex/workflows/user-discovery/steps/step-06-synthesize.md` — document current Compass table (lines ~150-154)
+  - [x] 1.4 Read `_bmad/bme/_vortex/compass-routing-reference.md` — confirm target state for Isla's section (lines ~189-197)
+  - [x] 1.5 Document current vs. target state in Dev Notes
 
-- [ ] **Task 2: Update Isla's 3 workflow step files** (AC: #1, #2, #3, #6, #7)
-  - [ ] 2.1 Update `empathy-map/steps/step-06-synthesize.md` Compass table — replace Emma row with Mila row per compass-routing-reference target state
-  - [ ] 2.2 Update `user-interview/steps/step-06-synthesize.md` Compass table — replace Emma row with Mila row per compass-routing-reference target state
-  - [ ] 2.3 Update `user-discovery/steps/step-06-synthesize.md` Compass table — replace Emma row with Mila row per compass-routing-reference target state
-  - [ ] 2.4 Verify each Mila row references HC1 contract and declares trigger condition
-  - [ ] 2.5 Verify user override note is present in each file (add if missing)
+- [x] **Task 2: Update Isla's 3 workflow step files** (AC: #1, #2, #3, #6, #7)
+  - [x] 2.1 Update `empathy-map/steps/step-06-synthesize.md` Compass table — replace Emma row with Mila row per compass-routing-reference target state
+  - [x] 2.2 Update `user-interview/steps/step-06-synthesize.md` Compass table — replace Emma row with Mila row per compass-routing-reference target state
+  - [x] 2.3 Update `user-discovery/steps/step-06-synthesize.md` Compass table — replace Emma row with Mila row per compass-routing-reference target state
+  - [x] 2.4 Verify each Mila row references HC1 contract and declares trigger condition
+  - [x] 2.5 Verify user override note is present in each file (add if missing)
 
-- [ ] **Task 3: Update compass-routing-reference.md** (AC: #5)
-  - [ ] 3.1 Remove or update the "Note:" at line ~197 that says "Isla's existing step-06 files currently route to Emma/Wade/Isla. The Mila route (HC1) is added by Epic 5 Story 5.1 (FR30)"
-  - [ ] 3.2 Verify Isla section target state matches what was implemented in the step files
+- [x] **Task 3: Update compass-routing-reference.md** (AC: #5)
+  - [x] 3.1 Remove or update the "Note:" at line ~197 that says "Isla's existing step-06 files currently route to Emma/Wade/Isla. The Mila route (HC1) is added by Epic 5 Story 5.1 (FR30)"
+  - [x] 3.2 Verify Isla section target state matches what was implemented in the step files
 
-- [ ] **Task 4: Verification** (AC: #4, #8)
-  - [ ] 4.1 Run `npm run lint` to verify no regressions
-  - [ ] 4.2 Verify all 3 updated Compass tables match compass-routing-reference.md target
-  - [ ] 4.3 Verify no voice bleed (Isla's voice in her step files, no agent crossover)
-  - [ ] 4.4 Verify existing routing guidance text around each Compass table is preserved
+- [x] **Task 4: Verification** (AC: #4, #8)
+  - [x] 4.1 Run `npm run lint` to verify no regressions
+  - [x] 4.2 Verify all 3 updated Compass tables match compass-routing-reference.md target
+  - [x] 4.3 Verify no voice bleed (Isla's voice in her step files, no agent crossover)
+  - [x] 4.4 Verify existing routing guidance text around each Compass table is preserved
 
 ## Dev Notes
 
@@ -172,9 +172,39 @@ Verify this exists in each file. Add if missing.
 ## Dev Agent Record
 
 ### Agent Model Used
+Claude Opus 4.6
 
 ### Completion Notes List
 
+- Task 1: Read-before-edit mandate satisfied. All 3 step files and compass-routing-reference.md read and verified against story Dev Notes. Current state matches documentation exactly.
+- Task 2: Replaced Emma row with Mila row in all 3 Isla Compass tables. Each Mila row references HC1 contract, declares trigger condition (artifact readiness for synthesis), and routes to `research-convergence`. Wade and Isla rows preserved with minor wording alignment to compass-routing-reference.md. FR22 user override note added to all 3 files (was missing).
+- Task 3: Removed the implementation-pending note from compass-routing-reference.md Isla section. Verified target state matches implementation.
+- Task 4: `npm run lint` clean. 199/199 unit tests pass. All 3 Compass tables match compass-routing-reference.md. No voice bleed — surrounding prose untouched. Routing guidance text preserved.
+
 ### Change Log
 
+- 2026-02-26: Updated Isla's 3 workflow Compass tables (empathy-map, user-interview, user-discovery) — replaced Emma routes with Mila routes per compass-routing-reference.md (P22). Added FR22 user override notes. Removed implementation-pending note from compass-routing-reference.md.
+- 2026-02-26: Code review fixes (0H/0M/4L) — reverted 2 retained route wording changes to preserve originals (empathy-map Wade trigger, user-interview Isla Why), aligned FR22 note format to two-line wrapped pattern matching other Wave 3 step files, added v1.0.2 version history entry to compass-routing-reference.md.
+
 ### File List
+
+- `_bmad/bme/_vortex/workflows/empathy-map/steps/step-06-synthesize.md` — Modified: Compass table updated (Emma→Mila), FR22 note added, review fix: Wade trigger reverted to original + note format aligned
+- `_bmad/bme/_vortex/workflows/user-interview/steps/step-06-synthesize.md` — Modified: Compass table updated (Emma→Mila), FR22 note added, review fix: Isla Why reverted to original + note format aligned
+- `_bmad/bme/_vortex/workflows/user-discovery/steps/step-06-synthesize.md` — Modified: Compass table updated (Emma→Mila), FR22 note added, review fix: note format aligned
+- `_bmad/bme/_vortex/compass-routing-reference.md` — Modified: Removed Story 5.1 implementation-pending note, review fix: added v1.0.2 version history entry
+
+## Senior Developer Review (AI)
+
+**Review Date:** 2026-02-26
+**Reviewer Model:** Claude Opus 4.6
+**Review Outcome:** Approve (with 4 LOW auto-fixes applied)
+
+**Findings Summary:** 0 High, 0 Medium, 4 Low — all fixed automatically
+
+**Action Items:**
+- [x] L1: Revert scope-creep wording changes on 2 retained routes (empathy-map Wade trigger, user-interview Isla Why)
+- [x] L2: Add v1.0.2 version history entry to compass-routing-reference.md
+- [x] L3: Align FR22 note to two-line wrapped format matching Wave 3 pattern
+- [x] L4: Restore user-interview Isla "Map patterns" verb (resolved by L1 revert)
+
+**Post-fix verification:** `npm run lint` clean, 199/199 tests pass
