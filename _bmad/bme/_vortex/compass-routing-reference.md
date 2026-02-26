@@ -1,14 +1,14 @@
-# Compass Routing Reference — Vortex Framework
+# Compass Routing Reference — Vortex Pattern
 
 > **Status:** Authoritative | **Version:** 1.0 | **Created:** 2026-02-24 | **Framework:** v1.6.0
 >
-> This is the **authoritative** routing reference for the Vortex Framework. The routing table in `architecture.md` is a point-in-time snapshot only (P22). All step-file Compass sections MUST reference this document for routing decisions.
+> This is the **authoritative** routing reference for the Vortex Pattern. The routing table in `architecture.md` is a point-in-time snapshot only (P22). All step-file Compass sections MUST reference this document for routing decisions.
 
 ---
 
 ## Vortex Overview
 
-The Vortex Framework has 7 agents across 7 streams, connected by 10 handoff contracts:
+The Vortex Pattern has 7 agents across 7 streams, connected by 10 handoff contracts:
 
 ```
                         ┌─────────────────────────────────────────────┐
