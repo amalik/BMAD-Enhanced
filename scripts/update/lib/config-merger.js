@@ -37,7 +37,7 @@ async function mergeConfig(currentConfigPath, newVersion, updates = {}) {
   // Seed with required structural defaults for fresh installs
   const defaults = {
     submodule_name: '_vortex',
-    description: 'Vortex Framework - Contextualize, Empathize, Synthesize, Hypothesize, Externalize, Sensitize, and Systematize streams',
+    description: 'Vortex Pattern - Contextualize, Empathize, Synthesize, Hypothesize, Externalize, Sensitize, and Systematize streams',
     module: 'bme',
     output_folder: '{project-root}/_bmad-output/vortex-artifacts',
     agents: [...AGENT_IDS],
