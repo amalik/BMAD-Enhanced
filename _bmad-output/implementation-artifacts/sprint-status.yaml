@@ -70,7 +70,7 @@ development_status:
   # Epic 4: Noah — Production Intelligence & Signal Interpretation
   epic-4: in-progress
   4-1-design-noahs-agent-definition-persona: done
-  4-2-create-signal-interpretation-workflow: ready-for-dev
+  4-2-create-signal-interpretation-workflow: in-progress
   4-3-create-behavior-analysis-workflow: backlog
   4-4-create-production-monitoring-workflow: backlog
   4-5-create-noah-user-guide-example-artifacts: backlog
