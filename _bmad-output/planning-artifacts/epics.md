@@ -9,7 +9,7 @@ inputDocuments:
 
 ## Overview
 
-This document provides the complete epic and story breakdown for BMAD-Enhanced v1.6.0, decomposing the requirements from the PRD and Architecture into implementable stories. Wave 3 completes the 7-stream Vortex Framework by adding Mila (Synthesize), Liam (Hypothesize), and Noah (Sensitize).
+This document provides the complete epic and story breakdown for BMAD-Enhanced v1.6.0, decomposing the requirements from the PRD and Architecture into implementable stories. Wave 3 completes the 7-stream Vortex Pattern by adding Mila (Synthesize), Liam (Hypothesize), and Noah (Sensitize).
 
 ## Requirements Inventory
 
@@ -259,7 +259,7 @@ This document provides the complete epic and story breakdown for BMAD-Enhanced v
 
 ### Epic 1: Vortex Foundation — Contracts, Routing & Infrastructure
 
-Users can install the 7-agent Vortex framework, see all agents in Party Mode and `bmad-doctor`, and rely on defined handoff contract schemas that guarantee artifact compatibility across the entire Vortex. The Compass routing reference document defines all navigation paths.
+Users can install the 7-agent Vortex pattern, see all agents in Party Mode and `bmad-doctor`, and rely on defined handoff contract schemas that guarantee artifact compatibility across the entire Vortex. The Compass routing reference document defines all navigation paths.
 
 **FRs covered:** FR24, FR25, FR26, FR27, FR28, FR29, FR34, FR35, FR36, FR37, FR38, FR39, FR40, FR41, FR42
 **NFRs addressed:** NFR1-7, NFR22-26
@@ -307,7 +307,7 @@ Users can navigate the complete 7-agent Vortex seamlessly. Existing agents route
 
 ## Epic 1: Vortex Foundation — Contracts, Routing & Infrastructure
 
-Users can install the 7-agent Vortex framework, see all agents in Party Mode and `bmad-doctor`, and rely on defined handoff contract schemas that guarantee artifact compatibility across the entire Vortex.
+Users can install the 7-agent Vortex pattern, see all agents in Party Mode and `bmad-doctor`, and rely on defined handoff contract schemas that guarantee artifact compatibility across the entire Vortex.
 
 ### Story 1.1: Expand Agent Registry to 7 Agents
 
@@ -806,7 +806,7 @@ So that I understand the full framework and can navigate all available agents an
 
 ### Story 5.4: Add CI Dead-End Detection & Final Version Bump
 
-As a maintainer of the Vortex framework,
+As a maintainer of the Vortex pattern,
 I want CI to detect dead-end Compass routes and the version bumped to 1.6.0,
 So that any broken routing is caught automatically and the release is properly versioned.
 
