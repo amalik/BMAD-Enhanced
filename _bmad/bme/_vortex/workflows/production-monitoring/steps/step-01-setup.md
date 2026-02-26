@@ -28,7 +28,7 @@ Noah expects experiment context — ideally produced by Wade's experimentation w
 - **HC4 Experiment Context** (from Wade's `lean-experiment` workflow)
 - **HC4 Experiment Context** (from Wade's `proof-of-concept`, `proof-of-value`, or `mvp` workflows)
 
-You can also bring **any well-formed experiment summaries** — Noah accepts input from outside the Vortex framework. It doesn't have to be HC4-compliant, but having structured experiment results with explicit success criteria makes portfolio monitoring dramatically more precise.
+You can also bring **any well-formed experiment summaries** — Noah accepts input from outside the Vortex pattern. It doesn't have to be HC4-compliant, but having structured experiment results with explicit success criteria makes portfolio monitoring dramatically more precise.
 
 ### 2. Provide Your Inputs
 
