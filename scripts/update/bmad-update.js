@@ -118,6 +118,9 @@ async function main() {
     case 'up-to-date':
       console.log(chalk.green(`✓ Already up to date! (v${assessment.currentVersion})`));
       console.log('');
+      console.log(chalk.gray('If you expected a newer version, npx may be serving a cached copy.'));
+      console.log(chalk.gray('Run: ') + chalk.cyan('npx -p bmad-enhanced@latest bmad-update'));
+      console.log('');
       process.exit(0);
       break;
 
