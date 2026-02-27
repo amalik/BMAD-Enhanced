@@ -80,8 +80,8 @@ async function main() {
   } else if (compareVersions(currentVersion, targetVersion) < 0) {
     console.log(chalk.yellow('Status: ⚠ Update available'));
     console.log('');
-    console.log('Run: ' + chalk.cyan('npx bmad-update --dry-run') + ' (to preview)');
-    console.log('     ' + chalk.cyan('npx bmad-update') + ' (to apply)');
+    console.log('Run: ' + chalk.cyan('npx -p bmad-enhanced@latest bmad-update --dry-run') + ' (to preview)');
+    console.log('     ' + chalk.cyan('npx -p bmad-enhanced@latest bmad-update') + ' (to apply)');
   } else {
     console.log(chalk.yellow(`Status: Package version (${targetVersion}) is older than installed (${currentVersion})`));
   }
