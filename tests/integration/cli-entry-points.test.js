@@ -2,6 +2,7 @@ const { describe, it } = require('node:test');
 const assert = require('node:assert/strict');
 const path = require('path');
 const { runScript, PACKAGE_ROOT } = require('../helpers');
+const { AGENTS } = require('../../scripts/update/lib/agent-registry');
 
 const projectRoot = PACKAGE_ROOT;
 
@@ -18,12 +19,11 @@ describe('index.js entry point', () => {
     assert.ok(stdout.includes(pkg.version), 'should show package version');
   });
 
-  it('shows all agent names', async () => {
+  it('shows all agent names (registry-driven)', async () => {
     const { stdout } = await run(path.join(projectRoot, 'index.js'));
-    assert.ok(stdout.includes('Emma'), 'should mention Emma');
-    assert.ok(stdout.includes('Isla'), 'should mention Isla');
-    assert.ok(stdout.includes('Wade'), 'should mention Wade');
-    assert.ok(stdout.includes('Max'), 'should mention Max');
+    for (const agent of AGENTS) {
+      assert.ok(stdout.includes(agent.name), `should mention ${agent.name}`);
+    }
   });
 
   it('shows available commands', async () => {
