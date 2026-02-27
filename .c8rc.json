@@ -1,8 +1,8 @@
 {
   "check-coverage": true,
-  "lines": 75,
-  "functions": 75,
-  "branches": 65,
+  "lines": 83,
+  "functions": 88,
+  "branches": 80,
   "reporter": ["text", "text-summary"],
   "include": ["scripts/**/*.js", "index.js"],
   "exclude": ["tests/**", "node_modules/**"]
