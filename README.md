@@ -1,11 +1,23 @@
-# BMAD-Enhanced
+<div align="center">
 
-**Vortex Pattern - Product Discovery through Lean Startup Validation**
+```
+ ██████╗ ███╗   ███╗ █████╗ ██████╗
+ ██╔══██╗████╗ ████║██╔══██╗██╔══██╗
+ ██████╔╝██╔████╔██║███████║██║  ██║
+ ██╔══██╗██║╚██╔╝██║██╔══██║██║  ██║
+ ██████╔╝██║ ╚═╝ ██║██║  ██║██████╔╝
+ ╚═════╝ ╚═╝     ╚═╝╚═╝  ╚═╝╚═════╝
+       E N H A N C E D
+```
+
+**BMAD Method enhanced by domain-specialized agents**
 
 [![Version](https://img.shields.io/badge/version-1.6.0-blue)](https://github.com/amalik/BMAD-Enhanced)
 [![Agents](https://img.shields.io/badge/agents-7-brightgreen)](docs/agents.md)
 [![Workflows](https://img.shields.io/badge/workflows-22-success)](docs/agents.md)
 [![License](https://img.shields.io/badge/license-MIT-blue)](LICENSE)
+
+</div>
 
 BMAD-Enhanced extends the [BMAD Method](https://github.com/bmadhub/bmad) with domain-specialized agents. First batch of agents cover the [Innovation Vortex](https://unfix.com/innovation-vortex) pattern from [unFIX model](https://unfix.com/) by [Jurgen Appelo](https://jurgenappelo.com/). Seven specialized agents will guide teams through full product discovery validation before building anything.
 
