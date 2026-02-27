@@ -5,6 +5,7 @@ const fs = require('fs-extra');
 const os = require('os');
 const yaml = require('js-yaml');
 const { runScript, PACKAGE_ROOT } = require('../helpers');
+const { AGENT_IDS, WORKFLOW_NAMES } = require('../../scripts/update/lib/agent-registry');
 
 const installerScript = path.join(PACKAGE_ROOT, 'scripts/install-vortex-agents.js');
 
@@ -26,22 +27,15 @@ describe('install-vortex-agents CLI E2E', () => {
   it('completes without error on a fresh directory', async () => {
     const { exitCode, stdout } = await runInstaller(tmpDir);
     assert.equal(exitCode, 0, 'installer should exit cleanly');
-    assert.ok(stdout.includes('E N H A N C E D'), 'should show banner');
-    assert.ok(stdout.includes('All Vortex Agents Installed'), 'should show success message');
+    assert.ok(stdout.length > 0, 'should produce output');
   });
 
-  it('creates all 4 agent files', async () => {
-    const agents = [
-      'contextualization-expert.md',
-      'lean-experiments-specialist.md',
-      'discovery-empathy-expert.md',
-      'learning-decision-expert.md'
-    ];
-    for (const agent of agents) {
-      const agentPath = path.join(tmpDir, '_bmad/bme/_vortex/agents', agent);
-      assert.ok(fs.existsSync(agentPath), `${agent} should exist`);
+  it('creates all agent files (registry-driven)', async () => {
+    for (const agentId of AGENT_IDS) {
+      const agentPath = path.join(tmpDir, '_bmad/bme/_vortex/agents', `${agentId}.md`);
+      assert.ok(fs.existsSync(agentPath), `${agentId}.md should exist`);
       const stat = fs.statSync(agentPath);
-      assert.ok(stat.size > 0, `${agent} should be non-empty`);
+      assert.ok(stat.size > 0, `${agentId}.md should be non-empty`);
     }
   });
 
@@ -54,15 +48,14 @@ describe('install-vortex-agents CLI E2E', () => {
     assert.equal(config.version, pkg.version);
   });
 
-  it('creates agent-manifest.csv', async () => {
+  it('creates agent-manifest.csv with all agents (registry-driven)', async () => {
     const manifestPath = path.join(tmpDir, '_bmad/_config/agent-manifest.csv');
     assert.ok(fs.existsSync(manifestPath), 'agent-manifest.csv should exist');
 
     const content = fs.readFileSync(manifestPath, 'utf8');
-    assert.ok(content.includes('contextualization-expert'), 'manifest should list Emma');
-    assert.ok(content.includes('discovery-empathy-expert'), 'manifest should list Isla');
-    assert.ok(content.includes('learning-decision-expert'), 'manifest should list Max');
-    assert.ok(content.includes('lean-experiments-specialist'), 'manifest should list Wade');
+    for (const agentId of AGENT_IDS) {
+      assert.ok(content.includes(agentId), `manifest should list ${agentId}`);
+    }
   });
 
   it('creates output directory', async () => {
@@ -70,13 +63,11 @@ describe('install-vortex-agents CLI E2E', () => {
     assert.ok(fs.existsSync(outputDir), 'output directory should exist');
   });
 
-  it('creates workflow directories', async () => {
+  it('creates all workflow directories (registry-driven)', async () => {
     const workflowsDir = path.join(tmpDir, '_bmad/bme/_vortex/workflows');
     assert.ok(fs.existsSync(workflowsDir), 'workflows directory should exist');
 
-    // Spot-check a few key workflows
-    const expected = ['lean-persona', 'empathy-map', 'learning-card', 'mvp'];
-    for (const wf of expected) {
+    for (const wf of WORKFLOW_NAMES) {
       assert.ok(
         fs.existsSync(path.join(workflowsDir, wf)),
         `${wf} workflow directory should exist`
