@@ -1,44 +1,46 @@
----
 submodule_name: _vortex
 description: Vortex Pattern - Contextualize, Empathize, Externalize, and Systematize streams
 module: bme
-version: 1.5.2
-
-# Output Configuration
-output_folder: "{project-root}/_bmad-output/vortex-artifacts"
-user_name: "{user}"
-communication_language: "en"
-
-# Agents in this submodule
+output_folder: '{project-root}/_bmad-output/vortex-artifacts'
 agents:
-  - contextualization-expert     # Emma - Contextualize Stream
-  - lean-experiments-specialist  # Wade - Externalize Stream
-  - discovery-empathy-expert     # Isla - Empathize Stream
-  - learning-decision-expert     # Max - Systematize Stream
-
-# Workflows available
+  - contextualization-expert
+  - discovery-empathy-expert
+  - research-convergence-specialist
+  - hypothesis-engineer
+  - lean-experiments-specialist
+  - production-intelligence-specialist
+  - learning-decision-expert
 workflows:
-  # Emma - Contextualize Stream
-  - lean-persona           # Create lean user personas
-  - product-vision         # Define product vision
-  - contextualize-scope    # Decide which problem space to investigate
-
-  # Wade - Externalize Stream
-  - mvp                    # Design Minimum Viable Product
-  - lean-experiment        # Run Build-Measure-Learn cycle
-  - proof-of-concept       # Validate technical feasibility
-  - proof-of-value         # Validate business value
-
-  # Isla - Empathize Stream
-  - empathy-map            # Create user empathy maps
-  - user-interview         # Design and conduct user interviews
-  - user-discovery         # Plan and execute discovery research
-
-  # Max - Systematize Stream
-  - learning-card          # Capture validated learnings
-  - pivot-patch-persevere  # Decision framework after experiments
-  - vortex-navigation      # Navigate between Vortex streams
-
-# Integration
+  - lean-persona
+  - product-vision
+  - contextualize-scope
+  - empathy-map
+  - user-interview
+  - user-discovery
+  - research-convergence
+  - pivot-resynthesis
+  - pattern-mapping
+  - hypothesis-engineering
+  - assumption-mapping
+  - experiment-design
+  - mvp
+  - lean-experiment
+  - proof-of-concept
+  - proof-of-value
+  - signal-interpretation
+  - behavior-analysis
+  - production-monitoring
+  - learning-card
+  - pivot-patch-persevere
+  - vortex-navigation
+version: 1.6.2
+user_name: '{user}'
+communication_language: en
 party_mode_enabled: true
 core_module: bme
+migration_history:
+  - timestamp: '2026-02-27T13:26:05.803Z'
+    from_version: 1.5.2
+    to_version: 1.6.2
+    migrations_applied:
+      - 1.5.x-to-1.6.0

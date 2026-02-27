@@ -67,8 +67,8 @@ describe('bmad-update CLI (dry-run)', () => {
     assert.equal(exitCode, 0);
     // Should report up-to-date or show dry-run plan
     assert.ok(
-      stdout.includes('up to date') || stdout.includes('DRY RUN') || stdout.includes('Already'),
-      'should show up-to-date or dry-run info'
+      stdout.includes('up to date') || stdout.includes('DRY RUN') || stdout.includes('Already') || stdout.includes('No migrations'),
+      'should show up-to-date, dry-run, or no-migrations info'
     );
   });
 });
