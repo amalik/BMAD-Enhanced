@@ -152,6 +152,16 @@ cp -r _bmad-output/.backups/{backup-dir}/agents _bmad/bme/_vortex/
 cp -r _bmad-output/.backups/{backup-dir}/workflows _bmad/bme/_vortex/
 ```
 
+### "Already up to date" but version is outdated
+
+npx caches package binaries. If you installed at an older version, `npx bmad-update` may keep running the cached script instead of the latest. Force-fetch the latest:
+
+```bash
+npx -p bmad-enhanced@latest bmad-update
+```
+
+This tells npx to download `bmad-enhanced@latest` first, then run the `bmad-update` bin from it.
+
 ### "Installation appears corrupted"
 
 Reinstall from scratch (preserves user data):
