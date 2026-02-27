@@ -26,7 +26,7 @@ describe('install-vortex-agents CLI E2E', () => {
   it('completes without error on a fresh directory', async () => {
     const { exitCode, stdout } = await runInstaller(tmpDir);
     assert.equal(exitCode, 0, 'installer should exit cleanly');
-    assert.ok(stdout.includes('Vortex Installer'), 'should show banner');
+    assert.ok(stdout.includes('E N H A N C E D'), 'should show banner');
     assert.ok(stdout.includes('All Vortex Agents Installed'), 'should show success message');
   });
 
