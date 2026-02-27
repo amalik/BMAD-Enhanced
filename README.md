@@ -12,7 +12,7 @@
 
 **BMAD Method enhanced by domain-specialized agents**
 
-[![Version](https://img.shields.io/badge/version-1.6.0-blue)](https://github.com/amalik/BMAD-Enhanced)
+[![Version](https://img.shields.io/badge/version-1.6.1-blue)](https://github.com/amalik/BMAD-Enhanced)
 [![Agents](https://img.shields.io/badge/agents-7-brightgreen)](docs/agents.md)
 [![Workflows](https://img.shields.io/badge/workflows-22-success)](docs/agents.md)
 [![License](https://img.shields.io/badge/license-MIT-blue)](LICENSE)
