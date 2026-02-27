@@ -12,17 +12,19 @@ const GREEN = '\x1b[32m';
 const CYAN = '\x1b[36m';
 const YELLOW = '\x1b[33m';
 const RED = '\x1b[31m';
-const MAGENTA = '\x1b[35m';
+const GREY = '\x1b[90m';
 
 function printBanner() {
   console.log('');
-  console.log(`${MAGENTA}${BOLD}╔════════════════════════════════════════════════════╗${RESET}`);
-  console.log(`${MAGENTA}${BOLD}║                                                    ║${RESET}`);
-  console.log(`${MAGENTA}${BOLD}║        BMAD-Enhanced Vortex Installer 🌀          ║${RESET}`);
-  console.log(`${MAGENTA}${BOLD}║                                                    ║${RESET}`);
-  console.log(`${MAGENTA}${BOLD}║   Installing ${AGENTS.map(a => a.name).join(' + ')} Agents${' '.repeat(Math.max(0, 6 - AGENTS.length))}║${RESET}`);
-  console.log(`${MAGENTA}${BOLD}║                                                    ║${RESET}`);
-  console.log(`${MAGENTA}${BOLD}╚════════════════════════════════════════════════════╝${RESET}`);
+  console.log(`${GREY} ██████╗ ███╗   ███╗ █████╗ ██████╗ ${RESET}`);
+  console.log(`${GREY} ██╔══██╗████╗ ████║██╔══██╗██╔══██╗${RESET}`);
+  console.log(`${GREY} ██████╔╝██╔████╔██║███████║██║  ██║${RESET}`);
+  console.log(`${GREY} ██╔══██╗██║╚██╔╝██║██╔══██║██║  ██║${RESET}`);
+  console.log(`${GREY} ██████╔╝██║ ╚═╝ ██║██║  ██║██████╔╝${RESET}`);
+  console.log(`${GREY} ╚═════╝ ╚═╝     ╚═╝╚═╝  ╚═╝╚═════╝ ${RESET}`);
+  console.log(`${GREY}       E N H A N C E D${RESET}`);
+  console.log('');
+  console.log(`${BOLD} BMAD Method enhanced by domain-specialized agents${RESET}`);
   console.log('');
 }
 
