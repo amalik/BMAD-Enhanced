@@ -1,5 +1,5 @@
 ---
-stepsCompleted: [step-01-init, step-02-discovery, step-03-success]
+stepsCompleted: [step-01-init, step-02-discovery, step-03-success, step-04-journeys, step-05-domain, step-06-innovation]
 inputDocuments:
   - _bmad-output/planning-artifacts/prd.md
   - _bmad-output/planning-artifacts/product-brief-BMAD-Enhanced-2026-02-22.md
@@ -161,3 +161,120 @@ Deferred until user demand is proven:
 - HC9/HC10 mid-workflow interrupt pattern
 - New Liam/Noah workflows
 - Growth & discoverability (marketing, community, tutorials)
+- Dynamic Vortex visualization (GIF/animation)
+
+## User Journeys
+
+### Journey 1: The New Adopter — "Is this real?"
+
+**Raya**, a solo founder building a B2B SaaS for freelancer invoicing. A colleague sends her a GitHub link to BMAD-Enhanced. She's been using Claude in her IDE but feels scattered — research in one chat, brainstorming in another, no structure connecting them.
+
+**Opening Scene:** Raya reads the README. She sees "7 Innovation Vortex streams" and a visual showing how agents connect. She's intrigued but skeptical — she's seen frameworks that promise structure and deliver templates. She clicks into the docs to see what agents actually do.
+
+**Rising Action:** She runs `npx bmad-enhanced` to install. She invokes Emma to contextualize her invoicing product. The conversation feels like working with a sharp colleague, not filling out a form. Emma produces a Contextualize Brief. Then she sees the Vortex Compass suggesting Isla next. She follows the thread — Isla takes Emma's output and runs empathy research. The handoff is seamless; Isla already knows what Emma established.
+
+**Climax:** She clicks the journey example link from the README — one click from where she landed. She sees a complete 7-agent run on the busy parents domain with real artifacts at every handoff. She sees the chain working: Emma → Isla → Synthesize → Hypothesize → Wade → Sensitize → Max. She thinks: "This is what my scattered Claude sessions are missing."
+
+**Failure Branch:** Raya tries to invoke Synthesize without running Isla first. The Vortex Compass provides clear prerequisite guidance — she needs empathy artifacts as input. She learns the chain has structure, not just suggestions. She runs `/bmad-help` and finds the FAQ explaining the agent sequence.
+
+**Resolution:** Raya finishes her first session with a Contextualize Brief and an Empathy Map. She keeps going the next day — running Synthesize to converge her research. BMAD-Enhanced becomes her product discovery backbone.
+
+**Phase 2 dependency:** Stale docs → she bounces at the README. Broken links → she loses trust. No journey example → she never sees the chain. Inconsistent agent output → handoff feels broken. Journey example not linked from README → she never finds it.
+
+---
+
+### Journey 2: The Returning User — "Did the update break anything?"
+
+**Tomás**, a PM at a small startup. He installed BMAD-Enhanced three weeks ago at v1.5.2 and has been using Emma and Wade regularly. He has custom TEA agents in his manifest. He sees on GitHub that v1.6.4 is out with 7 agents instead of 4. This journey validates fixes already shipped in v1.6.4.
+
+**Opening Scene:** Tomás runs `npx bmad-update`. It says "Already up to date" — but he knows 1.6.4 exists. The output prints a cache hint automatically: "If you expected a newer version, npx may be serving a cached copy." He runs the suggested command.
+
+**Rising Action:** The update pulls v1.6.4. His manifest regenerates — his custom TEA agents survive the merge. He checks his `/tea` slash command. It works. He checks whether his existing `_bmad-output/` artifacts from v1.5 are still compatible with updated agents — the UPDATE-GUIDE includes a forward-compatibility note confirming they are.
+
+**Climax:** He looks at the README to understand what changed. The docs accurately reflect 7 agents, 22 workflows, 268 tests. Links work. He finds the journey example showing how the three new agents (Synthesize, Hypothesize, Sensitize) fit between the four he already knows.
+
+**Resolution:** Tomás upgrades with confidence. His custom agents survive, the docs orient him to what's new, and the journey example shows him exactly where Synthesize and Hypothesize fit in his existing Emma → Isla → Wade flow.
+
+**Phase 2 dependency:** npx cache hint in output (done in v1.6.4). Manifest merge (done in v1.6.4). Docs accuracy and journey example are Phase 2 deliverables. Forward-compatibility note in UPDATE-GUIDE is a docs fix item.
+
+---
+
+### Journey 3: The Journey Follower — "Oh, that's how it all connects"
+
+**Priya**, a head of product at a 12-person startup. She ran Emma once, got a solid Contextualize Brief, but stared at the Vortex Compass thinking: "Where do I actually go from here?"
+
+**Opening Scene:** Priya finds the journey example — a complete 7-agent run on the busy parents domain. She starts reading. Each section is self-contained enough to understand individually, but the full narrative rewards linear reading.
+
+**Rising Action:** She follows the chain. Each section shows the real artifact that was produced. Emma's brief flows into Isla's empathy maps. Isla's research feeds Synthesize, who converges three personas into a single JTBD problem definition. She sees what Synthesize does that Isla doesn't — convergence vs divergence clicks for the first time. At each handoff, an annotation calls out: "Synthesize consumed the JTBD field from Isla's output — this is artifact contract HC2."
+
+Hypothesize takes the definition and runs brainwriting. The 4-field hypothesis contract lands on Wade's desk. Wade designs an experiment around the riskiest assumption. Sensitize picks up the graduated experiment and shows what to monitor in production. Max receives interpreted signals and makes a Persevere decision.
+
+**Climax:** She sees the annotated artifacts with handoff callouts showing which fields each agent consumed and which artifact contract applies (HC1-HC5). The chain is concrete, not abstract. Every transition is explained.
+
+**Resolution:** Priya goes back to her own project knowing exactly which agent to invoke next and why. The journey example didn't teach theory — it showed a real run she can pattern-match against. When she gets stuck, she runs `/bmad-help` for guidance.
+
+**Phase 2 dependency:** No journey example → she uses Emma standalone and never sees the chain. Authored/fake artifacts → she spots inconsistency. Missing handoff annotations → she doesn't understand what flows between agents. Poor editorial quality → narrative confuses instead of clarifies.
+
+---
+
+### Journey 4: The Module Extender — "I want to make this my own"
+
+**Kai**, a technical PM who's been using BMAD-Enhanced for a month. He wants domain-specific agents — a compliance reviewer for his fintech product.
+
+**Opening Scene:** Kai copies an existing agent row in `agent-manifest.csv`, changes the name, and creates a markdown file. His new agent works — but it's a shallow wrapper with no persona depth. He adds three more hand-rolled agents.
+
+**Rising Action:** His manifest grows to 11 agents. Slash commands are cluttered. His custom agents give generic advice because they lack identity structure — no communication style, no principles, no activation sequence. Then the real trigger: his hand-rolled compliance agent fails to produce output that Synthesize can consume. The handoff breaks silently.
+
+**Climax:** Agent bloat plus broken handoffs. More agents doesn't mean better discovery. Each addition dilutes the Vortex's signal. The failure drives him to investigate — he compares his agent's output to the journey example and sees the missing fields. The journey example is the implicit format reference showing what a well-formed agent produces.
+
+**Resolution:** Kai discovers BMB (the module builder) as the fix. He uses BMB to rebuild his compliance agent with proper persona depth — communication style, principles, activation sequence, output format matching the BME standard. His rebuilt agent produces outputs that slot into the Vortex chain. His team uses it alongside the standard 7. He removes the three shallow agents. The extension works because it follows the format the journey example demonstrated.
+
+**Phase 2 dependency:** No extension guidance → agents proliferate without structure. No bloat warning → UX degrades silently. P0 suites serve as implicit quality reference. Journey example as living schema documentation reduces the custom agent compatibility gap. Docs should explain BMB and forking as proper extension paths.
+
+---
+
+### Journey 5: The Maintainer — "Will this update break someone's setup?"
+
+**Amalik** ships BMAD-Enhanced. Sole maintainer — every release goes through him. No QA team, no staging with real user setups.
+
+**Opening Scene:** Tests pass. CI is green. 268 tests, 83%+ coverage. He opens a terminal to publish. He pauses.
+
+**Rising Action:** Did `refreshInstallation` handle the manifest correctly? Will someone with custom agents lose their rows? Will guides copy to the right place? Will someone on v1.5.2 with the npx cache issue even get this version? Each fix in v1.6.x was reactive — a user hit the problem, he patched it. The test suite validates code paths but doesn't validate what a real user experiences during upgrade.
+
+**Climax:** He can't simulate "Tomás with a 3-week-old install and custom agents runs bmad-update." Integration tests mock the filesystem. They prove functions work. They don't prove the experience works. The gap between "tests pass" and "safe to ship" is filled by his memory of past bugs.
+
+**Resolution (Phase 2):** P0 suites validate every agent's output — not just that code runs, but that artifacts contain fields downstream agents need. Handoff tests prove the chain works. Content correctness tests catch stale references before users do. CLI coverage closes the under-tested modules (bmad-update at 29%, bmad-version at 56%). He still pauses before `npm publish` — but the pause is shorter. The test suite catches the bug categories that burned him in v1.5 through v1.6.4.
+
+**Phase 2 dependency:** No P0 suites → agent changes go out unvalidated. No handoff tests → field renames silently break chains. No content tests → stale text ships. Low CLI coverage → update bugs found by users, not CI.
+
+---
+
+### Journey Requirements Summary
+
+| Requirement | Revealed By | Phase 2 Deliverable |
+|-------------|-------------|-------------------|
+| Accurate docs reflecting 7-agent reality | Raya (J1), Tomás (J2) | Docs fix |
+| Zero broken links | Raya (J1), Tomás (J2) | Docs fix |
+| Journey example linked from README (one click) | Raya (J1), Priya (J3) | Docs fix |
+| Journey example with real captured artifacts | Raya (J1), Priya (J3), Tomás (J2) | P0 + Journey example |
+| Handoff annotations in journey example (HC1-HC5) | Priya (J3) | Journey example |
+| Journey sections self-contained for non-linear reading | Priya (J3) | Journey example (editorial) |
+| Editorial review for pedagogical quality | Priya (J3) | Journey example |
+| Agent voice and output consistency | Raya (J1) | P0 suites |
+| Handoff chain compatibility (HC1-HC5) | Raya (J1), Amalik (J5) | P0 suites |
+| Agent prerequisite guidance via Vortex Compass | Raya (J1) | P0 suites |
+| Extension path guidance with bloat warning (BMB or fork) | Kai (J4) | Docs fix |
+| Journey example as implicit agent format reference | Kai (J4), Priya (J3), Amalik (J5) | Journey example |
+| Failure-to-BMB recovery path for custom agents | Kai (J4) | Docs fix |
+| bmad-update prints cache hint in output | Tomás (J2), Raya (J1) | CLI coverage |
+| Forward-compatibility note in UPDATE-GUIDE | Tomás (J2) | Docs fix |
+| P0 suites as pre-publish confidence gate | Amalik (J5) | P0 suites |
+| Content correctness tests in CI | Amalik (J5) | Content correctness testing |
+| CLI coverage at 85%+ for update modules | Amalik (J5) | CLI coverage |
+| `/bmad-help` and FAQ as "stuck" escape hatch | All journeys | Docs fix |
+
+### Cross-Cutting Notes
+
+- **Phase 2 ensures quality, not retention.** If a user arrives, has a correct and trustworthy experience, and still leaves — that's a product-market fit question for Phase 3, not a quality gap for Phase 2.
+- **Discovery is Phase 3's problem.** Phase 2 users arrive via recommendation or direct link, not organic search. Phase 2's job is to make the experience trustworthy when they arrive.
+- **Journey example serves triple duty:** pedagogical document for Priya, implicit format reference for Kai, and living proof of chain integrity for Amalik.
