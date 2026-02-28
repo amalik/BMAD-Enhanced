@@ -32,7 +32,9 @@ const WORD_TO_NUM = {
   'eleven': 11, 'twelve': 12, 'thirteen': 13, 'fourteen': 14,
   'fifteen': 15, 'sixteen': 16, 'seventeen': 17, 'eighteen': 18,
   'nineteen': 19, 'twenty': 20, 'twenty-one': 21, 'twenty-two': 22,
-  'twenty-three': 23,
+  'twenty-three': 23, 'twenty-four': 24, 'twenty-five': 25,
+  'twenty-six': 26, 'twenty-seven': 27, 'twenty-eight': 28,
+  'twenty-nine': 29, 'thirty': 30,
 };
 
 // --- Check Functions ---
@@ -205,7 +207,7 @@ function checkBrokenPaths(content, filePath, projectRoot) {
 
   // Match backtick-wrapped paths that start with known project directories
   // and end with a file extension
-  const backtickPathRe = /`((?:scripts|docs|tests|\.github)\/[^`\s*{}<>]+\.\w+)`/g;
+  const backtickPathRe = /`((?:scripts|docs|tests|\.github|_bmad)\/[^`\s*{}<>]+\.\w+)`/g;
 
   for (let i = 0; i < lines.length; i++) {
     const line = lines[i];
@@ -247,10 +249,11 @@ function checkDocsCoverage(allDocsContent) {
   const findings = [];
   const combined = allDocsContent.join('\n').toLowerCase();
 
-  // Check each agent has at least one mention by name
+  // Check each agent has at least one mention by name (word boundary match
+  // to avoid false negatives — e.g., "maximize" should not satisfy "Max")
   for (const agent of AGENTS) {
-    const nameLower = agent.name.toLowerCase();
-    if (!combined.includes(nameLower)) {
+    const nameRe = new RegExp('\\b' + agent.name.toLowerCase() + '\\b');
+    if (!nameRe.test(combined)) {
       findings.push({
         file: 'docs/*', line: 0,
         category: 'missing-coverage',
@@ -364,7 +367,11 @@ async function runAudit(opts = {}) {
     const content = fs.readFileSync(absPath, 'utf8');
     allDocsContent.push(content);
 
-    allFindings.push(...checkStaleReferences(content, relPath));
+    // Skip stale-reference checks for CHANGELOG — historical entries
+    // (e.g., "Added 4 agents" in v1.0) are accurate for their time period
+    if (relPath !== 'CHANGELOG.md') {
+      allFindings.push(...checkStaleReferences(content, relPath));
+    }
     allFindings.push(...checkBrokenLinks(content, relPath, projectRoot));
     allFindings.push(...checkBrokenPaths(content, relPath, projectRoot));
   }
