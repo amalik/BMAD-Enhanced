@@ -28,7 +28,7 @@ Key modules in `scripts/update/lib/`:
 | `refresh-installation.js` | Shared refresh (agents, workflows, config, guides) |
 | `migration-runner.js` | Orchestration (deltas → refresh → validate) |
 | `config-merger.js` | `mergeConfig()` with structural defaults for fresh installs |
-| `validator.js` | Validates all 4 agents, 13 workflows, config, manifest |
+| `validator.js` | Validates all 7 agents, 22 workflows, config, manifest |
 
 Migrations live in `scripts/update/migrations/registry.js` (append-only).
 
@@ -86,8 +86,8 @@ See: [Emma Reference Implementation](../_bmad-output/EMMA-REFERENCE-IMPLEMENTATI
 ```
 BMAD-Enhanced/
 ├── _bmad/bme/_vortex/
-│   ├── agents/              # Agent definition files (4)
-│   ├── workflows/           # 13 workflows, each with steps/ + template
+│   ├── agents/              # Agent definition files (7)
+│   ├── workflows/           # 22 workflows, each with steps/ + template
 │   │   └── _deprecated/     # Old workflows preserved here
 │   └── config.yaml          # Submodule configuration
 ├── _bmad-output/
