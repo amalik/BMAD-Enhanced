@@ -10,6 +10,7 @@ const PACKAGE_ROOT = path.join(__dirname, '..', '..');
 const VORTEX_DIR = path.join(PACKAGE_ROOT, '_bmad', 'bme', '_vortex');
 const AGENTS_DIR = path.join(VORTEX_DIR, 'agents');
 const WORKFLOWS_DIR = path.join(VORTEX_DIR, 'workflows');
+const STEP_PATTERN = /^step-\d{2}(-[^.]+)?\.md$/;
 
 // ─── Agent Discovery ────────────────────────────────────────────
 
@@ -262,8 +263,7 @@ function validateWorkflowStructure(workflowName, workflowsDir) {
 
   // Read step files — accepts both step-NN-name.md and step-NN.md patterns
   const allFiles = fs.readdirSync(stepsDir);
-  const stepPattern = /^step-\d{2}(-[^.]+)?\.md$/;
-  stepFiles = allFiles.filter(f => stepPattern.test(f)).sort();
+  stepFiles = allFiles.filter(f => STEP_PATTERN.test(f)).sort();
   stepCount = stepFiles.length;
 
   // Check step count (4-6 inclusive)
@@ -277,7 +277,7 @@ function validateWorkflowStructure(workflowName, workflowsDir) {
 
   // Check all step files match naming pattern
   for (const file of allFiles) {
-    if (file.endsWith('.md') && !stepPattern.test(file)) {
+    if (file.endsWith('.md') && !STEP_PATTERN.test(file)) {
       issues.push({
         field: 'step file naming',
         expected: 'step-NN-*.md or step-NN.md pattern',
@@ -331,6 +331,7 @@ module.exports = {
   VORTEX_DIR,
   AGENTS_DIR,
   WORKFLOWS_DIR,
+  STEP_PATTERN,
   discoverAgents,
   loadAgentDefinition,
   validateActivation,
