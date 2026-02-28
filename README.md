@@ -181,8 +181,8 @@ BMAD-Enhanced works standalone or as an extension — no BMAD Method installatio
 
 ## Roadmap
 
-- **v1.1.0–v1.5.x** — Waves 1-2: Foundation (Emma, Isla, Wade, Max — 4 agents, 13 workflows, update system, CI/CD)
-- **v1.6.0** — Wave 3: Complete 7-stream Vortex (added Mila, Liam, Noah — 22 workflows, 10 handoff contracts, Compass routing)
+- **v1.1.0–v1.5.x** — Waves 1-2: Foundation (Emma, Isla, Wade, Max — agent definitions, workflows, update system, CI/CD)
+- **v1.6.x** — Wave 3: Complete 7-stream Vortex (added Mila, Liam, Noah — 7 agents, 22 workflows, handoff contracts, Compass routing)
 - **v2.0.0+** — Multi-agent collaboration, cross-agent workflows, analytics
 
 ---
