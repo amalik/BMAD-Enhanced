@@ -88,36 +88,23 @@ your-project/
 
 ### Current Version
 
-**BMAD-Enhanced v1.0.4-alpha**
-- Compatible with: BMAD Method v1.x
-- Requires: `_bmad/` directory exists
-- Optional check: `_bmad/_config/bmad.yaml` exists
+**BMAD-Enhanced v1.6.4**
+- Compatible with: BMAD Method v1.x (optional — works standalone)
+- Creates `_bmad/` directory automatically if missing
+- Optional detection: BMAD Method config (bmad.yaml in _bmad/_config/)
 
 ### Detection Logic
 
 BMAD-Enhanced installers check:
 
 1. **Required:** `_bmad/` directory exists
-   - If missing: Installation fails with error message
-   - Error directs user to install BMAD Method first
+   - If missing: Created automatically by the installer
+   - Installation proceeds in standalone mode
 
-2. **Optional:** `_bmad/_config/bmad.yaml` exists
-   - If missing: Warning only (installation continues)
+2. **Optional:** BMAD Method configuration (bmad.yaml in _bmad/_config/)
+   - If found: Logged as detected
+   - If missing: Warning only (installation continues in standalone mode)
    - Allows for different BMAD Method configurations
-
-### Error Message Example
-
-```
-✗ BMAD Method not found!
-
-BMAD-Enhanced requires BMAD Method to be installed first.
-
-Please install BMAD Method:
-  git clone https://github.com/bmadhub/bmad.git
-  cd bmad && npm install
-
-Then run this installer again.
-```
 
 ---
 
