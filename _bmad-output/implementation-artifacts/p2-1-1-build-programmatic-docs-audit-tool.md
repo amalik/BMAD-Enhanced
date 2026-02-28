@@ -1,6 +1,6 @@
 # Story 1.1: Build Programmatic Docs Audit Tool
 
-Status: review
+Status: done
 
 ## Story
 
@@ -207,10 +207,13 @@ Claude Opus 4.6
 - No new dependencies added — uses existing chalk, fs-extra, js-yaml
 - All 304 tests pass (244 existing + 36 new + 24 integration), zero regressions
 - ESLint passes clean on all files
+- **Code review fixes (7 issues):** word-boundary agent matching in checkDocsCoverage (M1), _bmad/ prefix in checkBrokenPaths (M2), CHANGELOG stale-reference exclusion (M3), WORD_TO_NUM extended to 30 (L1), added test coverage for docs/ and _bmad/ prefixes (L2), subdirectory link resolution test (L3), substring false-negative regression test (M1)
+- Post-review: 40 tests (36 + 4 new), 248 total suite, audit findings 27 → 18 (CHANGELOG noise eliminated)
 
 ### Change Log
 
 - 2026-02-28: Story implementation complete — all 8 tasks, 36 tests, zero regressions
+- 2026-02-28: Code review — 7 issues found (3M, 4L), all fixed. Tests: 36 → 40. Audit: 27 → 18 findings.
 
 ### File List
 
