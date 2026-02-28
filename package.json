@@ -29,7 +29,8 @@
     "test:integration": "node --test tests/integration/*.test.js",
     "test:all": "node --test tests/**/*.test.js",
     "test:coverage": "c8 node --test tests/unit/*.test.js tests/integration/*.test.js",
-    "lint": "eslint scripts/ index.js tests/"
+    "lint": "eslint scripts/ index.js tests/",
+    "docs:audit": "node scripts/docs-audit.js"
   },
   "keywords": [
     "bmad",
