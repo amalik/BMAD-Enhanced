@@ -98,7 +98,7 @@ async function refreshInstallation(projectRoot, options = {}) {
   changes.push(`Updated config.yaml to v${version}`);
   if (verbose) console.log(`    Updated config.yaml to v${version}`);
 
-  // 4. Regenerate agent manifest from registry
+  // 4. Regenerate agent manifest — replace only bme rows, preserve other modules
   const manifestPath = path.join(projectRoot, '_bmad', '_config', 'agent-manifest.csv');
   await fs.ensureDir(path.dirname(manifestPath));
 
@@ -106,19 +106,36 @@ async function refreshInstallation(projectRoot, options = {}) {
     return `"${String(value).replace(/"/g, '""')}"`;
   }
 
-  const header = '"agent_id","name","title","icon","role","identity","communication_style","expertise","submodule","path"\n';
-  const rows = AGENTS.map(a => {
+  const header = '"agent_id","name","title","icon","role","identity","communication_style","expertise","submodule","path"';
+
+  // Read existing non-bme rows to preserve them
+  let preservedRows = [];
+  if (fs.existsSync(manifestPath)) {
+    const existing = (await fs.readFile(manifestPath, 'utf8')).trim().split('\n');
+    // Skip header, keep rows where submodule is NOT bme
+    preservedRows = existing.slice(1).filter(row => {
+      // submodule is the 9th field (index 8) in the CSV
+      const fields = row.match(/"([^"]*(?:""[^"]*)*)"/g);
+      if (!fields || fields.length < 9) return true; // keep unrecognised rows
+      const submodule = fields[8].replace(/^"|"$/g, '');
+      return submodule !== 'bme';
+    });
+  }
+
+  // Build fresh bme rows from registry
+  const bmeRows = AGENTS.map(a => {
     const p = a.persona;
     return [
       a.id, a.name, a.title, a.icon,
       p.role, p.identity, p.communication_style, p.expertise,
       'bme', `_bmad/bme/_vortex/agents/${a.id}.md`,
     ].map(csvEscape).join(',');
-  }).join('\n') + '\n';
+  });
 
-  await fs.writeFile(manifestPath, header + rows, 'utf8');
-  changes.push('Regenerated agent-manifest.csv');
-  if (verbose) console.log('    Regenerated agent-manifest.csv');
+  const allRows = [...preservedRows, ...bmeRows].join('\n') + '\n';
+  await fs.writeFile(manifestPath, header + '\n' + allRows, 'utf8');
+  changes.push('Regenerated agent-manifest.csv (bme rows updated, other modules preserved)');
+  if (verbose) console.log('    Regenerated agent-manifest.csv (bme rows updated, other modules preserved)');
 
   // 5. Copy user guides (with optional backup)
   const guidesSource = path.join(packageRoot, '_bmad', 'bme', '_vortex', 'guides');
