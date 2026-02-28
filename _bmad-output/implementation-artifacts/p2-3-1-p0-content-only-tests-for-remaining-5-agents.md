@@ -1,6 +1,6 @@
 # Story p2-3.1: P0 Content-Only Tests for Remaining 5 Agents
 
-Status: ready-for-dev
+Status: done
 
 <!-- Note: Validation is optional. Run validate-create-story for quality check before dev-story. -->
 
@@ -21,107 +21,120 @@ So that all 7 agents have baseline P0 coverage and the content-only template is 
 
 ## Tasks / Subtasks
 
-- [ ] Task 1: Create Isla P0 test file — `tests/p0/p0-isla.test.js` (AC: 1, 2, 3, 4, 6)
-  - [ ] 1.1: Create file with `'use strict'` + `node:test` + `node:assert/strict` imports
-  - [ ] 1.2: Import from `./helpers` (loadAgentDefinition, PACKAGE_ROOT, AGENTS_DIR, WORKFLOWS_DIR) and `../../scripts/update/lib/agent-registry` (AGENTS, WORKFLOWS, WAVE3_WORKFLOW_NAMES)
-  - [ ] 1.3: Describe suite "P0 Isla: Activation Sequence" — load definition in `before()` hook using `loadAgentDefinition('discovery-empathy-expert')`
-  - [ ] 1.4: Test persona ROLE contains "Qualitative Research Expert" (agent file value)
-  - [ ] 1.5: Test persona IDENTITY references "Empathize" stream
-  - [ ] 1.6: Test persona COMMUNICATION_STYLE contains "I noticed that" (characteristic phrase)
-  - [ ] 1.7: Test Isla has exactly 8 menu items with cmd triggers: MH, CH, EM, UI, UD, VE, PM, DA
-  - [ ] 1.8: Test Isla's 5 exec-path menu items reference files that exist on disk
-  - [ ] 1.9: Test activation step 2 contains config.yaml loading and "Configuration Error"
-  - [ ] 1.10: Test rules section exists and contains at least 5 rules (actual: 8)
-  - [ ] 1.11: Describe suite "P0 Isla: Workflow Execution Output" — for each of 3 workflows (empathy-map, user-interview, user-discovery)
-  - [ ] 1.12: Per-workflow: test workflow.md exists and contains frontmatter with `type:`, `description:`, `author:` fields
-  - [ ] 1.13: Per-workflow: test template file exists (`{workflow-name}.template.md`) — all 3 Isla workflows have templates
-  - [ ] 1.14: Per-workflow: test template contains placeholder variables (`{variable-name}` pattern)
-  - [ ] 1.15: Per-workflow: test steps 01 through (N-1) reference next step in sequence (use dynamic step count)
-  - [ ] 1.16: Per-workflow: test dynamically-discovered final step contains synthesize/artifact/final content (expected: step-06-synthesize.md for all 3)
-  - [ ] 1.17: Per-workflow: test final step suggests next workflows
-  - [ ] 1.18: Per-workflow: test step count — all 3 workflows have exactly 6 steps
+- [x] Task 1: Create Isla P0 test file — `tests/p0/p0-isla.test.js` (AC: 1, 2, 3, 4, 6)
+  - [x] 1.1: Create file with `'use strict'` + `node:test` + `node:assert/strict` imports
+  - [x] 1.2: Import from `./helpers` (loadAgentDefinition, PACKAGE_ROOT, AGENTS_DIR, WORKFLOWS_DIR) and `../../scripts/update/lib/agent-registry` (AGENTS, WORKFLOWS, WAVE3_WORKFLOW_NAMES)
+  - [x] 1.3: Describe suite "P0 Isla: Activation Sequence" — load definition in `before()` hook using `loadAgentDefinition('discovery-empathy-expert')`
+  - [x] 1.4: Test persona ROLE contains "Qualitative Research Expert" (agent file value)
+  - [x] 1.5: Test persona IDENTITY references "Empathize" stream
+  - [x] 1.6: Test persona COMMUNICATION_STYLE contains "I noticed that" (characteristic phrase)
+  - [x] 1.7: Test Isla has exactly 8 menu items with cmd triggers: MH, CH, EM, UI, UD, VE, PM, DA
+  - [x] 1.8: Test Isla's 5 exec-path menu items reference files that exist on disk
+  - [x] 1.9: Test activation step 2 contains config.yaml loading and "Configuration Error"
+  - [x] 1.10: Test rules section exists and contains at least 5 rules (actual: 8)
+  - [x] 1.11: Describe suite "P0 Isla: Workflow Execution Output" — for each of 3 workflows (empathy-map, user-interview, user-discovery)
+  - [x] 1.12: Per-workflow: test workflow.md exists and contains frontmatter with `type:`, `description:`, `author:` fields
+  - [x] 1.13: Per-workflow: test template file exists (`{workflow-name}.template.md`) — all 3 Isla workflows have templates
+  - [x] 1.14: Per-workflow: test template contains placeholder variables (`{variable-name}` pattern)
+  - [x] 1.15: Per-workflow: test steps 01 through (N-1) reference next step in sequence (use dynamic step count)
+  - [x] 1.16: Per-workflow: test dynamically-discovered final step contains synthesize/artifact/final content (expected: step-06-synthesize.md for all 3)
+  - [x] 1.17: Per-workflow: test final step suggests next workflows
+  - [x] 1.18: Per-workflow: test step count — all 3 workflows have exactly 6 steps
 
-- [ ] Task 2: Create Mila P0 test file — `tests/p0/p0-mila.test.js` (AC: 1, 2, 3, 4, 6)
-  - [ ] 2.1: Create file following same import pattern as Isla
-  - [ ] 2.2: Describe "P0 Mila: Activation Sequence" with `before()` hook for `loadAgentDefinition('research-convergence-specialist')`
-  - [ ] 2.3: Test persona ROLE contains "Research Convergence" (agent file value)
-  - [ ] 2.4: Test persona IDENTITY references "Synthesize" stream
-  - [ ] 2.5: Test persona COMMUNICATION_STYLE contains "what the research is telling us" (characteristic phrase)
-  - [ ] 2.6: Test Mila has exactly 7 menu items with cmd triggers: MH, CH, RC, PR, PA, PM, DA
-  - [ ] 2.7: Test Mila's 4 exec-path menu items reference files that exist on disk
-  - [ ] 2.8: Test activation step 2 contains config.yaml / "Configuration Error"
-  - [ ] 2.9: Test rules section contains at least 5 rules (actual: 9)
-  - [ ] 2.10: Describe "P0 Mila: Workflow Execution Output" — for each of 3 workflows (research-convergence, pivot-resynthesis, pattern-mapping)
-  - [ ] 2.11: Per-workflow: test workflow.md frontmatter fields
-  - [ ] 2.12: Per-workflow: NO template file test — Mila's 3 workflows have NO templates
-  - [ ] 2.13: Per-workflow: test steps reference next step (steps 01-04)
-  - [ ] 2.14: Per-workflow: test final step (step-05-synthesize.md) contains synthesize/artifact/final content
-  - [ ] 2.15: Per-workflow: test final step suggests next workflows
-  - [ ] 2.16: Per-workflow: test step count — all 3 workflows have exactly 5 steps
+- [x] Task 2: Create Mila P0 test file — `tests/p0/p0-mila.test.js` (AC: 1, 2, 3, 4, 6)
+  - [x] 2.1: Create file following same import pattern as Isla
+  - [x] 2.2: Describe "P0 Mila: Activation Sequence" with `before()` hook for `loadAgentDefinition('research-convergence-specialist')`
+  - [x] 2.3: Test persona ROLE contains "Research Convergence" (agent file value)
+  - [x] 2.4: Test persona IDENTITY references "Synthesize" stream
+  - [x] 2.5: Test persona COMMUNICATION_STYLE contains "what the research is telling us" (characteristic phrase)
+  - [x] 2.6: Test Mila has exactly 7 menu items with cmd triggers: MH, CH, RC, PR, PA, PM, DA
+  - [x] 2.7: Test Mila's 4 exec-path menu items reference files that exist on disk
+  - [x] 2.8: Test activation step 2 contains config.yaml / "Configuration Error"
+  - [x] 2.9: Test rules section contains at least 5 rules (actual: 9)
+  - [x] 2.10: Describe "P0 Mila: Workflow Execution Output" — for each of 3 workflows (research-convergence, pivot-resynthesis, pattern-mapping)
+  - [x] 2.11: Per-workflow: test workflow.md frontmatter fields
+  - [x] 2.12: Per-workflow: NO template file test — Mila's 3 workflows have NO templates
+  - [x] 2.13: Per-workflow: test steps 01 through (N-1) reference next step (use dynamic step count)
+  - [x] 2.14: Per-workflow: test dynamically-discovered final step contains synthesize/artifact/final content (expected: step-05-synthesize.md for all 3)
+  - [x] 2.15: Per-workflow: test final step suggests next workflows
+  - [x] 2.16: Per-workflow: test step count — all 3 workflows have exactly 5 steps
 
-- [ ] Task 3: Create Liam P0 test file — `tests/p0/p0-liam.test.js` (AC: 1, 2, 3, 4, 6)
-  - [ ] 3.1: Create file following same import pattern
-  - [ ] 3.2: Describe "P0 Liam: Activation Sequence" with `before()` hook for `loadAgentDefinition('hypothesis-engineer')`
-  - [ ] 3.3: Test persona ROLE contains "Hypothesis Engineering" (agent file: "Creative Ideation + Hypothesis Engineering Specialist")
-  - [ ] 3.4: Test persona IDENTITY references "Hypothesize" stream
-  - [ ] 3.5: Test persona COMMUNICATION_STYLE contains "What if?" (characteristic phrase)
-  - [ ] 3.6: Test Liam has exactly 7 menu items with cmd triggers: MH, CH, HE, AM, ED, PM, DA
-  - [ ] 3.7: Test Liam's 4 exec-path menu items reference files that exist on disk
-  - [ ] 3.8: Test activation step 2 contains config.yaml / "Configuration Error"
-  - [ ] 3.9: Test rules section contains at least 5 rules (actual: 9)
-  - [ ] 3.10: Describe "P0 Liam: Workflow Execution Output" — for each of 3 workflows (hypothesis-engineering, assumption-mapping, experiment-design)
-  - [ ] 3.11: Per-workflow: test workflow.md frontmatter fields
-  - [ ] 3.12: Per-workflow: NO template file test — Liam's 3 workflows have NO templates
-  - [ ] 3.13: Per-workflow: test steps reference next step in sequence
-  - [ ] 3.14: Per-workflow: test final step contains synthesize content — hypothesis-engineering: step-05-synthesize.md, assumption-mapping: step-04-synthesize.md, experiment-design: step-04-synthesize.md
-  - [ ] 3.15: Per-workflow: test final step suggests next workflows
-  - [ ] 3.16: Per-workflow: test step count — hypothesis-engineering has 5 steps, assumption-mapping has 4 steps, experiment-design has 4 steps
+- [x] Task 3: Create Liam P0 test file — `tests/p0/p0-liam.test.js` (AC: 1, 2, 3, 4, 6)
+  - [x] 3.1: Create file following same import pattern
+  - [x] 3.2: Describe "P0 Liam: Activation Sequence" with `before()` hook for `loadAgentDefinition('hypothesis-engineer')`
+  - [x] 3.3: Test persona ROLE contains "Hypothesis Engineering" (agent file: "Creative Ideation + Hypothesis Engineering Specialist")
+  - [x] 3.4: Test persona IDENTITY references "Hypothesize" stream
+  - [x] 3.5: Test persona COMMUNICATION_STYLE contains "What if?" (characteristic phrase)
+  - [x] 3.6: Test Liam has exactly 7 menu items with cmd triggers: MH, CH, HE, AM, ED, PM, DA
+  - [x] 3.7: Test Liam's 4 exec-path menu items reference files that exist on disk
+  - [x] 3.8: Test activation step 2 contains config.yaml / "Configuration Error"
+  - [x] 3.9: Test rules section contains at least 5 rules (actual: 9)
+  - [x] 3.10: Describe "P0 Liam: Workflow Execution Output" — for each of 3 workflows (hypothesis-engineering, assumption-mapping, experiment-design)
+  - [x] 3.11: Per-workflow: test workflow.md frontmatter fields
+  - [x] 3.12: Per-workflow: NO template file test — Liam's 3 workflows have NO templates
+  - [x] 3.13: Per-workflow: test steps 01 through (N-1) reference next step (use dynamic step count — varies per workflow)
+  - [x] 3.14: Per-workflow: test dynamically-discovered final step contains synthesize content (expected: hypothesis-engineering: step-05-synthesize.md, assumption-mapping: step-04-synthesize.md, experiment-design: step-04-synthesize.md)
+  - [x] 3.15: Per-workflow: test final step suggests next workflows
+  - [x] 3.16: Per-workflow: test step count — hypothesis-engineering has 5 steps, assumption-mapping has 4 steps, experiment-design has 4 steps
 
-- [ ] Task 4: Create Noah P0 test file — `tests/p0/p0-noah.test.js` (AC: 1, 2, 3, 4, 6)
-  - [ ] 4.1: Create file following same import pattern
-  - [ ] 4.2: Describe "P0 Noah: Activation Sequence" with `before()` hook for `loadAgentDefinition('production-intelligence-specialist')`
-  - [ ] 4.3: Test persona ROLE contains "Signal Interpretation" (agent file: "Signal Interpretation + Production Intelligence Analyst")
-  - [ ] 4.4: Test persona IDENTITY references "Sensitize" stream
-  - [ ] 4.5: Test persona COMMUNICATION_STYLE contains "The signal indicates" (characteristic phrase)
-  - [ ] 4.6: Test Noah has exactly 7 menu items with cmd triggers: MH, CH, SI, BA, MO, PM, DA
-  - [ ] 4.7: Test Noah's 4 exec-path menu items reference files that exist on disk
-  - [ ] 4.8: Test activation step 2 contains config.yaml / "Configuration Error"
-  - [ ] 4.9: Test rules section contains at least 5 rules (actual: 9)
-  - [ ] 4.10: Describe "P0 Noah: Workflow Execution Output" — for each of 3 workflows (signal-interpretation, behavior-analysis, production-monitoring)
-  - [ ] 4.11: Per-workflow: test workflow.md frontmatter fields
-  - [ ] 4.12: Per-workflow: NO template file test — Noah's 3 workflows have NO templates
-  - [ ] 4.13: Per-workflow: test steps reference next step (steps 01-04)
-  - [ ] 4.14: Per-workflow: test final step (step-05-synthesize.md) contains synthesize/artifact/final content
-  - [ ] 4.15: Per-workflow: test final step suggests next workflows
-  - [ ] 4.16: Per-workflow: test step count — all 3 workflows have exactly 5 steps
+- [x] Task 4: Create Noah P0 test file — `tests/p0/p0-noah.test.js` (AC: 1, 2, 3, 4, 6)
+  - [x] 4.1: Create file following same import pattern
+  - [x] 4.2: Describe "P0 Noah: Activation Sequence" with `before()` hook for `loadAgentDefinition('production-intelligence-specialist')`
+  - [x] 4.3: Test persona ROLE contains "Signal Interpretation" (agent file: "Signal Interpretation + Production Intelligence Analyst")
+  - [x] 4.4: Test persona IDENTITY references "Sensitize" stream
+  - [x] 4.5: Test persona COMMUNICATION_STYLE contains "The signal indicates" (characteristic phrase)
+  - [x] 4.6: Test Noah has exactly 7 menu items with cmd triggers: MH, CH, SI, BA, MO, PM, DA
+  - [x] 4.7: Test Noah's 4 exec-path menu items reference files that exist on disk
+  - [x] 4.8: Test activation step 2 contains config.yaml / "Configuration Error"
+  - [x] 4.9: Test rules section contains at least 5 rules (actual: 9)
+  - [x] 4.10: Describe "P0 Noah: Workflow Execution Output" — for each of 3 workflows (signal-interpretation, behavior-analysis, production-monitoring)
+  - [x] 4.11: Per-workflow: test workflow.md frontmatter fields
+  - [x] 4.12: Per-workflow: NO template file test — Noah's 3 workflows have NO templates
+  - [x] 4.13: Per-workflow: test steps 01 through (N-1) reference next step (use dynamic step count)
+  - [x] 4.14: Per-workflow: test dynamically-discovered final step contains synthesize/artifact/final content (expected: step-05-synthesize.md for all 3)
+  - [x] 4.15: Per-workflow: test final step suggests next workflows
+  - [x] 4.16: Per-workflow: test step count — all 3 workflows have exactly 5 steps
 
-- [ ] Task 5: Create Max P0 test file — `tests/p0/p0-max.test.js` (AC: 1, 2, 3, 4, 6)
-  - [ ] 5.1: Create file following same import pattern
-  - [ ] 5.2: Describe "P0 Max: Activation Sequence" with `before()` hook for `loadAgentDefinition('learning-decision-expert')`
-  - [ ] 5.3: Test persona ROLE contains "Validated Learning" (agent file: "Validated Learning Synthesizer + Strategic Decision Expert")
-  - [ ] 5.4: Test persona IDENTITY references "Systematize" stream
-  - [ ] 5.5: Test persona COMMUNICATION_STYLE contains "The evidence suggests" (characteristic phrase)
-  - [ ] 5.6: Test Max has exactly 8 menu items with cmd triggers: MH, CH, LC, PP, VN, VE, PM, DA
-  - [ ] 5.7: Test Max's 5 exec-path menu items reference files that exist on disk
-  - [ ] 5.8: Test activation step 2 contains config.yaml / "Configuration Error"
-  - [ ] 5.9: Test rules section contains at least 5 rules (actual: 8)
-  - [ ] 5.10: Describe "P0 Max: Workflow Execution Output" — for each of 3 workflows (learning-card, pivot-patch-persevere, vortex-navigation)
-  - [ ] 5.11: Per-workflow: test workflow.md frontmatter fields
-  - [ ] 5.12: Per-workflow: test template file exists (`{workflow-name}.template.md`) — all 3 Max workflows have templates
-  - [ ] 5.13: Per-workflow: test template contains placeholder variables
-  - [ ] 5.14: Per-workflow: test steps reference next step in sequence
-  - [ ] 5.15: Per-workflow: test final step contains synthesize/artifact/final content — learning-card: step-06-synthesize.md, pivot-patch-persevere: step-06-action-plan.md (NO "synthesize" in name), vortex-navigation: step-06-navigation-plan.md (NO "synthesize" in name)
-  - [ ] 5.16: Per-workflow: test final step suggests next workflows
-  - [ ] 5.17: Per-workflow: test step count — all 3 workflows have exactly 6 steps
+- [x] Task 5: Create Max P0 test file — `tests/p0/p0-max.test.js` (AC: 1, 2, 3, 4, 6)
+  - [x] 5.1: Create file following same import pattern
+  - [x] 5.2: Describe "P0 Max: Activation Sequence" with `before()` hook for `loadAgentDefinition('learning-decision-expert')`
+  - [x] 5.3: Test persona ROLE contains "Validated Learning" (agent file: "Validated Learning Synthesizer + Strategic Decision Expert")
+  - [x] 5.4: Test persona IDENTITY references "Systematize" stream
+  - [x] 5.5: Test persona COMMUNICATION_STYLE contains "The evidence suggests" (characteristic phrase)
+  - [x] 5.6: Test Max has exactly 8 menu items with cmd triggers: MH, CH, LC, PP, VN, VE, PM, DA
+  - [x] 5.7: Test Max's 5 exec-path menu items reference files that exist on disk
+  - [x] 5.8: Test activation step 2 contains config.yaml / "Configuration Error"
+  - [x] 5.9: Test rules section contains at least 5 rules (actual: 8)
+  - [x] 5.10: Describe "P0 Max: Workflow Execution Output" — for each of 3 workflows (learning-card, pivot-patch-persevere, vortex-navigation)
+  - [x] 5.11: Per-workflow: test workflow.md frontmatter fields
+  - [x] 5.12: Per-workflow: test template file exists (`{workflow-name}.template.md`) — all 3 Max workflows have templates
+  - [x] 5.13: Per-workflow: test template contains placeholder variables
+  - [x] 5.14: Per-workflow: test steps 01 through (N-1) reference next step (use dynamic step count)
+  - [x] 5.15: Per-workflow: test dynamically-discovered final step contains synthesize/artifact/final content (expected: learning-card: step-06-synthesize.md, pivot-patch-persevere: step-06-action-plan.md — NO "synthesize" in name, vortex-navigation: step-06-navigation-plan.md — NO "synthesize" in name)
+  - [x] 5.16: Per-workflow: test final step suggests next workflows
+  - [x] 5.17: Per-workflow: test step count — all 3 workflows have exactly 6 steps
 
-- [ ] Task 6: Validation — run full test suite and verify (AC: all)
-  - [ ] 6.1: Run `npm run test:p0` — all P0 tests pass (271 existing + ~122 new = ~393 total)
-  - [ ] 6.2: Run `npm test` — 248 existing unit tests pass (zero regressions)
-  - [ ] 6.3: Run `npm run lint` — zero errors, zero warnings
-  - [ ] 6.4: Verify all assertion messages include agent name and ID for diagnostic identification (AC 6)
-  - [ ] 6.5: Verify each agent's P0 suite timing is well under 43-second budget (AC 5)
+- [x] Task 6: Validation — run full test suite and verify (AC: all)
+  - [x] 6.1: Run `npm run test:p0` — 393 tests pass (271 existing + 122 new), 0 fail (316ms)
+  - [x] 6.2: Run `npm test` — 248 existing unit tests pass (zero regressions)
+  - [x] 6.3: Run `npm run lint` — zero errors, zero warnings (fixed 15 unused import warnings)
+  - [x] 6.4: Verify all assertion messages include agent name and ID for diagnostic identification (AC 6)
+  - [x] 6.5: Verify each agent's P0 suite timing is well under 43-second budget (AC 5) — 316ms total
 
 ## Dev Notes
+
+### Scope & Split Assessment
+
+The epic AC says this story "may be split into two stories (3+2) if the content-only template requires significant per-agent customization beyond assertion values." Analysis result: **NO SPLIT NEEDED.** All 5 agents follow the same 2-describe-block content-only structure. The variations (menu counts, step counts, template presence, final step names) are all assertion-value differences handled by per-agent constants — not structural customization. The template works for all 5.
+
+**Expected test counts per agent:**
+- Isla (with templates): ~7 activation + ~21 workflow (3 wf x 7 tests) = ~28
+- Mila (no templates): ~7 activation + ~15 workflow (3 wf x 5 tests) = ~22
+- Liam (no templates): ~7 activation + ~15 workflow (3 wf x 5 tests) = ~22
+- Noah (no templates): ~7 activation + ~15 workflow (3 wf x 5 tests) = ~22
+- Max (with templates): ~7 activation + ~21 workflow (3 wf x 7 tests) = ~28
+
+**Total: ~122 new tests. P0 suite total: 271 + 122 = ~393.**
 
 ### Architecture Compliance
 
@@ -267,10 +280,32 @@ This is the content-only template as defined in `tests/p0/templates.js` — NO F
 
 ### Agent Model Used
 
-{{agent_model_name_version}}
+Claude Opus 4.6 (claude-opus-4-6)
 
 ### Debug Log References
 
+- Initial lint run: 15 unused variable warnings (AGENTS, WORKFLOWS, WAVE3_WORKFLOW_NAMES) across all 5 files
+- Fix: Replaced destructured imports with bare `require('../../scripts/update/lib/agent-registry')` — 0 errors, 0 warnings after fix
+- Re-verified: `npm run test:p0` — 393 pass, 0 fail (316ms)
+
 ### Completion Notes List
 
+- 5 content-only P0 test files created: Isla (28 tests), Mila (22), Liam (22), Noah (22), Max (28) = 122 new tests
+- P0 suite total: 393 tests pass (271 existing + 122 new), 0 failures, 316ms runtime
+- Unit suite: 248 tests pass, zero regressions
+- Lint: 0 errors, 0 warnings (after fixing 15 unused import warnings)
+- All 6 ACs satisfied: activation sequence (FR7), workflow execution output (FR8), agent-specific assertions, deterministic results, performance budget, diagnostic error messages
+- Content-only template validated: 2-describe-block pattern works across all 5 agent variations (with/without templates, mixed step counts, non-synthesize final steps)
+- Applied M1/M2 code review fixes from Epic 2 — dynamic final step discovery, vacuous pass guards, diagnostic messages. M3 (WAVE3 positive assertion) omitted by design: content-only template has no infrastructure integration block
+- Liam's mixed step counts (5, 4, 4) handled via `LIAM_STEP_COUNTS` constant map
+- Max's non-synthesize final steps handled via M1 dynamic content check (looks inside file, not at filename)
+
 ### File List
+
+- `tests/p0/p0-isla.test.js` (NEW — 28 tests, 2 describe blocks, with templates)
+- `tests/p0/p0-mila.test.js` (NEW — 22 tests, 2 describe blocks, no templates)
+- `tests/p0/p0-liam.test.js` (NEW — 22 tests, 2 describe blocks, no templates, mixed step counts)
+- `tests/p0/p0-noah.test.js` (NEW — 22 tests, 2 describe blocks, no templates)
+- `tests/p0/p0-max.test.js` (NEW — 28 tests, 2 describe blocks, with templates, non-synthesize final steps)
+- `tests/p0/helpers.js` (MODIFIED — exported STEP_PATTERN constant, replaced local stepPattern in validateWorkflowStructure)
+- `_bmad-output/implementation-artifacts/sprint-status.yaml` (MODIFIED — p2-3-1 status transitions)
