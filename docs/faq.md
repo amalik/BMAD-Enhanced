@@ -10,10 +10,10 @@ Common questions about BMAD-Enhanced and the Vortex Pattern.
 
 | Phase | Agents | Question answered |
 |-------|--------|------------------|
-| Pre-implementation (Vortex) | Emma, Isla, Wade, Max | "Should we build this?" |
+| Pre-implementation (Vortex) | Emma, Isla, Mila, Liam, Wade, Noah, Max | "Should we build this?" |
 | Implementation (BMAD Core) | PM, Architect, Dev, QA | "Let's build it right" |
 
-The handoff: Emma → Isla → Wade → Max → BMAD Core.
+The handoff: Emma → Isla → Mila → Liam → Wade → Noah → Max → BMAD Core.
 
 ---
 
@@ -23,10 +23,13 @@ Yes. Each agent works standalone:
 
 - **Emma alone** — Strategic framing and problem space definition
 - **Isla alone** — User research and empathy mapping
-- **Wade alone** — Experiment design and validation
+- **Mila alone** — Research convergence and pattern recognition
+- **Liam alone** — Hypothesis engineering and experiment design
+- **Wade alone** — Experiment execution and validation
+- **Noah alone** — Production signal interpretation and behavior analysis
 - **Max alone** — Learning capture and decision-making
 
-Use all four together for the complete Vortex flow.
+Use all seven together for the complete Vortex flow.
 
 ---
 
@@ -36,8 +39,11 @@ Follow the Vortex flow, but jump in wherever you are:
 
 1. **Emma** — Defining a new product or problem space
 2. **Isla** — Know the problem, need to understand users
-3. **Wade** — Have hypotheses ready to test
-4. **Max** — Have experiment results, need to decide next steps
+3. **Mila** — Have research data, need to find patterns and convergence
+4. **Liam** — Have insights, need structured hypotheses and experiments
+5. **Wade** — Have hypotheses ready to test
+6. **Noah** — Have production data, need signal interpretation
+7. **Max** — Have experiment results, need to decide next steps
 
 Max's Vortex Navigation helps identify which stream needs attention based on evidence gaps.
 
@@ -62,28 +68,65 @@ The archived original vision is at `_bmad-output/planning-artifacts/ORIGINAL-VIS
 
 ---
 
-### What's coming in Wave 3?
+### What was added in Wave 3?
 
-v1.6.0 will add the remaining three Vortex streams:
+v1.6.x completed the full 7-stream Vortex Pattern by adding three new agents:
 
-- **Synthesize** — Pattern recognition and insight synthesis across research
-- **Hypothesize** — Structured hypothesis generation from insights
-- **Sensitize** — Stakeholder alignment and organizational buy-in
+- **Mila** — Research convergence, pivot-resynthesis, and pattern mapping
+- **Liam** — Hypothesis engineering, assumption mapping, and experiment design
+- **Noah** — Signal interpretation, behavior analysis, and production monitoring
 
-This completes the full 7-stream Vortex Pattern.
+These agents fill the gap between Isla's user research and Wade's experiment execution, giving teams a complete discovery-to-decision pipeline.
 
 ---
 
 ### Are all workflows ready to use?
 
-Yes. All 13 workflows are fully implemented:
+Yes. All 22 workflows are fully implemented:
 
 - **Emma:** lean-persona, product-vision, contextualize-scope
 - **Isla:** empathy-map, user-interview, user-discovery
+- **Mila:** research-convergence, pivot-resynthesis, pattern-mapping
+- **Liam:** hypothesis-engineering, assumption-mapping, experiment-design
 - **Wade:** mvp, lean-experiment, proof-of-concept, proof-of-value
+- **Noah:** signal-interpretation, behavior-analysis, production-monitoring
 - **Max:** learning-card, pivot-patch-persevere, vortex-navigation
 
 Each includes templates, step files, and validation.
+
+---
+
+### How do I add a custom agent or module?
+
+**Use BMB (BMAD Module Builder) — not manual file editing.**
+
+BMAD-Enhanced includes three builder agents specifically for extending the system:
+
+| Builder | Slash Command | What it creates |
+|---------|---------------|-----------------|
+| Bond (Agent Builder) | `/bmad-bmb-agent` | Custom agents with persona, menu, and workflows |
+| Morgan (Module Builder) | `/bmad-bmb-module` | Complete modules with agents, workflows, and config |
+| Wendy (Workflow Builder) | `/bmad-bmb-workflow` | Standalone workflows with steps, templates, and validation |
+
+**Quick start:** Run `/bmad-bmb-agent` to create a new agent through a guided process. BMB handles registry entries, file structure, and validation — you focus on the agent's purpose and behavior.
+
+**Alternative:** Fork the repository if you need full control over distribution (custom npm packages, non-standard patterns).
+
+**Do not** hand-edit the agent registry (`agent-registry.js`) or create agent files manually. Agents added without proper structure — no handoff contracts, no Compass routing, no validation — degrade the Vortex's signal quality. Each unstructured addition makes it harder for agents to produce coherent, chainable outputs. BMB ensures your extensions follow the patterns that keep the Vortex working.
+
+---
+
+### What do I do when a handoff between agents fails?
+
+Handoff failures typically mean the upstream agent's output is missing fields that the downstream agent expects.
+
+**To diagnose:**
+
+1. **Check the journey example** at `_bmad-output/journey-example/` — it shows what well-formed artifacts look like at every handoff point, serving as an implicit format reference *(coming in Phase 2, Epic 4)*
+2. **Check the handoff contract schemas** in `_bmad/bme/_vortex/contracts/` — the 5 artifact contracts (HC1-HC5) each have a schema file (e.g., `hc1-empathy-artifacts.md`) defining which fields the agent produces and the downstream agent consumes
+3. **Check the receiving agent's first workflow step** — it documents what input fields it expects and how it uses them
+
+**Common causes:** Running agents out of order, skipping intermediate agents, or using artifacts from a much older version as input to newer agents.
 
 ---
 
