@@ -20,7 +20,7 @@ BMAD-Enhanced works **standalone** or as an extension to [BMAD Method](https://g
 npm install bmad-enhanced && npx bmad-install-vortex-agents
 ```
 
-All 4 Vortex agents (Emma, Isla, Wade, Max) with 13 workflows are installed and ready to use.
+All 7 Vortex agents (Emma, Isla, Mila, Liam, Wade, Noah, Max) with 22 workflows are installed and ready to use.
 
 ---
 
@@ -92,10 +92,10 @@ your-project/
 
 ### Summary
 
-- **4 agent definitions** in `_bmad/bme/_vortex/agents/`
-- **13 workflows** (104 files) — each with steps, templates, and validation
+- **7 agent definitions** in `_bmad/bme/_vortex/agents/`
+- **22 workflows** (169 files) — each with steps, templates, and validation
 - **Configuration** in `_bmad/bme/_vortex/config.yaml`
-- **4 user guides** in `_bmad-output/vortex-artifacts/`
+- **7 user guides** in `_bmad/bme/_vortex/guides/`
 
 ---
 
