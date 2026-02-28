@@ -91,8 +91,8 @@ development_status:
   # Epic 1 (Phase 2): Documentation Accuracy & Extension Guidance
   p2-epic-1: in-progress
   p2-1-1-build-programmatic-docs-audit-tool: done
-  p2-1-2-execute-docs-fix-pass-1-stale-references-broken-links: ready-for-dev
-  p2-1-3-add-forward-compatibility-extension-guidance: backlog
+  p2-1-2-execute-docs-fix-pass-1-stale-references-broken-links: done
+  p2-1-3-add-forward-compatibility-extension-guidance: done
   p2-1-4-validate-pass-1-completeness-document-inter-pass-checkpoint: backlog
   p2-epic-1-retrospective: optional
 
