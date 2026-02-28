@@ -78,7 +78,7 @@ What happens:
 - Agent files and workflows refreshed
 - Isla + Max agents added with 6 new workflows
 
-### From v1.0.x to v1.5.x
+### From v1.0.x to v1.6.x
 
 **Breaking changes:**
 - Workflow renamed: `empathy-map` → `lean-persona` (for Emma)
@@ -87,9 +87,9 @@ What happens:
 
 What happens:
 - Old workflows preserved in `_bmad/bme/_vortex/workflows/_deprecated/`
-- All 13 Vortex workflows installed
+- All 22 Vortex workflows installed
 - Config structure updated (preferences preserved)
-- 4 agents installed (Emma, Isla, Wade, Max)
+- 7 agents installed (Emma, Isla, Mila, Liam, Wade, Noah, Max)
 
 ```bash
 npm install bmad-enhanced@latest
@@ -122,6 +122,33 @@ Every update creates a backup before making changes:
 - Workflow files (steps, templates, validation)
 - Vortex config.yaml (with preference preservation)
 - User guides
+
+---
+
+## Forward Compatibility
+
+### Your Artifacts Survive Updates
+
+All user-generated content in `_bmad-output/` (planning artifacts, implementation artifacts, vortex artifacts) works with updated agents **without regeneration**. When you update from v1.5.x to v1.6.x, your existing artifacts remain valid inputs to both original and new agents.
+
+Artifacts created with earlier agents (Emma, Isla, Wade, Max) were not designed specifically for the newer agents (Mila, Liam, Noah), but the handoff contracts are backward-compatible by design. A product vision created with v1.5.x works as input to Mila after updating to v1.6.x — the required fields are present.
+
+### What Is Backward-Compatible
+
+- **Artifact content** — Everything in `_bmad-output/` (planning artifacts, implementation artifacts, vortex artifacts)
+- **Handoff contract fields** — The fields agents produce and consume (HC1-HC5 schemas) are stable across versions
+- **Workflow outputs** — Templates and generated documents maintain their structure
+
+### What Is Managed by the Update System
+
+These change between versions but are handled automatically by `npx bmad-update`:
+
+- **Agent definition files** — Persona, menu, and instruction content in `_bmad/bme/_vortex/agents/`
+- **Workflow step files** — Step content, templates, and validation in `_bmad/bme/_vortex/workflows/`
+- **Internal file structure** — The layout of `_bmad/bme/` may change between versions
+- **User guides** — Updated guides are installed in `_bmad/bme/_vortex/guides/`
+
+You do not need to manually update these — the update system replaces them while preserving your preferences and artifacts.
 
 ---
 
