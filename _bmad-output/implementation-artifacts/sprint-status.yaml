@@ -97,15 +97,15 @@ development_status:
   p2-epic-1-retrospective: done
 
   # Epic 2 (Phase 2): P0 Test Framework & Infrastructure Agent Validation
-  p2-epic-2: in-progress
+  p2-epic-2: done
   p2-2-1-build-registry-driven-p0-test-framework: done
   p2-2-2-p0-activation-workflow-tests-for-emma: done
-  p2-2-3-p0-activation-workflow-tests-for-wade: backlog
-  p2-epic-2-retrospective: optional
+  p2-2-3-p0-activation-workflow-tests-for-wade: done
+  p2-epic-2-retrospective: done
 
   # Epic 3 (Phase 2): Full Agent Validation & Content Correctness
-  p2-epic-3: backlog
-  p2-3-1-p0-content-only-tests-for-remaining-5-agents: backlog
+  p2-epic-3: in-progress
+  p2-3-1-p0-content-only-tests-for-remaining-5-agents: ready-for-dev
   p2-3-2-voice-consistency-validation-full-p0-confidence-gate: backlog
   p2-3-3-handoff-contract-validation-tests: backlog
   p2-3-4-ci-content-correctness-vortex-compass-validation: backlog
