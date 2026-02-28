@@ -1,6 +1,6 @@
 # Story p2-1.4: Validate Pass 1 Completeness & Document Inter-Pass Checkpoint
 
-Status: ready-for-dev
+Status: done
 
 ## Story
 
@@ -17,33 +17,33 @@ So that I have confidence Pass 1 is complete and a repeatable process for Pass 2
 
 ## Tasks / Subtasks
 
-- [ ] Task 1: Execute inter-pass validation audit (AC: 1)
-  - [ ] 1.1: Run `npm run docs:audit -- --json` — verify zero findings (empty array `[]`)
-  - [ ] 1.2: Run `npm test` — verify all 248 tests pass with zero failures
-  - [ ] 1.3: Run `npm run lint` — verify clean output
-  - [ ] 1.4: Record baseline metrics: finding count (0), test count, files scanned, audit categories checked (stale-reference, broken-link, broken-path, missing-coverage)
+- [x] Task 1: Execute inter-pass validation audit (AC: 1)
+  - [x] 1.1: Run `npm run docs:audit -- --json` — verified: `[]` (zero findings)
+  - [x] 1.2: Run `npm test` — verified: 248 tests, 72 suites, 0 failures
+  - [x] 1.3: Run `npm run lint` — verified: clean output
+  - [x] 1.4: Baseline metrics recorded: 0 findings, 248 tests, 9 user-facing docs scanned, 4 audit categories (stale-reference, broken-link, broken-path, missing-coverage)
 
-- [ ] Task 2: Create inter-pass checkpoint document (AC: 2, 3)
-  - [ ] 2.1: Create `_bmad-output/implementation-artifacts/p2-epic-1-inter-pass-checkpoint.md`
-  - [ ] 2.2: Add header with date, project version (1.6.4), Pass 1 designation
-  - [ ] 2.3: Add "Pass 1 Summary" section — scope of work across Stories 1.1-1.3: audit tool built, 18 findings resolved, extension guidance added, forward-compatibility documented
-  - [ ] 2.4: Add "Baseline State" section — verbatim audit output (`[]`), test count (248), files scanned list (9 user-facing docs), categories checked (4)
-  - [ ] 2.5: Add "Two-Pass Process" section — explains that Pass 1 establishes a clean baseline before content-heavy Epics 2-5, and Pass 2 (Epic 6, Story 6.2) re-validates after all content changes to catch regressions
-  - [ ] 2.6: Add "Pass 2 Execution Guide" — commands to run, how to diff results against this checkpoint baseline
+- [x] Task 2: Create inter-pass checkpoint document (AC: 2, 3)
+  - [x] 2.1: Created `_bmad-output/implementation-artifacts/p2-epic-1-inter-pass-checkpoint.md`
+  - [x] 2.2: Header with date (2026-02-28), project version (1.6.4), Pass 1 designation, epic and story references
+  - [x] 2.3: "Pass 1 Summary" section — 3 stories covering audit tool creation, 18 findings resolved, extension guidance added, forward-compatibility documented
+  - [x] 2.4: "Baseline State" section — verbatim audit output (`[]`), test count (248/72 suites), files scanned list (9 user-facing docs), categories table (4 categories, all 0 findings), registry state (7 agents, 22 workflows)
+  - [x] 2.5: "Two-Pass Process" section — explains why two passes (content changes in Epics 2-5), Pass 1 scope (Stories 1.1-1.4), Pass 2 scope (Epic 6 Story 6.2 with 5-step process)
+  - [x] 2.6: "Pass 2 Execution Guide" — 5-step guide with exact commands, JSON comparison script, manual review checklist with 7 items
 
-- [ ] Task 3: Document deferred findings for Pass 2 (AC: 4)
-  - [ ] 3.1: Analyze Epics 2-5 for documentation impact — identify what new content each epic adds or modifies
-  - [ ] 3.2: Add "Deferred to Pass 2" section listing expected documentation changes per epic:
-    - Epic 2 (P0 Test Framework): test infrastructure docs, coverage thresholds, new test counts
-    - Epic 3 (Full Agent Validation): P0 content tests, voice consistency, handoff contract validation, CI docs
-    - Epic 4 (Journey Example): new `_bmad-output/journey-example/` content, handoff annotations, cross-references from faq.md
-    - Epic 5 (CLI Reliability): README landing page rewrite, output previews, user feedback mechanism
-  - [ ] 3.3: Note audit tool limitations discovered in Story 1.3 — semantic stale patterns not caught by numeric/word matching — recommend manual review alongside automated audit for Pass 2
+- [x] Task 3: Document deferred findings for Pass 2 (AC: 4)
+  - [x] 3.1: Analyzed Epics 2-5 for documentation impact — identified specific content changes per epic with docs impact tables
+  - [x] 3.2: "Deferred to Pass 2" section with per-epic tables:
+    - Epic 2 (P0 Test Framework): 3 items — test infrastructure, Emma tests, Wade tests → docs/testing.md
+    - Epic 3 (Full Agent Validation): 4 items — P0 content tests, voice consistency, handoff contracts, CI → docs/testing.md, docs/development.md
+    - Epic 4 (Journey Example): 3 items — journey directory, handoff annotations, editorial review → docs/faq.md, docs/agents.md
+    - Epic 5 (CLI Reliability): 4 items — README rewrite, output previews, CLI coverage, user feedback → README.md, docs/testing.md, docs/faq.md
+  - [x] 3.3: "Known Audit Tool Limitations" section — 4 specific patterns not caught (semantic stale, internal stream names, incomplete lists, tense drift) with recommendation for manual review + potential tool enhancement
 
-- [ ] Task 4: Validation — verify story completeness (AC: all)
-  - [ ] 4.1: Re-run `npm run docs:audit -- --json` — confirm zero findings still hold after checkpoint document creation
-  - [ ] 4.2: Re-run `npm test` — confirm all tests pass
-  - [ ] 4.3: Verify checkpoint document contains all required sections: Pass 1 Summary, Baseline State, Two-Pass Process, Deferred to Pass 2, Pass 2 Execution Guide
+- [x] Task 4: Validation — verify story completeness (AC: all)
+  - [x] 4.1: `npm run docs:audit -- --json` → `[]` — zero findings confirmed after checkpoint creation
+  - [x] 4.2: `npm test` → 248 tests, 0 failures — all pass
+  - [x] 4.3: Checkpoint document verified — all 5 required sections present: Pass 1 Summary, Baseline State, Two-Pass Process, Deferred to Pass 2, Pass 2 Execution Guide
 
 ## Dev Notes
 
@@ -188,10 +188,22 @@ The checkpoint document (`p2-epic-1-inter-pass-checkpoint.md`) should contain:
 
 ### Agent Model Used
 
-{{agent_model_name_version}}
+Claude Opus 4.6
 
 ### Debug Log References
 
 ### Completion Notes List
 
+- Inter-pass validation confirmed zero findings across all 4 audit categories (stale-reference, broken-link, broken-path, missing-coverage), 248 tests passing, lint clean
+- Created `p2-epic-1-inter-pass-checkpoint.md` with 5 sections: Pass 1 Summary (Stories 1.1-1.3 scope), Baseline State (verbatim audit output, test count, 9-file scope, registry state), Two-Pass Process (why two passes, Pass 1 vs Pass 2 scope), Deferred to Pass 2 (14 items across 4 epics in tabular format), Pass 2 Execution Guide (5-step procedure with commands and manual review checklist)
+- Deferred findings analysis covers Epics 2-5 with specific docs impact per area: test count changes (Epics 2-3), journey example placeholder resolution (Epic 4), README rewrite (Epic 5)
+- Known audit tool limitations documented: 4 semantic patterns not caught by automated checks, with recommendation for manual review during Pass 2
+- No JavaScript code changes — documentation-only story
+
+### Change Log
+
+- 2026-02-28: Story implementation complete — 4 tasks, 1 file created, zero regressions
+
 ### File List
+
+- _bmad-output/implementation-artifacts/p2-epic-1-inter-pass-checkpoint.md (NEW — inter-pass checkpoint document with baseline state and two-pass process)
