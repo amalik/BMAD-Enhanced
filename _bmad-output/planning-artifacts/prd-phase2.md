@@ -1,5 +1,5 @@
 ---
-stepsCompleted: [step-01-init, step-02-discovery, step-03-success, step-04-journeys, step-05-domain, step-06-innovation]
+stepsCompleted: [step-01-init, step-02-discovery, step-03-success, step-04-journeys, step-05-domain, step-06-innovation, step-07-project-type]
 inputDocuments:
   - _bmad-output/planning-artifacts/prd.md
   - _bmad-output/planning-artifacts/product-brief-BMAD-Enhanced-2026-02-22.md
@@ -278,3 +278,41 @@ Hypothesize takes the definition and runs brainwriting. The 4-field hypothesis c
 - **Phase 2 ensures quality, not retention.** If a user arrives, has a correct and trustworthy experience, and still leaves — that's a product-market fit question for Phase 3, not a quality gap for Phase 2.
 - **Discovery is Phase 3's problem.** Phase 2 users arrive via recommendation or direct link, not organic search. Phase 2's job is to make the experience trustworthy when they arrive.
 - **Journey example serves triple duty:** pedagogical document for Priya, implicit format reference for Kai, and living proof of chain integrity for Amalik.
+
+## Developer Tool Requirements
+
+### Project-Type Overview
+
+BMAD-Enhanced is an npm-distributed developer tool that installs into a user's project via `npx bmad-enhanced`. It operates through AI IDE integrations (VSCode, Cursor, Claude Code) using `.claude/settings.json` for slash command registration. Phase 2 does not change the technical architecture — it improves the quality of documentation, examples, and test coverage.
+
+### Documentation Architecture
+
+Current structure (unchanged by Phase 2):
+
+| File | Purpose | Phase 2 Action |
+|------|---------|---------------|
+| `README.md` | Landing page, first impression | Fix stale numbers, add journey example link, verify all internal links resolve |
+| `docs/agents.md` | Agent reference | Fix agent count, fix broken user guide links, verify all internal links resolve |
+| `docs/testing.md` | Testing reference | Update test count and coverage thresholds, verify all internal links resolve |
+| `docs/development.md` | Contributor reference | Update agent/workflow counts, verify all internal links resolve |
+| `docs/faq.md` | Common questions | Update counts, add extension guidance with bloat warning, verify all internal links resolve |
+| `UPDATE-GUIDE.md` | Upgrade instructions | Add forward-compatibility paragraph, verify npx cache tip, verify all internal links resolve |
+
+### Forward Compatibility
+
+Existing artifacts from Emma, Isla, Wade, and Max remain usable as inputs to updated and new agents. New agents (Synthesize, Hypothesize, Sensitize) accept inputs from existing agents without requiring artifact regeneration. Note: v1.5.x artifacts were not designed *for* new agents, but the handoff contracts are backward-compatible by design.
+
+### Installation & Update Path
+
+| Method | Command | Status |
+|--------|---------|--------|
+| Fresh install | `npx bmad-enhanced` | Working |
+| Update | `npx bmad-update` | Working (cache hint added in v1.6.4) |
+| Force latest | `npx -p bmad-enhanced@latest bmad-update` | Working (added in v1.6.4) |
+
+### Implementation Considerations
+
+- **Minimal code changes** — Phase 2 is primarily content fixes, test additions, and documentation updates. Vortex Compass prerequisite guidance may require agent content adjustments.
+- **Agent content is the product** — Quality of markdown agent files, workflow steps, and persona definitions matters more than code architecture
+- **Test strategy is the deliverable** — P0 suites, handoff tests, content correctness tests, and CLI coverage are the technical output of Phase 2
+- **Journey example is documentation, not code** — Captured artifacts from real agent runs, editorially reviewed, linked from README
