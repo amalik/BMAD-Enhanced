@@ -171,6 +171,13 @@ describe('checkBrokenLinks', () => {
     const findings = checkBrokenLinks(content, 'README.md', tmpDir);
     assert.equal(findings[0].line, 3);
   });
+
+  it('resolves relative links from subdirectory docs', () => {
+    // A link in docs/sub.md pointing to ../README.md should resolve to tmpDir/README.md
+    const content = 'See [readme](../README.md) for details.';
+    const findings = checkBrokenLinks(content, 'docs/sub.md', tmpDir);
+    assert.equal(findings.length, 0);
+  });
 });
 
 // === checkBrokenPaths ===
@@ -213,6 +220,20 @@ describe('checkBrokenPaths', () => {
     const findings = checkBrokenPaths(content, 'README.md', tmpDir);
     assert.equal(findings.length, 0);
   });
+
+  it('detects broken _bmad/ prefixed paths', () => {
+    const content = 'Agent at `_bmad/agents/missing.md`.';
+    const findings = checkBrokenPaths(content, 'README.md', tmpDir);
+    assert.equal(findings.length, 1);
+    assert.equal(findings[0].current, '_bmad/agents/missing.md');
+  });
+
+  it('detects broken docs/ prefixed paths', () => {
+    const content = 'See `docs/missing-guide.md` for reference.';
+    const findings = checkBrokenPaths(content, 'README.md', tmpDir);
+    assert.equal(findings.length, 1);
+    assert.equal(findings[0].current, 'docs/missing-guide.md');
+  });
 });
 
 // === checkDocsCoverage ===
@@ -250,6 +271,15 @@ describe('checkDocsCoverage', () => {
     const allWorkflows = WORKFLOW_NAMES.join(' ');
     const findings = checkDocsCoverage([`${allNames} ${allWorkflows}`]);
     assert.equal(findings.length, 0);
+  });
+
+  it('does not false-match agent names as substrings', () => {
+    // "maximize" contains "max" but should not satisfy Max agent coverage
+    const otherAgents = AGENTS.filter(a => a.name !== 'Max').map(a => a.name).join(' ');
+    const content = `${otherAgents} maximize ${WORKFLOW_NAMES.join(' ')}`;
+    const findings = checkDocsCoverage([content]);
+    const maxFinding = findings.filter(f => f.current.includes('Max'));
+    assert.equal(maxFinding.length, 1);
   });
 });
 
