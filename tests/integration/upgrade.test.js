@@ -104,7 +104,7 @@ describe('Upgrade from v1.3.x (simulated)', () => {
       submodule_name: 'vortex',
       description: 'test',
       module: 'bme',
-      output_folder: '_bmad-output/vortex-artifacts',
+      output_folder: '_bmad/bme/_vortex/guides',
       agents: ['contextualization-expert', 'lean-experiments-specialist'],
       workflows: ['lean-persona']
     }));
@@ -175,7 +175,7 @@ describe('User guide backup during upgrade', () => {
     await fs.ensureDir(path.join(tmpDir, '_bmad'));
 
     // Pre-create a user guide to test backup
-    const guidesDir = path.join(tmpDir, '_bmad-output/vortex-artifacts');
+    const guidesDir = path.join(tmpDir, '_bmad/bme/_vortex/guides');
     await fs.ensureDir(guidesDir);
     await fs.writeFile(path.join(guidesDir, 'EMMA-USER-GUIDE.md'), '# My custom guide notes');
   });
@@ -186,13 +186,13 @@ describe('User guide backup during upgrade', () => {
 
   it('backs up existing guides when backupGuides is true', async () => {
     const packageRoot = path.join(__dirname, '..', '..');
-    const srcGuide = path.join(packageRoot, '_bmad-output/vortex-artifacts/EMMA-USER-GUIDE.md');
+    const srcGuide = path.join(packageRoot, '_bmad/bme/_vortex/guides/EMMA-USER-GUIDE.md');
 
     // Only test if source guide exists in package
     if (fs.existsSync(srcGuide)) {
       await refreshInstallation(tmpDir, { backupGuides: true, verbose: false });
 
-      const bakPath = path.join(tmpDir, '_bmad-output/vortex-artifacts/EMMA-USER-GUIDE.md.bak');
+      const bakPath = path.join(tmpDir, '_bmad/bme/_vortex/guides/EMMA-USER-GUIDE.md.bak');
       assert.ok(fs.existsSync(bakPath), '.bak file should be created');
 
       const bakContent = fs.readFileSync(bakPath, 'utf8');
@@ -204,17 +204,17 @@ describe('User guide backup during upgrade', () => {
     const tmpDir2 = await fs.mkdtemp(path.join(os.tmpdir(), 'bmad-nobak-'));
     await fs.ensureDir(path.join(tmpDir2, '_bmad'));
 
-    const guidesDir = path.join(tmpDir2, '_bmad-output/vortex-artifacts');
+    const guidesDir = path.join(tmpDir2, '_bmad/bme/_vortex/guides');
     await fs.ensureDir(guidesDir);
     await fs.writeFile(path.join(guidesDir, 'WADE-USER-GUIDE.md'), '# Custom wade notes');
 
     const packageRoot = path.join(__dirname, '..', '..');
-    const srcGuide = path.join(packageRoot, '_bmad-output/vortex-artifacts/WADE-USER-GUIDE.md');
+    const srcGuide = path.join(packageRoot, '_bmad/bme/_vortex/guides/WADE-USER-GUIDE.md');
 
     if (fs.existsSync(srcGuide)) {
       await refreshInstallation(tmpDir2, { backupGuides: false, verbose: false });
 
-      const bakPath = path.join(tmpDir2, '_bmad-output/vortex-artifacts/WADE-USER-GUIDE.md.bak');
+      const bakPath = path.join(tmpDir2, '_bmad/bme/_vortex/guides/WADE-USER-GUIDE.md.bak');
       assert.ok(!fs.existsSync(bakPath), '.bak should NOT be created when backupGuides=false');
     }
 
@@ -241,7 +241,7 @@ describe('Upgrade from v1.4.x (simulated)', () => {
       submodule_name: 'vortex',
       description: 'test',
       module: 'bme',
-      output_folder: '_bmad-output/vortex-artifacts',
+      output_folder: '_bmad/bme/_vortex/guides',
       agents: ['contextualization-expert', 'lean-experiments-specialist'],
       workflows: ['lean-persona', 'product-vision', 'contextualize-scope', 'mvp', 'lean-experiment', 'proof-of-concept', 'proof-of-value']
     }));
