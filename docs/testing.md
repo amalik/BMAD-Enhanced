@@ -28,7 +28,7 @@ Zero-dependency test runner using `node:test`.
 
 | Suite | Tests | Coverage Area |
 |-------|-------|---------------|
-| fresh-install | 9 | `refreshInstallation` end-to-end (all 4 agents) |
+| fresh-install | 9 | `refreshInstallation` end-to-end (all 7 agents) |
 | upgrade | 22 | v1.0.x, v1.3.x, v1.4.x upgrade paths to v1.5.0 |
 | cli-entry-points | 8 | `index.js`, `bmad-version`, `bmad-update`, `bmad-doctor` |
 | installer-e2e | 7 | `install-vortex-agents` CLI end-to-end, idempotency |
@@ -99,7 +99,7 @@ Isla follows the same agent architecture as Emma and Wade. Infrastructure valida
 - Fresh-install integration tests
 - Upgrade path tests (v1.3.x, v1.4.x)
 - CLI entry point verification
-- All 3 workflow directories validated (templates, steps, validation)
+- Each of Isla's workflow directories validated (templates, steps, validation)
 
 Formal P0 test suite planned.
 
