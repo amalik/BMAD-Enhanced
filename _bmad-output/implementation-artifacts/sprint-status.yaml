@@ -97,9 +97,9 @@ development_status:
   p2-epic-1-retrospective: done
 
   # Epic 2 (Phase 2): P0 Test Framework & Infrastructure Agent Validation
-  p2-epic-2: backlog
-  p2-2-1-build-registry-driven-p0-test-framework: backlog
-  p2-2-2-p0-activation-workflow-tests-for-emma: backlog
+  p2-epic-2: in-progress
+  p2-2-1-build-registry-driven-p0-test-framework: done
+  p2-2-2-p0-activation-workflow-tests-for-emma: done
   p2-2-3-p0-activation-workflow-tests-for-wade: backlog
   p2-epic-2-retrospective: optional
 
