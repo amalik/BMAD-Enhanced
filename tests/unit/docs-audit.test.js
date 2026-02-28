@@ -361,22 +361,20 @@ describe('runAudit', () => {
 describe('CLI exit codes', () => {
   const scriptPath = path.join(__dirname, '../../scripts/docs-audit.js');
 
-  it('exits with code 1 when findings exist (real project)', async () => {
+  it('exits with code 0 when no findings exist (real project)', async () => {
     const result = await runScript(scriptPath);
-    // Real project has known stale references, so should exit 1
-    assert.equal(result.exitCode, 1);
+    // All stale references and broken links have been fixed
+    assert.equal(result.exitCode, 0);
   });
 
   it('produces valid JSON with --json flag', async () => {
     const result = await runScript(scriptPath, ['--json']);
     const parsed = JSON.parse(result.stdout);
     assert.ok(Array.isArray(parsed));
-    assert.ok(parsed.length > 0);
-    // Each finding should have required fields
-    assert.ok(parsed[0].file);
-    assert.ok(parsed[0].category);
-    assert.ok(parsed[0].current);
-    assert.ok(parsed[0].expected);
+    // All findings have been fixed — expect empty array.
+    // Finding object structure ({file, category, current, expected})
+    // is validated by unit tests (checkStaleReferences, checkBrokenLinks, etc.)
+    assert.equal(parsed.length, 0);
   });
 });
 
