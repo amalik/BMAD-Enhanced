@@ -1,6 +1,6 @@
 # Story 1.1: Build Programmatic Docs Audit Tool
 
-Status: ready-for-dev
+Status: review
 
 ## Story
 
@@ -25,55 +25,55 @@ So that I get an actionable report identifying every drift item with file locati
 
 ## Tasks / Subtasks
 
-- [ ] Task 1: Create `scripts/docs-audit.js` — main entry point (AC: 1, 12)
-  - [ ] 1.1: Import agent-registry.js to derive expected agent count (7), names, workflow count (22), and workflow names dynamically
-  - [ ] 1.2: Define user-facing doc scope — `docs/*.md` + root-level: README.md, UPDATE-GUIDE.md, INSTALLATION.md, CHANGELOG.md, BMAD-METHOD-COMPATIBILITY.md
-  - [ ] 1.3: Implement CLI entry with zero-config — no arguments, auto-discovers project root using existing `utils.js` `findProjectRoot()` pattern
-  - [ ] 1.4: Wire up finding collectors, run all check categories, output report, set exit code
+- [x] Task 1: Create `scripts/docs-audit.js` — main entry point (AC: 1, 12)
+  - [x] 1.1: Import agent-registry.js to derive expected agent count (7), names, workflow count (22), and workflow names dynamically
+  - [x] 1.2: Define user-facing doc scope — `docs/*.md` + root-level: README.md, UPDATE-GUIDE.md, INSTALLATION.md, CHANGELOG.md, BMAD-METHOD-COMPATIBILITY.md
+  - [x] 1.3: Implement CLI entry with zero-config — no arguments, auto-discovers project root using existing `utils.js` `findProjectRoot()` pattern
+  - [x] 1.4: Wire up finding collectors, run all check categories, output report, set exit code
 
-- [ ] Task 2: Implement stale numeric reference detection (AC: 2, 4)
-  - [ ] 2.1: Build regex patterns for numeric agent/workflow/test count references (digits and written-out numbers: "four", "seven", "13", "22", etc.)
-  - [ ] 2.2: Build word-pattern detection for contradictory terminology ("original agents", "original four", "initial agents", etc.)
-  - [ ] 2.3: Scan each doc file line-by-line, match patterns, compare against registry-derived expected values
-  - [ ] 2.4: Generate finding objects with: `{file, line, category: 'stale-reference', current, expected}`
+- [x] Task 2: Implement stale numeric reference detection (AC: 2, 4)
+  - [x] 2.1: Build regex patterns for numeric agent/workflow/test count references (digits and written-out numbers: "four", "seven", "13", "22", etc.)
+  - [x] 2.2: Build word-pattern detection for contradictory terminology ("original agents", "original four", "initial agents", etc.)
+  - [x] 2.3: Scan each doc file line-by-line, match patterns, compare against registry-derived expected values
+  - [x] 2.4: Generate finding objects with: `{file, line, category: 'stale-reference', current, expected}`
 
-- [ ] Task 3: Implement stale path reference detection (AC: 3)
-  - [ ] 3.1: Extract all file path references from markdown content (relative paths in links, code blocks, inline references)
-  - [ ] 3.2: Resolve each path relative to the document's location
-  - [ ] 3.3: Check filesystem existence via `fs.existsSync()`
-  - [ ] 3.4: Generate finding objects with: `{file, line, category: 'broken-path', current, expected: 'file should exist'}`
+- [x] Task 3: Implement stale path reference detection (AC: 3)
+  - [x] 3.1: Extract all file path references from markdown content (relative paths in links, code blocks, inline references)
+  - [x] 3.2: Resolve each path relative to the document's location
+  - [x] 3.3: Check filesystem existence via `fs.existsSync()`
+  - [x] 3.4: Generate finding objects with: `{file, line, category: 'broken-path', current, expected: 'file should exist'}`
 
-- [ ] Task 4: Implement internal link validation (AC: 6)
-  - [ ] 4.1: Parse all markdown links `[text](target)` — exclude external URLs (http/https)
-  - [ ] 4.2: Resolve relative link targets against document location
-  - [ ] 4.3: Handle anchor links (`#section`) by verifying file existence (anchor validation optional)
-  - [ ] 4.4: Generate finding objects with: `{file, line, category: 'broken-link', current, expected: 'target should exist'}`
+- [x] Task 4: Implement internal link validation (AC: 6)
+  - [x] 4.1: Parse all markdown links `[text](target)` — exclude external URLs (http/https)
+  - [x] 4.2: Resolve relative link targets against document location
+  - [x] 4.3: Handle anchor links (`#section`) by verifying file existence (anchor validation optional)
+  - [x] 4.4: Generate finding objects with: `{file, line, category: 'broken-link', current, expected: 'target should exist'}`
 
-- [ ] Task 5: Implement docs coverage completeness check (AC: 5, 11)
-  - [ ] 5.1: For each agent in `AGENTS` array from registry: search docs for agent name references (e.g., "Emma", "Mila", agent ID)
-  - [ ] 5.2: For each workflow in `WORKFLOWS` array from registry: search docs for workflow name references
-  - [ ] 5.3: Report agents/workflows with zero docs coverage as findings: `{category: 'missing-coverage', current: 'no references found', expected: 'at least one doc reference'}`
+- [x] Task 5: Implement docs coverage completeness check (AC: 5, 11)
+  - [x] 5.1: For each agent in `AGENTS` array from registry: search docs for agent name references (e.g., "Emma", "Mila", agent ID)
+  - [x] 5.2: For each workflow in `WORKFLOWS` array from registry: search docs for workflow name references
+  - [x] 5.3: Report agents/workflows with zero docs coverage as findings: `{category: 'missing-coverage', current: 'no references found', expected: 'at least one doc reference'}`
 
-- [ ] Task 6: Implement report generation and exit codes (AC: 7, 8, 9, 10)
-  - [ ] 6.1: Group findings by category and file
-  - [ ] 6.2: Format human-readable report with chalk-colored output (use existing chalk dependency)
-  - [ ] 6.3: Print summary line: `Found {n} findings across {f} files ({categories})`
-  - [ ] 6.4: Exit with code 1 if findings > 0, code 0 if clean
-  - [ ] 6.5: Support `--json` flag for machine-readable output (JSON array of finding objects)
+- [x] Task 6: Implement report generation and exit codes (AC: 7, 8, 9, 10)
+  - [x] 6.1: Group findings by category and file
+  - [x] 6.2: Format human-readable report with chalk-colored output (use existing chalk dependency)
+  - [x] 6.3: Print summary line: `Found {n} findings across {f} files ({categories})`
+  - [x] 6.4: Exit with code 1 if findings > 0, code 0 if clean
+  - [x] 6.5: Support `--json` flag for machine-readable output (JSON array of finding objects)
 
-- [ ] Task 7: Write tests — `tests/unit/docs-audit.test.js` (all ACs)
-  - [ ] 7.1: Test stale numeric detection with mock docs containing "four agents" vs expected 7
-  - [ ] 7.2: Test broken path detection with mock docs referencing non-existent files
-  - [ ] 7.3: Test internal link validation with mock docs containing broken `[text](path)` links
-  - [ ] 7.4: Test docs coverage check with mock registry and docs
-  - [ ] 7.5: Test report output format (human-readable and JSON)
-  - [ ] 7.6: Test exit codes (0 for clean, 1 for findings)
-  - [ ] 7.7: Test zero-config behavior (no arguments needed)
+- [x] Task 7: Write tests — `tests/unit/docs-audit.test.js` (all ACs)
+  - [x] 7.1: Test stale numeric detection with mock docs containing "four agents" vs expected 7
+  - [x] 7.2: Test broken path detection with mock docs referencing non-existent files
+  - [x] 7.3: Test internal link validation with mock docs containing broken `[text](path)` links
+  - [x] 7.4: Test docs coverage check with mock registry and docs
+  - [x] 7.5: Test report output format (human-readable and JSON)
+  - [x] 7.6: Test exit codes (0 for clean, 1 for findings)
+  - [x] 7.7: Test zero-config behavior (no arguments needed)
 
-- [ ] Task 8: Add npm script and verify CI integration (AC: 9, 12)
-  - [ ] 8.1: Add `"docs:audit": "node scripts/docs-audit.js"` to package.json scripts
-  - [ ] 8.2: Verify script runs successfully from project root
-  - [ ] 8.3: Verify non-zero exit code when findings exist (CI gate compatible)
+- [x] Task 8: Add npm script and verify CI integration (AC: 9, 12)
+  - [x] 8.1: Add `"docs:audit": "node scripts/docs-audit.js"` to package.json scripts
+  - [x] 8.2: Verify script runs successfully from project root
+  - [x] 8.3: Verify non-zero exit code when findings exist (CI gate compatible)
 
 ## Dev Notes
 
@@ -188,8 +188,32 @@ Modified: `package.json` (add `docs:audit` script entry)
 
 ### Agent Model Used
 
+Claude Opus 4.6
+
 ### Debug Log References
 
 ### Completion Notes List
 
+- Implemented `scripts/docs-audit.js` — single-file CLI tool following bmad-doctor.js pattern
+- All expected values derived dynamically from `agent-registry.js` (AGENTS, WORKFLOWS, WORKFLOW_NAMES) — zero hardcoded values
+- 4 check functions: `checkStaleReferences` (digit + written-out number + contradictory terminology), `checkBrokenLinks` (markdown link validation), `checkBrokenPaths` (backtick-wrapped path references), `checkDocsCoverage` (agent + workflow doc mention coverage)
+- Report supports human-readable (chalk-colored) and machine-readable (--json flag) output
+- Exit codes: 0 = clean, 1 = findings (CI gate compatible)
+- Zero-config: `findProjectRoot()` from utils.js, no arguments required
+- 36 tests in `tests/unit/docs-audit.test.js` — 8 describe blocks, all passing
+- CLI integration tests use `runScript()` from test helpers for exit code verification
+- `npm run docs:audit` script added to package.json
+- Real project audit found 27 findings: 23 stale-reference + 4 broken-link across 8 files
+- No new dependencies added — uses existing chalk, fs-extra, js-yaml
+- All 304 tests pass (244 existing + 36 new + 24 integration), zero regressions
+- ESLint passes clean on all files
+
+### Change Log
+
+- 2026-02-28: Story implementation complete — all 8 tasks, 36 tests, zero regressions
+
 ### File List
+
+- scripts/docs-audit.js (NEW)
+- tests/unit/docs-audit.test.js (NEW)
+- package.json (MODIFIED — added docs:audit script)
