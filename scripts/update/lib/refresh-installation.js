@@ -121,8 +121,8 @@ async function refreshInstallation(projectRoot, options = {}) {
   if (verbose) console.log('    Regenerated agent-manifest.csv');
 
   // 5. Copy user guides (with optional backup)
-  const guidesSource = path.join(packageRoot, '_bmad-output', 'vortex-artifacts');
-  const guidesTarget = path.join(projectRoot, '_bmad-output', 'vortex-artifacts');
+  const guidesSource = path.join(packageRoot, '_bmad', 'bme', '_vortex', 'guides');
+  const guidesTarget = path.join(projectRoot, '_bmad', 'bme', '_vortex', 'guides');
   await fs.ensureDir(guidesTarget);
 
   if (!isSameRoot) {
