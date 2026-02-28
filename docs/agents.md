@@ -343,12 +343,14 @@ These journeys show how practitioners move through the Vortex in practice.
 
 *You want to add a custom agent to the Vortex.*
 
-Adding a new agent follows a 4-step pattern:
+**Use BMB (BMAD Module Builder)** — the recommended way to extend BMAD-Enhanced. Run `/bmad-bmb-agent` to create a new agent through a guided process, or `/bmad-bmb-module` for a complete module with multiple agents and workflows. See the [extension guidance FAQ](faq.md#how-do-i-add-a-custom-agent-or-module) for details.
 
-1. **Registry entry** — Add agent to `scripts/update/lib/agent-registry.js` (single source of truth for all agents and workflows)
-2. **Agent file** — Create agent definition in `_bmad/bme/_vortex/agents/` following existing patterns (persona, communication style, menu)
-3. **Workflows** — Create workflow directories in `_bmad/bme/_vortex/workflows/` with step files (4-6 steps each, final step includes Compass routing)
-4. **User guide** — Create guide in `_bmad/bme/_vortex/guides/` with examples and artifact templates
+**Under the hood,** BMB generates the 4 components every agent needs:
+
+1. **Registry entry** — In `scripts/update/lib/agent-registry.js` (single source of truth for all agents and workflows)
+2. **Agent file** — Agent definition in `_bmad/bme/_vortex/agents/` (persona, communication style, menu)
+3. **Workflows** — Workflow directories in `_bmad/bme/_vortex/workflows/` with step files (4-6 steps each, final step includes Compass routing)
+4. **User guide** — Guide in `_bmad/bme/_vortex/guides/` with examples and artifact templates
 
 The installer, validator, and doctor all read from the registry automatically — no additional wiring needed.
 
@@ -374,13 +376,13 @@ All generated artifacts are saved to `_bmad-output/vortex-artifacts/`.
 
 Each agent also has a user guide:
 
-- [Emma User Guide](../_bmad-output/vortex-artifacts/EMMA-USER-GUIDE.md)
-- [Isla User Guide](../_bmad-output/vortex-artifacts/ISLA-USER-GUIDE.md)
+- [Emma User Guide](../_bmad/bme/_vortex/guides/EMMA-USER-GUIDE.md)
+- [Isla User Guide](../_bmad/bme/_vortex/guides/ISLA-USER-GUIDE.md)
 - [Mila User Guide](../_bmad/bme/_vortex/guides/MILA-USER-GUIDE.md)
 - [Liam User Guide](../_bmad/bme/_vortex/guides/LIAM-USER-GUIDE.md)
-- [Wade User Guide](../_bmad-output/vortex-artifacts/WADE-USER-GUIDE.md)
+- [Wade User Guide](../_bmad/bme/_vortex/guides/WADE-USER-GUIDE.md)
 - [Noah User Guide](../_bmad/bme/_vortex/guides/NOAH-USER-GUIDE.md)
-- [Max User Guide](../_bmad-output/vortex-artifacts/MAX-USER-GUIDE.md)
+- [Max User Guide](../_bmad/bme/_vortex/guides/MAX-USER-GUIDE.md)
 
 ---
 
