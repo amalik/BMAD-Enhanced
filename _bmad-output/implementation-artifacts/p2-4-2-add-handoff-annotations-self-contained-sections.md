@@ -1,6 +1,6 @@
 # Story 4.2: Add Handoff Annotations & Self-Contained Sections
 
-Status: ready-for-dev
+Status: done
 
 ## Story
 
@@ -19,29 +19,29 @@ So that I understand the handoff mechanics and can jump to any agent's section w
 
 ## Tasks / Subtasks
 
-- [ ] Task 1: Add handoff annotation callout boxes at each transition point (AC: #1, #2)
-  - [ ] 1.1 Add Emma → Isla annotation after "What Happens Next" in Emma's section: explain contextual input (not HC handoff), list fields Isla draws from (JTBD, pain points, validation plan), note that Emma's lean-persona format differs from HC schema
-  - [ ] 1.2 Add Isla → Mila annotation (HC1 contract) after Isla's artifact: list consumed fields (Synthesized Insights with evidence counts, Key Themes with implications, Pain Points with priorities, Desired Gains with priorities), reference HC1 schema
-  - [ ] 1.3 Add Mila → Liam annotation (HC2 contract) after Mila's artifact: list consumed fields (Problem Statement, JTBD primary + related, Ranked Pains & Gains, Assumptions with validation status, Evidence Summary), reference HC2 schema
-  - [ ] 1.4 Add Liam → Wade annotation (HC3 contract) after Liam's artifact: list consumed fields (3 hypotheses in 4-field format, Assumption Risk Map with Lethality × Uncertainty, Recommended Testing Order), reference HC3 schema
-  - [ ] 1.5 Add Wade → Noah annotation (HC4 contract) after Wade's artifact: list consumed fields (Hypothesis Tested baseline, Pre-Defined Success Criteria, Expected Production Behavior, Signal Thresholds, Monitoring Duration), reference HC4 schema
-  - [ ] 1.6 Add Noah → Max annotation (HC5 contract) after Noah's artifact: list consumed fields (Signal Description, Trend Analysis, Anomaly Detection, Confidence Level), note HC5 is intelligence-only (excludes strategy — Max adds that), reference HC5 schema
+- [x] Task 1: Add handoff annotation callout boxes at each transition point (AC: #1, #2)
+  - [x] 1.1 Add Emma → Isla annotation after "What Happens Next" in Emma's section: explain contextual input (not HC handoff), list fields Isla draws from (JTBD, pain points, validation plan), note that Emma's lean-persona format differs from HC schema
+  - [x] 1.2 Add Isla → Mila annotation (HC1 contract) after Isla's artifact: list consumed fields (Synthesized Insights with evidence counts, Key Themes with implications, Pain Points with priorities, Desired Gains with priorities), reference HC1 schema
+  - [x] 1.3 Add Mila → Liam annotation (HC2 contract) after Mila's artifact: list consumed fields (Problem Statement, JTBD primary + related, Ranked Pains & Gains, Assumptions with validation status, Evidence Summary), reference HC2 schema
+  - [x] 1.4 Add Liam → Wade annotation (HC3 contract) after Liam's artifact: list consumed fields (3 hypotheses in 4-field format, Assumption Risk Map with Lethality × Uncertainty, Recommended Testing Order), reference HC3 schema
+  - [x] 1.5 Add Wade → Noah annotation (HC4 contract) after Wade's artifact: list consumed fields (Hypothesis Tested baseline, Pre-Defined Success Criteria, Expected Production Behavior, Signal Thresholds, Monitoring Duration), reference HC4 schema
+  - [x] 1.6 Add Noah → Max annotation (HC5 contract) after Noah's artifact: list consumed fields (Signal Description, Trend Analysis, Anomaly Detection, Confidence Level), note HC5 is intelligence-only (excludes strategy — Max adds that), reference HC5 schema
 
-- [ ] Task 2: Add self-contained context declarations to each agent section (AC: #3, #4)
-  - [ ] 2.1 Emma section: already self-contained — verify JTBD, lean persona, and Vortex concepts are defined within this section (no changes expected)
-  - [ ] 2.2 Isla section: add brief context declaration defining who Emma is and what the lean persona provides, so a reader starting here understands the input without reading Section 1
-  - [ ] 2.3 Mila section: add context declaration defining who Isla is, what HC1 empathy artifacts contain, and what "research convergence" means — so a reader starting here understands Mila's inputs
-  - [ ] 2.4 Liam section: add context declaration defining who Mila is, what HC2 problem definition contains, and what "hypothesis engineering" means — so a reader starting here can follow the hypothesis work
-  - [ ] 2.5 Wade section: add context declaration defining who Liam is, what HC3 hypothesis contracts contain (4-field format), and what "externalize" means (experiment design + execution)
-  - [ ] 2.6 Noah section: add context declaration defining who Wade is, what HC4 experiment context contains, what "graduation" means (experiment → production), and what signal interpretation does
-  - [ ] 2.7 Max section: add context declaration defining who Noah is, what HC5 signal reports contain (intelligence-only, no strategy), and what "systematize" means (learning synthesis + routing decisions)
+- [x] Task 2: Add self-contained context declarations to each agent section (AC: #3, #4)
+  - [x] 2.1 Emma section: already self-contained — verify JTBD, lean persona, and Vortex concepts are defined within this section (no changes expected)
+  - [x] 2.2 Isla section: add brief context declaration defining who Emma is and what the lean persona provides, so a reader starting here understands the input without reading Section 1
+  - [x] 2.3 Mila section: add context declaration defining who Isla is, what HC1 empathy artifacts contain, and what "research convergence" means — so a reader starting here understands Mila's inputs
+  - [x] 2.4 Liam section: add context declaration defining who Mila is, what HC2 problem definition contains, and what "hypothesis engineering" means — so a reader starting here can follow the hypothesis work
+  - [x] 2.5 Wade section: add context declaration defining who Liam is, what HC3 hypothesis contracts contain (4-field format), and what "externalize" means (experiment design + execution)
+  - [x] 2.6 Noah section: add context declaration defining who Wade is, what HC4 experiment context contains, what "graduation" means (experiment → production), and what signal interpretation does
+  - [x] 2.7 Max section: add context declaration defining who Noah is, what HC5 signal reports contain (intelligence-only, no strategy), and what "systematize" means (learning synthesis + routing decisions)
 
-- [ ] Task 3: Verify narrative coherence and terminology consistency (AC: #5, #6)
-  - [ ] 3.1 Read the full journey document end-to-end after annotations and context declarations are added — verify it still reads as a coherent narrative sequentially, not as a collection of disconnected sections
-  - [ ] 3.2 Verify all agent names match registry: Emma 🎯, Isla 🔍, Mila 🔬, Liam 💡, Wade 🧪, Noah 📡, Max 🧭 — no abbreviations or synonyms
-  - [ ] 3.3 Verify all contract references use exact names: HC1 through HC5, not "handoff 1" or "contract one" or other variants
-  - [ ] 3.4 Verify all workflow names match registry: lean-persona, user-discovery, research-convergence, hypothesis-engineering, mvp, signal-interpretation, learning-card
-  - [ ] 3.5 Update the individual artifact files in `_bmad-output/vortex-artifacts/` if any content changes are needed for consistency with annotations added to the journey document
+- [x] Task 3: Verify narrative coherence and terminology consistency (AC: #5, #6)
+  - [x] 3.1 Read the full journey document end-to-end after annotations and context declarations are added — verify it still reads as a coherent narrative sequentially, not as a collection of disconnected sections
+  - [x] 3.2 Verify all agent names match registry: Emma 🎯, Isla 🔍, Mila 🔬, Liam 💡, Wade 🧪, Noah 📡, Max 🧭 — no abbreviations or synonyms
+  - [x] 3.3 Verify all contract references use exact names: HC1 through HC5, not "handoff 1" or "contract one" or other variants
+  - [x] 3.4 Verify all workflow names match registry: lean-persona, user-discovery, research-convergence, hypothesis-engineering, mvp, signal-interpretation, learning-card
+  - [x] 3.5 Update the individual artifact files in `_bmad-output/vortex-artifacts/` if any content changes are needed for consistency with annotations added to the journey document
 
 ## Dev Notes
 
@@ -191,10 +191,34 @@ This story prepares the journey for editorial review. Story 4.3 will:
 
 ### Agent Model Used
 
-{{agent_model_name_version}}
+Claude Opus 4.6
 
 ### Debug Log References
 
+- Verification agent flagged HC6/HC7/HC8 in Max's routing table as undefined — false positive: HC6-HC10 are formally defined routing contracts in compass-routing-reference.md (not artifact contracts like HC1-HC5)
+- Verification agent correctly identified "Evidence Summary" listed as HC1 consumed field — fixed to "Recommendations" (Evidence Summary exists in HC2, not HC1)
+- Code review found 5 issues (1 HIGH, 4 MEDIUM) — all fixed automatically:
+  - H1: HC1 annotation listed 4th theme as "default meal trap" — actual HC1 artifact names it "Tool Abandonment Pattern" — fixed
+  - M1: HC1 annotation's "52 evidence points" forward-referenced HC2's count — replaced with "research findings"
+  - M2: "Vortex" term undefined in all 6 context declarations — added "(BMAD's 7-agent product discovery pipeline)" parenthetical to each
+  - M3: Empathy Map section omitted from HC1 consumed fields — added to annotation
+  - M4: "concierge test" undefined in Wade's context declaration — added parenthetical definition
+
 ### Completion Notes List
 
+- Added 6 handoff annotation callout boxes (1 contextual input + 5 HC contract annotations) at each transition point in the journey document
+- Added 6 self-contained context declarations (Isla through Max sections) as italic paragraphs at the top of each "What [Agent] Receives/Draws From" subsection
+- Verified Emma section is already self-contained (no changes needed)
+- Updated document footer to reflect completed annotations (replaced "see Story 4.2" forward reference with description of what was added)
+- Fixed HC1 annotation: replaced "Evidence Summary" (not in HC1 schema) with "Recommendations" (correct HC1 field)
+- Verification confirmed: all agent names with icons match registry, all contract references use exact HC1-HC5 format, all workflow names match registry, no informal variants found, narrative flows coherently with annotations
+- Individual artifacts in `_bmad-output/vortex-artifacts/` did not require modification — annotations are additive content only
+
+### Change Log
+
+- 2026-03-01: Added 6 handoff annotations and 6 context declarations to journey document; updated footer; fixed HC1 consumed field accuracy
+- 2026-03-01: Code review fixes — corrected theme name, removed forward-referenced count, defined Vortex in all context declarations, added Empathy Map to HC1 fields, defined concierge test
+
 ### File List
+
+- `_bmad-output/journey-examples/busy-parents-7-agent-journey.md` (modified — added annotations, context declarations, updated footer)
