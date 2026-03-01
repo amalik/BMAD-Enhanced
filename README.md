@@ -24,23 +24,23 @@ Most teams skip validation and build on assumptions. BMAD-Enhanced guides you th
 ```
                          7 Streams · 7 Agents
 
-  ┌──────────┐       ┌──────────┐       ┌──────────┐       ┌──────────┐
-  │  Isla 🔍  │──────▶│  Mila 🔬  │──────▶│  Liam 💡  │──────▶│  Wade 🧪  │
-  │ Empathize│       │Synthesize│       │Hypothesiz│       │Externaliz│
-  └──────────┘       └──────────┘       └──────────┘       └──────────┘
-       ▲                                                         │
-       │                                                         │
-       │                                                         ▼
-  ┌──────────┐       ┌──────────┐       ┌──────────┐              │
-  │  Emma 🎯  │◀──────│  Max  🧭  │◀──────│  Noah 📡  │◀────────────┘
-  │Contextual│       │Systematiz│       │ Sensitize│
-  └──────────┘       └──────────┘       └──────────┘
-       │                  │                  │
-       └──────────────────┴──────────────────┘
-                    ◀ back to any stream
+  ┌─────────────┐   ┌─────────────┐   ┌─────────────┐   ┌─────────────┐
+  │   Isla 🔍    │──▶│   Mila 🔬    │──▶│   Liam 💡    │──▶│   Wade 🧪    │
+  │  Empathize  │   │ Synthesize  │   │ Hypothesize │   │ Externalize │
+  └─────────────┘   └─────────────┘   └─────────────┘   └─────────────┘
+         ▲                                                       │
+         │                                                       │
+         │                                                       ▼
+  ┌─────────────┐   ┌─────────────┐   ┌─────────────┐           │
+  │   Emma 🎯    │◀──│   Max  🧭    │◀──│   Noah 📡    │◀──────────┘
+  │Contextualize│   │ Systematize │   │  Sensitize  │
+  └─────────────┘   └─────────────┘   └─────────────┘
+         │                 │                 │
+         └─────────────────┴─────────────────┘
+          ▶ Start at Emma · back to any stream
 ```
 
-Each stream builds on the previous one's output. Based on what you learn, the system guides you back to fill any remaining gaps — you don't have to follow a fixed path.
+Each agent above runs one of these streams. You don't follow a fixed path — the system guides you to whichever stream needs attention based on what you've learned so far.
 
 | Agent | Stream | What they do |
 |-------|--------|-------------|
@@ -92,7 +92,7 @@ your-project/
 ├── _bmad/bme/_vortex/
 │   ├── agents/           # 7 agent definition files
 │   ├── workflows/        # 22 workflows
-│   ├── contracts/        # 5 artifact contract schemas (HC1-HC5)
+│   ├── contracts/        # Artifact contract schemas
 │   ├── guides/           # User guides (all 7 agents)
 │   └── config.yaml       # Configuration
 └── _bmad-output/
@@ -118,8 +118,6 @@ Your data in `_bmad-output/` is never touched. Automatic backups are created bef
 > ```
 
 See [UPDATE-GUIDE.md](UPDATE-GUIDE.md) for migration paths and troubleshooting.
-
----
 
 <!-- STORY-5.4: Output Previews Section -->
 
