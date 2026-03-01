@@ -27,6 +27,7 @@
     "postinstall": "node scripts/postinstall.js",
     "test": "node --test tests/unit/*.test.js",
     "test:p0": "node --test tests/p0/*.test.js",
+    "test:p0:gate": "node --test tests/p0/*.test.js",
     "test:integration": "node --test tests/integration/*.test.js",
     "test:all": "node --test tests/**/*.test.js",
     "test:coverage": "c8 node --test tests/unit/*.test.js tests/integration/*.test.js tests/p0/*.test.js",
