@@ -119,9 +119,47 @@ Your data in `_bmad-output/` is never touched. Automatic backups are created bef
 
 See [UPDATE-GUIDE.md](UPDATE-GUIDE.md) for migration paths and troubleshooting.
 
-<!-- STORY-5.4: Output Previews Section -->
+## What Agents Produce
 
-<!-- STORY-5.4: Journey Example Link -->
+Here's a sample of real output from a busy parents meal planning project — each excerpt is from the [full 7-agent journey example](_bmad-output/journey-examples/busy-parents-7-agent-journey.md).
+
+### Emma 🎯 Contextualize
+
+Emma frames the right problem. Here's the Job-to-be-Done she produced:
+
+> **Job-to-be-Done:** Eliminate the daily 5:30 PM dinner decision so I can feed my family well without the mental load of planning, shopping, and deciding under time pressure.
+>
+> **Riskiest Assumptions:**
+> 1. Decision fatigue — not cooking skill or ingredient access — is the primary barrier to weeknight dinner success
+> 2. Parents would trust and act on an externally-provided dinner suggestion rather than needing to choose themselves
+> 3. "Good enough" nutrition is an acceptable standard — parents aren't seeking perfection, they're seeking relief from guilt
+
+### Liam 💡 Hypothesize
+
+Liam turns problems into testable ideas. Here's one of three hypotheses he produced:
+
+> **Hypothesis 1: The Pre-Commute Decision Eliminator**
+>
+> We believe that busy parents will act on a single dinner suggestion delivered at 4:00 PM within 3 minutes because the decision burden — not cooking — is their primary barrier, and an earlier intervention catches them before the anxiety spiral begins.
+>
+> **Riskiest Assumption:** Parents will trust and act on an automated suggestion without second-guessing. Research shows they want "someone to tell me what to make" — but "someone" may need to be a trusted person, not an algorithm.
+
+### Max 🧭 Systematize
+
+Max captures what you learned and decides what to do next:
+
+> **Recommendation: PATCH** (iterate on timing, don't pivot direction)
+>
+> The core hypothesis is validated. The product direction (decision elimination via single suggestion) is correct. The timing mechanism needs refinement — shift from fixed 4:00 PM delivery to adaptive delivery based on each user's observed engagement pattern.
+>
+> **Three Actions:**
+> 1. **Implement adaptive timing** — shift the push notification to match each user's observed engagement window. Engineering effort: 1-2 sprints.
+> 2. **Route to Isla for timing investigation** — qualitative research on why users engage at 3:15 PM. Is it anxiety relief, logistical planning, or habit?
+> 3. **Test willingness to pay immediately** — the mechanism works, but we have no commercial validation. Run a landing page test with pricing before further product investment.
+
+Want to see the complete walkthrough of all 7 agents applied to the example above?
+
+**📖 [See the full 7-agent journey example →](_bmad-output/journey-examples/busy-parents-7-agent-journey.md)**
 
 ---
 
