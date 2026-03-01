@@ -112,9 +112,9 @@ development_status:
   p2-epic-3-retrospective: done
 
   # Epic 4 (Phase 2): Journey Example & Editorial Quality
-  p2-epic-4: backlog
-  p2-4-1-create-7-agent-journey-example-with-real-artifacts: backlog
-  p2-4-2-add-handoff-annotations-self-contained-sections: backlog
+  p2-epic-4: in-progress
+  p2-4-1-create-7-agent-journey-example-with-real-artifacts: done
+  p2-4-2-add-handoff-annotations-self-contained-sections: in-progress
   p2-4-3-journey-quality-verification-editorial-review: backlog
   p2-epic-4-retrospective: optional
 
