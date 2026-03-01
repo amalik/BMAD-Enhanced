@@ -1,6 +1,6 @@
 # Story 5.1: bmad-update.js Automated Tests at 85%+ Coverage
 
-Status: review
+Status: done
 
 ## Story
 
@@ -203,17 +203,17 @@ Claude Opus 4.6
 ### Completion Notes List
 
 1. **Coverage achieved: 92.91% lines, 94.54% branches, 100% functions** — exceeds 85% target on both line and branch coverage (AC #1, #4)
-2. **Tests expanded from 7 to 31** — 24 new tests added (12 assessUpdate unit tests + 19 CLI integration tests)
+2. **Tests expanded from 7 to 37** — 30 new tests added (12 assessUpdate unit tests + 23 CLI integration tests + 2 TODO)
 3. **All 8 assessUpdate scenarios covered** — no-project, fresh, broken, no-version, up-to-date, downgrade, no-migrations, upgrade (AC #2)
-4. **3+ edge cases implemented** — malformed YAML, empty config, duplicate entry prevention (AC #4)
+4. **3+ edge cases implemented** — malformed YAML, empty config, duplicate entry prevention, partial failure recovery (AC #4)
 5. **CLI integration tests use subprocess execution** — runScript helper for exit code testing, custom runScriptWithInput for stdin piping to test confirm() (AC #2)
-6. **Cross-platform path handling verified** — findProjectRoot tested from nested subdirectory using path.join (AC #5)
+6. **Cross-platform path handling verified** — process.platform mocked to win32/darwin, source code verified to use path module (AC #5)
 7. **Node.js LTS 18/20/22 compatibility verified** — engines field matches, all APIs available on Node 18+ (AC #6)
 8. **No new dependencies added** — uses node:test + c8 only (AC #7)
 9. **Test file is self-documenting** — descriptive test names, clear describe blocks (AC #8)
 10. **Key discovery: empathy-map workflow name collision** — `empathy-map` is both a legacy v1.0.0 marker in guessVersionFromFileStructure AND a current Isla workflow in WORKFLOW_NAMES. Tests that need currentVersion=null must remove the empathy-map dir after createValidInstallation.
-11. **Manifest merge tests adapted to actual behavior** — refreshInstallation overwrites config.yaml (config-merger responsibility, not bmad-update.js). Tests verify core agents present and version updated after upgrade.
-12. **974 total tests pass** — 0 regressions from existing 974-test suite
+11. **Manifest merge tests adapted to actual behavior** — refreshInstallation overwrites config.yaml (config-merger responsibility, not bmad-update.js). Tests verify core agents present and version updated after upgrade. Two TODO tests document the user-agent preservation gap (NFR15).
+12. **980 total tests pass** — 0 regressions from full suite (978 pass + 2 todo)
 
 **Uncovered lines with rationale:**
 - Lines 182-184: dry-run previewMigrations error catch — defensive code, preview function doesn't throw in normal operation
@@ -228,11 +228,12 @@ Claude Opus 4.6
 | 2026-03-01 | Expanded tests/unit/bmad-update.test.js from 7 to 31 tests | Achieve 85%+ coverage target |
 | 2026-03-01 | Added runScriptWithInput helper for stdin piping | Test readline-based confirm() function via subprocess |
 | 2026-03-01 | No changes to bmad-update.js source | Per story guidance: test as-is, no source modifications |
+| 2026-03-01 | Code review fixes: +6 tests (platform mocking, partial failure, TODO tests), assertion hardening, createTempDir consistency | Adversarial code review findings — 1 CRITICAL, 2 HIGH, 3 MEDIUM fixed |
 
 ### File List
 
 | File | Action | Description |
 |------|--------|-------------|
-| tests/unit/bmad-update.test.js | Modified | Expanded from 7 to 31 tests (~120 to ~580 lines) |
+| tests/unit/bmad-update.test.js | Modified | Expanded from 7 to 37 tests (~120 to ~640 lines) |
 | _bmad-output/implementation-artifacts/p2-5-1-bmad-update-js-automated-tests-at-85-coverage.md | Modified | Story status updates and Dev Agent Record |
 | _bmad-output/implementation-artifacts/sprint-status.yaml | Modified | Status: ready-for-dev → in-progress → review |
