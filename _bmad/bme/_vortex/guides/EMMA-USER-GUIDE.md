@@ -38,35 +38,30 @@ Lean personas focused on jobs-to-be-done and problem contexts, product vision do
 
 ## How to Invoke Emma
 
-### Method 1: Slash Command (Preferred)
+### Method 1: Direct Agent File Reading (Recommended)
 
-If you're in a BMAD environment that supports slash commands:
+Read Emma's agent file to activate her. This works in any environment:
 
-```
-/bmad-agent-bme-contextualization-expert
-```
-
-**If you see "Unknown skill":**
-This means slash commands aren't available in your environment. Use Method 2 instead.
-
----
-
-### Method 2: Direct Agent File Reading (Always Works)
-
-In any environment (including Claude Code), you can invoke Emma by reading her agent file:
-
-1. Navigate to your BMAD project root
-2. Read the file: `_bmad/bme/_vortex/agents/contextualization-expert.md`
-3. Emma will activate and greet you
-
-**Example (Claude Code):**
+**Claude Code:**
 ```
 Read the file at _bmad/bme/_vortex/agents/contextualization-expert.md
 ```
 
-**Example (Terminal):**
+**Terminal:**
 ```bash
 cat _bmad/bme/_vortex/agents/contextualization-expert.md
+```
+
+**Claude.ai:** Copy the contents of `_bmad/bme/_vortex/agents/contextualization-expert.md` and paste into the chat.
+
+---
+
+### Method 2: Slash Command (BMAD Environments Only)
+
+If your environment supports BMAD slash commands:
+
+```
+/bmad-agent-bme-contextualization-expert
 ```
 
 ---
@@ -228,7 +223,7 @@ Unclear product strategy wastes everyone's time. Be specific about problem space
 
 **Agent:** Emma (contextualization-expert)
 **Module:** BMAD Enhanced (bme)
-**Submodule:** Vortex Pattern (_vortex)
+**Submodule:** Vortex Pattern (`_vortex`)
 **Stream:** Contextualize (Stream 1)
 **Version:** 1.6.4
 
