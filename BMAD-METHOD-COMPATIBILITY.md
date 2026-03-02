@@ -1,6 +1,6 @@
 # BMAD Method Compatibility Guide
 
-**BMAD-Enhanced** is an extension package for the **BMAD Method**. This document explains the relationship, compatibility requirements, and update strategy.
+**BMAD-Enhanced** works standalone or as an extension of the **BMAD Method**. This document explains the relationship, compatibility behavior, and update strategy.
 
 ---
 
@@ -35,40 +35,36 @@
 
 ### Key Principle
 
-**BMAD-Enhanced does NOT include BMAD Method.**
+**BMAD-Enhanced works standalone — BMAD Method is optional.**
 
-- Users must install BMAD Method first
-- BMAD-Enhanced adds agents to existing BMAD installation
-- BMAD-Enhanced installers verify BMAD Method presence
-- Prevents duplicate code and maintenance burden
+- BMAD-Enhanced creates the `_bmad/` directory automatically if missing
+- If BMAD Method is already installed, BMAD-Enhanced detects it and logs confirmation
+- If BMAD Method is not installed, the installer warns but proceeds in standalone mode
+- No npm dependency on BMAD Method — BMAD-Enhanced is fully self-contained
 
 ---
 
 ## Installation Flow
 
-### Correct Installation Order
+### Standard Installation (Standalone)
 
 ```bash
-# Step 1: Install BMAD Method (required)
-npx bmad-method@alpha install
-
-# Step 2: Install BMAD-Enhanced agents (extension)
-npm install bmad-enhanced@alpha
-npx bmad-install-agents
+npm install bmad-enhanced
+npx bmad-install-vortex-agents
 ```
 
-### What Happens
+### With Existing BMAD Method
 
-**BMAD Method creates:**
-```
-your-project/
-└── _bmad/
-    ├── _config/
-    │   └── bmad.yaml
-    └── (other BMAD core files)
+```bash
+# If BMAD Method is already installed, BMAD-Enhanced detects it automatically
+npm install bmad-enhanced
+npx bmad-install-vortex-agents
+# Installer logs: "✓ BMAD Method configuration found"
 ```
 
-**BMAD-Enhanced adds:**
+### What Gets Installed
+
+**BMAD-Enhanced creates:**
 ```
 your-project/
 └── _bmad/
@@ -252,15 +248,15 @@ When new BMAD Method version releases:
 - [ ] Check for errors or warnings
 - [ ] Update compatibility matrix if successful
 
-### Automated Testing (Future)
+### Automated Testing
 
-Recommended automated tests:
+BMAD-Enhanced v1.6.4 includes automated test coverage:
 
-1. **Installation test:** Verify installer detects BMAD Method
-2. **File integrity test:** Verify all files copied correctly
-3. **Agent activation test:** Verify agents load without errors
-4. **Workflow execution test:** Run complete workflows
-5. **Artifact generation test:** Verify output files created
+- **P0 activation tests:** Verify all 7 agents activate correctly (642 assertions)
+- **Content correctness tests:** Validate voice consistency, handoff contracts, Compass routing
+- **CLI tests:** bmad-update.js (92.91% coverage), bmad-version.js (95.52% coverage)
+- **Docs audit:** Programmatic stale-reference, broken-link, and broken-path detection across 16 user-facing files
+- **Total:** 293 tests, 0 failures, CI-integrated
 
 ---
 
@@ -315,12 +311,13 @@ Recommended automated tests:
 
 ### For Users
 
-1. **Install in correct order:**
-   - Always install BMAD Method first
-   - Then install BMAD-Enhanced
+1. **Install directly:**
+   - Run `npm install bmad-enhanced && npx bmad-install-vortex-agents`
+   - No prerequisite installation needed
+   - BMAD Method is optional — installer handles both cases
 
-2. **Keep versions in sync:**
-   - Check compatibility matrix before updating
+2. **If using both packages:**
+   - Check compatibility matrix before updating either
    - Test BMAD-Enhanced after updating BMAD Method
    - Report compatibility issues
 
@@ -331,66 +328,27 @@ Recommended automated tests:
 
 ---
 
-## Future Enhancements
-
-### Automated Compatibility Checking
-
-**Proposed:** Add version detection to installers
-
-```javascript
-// Pseudocode
-function checkBMADMethodVersion() {
-  const bmadVersion = readBMADVersion(); // from bmad.yaml or package.json
-  const compatibleVersions = ['1.0.x', '1.1.x'];
-
-  if (!isCompatible(bmadVersion, compatibleVersions)) {
-    console.warn(`
-      Warning: BMAD Method version ${bmadVersion} may not be compatible.
-      BMAD-Enhanced tested with: ${compatibleVersions.join(', ')}
-
-      Continue anyway? (y/n)
-    `);
-  }
-}
-```
-
-### Version Pinning
-
-**Proposed:** Allow users to pin BMAD Method version
-
-```json
-// bmad-enhanced-config.json
-{
-  "bmadMethodVersion": "1.0.0",
-  "strict": true
-}
-```
-
----
-
 ## Summary
 
 **Key Points:**
 
-✅ BMAD-Enhanced extends BMAD Method (does not include it)
-✅ BMAD Method is a required prerequisite
-✅ Installers check for BMAD Method presence
-✅ Compatibility must be tested with each BMAD Method update
-✅ Clear documentation prevents user confusion
+✅ BMAD-Enhanced works standalone — no BMAD Method required
+✅ If BMAD Method is present, the installer detects and logs it
+✅ Installers create `_bmad/` automatically if missing
+✅ Compatibility should be tested if using both together
+✅ 293 automated tests validate agent activation, content correctness, and CLI behavior
 
-**Your Responsibility:**
+**For Maintainers:**
 
 - Maintain BMAD-Enhanced agents separately from BMAD Method
-- Test compatibility when BMAD Method updates
-- Update BMAD-Enhanced only when needed
-- Document compatibility clearly
+- Test compatibility if BMAD Method releases breaking changes
+- Update compatibility matrix when verified
 
-**User Benefits:**
+**For Users:**
 
-- No duplicate code
-- Smaller package size
-- Clear separation of concerns
-- Flexibility to use BMAD Method with or without BMAD-Enhanced
+- Install with `npm install bmad-enhanced && npx bmad-install-vortex-agents`
+- No prerequisite installation needed
+- If using BMAD Method alongside, check compatibility matrix before updating either package
 
 ---
 
