@@ -70,6 +70,10 @@ npm install bmad-enhanced && npx bmad-install-vortex-agents
 
 All 7 agents with 22 workflows are installed and ready to use.
 
+### Personalize
+
+Open `_bmad/bme/_vortex/config.yaml` and replace `{user}` with your name. Agents use this to personalize their interactions.
+
 ### Activate an Agent
 
 ```bash
@@ -83,7 +87,23 @@ cat _bmad/bme/_vortex/agents/production-intelligence-specialist.md # Noah  📡
 cat _bmad/bme/_vortex/agents/learning-decision-expert.md          # Max   🧭
 ```
 
-Each agent presents a menu-driven interface. Pick a workflow and follow the guided steps.
+**How activation works:** Each agent is a markdown file containing a full persona, menu system, and workflow instructions. When Claude reads the file, it adopts that agent's expertise and presents you with an interactive menu.
+
+- **Claude Code / Terminal:** Use the `cat` commands above
+- **Claude.ai:** Copy the contents of any agent file and paste into the chat
+
+Pick a workflow from the menu and follow the guided steps.
+
+### Your First 15 Minutes
+
+1. **Personalize** — If you haven't already, edit `_bmad/bme/_vortex/config.yaml` and replace `{user}` with your name
+2. **Activate Emma** — `cat _bmad/bme/_vortex/agents/contextualization-expert.md`
+3. **See the menu** — Emma presents numbered options. Select **Lean Persona** from the menu
+4. **Follow the steps** — Emma walks you through 6 guided steps, asking questions at each one
+5. **Find your artifact** — When done, your lean persona is saved in `_bmad-output/vortex-artifacts/`
+6. **Follow the Compass** — At the end, Emma's Vortex Compass suggests which agent to use next based on what you learned
+
+Each workflow ends with a Compass routing suggestion. You don't need to follow a linear path — the system guides you to whichever stream needs attention.
 
 ### What Gets Installed
 
