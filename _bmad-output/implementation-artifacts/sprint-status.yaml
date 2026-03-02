@@ -128,8 +128,8 @@ development_status:
   p2-epic-5-retrospective: done
 
   # Epic 6 (Phase 2): Release Readiness & Final Integration
-  p2-epic-6: in-progress
+  p2-epic-6: done
   p2-6-1-scope-adjacent-improvements-backlog-convention: done
   p2-6-2-execute-docs-fix-pass-2-post-release-review-template: done
   p2-6-3-scripted-end-to-end-rayas-journey-acceptance-test: done
-  p2-epic-6-retrospective: optional
+  p2-epic-6-retrospective: done
