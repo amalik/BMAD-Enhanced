@@ -23,4 +23,4 @@ Validate that you CAN build this before validating that you SHOULD.
 
 ## INITIALIZATION
 
-Load step: {project-root}/_bmad/bme/_vortex/workflows/proof-of-concept/steps/step-01.md
+Load step: {project-root}/_bmad/bme/_vortex/workflows/proof-of-concept/steps/step-01-risk.md
