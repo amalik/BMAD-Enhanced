@@ -120,7 +120,7 @@ Every update creates a backup before making changes:
 
 - Agent definition files
 - Workflow files (steps, templates, validation)
-- Vortex config.yaml (with preference preservation)
+- Vortex config.yaml (with preference preservation — user-added agents and workflows are kept after core entries)
 - User guides
 
 ---
