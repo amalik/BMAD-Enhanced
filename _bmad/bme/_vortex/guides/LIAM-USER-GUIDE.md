@@ -39,35 +39,30 @@ Hypothesis contracts (HC3 artifacts) containing 1-3 testable hypotheses in 4-fie
 
 ## How to Invoke Liam
 
-### Method 1: Slash Command (Preferred)
+### Method 1: Direct Agent File Reading (Recommended)
 
-If you're in a BMAD environment that supports slash commands:
+Read Liam's agent file to activate him. This works in any environment:
 
-```
-/bmad-agent-bme-hypothesis-engineer
-```
-
-**If you see "Unknown skill":**
-This means slash commands aren't available in your environment. Use Method 2 instead.
-
----
-
-### Method 2: Direct Agent File Reading (Always Works)
-
-In any environment (including Claude Code), you can invoke Liam by reading his agent file:
-
-1. Navigate to your BMAD project root
-2. Read the file: `_bmad/bme/_vortex/agents/hypothesis-engineer.md`
-3. Liam will activate and greet you
-
-**Example (Claude Code):**
+**Claude Code:**
 ```
 Read the file at _bmad/bme/_vortex/agents/hypothesis-engineer.md
 ```
 
-**Example (Terminal):**
+**Terminal:**
 ```bash
 cat _bmad/bme/_vortex/agents/hypothesis-engineer.md
+```
+
+**Claude.ai:** Copy the contents of `_bmad/bme/_vortex/agents/hypothesis-engineer.md` and paste into the chat.
+
+---
+
+### Method 2: Slash Command (BMAD Environments Only)
+
+If your environment supports BMAD slash commands:
+
+```
+/bmad-agent-bme-hypothesis-engineer
 ```
 
 ---
@@ -251,7 +246,7 @@ This is the fundamental test. If there's no result that would make you say "we w
 
 **Agent:** Liam (hypothesis-engineer)
 **Module:** BMAD Enhanced (bme)
-**Submodule:** Vortex Pattern (_vortex)
+**Submodule:** Vortex Pattern (`_vortex`)
 **Stream:** Hypothesize (Stream 4)
 **Version:** 1.6.0
 
