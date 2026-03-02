@@ -911,9 +911,9 @@ Based on the evidence, Max routes the Vortex forward on three paths:
 
 | Route | Contract | Agent | Action |
 |-------|----------|-------|--------|
-| Timing investigation | HC8 (decision-driven) | Isla 🔍 | Qualitative research on 3:15 PM engagement — understand user intent behind timing shift |
-| Willingness to pay validation | HC7 (decision-driven) | Wade 🧪 via Liam 💡 | Design and run a pricing experiment (landing page smoke test) |
-| Adaptive timing implementation | HC6 (decision-driven) | Emma 🎯 | Recontextualize the product scope to include adaptive timing as core feature |
+| Timing investigation | HC7 (decision-driven) | Isla 🔍 | Qualitative research on 3:15 PM engagement — understand user intent behind timing shift |
+| Willingness to pay validation | Organic routing | Wade 🧪 | Design and run a pricing experiment (landing page smoke test) |
+| Adaptive timing implementation | HC8 (decision-driven) | Emma 🎯 | Recontextualize the product scope to include adaptive timing as core feature |
 
 ### What Happens Next
 
