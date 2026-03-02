@@ -834,4 +834,4 @@ No changes to installation flow. Reinstallation will fix the Wade workflow bug.
 - [README.md](README.md) - Project overview
 - [INSTALLATION.md](INSTALLATION.md) - Installation guide
 - [BMAD-METHOD-COMPATIBILITY.md](BMAD-METHOD-COMPATIBILITY.md) - Integration details
-- User guides in `_bmad-output/design-artifacts/`
+- User guides in `_bmad/bme/_vortex/guides/`
