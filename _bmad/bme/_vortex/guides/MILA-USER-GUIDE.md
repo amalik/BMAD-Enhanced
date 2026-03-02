@@ -38,35 +38,30 @@ Evidence-backed problem definitions (HC2 artifacts) grounded in Jobs-to-be-Done 
 
 ## How to Invoke Mila
 
-### Method 1: Slash Command (Preferred)
+### Method 1: Direct Agent File Reading (Recommended)
 
-If you're in a BMAD environment that supports slash commands:
+Read Mila's agent file to activate her. This works in any environment:
 
-```
-/bmad-agent-bme-research-convergence-specialist
-```
-
-**If you see "Unknown skill":**
-This means slash commands aren't available in your environment. Use Method 2 instead.
-
----
-
-### Method 2: Direct Agent File Reading (Always Works)
-
-In any environment (including Claude Code), you can invoke Mila by reading her agent file:
-
-1. Navigate to your BMAD project root
-2. Read the file: `_bmad/bme/_vortex/agents/research-convergence-specialist.md`
-3. Mila will activate and greet you
-
-**Example (Claude Code):**
+**Claude Code:**
 ```
 Read the file at _bmad/bme/_vortex/agents/research-convergence-specialist.md
 ```
 
-**Example (Terminal):**
+**Terminal:**
 ```bash
 cat _bmad/bme/_vortex/agents/research-convergence-specialist.md
+```
+
+**Claude.ai:** Copy the contents of `_bmad/bme/_vortex/agents/research-convergence-specialist.md` and paste into the chat.
+
+---
+
+### Method 2: Slash Command (BMAD Environments Only)
+
+If your environment supports BMAD slash commands:
+
+```
+/bmad-agent-bme-research-convergence-specialist
 ```
 
 ---
@@ -231,7 +226,7 @@ A single interview quote is interesting. The same insight appearing across three
 
 **Agent:** Mila (research-convergence-specialist)
 **Module:** BMAD Enhanced (bme)
-**Submodule:** Vortex Pattern (_vortex)
+**Submodule:** Vortex Pattern (`_vortex`)
 **Stream:** Synthesize (Stream 3)
 **Version:** 1.6.0
 
