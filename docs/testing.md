@@ -101,11 +101,21 @@ Isla follows the same agent architecture as Emma and Wade. Infrastructure valida
 - CLI entry point verification
 - Each of Isla's workflow directories validated (templates, steps, validation)
 
-Formal P0 test suite planned.
+### Mila - Infrastructure Validated
+
+Same infrastructure validation as Isla. Content correctness validated by P0 content-only tests (voice consistency, persona accuracy, workflow activation).
+
+### Liam - Infrastructure Validated
+
+Same infrastructure validation as Isla. Content correctness validated by P0 content-only tests (voice consistency, persona accuracy, workflow activation).
+
+### Noah - Infrastructure Validated
+
+Same infrastructure validation as Isla. Content correctness validated by P0 content-only tests (voice consistency, persona accuracy, workflow activation).
 
 ### Max - Infrastructure Validated
 
-Same infrastructure validation as Isla. Formal P0 test suite planned.
+Same infrastructure validation as Isla. Content correctness validated by P0 content-only tests (voice consistency, persona accuracy, workflow activation).
 
 ---
 
