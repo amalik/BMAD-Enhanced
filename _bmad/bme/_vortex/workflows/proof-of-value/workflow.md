@@ -23,4 +23,4 @@ Validate that you SHOULD build this (business case) after proving you CAN.
 
 ## INITIALIZATION
 
-Load step: {project-root}/_bmad/bme/_vortex/workflows/proof-of-value/steps/step-01.md
+Load step: {project-root}/_bmad/bme/_vortex/workflows/proof-of-value/steps/step-01-value-hypothesis.md
