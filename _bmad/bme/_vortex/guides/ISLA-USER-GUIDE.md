@@ -27,35 +27,30 @@ Empathy maps grounded in research, interview guides and findings, discovery rese
 
 ## How to Invoke Isla
 
-### Method 1: Slash Command (Preferred)
+### Method 1: Direct Agent File Reading (Recommended)
 
-If you're in a BMAD environment that supports slash commands:
+Read Isla's agent file to activate her. This works in any environment:
 
-```
-/bmad-agent-bme-discovery-empathy-expert
-```
-
-**If you see "Unknown skill":**
-This means slash commands aren't available in your environment. Use Method 2 instead.
-
----
-
-### Method 2: Direct Agent File Reading (Always Works)
-
-In any environment (including Claude Code), you can invoke Isla by reading her agent file:
-
-1. Navigate to your BMAD project root
-2. Read the file: `_bmad/bme/_vortex/agents/discovery-empathy-expert.md`
-3. Isla will activate and greet you
-
-**Example (Claude Code):**
+**Claude Code:**
 ```
 Read the file at _bmad/bme/_vortex/agents/discovery-empathy-expert.md
 ```
 
-**Example (Terminal):**
+**Terminal:**
 ```bash
 cat _bmad/bme/_vortex/agents/discovery-empathy-expert.md
+```
+
+**Claude.ai:** Copy the contents of `_bmad/bme/_vortex/agents/discovery-empathy-expert.md` and paste into the chat.
+
+---
+
+### Method 2: Slash Command (BMAD Environments Only)
+
+If your environment supports BMAD slash commands:
+
+```
+/bmad-agent-bme-discovery-empathy-expert
 ```
 
 ---
@@ -204,7 +199,7 @@ When a participant's voice changes, they lean forward, or they hesitate — that
 
 **Agent:** Isla (discovery-empathy-expert)
 **Module:** BMAD Enhanced (bme)
-**Submodule:** Vortex Pattern (_vortex)
+**Submodule:** Vortex Pattern (`_vortex`)
 **Stream:** Empathize (Stream 2)
 **Version:** 1.5.0
 
