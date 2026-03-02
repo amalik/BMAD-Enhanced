@@ -1,0 +1,56 @@
+name: "Agent/Workflow Feedback"
+description: "Share feedback about a BMAD-Enhanced agent or workflow — report a quality issue, suggest a missing capability, or leave a general comment."
+title: "[Feedback] "
+labels: ["feedback"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for taking the time to share feedback! Pick the agent, choose a category, and describe what happened — it takes under 30 seconds.
+
+  - type: dropdown
+    id: agent
+    attributes:
+      label: "Agent"
+      description: "Which agent is this feedback about?"
+      options:
+        - "Emma 🎯 Contextualize"
+        - "Isla 🔍 Empathize"
+        - "Mila 🔬 Synthesize"
+        - "Liam 💡 Hypothesize"
+        - "Wade 🧪 Externalize"
+        - "Noah 📡 Sensitize"
+        - "Max 🧭 Systematize"
+        - "General / Multiple agents"
+    validations:
+      required: true
+
+  - type: dropdown
+    id: category
+    attributes:
+      label: "Category"
+      description: "What kind of feedback is this?"
+      options:
+        - "Quality issue"
+        - "Missing capability"
+        - "General comment"
+    validations:
+      required: true
+
+  - type: textarea
+    id: description
+    attributes:
+      label: "Description"
+      description: "What happened? What did you expect? Include any relevant context."
+      placeholder: "Describe the issue or suggestion..."
+    validations:
+      required: true
+
+  - type: input
+    id: workflow
+    attributes:
+      label: "Workflow (optional)"
+      description: "If this is about a specific workflow, enter its name."
+      placeholder: "e.g., research-convergence, hypothesis-engineering"
+    validations:
+      required: false
