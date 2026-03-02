@@ -1,27 +1,39 @@
 # Wade User Guide - Lean Experiments Specialist 🧪
 
 **Agent:** Wade (lean-experiments-specialist)
-**Version:** 1.2.0
+**Version:** 1.6.4
 **Module:** BMAD Enhanced (bme) - Vortex Pattern
-**Last Updated:** 2026-02-17
+**Last Updated:** 2026-03-02
 
 ---
 
 ## Quick Start
 
 **Who is Wade?**
-Wade is a Lean Startup practitioner specialized in running rapid experiments to validate product hypotheses. He helps teams move from assumptions to evidence through Build-Measure-Learn cycles. Wade guides teams through the "Externalize" stream of the Vortex pattern - taking ideas into the real world to test with actual users.
+Wade is a Validated Learning Expert and First Externalization Designer who helps teams create minimal, fast, inexpensive experiments to validate product direction. He guides you through the "Externalize" stream of the Vortex pattern — designing MVPs, running Build-Measure-Learn experiments, validating technical feasibility (proof-of-concept), and validating business value (proof-of-value). Every build Wade produces is an experiment for validated learning, not a feature to ship.
 
 **When to use Wade:**
-- Designing Minimum Viable Products (MVPs)
-- Running Build-Measure-Learn experiments
-- Validating technical feasibility (proof-of-concept)
-- Validating business value (proof-of-value)
-- Testing assumptions before full buildout
-- Rapid iteration and validated learning
+- Designing Minimum Viable Products that test the riskiest assumption
+- Running Build-Measure-Learn experiment cycles
+- Validating technical feasibility before investing in business case (proof-of-concept)
+- Validating business value and market demand (proof-of-value)
+- Reviewing experiment designs for rigor before execution
+- Producing experiment artifacts (HC4) that connect back to Liam's hypotheses (HC3)
+
+**Wade vs. Just Building — which do I need?**
+
+| | Wade 🧪 (Structured Experiments) | Just Building |
+|---|---|---|
+| **Process** | Hypothesis → MVP → Measure → Learn → Decide | Spec → Build → Ship → Hope |
+| **Output** | HC4 experiment context with validated learning | A product feature |
+| **Rigor** | Pre-defined success criteria, falsifiable hypothesis | "We'll know it when we see it" |
+| **Failure mode** | Fast learning from small bets | Expensive learning from big bets |
+| **Next step** | Noah interprets production signals, Max decides | Ship more features |
+
+**Decision aid:** If you need to validate assumptions before committing resources → **Wade**. If you already know what to build and just need to build it → BMAD Core development agents.
 
 **What you'll get:**
-Lean experiment artifacts using Build-Measure-Learn methodology - MVP specifications, experiment designs, proof-of-concept results, proof-of-value validations, and validated learning documentation.
+MVP specifications, lean experiment designs with Build-Measure-Learn structure, proof-of-concept results for technical feasibility, proof-of-value validations for business case, and validated learning documentation — all as HC4 experiment context artifacts that feed into Noah's signal interpretation.
 
 ---
 
@@ -34,11 +46,6 @@ If you're in a BMAD environment that supports slash commands:
 ```
 /bmad-agent-bme-lean-experiments-specialist
 ```
-
-**When this works:**
-- Native BMAD CLI environment
-- BMAD-enabled IDEs
-- Production BMAD installations
 
 **If you see "Unknown skill":**
 This means slash commands aren't available in your environment. Use Method 2 instead.
@@ -63,8 +70,6 @@ Read the file at _bmad/bme/_vortex/agents/lean-experiments-specialist.md
 cat _bmad/bme/_vortex/agents/lean-experiments-specialist.md
 ```
 
-This method has been fully tested and validated.
-
 ---
 
 ## Wade's Menu Options
@@ -73,204 +78,126 @@ Once Wade activates, you'll see menu options for his available workflows:
 
 ```
 1. [MH] Redisplay Menu Help
-2. [CH] Chat with Wade about Lean Startup, experimentation, or validated learning
-3. [WM] Wireframe (Legacy): Create UI wireframes (v1.0 workflow - still functional)
-4. [VM] Validate Artifact: Review existing artifacts against Lean Startup principles
-5. [PM] Start Party Mode
-6. [DA] Dismiss Agent
+2. [CH] Chat with Wade about lean experiments, MVPs, validated learning, or Lean Startup
+3. [ME] Design MVP: Create Minimum Viable Product specification in 6 steps
+4. [LE] Run Lean Experiment: Execute Build-Measure-Learn cycle in 6 steps
+5. [PC] Create Proof of Concept: Validate technical feasibility in 6 steps
+6. [PV] Create Proof of Value: Validate business value in 6 steps
+7. [VE] Validate Experiment: Review experiment design for rigor
+8. [PM] Start Party Mode
+9. [DA] Dismiss Agent
 ```
 
 ### How to Select an Option
 
-**Three ways to choose:**
-
 1. **Number:** Type `3` to select option 3
-2. **Command Code:** Type `WM` to create a wireframe
-3. **Fuzzy Match:** Type `wireframe` or `create` - Wade will match the command
+2. **Command Code:** Type `ME` to design an MVP
+3. **Fuzzy Match:** Type `mvp` or `experiment` or `proof` - Wade will match the command
 
 ---
 
-## Wade's Philosophy: Externalization over Speculation
+## Workflows
 
-### What is Externalization?
+### [ME] Design MVP (6 steps)
 
-Externalization means taking ideas into the real world to test with actual users. It's about:
+Design a Minimum Viable Product specification using Build-Measure-Learn methodology. An MVP is not a feature-light product — it's the smallest experiment that tests the riskiest assumption from Liam's hypothesis contracts (HC3).
 
-1. **Build-Measure-Learn** (Not Plan-Build-Launch)
-2. **Test assumptions, don't validate them** (Seek to disprove, not confirm)
-3. **Speed-to-insight over perfection** (Fast feedback beats polished guesses)
-4. **Actionable metrics, not vanity metrics** (What drives decisions?)
-5. **Proof-of-concept before proof-of-value** (Technical feasibility before business case)
+**Output:** `{output_folder}/vortex-artifacts/hc4-mvp-spec-{date}.md`
+**Time:** 60-120 minutes
+
+**When to use Design MVP:**
+You have validated hypotheses from Liam and need to design the smallest thing that tests the riskiest assumption. You want to move from "we think" to "we know" with minimal investment.
+
+---
+
+### [LE] Run Lean Experiment (6 steps)
+
+Execute a full Build-Measure-Learn cycle with structured hypothesis testing. Takes an HC3 hypothesis contract (from Liam) and walks through building the experiment, measuring results, and capturing validated learning.
+
+**Output:** `{output_folder}/vortex-artifacts/hc4-experiment-results-{date}.md`
+**Time:** 90-180 minutes (design + execution guidance)
+
+**When to use Lean Experiment:**
+You're ready to run a complete experiment cycle — build, measure, learn, decide. This is the core Build-Measure-Learn workflow that produces the HC4 experiment context Noah will interpret.
+
+---
+
+### [PC] Create Proof of Concept (6 steps)
+
+Validate technical feasibility before investing in the business case. Can you build this? A proof-of-concept answers "is this technically possible?" before asking "should we build this?"
+
+**Output:** `{output_folder}/vortex-artifacts/hc4-poc-results-{date}.md`
+**Time:** 60-120 minutes
+
+**When to use Proof of Concept:**
+The riskiest assumption is technical — "can we build this at all?" Run a PoC before investing in business validation. Technical feasibility must come before market feasibility.
+
+---
+
+### [PV] Create Proof of Value (6 steps)
+
+Validate business value and market demand. Should you build this? A proof-of-value answers "do users want this enough to pay/change behavior?" after technical feasibility is established.
+
+**Output:** `{output_folder}/vortex-artifacts/hc4-pov-results-{date}.md`
+**Time:** 60-120 minutes
+
+**When to use Proof of Value:**
+Technical feasibility is confirmed (via PoC or prior knowledge) and now you need to validate that users actually want this. Technical capability doesn't guarantee business success.
+
+---
+
+### [VE] Validate Experiment
+
+Review an experiment design for rigor before execution.
+
+**When to use Validate Experiment:**
+- You designed an experiment and want expert review before running it
+- You inherited experiment artifacts from another team
+- You want to check if success criteria are truly falsifiable
+- You're preparing to hand off to Noah for production signal interpretation
+
+**What Wade checks:**
+- Is the hypothesis falsifiable and specific?
+- Are success metrics actionable (not vanity metrics)?
+- Is the MVP truly minimal (smallest testable version)?
+- Are pre-defined success criteria in place before results come in?
+- Can this guide a pivot/patch/persevere decision?
+
+---
+
+## Wade's Philosophy: Externalization Over Speculation
 
 ### The Externalize Stream (Vortex Pattern)
 
-Wade guides teams through the "Externalize" stream:
-- **Build the smallest thing that tests the riskiest assumption**
-- **Measure what matters** - focus on actionable metrics
-- **Learn fast, pivot faster** - every experiment teaches something
-- **MVPs are learning tools** - not feature-light products
-- **Fail fast is good, learn fast is better**
-
----
-
-## Current Workflows (v1.2.0)
-
-### [WM] Wireframe (Legacy - v1.0 Workflow)
-
-**Status:** Functional but deprecated. Maintained for backwards compatibility.
-
-**What it does:**
-Wade guides you through creating comprehensive wireframes for web and mobile applications using a structured 6-step process.
-
-**When to use:**
-- You need quick UI layout planning using familiar wireframe methodology
-- You're designing interfaces before high-fidelity design
-- You're waiting for v1.4.0+ workflows (mvp, lean-experiment, proof-of-concept, proof-of-value)
-
-**Process:** 6 steps
-1. Define Requirements
-2. User Flows
-3. Information Architecture
-4. Wireframe Sketch (ASCII art)
-5. Components & Interactions
-6. Synthesize
-
-**Output Location:**
-`{project-root}/_bmad-output/vortex-artifacts/wireframe-{screen-name}-{date}.md`
-
-**Time:** 20-30 minutes
-
-**Important:** This workflow uses traditional wireframe design methodology. For Lean Startup-focused workflows aligned with the Vortex pattern, see "Coming in v1.4.0+" section below.
-
----
-
-## Coming in v1.4.0+
-
-Wade's new Externalize stream workflows are planned for v1.4.0:
-
-### [MVP] Minimum Viable Product
-Design MVP specifications using Build-Measure-Learn methodology.
-
-**Output:** MVP specification document
-**Focus:** Smallest testable version, hypothesis validation, success metrics
-**Principle:** Build only what's needed to test the riskiest assumption
-
-### [LE] Lean Experiment
-Execute Build-Measure-Learn cycles with structured hypothesis testing.
-
-**Output:** Experiment results document
-**Focus:** Hypothesis → Experiment → Measure → Learn → Decide (pivot/persevere)
-**Principle:** Every experiment must have a falsifiable hypothesis
-
-### [POC] Proof-of-Concept
-Validate technical feasibility before investing in business case.
-
-**Output:** PoC results document
-**Focus:** Can we build this? Technical validation, risk assessment
-**Principle:** Prove technical viability before proving business value
-
-### [POV] Proof-of-Value
-Validate business value and market demand.
-
-**Output:** PoV results document
-**Focus:** Should we build this? Business case validation, market validation
-**Principle:** Technical feasibility doesn't guarantee business success
-
-**Note:** These workflows are being designed to fully align with Lean Startup methodologies and the Vortex pattern's Externalize stream.
-
----
-
-## Understanding the Legacy Wireframe Workflow
-
-*This section describes the current v1.0 wireframe workflow. For the full detailed guide, see the v1.0 documentation.*
-
-### Quick Overview
-
-1. **Define Requirements** (2-3 min)
-   - Screen scope, platform, target user, core functionality, constraints
-
-2. **User Flows** (3-5 min)
-   - Entry points, happy path, alternative flows, exit points
-
-3. **Information Architecture** (3-5 min)
-   - Visual hierarchy, content grouping, navigation patterns, information density
-
-4. **Wireframe Sketch** (5-10 min)
-   - ASCII art layout, grid system, component placement, typography hierarchy
-
-5. **Components & Interactions** (5-7 min)
-   - Component identification, specifications, interactions, responsive breakpoints
-
-6. **Synthesize** (1-2 min)
-   - Generate final wireframe artifact
-   - Save to output folder
-
-**Key Principles:**
-- Wireframes answer three questions: Where am I? What can I do? Where can I go?
-- Low-fidelity (ASCII art) for fast iteration
-- Mobile-first design approach
-- WCAG 2.1 Level AA accessibility compliance
+Wade guides teams through the "Externalize" stream (Stream 5):
+- **Build the smallest thing that validates learning** — not the best thing
+- **Expose to real users early** — internal feedback isn't validation
+- **Treat everything as an experiment** — hypothesis → test → learn
+- **Outcomes over outputs** — focus on what we learn, not what we build
+- **Fast and cheap beats slow and perfect** — speed enables iteration
+- **MVP does not equal Minimum Viable Quality** — it must be functional enough to test the hypothesis
 
 ---
 
 ## Chatting with Wade (CH)
 
-Select **[CH] Chat** to have a free-form conversation with Wade about:
-
-- Lean Startup methodologies
-- Build-Measure-Learn cycles
-- Hypothesis testing and experimentation
-- MVP design and validation
-- Validated learning
-- Proof-of-concept vs proof-of-value
-- Rapid prototyping
-- Actionable metrics
+Select **[CH] Chat** to discuss:
+- Lean Startup methodologies and Build-Measure-Learn cycles
+- MVP design and what "minimum" really means
+- Hypothesis testing and experiment methodology
+- Proof-of-concept vs. proof-of-value decisions
+- Actionable metrics vs. vanity metrics
+- When to pivot vs. persevere
+- Rapid prototyping and validated learning
 
 **Example questions:**
 - "How do I design an MVP that tests my riskiest assumption?"
 - "What's the difference between proof-of-concept and proof-of-value?"
-- "How do I write a falsifiable hypothesis?"
+- "How do I write a falsifiable hypothesis for an experiment?"
 - "What metrics should I track in a lean experiment?"
 - "When should I pivot vs. persevere?"
-
----
-
-## Validating Artifacts (VM)
-
-Select **[VM] Validate** to review existing artifacts against Lean Startup principles.
-
-**When to use this:**
-- You created an artifact and want expert review
-- You inherited artifacts from another team
-- Your experimental results changed and you need to update
-- You're preparing to present to stakeholders
-
-**What Wade checks:**
-- Are hypotheses falsifiable and specific?
-- Are success metrics actionable (not vanity metrics)?
-- Is the MVP truly minimal (smallest testable version)?
-- Are experimental results clearly documented?
-- Can this guide decision-making (pivot or persevere)?
-
----
-
-## Party Mode (PM)
-
-Select **[PM] Party Mode** to bring Wade into a multi-agent collaboration session.
-
-**When to use this:**
-- You need multiple BMAD agents working together
-- Example: Emma (contextualization) + Wade (experiments) + Quinn (quality review)
-
-**How it works:**
-- Wade joins a group discussion with other agents
-- Each agent contributes their expertise
-- Agents collaborate naturally on complex tasks
-
-**Powerful Combo: Emma + Wade**
-- Emma contextualizes the problem space (Who? What? Why?)
-- Wade designs experiments to validate assumptions
-- Together they ensure you're building the right thing, not just building things right
+- "How do I know if my MVP is truly minimal?"
+- "What experiment methodology should I use for my hypothesis?"
 
 ---
 
@@ -278,183 +205,35 @@ Select **[PM] Party Mode** to bring Wade into a multi-agent collaboration sessio
 
 ### Error: "Configuration Error: Cannot load config file"
 
-**What it means:**
-Wade can't find or read the config file at `_bmad/bme/_vortex/config.yaml`
+**How to fix:**
+1. Check if `_bmad/bme/_vortex/config.yaml` exists
+2. If missing: `npx bmad-install-vortex-agents`
+
+### Error: "Workflow Error: Cannot load lean experiment workflow"
 
 **How to fix:**
-
-1. **Check if file exists:**
-   ```bash
-   ls _bmad/bme/_vortex/config.yaml
-   ```
-
-2. **If missing, reinstall:**
-   ```bash
-   npm install bmad-enhanced@latest
-   npx bmad-install-agents
-   ```
-
-3. **Verify YAML syntax:**
-   - No tabs (use spaces)
-   - Proper indentation
-   - Quotes around string values
-
----
-
-### Error: "Unknown skill: bmad-agent-bme-lean-experiments-specialist"
-
-**What it means:**
-Slash commands aren't available in your environment.
-
-**How to fix:**
-Use Method 2 (Direct Agent File Reading) instead:
-
-1. Read the file: `_bmad/bme/_vortex/agents/lean-experiments-specialist.md`
-2. Wade will activate normally
-3. This method is fully tested and works in all environments
-
-**Note:** This is NOT an error with Wade - it's an environment limitation.
+1. Check workflow files exist in `_bmad/bme/_vortex/workflows/`
+2. Run `npx bmad-doctor` to diagnose
+3. If missing: `npx bmad-install-vortex-agents`
 
 ---
 
 ## Tips from Wade
 
 ### "Build the smallest thing that tests the riskiest assumption"
-
 Don't build a full product to test if users want it. Build the smallest experiment that answers your biggest question. Sometimes that's a landing page, not an app.
 
 ### "Measure what matters"
-
 Vanity metrics look good but don't drive decisions. Actionable metrics tell you what to do next. Instead of "page views," track "% who signed up after viewing pricing."
 
 ### "Learn fast, pivot faster"
-
-Every experiment teaches something, even failures. The goal isn't to validate your idea - it's to learn what's true. Be willing to pivot when evidence contradicts assumptions.
+Every experiment teaches something, even failures. The goal isn't to validate your idea — it's to learn what's true. Be willing to pivot when evidence contradicts assumptions.
 
 ### "Proof-of-concept before proof-of-value"
-
 Can you build it? Doesn't mean should you build it. Validate technical feasibility first, then validate business case. Don't waste money proving market demand for something you can't deliver.
 
 ### "Fail fast is good, learn fast is better"
-
 Failure is only valuable if you learn from it. Document what you learned, why experiments failed, and what that means for your next move. Failure without learning is just waste.
-
----
-
-## Migration Guide (v1.0 → v1.2.0)
-
-### What Changed
-
-**v1.0.0 (DesignOS):**
-- Agent: wireframe-designer
-- Module: `_bmad/bme/_designos/`
-- Focus: Wireframe design, UX, information architecture
-- Output: `_bmad-output/design-artifacts/`
-
-**v1.2.0 (Vortex Pattern):**
-- Agent: lean-experiments-specialist
-- Module: `_bmad/bme/_vortex/`
-- Focus: Lean Startup, experimentation, validated learning
-- Output: `_bmad-output/vortex-artifacts/`
-
-### How to Update
-
-1. **Update package:**
-   ```bash
-   npm install bmad-enhanced@latest
-   ```
-
-2. **Reinstall agents:**
-   ```bash
-   npx bmad-install-agents
-   ```
-
-3. **Update activation path:**
-   - Old: `_bmad/bme/_designos/agents/wireframe-designer.md`
-   - New: `_bmad/bme/_vortex/agents/lean-experiments-specialist.md`
-
-4. **Update output references:**
-   - Old: `_bmad-output/design-artifacts/`
-   - New: `_bmad-output/vortex-artifacts/`
-
-### Backwards Compatibility
-
-- Legacy wireframe workflow still functional in v1.2.0
-- Old artifacts remain valid and accessible
-- New Lean Startup workflows coming in v1.4.0+
-
----
-
-## Roadmap
-
-**v1.2.0 (Current):**
-- ✅ Agent repositioned as Lean Experiments Specialist
-- ✅ Module renamed to _vortex (Vortex Pattern)
-- ✅ Legacy wireframe workflow maintained
-- ✅ User guide updated
-
-**v1.3.0 (Planned):**
-- Update/migration tooling
-- Automated update scripts
-
-**v1.4.0+ (Planned):**
-- New Externalize stream workflows:
-  - [MVP] Minimum Viable Product
-  - [LE] Lean Experiment
-  - [POC] Proof-of-Concept
-  - [POV] Proof-of-Value
-- Full Vortex Pattern implementation
-
----
-
-## Getting Help
-
-### Need help using Wade?
-
-1. **Chat with Wade (CH):** Ask him questions about Lean Startup and experimentation
-2. **Read this guide:** Most questions are answered here
-3. **Check troubleshooting section:** Common errors and solutions
-
-### Found a bug or issue?
-
-1. **Check if it's an environment limitation:** Some features (like slash commands) may not work in all environments
-2. **Report the issue:** Provide Wade's version (1.2.0), your environment, and steps to reproduce
-
-### Want to learn more?
-
-**Wade's expertise includes:**
-- Lean Startup methodology
-- Build-Measure-Learn cycles
-- Hypothesis testing
-- MVP design and validation
-- Rapid experimentation
-- Proof-of-concept and proof-of-value
-- Validated learning
-- Pivot or persevere decisions
-
-**Ask Wade (CH) about any of these topics!**
-
----
-
-## Version History
-
-**v1.2.0 (2026-02-17)**
-- Agent repositioned as Lean Experiments Specialist (Lean Startup focus)
-- Module renamed from _designos to _vortex (Vortex Pattern)
-- Output folder moved to vortex-artifacts
-- Updated documentation to reflect experimentation and validated learning
-- Legacy wireframe workflow maintained for backwards compatibility
-- Roadmap added for v1.4.0+ Externalize stream workflows
-
-**v1.0.0 (2026-02-14)**
-- Initial release as Wireframe Designer
-- 6-step wireframe creation workflow
-- ASCII art visualization
-- WCAG 2.1 Level AA accessibility
-- Responsive design patterns
-- Config-driven personalization
-- Validation workflow (VM)
-- Party mode integration (PM)
 
 ---
 
@@ -463,8 +242,8 @@ Failure is only valuable if you learn from it. Document what you learned, why ex
 **Agent:** Wade (lean-experiments-specialist)
 **Module:** BMAD Enhanced (bme)
 **Submodule:** Vortex Pattern (_vortex)
-**Framework:** BMAD Agent Architecture Framework v1.1.0
-**Methodology:** Lean Startup, Build-Measure-Learn
+**Stream:** Externalize (Stream 5)
+**Version:** 1.6.4
 
 ---
 
