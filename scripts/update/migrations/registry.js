@@ -53,6 +53,13 @@ const MIGRATIONS = [
     breaking: false,
     description: 'Add Wave 3 agents (Mila, Liam, Noah) and 9 workflows to config',
     module: null
+  },
+  {
+    name: '1.6.x-to-1.7.0',
+    fromVersion: '1.6.x',
+    breaking: false,
+    description: 'Quality & onboarding (production workflow steps, updated guides, smart-merge)',
+    module: null
   }
   // Future migrations: append here. Only add delta logic for version-specific changes.
 ];
