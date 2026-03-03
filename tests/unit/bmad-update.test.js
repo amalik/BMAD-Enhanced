@@ -193,13 +193,13 @@ describe('assessUpdate', () => {
       await createValidInstallation(tmpDir);
       const configPath = path.join(tmpDir, '_bmad/bme/_vortex/config.yaml');
       const config = yaml.load(fs.readFileSync(configPath, 'utf8'));
-      // 1.6.0 < pkg 1.6.4 (upgrade-needed) but no 1.6.x migration in registry
-      config.version = '1.6.0';
+      // Use a version with no registered migration (0.9.x has no entry in registry)
+      config.version = '0.9.0';
       fs.writeFileSync(configPath, yaml.dump(config), 'utf8');
 
       const result = assessUpdate(tmpDir);
       assert.equal(result.action, 'no-migrations');
-      assert.equal(result.currentVersion, '1.6.0');
+      assert.equal(result.currentVersion, '0.9.0');
     } finally {
       await fs.remove(tmpDir);
     }
@@ -375,8 +375,8 @@ describe('bmad-update CLI (main)', () => {
       await createValidInstallation(tmpDir);
       const configPath = path.join(tmpDir, '_bmad/bme/_vortex/config.yaml');
       const config = yaml.load(fs.readFileSync(configPath, 'utf8'));
-      // 1.6.0 < pkg 1.6.4 (upgrade-needed) but no 1.6.x migration in registry
-      config.version = '1.6.0';
+      // Use a version with no registered migration (0.9.x has no entry in registry)
+      config.version = '0.9.0';
       fs.writeFileSync(configPath, yaml.dump(config), 'utf8');
 
       const { exitCode, stdout } = await runScript(SCRIPT_PATH, [], { cwd: tmpDir });
