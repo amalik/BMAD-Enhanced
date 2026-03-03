@@ -7,6 +7,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [1.7.1] - 2026-03-03
+
+### Fixed
+
+- **`bmad-update` failed to upgrade from 1.6.x to 1.7.0** — Missing `1.6.x-to-1.7.0` migration in registry caused "No migrations needed (versions compatible)" instead of running the upgrade. Added migration entry and no-op delta file.
+
+---
+
 ## [1.7.0] - 2026-03-02
 
 ### Added
