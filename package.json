@@ -1,7 +1,7 @@
 {
-  "name": "bmad-enhanced",
-  "version": "1.7.1",
-  "description": "Vortex Pattern - Contextualize, Empathize, Synthesize, Hypothesize, Externalize, Sensitize, and Systematize streams for Lean Startup validation",
+  "name": "convoke",
+  "version": "2.0.0",
+  "description": "Agent teams for complex systems, compatible with BMad Method",
   "main": "index.js",
   "files": [
     "index.js",
@@ -14,12 +14,12 @@
     "README.md"
   ],
   "bin": {
-    "bmad-install-vortex-agents": "scripts/install-vortex-agents.js",
-    "bmad-install-agents": "scripts/install-all-agents.js",
-    "bmad-update": "scripts/update/bmad-update.js",
-    "bmad-version": "scripts/update/bmad-version.js",
-    "bmad-migrate": "scripts/update/bmad-migrate.js",
-    "bmad-doctor": "scripts/bmad-doctor.js"
+    "convoke-install-vortex": "scripts/install-vortex-agents.js",
+    "convoke-install": "scripts/install-all-agents.js",
+    "convoke-update": "scripts/update/convoke-update.js",
+    "convoke-version": "scripts/update/convoke-version.js",
+    "convoke-migrate": "scripts/update/convoke-migrate.js",
+    "convoke-doctor": "scripts/convoke-doctor.js"
   },
   "scripts": {
     "install:agents": "node scripts/install-all-agents.js",
@@ -34,6 +34,8 @@
     "docs:audit": "node scripts/docs-audit.js"
   },
   "keywords": [
+    "convoke",
+    "bmad-enhanced",
     "bmad",
     "agents",
     "lean-startup",
@@ -49,11 +51,14 @@
     "product-strategy",
     "ai-agents"
   ],
-  "author": "BMAD-Enhanced Community",
+  "author": "Convoke Contributors",
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/amalik/BMAD-Enhanced.git"
+    "url": "git+https://github.com/amalik/convoke.git"
+  },
+  "bugs": {
+    "url": "https://github.com/amalik/convoke/issues"
   },
   "engines": {
     "node": ">=18.0.0"

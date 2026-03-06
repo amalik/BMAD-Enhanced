@@ -5,7 +5,7 @@ const yaml = require('js-yaml');
 const { AGENT_IDS, WORKFLOW_NAMES } = require('./agent-registry');
 
 /**
- * Config Merger for BMAD-Enhanced
+ * Config Merger for Convoke
  * Smart YAML merging preserving user settings
  */
 

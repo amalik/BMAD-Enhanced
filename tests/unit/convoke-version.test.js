@@ -13,19 +13,19 @@ const {
   PACKAGE_ROOT
 } = require('../helpers');
 
-const SCRIPT_PATH = path.join(PACKAGE_ROOT, 'scripts/update/bmad-version.js');
+const SCRIPT_PATH = path.join(PACKAGE_ROOT, 'scripts/update/convoke-version.js');
 const PKG_VERSION = require('../../package.json').version;
 
 // ─── main() Status Branches ────────────────────────────────────
 
-describe('bmad-version CLI — status branches', () => {
-  it('shows "Not in a BMAD project" when no _bmad/ directory exists', async () => {
+describe('convoke-version CLI — status branches', () => {
+  it('shows "Not in a Convoke project" when no _bmad/ directory exists', async () => {
     const tmpDir = await createTempDir('bmad-ver-');
     try {
       const { exitCode, stdout } = await runScript(SCRIPT_PATH, [], { cwd: tmpDir });
       assert.equal(exitCode, 0, 'should exit 0');
-      assert.ok(stdout.includes('Not in a BMAD project'), `stdout should contain "Not in a BMAD project", got: ${stdout.slice(0, 200)}`);
-      assert.ok(stdout.includes('bmad-install-agents'), 'should suggest install command');
+      assert.ok(stdout.includes('Not in a Convoke project'), `stdout should contain "Not in a Convoke project", got: ${stdout.slice(0, 200)}`);
+      assert.ok(stdout.includes('convoke-install'), 'should suggest install command');
     } finally {
       await fs.remove(tmpDir);
     }
@@ -131,7 +131,7 @@ describe('bmad-version CLI — status branches', () => {
       const { exitCode, stdout } = await runScript(SCRIPT_PATH, [], { cwd: tmpDir });
       assert.equal(exitCode, 0, 'should exit 0');
       assert.ok(stdout.includes('Update available'), `stdout should contain "Update available", got: ${stdout.slice(0, 300)}`);
-      assert.ok(stdout.includes('bmad-update'), 'should suggest bmad-update command');
+      assert.ok(stdout.includes('convoke-update'), 'should suggest convoke-update command');
     } finally {
       await fs.remove(tmpDir);
     }
@@ -157,7 +157,7 @@ describe('bmad-version CLI — status branches', () => {
 
 // ─── getMigrationHistory() — Tested Indirectly via CLI Output ───
 
-describe('bmad-version CLI — migration history display', () => {
+describe('convoke-version CLI — migration history display', () => {
   it('displays migration history when config.yaml contains migration_history', async () => {
     const tmpDir = await createTempDir('bmad-ver-');
     try {
@@ -226,7 +226,7 @@ describe('bmad-version CLI — migration history display', () => {
 
 // ─── Edge Cases ─────────────────────────────────────────────────
 
-describe('bmad-version CLI — edge cases', () => {
+describe('convoke-version CLI — edge cases', () => {
   it('handles malformed version string gracefully (treated as older version)', async () => {
     const tmpDir = await createTempDir('bmad-ver-');
     try {
@@ -321,10 +321,10 @@ describe('bmad-version CLI — edge cases', () => {
 
 // ─── Cross-Platform Path Handling ───────────────────────────────
 
-describe('bmad-version — cross-platform path validation', () => {
-  it('bmad-version.js uses path.join for all filesystem path construction (no raw concatenation)', async () => {
+describe('convoke-version — cross-platform path validation', () => {
+  it('convoke-version.js uses path.join for all filesystem path construction (no raw concatenation)', async () => {
     const source = await fs.readFile(
-      path.join(PACKAGE_ROOT, 'scripts/update/bmad-version.js'), 'utf8'
+      path.join(PACKAGE_ROOT, 'scripts/update/convoke-version.js'), 'utf8'
     );
 
     const lines = source.split('\n');
@@ -352,9 +352,9 @@ describe('bmad-version — cross-platform path validation', () => {
       }
     }
 
-    assert.equal(violations.length, 0, `Found raw path concatenation in bmad-version.js:\n${violations.join('\n')}`);
+    assert.equal(violations.length, 0, `Found raw path concatenation in convoke-version.js:\n${violations.join('\n')}`);
     // Verify path.join is used (positive check)
-    assert.ok(source.includes('path.join'), 'bmad-version.js should use path.join for path construction');
+    assert.ok(source.includes('path.join'), 'convoke-version.js should use path.join for path construction');
   });
 
   it('version-detector.js and utils.js use path module for path construction', async () => {

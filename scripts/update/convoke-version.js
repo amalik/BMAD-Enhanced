@@ -8,7 +8,7 @@ const versionDetector = require('./lib/version-detector');
 const { findProjectRoot, compareVersions } = require('./lib/utils');
 
 /**
- * BMAD-Enhanced Version CLI
+ * Convoke Version CLI
  * Show version information and migration history
  */
 
@@ -17,15 +17,15 @@ async function main() {
   const targetVersion = versionDetector.getTargetVersion();
 
   console.log('');
-  console.log(chalk.bold('BMAD-Enhanced Version Information'));
+  console.log(chalk.bold('Convoke Version Information'));
   console.log('');
 
-  // Not in a BMAD project
+  // Not in a Convoke project
   if (!projectRoot) {
-    console.log(chalk.yellow('Status:           Not in a BMAD project'));
+    console.log(chalk.yellow('Status:           Not in a Convoke project'));
     console.log(`Package version:  ${chalk.cyan(targetVersion)}`);
     console.log('');
-    console.log('Run: ' + chalk.cyan('npx bmad-install-agents'));
+    console.log('Run: ' + chalk.cyan('npx convoke-install'));
     console.log('');
     return;
   }
@@ -38,7 +38,7 @@ async function main() {
     console.log(chalk.yellow('Status:           Not installed'));
     console.log(`Package version:  ${chalk.cyan(targetVersion)}`);
     console.log('');
-    console.log('Run: ' + chalk.cyan('npx bmad-install-agents'));
+    console.log('Run: ' + chalk.cyan('npx convoke-install'));
     console.log('');
     return;
   }
@@ -50,7 +50,7 @@ async function main() {
     console.log('');
     console.log(chalk.yellow('This indicates an installation error.'));
     console.log('');
-    console.log('Try running: ' + chalk.cyan('npx bmad-install-agents'));
+    console.log('Try running: ' + chalk.cyan('npx convoke-install'));
     console.log('');
     console.log('If the problem persists, check the installation logs.');
     console.log('');
@@ -64,7 +64,7 @@ async function main() {
     console.log('');
     console.log(chalk.yellow('Some required files are missing.'));
     console.log('');
-    console.log('Run: ' + chalk.cyan('npx bmad-install-agents') + ' to reinstall');
+    console.log('Run: ' + chalk.cyan('npx convoke-install') + ' to reinstall');
     console.log('');
     return;
   }
@@ -80,8 +80,8 @@ async function main() {
   } else if (compareVersions(currentVersion, targetVersion) < 0) {
     console.log(chalk.yellow('Status: ⚠ Update available'));
     console.log('');
-    console.log('Run: ' + chalk.cyan('npx -p bmad-enhanced@latest bmad-update --dry-run') + ' (to preview)');
-    console.log('     ' + chalk.cyan('npx -p bmad-enhanced@latest bmad-update') + ' (to apply)');
+    console.log('Run: ' + chalk.cyan('npx -p convoke@latest convoke-update --dry-run') + ' (to preview)');
+    console.log('     ' + chalk.cyan('npx -p convoke@latest convoke-update') + ' (to apply)');
   } else {
     console.log(chalk.yellow(`Status: Package version (${targetVersion}) is older than installed (${currentVersion})`));
   }

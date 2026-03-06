@@ -6,7 +6,7 @@ const yaml = require('js-yaml');
 const { findProjectRoot, compareVersions, getPackageVersion } = require('./utils');
 
 /**
- * Version Detector for BMAD-Enhanced
+ * Version Detector for Convoke
  * Reliably detects current installed version and determines migration path
  */
 

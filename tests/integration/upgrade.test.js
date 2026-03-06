@@ -130,12 +130,13 @@ describe('Upgrade from v1.3.x (simulated)', () => {
     assert.equal(changes.length, 0);
   });
 
-  it('migration path shows upgrade-needed and non-breaking', () => {
+  it('migration path shows upgrade-needed and breaking (v2.0.0 rename)', () => {
     const pkg = require('../../package.json');
     const path = versionDetector.getMigrationPath('1.3.8', pkg.version);
     if (pkg.version !== '1.3.8') {
       assert.equal(path.type, 'upgrade-needed');
-      assert.equal(path.breaking, false);
+      // v2.0.0 introduced a breaking migration (product rename BMAD-Enhanced → Convoke)
+      assert.equal(path.breaking, true);
     } else {
       assert.equal(path.type, 'up-to-date');
     }
@@ -340,5 +341,105 @@ describe('Config merge preserves migration history', () => {
     assert.ok(Array.isArray(config.migration_history));
     assert.ok(config.migration_history.length >= 1);
     assert.equal(config.migration_history[0].from_version, '1.0.5');
+  });
+});
+
+describe('Upgrade from v1.7.x (simulated)', () => {
+  let tmpDir;
+
+  before(async () => {
+    tmpDir = await fs.mkdtemp(path.join(os.tmpdir(), 'bmad-upgrade-1.7-'));
+
+    // Simulate a v1.7.x installation (all 7 agents, 22 workflows)
+    const vortexDir = path.join(tmpDir, '_bmad/bme/_vortex');
+    await fs.ensureDir(path.join(vortexDir, 'agents'));
+    await fs.ensureDir(path.join(vortexDir, 'workflows'));
+
+    await fs.writeFile(path.join(vortexDir, 'agents/contextualization-expert.md'), '# Emma v1.7');
+    await fs.writeFile(path.join(vortexDir, 'agents/lean-experiments-specialist.md'), '# Wade v1.7');
+    await fs.writeFile(path.join(vortexDir, 'agents/discovery-empathy-expert.md'), '# Isla v1.7');
+    await fs.writeFile(path.join(vortexDir, 'agents/learning-decision-expert.md'), '# Max v1.7');
+    await fs.writeFile(path.join(vortexDir, 'agents/research-convergence-specialist.md'), '# Mila v1.7');
+    await fs.writeFile(path.join(vortexDir, 'agents/hypothesis-engineer.md'), '# Liam v1.7');
+    await fs.writeFile(path.join(vortexDir, 'agents/production-intelligence-specialist.md'), '# Noah v1.7');
+
+    await fs.writeFile(path.join(vortexDir, 'config.yaml'), yaml.dump({
+      version: '1.7.1',
+      user_name: 'Charlie',
+      submodule_name: '_vortex',
+      description: 'Vortex Pattern',
+      module: 'bme',
+      output_folder: '_bmad-output/vortex-artifacts',
+      agents: [
+        'contextualization-expert', 'lean-experiments-specialist',
+        'discovery-empathy-expert', 'learning-decision-expert',
+        'research-convergence-specialist', 'hypothesis-engineer',
+        'production-intelligence-specialist'
+      ],
+      workflows: [
+        'lean-persona', 'product-vision', 'contextualize-scope',
+        'empathy-map', 'user-interview', 'user-discovery',
+        'mvp', 'lean-experiment', 'proof-of-concept',
+        'proof-of-value', 'learning-card', 'pivot-patch-persevere',
+        'vortex-navigation', 'research-convergence', 'pivot-resynthesis',
+        'pattern-mapping', 'hypothesis-engineering', 'assumption-mapping',
+        'experiment-design', 'signal-interpretation', 'behavior-analysis',
+        'production-monitoring'
+      ]
+    }));
+  });
+
+  after(async () => {
+    await fs.remove(tmpDir);
+  });
+
+  it('detects v1.7.1 from config', () => {
+    const version = versionDetector.getCurrentVersion(tmpDir);
+    assert.equal(version, '1.7.1');
+  });
+
+  it('finds applicable migration for v1.7.1', () => {
+    const migrations = registry.getMigrationsFor('1.7.1');
+    assert.equal(migrations.length, 1);
+    assert.equal(migrations[0].name, '1.7.x-to-2.0.0');
+    assert.equal(migrations[0].breaking, true);
+  });
+
+  it('reports breaking changes for v1.7.1', () => {
+    const changes = registry.getBreakingChanges('1.7.1');
+    assert.equal(changes.length, 1);
+    assert.ok(changes[0].includes('rename') || changes[0].includes('Convoke'), 'should describe the rename');
+  });
+
+  it('refreshInstallation preserves user_name', async () => {
+    await refreshInstallation(tmpDir, { backupGuides: false, verbose: false });
+
+    const configPath = path.join(tmpDir, '_bmad/bme/_vortex/config.yaml');
+    const config = yaml.load(fs.readFileSync(configPath, 'utf8'));
+
+    assert.equal(config.user_name, 'Charlie');
+  });
+
+  it('refreshInstallation updates config version to current package', async () => {
+    const configPath = path.join(tmpDir, '_bmad/bme/_vortex/config.yaml');
+    const config = yaml.load(fs.readFileSync(configPath, 'utf8'));
+    const pkg = require('../../package.json');
+
+    assert.equal(config.version, pkg.version);
+  });
+
+  it('preserves _bmad/ directory structure after refresh', async () => {
+    assert.ok(fs.existsSync(path.join(tmpDir, '_bmad/bme/_vortex/config.yaml')));
+    assert.ok(fs.existsSync(path.join(tmpDir, '_bmad/bme/_vortex/agents')));
+    assert.ok(fs.existsSync(path.join(tmpDir, '_bmad/bme/_vortex/workflows')));
+  });
+
+  it('preserves all 7 agents after refresh', async () => {
+    const configPath = path.join(tmpDir, '_bmad/bme/_vortex/config.yaml');
+    const config = yaml.load(fs.readFileSync(configPath, 'utf8'));
+
+    assert.ok(config.agents.length >= 7, 'should have at least 7 agents');
+    assert.ok(config.agents.includes('contextualization-expert'));
+    assert.ok(config.agents.includes('production-intelligence-specialist'));
   });
 });

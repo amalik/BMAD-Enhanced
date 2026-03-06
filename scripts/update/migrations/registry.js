@@ -5,7 +5,7 @@ const yaml = require('js-yaml');
 const { compareVersions } = require('../lib/utils');
 
 /**
- * Migration Registry for BMAD-Enhanced
+ * Migration Registry for Convoke
  *
  * APPEND-ONLY: Add new migrations at the bottom. Never edit old entries.
  * No toVersion needed - target is always the current package version at runtime.
@@ -59,6 +59,13 @@ const MIGRATIONS = [
     fromVersion: '1.6.x',
     breaking: false,
     description: 'Quality & onboarding (production workflow steps, updated guides, smart-merge)',
+    module: null
+  },
+  {
+    name: '1.7.x-to-2.0.0',
+    fromVersion: '1.7.x',
+    breaking: true,
+    description: 'Product rename: BMAD-Enhanced -> Convoke. CLI commands renamed from bmad-* to convoke-*. _bmad/ directory preserved.',
     module: null
   }
   // Future migrations: append here. Only add delta logic for version-specific changes.

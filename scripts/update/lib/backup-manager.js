@@ -5,7 +5,7 @@ const path = require('path');
 const { countUserDataFiles } = require('./utils');
 
 /**
- * Backup Manager for BMAD-Enhanced
+ * Backup Manager for Convoke
  * Creates backups before migrations and restores on failure
  */
 

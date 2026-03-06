@@ -5,7 +5,7 @@ const fs = require('fs-extra');
 const yaml = require('js-yaml');
 const { spawn } = require('node:child_process');
 
-const { assessUpdate } = require('../../scripts/update/bmad-update');
+const { assessUpdate } = require('../../scripts/update/convoke-update');
 const {
   createTempDir,
   createValidInstallation,
@@ -14,7 +14,7 @@ const {
   PACKAGE_ROOT
 } = require('../helpers');
 
-const SCRIPT_PATH = path.join(PACKAGE_ROOT, 'scripts/update/bmad-update.js');
+const SCRIPT_PATH = path.join(PACKAGE_ROOT, 'scripts/update/convoke-update.js');
 
 /**
  * Run a script with input piped to stdin.
@@ -268,7 +268,7 @@ describe('assessUpdate', () => {
 
 // ─── main() CLI Integration Tests ─────────────────────────
 
-describe('bmad-update CLI (main)', () => {
+describe('convoke-update CLI (main)', () => {
 
   // ─── Scenario Tests ──────────────────────────────────
 
@@ -277,7 +277,7 @@ describe('bmad-update CLI (main)', () => {
     try {
       const { exitCode, stdout } = await runScript(SCRIPT_PATH, [], { cwd: tmpDir });
       assert.equal(exitCode, 1);
-      assert.ok(stdout.includes('Not in a BMAD project'), 'should mention missing project');
+      assert.ok(stdout.includes('Not in a Convoke project'), 'should mention missing project');
     } finally {
       await fs.remove(tmpDir);
     }
@@ -697,11 +697,11 @@ describe('bmad-update CLI (main)', () => {
     assert.ok(utilsSource.includes('path.dirname('), 'utils.js should use path.dirname');
     assert.ok(utilsSource.includes('path.parse('), 'utils.js should use path.parse');
 
-    // Verify bmad-update.js imports utils for path operations
+    // Verify convoke-update.js imports utils for path operations
     const updateSource = fs.readFileSync(SCRIPT_PATH, 'utf8');
     assert.ok(
       updateSource.includes("require('./lib/utils')"),
-      'bmad-update.js should import utils for path operations'
+      'convoke-update.js should import utils for path operations'
     );
   });
 
@@ -711,7 +711,39 @@ describe('bmad-update CLI (main)', () => {
     const tmpDir = await createTempDir('bmad-cli-');
     try {
       const { stdout } = await runScript(SCRIPT_PATH, [], { cwd: tmpDir });
-      assert.ok(stdout.includes('BMAD-Enhanced Update Manager'), 'should display header banner');
+      assert.ok(stdout.includes('Convoke Update Manager'), 'should display header banner');
+    } finally {
+      await fs.remove(tmpDir);
+    }
+  });
+
+  // ─── v1.7.x → 2.0.0 Migration Path (Story 1.7) ────
+
+  it('assessUpdate returns upgrade with breaking migration for v1.7.1', async () => {
+    const tmpDir = await createTempDir('bmad-cli-');
+    try {
+      await createInstallation(tmpDir, '1.7.1');
+
+      const result = assessUpdate(tmpDir);
+      assert.equal(result.action, 'upgrade');
+      assert.ok(Array.isArray(result.migrations));
+      assert.ok(result.migrations.some(m => m.name === '1.7.x-to-2.0.0'), 'should include 1.7.x-to-2.0.0 migration');
+      assert.ok(result.breakingChanges.length > 0, 'should have breaking changes');
+    } finally {
+      await fs.remove(tmpDir);
+    }
+  });
+
+  it('displays breaking changes warning for v1.7.x upgrade', async () => {
+    const tmpDir = await createTempDir('bmad-cli-');
+    try {
+      await createInstallation(tmpDir, '1.7.1');
+
+      const { stdout } = await runScriptWithInput(
+        SCRIPT_PATH, [], 'n\n', { cwd: tmpDir }
+      );
+      assert.ok(stdout.includes('BREAKING CHANGES'), 'should display breaking changes warning');
+      assert.ok(stdout.includes('Migration Plan'), 'should show migration plan');
     } finally {
       await fs.remove(tmpDir);
     }

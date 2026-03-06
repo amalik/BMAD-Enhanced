@@ -5,13 +5,13 @@ const fs = require('fs-extra');
 const os = require('os');
 const { runScript, PACKAGE_ROOT } = require('../helpers');
 
-const doctorScript = path.join(PACKAGE_ROOT, 'scripts/bmad-doctor.js');
+const doctorScript = path.join(PACKAGE_ROOT, 'scripts/convoke-doctor.js');
 
 function runDoctor(cwd) {
   return runScript(doctorScript, [], { cwd });
 }
 
-describe('bmad-doctor: no project root', () => {
+describe('convoke-doctor: no project root', () => {
   let tmpDir;
 
   before(async () => {
@@ -29,7 +29,7 @@ describe('bmad-doctor: no project root', () => {
   });
 });
 
-describe('bmad-doctor: missing config', () => {
+describe('convoke-doctor: missing config', () => {
   let tmpDir;
 
   before(async () => {
@@ -50,7 +50,7 @@ describe('bmad-doctor: missing config', () => {
   });
 });
 
-describe('bmad-doctor: invalid config YAML', () => {
+describe('convoke-doctor: invalid config YAML', () => {
   let tmpDir;
 
   before(async () => {
@@ -75,7 +75,7 @@ describe('bmad-doctor: invalid config YAML', () => {
   });
 });
 
-describe('bmad-doctor: missing agent files', () => {
+describe('convoke-doctor: missing agent files', () => {
   let tmpDir;
 
   before(async () => {
@@ -102,7 +102,7 @@ describe('bmad-doctor: missing agent files', () => {
   });
 });
 
-describe('bmad-doctor: empty agent files', () => {
+describe('convoke-doctor: empty agent files', () => {
   let tmpDir;
 
   before(async () => {
@@ -134,7 +134,7 @@ describe('bmad-doctor: empty agent files', () => {
   });
 });
 
-describe('bmad-doctor: stale migration lock', () => {
+describe('convoke-doctor: stale migration lock', () => {
   let tmpDir;
 
   before(async () => {
@@ -167,7 +167,7 @@ describe('bmad-doctor: stale migration lock', () => {
   });
 });
 
-describe('bmad-doctor: version mismatch', () => {
+describe('convoke-doctor: version mismatch', () => {
   let tmpDir;
 
   before(async () => {
@@ -194,7 +194,7 @@ describe('bmad-doctor: version mismatch', () => {
   });
 });
 
-describe('bmad-doctor: corrupt migration lock', () => {
+describe('convoke-doctor: corrupt migration lock', () => {
   let tmpDir;
 
   before(async () => {

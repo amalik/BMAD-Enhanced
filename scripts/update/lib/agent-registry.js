@@ -2,7 +2,7 @@
  * Canonical agent and workflow registry.
  *
  * Single source of truth consumed by refresh-installation, validator,
- * bmad-doctor, installer, index.js, and migration-runner.
+ * convoke-doctor, installer, index.js, and migration-runner.
  *
  * To add a new agent:  push one entry to AGENTS + its workflows to WORKFLOWS.
  * Every consumer picks up the change automatically.

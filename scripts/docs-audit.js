@@ -402,6 +402,37 @@ function checkInternalNamingLeaks(content, filePath) {
   return findings;
 }
 
+/**
+ * Check for stale product brand references (bmad-enhanced / BMAD-Enhanced).
+ * These should have been replaced with "convoke" / "Convoke" during the rename.
+ *
+ * @param {string} content - File content
+ * @param {string} filePath - Relative file path (for reporting)
+ * @returns {Array<object>} findings
+ */
+function checkStaleBrandReferences(content, filePath) {
+  const findings = [];
+  const lines = content.split('\n');
+  const staleRe = /bmad-enhanced|BMAD-Enhanced|BMAD Enhanced/g;
+
+  for (let i = 0; i < lines.length; i++) {
+    const line = lines[i];
+    const lineNum = i + 1;
+
+    staleRe.lastIndex = 0;
+    let m;
+    while ((m = staleRe.exec(line)) !== null) {
+      findings.push({
+        file: filePath, line: lineNum,
+        category: 'stale-brand-reference',
+        current: m[0], expected: 'Convoke (product renamed)',
+      });
+    }
+  }
+
+  return findings;
+}
+
 // --- Report Functions (Task 6) ---
 
 /**
@@ -413,7 +444,7 @@ function formatReport(findings) {
   if (findings.length === 0) {
     return [
       '',
-      chalk.green.bold('BMAD-Enhanced Docs Audit'),
+      chalk.green.bold('Convoke Docs Audit'),
       chalk.gray(`Registry: ${AGENTS.length} agents, ${WORKFLOWS.length} workflows`),
       '',
       chalk.green.bold(`\u2713 Docs audit passed \u2014 zero findings.`),
@@ -436,7 +467,7 @@ function formatReport(findings) {
 
   const lines = [
     '',
-    chalk.cyan.bold('BMAD-Enhanced Docs Audit Report'),
+    chalk.cyan.bold('Convoke Docs Audit Report'),
     chalk.gray(`Registry: ${AGENTS.length} agents, ${WORKFLOWS.length} workflows`),
     '',
   ];
@@ -478,7 +509,7 @@ async function runAudit(opts = {}) {
   const projectRoot = opts.projectRoot || findProjectRoot();
 
   if (!projectRoot) {
-    throw new Error('Could not find BMAD project root (_bmad/ directory)');
+    throw new Error('Could not find Convoke project root (_bmad/ directory)');
   }
 
   const allFindings = [];
@@ -500,6 +531,7 @@ async function runAudit(opts = {}) {
     allFindings.push(...checkBrokenPaths(content, relPath, projectRoot));
     allFindings.push(...checkIncompleteAgentTables(content, relPath));
     allFindings.push(...checkInternalNamingLeaks(content, relPath));
+    allFindings.push(...checkStaleBrandReferences(content, relPath));
   }
 
   // Coverage check across all docs combined
@@ -542,6 +574,7 @@ module.exports = {
   checkDocsCoverage,
   checkIncompleteAgentTables,
   checkInternalNamingLeaks,
+  checkStaleBrandReferences,
   formatReport,
   runAudit,
 };

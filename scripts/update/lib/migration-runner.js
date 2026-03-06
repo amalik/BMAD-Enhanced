@@ -13,7 +13,7 @@ const registry = require('../migrations/registry');
 const { WORKFLOW_NAMES } = require('./agent-registry');
 
 /**
- * Migration Runner for BMAD-Enhanced
+ * Migration Runner for Convoke
  * Core orchestration: executes migration deltas, refreshes installation, handles backups and rollback.
  */
 
@@ -30,7 +30,7 @@ async function runMigrations(fromVersion, options = {}) {
   // Resolve project root
   const projectRoot = findProjectRoot();
   if (!projectRoot) {
-    throw new Error('Not in a BMAD project. Could not find _bmad/ directory.');
+    throw new Error('Not in a Convoke project. Could not find _bmad/ directory.');
   }
 
   console.log('');
@@ -222,7 +222,7 @@ async function previewMigrations(migrations) {
   console.log(chalk.gray('  - Update user guides (with .bak backup)'));
   console.log('');
   console.log(chalk.green('To apply these changes, run:'));
-  console.log(chalk.cyan('  npx bmad-update'));
+  console.log(chalk.cyan('  npx convoke-update'));
   console.log('');
 
   return { success: true, dryRun: true, previews };
@@ -305,7 +305,7 @@ async function createMigrationLog(projectRoot, fromVersion, toVersion, results, 
 
   const logFile = path.join(logsDir, `migration-${Date.now()}.log`);
   const logContent = [
-    `BMAD-Enhanced Migration Log`,
+    `Convoke Migration Log`,
     `Date: ${new Date().toISOString()}`,
     `From Version: ${fromVersion}`,
     `To Version: ${toVersion}`,
@@ -330,7 +330,7 @@ async function createErrorLog(projectRoot, fromVersion, toVersion, error, backup
 
   const logFile = path.join(logsDir, `migration-error-${Date.now()}.log`);
   const logContent = [
-    `BMAD-Enhanced Migration Error Log`,
+    `Convoke Migration Error Log`,
     `Date: ${new Date().toISOString()}`,
     `From Version: ${fromVersion}`,
     `To Version: ${toVersion}`,
@@ -343,7 +343,7 @@ async function createErrorLog(projectRoot, fromVersion, toVersion, error, backup
     backupMetadata ? `Backup: ${backupMetadata.backup_dir}` : 'No backup created',
     backupMetadata ? 'Status: ROLLED BACK' : 'Status: FAILED (no backup)',
     '',
-    'Please report this issue at: https://github.com/amalik/BMAD-Enhanced/issues'
+    'Please report this issue at: https://github.com/amalik/convoke/issues'
   ].join('\n');
 
   await fs.writeFile(logFile, logContent, 'utf8');

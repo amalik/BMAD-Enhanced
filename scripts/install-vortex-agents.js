@@ -16,15 +16,15 @@ const GREY = '\x1b[90m';
 
 function printBanner() {
   console.log('');
-  console.log(`${GREY} ██████╗ ███╗   ███╗ █████╗ ██████╗ ${RESET}`);
-  console.log(`${GREY} ██╔══██╗████╗ ████║██╔══██╗██╔══██╗${RESET}`);
-  console.log(`${GREY} ██████╔╝██╔████╔██║███████║██║  ██║${RESET}`);
-  console.log(`${GREY} ██╔══██╗██║╚██╔╝██║██╔══██║██║  ██║${RESET}`);
-  console.log(`${GREY} ██████╔╝██║ ╚═╝ ██║██║  ██║██████╔╝${RESET}`);
-  console.log(`${GREY} ╚═════╝ ╚═╝     ╚═╝╚═╝  ╚═╝╚═════╝ ${RESET}`);
-  console.log(`${GREY}       E N H A N C E D${RESET}`);
+  console.log(`${GREY}  ██████╗ ██████╗ ███╗   ██╗██╗   ██╗ ██████╗ ██╗  ██╗███████╗${RESET}`);
+  console.log(`${GREY} ██╔════╝██╔═══██╗████╗  ██║██║   ██║██╔═══██╗██║ ██╔╝██╔════╝${RESET}`);
+  console.log(`${GREY} ██║     ██║   ██║██╔██╗ ██║██║   ██║██║   ██║█████╔╝ █████╗  ${RESET}`);
+  console.log(`${GREY} ██║     ██║   ██║██║╚██╗██║╚██╗ ██╔╝██║   ██║██╔═██╗ ██╔══╝  ${RESET}`);
+  console.log(`${GREY} ╚██████╗╚██████╔╝██║ ╚████║ ╚████╔╝ ╚██████╔╝██║  ██╗███████╗${RESET}`);
+  console.log(`${GREY}  ╚═════╝ ╚═════╝ ╚═╝  ╚═══╝  ╚═══╝   ╚═════╝ ╚═╝  ╚═╝╚══════╝${RESET}`);
+  console.log(`${GREY}       Agent teams for complex systems${RESET}`);
   console.log('');
-  console.log(`${BOLD} BMAD Method enhanced by domain-specialized agents${RESET}`);
+  console.log(`${BOLD} Domain-specialized agent teams | compatible with BMAD Method${RESET}`);
   console.log('');
 }
 
@@ -46,7 +46,7 @@ function checkPrerequisites(projectRoot) {
   if (fs.existsSync(bmadConfigPath)) {
     console.log(`${GREEN}  ✓${RESET} BMAD Method configuration found`);
   } else {
-    console.log(`${YELLOW}  ⚠${RESET} BMAD Method not detected (BMAD-Enhanced will install standalone)`);
+    console.log(`${YELLOW}  ⚠${RESET} BMAD Method not detected (Convoke will install standalone)`);
   }
 
   console.log(`${GREEN}  ✓${RESET} Prerequisites met`);

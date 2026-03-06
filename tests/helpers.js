@@ -14,10 +14,10 @@ const PACKAGE_ROOT = path.join(__dirname, '..');
 
 /**
  * Create an isolated temp directory for a test suite.
- * @param {string} prefix - Short prefix (e.g. 'bmad-val-')
+ * @param {string} prefix - Short prefix (e.g. 'convoke-val-')
  * @returns {Promise<string>} Absolute path to temp dir
  */
-async function createTempDir(prefix = 'bmad-test-') {
+async function createTempDir(prefix = 'convoke-test-') {
   return fs.mkdtemp(path.join(os.tmpdir(), prefix));
 }
 

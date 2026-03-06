@@ -20,7 +20,7 @@ const RED = '\x1b[31m';
 
 async function main() {
   console.log('');
-  console.log(`${BOLD}BMAD-Enhanced installed!${RESET}`);
+  console.log(`${BOLD}Convoke installed!${RESET}`);
   console.log('');
 
   // If update system available, check for upgrades
@@ -40,14 +40,14 @@ async function main() {
       const agentNames = AGENTS.map(a => a.name).join(' + ');
       console.log('To install agents into your project, run:');
       console.log('');
-      console.log(`  ${CYAN}npx bmad-install-agents${RESET}  - Install all agents (${agentNames})`);
+      console.log(`  ${CYAN}npx convoke-install${RESET}  - Install all agents (${agentNames})`);
       console.log('');
       return;
     }
 
     // Already up to date
     if (currentVersion === targetVersion) {
-      console.log(`${GREEN}✓ BMAD-Enhanced is up to date! (v${currentVersion})${RESET}`);
+      console.log(`${GREEN}✓ Convoke is up to date! (v${currentVersion})${RESET}`);
       console.log('');
       return;
     }
@@ -73,10 +73,10 @@ async function main() {
       }
 
       console.log('To preview changes without applying:');
-      console.log(`  ${CYAN}npx bmad-update --dry-run${RESET}`);
+      console.log(`  ${CYAN}npx convoke-update --dry-run${RESET}`);
       console.log('');
       console.log('To apply the update:');
-      console.log(`  ${CYAN}npx bmad-update${RESET}`);
+      console.log(`  ${CYAN}npx convoke-update${RESET}`);
       console.log('');
       console.log(`${BOLD}Your data will be backed up automatically before any changes.${RESET}`);
       console.log('');
@@ -94,7 +94,7 @@ async function main() {
     const agentNames = AGENTS.map(a => a.name).join(' + ');
     console.log('To install agents into your project, run:');
     console.log('');
-    console.log(`  ${CYAN}npx bmad-install-agents${RESET}  - Install all agents (${agentNames})`);
+    console.log(`  ${CYAN}npx convoke-install${RESET}  - Install all agents (${agentNames})`);
     console.log('');
   }
 }

@@ -7,7 +7,7 @@ const configMerger = require('./config-merger');
 const { AGENTS, AGENT_FILES, AGENT_IDS, WORKFLOW_NAMES, USER_GUIDES } = require('./agent-registry');
 
 /**
- * Refresh Installation for BMAD-Enhanced
+ * Refresh Installation for Convoke
  *
  * Copies latest agent files, workflows, config, and user guides from the
  * package to the project. Called ONCE after all migration deltas have run,

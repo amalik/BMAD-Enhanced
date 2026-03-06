@@ -8,7 +8,7 @@ const { countUserDataFiles } = require('./utils');
 const { AGENT_FILES, AGENT_IDS, WORKFLOW_NAMES, WAVE3_WORKFLOW_NAMES } = require('./agent-registry');
 
 /**
- * Validator for BMAD-Enhanced
+ * Validator for Convoke
  * Verifies installation integrity post-migration
  */
 
@@ -199,7 +199,7 @@ async function validateManifest(projectRoot) {
 
     const manifestContent = fs.readFileSync(manifestPath, 'utf8');
 
-    // Check for all BMAD-Enhanced agents
+    // Check for all Convoke agents
     const missingFromManifest = AGENT_IDS.filter(id => !manifestContent.includes(id));
 
     if (missingFromManifest.length > 0) {

@@ -8,7 +8,7 @@ const registry = require('./migrations/registry');
 const { findProjectRoot } = require('./lib/utils');
 
 /**
- * BMAD-Enhanced Update CLI
+ * Convoke Update CLI
  * Main update command for users
  */
 
@@ -75,7 +75,7 @@ async function main() {
   // Header
   console.log('');
   console.log(chalk.bold.magenta('╔════════════════════════════════════════╗'));
-  console.log(chalk.bold.magenta('║   BMAD-Enhanced Update Manager         ║'));
+  console.log(chalk.bold.magenta('║   Convoke Update Manager               ║'));
   console.log(chalk.bold.magenta('╚════════════════════════════════════════╝'));
   console.log('');
 
@@ -84,9 +84,9 @@ async function main() {
 
   switch (assessment.action) {
     case 'no-project':
-      console.log(chalk.red('Not in a BMAD project. Could not find _bmad/ directory.'));
+      console.log(chalk.red('Not in a Convoke project. Could not find _bmad/ directory.'));
       console.log('');
-      console.log('Run: ' + chalk.cyan('npx bmad-install-agents'));
+      console.log('Run: ' + chalk.cyan('npx convoke-install'));
       console.log('');
       process.exit(1);
       break;
@@ -94,7 +94,7 @@ async function main() {
     case 'fresh':
       console.log(chalk.yellow('No previous installation detected.'));
       console.log('');
-      console.log('Run: ' + chalk.cyan('npx bmad-install-agents'));
+      console.log('Run: ' + chalk.cyan('npx convoke-install'));
       console.log('');
       process.exit(0);
       break;
@@ -102,7 +102,7 @@ async function main() {
     case 'broken':
       console.log(chalk.red('Installation appears incomplete or corrupted.'));
       console.log('');
-      console.log('Recommend running: ' + chalk.cyan('npx bmad-install-agents'));
+      console.log('Recommend running: ' + chalk.cyan('npx convoke-install'));
       console.log('');
       process.exit(1);
       break;
@@ -110,7 +110,7 @@ async function main() {
     case 'no-version':
       console.log(chalk.yellow('Could not detect current version.'));
       console.log('');
-      console.log('Run: ' + chalk.cyan('npx bmad-install-agents'));
+      console.log('Run: ' + chalk.cyan('npx convoke-install'));
       console.log('');
       process.exit(0);
       break;
@@ -119,7 +119,7 @@ async function main() {
       console.log(chalk.green(`✓ Already up to date! (v${assessment.currentVersion})`));
       console.log('');
       console.log(chalk.gray('If you expected a newer version, npx may be serving a cached copy.'));
-      console.log(chalk.gray('Run: ') + chalk.cyan('npx -p bmad-enhanced@latest bmad-update'));
+      console.log(chalk.gray('Run: ') + chalk.cyan('npx -p convoke@latest convoke-update'));
       console.log('');
       process.exit(0);
       break;
@@ -131,10 +131,10 @@ async function main() {
       console.log(`  Package version: ${assessment.targetVersion}`);
       console.log('');
       console.log(chalk.gray('This usually means npx is serving a cached older package.'));
-      console.log(chalk.gray('Run: ') + chalk.cyan('npx -p bmad-enhanced@latest bmad-update'));
+      console.log(chalk.gray('Run: ') + chalk.cyan('npx -p convoke@latest convoke-update'));
       console.log('');
       console.log(chalk.gray('If the issue persists, clear the cache and reinstall:'));
-      console.log(chalk.cyan('  npm cache clean --force && npm install bmad-enhanced@latest'));
+      console.log(chalk.cyan('  npm cache clean --force && npm install convoke@latest'));
       console.log('');
       console.log(chalk.yellow('If you intentionally want to downgrade:'));
       console.log('  1. Backup your installation');

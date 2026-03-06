@@ -28,40 +28,40 @@ describe('index.js entry point', () => {
 
   it('shows available commands', async () => {
     const { stdout } = await run(path.join(projectRoot, 'index.js'));
-    assert.ok(stdout.includes('bmad-install-vortex-agents'), 'should list primary install command');
-    assert.ok(stdout.includes('bmad-update'), 'should list update command');
-    assert.ok(stdout.includes('bmad-doctor'), 'should list doctor command');
+    assert.ok(stdout.includes('convoke-install-vortex'), 'should list primary install command');
+    assert.ok(stdout.includes('convoke-update'), 'should list update command');
+    assert.ok(stdout.includes('convoke-doctor'), 'should list doctor command');
   });
 });
 
-describe('bmad-doctor CLI', () => {
+describe('convoke-doctor CLI', () => {
   it('runs and produces check results', async () => {
-    const { stdout } = await run(path.join(projectRoot, 'scripts/bmad-doctor.js'));
-    assert.ok(stdout.includes('BMAD-Enhanced Doctor'), 'should show doctor header');
+    const { stdout } = await run(path.join(projectRoot, 'scripts/convoke-doctor.js'));
+    assert.ok(stdout.includes('Convoke Doctor'), 'should show doctor header');
     assert.ok(stdout.includes('Project root'), 'should check project root');
     assert.ok(stdout.includes('Config file'), 'should check config');
     assert.ok(stdout.includes('Agent files'), 'should check agents');
   });
 });
 
-describe('bmad-version CLI', () => {
+describe('convoke-version CLI', () => {
   it('runs without error from project root', async () => {
-    const { exitCode, stdout } = await run(path.join(projectRoot, 'scripts/update/bmad-version.js'));
+    const { exitCode, stdout } = await run(path.join(projectRoot, 'scripts/update/convoke-version.js'));
     assert.equal(exitCode, 0);
-    assert.ok(stdout.includes('BMAD-Enhanced'), 'should show project name');
+    assert.ok(stdout.includes('Convoke'), 'should show project name');
   });
 
   it('shows installed and package versions', async () => {
-    const { stdout } = await run(path.join(projectRoot, 'scripts/update/bmad-version.js'));
+    const { stdout } = await run(path.join(projectRoot, 'scripts/update/convoke-version.js'));
     const pkg = require('../../package.json');
     assert.ok(stdout.includes(pkg.version), 'should show package version');
   });
 });
 
-describe('bmad-update CLI (dry-run)', () => {
+describe('convoke-update CLI (dry-run)', () => {
   it('runs with --dry-run without error', async () => {
     const { exitCode, stdout } = await run(
-      path.join(projectRoot, 'scripts/update/bmad-update.js'),
+      path.join(projectRoot, 'scripts/update/convoke-update.js'),
       ['--dry-run']
     );
     assert.equal(exitCode, 0);
@@ -73,10 +73,10 @@ describe('bmad-update CLI (dry-run)', () => {
   });
 });
 
-describe('bmad-version smoke test', () => {
+describe('convoke-version smoke test', () => {
   it('does not crash when run from project root', async () => {
     const { exitCode } = await run(
-      path.join(projectRoot, 'scripts/update/bmad-version.js'),
+      path.join(projectRoot, 'scripts/update/convoke-version.js'),
       [],
     );
     assert.equal(exitCode, 0);
