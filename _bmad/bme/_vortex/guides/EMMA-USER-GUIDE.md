@@ -2,7 +2,7 @@
 
 **Agent:** Emma (contextualization-expert)
 **Version:** 1.6.4
-**Module:** BMAD Enhanced (bme) - Vortex Pattern
+**Module:** Convoke (bme) - Vortex Pattern
 **Last Updated:** 2026-03-02
 
 ---
@@ -184,7 +184,7 @@ Select **[CH] Chat** to discuss:
 
 **How to fix:**
 1. Check if `_bmad/bme/_vortex/config.yaml` exists
-2. If missing: `npx bmad-install-vortex-agents`
+2. If missing: `npx convoke-install-vortex`
 
 ### Error: "Unknown skill: bmad-agent-bme-contextualization-expert"
 
@@ -222,7 +222,7 @@ Unclear product strategy wastes everyone's time. Be specific about problem space
 ## Credits
 
 **Agent:** Emma (contextualization-expert)
-**Module:** BMAD Enhanced (bme)
+**Module:** Convoke (bme)
 **Submodule:** Vortex Pattern (`_vortex`)
 **Stream:** Contextualize (Stream 1)
 **Version:** 1.6.4
