@@ -1,6 +1,6 @@
 # Development Guide
 
-Architecture overview, agent development patterns, and contribution guidelines for BMAD-Enhanced.
+Architecture overview, agent development patterns, and contribution guidelines for Convoke.
 
 ---
 
@@ -84,7 +84,7 @@ See: [Emma Reference Implementation](../_bmad-output/EMMA-REFERENCE-IMPLEMENTATI
 ## Project Structure
 
 ```
-BMAD-Enhanced/
+Convoke/
 ├── _bmad/bme/_vortex/
 │   ├── agents/              # Agent definition files (7)
 │   ├── workflows/           # 22 workflows, each with steps/ + template
@@ -101,7 +101,7 @@ BMAD-Enhanced/
 │   ├── unit/                # 208 unit tests
 │   └── integration/         # 60 integration tests
 ├── docs/                    # Documentation (you're here)
-├── package.json             # v1.6.0
+├── package.json             # v2.0.0
 ├── CHANGELOG.md             # Version history
 └── UPDATE-GUIDE.md          # Migration documentation
 ```
