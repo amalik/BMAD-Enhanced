@@ -1,6 +1,6 @@
 # Story 3.2: Update Miscellaneous Top-Level Files
 
-Status: review
+Status: done
 
 ## Story
 
