@@ -1,5 +1,5 @@
 name: "Agent/Workflow Feedback"
-description: "Share feedback about a BMAD-Enhanced agent or workflow — report a quality issue, suggest a missing capability, or leave a general comment."
+description: "Share feedback about a Convoke agent or workflow — report a quality issue, suggest a missing capability, or leave a general comment."
 title: "[Feedback] "
 labels: ["feedback"]
 body:
