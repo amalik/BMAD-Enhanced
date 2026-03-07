@@ -28,7 +28,7 @@ git push
 - `0aacaab` - Update Wade status to complete in README
 
 After pushing, verify at:
-https://github.com/amalik/BMAD-Enhanced/commits/main
+https://github.com/amalik/convoke/commits/main
 
 ---
 
@@ -44,7 +44,7 @@ https://github.com/amalik/BMAD-Enhanced/commits/main
 **Or manually:**
 ```bash
 gh release create v1.0.3-alpha \
-  --title "BMAD-Enhanced v1.0.3-alpha - User-Friendly npx Installation" \
+  --title "Convoke v1.0.3-alpha - User-Friendly npx Installation" \
   --notes-file RELEASE-NOTES-v1.0.3-alpha.md \
   --prerelease \
   --target main
@@ -52,12 +52,12 @@ gh release create v1.0.3-alpha \
 
 ### Option B: Using GitHub Web Interface
 
-1. Go to: https://github.com/amalik/BMAD-Enhanced/releases/new
+1. Go to: https://github.com/amalik/convoke/releases/new
 
 2. Fill in the form:
    - **Tag:** `v1.0.3-alpha`
    - **Target:** `main`
-   - **Release title:** `BMAD-Enhanced v1.0.3-alpha - User-Friendly npx Installation`
+   - **Release title:** `Convoke v1.0.3-alpha - User-Friendly npx Installation`
    - **Description:** Copy contents from `RELEASE-NOTES-v1.0.3-alpha.md`
    - **Pre-release:** ✅ Check this box
 
@@ -77,9 +77,9 @@ The release notes include:
 - 📦 Both agents complete and published
 
 ### Key Features
-- `npx bmad-install-agents` - Install all agents
-- `npx bmad-install-emma` - Install Emma only
-- `npx bmad-install-wade` - Install Wade only
+- `npx convoke-install` - Install all agents
+- `npx convoke-install-emma` - Install Emma only
+- `npx convoke-install-wade` - Install Wade only
 
 ### Full Release Notes
 See: [RELEASE-NOTES-v1.0.3-alpha.md](RELEASE-NOTES-v1.0.3-alpha.md)
@@ -91,11 +91,11 @@ See: [RELEASE-NOTES-v1.0.3-alpha.md](RELEASE-NOTES-v1.0.3-alpha.md)
 After creating the release:
 
 1. **Check release page:**
-   https://github.com/amalik/BMAD-Enhanced/releases/tag/v1.0.3-alpha
+   https://github.com/amalik/convoke/releases/tag/v1.0.3-alpha
 
 2. **Verify npm package:**
    ```bash
-   npm view bmad-enhanced@alpha
+   npm view convoke@alpha
    # Should show: 1.0.3-alpha
    ```
 
@@ -104,8 +104,8 @@ After creating the release:
    mkdir -p /tmp/test-release
    cd /tmp/test-release
    mkdir -p _bmad/_config && echo "test: true" > _bmad/_config/bmad.yaml
-   npm install bmad-enhanced@alpha
-   npx bmad-install-agents
+   npm install convoke@alpha
+   npx convoke-install
    ```
 
 ---
@@ -115,20 +115,20 @@ After creating the release:
 ### Social Media Post Template
 
 ```
-🎉 BMAD-Enhanced v1.0.3-alpha released!
+🎉 Convoke v1.0.3-alpha released!
 
 ✨ What's new:
 - User-friendly npx installation
 - No more npm run confusion!
-- Just: npm install bmad-enhanced@alpha && npx bmad-install-agents
+- Just: npm install convoke@alpha && npx convoke-install
 
 🎨 Includes:
 - Emma (empathy-mapper)
 - Wade (wireframe-designer)
 
-📦 Install: https://www.npmjs.com/package/bmad-enhanced
-📖 Docs: https://github.com/amalik/BMAD-Enhanced
-🔖 Release: https://github.com/amalik/BMAD-Enhanced/releases/tag/v1.0.3-alpha
+📦 Install: https://www.npmjs.com/package/convoke
+📖 Docs: https://github.com/amalik/convoke
+🔖 Release: https://github.com/amalik/convoke/releases/tag/v1.0.3-alpha
 
 #BMAD #AI #Agents #DesignThinking #UX
 ```
@@ -136,9 +136,9 @@ After creating the release:
 ### GitHub Discussion Post Template
 
 ```markdown
-# BMAD-Enhanced v1.0.3-alpha Released! 🎉
+# Convoke v1.0.3-alpha Released! 🎉
 
-We're excited to announce the release of BMAD-Enhanced v1.0.3-alpha!
+We're excited to announce the release of Convoke v1.0.3-alpha!
 
 ## What's New
 
@@ -146,8 +146,8 @@ The biggest improvement is **user-friendly installation**. No more confusion abo
 
 **New Installation:**
 \`\`\`bash
-npm install bmad-enhanced@alpha
-npx bmad-install-agents  # This works now!
+npm install convoke@alpha
+npx convoke-install  # This works now!
 \`\`\`
 
 ## What's Included
@@ -159,9 +159,9 @@ npx bmad-install-agents  # This works now!
 
 ## Links
 
-- 📦 npm: https://www.npmjs.com/package/bmad-enhanced
-- 🔖 Release Notes: https://github.com/amalik/BMAD-Enhanced/releases/tag/v1.0.3-alpha
-- 📖 Documentation: https://github.com/amalik/BMAD-Enhanced
+- 📦 npm: https://www.npmjs.com/package/convoke
+- 🔖 Release Notes: https://github.com/amalik/convoke/releases/tag/v1.0.3-alpha
+- 📖 Documentation: https://github.com/amalik/convoke
 
 ## Feedback
 
@@ -189,7 +189,7 @@ git remote -v
 
 # If using HTTPS, you may need to authenticate
 # Consider switching to SSH:
-git remote set-url origin git@github.com:amalik/BMAD-Enhanced.git
+git remote set-url origin git@github.com:amalik/Convoke.git
 ```
 
 ### Issue: Release already exists
@@ -220,14 +220,14 @@ git push
 
 # Or manually
 gh release create v1.0.3-alpha \
-  --title "BMAD-Enhanced v1.0.3-alpha - User-Friendly npx Installation" \
+  --title "Convoke v1.0.3-alpha - User-Friendly npx Installation" \
   --notes-file RELEASE-NOTES-v1.0.3-alpha.md \
   --prerelease \
   --target main
 
 # Verify
 gh release view v1.0.3-alpha
-npm view bmad-enhanced@alpha
+npm view convoke@alpha
 ```
 
 ---
