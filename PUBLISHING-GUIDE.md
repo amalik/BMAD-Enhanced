@@ -1,4 +1,4 @@
-# BMAD-Enhanced Publishing Guide
+# Convoke Publishing Guide
 
 **Date:** 2026-02-15
 **Version:** 1.0.0-alpha
@@ -62,7 +62,7 @@ Wade (wireframe-designer):
 - [x] `scripts/install-all-agents.js` ✅
 - [x] `scripts/postinstall.js` ✅
 - [x] All scripts executable ✅
-- [x] All scripts have BMAD Method prerequisite check ✅
+- [x] All scripts have BMAD Method prerequisite check (optional detection) ✅
 
 #### 1.5 Test Results Check ✅
 
@@ -78,27 +78,27 @@ Wade (wireframe-designer):
 #### 2.1 Create Test Package
 
 ```bash
-# From BMAD-Enhanced directory
+# From Convoke directory
 npm pack
 ```
 
 **Expected output:**
 ```
 npm notice
-npm notice 📦  bmad-enhanced@1.0.0-alpha
+npm notice 📦  convoke@1.0.0-alpha
 npm notice === Tarball Contents ===
 npm notice 38.6kB package.json
 npm notice 45.2kB _bmad/bme/_designos/agents/empathy-mapper.md
 npm notice ...
 npm notice === Tarball Details ===
-npm notice name:          bmad-enhanced
+npm notice name:          convoke
 npm notice version:       1.0.0-alpha
-npm notice filename:      bmad-enhanced-1.0.0-alpha.tgz
+npm notice filename:      convoke-1.0.0-alpha.tgz
 npm notice package size:  XX.X kB
 npm notice unpacked size: XXX kB
 npm notice total files:   XX
 npm notice
-bmad-enhanced-1.0.0-alpha.tgz
+convoke-1.0.0-alpha.tgz
 ```
 
 #### 2.2 Test Installation Locally
@@ -113,17 +113,17 @@ mkdir -p _bmad/_config
 echo "test: true" > _bmad/_config/bmad.yaml
 
 # Install from local package
-npm install /Users/amalikamriou/BMAD-Enhanced/bmad-enhanced-1.0.0-alpha.tgz
+npm install /Users/amalikamriou/convoke/convoke-1.0.0-alpha.tgz
 
 # Test installation
-npx bmad-install-agents
+npx convoke-install
 ```
 
 **Expected output:**
 ```
 ╔════════════════════════════════════════════════════╗
 ║                                                    ║
-║        BMAD-Enhanced Complete Installer 🚀        ║
+║        Convoke Complete Installer 🚀        ║
 ║                                                    ║
 ║     Installing Emma + Wade Design Agents          ║
 ║                                                    ║
@@ -175,9 +175,9 @@ cat _bmad/bme/_designos/agents/wireframe-designer.md
 #### 2.4 Cleanup Test
 
 ```bash
-cd /Users/amalikamriou/BMAD-Enhanced
+cd /Users/amalikamriou/convoke
 rm -rf /tmp/bmad-test
-rm bmad-enhanced-1.0.0-alpha.tgz
+rm convoke-1.0.0-alpha.tgz
 ```
 
 ---
@@ -186,7 +186,7 @@ rm bmad-enhanced-1.0.0-alpha.tgz
 
 #### 3.1 Verify Repository URL
 
-Current: `https://github.com/bmadhub/bmad-enhanced.git`
+Current: `https://github.com/amalik/convoke.git`
 
 Verify this repository exists and is accessible.
 
@@ -195,7 +195,7 @@ Verify this repository exists and is accessible.
 If repository doesn't exist yet:
 
 1. Go to https://github.com/new
-2. Repository name: `bmad-enhanced`
+2. Repository name: `convoke`
 3. Description: "Domain-Specialized Agents for BMAD Method"
 4. Public repository
 5. Don't initialize with README (already have one)
@@ -204,19 +204,19 @@ If repository doesn't exist yet:
 #### 3.3 Push Code to GitHub
 
 ```bash
-cd /Users/amalikamriou/BMAD-Enhanced
+cd /Users/amalikamriou/convoke
 
 # Initialize git (if not already)
 git init
 
 # Add remote (if not already)
-git remote add origin https://github.com/bmadhub/bmad-enhanced.git
+git remote add origin https://github.com/amalik/convoke.git
 
 # Add all files
 git add .
 
 # Create initial commit
-git commit -m "Initial release: BMAD-Enhanced v1.0.0-alpha
+git commit -m "Initial release: Convoke v1.0.0-alpha
 
 Features:
 - Emma (empathy-mapper) - Empathy Mapping Specialist
@@ -235,15 +235,15 @@ git push -u origin main
 
 #### 3.4 Create GitHub Release
 
-1. Go to: `https://github.com/bmadhub/bmad-enhanced/releases/new`
+1. Go to: `https://github.com/amalik/convoke/releases/new`
 2. Tag version: `v1.0.0-alpha`
-3. Release title: `BMAD-Enhanced v1.0.0-alpha - Initial Release`
+3. Release title: `Convoke v1.0.0-alpha - Initial Release`
 4. Description:
 
 ```markdown
-# BMAD-Enhanced v1.0.0-alpha
+# Convoke v1.0.0-alpha
 
-**First public release of BMAD-Enhanced!** 🎉
+**First public release of Convoke!** 🎉
 
 Domain-specialized agents for BMAD Method - expert agents for design, quality, and standards workflows.
 
@@ -254,7 +254,7 @@ Domain-specialized agents for BMAD Method - expert agents for design, quality, a
 - **Wade (wireframe-designer)** - Wireframe Design Expert
 
 ### Features
-- ✅ One-command installation (`npm install bmad-enhanced@alpha && npx bmad-install-agents`)
+- ✅ One-command installation (`npm install convoke@alpha && npx convoke-install`)
 - ✅ BMAD Method prerequisite checking
 - ✅ 100% test pass rate (36 total tests across both agents)
 - ✅ Comprehensive user guides (16KB each)
@@ -267,10 +267,10 @@ Domain-specialized agents for BMAD Method - expert agents for design, quality, a
 npx bmad-method@alpha install
 ```
 
-**Install BMAD-Enhanced:**
+**Install Convoke:**
 ```bash
-npm install bmad-enhanced@alpha
-npx bmad-install-agents
+npm install convoke@alpha
+npx convoke-install
 ```
 
 ## 📚 Documentation
@@ -298,8 +298,8 @@ Upcoming agents:
 
 ---
 
-**npm package:** https://www.npmjs.com/package/bmad-enhanced
-**GitHub:** https://github.com/bmadhub/bmad-enhanced
+**npm package:** https://www.npmjs.com/package/convoke
+**GitHub:** https://github.com/amalik/convoke
 ```
 
 5. Publish release
@@ -340,7 +340,7 @@ npm publish --access public --tag alpha
 
 Users install with:
 ```bash
-npm install bmad-enhanced@alpha
+npm install convoke@alpha
 ```
 
 **Option B: Publish as latest**
@@ -351,14 +351,14 @@ npm publish --access public
 
 Users install with:
 ```bash
-npm install bmad-enhanced
+npm install convoke
 ```
 
 **Recommendation:** Use `--tag alpha` for first release, then promote to latest after community feedback.
 
 #### 4.4 Verify npm Publication
 
-1. Go to: `https://www.npmjs.com/package/bmad-enhanced`
+1. Go to: `https://www.npmjs.com/package/convoke`
 2. Verify package shows up
 3. Check version is correct (1.0.0-alpha)
 4. Verify README displays correctly
@@ -375,10 +375,10 @@ mkdir -p _bmad/_config
 echo "test: true" > _bmad/_config/bmad.yaml
 
 # Install from npm
-npm install bmad-enhanced@alpha
+npm install convoke@alpha
 
 # Test
-npx bmad-install-agents
+npx convoke-install
 ```
 
 ---
@@ -390,8 +390,8 @@ npx bmad-install-agents
 Add npm version badge to README:
 
 ```markdown
-[![npm version](https://badge.fury.io/js/bmad-enhanced.svg)](https://www.npmjs.com/package/bmad-enhanced)
-[![Downloads](https://img.shields.io/npm/dm/bmad-enhanced.svg)](https://www.npmjs.com/package/bmad-enhanced)
+[![npm version](https://badge.fury.io/js/convoke.svg)](https://www.npmjs.com/package/convoke)
+[![Downloads](https://img.shields.io/npm/dm/convoke.svg)](https://www.npmjs.com/package/convoke)
 ```
 
 #### 5.2 Announce Release
@@ -405,17 +405,17 @@ Add npm version badge to README:
 **Sample announcement:**
 
 ```
-🎉 Introducing BMAD-Enhanced v1.0.0-alpha!
+🎉 Introducing Convoke v1.0.0-alpha!
 
 Domain-specialized agents for BMAD Method:
 - Emma: Empathy Mapping Specialist
 - Wade: Wireframe Design Expert
 
 Install:
-npm install bmad-enhanced@alpha && npx bmad-install-agents
+npm install convoke@alpha && npx convoke-install
 
-Docs: https://github.com/bmadhub/bmad-enhanced
-npm: https://www.npmjs.com/package/bmad-enhanced
+Docs: https://github.com/amalik/convoke
+npm: https://www.npmjs.com/package/convoke
 ```
 
 #### 5.3 Create CHANGELOG.md
@@ -470,7 +470,7 @@ npm version 1.0.0
 npm publish --access public
 
 # Update alpha tag to point to latest
-npm dist-tag add bmad-enhanced@1.0.0 latest
+npm dist-tag add convoke@1.0.0 latest
 ```
 
 ---
@@ -488,8 +488,8 @@ npm login   # Login again
 
 ### "Package name already exists"
 
-**Solution:** Package name `bmad-enhanced` is taken. Options:
-- Use scoped package: `@yourusername/bmad-enhanced`
+**Solution:** Package name `convoke` is taken. Options:
+- Use scoped package: `@yourusername/convoke`
 - Choose different name
 
 ### "402 Payment Required"
@@ -518,8 +518,8 @@ After publishing, track:
 - **Pull requests** - Community contributions
 
 **Access stats:**
-- npm: `https://www.npmjs.com/package/bmad-enhanced`
-- GitHub Insights: `https://github.com/bmadhub/bmad-enhanced/pulse`
+- npm: `https://www.npmjs.com/package/convoke`
+- GitHub Insights: `https://github.com/amalik/convoke/pulse`
 
 ---
 
@@ -538,4 +538,4 @@ After publishing, track:
 
 ---
 
-**Ready to publish?** Follow the steps above and BMAD-Enhanced will be live! 🚀
+**Ready to publish?** Follow the steps above and Convoke will be live! 🚀
