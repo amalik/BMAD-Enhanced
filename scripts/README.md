@@ -1,6 +1,6 @@
-# BMAD-Enhanced Installation Scripts
+# Convoke Installation Scripts
 
-This directory contains npm-based installation scripts for BMAD-Enhanced agents.
+This directory contains npm-based installation scripts for Convoke agents.
 
 ## Available Scripts
 
@@ -64,7 +64,7 @@ Runs automatically after `npm install` to display installation instructions.
 ## Installation Flow
 
 ```
-npm install bmad-enhanced@alpha
+npm install convoke
        ↓
 postinstall.js runs
        ↓
