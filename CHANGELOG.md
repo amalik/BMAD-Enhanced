@@ -1,9 +1,27 @@
 # Changelog
 
-All notable changes to BMAD-Enhanced will be documented in this file.
+All notable changes to Convoke will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
+
+---
+
+## [2.0.0] - 2026-03-07
+
+### Changed
+
+- **Product renamed to Convoke.** Package name is now `convoke` on npm (`npm install convoke`).
+- **All CLI commands renamed** from `bmad-*` to `convoke-*`:
+  - `convoke-install-vortex` (was `bmad-install-vortex-agents`)
+  - `convoke-install` (was `bmad-install-agents`)
+  - `convoke-update` (was `bmad-update`)
+  - `convoke-version` (was `bmad-version`)
+  - `convoke-doctor` (was `bmad-doctor`)
+  - `convoke-migrate` (was `bmad-migrate`)
+- **Migration path from v1.7.x** — Run `npm install convoke && npx convoke-update` to migrate
+- **`_bmad/` directory preserved** — All agent files, workflows, and user data remain in `_bmad/` for BMAD Method compatibility
+- **Repository URL** updated to `github.com/amalik/convoke`
 
 ---
 
@@ -11,7 +29,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
-- **`bmad-update` failed to upgrade from 1.6.x to 1.7.0** — Missing `1.6.x-to-1.7.0` migration in registry caused "No migrations needed (versions compatible)" instead of running the upgrade. Added migration entry and no-op delta file.
+- **`convoke-update` failed to upgrade from 1.6.x to 1.7.0** — Missing `1.6.x-to-1.7.0` migration in registry caused "No migrations needed (versions compatible)" instead of running the upgrade. Added migration entry and no-op delta file.
 
 ---
 
@@ -34,8 +52,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **"Your First 15 Minutes" walkthrough** in README — 6-step guided onboarding from config to first artifact
 - **Activation model explanation** in README — explains what agent files are and how Claude adopts personas
 - **Config personalization step** in README Quick Start and installer output
-- **`bmad-update` test suite** — 615+ lines covering upgrade flows, config merging, version detection
-- **`bmad-version` test suite** — 377 lines covering version display, migration history, update detection
+- **`convoke-update` test suite** — 615+ lines covering upgrade flows, config merging, version detection
+- **`convoke-version` test suite** — 377 lines covering version display, migration history, update detection
 - **`docs-audit` test suite** — 539 lines covering all 5 check functions
 - **7-agent journey example** — Complete busy-parents walkthrough demonstrating all 7 agents and handoff contracts
 - **Structured feedback mechanism** — GitHub issue template for agent/workflow feedback
@@ -112,7 +130,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 
 - **Registry-driven postinstall** — `postinstall.js` now imports from `agent-registry.js` instead of hardcoding agent names; agent list stays current automatically
-- **Removed deprecated installer wrappers** — Deleted `install-emma.js` and `install-wade.js`; removed `bmad-install-emma` / `bmad-install-wade` bin entries and `install:emma` / `install:wade` scripts
+- **Removed deprecated installer wrappers** — Deleted `install-emma.js` and `install-wade.js`; removed `convoke-install-emma` / `convoke-install-wade` bin entries and `install:emma` / `install:wade` scripts
 - **Manifest persona data moved to registry** — `createAgentManifest()` now reads role, identity, communication_style, and expertise from `agent-registry.js` instead of hardcoded CSV strings
 - **Formalized config schema** — `validateConfig()` rewritten to iterate a declarative `CONFIG_SCHEMA`; added type checks for `submodule_name`, `module`, `output_folder`, `communication_language`, `party_mode_enabled`, and array-item types for `agents`/`workflows`
 
@@ -131,7 +149,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `validator.js` coverage: 96% (was 21%)
 - `migration-runner.js` coverage: 81% (was 28%)
 - Installer E2E test (CLI as child process)
-- `bmad-doctor` negative-path tests (8 scenarios)
+- `convoke-doctor` negative-path tests (8 scenarios)
 
 ### Fixed
 
@@ -154,7 +172,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - **Isla** (discovery-empathy-expert) - Discovery & Empathy Expert for the Empathize stream
 - **Max** (learning-decision-expert) - Learning & Decision Expert for the Systematize stream
-- New primary installer: `bmad-install-vortex-agents`
+- New primary installer: `convoke-install-vortex`
 - Workflows for Isla: `empathy-map`, `user-interview`, `user-discovery`
 - Workflows for Max: `learning-card`, `pivot-patch-persevere`, `vortex-navigation`
 - `ISLA-USER-GUIDE.md` and `MAX-USER-GUIDE.md` in vortex-artifacts
@@ -162,10 +180,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
-- `bmad-install-agents` now delegates to `install-vortex-agents.js` (umbrella wrapper)
-- `bmad-install-emma` and `bmad-install-wade` are now deprecation wrappers
+- `convoke-install` now delegates to `install-vortex-agents.js` (umbrella wrapper)
+- `convoke-install-emma` and `convoke-install-wade` are now deprecation wrappers
 - Package description updated to include Empathize and Systematize streams
-- `bmad-doctor` now checks for all 4 agents and 13 workflows
+- `convoke-doctor` now checks for all 4 agents and 13 workflows
 
 ### Fixed
 
@@ -180,7 +198,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - CI pipeline with GitHub Actions (lint + test on Node 18/20/22)
 - ESLint configuration and full lint pass
-- `bmad-doctor` diagnostic CLI with 7 installation checks
+- `convoke-doctor` diagnostic CLI with 7 installation checks
 - 112 tests (82 unit + 30 integration)
 - `.c8rc.json` for coverage configuration
 
@@ -195,7 +213,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 
 - **Architecture refactor** — Centralized agent/workflow data into `agent-registry.js`
-  - Single source of truth consumed by validator, refresh-installation, bmad-doctor, migration-runner, and index.js
+  - Single source of truth consumed by validator, refresh-installation, convoke-doctor, migration-runner, and index.js
   - To add a new agent: push one entry to `AGENTS` + its workflows to `WORKFLOWS`; all consumers pick up the change automatically
 - **`refresh-installation.js`** — Shared refresh logic extracted; copies agents, workflows, config, and user guides from package to project
 - **`migration-runner.js`** — Rewritten as 8-step orchestration (deltas → refresh → validate) with lock file, backup, and rollback
@@ -220,7 +238,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Better error handling with try-catch blocks
 
 **📊 Improved Version Check Messaging:**
-- `bmad-version` now distinguishes between "fresh", "partial", and "corrupted" installations
+- `convoke-version` now distinguishes between "fresh", "partial", and "corrupted" installations
 - "Partial installation" message when config.yaml is missing but other files exist
 - "Corrupted installation" message when required agent files are missing
 - Each scenario now provides specific next steps for resolution
@@ -239,7 +257,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 
 **🚨 CRITICAL Install Script Bug:**
-- Fixed `bmad-install-agents` only copying deprecated workflows, not the 7 new workflows
+- Fixed `convoke-install` only copying deprecated workflows, not the 7 new workflows
 - Fixed hardcoded version 1.2.0 (now correctly uses 1.3.5)
 - Install script now copies all 7 Vortex workflows: lean-persona, product-vision, contextualize-scope, mvp, lean-experiment, proof-of-concept, proof-of-value
 - **This was causing "folders are still a mess" issue - workflows were listed in config but never installed**
@@ -303,9 +321,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - All necessary agent and workflow files
 
 **⚠️ Action Required:**
-- If you installed v1.3.0 or v1.3.1: `npm install bmad-enhanced@1.3.2`
-- Fresh installations now work: `npx bmad-install-agents`
-- Migrations now work: `npx bmad-update`
+- If you installed v1.3.0 or v1.3.1: `npm install convoke@1.3.2`
+- Fresh installations now work: `npx convoke-install`
+- Migrations now work: `npx convoke-update`
 
 ---
 
@@ -327,28 +345,28 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Major Release: Automatic Update/Migration System
 
-This release introduces a comprehensive update/migration system that makes it safe and easy to upgrade BMAD-Enhanced from previous versions.
+This release introduces a comprehensive update/migration system that makes it safe and easy to upgrade Convoke from previous versions.
 
 ### Added
 
 **🔄 Automatic Update System:**
-- **bmad-update** - Main update CLI with dry-run support
-  - Preview changes before applying: `npx bmad-update --dry-run`
+- **convoke-update** - Main update CLI with dry-run support
+  - Preview changes before applying: `npx convoke-update --dry-run`
   - Interactive confirmation (or `--yes` to skip)
   - Automatic backup before every migration
   - Automatic rollback on failure
   - Detailed progress indicators
 
-- **bmad-version** - Version information CLI
+- **convoke-version** - Version information CLI
   - Shows current vs. latest version
   - Displays migration history
   - Update availability status
-  - Example: `npx bmad-version`
+  - Example: `npx convoke-version`
 
-- **bmad-migrate** - Manual migration control (advanced users)
+- **convoke-migrate** - Manual migration control (advanced users)
   - Run specific migrations
   - List available migrations
-  - Example: `npx bmad-migrate 1.1.x-to-1.2.0`
+  - Example: `npx convoke-migrate 1.1.x-to-1.2.0`
 
 **📦 Migration Framework:**
 - Version detector with fallback strategies
@@ -397,22 +415,22 @@ This release introduces a comprehensive update/migration system that makes it sa
 **🎨 Enhanced Postinstall Experience:**
 - Now detects upgrades automatically
 - Shows breaking changes warnings
-- Prompts to run `npx bmad-update`
+- Prompts to run `npx convoke-update`
 - Displays current → new version
 - Does NOT auto-migrate (requires user consent)
 
 **⚙️ Package.json:**
 - Added `js-yaml` dependency for config parsing
 - Added 3 new bin commands:
-  - `bmad-update`
-  - `bmad-version`
-  - `bmad-migrate`
+  - `convoke-update`
+  - `convoke-version`
+  - `convoke-migrate`
 
 **📁 File Structure:**
 - New `scripts/update/` directory:
   - `lib/` - Shared migration logic (6 modules)
   - `migrations/` - Individual migration files + registry
-  - `bmad-update.js`, `bmad-version.js`, `bmad-migrate.js` - CLI commands
+  - `convoke-update.js`, `convoke-version.js`, `convoke-migrate.js` - CLI commands
 
 ### Migration Features
 
@@ -440,23 +458,23 @@ This release introduces a comprehensive update/migration system that makes it sa
 
 **Before Update:**
 ```bash
-npm install bmad-enhanced@1.3.0
+npm install convoke@1.3.0
 # Postinstall shows:
 # ⚠ UPGRADE DETECTED
 # Current version: 1.1.0
 # New version: 1.3.0
-# Run: npx bmad-update --dry-run (to preview)
+# Run: npx convoke-update --dry-run (to preview)
 ```
 
 **Preview Changes:**
 ```bash
-npx bmad-update --dry-run
+npx convoke-update --dry-run
 # Shows detailed preview of changes without applying
 ```
 
 **Apply Update:**
 ```bash
-npx bmad-update
+npx convoke-update
 # [1/5] Creating backup...
 # [2/5] Running migrations...
 # [3/5] Updating configuration...
@@ -627,7 +645,7 @@ This release completes the Vortex Pattern by implementing all 7 new Lean Startup
   - Fixed agent-manifest.csv generation to reference correct file paths
   - Fixed Quick Start instructions in installer output
 
-**Impact:** v1.1.1 had broken installer scripts that would fail when users ran `npx bmad-install-agents`. This patch fixes the installation process.
+**Impact:** v1.1.1 had broken installer scripts that would fail when users ran `npx convoke-install`. This patch fixes the installation process.
 
 ### Known Issues
 - User guides still reference v1.0.0 content and will be updated in v1.2.0
@@ -650,7 +668,7 @@ This release completes the Vortex Pattern by implementing all 7 new Lean Startup
 
 ### MAJOR REPOSITIONING: From Design Agents to Vortex Pattern
 
-This release represents a fundamental repositioning of BMAD-Enhanced from design-focused agents (empathy mapping, wireframing) to a Lean Startup validation framework.
+This release represents a fundamental repositioning of Convoke from design-focused agents (empathy mapping, wireframing) to a Lean Startup validation framework.
 
 ### Changed
 - **BREAKING:** Renamed module from `_designos` to `_vortex`
@@ -702,8 +720,8 @@ This release represents a fundamental repositioning of BMAD-Enhanced from design
    rm -rf _bmad-output/design-artifacts
 
    # Install v1.1.0
-   npm install bmad-enhanced@1.1.0
-   npx bmad-install-agents
+   npm install convoke@1.1.0
+   npx convoke-install
    ```
 
 ### Positioning Rationale
@@ -735,7 +753,7 @@ This creates a clear value proposition: Use Emma + Wade for Lean Startup validat
 ## [1.0.4-alpha] - 2026-02-16
 
 ### Fixed
-- **Documentation:** All installation commands now correctly use `npm install bmad-enhanced@alpha` instead of `npm install bmad-enhanced`
+- **Documentation:** All installation commands now correctly use `npm install convoke@alpha` instead of `npm install convoke`
 - Updated installation instructions across all documentation files:
   - README.md
   - INSTALLATION.md
@@ -758,14 +776,14 @@ This creates a clear value proposition: Use Emma + Wade for Lean Startup validat
 
 ### Added
 - **npx bin commands** for user-friendly installation
-  - `npx bmad-install-agents` - Install all agents (Emma + Wade)
-  - `npx bmad-install-emma` - Install Emma only
-  - `npx bmad-install-wade` - Install Wade only
+  - `npx convoke-install` - Install all agents (Emma + Wade)
+  - `npx convoke-install-emma` - Install Emma only
+  - `npx convoke-install-wade` - Install Wade only
 - bin section in package.json with executable scripts
 - Updated postinstall message to show npx commands
 
 ### Changed
-- **BREAKING:** Installation command changed from `npm run install:agents` to `npx bmad-install-agents`
+- **BREAKING:** Installation command changed from `npm run install:agents` to `npx convoke-install`
 - Updated all documentation to use npx commands:
   - README.md
   - INSTALLATION.md
@@ -812,7 +830,7 @@ This creates a clear value proposition: Use Emma + Wade for Lean Startup validat
 ## [1.0.0-alpha] - 2026-02-15
 
 ### Added
-- Initial release of BMAD-Enhanced
+- Initial release of Convoke
 - **Emma (empathy-mapper)** - Empathy Mapping Specialist
   - 6-step empathy map workflow
   - Empathy map template
@@ -864,14 +882,14 @@ This creates a clear value proposition: Use Emma + Wade for Lean Startup validat
 
 **Old:**
 ```bash
-npm install bmad-enhanced@alpha
+npm install convoke@alpha
 npm run install:agents  # This doesn't work
 ```
 
 **New:**
 ```bash
-npm install bmad-enhanced@alpha
-npx bmad-install-agents  # This works!
+npm install convoke@alpha
+npx convoke-install  # This works!
 ```
 
 **Note:** The old `npm run install:agents` command never actually worked in user projects. The new npx command is the correct installation method.
@@ -888,10 +906,10 @@ No changes to installation flow. Reinstallation will fix the Wade workflow bug.
 
 ## Links
 
-- **npm Package:** https://www.npmjs.com/package/bmad-enhanced
-- **GitHub Repository:** https://github.com/amalik/BMAD-Enhanced
+- **npm Package:** https://www.npmjs.com/package/convoke
+- **GitHub Repository:** https://github.com/amalik/convoke
 - **BMAD Method:** https://github.com/bmadhub/bmad
-- **Issues:** https://github.com/amalik/BMAD-Enhanced/issues
+- **Issues:** https://github.com/amalik/convoke/issues
 
 ---
 
