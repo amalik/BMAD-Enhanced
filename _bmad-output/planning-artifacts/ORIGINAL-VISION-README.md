@@ -1,4 +1,4 @@
-# BMAD-Enhanced
+# Convoke
 
 **Unified AI-Assisted Software Development Platform**
 
@@ -10,9 +10,9 @@
 
 ---
 
-## 🎯 What is BMAD-Enhanced?
+## 🎯 What is Convoke?
 
-BMAD-Enhanced integrates **4 powerful frameworks** into a single platform that preserves your entire reasoning chain from initial hypothesis through to production deployment.
+Convoke integrates **4 powerful frameworks** into a single platform that preserves your entire reasoning chain from initial hypothesis through to production deployment.
 
 ```
 WHY?           WHAT?          HOW?           QUALITY?
@@ -30,7 +30,7 @@ Every line of code traces back to validated user need
 
 **37% of features** ship but don't solve the original problem because teams lose context between discovery, design, and development.
 
-**BMAD-Enhanced** maintains complete traceability:
+**Convoke** maintains complete traceability:
 - **Why** was this decision made? → Quint hypothesis with evidence
 - **What** should we design? → DesignOS decision records
 - **How** should we build it? → BMAD stories with tests
@@ -50,15 +50,15 @@ Every line of code traces back to validated user need
 
 ```bash
 # Clone repository
-git clone https://github.com/yourusername/BMAD-Enhanced.git
-cd BMAD-Enhanced
+git clone https://github.com/yourusername/Convoke.git
+cd Convoke
 
 # Install dependencies
 npm install
 # or
 bun install
 
-# Initialize BMAD-Enhanced
+# Initialize Convoke
 bmad init
 
 # Install git hooks (optional but recommended)
@@ -144,7 +144,7 @@ Automated quality enforcement before each deployment milestone
 ### Planning Artifacts (All Complete ✅)
 
 1. **[Executive Summary](_bmad-output/planning-artifacts/executive-summary-presentation.md)** - Business case, ROI, competitive landscape
-2. **[Product Brief](_bmad-output/planning-artifacts/product-brief-BMAD-Enhanced-2026-02-01.md)** - Complete vision with ADRs
+2. **[Product Brief](_bmad-output/planning-artifacts/product-brief-Convoke-2026-02-01.md)** - Complete vision with ADRs
 3. **[4-Framework Comparison](_bmad-output/planning-artifacts/4-framework-comparison-matrix.md)** - Detailed framework analysis
 4. **[BaseArtifact Contract](_bmad-output/planning-artifacts/baseartifact-contract-spec.md)** - Technical foundation
 5. **[`/align` Command](_bmad-output/planning-artifacts/align-command-prototype.md)** - Alignment validation
@@ -264,19 +264,19 @@ Built on:
 ## 📞 Contact
 
 **Project Lead:** Amalik Amriou
-**Repository:** [github.com/yourusername/BMAD-Enhanced](https://github.com/yourusername/BMAD-Enhanced)
+**Repository:** [github.com/yourusername/Convoke](https://github.com/yourusername/Convoke)
 **Documentation:** `_bmad-output/planning-artifacts/`
 
 ---
 
 <div align="center">
 
-**BMAD-Enhanced**
+**Convoke**
 
 *From Hypothesis to Deployment with Evidence*
 
 [Get Started](#quick-start) • [Documentation](#documentation) • [Roadmap](#development-roadmap)
 
-Made with ❤️ by the BMAD-Enhanced community
+Made with ❤️ by the Convoke community
 
 </div>

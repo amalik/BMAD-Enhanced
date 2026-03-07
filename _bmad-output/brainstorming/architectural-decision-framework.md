@@ -1,4 +1,4 @@
-# BMAD-Enhanced Architectural Decision Framework
+# Convoke Architectural Decision Framework
 
 **Generated:** 2026-02-05
 **Purpose:** Guide Phase 0 POC architectural decisions based on 100 pattern analysis
@@ -7,7 +7,7 @@
 
 ## Overview
 
-This framework helps make strategic architectural decisions for BMAD-Enhanced Phase 0 POC by organizing choices along **7 foundational dimensions** derived from analyzing 100 orchestration patterns.
+This framework helps make strategic architectural decisions for Convoke Phase 0 POC by organizing choices along **7 foundational dimensions** derived from analyzing 100 orchestration patterns.
 
 **Core Constraint:** All agents use BMAD Method architecture. Quint/DesignOS/AgentOS are capability providers accessed by BMAD workflows.
 

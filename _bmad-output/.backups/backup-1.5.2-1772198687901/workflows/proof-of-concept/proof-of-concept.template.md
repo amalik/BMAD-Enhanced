@@ -21,5 +21,5 @@ status: {status}
 
 ---
 
-**Created with:** BMAD-Enhanced v1.2.0
+**Created with:** Convoke v1.2.0
 **Workflow:** proof-of-concept

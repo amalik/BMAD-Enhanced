@@ -9,7 +9,7 @@
 
 ## Executive Summary
 
-Wade (wireframe-designer) is the second domain-specialized agent in the BMAD-Enhanced project. Following Emma's successful pattern, Wade helps teams create comprehensive wireframes for web and mobile applications through a structured 6-step process.
+Wade (wireframe-designer) is the second domain-specialized agent in the Convoke project. Following Emma's successful pattern, Wade helps teams create comprehensive wireframes for web and mobile applications through a structured 6-step process.
 
 **Development completed 1 day ahead of schedule with 100% test pass rate.**
 
@@ -366,7 +366,7 @@ Wade built on **BMAD Agent Architecture Framework v1.1.0:**
 
 ### Long-term (Week 3)
 - [ ] Complete all 4 agents (Emma ✅, Wade ✅, Quinn 📋, Stan 📋)
-- [ ] BMAD-Enhanced v1.0.0 release
+- [ ] Convoke v1.0.0 release
 
 ---
 
@@ -395,7 +395,7 @@ Wade built on **BMAD Agent Architecture Framework v1.1.0:**
 
 ---
 
-## Impact on BMAD-Enhanced Project
+## Impact on Convoke Project
 
 ### Progress Summary
 

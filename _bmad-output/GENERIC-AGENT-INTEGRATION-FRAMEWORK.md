@@ -370,7 +370,7 @@ type: yaml-instructions
   "version": "1.0.0",
   "description": "Emma - Empathy Mapping Specialist for BMAD Method",
   "keywords": ["bmad", "agent", "empathy-mapping", "ux-research", "design-thinking"],
-  "author": "BMAD Enhanced Team",
+  "author": "Convoke Team",
   "license": "MIT",
   "peerDependencies": {
     "@bmad/bme-core": "^1.0.0"

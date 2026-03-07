@@ -1,4 +1,4 @@
-# BMAD-Enhanced v1.0.3-alpha - Publication Success! 🎉
+# Convoke v1.0.3-alpha - Publication Success! 🎉
 
 **Publication Date:** 2026-02-15
 **Version:** 1.0.3-alpha
@@ -8,7 +8,7 @@
 
 ## 🚀 Publication Summary
 
-**Package URL:** https://www.npmjs.com/package/bmad-enhanced
+**Package URL:** https://www.npmjs.com/package/convoke
 **Version:** 1.0.3-alpha
 **Tag:** alpha (latest alpha release)
 
@@ -35,13 +35,13 @@ Tested the published package from npm registry:
 
 ✅ **Installation Works:**
 ```bash
-npm install bmad-enhanced@alpha
+npm install convoke@alpha
 # Successfully installs v1.0.3-alpha
 ```
 
 ✅ **npx Commands Work:**
 ```bash
-npx bmad-install-agents
+npx convoke-install
 # ✓ Beautiful installation banner
 # ✓ Emma installed
 # ✓ Wade installed
@@ -69,9 +69,9 @@ npx bmad-install-agents
 ### Changes in v1.0.3-alpha
 
 1. **Added bin executables:**
-   - `bmad-install-agents` - Install all agents
-   - `bmad-install-emma` - Install Emma only
-   - `bmad-install-wade` - Install Wade only
+   - `convoke-install` - Install all agents
+   - `convoke-install-emma` - Install Emma only
+   - `convoke-install-wade` - Install Wade only
 
 2. **Updated postinstall message:**
    - Now shows npx commands instead of npm run commands
@@ -102,11 +102,11 @@ The working installation flow is now:
 # Step 1: Install BMAD Method (prerequisite)
 npx bmad-method@alpha install
 
-# Step 2: Install BMAD-Enhanced
-npm install bmad-enhanced@alpha
+# Step 2: Install Convoke
+npm install convoke@alpha
 
 # Step 3: Install agents
-npx bmad-install-agents
+npx convoke-install
 ```
 
 **This is:**
@@ -185,8 +185,8 @@ npx bmad-install-agents
 
 ## 🔗 Important Links
 
-**npm Package:** https://www.npmjs.com/package/bmad-enhanced
-**GitHub Repository:** https://github.com/amalik/BMAD-Enhanced
+**npm Package:** https://www.npmjs.com/package/convoke
+**GitHub Repository:** https://github.com/amalik/convoke
 **BMAD Method:** https://github.com/bmadhub/bmad
 
 **Documentation:**
@@ -202,12 +202,12 @@ npx bmad-install-agents
 For sharing on social media, forums, or GitHub:
 
 ```markdown
-🎉 BMAD-Enhanced v1.0.3-alpha is now live!
+🎉 Convoke v1.0.3-alpha is now live!
 
 ✨ What's new:
 - User-friendly npx installation commands
 - No more npm run confusion!
-- Simply: npm install bmad-enhanced@alpha && npx bmad-install-agents
+- Simply: npm install convoke@alpha && npx convoke-install
 
 🎨 Includes:
 - Emma (empathy-mapper) - Empathy Mapping Specialist
@@ -215,11 +215,11 @@ For sharing on social media, forums, or GitHub:
 
 📦 Install:
 npx bmad-method@alpha install
-npm install bmad-enhanced@alpha
-npx bmad-install-agents
+npm install convoke@alpha
+npx convoke-install
 
-📚 Docs: https://github.com/amalik/BMAD-Enhanced
-📦 npm: https://www.npmjs.com/package/bmad-enhanced
+📚 Docs: https://github.com/amalik/convoke
+📦 npm: https://www.npmjs.com/package/convoke
 ```
 
 ---
@@ -269,7 +269,7 @@ npx bmad-install-agents
 
 ## ✅ Final Status
 
-**BMAD-Enhanced v1.0.3-alpha is:**
+**Convoke v1.0.3-alpha is:**
 - ✅ Published on npm
 - ✅ Fully functional
 - ✅ Tested end-to-end

@@ -26,5 +26,5 @@ This validation workflow will be available alongside the lean-persona workflow i
 ## Questions?
 
 For questions or to request early access:
-- GitHub Issues: https://github.com/amalik/BMAD-Enhanced/issues
+- GitHub Issues: https://github.com/amalik/convoke/issues
 - Tag with: `workflow:lean-persona` and `v1.2.0`

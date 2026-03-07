@@ -1,7 +1,7 @@
 ---
 stepsCompleted: [step-01-init, step-02-discovery, step-03-success, step-04-journeys, step-05-domain, step-06-innovation, step-07-project-type, step-08-scoping, step-09-functional, step-10-nonfunctional, step-11-polish, step-12-complete]
 inputDocuments:
-  - _bmad-output/planning-artifacts/product-brief-BMAD-Enhanced-2026-02-22.md
+  - _bmad-output/planning-artifacts/product-brief-Convoke-2026-02-22.md
   - docs/agents.md
   - docs/testing.md
   - docs/development.md
@@ -19,14 +19,14 @@ classification:
 version: "1.6.0"
 ---
 
-# Product Requirements Document - BMAD-Enhanced v1.6.0
+# Product Requirements Document - Convoke v1.6.0
 
 **Author:** Amalik
 **Date:** 2026-02-22
 
 ## Executive Summary
 
-BMAD-Enhanced v1.6.0 completes the Vortex Pattern — the first AI-guided product discovery framework covering all 7 streams of the Shiftup Innovation Vortex. Wave 3 adds three agents: **Mila** (Synthesize — research convergence), **Liam** (Hypothesize — hypothesis engineering), and **Noah** (Sensitize — production intelligence), joining the existing Emma, Isla, Wade, and Max. The release ships 10 handoff contracts with declared artifact schemas and a Compass routing decision matrix that enables non-sequential, evidence-driven navigation across all 7 agents. Together they form a Double Diamond structure: Emma and Isla discover the problem space, Mila and Liam converge on solutions, Wade externalizes through experiments, Noah monitors production, and Max drives decisions. This is a brownfield content platform expansion delivered via npm, with targeted infrastructure updates to the agent registry, validator, manifest, and migration system.
+Convoke v1.6.0 completes the Vortex Pattern — the first AI-guided product discovery framework covering all 7 streams of the Shiftup Innovation Vortex. Wave 3 adds three agents: **Mila** (Synthesize — research convergence), **Liam** (Hypothesize — hypothesis engineering), and **Noah** (Sensitize — production intelligence), joining the existing Emma, Isla, Wade, and Max. The release ships 10 handoff contracts with declared artifact schemas and a Compass routing decision matrix that enables non-sequential, evidence-driven navigation across all 7 agents. Together they form a Double Diamond structure: Emma and Isla discover the problem space, Mila and Liam converge on solutions, Wade externalizes through experiments, Noah monitors production, and Max drives decisions. This is a brownfield content platform expansion delivered via npm, with targeted infrastructure updates to the agent registry, validator, manifest, and migration system.
 
 **Target users:** Product managers, solo founders, and product teams using AI-assisted product discovery. Secondary users: module developers extending the framework and team leads reviewing Vortex artifacts.
 
@@ -61,7 +61,7 @@ BMAD-Enhanced v1.6.0 completes the Vortex Pattern — the first AI-guided produc
 
 | Outcome | Measurement | Target |
 |---------|-------------|--------|
-| All 7 agents installed and functional | `bmad-doctor` validation | Pass |
+| All 7 agents installed and functional | `convoke-doctor` validation | Pass |
 | All 10 handoff contracts have Compass triggers | Contract-to-trigger audit | 10/10 |
 | All existing tests pass + new coverage | `npm test` | Zero failures |
 | Install flow end-to-end | Installer E2E test | Pass |
@@ -228,13 +228,13 @@ Defined **before implementation begins**. User Journeys 1-5 serve as structured 
 
 ### Journey 6: Module Developer — Building on the Framework
 
-**Persona:** Alex, a developer who wants to create a custom agent for their company's specific domain (e.g., a compliance-focused agent for fintech). They have BMAD-Enhanced installed and want to extend it.
+**Persona:** Alex, a developer who wants to create a custom agent for their company's specific domain (e.g., a compliance-focused agent for fintech). They have Convoke installed and want to extend it.
 
 **Opening Scene:** Alex reads the development guide (`docs/development.md`). They see the agent architecture pattern: clone an existing agent, customize the persona, create workflow step files, register in manifest.
 
 **Rising Action:** Alex clones Mila's agent definition as a template. They customize the persona for compliance expertise, create 2 workflows (regulatory scan, compliance checklist), and add step files following the established pattern. They register the agent in the manifest CSV.
 
-**Climax:** `npx bmad-install-agents` picks up their custom agent. Party Mode includes it. The Compass routing in their custom workflows references existing Vortex agents where relevant.
+**Climax:** `npx convoke-install` picks up their custom agent. Party Mode includes it. The Compass routing in their custom workflows references existing Vortex agents where relevant.
 
 **Resolution:** Alex's compliance agent works alongside the 7 Vortex agents. The framework is extensible without forking.
 
@@ -268,11 +268,11 @@ Defined **before implementation begins**. User Journeys 1-5 serve as structured 
 
 ### Project-Type Overview
 
-BMAD-Enhanced is a hybrid: an npm-distributed developer tool (infrastructure) and a content platform (agents/workflows). Wave 3 is primarily a content expansion — 3 agents, 6-9 workflows, 30+ step files, user guides — with targeted infrastructure updates.
+Convoke is a hybrid: an npm-distributed developer tool (infrastructure) and a content platform (agents/workflows). Wave 3 is primarily a content expansion — 3 agents, 6-9 workflows, 30+ step files, user guides — with targeted infrastructure updates.
 
 ### Installation & Distribution
 
-- **Package manager:** npm (unchanged) — `npx bmad-install-agents` installs all 7 agents
+- **Package manager:** npm (unchanged) — `npx convoke-install` installs all 7 agents
 - **Node.js compatibility:** Node 18/20/22 (existing CI matrix, unchanged)
 - **No new runtime dependencies** — Wave 3 adds content files (.md, .yaml), not code dependencies
 - **Backward-compatible install** — v1.5.x users upgrading to v1.6.0 get all 7 agents through the migration system
@@ -309,7 +309,7 @@ These serve as format references for downstream agents and users.
 | `agent-registry.js` | 4 agents with persona data | Expand to 7 agents |
 | `validator.js` | Validates 4 agents, 13 workflows | Validate 7 agents, 19-22 workflows |
 | `install-vortex-agents.js` | Installs 4 agents, generates manifest | Install 7 agents |
-| `bmad-doctor` | Checks 4 agents | Check 7 agents |
+| `convoke-doctor` | Checks 4 agents | Check 7 agents |
 | `config.yaml` | Lists 4 agents, 13 workflows | List 7 agents, 19-22 workflows |
 | Manifest CSV | 4 agent rows | 7 agent rows |
 | `config-merger.js` | Seeds 4 agents; validates 4 agents | Seeds 7 agents; schema accepts 7 agents |
@@ -415,9 +415,9 @@ Migration appends to existing config — user customizations preserved.
 
 ### Installation & Infrastructure
 
-- FR34: The existing `npx bmad-install-agents` command installs all 7 Vortex agents without requiring a new command or flag
+- FR34: The existing `npx convoke-install` command installs all 7 Vortex agents without requiring a new command or flag
 - FR35: Agent registry (`agent-registry.js`) contains entries for all 7 agents with complete persona data
-- FR36: `bmad-doctor` validates all 7 agents, expanded workflow count, manifest integrity
+- FR36: `convoke-doctor` validates all 7 agents, expanded workflow count, manifest integrity
 - FR37: Agent manifest CSV contains rows for all 7 Vortex agents
 - FR38: Party Mode includes all 7 agents in collaborative discussions from day one
 
@@ -460,7 +460,7 @@ Migration appends to existing config — user customizations preserved.
 ### Installability
 
 - NFR6: Install time does not degrade noticeably from v1.5.x with the addition of Wave 3 content
-- NFR7: Running `npx bmad-install-agents` twice produces identical results — install is fully idempotent
+- NFR7: Running `npx convoke-install` twice produces identical results — install is fully idempotent
 
 ### Maintainability
 
@@ -484,8 +484,8 @@ Migration appends to existing config — user customizations preserved.
 ### Reliability
 
 - NFR21: Every workflow can be completed from start to finish without encountering broken file references, missing step files, or undefined Compass routes
-- NFR22: `bmad-doctor` detects all structural integrity issues (missing agents, missing workflows, broken manifest, invalid config) in a single diagnostic run
-- NFR23: All `bmad-doctor` diagnostic messages include the specific issue and expected state, enabling resolution without additional investigation
+- NFR22: `convoke-doctor` detects all structural integrity issues (missing agents, missing workflows, broken manifest, invalid config) in a single diagnostic run
+- NFR23: All `convoke-doctor` diagnostic messages include the specific issue and expected state, enabling resolution without additional investigation
 - NFR24: The migration system either fully succeeds or fails cleanly with a diagnostic message — no partial migration states
 - NFR25: Party Mode functions correctly with all 7 agents loaded — no agent loading failures when manifest expands to 7 Vortex entries
 

@@ -75,7 +75,7 @@ related_docs:
    - Audit reports, compliance scores, recommendations
 
 **Integration:**
-- Module name: `bme` (BMAD Enhanced)
+- Module name: `bme` (Convoke)
 - Distribution: npm package for seamless installation
 - Register in `_bmad/_config/agent-manifest.csv`
 - Invoke via slash commands: `/bmad-agent-bme-empathy-mapper`
@@ -851,7 +851,7 @@ Party Mode selects relevant agents:
 
 ### Week 3 Decision Gate
 
-**Primary Question:** Does agent enhancement approach prove viable for BMAD-Enhanced integration?
+**Primary Question:** Does agent enhancement approach prove viable for Convoke integration?
 
 **Evaluation Criteria:**
 
@@ -943,7 +943,7 @@ Party Mode selects relevant agents:
 
 ### npm Package Structure
 
-**BMAD Enhanced provides flexible installation:**
+**Convoke provides flexible installation:**
 - **Individual agents**: Install only what you need
 - **Bulk installation**: Install all 4 agents at once
 
@@ -990,7 +990,7 @@ Invoke with: /bmad-agent-bme-empathy-mapper
 npm install -g @bmad/bme
 
 # Post-install output:
-✅ BMAD Enhanced installed successfully!
+✅ Convoke installed successfully!
 4 agents available:
   /bmad-agent-bme-empathy-mapper      (Emma - Empathy Mapping)
   /bmad-agent-bme-wireframe-designer  (Wade - Wireframes)
@@ -1041,7 +1041,7 @@ npm uninstall -g @bmad/bme-empathy-mapper
 npm uninstall -g @bmad/bme
 
 # Post-uninstall output:
-✅ BMAD Enhanced uninstalled (4 agents removed)
+✅ Convoke uninstalled (4 agents removed)
 
 # What happened:
 # 1. Triggered uninstall for all 4 agent dependencies
@@ -1177,7 +1177,7 @@ installAgent(AGENT_CONFIG)
 {
   "name": "@bmad/bme",
   "version": "1.0.0",
-  "description": "BMAD Enhanced - All agents bundle",
+  "description": "Convoke - All agents bundle",
   "dependencies": {
     "@bmad/bme-core": "^1.0.0",
     "@bmad/bme-empathy-mapper": "^1.0.0",
@@ -1197,7 +1197,7 @@ installAgent(AGENT_CONFIG)
 // Bundle package just displays success message
 // (All agents already installed via dependencies)
 
-console.log('✅ BMAD Enhanced installed successfully!');
+console.log('✅ Convoke installed successfully!');
 console.log('4 agents available:');
 console.log('  /bmad-agent-bme-empathy-mapper      (Emma - Empathy Mapping)');
 console.log('  /bmad-agent-bme-wireframe-designer  (Wade - Wireframes)');
@@ -1220,7 +1220,7 @@ console.log("Run '/bmad-party-mode' to see all 25 agents!");
 **Why Explicit Module Prefix?**
 - Clear module ownership (bme)
 - Avoids naming conflicts with future agents
-- Easy to identify BMAD Enhanced agents in party mode
+- Easy to identify Convoke agents in party mode
 - Consistent with BMAD Method naming conventions
 
 ---
@@ -1228,7 +1228,7 @@ console.log("Run '/bmad-party-mode' to see all 25 agents!");
 ## Appendix B: File Structure Summary
 
 ```
-_bmad/bme/                          # BMAD Enhanced module (installed via npm)
+_bmad/bme/                          # Convoke module (installed via npm)
 ├── package.json                    # npm package metadata
 ├── install.js                      # Post-install script
 ├── _config/
@@ -1331,7 +1331,7 @@ npm install -g @bmad/bme
 ---
 
 ### Use Case 4: Gradual Adoption
-**Profile:** Team wants to try BMAD Enhanced before committing.
+**Profile:** Team wants to try Convoke before committing.
 
 **Week 1:**
 ```bash
@@ -1347,7 +1347,7 @@ npm install -g @bmad/bme-wireframe-designer
 
 **Week 3:**
 ```bash
-# Love BMAD Enhanced! Upgrade to full bundle
+# Love Convoke! Upgrade to full bundle
 npm install -g @bmad/bme
 # Skips Emma + Wade (already installed), adds Quinn + Stan
 ```

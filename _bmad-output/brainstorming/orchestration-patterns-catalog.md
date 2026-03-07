@@ -1,4 +1,4 @@
-# BMAD-Enhanced Orchestration Patterns Catalog
+# Convoke Orchestration Patterns Catalog
 
 **Generated:** 2026-02-05
 **Session:** Phase 0 POC Brainstorming - Morphological Analysis

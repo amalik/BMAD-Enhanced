@@ -4,7 +4,7 @@ Status: done
 
 ## Story
 
-As a user running `bmad-doctor`,
+As a user running `convoke-doctor`,
 I want the validation system to expect and verify all 7 agents and 22 workflows,
 So that installation health checks confirm my complete Vortex setup.
 
@@ -23,8 +23,8 @@ So that installation health checks confirm my complete Vortex setup.
    - **And** the `workflows` array is seeded with all 22 workflow names from registry
    - **And** the `description` field reflects the full 7-stream Vortex
 
-3. **AC3: bmad-doctor checks all 7 agents**
-   - **Given** `bmad-doctor.js`
+3. **AC3: convoke-doctor checks all 7 agents**
+   - **Given** `convoke-doctor.js`
    - **When** it checks agent files
    - **Then** it verifies all 7 agents and reports status for each
    - **Note:** Already data-driven from registry (Story 1.1). Verify no hardcoded counts remain.
@@ -90,14 +90,14 @@ So that installation health checks confirm my complete Vortex setup.
 
 - [x] **Task 5: Verify existing data-driven behavior** (AC: 1, 3)
   - [x] 5.1 Verify `validator.js` has no hardcoded agent/workflow counts
-  - [x] 5.2 Verify `bmad-doctor.js` has no hardcoded agent/workflow counts
+  - [x] 5.2 Verify `convoke-doctor.js` has no hardcoded agent/workflow counts
   - [x] 5.3 Run full test suite: `npm test && npm run test:integration && npm run lint`
 
 ## Dev Notes
 
 ### What's Already Done (Story 1.1 Carry-Forward)
 
-Both `validator.js` and `bmad-doctor.js` are **already fully data-driven** — they import `AGENT_FILES`, `AGENT_IDS`, `WORKFLOW_NAMES` from the registry and iterate dynamically. No hardcoded counts exist. This story primarily adds **new functionality** (step structure validation) and **config-merger defaults**.
+Both `validator.js` and `convoke-doctor.js` are **already fully data-driven** — they import `AGENT_FILES`, `AGENT_IDS`, `WORKFLOW_NAMES` from the registry and iterate dynamically. No hardcoded counts exist. This story primarily adds **new functionality** (step structure validation) and **config-merger defaults**.
 
 ### Config-Merger Changes (Task 1)
 
@@ -132,7 +132,7 @@ This is **new functionality** — `validator.js` currently validates that workfl
 
 ### Files NOT Changing
 
-- `scripts/bmad-doctor.js` — already data-driven, no changes needed
+- `scripts/convoke-doctor.js` — already data-driven, no changes needed
 - `scripts/update/lib/agent-registry.js` — no changes (source of truth, updated in Story 1.1)
 - `tests/helpers.js` — already registry-driven (updated in Story 1.1)
 

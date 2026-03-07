@@ -1,16 +1,16 @@
-# Story 5.1: bmad-update.js Automated Tests at 85%+ Coverage
+# Story 5.1: convoke-update.js Automated Tests at 85%+ Coverage
 
 Status: done
 
 ## Story
 
 As a maintainer,
-I want automated tests covering bmad-update.js at 85%+ line coverage,
+I want automated tests covering convoke-update.js at 85%+ line coverage,
 So that CLI update behavior is regression-proof and I can confidently modify the update path knowing tests will catch breakage.
 
 ## Acceptance Criteria
 
-1. Given bmad-update.js exists with its current functionality, when the maintainer runs the test suite with coverage reporting, then unit and integration tests cover bmad-update.js at **85%+ line coverage measured by c8** (FR21)
+1. Given convoke-update.js exists with its current functionality, when the maintainer runs the test suite with coverage reporting, then unit and integration tests cover convoke-update.js at **85%+ line coverage measured by c8** (FR21)
 2. Tests validate core update behaviors: manifest merge, file copying, version detection
 3. Tests verify manifest merge preserves all user-added rows (custom agents, TEA agents) without duplication or reordering (NFR15)
 4. Tests include **at least 3 edge case scenarios**: malformed input handling, partial failure recovery, and duplicate entry handling — **coverage target applies to branch coverage, not just line coverage**
@@ -22,7 +22,7 @@ So that CLI update behavior is regression-proof and I can confidently modify the
 ## Tasks / Subtasks
 
 - [x] Task 1: Analyze current coverage baseline and identify gaps (AC: #1)
-  - [x] 1.1 Run `c8 node --test tests/unit/bmad-update.test.js` and record current line/branch coverage for bmad-update.js
+  - [x] 1.1 Run `c8 node --test tests/unit/convoke-update.test.js` and record current line/branch coverage for convoke-update.js
   - [x] 1.2 Map all uncovered code paths: `main()`, `confirm()`, CLI arg parsing, error handling, dry-run, migration execution, rollback
   - [x] 1.3 Identify which code paths can be tested via unit tests (assessUpdate, confirm) vs integration tests (main with runScript helper)
 
@@ -57,15 +57,15 @@ So that CLI update behavior is regression-proof and I can confidently modify the
   - [x] 6.3 Document compatibility verification in Dev Agent Record (no need to run on multiple versions — verify API usage only)
 
 - [x] Task 7: Measure final coverage and verify target (AC: #1, #7, #8)
-  - [x] 7.1 Run `c8 node --test tests/unit/bmad-update.test.js` and verify 85%+ line coverage
-  - [x] 7.2 Run `c8 --check-coverage --lines 85 --branches 85 node --test tests/unit/bmad-update.test.js` to enforce threshold
+  - [x] 7.1 Run `c8 node --test tests/unit/convoke-update.test.js` and verify 85%+ line coverage
+  - [x] 7.2 Run `c8 --check-coverage --lines 85 --branches 85 node --test tests/unit/convoke-update.test.js` to enforce threshold
   - [x] 7.3 Run `npm run test:all` to verify no regressions (890 existing tests pass)
   - [x] 7.4 Report actual coverage percentages (line AND branch) in Dev Agent Record
   - [x] 7.5 Document any uncovered branches with rationale for exclusion
 
 ## Dev Notes
 
-### Target Script: `scripts/update/bmad-update.js` (268 lines)
+### Target Script: `scripts/update/convoke-update.js` (268 lines)
 
 **Architecture:** CLI script with two main components:
 1. **`assessUpdate(projectRoot)`** (lines 22-67) — Pure logic function, already exported for testing. Returns structured decision object with `.action` field. 8 possible actions: no-project, fresh, broken, no-version, up-to-date, downgrade, no-migrations, upgrade.
@@ -82,7 +82,7 @@ So that CLI update behavior is regression-proof and I can confidently modify the
 
 **Key decision paths (10+):** 8 assessUpdate actions × 3 execution modes (dry-run, confirmed, rejected) × 2 error paths (success, failure) = significant branch count.
 
-### Existing Tests: `tests/unit/bmad-update.test.js`
+### Existing Tests: `tests/unit/convoke-update.test.js`
 
 7 tests covering `assessUpdate()` only:
 1. returns no-project when projectRoot is null
@@ -98,7 +98,7 @@ So that CLI update behavior is regression-proof and I can confidently modify the
 
 **Unit tests (assessUpdate, confirm):** Direct function calls with mocked dependencies. Use `silenceConsole()` from helpers.js.
 
-**Integration tests (main):** Use `runScript('scripts/update/bmad-update.js', [...args])` from helpers.js. This runs the script as a subprocess, capturing stdout/stderr/exitCode. Mock the filesystem via `createTempDir()` + `createInstallation()`.
+**Integration tests (main):** Use `runScript('scripts/update/convoke-update.js', [...args])` from helpers.js. This runs the script as a subprocess, capturing stdout/stderr/exitCode. Mock the filesystem via `createTempDir()` + `createInstallation()`.
 
 **Mocking approach for main():**
 - Option A: `runScript` integration tests (subprocess, real execution, can test exit codes and stdout) — PREFERRED for CLI behavior
@@ -134,10 +134,10 @@ restoreConsole()             // Restores console
 
 ```bash
 # Single file coverage
-c8 node --test tests/unit/bmad-update.test.js
+c8 node --test tests/unit/convoke-update.test.js
 
 # With threshold enforcement
-c8 --check-coverage --lines 85 --branches 85 node --test tests/unit/bmad-update.test.js
+c8 --check-coverage --lines 85 --branches 85 node --test tests/unit/convoke-update.test.js
 
 # Full suite (verify no regressions)
 npm run test:all
@@ -146,10 +146,10 @@ npm run test:all
 ### What NOT to Do
 
 - Do NOT add new npm dependencies (NFR7 — use node:test + c8 only; note: PRD references "Jest" but project uses node:test — node:test is correct)
-- Do NOT modify bmad-update.js source code unless necessary for testability (prefer testing as-is)
+- Do NOT modify convoke-update.js source code unless necessary for testability (prefer testing as-is)
 - Do NOT test legacy migration file contents (out of scope — "documented but not targeted for 85%")
 - Do NOT run actual multi-OS tests (AC #5 says "via mocked process.platform, not actual multi-OS execution")
-- Do NOT test bmad-version.js (that's Story 5.2)
+- Do NOT test convoke-version.js (that's Story 5.2)
 
 ### Previous Epic Intelligence (Epic 4 Retrospective)
 
@@ -170,17 +170,17 @@ Key learnings carried forward:
 
 ### Project Structure Notes
 
-- Test file: `tests/unit/bmad-update.test.js` (EXPAND existing file)
+- Test file: `tests/unit/convoke-update.test.js` (EXPAND existing file)
 - Test helpers: `tests/helpers.js` (USE existing helpers, do not duplicate)
-- Target script: `scripts/update/bmad-update.js` (READ ONLY unless refactoring for testability)
+- Target script: `scripts/update/convoke-update.js` (READ ONLY unless refactoring for testability)
 - Dependencies: `scripts/update/lib/version-detector.js`, `scripts/update/lib/migration-runner.js`, `scripts/update/lib/utils.js`, `scripts/update/migrations/registry.js`
 
 ### References
 
 - [Source: _bmad-output/planning-artifacts/epics-phase2.md#Epic 5, Story 5.1]
 - [Source: _bmad-output/planning-artifacts/prd-phase2.md#FR21, NFR1-NFR8, NFR13, NFR15-NFR16]
-- [Source: scripts/update/bmad-update.js]
-- [Source: tests/unit/bmad-update.test.js]
+- [Source: scripts/update/convoke-update.js]
+- [Source: tests/unit/convoke-update.test.js]
 - [Source: tests/helpers.js]
 - [Source: _bmad-output/implementation-artifacts/p2-epic-4-retro-2026-03-01.md#Action Items]
 
@@ -212,7 +212,7 @@ Claude Opus 4.6
 8. **No new dependencies added** — uses node:test + c8 only (AC #7)
 9. **Test file is self-documenting** — descriptive test names, clear describe blocks (AC #8)
 10. **Key discovery: empathy-map workflow name collision** — `empathy-map` is both a legacy v1.0.0 marker in guessVersionFromFileStructure AND a current Isla workflow in WORKFLOW_NAMES. Tests that need currentVersion=null must remove the empathy-map dir after createValidInstallation.
-11. **Manifest merge tests adapted to actual behavior** — refreshInstallation overwrites config.yaml (config-merger responsibility, not bmad-update.js). Tests verify core agents present and version updated after upgrade. Two TODO tests document the user-agent preservation gap (NFR15).
+11. **Manifest merge tests adapted to actual behavior** — refreshInstallation overwrites config.yaml (config-merger responsibility, not convoke-update.js). Tests verify core agents present and version updated after upgrade. Two TODO tests document the user-agent preservation gap (NFR15).
 12. **980 total tests pass** — 0 regressions from full suite (978 pass + 2 todo)
 
 **Uncovered lines with rationale:**
@@ -225,15 +225,15 @@ Claude Opus 4.6
 
 | Date | Change | Reason |
 |------|--------|--------|
-| 2026-03-01 | Expanded tests/unit/bmad-update.test.js from 7 to 31 tests | Achieve 85%+ coverage target |
+| 2026-03-01 | Expanded tests/unit/convoke-update.test.js from 7 to 31 tests | Achieve 85%+ coverage target |
 | 2026-03-01 | Added runScriptWithInput helper for stdin piping | Test readline-based confirm() function via subprocess |
-| 2026-03-01 | No changes to bmad-update.js source | Per story guidance: test as-is, no source modifications |
+| 2026-03-01 | No changes to convoke-update.js source | Per story guidance: test as-is, no source modifications |
 | 2026-03-01 | Code review fixes: +6 tests (platform mocking, partial failure, TODO tests), assertion hardening, createTempDir consistency | Adversarial code review findings — 1 CRITICAL, 2 HIGH, 3 MEDIUM fixed |
 
 ### File List
 
 | File | Action | Description |
 |------|--------|-------------|
-| tests/unit/bmad-update.test.js | Modified | Expanded from 7 to 37 tests (~120 to ~640 lines) |
-| _bmad-output/implementation-artifacts/p2-5-1-bmad-update-js-automated-tests-at-85-coverage.md | Modified | Story status updates and Dev Agent Record |
+| tests/unit/convoke-update.test.js | Modified | Expanded from 7 to 37 tests (~120 to ~640 lines) |
+| _bmad-output/implementation-artifacts/p2-5-1-convoke-update-js-automated-tests-at-85-coverage.md | Modified | Story status updates and Dev Agent Record |
 | _bmad-output/implementation-artifacts/sprint-status.yaml | Modified | Status: ready-for-dev → in-progress → review |

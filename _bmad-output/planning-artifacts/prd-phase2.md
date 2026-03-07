@@ -2,7 +2,7 @@
 stepsCompleted: [step-01-init, step-02-discovery, step-03-success, step-04-journeys, step-05-domain, step-06-innovation, step-07-project-type, step-08-scoping, step-09-functional, step-10-nonfunctional, step-11-polish, step-12-complete]
 inputDocuments:
   - _bmad-output/planning-artifacts/prd.md
-  - _bmad-output/planning-artifacts/product-brief-BMAD-Enhanced-2026-02-22.md
+  - _bmad-output/planning-artifacts/product-brief-Convoke-2026-02-22.md
   - _bmad-output/planning-artifacts/architecture.md
   - _bmad-output/planning-artifacts/epics.md
   - _bmad-output/implementation-artifacts/epic-1-retro-2026-02-24.md
@@ -55,14 +55,14 @@ elicitation:
 version: "2.0.0"
 ---
 
-# Product Requirements Document - BMAD-Enhanced Phase 2
+# Product Requirements Document - Convoke Phase 2
 
 **Author:** Amalik
 **Date:** 2026-02-28
 
 ## Project Discovery
 
-BMAD-Enhanced is an AI-powered product discovery framework that shipped its v1.6.0 "Innovation Vortex" — 7 specialized agents guiding teams from contextualization through validated learning. Phase 1 built the product. Phase 2 makes it trustworthy: fixing stale documentation, validating every agent's output, proving the chain works end-to-end, and giving new users a compelling first impression. Without Phase 2, growth efforts in Phase 3 would drive users to a product that contradicts its own documentation and ships untested agent chains.
+Convoke is an AI-powered product discovery framework that shipped its v1.6.0 "Innovation Vortex" — 7 specialized agents guiding teams from contextualization through validated learning. Phase 1 built the product. Phase 2 makes it trustworthy: fixing stale documentation, validating every agent's output, proving the chain works end-to-end, and giving new users a compelling first impression. Without Phase 2, growth efforts in Phase 3 would drive users to a product that contradicts its own documentation and ships untested agent chains.
 
 *Document navigation for implementation planning: Functional Requirements (§8), Non-Functional Requirements (§9), Execution Order (§5.2), Developer Tool Requirements (§6).*
 
@@ -91,7 +91,7 @@ BMAD-Enhanced is an AI-powered product discovery framework that shipped its v1.6
 | 1 | **Fix stale docs** | Hygiene (URGENT) | Programmatic audit first — grep for stale numbers and deleted paths |
 | 2 | **P0 test suites + journey example** | Quality + Usability | Run all 7 agents on busy parents domain. Validate handoff chain compatibility. Capture real artifacts as journey example. |
 | 3 | **Expand content correctness testing** | Quality | Test semantics not syntax. Follow dead-end detection pattern. |
-| 4 | **Close CLI coverage gaps** | Tech debt | bmad-update.js (29%), bmad-version.js (56%), legacy migration (37%) |
+| 4 | **Close CLI coverage gaps** | Tech debt | convoke-update.js (29%), convoke-version.js (56%), legacy migration (37%) |
 
 ### Explicitly Deferred (until user demand proven)
 
@@ -127,7 +127,7 @@ BMAD-Enhanced is an AI-powered product discovery framework that shipped its v1.6
 | Gate | Criteria | Measurement | FR Coverage |
 |------|----------|-------------|-------------|
 | **Content correctness validation in CI** | Agent definitions, workflow references, and handoff schemas validated for stale cross-references, mismatched fields, and structural inconsistencies | Content correctness tests pass in CI, following dead-end detection pattern | FR20 |
-| **CLI coverage matches project standard** | bmad-update.js and bmad-version.js coverage at 85%+ lines. Legacy migration coverage documented but not targeted for 85%. | Coverage report per module | FR21-22 |
+| **CLI coverage matches project standard** | convoke-update.js and convoke-version.js coverage at 85%+ lines. Legacy migration coverage documented but not targeted for 85%. | Coverage report per module | FR21-22 |
 | **Zero bugs the test suite should have caught** | Post-release: no patches required for issues that existing or new tests should have detected. Patches for genuinely novel issues are acceptable. | Post-release review at 7 days | FR33 |
 
 ### Measurable Outcomes (Aggregate Targets)
@@ -138,7 +138,7 @@ BMAD-Enhanced is an AI-powered product discovery framework that shipped its v1.6
 - **Docs accuracy:** Zero grep hits for stale patterns post-fix (gate: User Trust)
 - **Handoff coverage:** 5/5 artifact contracts (HC1-HC5) validated (gate: Product Correctness)
 - **Content correctness:** Validation tests operational in CI (gate: Engineering Confidence)
-- **CLI coverage:** 85%+ for bmad-update.js and bmad-version.js (gate: Engineering Confidence)
+- **CLI coverage:** 85%+ for convoke-update.js and convoke-version.js (gate: Engineering Confidence)
 - **Feedback mechanism:** Structured feedback prompt operational — users can submit in under 30 seconds without leaving IDE (FR30, NFR17)
 - **Release gate:** All 9 gate criteria pass before `npm publish`
 
@@ -152,7 +152,7 @@ BMAD-Enhanced is an AI-powered product discovery framework that shipped its v1.6
 2. **P0 test suites for all 7 agents** — Two templates: infrastructure (Emma/Wade) and content-only (Mila/Liam/Noah/Isla/Max). No pivot — all 7 automated.
 3. **End-to-end journey example** — Captured from real runs on busy parents domain. Editorially reviewed.
 4. **Content correctness testing** — Agent definitions, workflow references, handoff schemas validated in CI.
-5. **CLI coverage gaps** — bmad-update.js and bmad-version.js at 85%+.
+5. **CLI coverage gaps** — convoke-update.js and convoke-version.js at 85%+.
 6. **README as landing page** — Discovery experience with example output showcase and visual chain overview.
 7. **Structured feedback prompt** — Low-friction mechanism for users to submit quality issues, missing capabilities, or general comments. Repo-only (GitHub issue template or local file). Under 30 seconds, no IDE exit.
 
@@ -170,17 +170,17 @@ BMAD-Enhanced is an AI-powered product discovery framework that shipped its v1.6
 
 ### Journey 1: The New Adopter — "Is this real?"
 
-**Raya**, a solo founder building a B2B SaaS for freelancer invoicing. A colleague sends her a GitHub link to BMAD-Enhanced. She's been using Claude in her IDE but feels scattered — research in one chat, brainstorming in another, no structure connecting them.
+**Raya**, a solo founder building a B2B SaaS for freelancer invoicing. A colleague sends her a GitHub link to Convoke. She's been using Claude in her IDE but feels scattered — research in one chat, brainstorming in another, no structure connecting them.
 
 **Opening Scene:** Raya reads the README. She sees "7 Innovation Vortex streams" and a visual showing how agents connect. She's intrigued but skeptical — she's seen frameworks that promise structure and deliver templates. She clicks into the docs to see what agents actually do.
 
-**Rising Action:** She runs `npx bmad-enhanced` to install. She invokes Emma to contextualize her invoicing product. The conversation feels like working with a sharp colleague, not filling out a form. Emma produces a Contextualize Brief. Then she sees the Vortex Compass suggesting Isla next. She follows the thread — Isla takes Emma's output and runs empathy research. The handoff is seamless; Isla already knows what Emma established.
+**Rising Action:** She runs `npx convoke` to install. She invokes Emma to contextualize her invoicing product. The conversation feels like working with a sharp colleague, not filling out a form. Emma produces a Contextualize Brief. Then she sees the Vortex Compass suggesting Isla next. She follows the thread — Isla takes Emma's output and runs empathy research. The handoff is seamless; Isla already knows what Emma established.
 
 **Climax:** She clicks the journey example link from the README — one click from where she landed. She sees a complete 7-agent run on the busy parents domain with real artifacts at every handoff. She sees the chain working: Emma → Isla → Synthesize → Hypothesize → Wade → Sensitize → Max. She thinks: "This is what my scattered Claude sessions are missing."
 
 **Failure Branch:** Raya tries to invoke Synthesize without running Isla first. The Vortex Compass provides clear prerequisite guidance — she needs empathy artifacts as input. She learns the chain has structure, not just suggestions. She runs `/bmad-help` and finds the FAQ explaining the agent sequence.
 
-**Resolution:** Raya finishes her first session with a Contextualize Brief and an Empathy Map. She keeps going the next day — running Synthesize to converge her research. BMAD-Enhanced becomes her product discovery backbone.
+**Resolution:** Raya finishes her first session with a Contextualize Brief and an Empathy Map. She keeps going the next day — running Synthesize to converge her research. Convoke becomes her product discovery backbone.
 
 **Phase 2 dependency:** Stale docs → she bounces at the README. Broken links → she loses trust. No journey example → she never sees the chain. Inconsistent agent output → handoff feels broken. Journey example not linked from README → she never finds it.
 
@@ -188,9 +188,9 @@ BMAD-Enhanced is an AI-powered product discovery framework that shipped its v1.6
 
 ### Journey 2: The Returning User — "Did the update break anything?"
 
-**Tomás**, a PM at a small startup. He installed BMAD-Enhanced three weeks ago at v1.5.2 and has been using Emma and Wade regularly. He has custom TEA agents in his manifest. He sees on GitHub that v1.6.4 is out with 7 agents instead of 4. This journey validates fixes already shipped in v1.6.4.
+**Tomás**, a PM at a small startup. He installed Convoke three weeks ago at v1.5.2 and has been using Emma and Wade regularly. He has custom TEA agents in his manifest. He sees on GitHub that v1.6.4 is out with 7 agents instead of 4. This journey validates fixes already shipped in v1.6.4.
 
-**Opening Scene:** Tomás runs `npx bmad-update`. It says "Already up to date" — but he knows 1.6.4 exists. The output prints a cache hint automatically: "If you expected a newer version, npx may be serving a cached copy." He runs the suggested command.
+**Opening Scene:** Tomás runs `npx convoke-update`. It says "Already up to date" — but he knows 1.6.4 exists. The output prints a cache hint automatically: "If you expected a newer version, npx may be serving a cached copy." He runs the suggested command.
 
 **Rising Action:** The update pulls v1.6.4. His manifest regenerates — his custom TEA agents survive the merge. He checks his `/tea` slash command. It works. He checks whether his existing `_bmad-output/` artifacts from v1.5 are still compatible with updated agents — the UPDATE-GUIDE includes a forward-compatibility note confirming they are.
 
@@ -222,7 +222,7 @@ Hypothesize takes the definition and runs brainwriting. The 4-field hypothesis c
 
 ### Journey 4: The Module Extender — "I want to make this my own"
 
-**Kai**, a technical PM who's been using BMAD-Enhanced for a month. He wants domain-specific agents — a compliance reviewer for his fintech product.
+**Kai**, a technical PM who's been using Convoke for a month. He wants domain-specific agents — a compliance reviewer for his fintech product.
 
 **Opening Scene:** Kai copies an existing agent row in `agent-manifest.csv`, changes the name, and creates a markdown file. His new agent works — but it's a shallow wrapper with no persona depth. He adds three more hand-rolled agents.
 
@@ -238,15 +238,15 @@ Hypothesize takes the definition and runs brainwriting. The 4-field hypothesis c
 
 ### Journey 5: The Maintainer — "Will this update break someone's setup?"
 
-**Amalik** ships BMAD-Enhanced. Sole maintainer — every release goes through him. No QA team, no staging with real user setups.
+**Amalik** ships Convoke. Sole maintainer — every release goes through him. No QA team, no staging with real user setups.
 
 **Opening Scene:** Tests pass. CI is green. 268 tests, 83%+ coverage. He opens a terminal to publish. He pauses.
 
 **Rising Action:** Did `refreshInstallation` handle the manifest correctly? Will someone with custom agents lose their rows? Will guides copy to the right place? Will someone on v1.5.2 with the npx cache issue even get this version? Each fix in v1.6.x was reactive — a user hit the problem, he patched it. The test suite validates code paths but doesn't validate what a real user experiences during upgrade.
 
-**Climax:** He can't simulate "Tomás with a 3-week-old install and custom agents runs bmad-update." Integration tests mock the filesystem. They prove functions work. They don't prove the experience works. The gap between "tests pass" and "safe to ship" is filled by his memory of past bugs.
+**Climax:** He can't simulate "Tomás with a 3-week-old install and custom agents runs convoke-update." Integration tests mock the filesystem. They prove functions work. They don't prove the experience works. The gap between "tests pass" and "safe to ship" is filled by his memory of past bugs.
 
-**Resolution (Phase 2):** P0 suites validate every agent's output — not just that code runs, but that artifacts contain fields downstream agents need. Handoff tests prove the chain works. Content correctness tests catch stale references before users do. CLI coverage closes the under-tested modules (bmad-update at 29%, bmad-version at 56%). He still pauses before `npm publish` — but the pause is shorter. The test suite catches the bug categories that burned him in v1.5 through v1.6.4.
+**Resolution (Phase 2):** P0 suites validate every agent's output — not just that code runs, but that artifacts contain fields downstream agents need. Handoff tests prove the chain works. Content correctness tests catch stale references before users do. CLI coverage closes the under-tested modules (convoke-update at 29%, convoke-version at 56%). He still pauses before `npm publish` — but the pause is shorter. The test suite catches the bug categories that burned him in v1.5 through v1.6.4.
 
 **Phase 2 dependency:** No P0 suites → agent changes go out unvalidated. No handoff tests → field renames silently break chains. No content tests → stale text ships. Low CLI coverage → update bugs found by users, not CI.
 
@@ -303,7 +303,7 @@ Solo maintainer means sequential work — the order *is* the strategy. Dependenc
 3. **P0 Suites: Content-Only Agents** — Apply content-only template to Mila, Liam, Noah, Isla, Max. No pivot — commit to automated P0 for all 7.
 4. **Content Correctness / Handoff Tests** — HC1-HC5 contract validation. Overlaps with P0 work.
 5. **Journey Example** — Benefits from everything before it being stable. Cherry-picked captures from real runs on busy parents domain.
-6. **CLI Coverage** — Independent. bmad-update.js, bmad-version.js. Legacy migration gets documented exception.
+6. **CLI Coverage** — Independent. convoke-update.js, convoke-version.js. Legacy migration gets documented exception.
 7. **README as Landing Page + Example Output Showcase** — Transform README into a discovery experience: clear value proposition, example output previews, visual chain overview. Depends on journey example existing.
 8. **Docs Fix Pass 2** — Add journey example link + discovery elements. Ships only after journey and README landing page exist. Re-scan fixed docs before this pass to catch inconsistencies introduced by Pass 1 edits.
 
@@ -329,7 +329,7 @@ Solo maintainer means sequential work — the order *is* the strategy. Dependenc
 
 4. **Content Correctness Testing** — Handoff contract tests (HC1-HC5) run independently, not as a linear chain. Validate that Agent A's output contains fields Agent B needs. Test semantics not syntax: check presence and non-empty, not exact string matching. Word-pattern audit included.
 
-5. **CLI Coverage Gaps** — Focus on bmad-update.js and bmad-version.js. Legacy migration gets documented exception, not automated test coverage.
+5. **CLI Coverage Gaps** — Focus on convoke-update.js and convoke-version.js. Legacy migration gets documented exception, not automated test coverage.
 
 6. **README as Landing Page** — Transform README from technical reference into discovery experience: clear value proposition, example output previews showing what agents produce, visual chain overview. First thing Raya sees.
 
@@ -362,7 +362,7 @@ Solo maintainer means sequential work — the order *is* the strategy. Dependenc
 
 ### Project-Type Overview
 
-BMAD-Enhanced is an npm-distributed developer tool that installs into a user's project via `npx bmad-enhanced`. It operates through AI IDE integrations (VSCode, Cursor, Claude Code) using `.claude/settings.json` for slash command registration. Phase 2 does not change the technical architecture — it improves the quality of documentation, examples, and test coverage.
+Convoke is an npm-distributed developer tool that installs into a user's project via `npx convoke`. It operates through AI IDE integrations (VSCode, Cursor, Claude Code) using `.claude/settings.json` for slash command registration. Phase 2 does not change the technical architecture — it improves the quality of documentation, examples, and test coverage.
 
 ### Documentation Architecture
 
@@ -385,9 +385,9 @@ Existing artifacts from Emma, Isla, Wade, and Max remain usable as inputs to upd
 
 | Method | Command | Status |
 |--------|---------|--------|
-| Fresh install | `npx bmad-enhanced` | Working |
-| Update | `npx bmad-update` | Working (cache hint added in v1.6.4) |
-| Force latest | `npx -p bmad-enhanced@latest bmad-update` | Working (added in v1.6.4) |
+| Fresh install | `npx convoke` | Working |
+| Update | `npx convoke-update` | Working (cache hint added in v1.6.4) |
+| Force latest | `npx -p convoke@latest convoke-update` | Working (added in v1.6.4) |
 
 ### Implementation Considerations
 
@@ -443,8 +443,8 @@ Existing artifacts from Emma, Isla, Wade, and Max remain usable as inputs to upd
 
 ### CLI Reliability
 
-- **FR21** [I]: Maintainer can verify bmad-update.js behavior through automated tests at 85%+ line coverage
-- **FR22** [I]: Maintainer can verify bmad-version.js behavior through automated tests at 85%+ line coverage
+- **FR21** [I]: Maintainer can verify convoke-update.js behavior through automated tests at 85%+ line coverage
+- **FR22** [I]: Maintainer can verify convoke-version.js behavior through automated tests at 85%+ line coverage
 
 ### Extension Guidance
 
@@ -456,7 +456,7 @@ Existing artifacts from Emma, Isla, Wade, and Max remain usable as inputs to upd
 
 *Note: FR26-29 require a design spike before epic breakdown — copy, format, and visual approach need decisions. README copy requires editorial review scope (`/bmad-editorial-review-prose`), not just the journey example.*
 
-- **FR26** [U]: New user arriving at the README can understand BMAD-Enhanced's value proposition within the first scroll
+- **FR26** [U]: New user arriving at the README can understand Convoke's value proposition within the first scroll
 - **FR27** [U]: New user can see example output previews showing what agents actually produce before installing
 - **FR28** [U]: New user can see a visual overview of how the 7-agent chain connects
 - **FR29** [U]: New user can reach the journey example in one click from the README
@@ -519,7 +519,7 @@ Existing artifacts from Emma, Isla, Wade, and Max remain usable as inputs to upd
 
 ### Compatibility
 
-- **NFR13:** `npx bmad-enhanced` and `npx bmad-update` work on macOS, Linux, and Windows (PowerShell + CMD) without platform-specific instructions.
+- **NFR13:** `npx convoke` and `npx convoke-update` work on macOS, Linux, and Windows (PowerShell + CMD) without platform-specific instructions.
 - **NFR14:** Existing `_bmad-output/` artifacts from v1.5.x remain usable as inputs to v1.6.x+ agents without regeneration. Handoff contracts are backward-compatible.
 - **NFR15:** Manifest merge during update preserves all user-added rows (custom agents, TEA agents) without duplication or reordering. *(Regression guardrail — existing behavior, covered implicitly by CLI coverage FR21-22.)*
 - **NFR16:** Package installs cleanly on Node.js LTS versions (18, 20, 22) without peer dependency warnings. *(Regression guardrail — verify CI tests on multiple Node versions.)*

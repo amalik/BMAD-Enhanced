@@ -207,7 +207,7 @@ version: 1.0
 
 ---
 
-**Created with:** BMAD-Enhanced — Vortex Pattern (Contextualize Stream)
+**Created with:** Convoke — Vortex Pattern (Contextualize Stream)
 **Agent:** Emma (Contextualization Expert)
 **Workflow:** lean-persona
 
@@ -885,4 +885,4 @@ Each handoff preserved context, accumulated evidence, and narrowed uncertainty. 
 
 ---
 
-> **About this document:** Every artifact above was captured from a real agent run using the BMAD-Enhanced Vortex pattern on the "busy parents" domain. Agent names, workflow names, and artifact structures match the canonical registry and handoff contract schemas in this repository. Handoff annotations at each transition point reference the specific HC contract and list the fields the receiving agent consumes. Each agent section includes a context declaration that enables non-linear reading. Editorial quality verified through structural review, prose review, and 5-dimension editorial checklist.
+> **About this document:** Every artifact above was captured from a real agent run using the Convoke Vortex pattern on the "busy parents" domain. Agent names, workflow names, and artifact structures match the canonical registry and handoff contract schemas in this repository. Handoff annotations at each transition point reference the specific HC contract and list the fields the receiving agent consumes. Each agent section includes a context declaration that enables non-linear reading. Editorial quality verified through structural review, prose review, and 5-dimension editorial checklist.

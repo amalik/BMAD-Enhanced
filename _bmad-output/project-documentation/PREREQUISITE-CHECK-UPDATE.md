@@ -9,14 +9,14 @@
 ## Problem Identified
 
 User asked important question:
-> "Does a user need to have BMAD Method already installed to add Emma and Wade or does he need, by running npm install bmad-enhanced, to install the whole package?"
+> "Does a user need to have BMAD Method already installed to add Emma and Wade or does he need, by running npm install convoke, to install the whole package?"
 
 ### Original Behavior
 
 **❌ Installation scripts did NOT check for BMAD Method:**
 - Created `_bmad/` directory from scratch if missing
 - Allowed installation without BMAD Method
-- Users could install BMAD-Enhanced standalone (incorrect)
+- Users could install Convoke standalone (incorrect)
 
 **❌ Documentation was ambiguous:**
 - Prerequisites section didn't clearly state BMAD Method required
@@ -43,7 +43,7 @@ if (!fs.existsSync(bmadDir)) {
   console.log('');
   console.error(`${RED}${BOLD}✗ BMAD Method not found!${RESET}`);
   console.log('');
-  console.log(`${YELLOW}BMAD-Enhanced requires BMAD Method to be installed first.${RESET}`);
+  console.log(`${YELLOW}Convoke requires BMAD Method to be installed first.${RESET}`);
   console.log('');
   console.log('Please install BMAD Method:');
   console.log(`  ${CYAN}git clone https://github.com/bmadhub/bmad.git${RESET}`);
@@ -95,7 +95,7 @@ function verifyInstallation() {
 
 **⚠️ IMPORTANT: BMAD Method Required**
 
-BMAD-Enhanced is an extension package. You must have [BMAD Method](https://github.com/bmadhub/bmad) installed first:
+Convoke is an extension package. You must have [BMAD Method](https://github.com/bmadhub/bmad) installed first:
 
 ```bash
 # Install BMAD Method first
@@ -111,7 +111,7 @@ npx bmad-method@alpha install
 Once BMAD Method is installed:
 
 ```bash
-npm install bmad-enhanced && npx bmad-install-agents
+npm install convoke && npx convoke-install
 ```
 
 That's it! Emma and Wade are now **added to your BMAD installation**.
@@ -126,10 +126,10 @@ That's it! Emma and Wade are now **added to your BMAD installation**.
 
 **BMAD Method Required**
 
-BMAD-Enhanced is an **extension package** for the [BMAD Method](https://github.com/bmadhub/bmad). You **must** install BMAD Method first.
+Convoke is an **extension package** for the [BMAD Method](https://github.com/bmadhub/bmad). You **must** install BMAD Method first.
 
 ### Step 1: Install BMAD Method
-### Step 2: Install BMAD-Enhanced Agents
+### Step 2: Install Convoke Agents
 ```
 
 ---
@@ -139,7 +139,7 @@ BMAD-Enhanced is an **extension package** for the [BMAD Method](https://github.c
 **New File:** `BMAD-METHOD-COMPATIBILITY.md`
 
 Comprehensive guide covering:
-- Architecture relationship (BMAD Method vs BMAD-Enhanced)
+- Architecture relationship (BMAD Method vs Convoke)
 - Installation flow
 - Compatibility requirements
 - Update strategy when BMAD Method changes
@@ -160,18 +160,18 @@ Comprehensive guide covering:
 
 ### Installation Flow
 
-**Step 1: User attempts to install BMAD-Enhanced without BMAD Method**
+**Step 1: User attempts to install Convoke without BMAD Method**
 
 ```bash
-npm install bmad-enhanced
-npx bmad-install-agents
+npm install convoke
+npx convoke-install
 ```
 
 **Output:**
 ```
 ╔════════════════════════════════════════════════════╗
 ║                                                    ║
-║        BMAD-Enhanced Complete Installer 🚀        ║
+║        Convoke Complete Installer 🚀        ║
 ║                                                    ║
 ║     Installing Emma + Wade Design Agents          ║
 ║                                                    ║
@@ -181,7 +181,7 @@ npx bmad-install-agents
 
 ✗ BMAD Method not found!
 
-BMAD-Enhanced requires BMAD Method to be installed first.
+Convoke requires BMAD Method to be installed first.
 
 Please install BMAD Method:
   git clone https://github.com/bmadhub/bmad.git
@@ -198,18 +198,18 @@ Then run this installer again.
 npx bmad-method@alpha install
 ```
 
-**Step 3: User installs BMAD-Enhanced successfully**
+**Step 3: User installs Convoke successfully**
 
 ```bash
-npm install bmad-enhanced
-npx bmad-install-agents
+npm install convoke
+npx convoke-install
 ```
 
 **Output:**
 ```
 ╔════════════════════════════════════════════════════╗
 ║                                                    ║
-║        BMAD-Enhanced Complete Installer 🚀        ║
+║        Convoke Complete Installer 🚀        ║
 ║                                                    ║
 ║     Installing Emma + Wade Design Agents          ║
 ║                                                    ║
@@ -254,7 +254,7 @@ npx bmad-install-agents
 ### For You (Maintainer)
 
 ✅ **No need to maintain BMAD Method code**
-- BMAD-Enhanced only contains agents/workflows
+- Convoke only contains agents/workflows
 - BMAD Method handles core framework
 - Clear separation of concerns
 
@@ -275,14 +275,14 @@ npx bmad-install-agents
 - Documentation clearly states requirements
 
 ✅ **Prevents incorrect installation**
-- Can't install BMAD-Enhanced without BMAD Method
+- Can't install Convoke without BMAD Method
 - Installation fails fast with helpful error
 - Verification step confirms correct installation
 
 ✅ **Flexibility**
 - Can use BMAD Method standalone
-- Can add BMAD-Enhanced agents optionally
-- Can uninstall BMAD-Enhanced without affecting BMAD Method
+- Can add Convoke agents optionally
+- Can uninstall Convoke without affecting BMAD Method
 
 ---
 
@@ -300,15 +300,15 @@ npx bmad-install-agents
                       │ requires (prerequisite)
                       │
 ┌─────────────────────────────────────────────────┐
-│        BMAD-Enhanced (Extension Package)        │
-│  Repository: github.com/bmadhub/bmad-enhanced   │
+│        Convoke (Extension Package)        │
+│  Repository: github.com/bmadhub/convoke   │
 │  Maintained by: You                             │
 │  Contains: Emma, Wade, Quinn, Stan agents       │
 │  Adds agents to existing BMAD installation      │
 └─────────────────────────────────────────────────┘
 ```
 
-**Key Principle:** BMAD-Enhanced **extends** BMAD Method, does not include it.
+**Key Principle:** Convoke **extends** BMAD Method, does not include it.
 
 ---
 
@@ -317,13 +317,13 @@ npx bmad-install-agents
 ### Manual Verification
 
 ✅ **Test 1: Install without BMAD Method**
-- Run `npx bmad-install-agents` in empty directory
+- Run `npx convoke-install` in empty directory
 - Expected: Error message, exit code 1
 - Result: ✅ PASS
 
 ✅ **Test 2: Install with BMAD Method**
 - Create `_bmad/` directory (simulating BMAD Method)
-- Run `npx bmad-install-agents`
+- Run `npx convoke-install`
 - Expected: Success, files installed
 - Result: ✅ PASS (would pass if BMAD Method actually installed)
 
@@ -352,7 +352,7 @@ if (!isCompatible(bmadVersion, minVersion)) {
 ### Compatibility Matrix
 
 As BMAD Method releases new versions:
-- Test BMAD-Enhanced compatibility
+- Test Convoke compatibility
 - Update `BMAD-METHOD-COMPATIBILITY.md`
 - Document breaking changes if any
 
@@ -375,24 +375,24 @@ As BMAD Method releases new versions:
 
 ## Summary
 
-**Problem:** Installation allowed BMAD-Enhanced without BMAD Method
+**Problem:** Installation allowed Convoke without BMAD Method
 **Solution:** Added prerequisite checking to all installers + updated documentation
 **Result:** Users must install BMAD Method first, clear error if missing
 
 **Architecture Confirmed:**
 - BMAD Method = Core framework (separate repository)
-- BMAD-Enhanced = Extension package (adds agents only)
-- BMAD-Enhanced requires BMAD Method (prerequisite)
+- Convoke = Extension package (adds agents only)
+- Convoke requires BMAD Method (prerequisite)
 
 **Your Responsibility:**
-- Maintain BMAD-Enhanced agents only
+- Maintain Convoke agents only
 - Test compatibility when BMAD Method updates
 - Update compatibility matrix as needed
 - Don't include BMAD Method code
 
 **User Experience:**
 1. Install BMAD Method first
-2. Install BMAD-Enhanced to add agents
+2. Install Convoke to add agents
 3. Clear error if wrong order
 4. Verification confirms correct installation
 
@@ -400,6 +400,6 @@ As BMAD Method releases new versions:
 
 **Status:** ✅ COMPLETE
 **Date:** 2026-02-15
-**Version:** BMAD-Enhanced v1.0.0-alpha
+**Version:** Convoke v1.0.0-alpha
 
 All prerequisite checking is now in place. Installation system correctly enforces BMAD Method as a prerequisite.

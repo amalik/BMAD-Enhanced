@@ -7,11 +7,11 @@ inputDocuments:
   - _bmad-output/planning-artifacts/epics.md
 ---
 
-# BMAD-Enhanced Phase 2 - Epic Breakdown
+# Convoke Phase 2 - Epic Breakdown
 
 ## Overview
 
-This document provides the complete epic and story breakdown for BMAD-Enhanced Phase 2 ("Stabilize + Targeted Growth"), decomposing the 34 FRs, 18 NFRs, and 7 deliverables from the Phase 2 PRD into implementation-ready stories. Phase 2 makes the product trustworthy: fixing stale documentation, validating every agent's output, proving the chain works end-to-end, and giving new users a compelling first impression.
+This document provides the complete epic and story breakdown for Convoke Phase 2 ("Stabilize + Targeted Growth"), decomposing the 34 FRs, 18 NFRs, and 7 deliverables from the Phase 2 PRD into implementation-ready stories. Phase 2 makes the product trustworthy: fixing stale documentation, validating every agent's output, proving the chain works end-to-end, and giving new users a compelling first impression.
 
 ## Requirements Inventory
 
@@ -54,8 +54,8 @@ This document provides the complete epic and story breakdown for BMAD-Enhanced P
 
 **CLI Reliability (2):**
 
-- FR21 [I]: Maintainer can verify bmad-update.js behavior through automated tests at 85%+ line coverage
-- FR22 [I]: Maintainer can verify bmad-version.js behavior through automated tests at 85%+ line coverage
+- FR21 [I]: Maintainer can verify convoke-update.js behavior through automated tests at 85%+ line coverage
+- FR22 [I]: Maintainer can verify convoke-version.js behavior through automated tests at 85%+ line coverage
 
 **Extension Guidance (3):**
 
@@ -65,7 +65,7 @@ This document provides the complete epic and story breakdown for BMAD-Enhanced P
 
 **Discovery Experience (4):**
 
-- FR26 [U]: New user arriving at the README can understand BMAD-Enhanced's value proposition within the first scroll
+- FR26 [U]: New user arriving at the README can understand Convoke's value proposition within the first scroll
 - FR27 [U]: New user can see example output previews showing what agents actually produce before installing
 - FR28 [U]: New user can see a visual overview of how the 7-agent chain connects
 - FR29 [U]: New user can reach the journey example in one click from the README
@@ -109,7 +109,7 @@ This document provides the complete epic and story breakdown for BMAD-Enhanced P
 
 **Compatibility (6):**
 
-- NFR13: npx bmad-enhanced and npx bmad-update work on macOS, Linux, and Windows (PowerShell + CMD) without platform-specific instructions.
+- NFR13: npx convoke and npx convoke-update work on macOS, Linux, and Windows (PowerShell + CMD) without platform-specific instructions.
 - NFR14: Existing _bmad-output/ artifacts from v1.5.x remain usable as inputs to v1.6.x+ agents without regeneration. Handoff contracts are backward-compatible.
 - NFR15: Manifest merge during update preserves all user-added rows (custom agents, TEA agents) without duplication or reordering. (Regression guardrail.)
 - NFR16: Package installs cleanly on Node.js LTS versions (18, 20, 22) without peer dependency warnings. (Regression guardrail.)
@@ -150,8 +150,8 @@ FR17: Epic 4 - Handoff annotations explaining consumed fields and contracts
 FR18: Epic 4 - Self-contained sections enabling non-linear reading
 FR19: Epic 4 - Journey quality verification via editorial checklist
 FR20: Epic 3 - CI content correctness validation across agents/workflows/schemas
-FR21: Epic 5 - bmad-update.js automated tests at 85%+ line coverage
-FR22: Epic 5 - bmad-version.js automated tests at 85%+ line coverage
+FR21: Epic 5 - convoke-update.js automated tests at 85%+ line coverage
+FR22: Epic 5 - convoke-version.js automated tests at 85%+ line coverage
 FR23: Epic 1 - Extension guidance: build through BMB or fork, not hand-rolled
 FR24: Epic 1 - Bloat warning about unstructured agent additions
 FR25: Epic 1 - Journey example as implicit format reference for handoff debugging
@@ -493,17 +493,17 @@ So that the journey reads as a coherent narrative with professional prose qualit
 
 CLI tools are hardened with 85%+ test coverage, the README landing page communicates BMAD's value to non-technical PMs, and users can submit structured feedback — three independent work streams unified by their shared goal of making BMAD approachable and trustworthy from first contact.
 
-### Story 5.1: bmad-update.js Automated Tests at 85%+ Coverage
+### Story 5.1: convoke-update.js Automated Tests at 85%+ Coverage
 
 As a maintainer,
-I want automated tests for bmad-update.js achieving 85%+ line coverage,
+I want automated tests for convoke-update.js achieving 85%+ line coverage,
 So that I can confidently ship update CLI changes knowing regressions will be caught.
 
 **Acceptance Criteria:**
 
-**Given** bmad-update.js exists with its current functionality
+**Given** convoke-update.js exists with its current functionality
 **When** the maintainer runs the test suite with coverage reporting
-**Then** unit and integration tests cover bmad-update.js at 85%+ line coverage measured by c8 (FR21)
+**Then** unit and integration tests cover convoke-update.js at 85%+ line coverage measured by c8 (FR21)
 **And** tests validate core update behaviors: manifest merge, file copying, version detection
 **And** tests verify manifest merge preserves all user-added rows (custom agents, TEA agents) without duplication or reordering (NFR15)
 **And** tests include at least 3 edge case scenarios: malformed input handling, partial failure recovery, and duplicate entry handling — coverage target applies to branch coverage, not just line coverage
@@ -512,17 +512,17 @@ So that I can confidently ship update CLI changes knowing regressions will be ca
 **And** tests use `node:test` + c8 with no new dependencies (NFR7)
 **And** test files are self-documenting (NFR8)
 
-### Story 5.2: bmad-version.js Automated Tests at 85%+ Coverage
+### Story 5.2: convoke-version.js Automated Tests at 85%+ Coverage
 
 As a maintainer,
-I want automated tests for bmad-version.js achieving 85%+ line coverage,
+I want automated tests for convoke-version.js achieving 85%+ line coverage,
 So that I can confidently ship version CLI changes knowing regressions will be caught.
 
 **Acceptance Criteria:**
 
-**Given** bmad-version.js exists with its current functionality
+**Given** convoke-version.js exists with its current functionality
 **When** the maintainer runs the test suite with coverage reporting
-**Then** unit and integration tests cover bmad-version.js at 85%+ line coverage measured by c8 (FR22)
+**Then** unit and integration tests cover convoke-version.js at 85%+ line coverage measured by c8 (FR22)
 **And** tests validate core version behaviors: version reading, display formatting, comparison logic
 **And** tests include at least 3 edge case scenarios: malformed version strings, missing version files, and unexpected format handling — coverage target applies to branch coverage, not just line coverage
 **And** tests verify cross-platform path handling and OS-specific behaviors via mocked `process.platform` and filesystem abstractions — not actual multi-OS execution (NFR13)
@@ -532,7 +532,7 @@ So that I can confidently ship version CLI changes knowing regressions will be c
 ### Story 5.3: README Landing Page — Value Proposition & Visual Overview
 
 As a new user arriving at the README,
-I want to understand BMAD-Enhanced's value proposition within the first scroll and see a visual overview of how the 7-agent chain connects,
+I want to understand Convoke's value proposition within the first scroll and see a visual overview of how the 7-agent chain connects,
 So that I can quickly decide whether BMAD fits my needs without reading detailed documentation.
 
 **Acceptance Criteria:**
@@ -633,7 +633,7 @@ So that I can verify the complete Phase 2 user experience works as designed and 
 **Then** the script covers: install via npx → first agent invocation → agent handoff → journey example discovery (FR34)
 **And** each step has explicit pass/fail criteria documented in the script
 **And** friction points encountered during the walkthrough are recorded with severity and location
-**And** the walkthrough validates that `npx bmad-enhanced` works on the target platform (NFR13)
+**And** the walkthrough validates that `npx convoke` works on the target platform (NFR13)
 **And** the walkthrough confirms new user can reach the journey example from README in one click (FR29 validation)
 **And** the walkthrough confirms Vortex Compass provides prerequisite guidance when artifacts are missing (FR31 validation)
 **And** the walkthrough must be executed with fresh-context perspective (someone who did NOT build the Phase 2 content, or simulated via fresh-context LLM agent) to validate navigation is intuitive without insider knowledge

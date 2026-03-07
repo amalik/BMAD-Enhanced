@@ -1,4 +1,4 @@
-# BMAD-Enhanced Documentation Cleanup Audit
+# Convoke Documentation Cleanup Audit
 
 **Date:** 2026-02-15
 **Current Version:** 1.0.3-alpha (published)
@@ -83,7 +83,7 @@ Remove any .tgz files from root (should be in .gitignore/.npmignore)
 ## Final Structure
 
 ```
-BMAD-Enhanced/
+Convoke/
 ├── README.md                          # Main docs
 ├── INSTALLATION.md                    # Installation guide
 ├── LICENSE                            # License

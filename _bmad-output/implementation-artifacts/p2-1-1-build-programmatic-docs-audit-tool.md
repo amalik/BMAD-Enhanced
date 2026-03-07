@@ -104,7 +104,7 @@ The audit tool MUST derive ALL expected values from `scripts/update/lib/agent-re
 - Orchestrator calls all checks, aggregates results
 - Uses `AGENTS`, `WORKFLOWS` etc. from registry imports
 
-**bmad-doctor.js pattern** ([scripts/bmad-doctor.js](scripts/bmad-doctor.js)):
+**convoke-doctor.js pattern** ([scripts/convoke-doctor.js](scripts/convoke-doctor.js)):
 - User-facing CLI with colored chalk output
 - Runs checks sequentially, prints pass/fail per check
 - Reports summary at end
@@ -160,9 +160,9 @@ Modified: `package.json` (add `docs:audit` script entry)
 ### Project Structure Notes
 
 - Alignment with existing `scripts/` directory for CLI tools
-- Follows `scripts/bmad-doctor.js` precedent for user-facing diagnostic tool
+- Follows `scripts/convoke-doctor.js` precedent for user-facing diagnostic tool
 - Test file follows `tests/unit/*.test.js` naming convention
-- Imports from `scripts/update/lib/agent-registry.js` — same pattern as validator.js and bmad-doctor.js
+- Imports from `scripts/update/lib/agent-registry.js` — same pattern as validator.js and convoke-doctor.js
 
 ### Testing Standards
 
@@ -179,7 +179,7 @@ Modified: `package.json` (add `docs:audit` script entry)
 - [Source: _bmad-output/planning-artifacts/architecture.md — Technical Stack, Code Structure, Testing Standards]
 - [Source: scripts/update/lib/agent-registry.js — Single source of truth for agents/workflows]
 - [Source: scripts/update/lib/validator.js — Check function pattern: {name, passed, error, info, fix, warning}]
-- [Source: scripts/bmad-doctor.js — CLI output pattern with chalk]
+- [Source: scripts/convoke-doctor.js — CLI output pattern with chalk]
 - [Source: scripts/update/lib/utils.js — findProjectRoot() utility]
 - [Source: tests/helpers.js — createTempDir(), runScript(), silenceConsole()]
 - [Source: package.json — existing deps: chalk@^4.1.2, fs-extra@^11.3.3, js-yaml@^4.1.0]
@@ -194,7 +194,7 @@ Claude Opus 4.6
 
 ### Completion Notes List
 
-- Implemented `scripts/docs-audit.js` — single-file CLI tool following bmad-doctor.js pattern
+- Implemented `scripts/docs-audit.js` — single-file CLI tool following convoke-doctor.js pattern
 - All expected values derived dynamically from `agent-registry.js` (AGENTS, WORKFLOWS, WORKFLOW_NAMES) — zero hardcoded values
 - 4 check functions: `checkStaleReferences` (digit + written-out number + contradictory terminology), `checkBrokenLinks` (markdown link validation), `checkBrokenPaths` (backtick-wrapped path references), `checkDocsCoverage` (agent + workflow doc mention coverage)
 - Report supports human-readable (chalk-colored) and machine-readable (--json flag) output

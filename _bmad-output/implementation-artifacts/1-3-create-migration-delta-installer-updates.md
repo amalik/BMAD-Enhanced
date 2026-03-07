@@ -6,13 +6,13 @@ Status: done
 
 As a user upgrading from v1.5.x,
 I want the migration system to add all 3 new agents and 9 workflows to my existing config without losing my customizations,
-So that I get the complete 7-agent Vortex through `npx bmad-update`.
+So that I get the complete 7-agent Vortex through `npx convoke-update`.
 
 ## Acceptance Criteria
 
 1. **AC1: Migration delta file exists and is registered**
    - **Given** a user upgrading from v1.5.x
-   - **When** `npx bmad-update` runs
+   - **When** `npx convoke-update` runs
    - **Then** migration registry contains a `1.5.x-to-1.6.0` entry
    - **And** the entry lazy-loads `1.5.x-to-1.6.0.js` delta file
    - **And** the delta is marked `breaking: false`

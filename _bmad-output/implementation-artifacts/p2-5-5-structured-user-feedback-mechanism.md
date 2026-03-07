@@ -195,7 +195,7 @@ All three paths meet the 30-second constraint for a brief description.
 - Do NOT add new npm dependencies — this is markdown/YAML content only
 - Do NOT create complex feedback workflows — this is a simple structured form
 - Do NOT modify any JavaScript, test files, or CI configuration
-- Do NOT add the feedback template to the installer (`bmad-install-vortex-agents`) — this is a repo-level file, not a user-installed file
+- Do NOT add the feedback template to the installer (`convoke-install-vortex`) — this is a repo-level file, not a user-installed file
 - Do NOT use `<details><summary>` in README content (Story 5.3 lesson)
 - Do NOT introduce a double `---` separator — the Contributing section is bounded by separators at lines 230 and 243. Ensure exactly one `---` above and below after insertion (Story 5.3 code review found and fixed a double `---` — don't reintroduce it)
 - Do NOT include HC IDs, contract schemas, or implementation jargon in user-facing text

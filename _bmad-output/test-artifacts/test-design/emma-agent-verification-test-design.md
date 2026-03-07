@@ -38,7 +38,7 @@ This test design provides comprehensive operational verification for **Emma (emp
 **Display Name:** Emma
 **Icon:** 🎨
 **Role:** User Empathy Expert + Design Thinking Specialist
-**Module:** bme (BMAD Enhanced)
+**Module:** bme (Convoke)
 **Submodule:** _designos
 
 **Slash Command:** `/bmad-agent-bme-empathy-mapper`

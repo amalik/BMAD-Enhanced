@@ -133,7 +133,7 @@ status: DRAFT
 ---
 
 **Created by:** {creator-name}
-**Created with:** Emma (contextualization-expert) - BMAD Enhanced
+**Created with:** Emma (contextualization-expert) - Convoke
 **Date:** {creation-date}
 **Version:** 1.0
 **Status:** {status}

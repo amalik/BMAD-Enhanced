@@ -9,7 +9,7 @@ inputDocuments:
 # Implementation Readiness Assessment Report
 
 **Date:** 2026-02-23
-**Project:** BMAD-Enhanced v1.6.0
+**Project:** Convoke v1.6.0
 **Assessor:** Implementation Readiness Workflow (Full Assessment)
 
 ---
@@ -73,7 +73,7 @@ FR25 says "each of the 10 handoff contracts has a defined artifact schema." Stor
 
 ### UX Document Status: Not Found — Not Required
 
-BMAD-Enhanced is a Developer Tool + Content Platform. Users interact through IDE conversation, not a traditional GUI. The "UX" is the workflow step architecture, agent personas, and artifact formats — all covered by FRs 46-52 and NFRs 15-20.
+Convoke is a Developer Tool + Content Platform. Users interact through IDE conversation, not a traditional GUI. The "UX" is the workflow step architecture, agent personas, and artifact formats — all covered by FRs 46-52 and NFRs 15-20.
 
 **No UX alignment issues.**
 

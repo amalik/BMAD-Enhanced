@@ -451,7 +451,7 @@ Wade is production-ready with no blocking conditions.
 
 ### Long-term (Week 3)
 - [ ] Complete all 4 agents (Emma ✅, Wade ✅, Quinn 📋, Stan 📋)
-- [ ] BMAD-Enhanced v1.0.0 release
+- [ ] Convoke v1.0.0 release
 
 ---
 

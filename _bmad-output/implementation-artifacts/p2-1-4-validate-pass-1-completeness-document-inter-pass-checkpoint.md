@@ -116,7 +116,7 @@ Each subsequent epic introduces documentation content that Pass 2 must verify:
 **Epic 5 (CLI Reliability, Discovery Experience & User Feedback):**
 - README.md major rewrite — landing page, value proposition, visual overview
 - Output previews and journey link in README
-- Test coverage changes for `bmad-update.js` and `bmad-version.js` (85% target)
+- Test coverage changes for `convoke-update.js` and `convoke-version.js` (85% target)
 - docs/testing.md coverage thresholds may change
 - Structured user feedback mechanism → may add docs/faq.md content
 

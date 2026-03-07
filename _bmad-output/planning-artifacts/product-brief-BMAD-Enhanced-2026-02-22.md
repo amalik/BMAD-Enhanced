@@ -8,7 +8,7 @@ author: Amalik
 scope: "Wave 3 — Synthesize, Hypothesize, Sensitize agents"
 ---
 
-# Product Brief: BMAD-Enhanced — Wave 3 Agents
+# Product Brief: Convoke — Wave 3 Agents
 
 <!-- Content will be appended sequentially through collaborative workflow steps -->
 
@@ -95,11 +95,11 @@ Three new Vortex agents, each with 2-3 workflows following established patterns 
 
 **The Product Builder — "Anyone responsible for making product decisions"**
 
-BMAD-Enhanced serves a single, broad user archetype: the product builder working with an AI assistant to navigate product discovery. This ranges from solo founders using the Vortex as a virtual expert team to CPOs and product managers at large organizations struggling with the "why" behind their products. Wave 3 does not create new user segments — it fills blind spots for everyone already using (or adopting) the framework.
+Convoke serves a single, broad user archetype: the product builder working with an AI assistant to navigate product discovery. This ranges from solo founders using the Vortex as a virtual expert team to CPOs and product managers at large organizations struggling with the "why" behind their products. Wave 3 does not create new user segments — it fills blind spots for everyone already using (or adopting) the framework.
 
 **Profile:**
 - **Role:** Solo founder, product manager, head of product, CPO, or any practitioner responsible for product decisions
-- **Environment:** Works with an AI coding assistant (Claude, GPT, etc.) in their IDE or terminal. BMAD-Enhanced is installed as an npm package in their project
+- **Environment:** Works with an AI coding assistant (Claude, GPT, etc.) in their IDE or terminal. Convoke is installed as an npm package in their project
 - **Skill level:** Treated as a practitioner regardless of seniority. The agents speak *with* them, not *down to* them
 - **Key characteristic:** The AI agent is their collaborator — not a tool they delegate to, but a thinking partner they work alongside. For solo founders, the AI *is* the team. For larger orgs, the AI augments the team's process
 
@@ -117,7 +117,7 @@ A critical design principle for Wave 3: the AI agent *is* the brainstorming part
 
 ### Secondary Users
 
-N/A — No buyer/user distinction exists currently. The person who installs BMAD-Enhanced is the person who uses it.
+N/A — No buyer/user distinction exists currently. The person who installs Convoke is the person who uses it.
 
 ### User Journey
 
@@ -125,7 +125,7 @@ The user journey for Wave 3 is an extension of the existing Vortex journey, not 
 
 **Discovery:** Users already familiar with Emma, Isla, Wade, or Max encounter the gaps naturally. "I finished Isla's empathy map — now what?" leads them to Synthesize. "I have a problem definition but no solution ideas" leads them to Hypothesize. "My product launched but I don't know what's happening" leads them to Sensitize. New users adopting the full framework get all 7 agents from day one.
 
-**Onboarding:** Same as existing agents — `npx bmad-install-agents` installs everything. Each agent has a user guide. The Vortex Compass at the end of every workflow naturally routes users to Wave 3 agents when appropriate.
+**Onboarding:** Same as existing agents — `npx convoke-install` installs everything. Each agent has a user guide. The Vortex Compass at the end of every workflow naturally routes users to Wave 3 agents when appropriate.
 
 **Core Usage by agent:**
 - **Synthesize:** User brings Isla's artifacts → agent guides JTBD and Pains & Gains convergence → outputs a single problem definition. Typical session: 30-60 minutes.
@@ -147,13 +147,13 @@ The user journey for Wave 3 is an extension of the existing Vortex journey, not 
 
 | Gate | Criteria | Measurement |
 |------|----------|-------------|
-| **Agent file integrity** | All 7 agent .md files present with valid frontmatter (name, title, icon, stream) | `bmad-doctor` validation — binary pass/fail |
-| **Workflow completeness** | Each Wave 3 agent ships with 2-3 workflows following step-file architecture | File count + structure validation in `bmad-doctor` |
+| **Agent file integrity** | All 7 agent .md files present with valid frontmatter (name, title, icon, stream) | `convoke-doctor` validation — binary pass/fail |
+| **Workflow completeness** | Each Wave 3 agent ships with 2-3 workflows following step-file architecture | File count + structure validation in `convoke-doctor` |
 | **Vortex Compass integration** | Every workflow ends with Compass routing that includes all 7 agents | Manual review checklist — every workflow file checked |
 | **Handoff contract coverage** | All 9 declared handoff contracts from the product brief have corresponding Compass triggers | Contract-to-trigger mapping — each contract verified |
 | **Registry consistency** | `agent-registry.js` contains all 7 agents with complete persona data; manifest CSV generation produces valid output | Unit test + integration test coverage |
 | **Test suite** | All existing tests pass; new agents covered by validator; no regression | `npm test` — zero failures |
-| **Install flow** | `npx bmad-install-agents` installs all 7 agents, generates correct manifest, config validates | Installer E2E test |
+| **Install flow** | `npx convoke-install` installs all 7 agents, generates correct manifest, config validates | Installer E2E test |
 | **User guides** | Each Wave 3 agent has a user guide following existing naming convention | File presence check |
 
 ### Adoption Signals (Directional — tracked post-release, no specific targets)
@@ -229,7 +229,7 @@ All 3 new agents (Mila, Liam, Noah) appear in Party Mode from day one, with full
 
 - `agent-registry.js` expanded to 7 agents with complete persona data
 - `validator.js` updated to check all 7 agents and expanded workflow count
-- `bmad-doctor` validates the full 7-agent Vortex
+- `convoke-doctor` validates the full 7-agent Vortex
 - Manifest CSV generation produces all 7 agents
 - Config updated with new workflow entries
 
@@ -244,7 +244,7 @@ All 3 new agents (Mila, Liam, Noah) appear in Party Mode from day one, with full
 ### MVP Success Criteria
 
 MVP success = all Release Quality Gates from the Success Metrics section pass:
-1. All 7 agent files present with valid frontmatter — `bmad-doctor` passes
+1. All 7 agent files present with valid frontmatter — `convoke-doctor` passes
 2. All Wave 3 workflows follow step-file architecture — structure validated
 3. All 9 handoff contracts have Compass triggers — contract-to-trigger mapping complete
 4. All existing tests pass + new agents covered — `npm test` zero failures

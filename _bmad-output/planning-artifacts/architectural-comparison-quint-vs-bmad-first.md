@@ -1,16 +1,16 @@
-# BMAD-Enhanced: Architectural Comparison Analysis
+# Convoke: Architectural Comparison Analysis
 ## Option 1 (Quint-First) vs Option 2 (BMAD-First)
 
 **Version:** 1.0.0
 **Date:** 2026-02-04
 **Status:** Analysis Complete
-**Owner:** BMAD-Enhanced Architecture Team
+**Owner:** Convoke Architecture Team
 
 ---
 
 ## Executive Summary
 
-This document provides a comprehensive technical comparison of two architectural approaches for integrating four frameworks (BMAD Method, Quint FPF, DesignOS, AgentOS) into BMAD-Enhanced.
+This document provides a comprehensive technical comparison of two architectural approaches for integrating four frameworks (BMAD Method, Quint FPF, DesignOS, AgentOS) into Convoke.
 
 ### Quick Recommendation
 
@@ -67,7 +67,7 @@ This document provides a comprehensive technical comparison of two architectural
 - Git-friendly markdown artifacts (human-readable)
 - Extensible module system (federated architecture)
 - Zero-setup workflows (no compilation, no build step)
-- Already being used to build BMAD-Enhanced (dogfooding)
+- Already being used to build Convoke (dogfooding)
 
 **Weaknesses:**
 - No evidence tracking or trust score computation
@@ -2240,7 +2240,7 @@ Goal: Complete the hypothesis → design → story → test chain.
 Goal: Documentation, migration guides, and v1.0 release.
 
 - Week 27-28: Complete documentation (50 pages)
-- Week 29: Create migration guide (BMAD v6 → BMAD-Enhanced v1)
+- Week 29: Create migration guide (BMAD v6 → Convoke v1)
 - Week 30: v1.0 release, announcement, community onboarding
 
 **Deliverables:**
@@ -2254,7 +2254,7 @@ Goal: Documentation, migration guides, and v1.0 release.
 ### 13.5 Success Metrics (Post-Launch)
 
 **Adoption Metrics:**
-- 100+ teams using BMAD-Enhanced within 6 months
+- 100+ teams using Convoke within 6 months
 - 80%+ enable Quint integration (opt-in rate)
 - NPS ≥8 (Net Promoter Score)
 

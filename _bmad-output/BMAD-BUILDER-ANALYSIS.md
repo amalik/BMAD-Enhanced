@@ -291,7 +291,7 @@ cd your-module
 
 ## Recommendation
 
-### ❌ Do NOT Use BMAD Builder for BMAD Enhanced
+### ❌ Do NOT Use BMAD Builder for Convoke
 
 **Primary Reason:** **BMAD Builder CANNOT provide individual agent npm packages.**
 
@@ -335,7 +335,7 @@ If we create **additional agents** in the future (Phase 1.5 - "Enhance Agent Cap
 
 ## Summary
 
-**Question:** Should we use BMAD Builder for BMAD Enhanced?
+**Question:** Should we use BMAD Builder for Convoke?
 
 **Answer:** ❌ **No** - BMAD Builder does not support individual agent npm packages, which is a core user requirement.
 

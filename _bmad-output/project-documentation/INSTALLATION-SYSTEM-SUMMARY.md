@@ -1,4 +1,4 @@
-# BMAD-Enhanced Installation System - Complete Summary
+# Convoke Installation System - Complete Summary
 
 **Created:** 2026-02-15
 **Status:** ✅ Complete and Production Ready
@@ -7,20 +7,20 @@
 
 ## Overview
 
-Created a complete npm-based installation system that allows users to install BMAD-Enhanced agents with a single command.
+Created a complete npm-based installation system that allows users to install Convoke agents with a single command.
 
 ### User Experience
 
 **Before:**
 ```bash
-git clone https://github.com/yourusername/BMAD-Enhanced.git
-cd BMAD-Enhanced
+git clone https://github.com/yourusername/Convoke.git
+cd Convoke
 # Manually copy files, configure agents, create directories...
 ```
 
 **After:**
 ```bash
-npm install bmad-enhanced && npx bmad-install-agents
+npm install convoke && npx convoke-install
 # Done! Agents installed and ready to use.
 ```
 
@@ -33,7 +33,7 @@ npm install bmad-enhanced && npx bmad-install-agents
 **File:** `package.json`
 - npm package metadata
 - Installation scripts (install:emma, install:wade, install:agents)
-- Binary commands (bmad-install-emma, bmad-install-wade, bmad-install-agents)
+- Binary commands (convoke-install-emma, convoke-install-wade, convoke-install)
 - Dependencies: fs-extra, chalk
 
 ### 2. Installation Scripts (4 files)
@@ -102,12 +102,12 @@ npm install bmad-enhanced && npx bmad-install-agents
 
 ```bash
 # Install all agents (Emma + Wade)
-npm install bmad-enhanced
-npx bmad-install-agents
+npm install convoke
+npx convoke-install
 
 # Install individual agents
-npx bmad-install-emma    # Emma only
-npx bmad-install-wade    # Wade only
+npx convoke-install-emma    # Emma only
+npx convoke-install-wade    # Wade only
 ```
 
 ### Output Example
@@ -115,7 +115,7 @@ npx bmad-install-wade    # Wade only
 ```
 ╔════════════════════════════════════════════════════╗
 ║                                                    ║
-║        BMAD-Enhanced Complete Installer 🚀        ║
+║        Convoke Complete Installer 🚀        ║
 ║                                                    ║
 ║     Installing Emma + Wade Design Agents          ║
 ║                                                    ║
@@ -246,7 +246,7 @@ Added:
 ### One-Command Installation
 
 ```bash
-npm install bmad-enhanced && npx bmad-install-agents
+npm install convoke && npx convoke-install
 ```
 
 That's it! Both Emma and Wade are ready to use.
@@ -259,9 +259,9 @@ That's it! Both Emma and Wade are ready to use.
 ### Verified Functionality
 
 ✅ `npm install` - Installs package dependencies
-✅ `npx bmad-install-agents` - Installs both agents successfully
-✅ `npx bmad-install-emma` - Installs Emma only
-✅ `npx bmad-install-wade` - Installs Wade only
+✅ `npx convoke-install` - Installs both agents successfully
+✅ `npx convoke-install-emma` - Installs Emma only
+✅ `npx convoke-install-wade` - Installs Wade only
 ✅ Directory structure created correctly
 ✅ Config files generated properly
 ✅ User guides copied successfully
@@ -347,12 +347,12 @@ That's it! Both Emma and Wade are ready to use.
 
 **All installation system components are complete and tested.**
 
-Users can now install BMAD-Enhanced agents with a single npm command. The installation system is production-ready, well-documented, and extensible for future agents (Quinn, Stan).
+Users can now install Convoke agents with a single npm command. The installation system is production-ready, well-documented, and extensible for future agents (Quinn, Stan).
 
 **Next Steps:**
 1. Update GitHub repository URL in package.json
 2. Publish to npm registry: `npm publish`
-3. Test installation from npm: `npm install bmad-enhanced`
+3. Test installation from npm: `npm install convoke`
 4. Announce availability to users
 
 ---

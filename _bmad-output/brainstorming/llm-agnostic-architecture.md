@@ -1,7 +1,7 @@
 # LLM-Agnostic Architecture Decision
 
 **Date:** 2026-02-05
-**Decision:** Make BMAD-Enhanced core architecture LLM-agnostic while optimizing for Claude experience
+**Decision:** Make Convoke core architecture LLM-agnostic while optimizing for Claude experience
 
 ---
 
@@ -297,9 +297,9 @@ Phase 0 POC Implementation:
 
 **When discussing with stakeholders:**
 
-✅ **Correct:** "BMAD-Enhanced uses a capabilities architecture that's LLM-agnostic. For Claude users, capabilities are exposed as convenient slash commands (skills)."
+✅ **Correct:** "Convoke uses a capabilities architecture that's LLM-agnostic. For Claude users, capabilities are exposed as convenient slash commands (skills)."
 
-❌ **Incorrect:** "BMAD-Enhanced is a Claude-only system."
+❌ **Incorrect:** "Convoke is a Claude-only system."
 
 **When discussing implementation:**
 
@@ -311,7 +311,7 @@ Phase 0 POC Implementation:
 
 ## FAQ
 
-**Q: Can BMAD-Enhanced work without Claude?**
+**Q: Can Convoke work without Claude?**
 A: Yes. Capabilities are markdown workflows that any LLM or tool can execute. Claude integration is one adapter, not a requirement.
 
 **Q: Will switching from Claude to another LLM be expensive?**

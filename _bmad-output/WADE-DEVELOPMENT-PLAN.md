@@ -671,7 +671,7 @@ status: DRAFT
 ---
 
 **Created by:** {user-name}
-**Created with:** Wade (wireframe-designer) - BMAD Enhanced
+**Created with:** Wade (wireframe-designer) - Convoke
 **Date:** {date}
 **Version:** 1.0
 **Status:** DRAFT

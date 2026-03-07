@@ -1,4 +1,4 @@
-# BMAD-Enhanced: Executive Summary
+# Convoke: Executive Summary
 
 **Unified AI-Assisted Software Development Platform**
 
@@ -34,12 +34,12 @@ Result: 60% of development time wasted on rework and misalignment
 
 ---
 
-## ✨ The Solution: BMAD-Enhanced
+## ✨ The Solution: Convoke
 
 **Complete traceability from hypothesis to deployment with AI-assisted validation**
 
 ```
-✅ BMAD-Enhanced: Connected Reasoning
+✅ Convoke: Connected Reasoning
 
 WHY?                    WHAT?                   HOW?                    QUALITY?
 ┌──────────────┐       ┌──────────────┐       ┌──────────────┐       ┌──────────────┐
@@ -150,7 +150,7 @@ No action needed - all traces aligned.
 
 **For a 50-person engineering team:**
 
-| Metric | Before BMAD-Enhanced | After BMAD-Enhanced | Improvement |
+| Metric | Before Convoke | After Convoke | Improvement |
 |--------|---------------------|---------------------|-------------|
 | **Rework time** | 25% of dev time | 8% of dev time | **68% reduction** |
 | **Feature alignment** | 63% hit target | 94% hit target | **49% improvement** |
@@ -352,7 +352,7 @@ Week 24: 🚀 v1.0.0 LAUNCH
            High AI Integration
                    ▲
                    │
-    BMAD-Enhanced ◉ (Target)
+    Convoke ◉ (Target)
                    │
                    │    Linear ○
                    │
@@ -366,7 +366,7 @@ Week 24: 🚀 v1.0.0 LAUNCH
 ```
 
 **Positioning Statement:**
-> "BMAD-Enhanced is the only AI-assisted development platform that preserves complete reasoning chains from hypothesis to deployment with automated evidence validation."
+> "Convoke is the only AI-assisted development platform that preserves complete reasoning chains from hypothesis to deployment with automated evidence validation."
 
 ---
 
@@ -397,7 +397,7 @@ Week 24: 🚀 v1.0.0 LAUNCH
 ## 📚 Supporting Documents
 
 **Planning Artifacts (All Complete):**
-1. ✅ [Product Brief](./product-brief-BMAD-Enhanced-2026-02-01.md) - Full vision with ADRs
+1. ✅ [Product Brief](./product-brief-Convoke-2026-02-01.md) - Full vision with ADRs
 2. ✅ [4-Framework Comparison Matrix](./4-framework-comparison-matrix.md) - Detailed analysis
 3. ✅ [BaseArtifact Contract Specification](./baseartifact-contract-spec.md) - Technical foundation
 4. ✅ [`/align` Command Prototype](./align-command-prototype.md) - Alignment validation
@@ -437,8 +437,8 @@ Week 24: 🚀 v1.0.0 LAUNCH
 ### For Open Source Contributors
 
 **Get Involved:**
-- GitHub: [github.com/bmad-enhanced/bmad-enhanced](https://github.com/bmad-enhanced/bmad-enhanced) (planned)
-- Documentation: [docs.bmad-enhanced.dev](https://docs.bmad-enhanced.dev) (planned)
+- GitHub: [github.com/convoke/convoke](https://github.com/convoke/convoke) (planned)
+- Documentation: [docs.convoke.dev](https://docs.convoke.dev) (planned)
 - Community: Discord / Slack (planned)
 - Contribute: See CONTRIBUTING.md (planned)
 

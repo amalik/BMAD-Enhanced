@@ -1,4 +1,4 @@
-# BMAD-Enhanced Planning & Brainstorming Outputs
+# Convoke Planning & Brainstorming Outputs
 
 **Last Updated:** 2026-02-14
 
@@ -6,7 +6,7 @@
 
 ## Overview
 
-This directory contains all planning artifacts, analysis documents, and brainstorming outputs for the BMAD-Enhanced project.
+This directory contains all planning artifacts, analysis documents, and brainstorming outputs for the Convoke project.
 
 **Project Goal:** Enhance BMAD Method with domain-specialized agents covering design, quality, and standards domains.
 
@@ -51,7 +51,7 @@ This directory contains all planning artifacts, analysis documents, and brainsto
 - [greenfield-architecture-analysis.md](./planning-artifacts/greenfield-architecture-analysis.md) - Option 3 evaluation
 
 **Supporting Documents:**
-- [product-brief-BMAD-Enhanced-2026-02-01.md](./planning-artifacts/product-brief-BMAD-Enhanced-2026-02-01.md) - Product vision and strategy
+- [product-brief-Convoke-2026-02-01.md](./planning-artifacts/product-brief-Convoke-2026-02-01.md) - Product vision and strategy
 - [4-framework-comparison-matrix.md](./planning-artifacts/4-framework-comparison-matrix.md) - Framework capabilities matrix
 - [executive-summary-presentation.md](./planning-artifacts/executive-summary-presentation.md) - Stakeholder presentation
 - [align-command-prototype.md](./planning-artifacts/align-command-prototype.md) - `/align` command specification
@@ -223,6 +223,6 @@ All planning documents follow markdown standards with YAML frontmatter for metad
 
 ## Contact
 
-**BMAD-Enhanced Core Team**
+**Convoke Core Team**
 **Project Start:** 2026-02-01
 **Latest Update:** 2026-02-14 (Documentation cleanup: removed external framework references, clarified domain-specialized agent approach)

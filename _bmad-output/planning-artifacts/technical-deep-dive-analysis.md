@@ -1,10 +1,10 @@
-# BMAD-Enhanced: Technical Deep-Dive Analysis
+# Convoke: Technical Deep-Dive Analysis
 ## 4-Framework Implementation Patterns & Integration Feasibility
 
 **Version:** 1.0.0
 **Date:** 2026-02-04
 **Status:** Technical Analysis Complete
-**Author:** BMAD-Enhanced Technical Analysis Team
+**Author:** Convoke Technical Analysis Team
 
 ---
 
@@ -603,7 +603,7 @@ updated_date: "2026-02-04T14:32:15.234Z"
 **1. Configuration Loading:**
 ```yaml
 # config.yaml
-project_name: "BMAD-Enhanced"
+project_name: "Convoke"
 user_name: "Alex"
 communication_language: "English"
 document_output_language: "English"
@@ -2324,7 +2324,7 @@ With 10K+ artifacts:
 **Cons:**
 - No design rationale preservation
 - No quality orchestration layer
-- Loses vision of unified BMAD-Enhanced platform
+- Loses vision of unified Convoke platform
 
 **Recommendation:** Consider if complexity remains unmanageable after Phase 2
 
@@ -2724,7 +2724,7 @@ With 10K+ artifacts:
 **Phase 5: Cross-Framework Traceability (6 weeks)**
 - Trace index + visualization + alignment dashboard
 - Performance optimization + production hardening
-- **Launch: BMAD-Enhanced v1.0.0**
+- **Launch: Convoke v1.0.0**
 
 **Total Timeline:**
 - With simplification: 23 weeks (5.75 months)

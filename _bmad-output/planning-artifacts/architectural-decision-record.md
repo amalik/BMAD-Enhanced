@@ -1,15 +1,15 @@
-# Architecture Decision Record: BMAD-Enhanced Integration Approach
+# Architecture Decision Record: Convoke Integration Approach
 
 **Status:** ✅ ACCEPTED
 **Date:** 2026-02-05
-**Decision Makers:** BMAD-Enhanced Core Team
+**Decision Makers:** Convoke Core Team
 **Supersedes:** N/A (Initial architectural decision)
 
 ---
 
 ## Context
 
-BMAD-Enhanced integrates 4 powerful frameworks (BMAD Method, Quint FPF, DesignOS, AgentOS) into a unified platform with complete cross-framework traceability. The core architectural question was:
+Convoke integrates 4 powerful frameworks (BMAD Method, Quint FPF, DesignOS, AgentOS) into a unified platform with complete cross-framework traceability. The core architectural question was:
 
 **"How should we technically integrate these 4 frameworks?"**
 
@@ -86,7 +86,7 @@ _bmad-enhanced/
 
 ```
 ┌─────────────────────────────────────────────────────────────┐
-│           BMAD-Enhanced Platform (BMAD-First)               │
+│           Convoke Platform (BMAD-First)               │
 └─────────────────────────────────────────────────────────────┘
 
 ┌─────────────────────────────────────────────────────────────┐
@@ -499,7 +499,7 @@ _bmad-enhanced/
 
 4. **[Integration Roadmap](_bmad-output/planning-artifacts/integration-roadmap.md)** - 24-week implementation plan with 87 tasks
 5. **[BaseArtifact Contract v2.0.0](_bmad-output/planning-artifacts/baseartifact-contract-spec.md)** - Technical foundation specification
-6. **[Product Brief](_bmad-output/planning-artifacts/product-brief-BMAD-Enhanced-2026-02-01.md)** - Complete product vision with ADRs
+6. **[Product Brief](_bmad-output/planning-artifacts/product-brief-Convoke-2026-02-01.md)** - Complete product vision with ADRs
 
 ### Orchestration Pattern Analysis (2026-02-05)
 
@@ -507,7 +507,7 @@ _bmad-enhanced/
 8. **[Orchestration Patterns Catalog](_bmad-output/brainstorming/orchestration-patterns-catalog.md)** - Complete reference of 100 patterns across 15 families
 9. **[Architectural Decision Framework](_bmad-output/brainstorming/architectural-decision-framework.md)** - 7 foundational dimensions for orchestration decisions
 10. **[Alignment Summary](_bmad-output/brainstorming/alignment-summary.md)** - How pattern analysis refines and validates BMAD-First Architecture
-11. **[LLM-Agnostic Architecture](_bmad-output/brainstorming/llm-agnostic-architecture.md)** - How BMAD-Enhanced remains LLM-agnostic while optimizing for Claude
+11. **[LLM-Agnostic Architecture](_bmad-output/brainstorming/llm-agnostic-architecture.md)** - How Convoke remains LLM-agnostic while optimizing for Claude
 
 ---
 
@@ -515,7 +515,7 @@ _bmad-enhanced/
 
 **Decision Date:** 2026-02-05
 **Decision Status:** ✅ ACCEPTED
-**Approved By:** BMAD-Enhanced Core Team
+**Approved By:** Convoke Core Team
 **Implementation Start:** Phase 0 POC (Week 1)
 **Review Date:** After Phase 0 POC (Week 3) - validate sync adapter feasibility
 
@@ -525,11 +525,11 @@ _bmad-enhanced/
 
 | Version | Date | Author | Changes |
 |---------|------|--------|---------|
-| 1.0.0 | 2026-02-05 | BMAD-Enhanced Team | Initial ADR - selected BMAD-First architecture after 3-option analysis |
-| 1.1.0 | 2026-02-05 | BMAD-Enhanced Team | Refined with orchestration patterns analysis (100 patterns evaluated), added Skills+Steps integration model, clarified markdown-as-master state management, updated LOC estimate to 3,100 |
-| 1.2.0 | 2026-02-05 | BMAD-Enhanced Team | Made architecture LLM-agnostic: renamed Skills→Capabilities (core), Claude integration exposes capabilities as skills (slash commands), added .integrations/ layer for multi-LLM support |
-| 1.3.0 | 2026-02-06 | BMAD-Enhanced Team | Phase 0 scope refinement: Deferred Quint SQLite integration to Phase 2, focus Phase 0 on pure markdown orchestration (DesignOS + AgentOS). Updated LOC estimates: Phase 0 = 1,800 LOC, Phase 2 = +500 LOC Quint adapter. Reduces Phase 0 complexity and validates orchestration pattern before database sync challenges. |
-| 1.4.0 | 2026-02-07 | BMAD-Enhanced Team | **MAJOR PIVOT:** Deep-dive analysis revealed DesignOS/AgentOS are NOT markdown systems (TypeScript web app + CLI tool). Pivoted Phase 0 from custom orchestration engine (1,800 LOC) to agent enhancement approach (500 LOC) leveraging proven BMAD agent architecture. BMAD already provides 80%+ of DesignOS/AgentOS functionality. Creates 4 new agents inspired by DesignOS/AgentOS capabilities. Total LOC: Phase 0 = 500 LOC, Phase 2 = +500 LOC (1,000 LOC total vs 2,300 LOC previous). See framework-deep-dive-analysis.md for full analysis. |
+| 1.0.0 | 2026-02-05 | Convoke Team | Initial ADR - selected BMAD-First architecture after 3-option analysis |
+| 1.1.0 | 2026-02-05 | Convoke Team | Refined with orchestration patterns analysis (100 patterns evaluated), added Skills+Steps integration model, clarified markdown-as-master state management, updated LOC estimate to 3,100 |
+| 1.2.0 | 2026-02-05 | Convoke Team | Made architecture LLM-agnostic: renamed Skills→Capabilities (core), Claude integration exposes capabilities as skills (slash commands), added .integrations/ layer for multi-LLM support |
+| 1.3.0 | 2026-02-06 | Convoke Team | Phase 0 scope refinement: Deferred Quint SQLite integration to Phase 2, focus Phase 0 on pure markdown orchestration (DesignOS + AgentOS). Updated LOC estimates: Phase 0 = 1,800 LOC, Phase 2 = +500 LOC Quint adapter. Reduces Phase 0 complexity and validates orchestration pattern before database sync challenges. |
+| 1.4.0 | 2026-02-07 | Convoke Team | **MAJOR PIVOT:** Deep-dive analysis revealed DesignOS/AgentOS are NOT markdown systems (TypeScript web app + CLI tool). Pivoted Phase 0 from custom orchestration engine (1,800 LOC) to agent enhancement approach (500 LOC) leveraging proven BMAD agent architecture. BMAD already provides 80%+ of DesignOS/AgentOS functionality. Creates 4 new agents inspired by DesignOS/AgentOS capabilities. Total LOC: Phase 0 = 500 LOC, Phase 2 = +500 LOC (1,000 LOC total vs 2,300 LOC previous). See framework-deep-dive-analysis.md for full analysis. |
 
 ---
 

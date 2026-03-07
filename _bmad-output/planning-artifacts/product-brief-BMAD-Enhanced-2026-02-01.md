@@ -5,7 +5,7 @@ date: 2026-02-01
 author: Amalik
 ---
 
-# Product Brief: BMAD-Enhanced
+# Product Brief: Convoke
 
 <!-- Content will be appended sequentially through collaborative workflow steps -->
 
@@ -15,14 +15,14 @@ author: Amalik
 Product teams waste 30-40% of their time on the "context reconstruction tax"—answering "why did we build this?" and "what problem does this solve?" This tax compounds across roles: designers re-explaining rationale, PMs clarifying original intent, engineers archaeology-diving through commit history. The root cause: shared understanding decays across human boundaries (discovery → design → development), and current tools preserve artifacts but lose reasoning.
 
 **The Solution:**
-BMAD-Enhanced eliminates the context reconstruction tax by preserving reasoning trails from validated hypothesis through shipped code. Built as a **composable toolbox** (not monolithic framework), users select the lifecycle phases, workflows, and agents they need—no forced adoption. The system captures major decisions at decision-time, creates bidirectional traceability, and uses adaptive AI guidance to suggest (not dictate) best practices. Import from existing tools (Jira, GitHub, Notion), work in your natural environment (Figma, IDE, terminal), export anywhere—interoperability first.
+Convoke eliminates the context reconstruction tax by preserving reasoning trails from validated hypothesis through shipped code. Built as a **composable toolbox** (not monolithic framework), users select the lifecycle phases, workflows, and agents they need—no forced adoption. The system captures major decisions at decision-time, creates bidirectional traceability, and uses adaptive AI guidance to suggest (not dictate) best practices. Import from existing tools (Jira, GitHub, Notion), work in your natural environment (Figma, IDE, terminal), export anywhere—interoperability first.
 
 **The 10X Result:**
 Context reconstruction time drops from hours to minutes (<5% time spent vs 30-40%), translating directly to velocity gains. Teams maintain shared understanding without meetings, onboard new members by reading reasoning trails, and make informed changes knowing full downstream impact.
 
 ---
 
-## What is BMAD-Enhanced? (In Simple Terms)
+## What is Convoke? (In Simple Terms)
 
 ### The Magic Notebook Analogy
 
@@ -36,7 +36,7 @@ After you finish, someone asks: **"Why did you put the dragon tower on the left 
 
 Nobody remembers why. You argue for 20 minutes trying to reconstruct the decision from memory.
 
-**BMAD-Enhanced is like a magic notebook that captures WHY you made each decision while you're making it.**
+**Convoke is like a magic notebook that captures WHY you made each decision while you're making it.**
 
 When you decide "dragon tower goes left because the moat is on the right," the notebook captures that reasoning. When someone asks later, you open the notebook and show them: "See? We wrote it down. The moat is on the right, so the dragon tower goes left."
 
@@ -65,7 +65,7 @@ But it's more than just writing things down. The real power is **alignment**:
 - Builder makes narrow tower (ignores "wide base" architecture)
 - Result: Scary dragon on unstable tower that breaks
 
-**BMAD-Enhanced ensures alignment:**
+**Convoke ensures alignment:**
 - When designer creates dragon drawing, notebook says: "This design must align with: Design System (friendly face), Hypothesis (kids like dragons), Architecture (stable structure)"
 - If designer draws scary teeth → Notebook alerts: "⚠️ Misalignment: Design System says friendly, but your dragon has scary teeth"
 - Designer fixes it → Design is now **aligned** with standards and intentions
@@ -80,7 +80,7 @@ But it's more than just writing things down. The real power is **alignment**:
 
 **Simple Formula:**
 ```
-Magic Notebook (BMAD-Enhanced) =
+Magic Notebook (Convoke) =
   Capture WHY (reasoning) +
   Link related notes (traceability) +
   Check alignment (validation) +
@@ -292,7 +292,7 @@ Validating multiple artifacts simultaneously:
 **Deliverable Type:** Usage guide / workflow documentation
 
 **Location in Product Brief:**
-- Section: Key usage pattern for BMAD-Enhanced
+- Section: Key usage pattern for Convoke
 - Format: Step-by-step guide with examples
 - Audience: All roles (PM, Designer, Engineer, QA)
 
@@ -378,7 +378,7 @@ When shared understanding decays across boundaries:
 
 **Philosophy: Composable Toolbox, Not Monolithic Platform**
 
-BMAD-Enhanced rejects the "all-or-nothing" platform model. Instead:
+Convoke rejects the "all-or-nothing" platform model. Instead:
 
 - **À la carte adoption**: Use Discovery tools without Design. Use Design without Development. Your choice.
 - **Role-specific selection**: PM uses different workflows than Engineer. Designer uses different agents than QA.
@@ -387,7 +387,7 @@ BMAD-Enhanced rejects the "all-or-nothing" platform model. Instead:
 
 **Core Architecture: Composable Toolbox**
 
-BMAD-Enhanced is a **lifecycle-aware toolbox**, not a monolithic platform. Users choose what they need per role and phase. AI advisor suggests, user decides. Shared Git repository maintains cross-role context.
+Convoke is a **lifecycle-aware toolbox**, not a monolithic platform. Users choose what they need per role and phase. AI advisor suggests, user decides. Shared Git repository maintains cross-role context.
 
 **User Journey (Lifecycle-Phase Entry):**
 
@@ -495,7 +495,7 @@ Optional: 'Customize' link for power users (swap agent, modify workflow, change 
 
 ```
 ┌─────────────────────────────────────────────────────────────────┐
-│                    BMAD-Enhanced Toolbox                        │
+│                    Convoke Toolbox                        │
 │                  (Composable, Not Monolithic)                   │
 └─────────────────────────────────────────────────────────────────┘
                                │
@@ -561,7 +561,7 @@ Optional: 'Customize' link for power users (swap agent, modify workflow, change 
 2. **Lower risk**: Prove integration works before investing in UI
 3. **Better feedback**: Technical users give actionable framework feedback vs. GUI nitpicks
 4. **BMAD Method familiarity**: Existing users already know CLI workflow
-5. **Self-dogfooding**: Use BMAD-Enhanced CLI to build BMAD-Enhanced GUI
+5. **Self-dogfooding**: Use Convoke CLI to build Convoke GUI
 
 **Pragmatic Traceability Model:**
 
@@ -1033,7 +1033,7 @@ bmad create-story
 Select [1]: _
 
 # Global commands (cross-module operations)
-bmad init          → Initialize BMAD-Enhanced project
+bmad init          → Initialize Convoke project
 bmad trace show    → Cross-module traceability
 bmad help          → Global help
 ```
@@ -1116,11 +1116,11 @@ interface StoryArtifact extends BaseArtifact {
 **User Mental Model:**
 
 **BEFORE (Confusing):**
-> "BMAD-Enhanced is one tool with many commands"
+> "Convoke is one tool with many commands"
 > Expectation: Flat namespace → collision chaos
 
 **AFTER (Clear):**
-> "BMAD-Enhanced is a module orchestrator. Each module is a tool."
+> "Convoke is a module orchestrator. Each module is a tool."
 > Expectation: Module-scoped commands → zero collisions
 
 **Trade-offs Accepted:**
@@ -1554,8 +1554,8 @@ bmad init --modules bmm,designos,agentos
 **Day 1 (Critical):**
 - 📋 Document "cut list" of features to defer if timeline pressured (aliases, visual graph, advanced error handling, event log, incremental indexing)
 - 🔨 Start daily dogfood journal (document pain points, review weekly)
-- 🎯 Begin using BMAD-Enhanced to build BMAD-Enhanced (even if broken)
-- 📝 Create Phase 1 plan artifact using BMAD-Enhanced (proof of dogfooding from Day 1)
+- 🎯 Begin using Convoke to build Convoke (even if broken)
+- 📝 Create Phase 1 plan artifact using Convoke (proof of dogfooding from Day 1)
 
 **Week 1-2:**
 1. Implement federated module architecture (ADR-001)
@@ -1577,7 +1577,7 @@ bmad init --modules bmm,designos,agentos
    - Evaluate: Custom MCP server vs existing Claude Code tool use API
    - Prototype: Simple conversational spike to validate AI chat interface works
    - Decision gate: Only build full MCP server if prototype validates user preference
-9. **NEW**: Build Claude Code integration for BMAD-Enhanced (implements ADR-003 AI Chat-First strategy) - ONLY if prototype validated
+9. **NEW**: Build Claude Code integration for Convoke (implements ADR-003 AI Chat-First strategy) - ONLY if prototype validated
    - Conversational artifact creation ("Create hypothesis for X" → Guided conversation)
    - Natural language queries ("Show all hypotheses related to authentication")
    - Traceability graph generation ("Show decision tree for Q4 roadmap")
@@ -1611,7 +1611,7 @@ bmad init --modules bmm,designos,agentos
 7. Find integration bugs (expect 6-8), fix critical ones, document known issues
 
 **Week 3:**
-6. Self-dogfooding validation: Use BMAD-Enhanced to create Phase 1 plan
+6. Self-dogfooding validation: Use Convoke to create Phase 1 plan
 7. Discover CLI ergonomics issues, fix immediately
 
 **Week 4:**
@@ -1647,7 +1647,7 @@ bmad init --modules bmm,designos,agentos
 - ✅ Cross-phase traceability working (hypothesis → design → story → test)
 - ✅ Complete end-to-end workflow produces coherent artifacts via conversation
 - ✅ **Artifact architecture validated: 80% of artifacts remain domain-native (minimal overhead), cross-domain promotion triggers working**
-- ✅ Self-dogfooding: Used BMAD-Enhanced from Week 1 Day 1 via Claude Code chat (product brief, Phase 1 plan, architecture docs created conversationally)
+- ✅ Self-dogfooding: Used Convoke from Week 1 Day 1 via Claude Code chat (product brief, Phase 1 plan, architecture docs created conversationally)
 - ✅ Daily dogfood journal maintained, pain points addressed weekly
 - ✅ **Contract migration tooling built and tested (`bmad contract migrate`, `bmad contract check`)** - ADR-006
 - ✅ **Contract validation test suite passing in CI (3-level pyramid: schema, references, lifecycle)** - ADR-006
@@ -1669,7 +1669,7 @@ Evaluated by 3 personas (Winston/Architect, John/PM, Dr. Quinn/Problem Solver) u
 |----------|-------|-------------------------------|-----------|
 | **VSCode Extension v1.1 Priority 1** | **9.0/10** | Adoption Catalyst (30% × 9.3)<br>Context Switching Reduction (25% × 9.7) | **THE INFLECTION POINT** - makes traceability faster than not using it. Delaying to v2.0 loses 3-4 months of accelerated adoption. |
 | **Frontmatter Helpers Month 1 Wk 4** | **9.0/10** | Alpha Abandonment Prevention (35% × 10.0)<br>User Trust (25% × 9.3) | Proactive vs. reactive. Reverse engineering showed 40% of alpha teams threatened abandonment due to verbosity. Building 2 weeks earlier prevents crisis. |
-| **Self-Dogfooding Week 1 Day 1** | **8.9/10** | Architectural Issue Detection (30% × 9.7)<br>Sales Differentiator (20% × 9.7) | Catches namespace collisions, contract bugs internally vs. embarrassing alpha team discovery. "We use BMAD-Enhanced to build BMAD-Enhanced" = powerful identity. |
+| **Self-Dogfooding Week 1 Day 1** | **8.9/10** | Architectural Issue Detection (30% × 9.7)<br>Sales Differentiator (20% × 9.7) | Catches namespace collisions, contract bugs internally vs. embarrassing alpha team discovery. "We use Convoke to build Convoke" = powerful identity. |
 | **Federated Modules Architecture** | **8.3/10** | Risk Mitigation (25% × 9.3)<br>Extensibility (20% × 9.7) | Prevents "DesignOS update breaks BMAD" failure mode (happened 3× in failed timeline). Modules evolve independently. |
 | **CLI-First Validation Approach** | **7.5/10** | Risk Mitigation (25% × 9.0)<br>Speed to Market (15% × 8.7) | Prove framework integration before 4-6 month GUI investment. Technical users give actionable feedback vs. GUI nitpicks. |
 
@@ -1829,7 +1829,7 @@ Launched with all four modules, 20+ config options per module. "Modular adoption
   - CLI/VSCode only (no GUI complexity)
   - Private → Alpha → Beta (technical users who understand frameworks)
   - Prove framework merge works end-to-end
-  - Self-dogfood (use BMAD-Enhanced to build BMAD-Enhanced)
+  - Self-dogfood (use Convoke to build Convoke)
 - **Phase 3+ (Product, Month 7+)**:
   - ONLY build GUI if CLI proves product-market fit (>500 teams, NPS >7)
   - Start with read-only web UI (visual traceability graph)
@@ -2083,7 +2083,7 @@ This document uses **Product Phases 0-3+** (validation → alpha → beta → pr
 - CLI/IDE only (VSCode integration, terminal commands)
 - Leverage BMAD Method's existing customization capabilities
 - Merge DesignOS, AgentOS, Quint into BMAD framework structure
-- **Dogfood from Day 1**: Use BMAD-Enhanced to build BMAD-Enhanced
+- **Dogfood from Day 1**: Use Convoke to build Convoke
 
 **Month 1: Framework Integration**
 
@@ -2091,7 +2091,7 @@ This document uses **Product Phases 0-3+** (validation → alpha → beta → pr
 - Fork BMAD Method as foundation
 - 📋 Document "cut list" (aliases, visual graph, advanced errors)
 - 🔨 Initialize daily dogfood journal (`_bmad-output/dogfood-journal.md`)
-- 🎯 Start using BMAD-Enhanced (even broken) to plan Month 1 work
+- 🎯 Start using Convoke (even broken) to plan Month 1 work
 
 **Week 1-4 Execution:**
 - Import DesignOS agents + workflows (UX Designer, Design System, Wireframes)
@@ -2110,14 +2110,14 @@ This document uses **Product Phases 0-3+** (validation → alpha → beta → pr
 - Design incremental indexing architecture
 
 **Week 2-3:**
-- Test full lifecycle on real project (this BMAD-Enhanced project itself):
+- Test full lifecycle on real project (this Convoke project itself):
   1. Discovery: Use Quint to validate hypothesis
   2. Design: Use DesignOS to create UX design doc
   3. Development: Use BMAD to generate epics/stories
   4. Quality: Use AgentOS + TEA to define test strategy
 - Cross-phase traceability: Hypothesis → Design → Story → Test
 - Git-based artifacts in `_bmad-output/` (version-controlled)
-- Self-dogfooding: Create Phase 1 plan using BMAD-Enhanced
+- Self-dogfooding: Create Phase 1 plan using Convoke
 
 **Week 4:**
 - Build CLI commands: `bmad trace show`, `bmad trace rebuild`, `bmad trace auto`
@@ -2134,7 +2134,7 @@ This document uses **Product Phases 0-3+** (validation → alpha → beta → pr
 - ✅ Cross-phase workflows proven (Discovery → Design → Dev → Quality)
 - ✅ Traceability working (can trace code → design → hypothesis)
 - ✅ Agent collaboration tested (PM + Designer + Engineer + QA working together)
-- ✅ Self-dogfooding validated: Used BMAD-Enhanced from Week 1
+- ✅ Self-dogfooding validated: Used Convoke from Week 1
 - ✅ Daily dogfood journal maintained, top pain points resolved
 - ✅ Contract migration tooling built and documented
 - ✅ Frontmatter UI helpers working (`bmad trace hide`)
@@ -2143,7 +2143,7 @@ This document uses **Product Phases 0-3+** (validation → alpha → beta → pr
 - **Daily dogfood journal**: Document every pain point, friction, confusion
 - **Weekly review**: Team reviews journal, prioritizes fixes
 - **1-week internal validation**: All features used internally before external release
-- **Identity**: "We use BMAD-Enhanced to build BMAD-Enhanced" (sales differentiator)
+- **Identity**: "We use Convoke to build Convoke" (sales differentiator)
 - **Team morale**: Engineers proud to ship what they use themselves
 
 ---
@@ -2316,14 +2316,14 @@ This document uses **Product Phases 0-3+** (validation → alpha → beta → pr
 3. Design kickoff → Designer reads epic, interprets differently
 4. 3 months later → Engineer asks "why did we build this?" → Alex spends 2 hours reconstructing context from Slack threads
 
-**What's In It For Me? (BMAD-Enhanced Value Prop)**
+**What's In It For Me? (Convoke Value Prop)**
 - **75% reduction in context reconstruction time** (4-6 hours/week → 1 hour/week)
 - **Onboarding speed: 50% faster** (3 weeks → 1.5 weeks)
 - **Decision traceability**: Every feature traces back to original hypothesis with 1 click
 - **Async collaboration**: Designer sees hypothesis → creates design → engineer sees both → builds aligned feature
 
 **Adoption Journey (AI Chat-First):**
-- **Discovery (Week 1, Day 1)**: Hears about BMAD-Enhanced from peer at product management meetup
+- **Discovery (Week 1, Day 1)**: Hears about Convoke from peer at product management meetup
   - Peer opens VSCode, shows Claude Code chat: "Show me the hypothesis behind our Q4 roadmap"
   - Claude Code responds with artifact summary and visual graph
   - Alex: "Wait, you're just... talking to it? No commands to memorize?"
@@ -2402,14 +2402,14 @@ This document uses **Product Phases 0-3+** (validation → alpha → beta → pr
 3. Hands off to engineer → Engineer asks "what happens when user clicks here?" → Jordan realizes didn't think through edge cases
 4. 2 months later → PM asks "why did we use tabs instead of accordion?" → Jordan: "I... don't remember"
 
-**What's In It For Me? (BMAD-Enhanced Value Prop)**
+**What's In It For Me? (Convoke Value Prop)**
 - **Design rationale captured automatically** (annotation tool in Figma plugin)
 - **Hypothesis → Design traceability** (always know what problem I'm solving)
 - **Portfolio-ready artifacts** (export design reasoning as case study)
 - **Engineer alignment** (interaction intent documented, not just pixels)
 
 **Adoption Journey (AI Chat + Figma Plugin Hybrid):**
-- **Discovery (Week 1)**: PM Alex introduces BMAD-Enhanced, shows hypothesis artifact in Claude Code chat
+- **Discovery (Week 1)**: PM Alex introduces Convoke, shows hypothesis artifact in Claude Code chat
   - Jordan (skeptical): "Another tool? I already use Figma, Notion, Loom..."
   - Alex: "It's not a separate tool - it's in VSCode chat and Figma plugin. You just talk to it."
 
@@ -2460,7 +2460,7 @@ This document uses **Product Phases 0-3+** (validation → alpha → beta → pr
 - **Proactive capture**: Tool detects deleted Figma frames, prompts to capture rejected options
 - **Visual annotation**: Screenshot + annotations, not text-heavy documentation
 - **Zero Figma context-switching**: Plugin works within Figma, chat accessible in VSCode
-- **Export to PDF/portfolio**: Design artifacts usable outside BMAD-Enhanced
+- **Export to PDF/portfolio**: Design artifacts usable outside Convoke
 
 ---
 
@@ -2492,15 +2492,15 @@ This document uses **Product Phases 0-3+** (validation → alpha → beta → pr
 3. Implements feature, makes technical decision (REST vs GraphQL) → Documents in code comment (lost context)
 4. 6 months later → New engineer: "Why did you use REST here?" → Sam: "I... don't remember the exact reasoning"
 
-**What's In It For Me? (BMAD-Enhanced Value Prop)**
+**What's In It For Me? (Convoke Value Prop)**
 - **IDE-native context**: Hover over story ID in VS Code → See hypothesis/design reasoning
 - **Technical decision preservation**: Document architecture decisions with traceability to product context
 - **2-minute code review context**: PR linked to story → Story linked to hypothesis → Full context instantly
 - **Onboarding acceleration**: New engineer reads artifact graph, understands codebase in 1 week (vs 3 weeks)
 
 **Adoption Journey (AI Chat + IDE Integration):**
-- **Discovery (Week 1, Day 1)**: PM Alex mentions BMAD-Enhanced in standup OR Sam discovers via GitHub README in team repo
-  - Alex: "I've been documenting our decisions in BMAD-Enhanced. You can see the context for any story in Claude Code."
+- **Discovery (Week 1, Day 1)**: PM Alex mentions Convoke in standup OR Sam discovers via GitHub README in team repo
+  - Alex: "I've been documenting our decisions in Convoke. You can see the context for any story in Claude Code."
   - Sam (skeptical): "Another tool? I already juggle Linear, Slack, Notion, Figma..."
   - Alex: "It's just Claude Code chat in VSCode. You already have it."
 
@@ -2521,7 +2521,7 @@ This document uses **Product Phases 0-3+** (validation → alpha → beta → pr
 - **Missing Context Scenario (Week 1, Day 4)**: Working on story-038 (password reset)
   - Hovers over story-038 → No hypothesis found
   - Claude Code prompts: "Missing context for story-038. This story has no linked hypothesis."
-  - Sam asks PM directly: "Alex, can you add context for story-038 in BMAD-Enhanced?"
+  - Sam asks PM directly: "Alex, can you add context for story-038 in Convoke?"
   - Alex opens Claude Code, creates hypothesis, links to story-038
   - Sam refreshes → Context now appears
   - **Creates pull behavior: Sam pulls Alex into tool through direct communication**
@@ -2582,14 +2582,14 @@ This document uses **Product Phases 0-3+** (validation → alpha → beta → pr
 3. Production bug → Postmortem: "Why wasn't this tested?" → Taylor: "No one told me about this edge case"
 4. New QA onboards → Taylor explains test strategy verbally (no written artifacts)
 
-**What's In It For Me? (BMAD-Enhanced Value Prop)**
+**What's In It For Me? (Convoke Value Prop)**
 - **Test-to-story traceability**: Every test artifact links to story, story links to hypothesis
 - **Coverage dashboard**: Visual graph showing which stories lack test coverage
 - **Risk-based testing documentation**: Capture "why we prioritized testing feature A over B"
 - **Shift-left testing**: See hypothesis during story creation, write acceptance tests BEFORE implementation
 
 **Adoption Journey (AI Chat + Manual Linking Alpha):**
-- **Discovery (Week 1, Sprint Planning)**: PM Alex demonstrates BMAD-Enhanced
+- **Discovery (Week 1, Sprint Planning)**: PM Alex demonstrates Convoke
   - Alex shows hypothesis → story → design traceability graph in Claude Code chat
   - Taylor: "Can I link tests to stories the same way?"
   - Alex: "Yes - you can link test files to stories manually in alpha, then query instantly."
@@ -2793,8 +2793,8 @@ This document uses **Product Phases 0-3+** (validation → alpha → beta → pr
 - [ ] Fork BMAD Method as foundation
 - [ ] Document "cut list" (aliases, visual graph, advanced error handling, event log, incremental indexing)
 - [ ] Initialize daily dogfood journal (`_bmad-output/dogfood-journal.md`)
-- [ ] Begin using BMAD-Enhanced (even broken) to plan Month 1 work
-- [ ] Create Phase 1 plan artifact using BMAD-Enhanced (proof of dogfooding)
+- [ ] Begin using Convoke (even broken) to plan Month 1 work
+- [ ] Create Phase 1 plan artifact using Convoke (proof of dogfooding)
 
 **Success Metrics:**
 - ✅ All 5 items completed within 1 day
@@ -2895,7 +2895,7 @@ This document uses **Product Phases 0-3+** (validation → alpha → beta → pr
 - [ ] Find integration bugs (expect 6-8), fix critical ones, document known issues
 
 **Week 3:**
-- [ ] Self-dogfooding validation: Use BMAD-Enhanced to create Phase 1 plan
+- [ ] Self-dogfooding validation: Use Convoke to create Phase 1 plan
 - [ ] Verify 80% of artifacts remain domain-native (minimal overhead validation)
 - [ ] Discover CLI ergonomics issues, fix immediately
 
@@ -2912,7 +2912,7 @@ This document uses **Product Phases 0-3+** (validation → alpha → beta → pr
 - ✅ **Nightly CI runs functional (Level 3 lifecycle tests)** - ADR-006
 - ✅ **Adapter mode tested (version mismatch scenarios working)** - ADR-006
 - ✅ Integration bugs found (6-8), critical ones fixed
-- ✅ Self-dogfooding: Phase 1 plan created using BMAD-Enhanced
+- ✅ Self-dogfooding: Phase 1 plan created using Convoke
 - ✅ Module-scoped mental model documented
 
 **Risk Mitigation:**
@@ -2977,7 +2977,7 @@ This document uses **Product Phases 0-3+** (validation → alpha → beta → pr
 
 **Public Beta Track:**
 - [ ] Public beta launched (GitHub, open source or free tier)
-- [ ] 100+ teams using BMAD-Enhanced
+- [ ] 100+ teams using Convoke
 - [ ] 50+ GitHub stars, 5+ community contributors
 - [ ] Framework hardening (edge cases, error handling, performance)
 
@@ -3074,10 +3074,10 @@ This document uses **Product Phases 0-3+** (validation → alpha → beta → pr
 
 ---
 
-## What BMAD-Enhanced Actually Is
+## What Convoke Actually Is
 
 **Elevator Pitch (30 seconds):**
-> "BMAD-Enhanced is a composable toolbox that eliminates the context reconstruction tax. Pick the lifecycle phases you need—Discovery, Design, Development, Quality—and choose workflows per role. Import from Jira/GitHub/Notion, work in your natural environment, export anywhere. AI adapts to your expertise: teaches beginners, assists intermediates, stays quiet for experts. Trace from any line of code back to the original hypothesis in under 2 minutes. No forced adoption, no rip-and-replace."
+> "Convoke is a composable toolbox that eliminates the context reconstruction tax. Pick the lifecycle phases you need—Discovery, Design, Development, Quality—and choose workflows per role. Import from Jira/GitHub/Notion, work in your natural environment, export anywhere. AI adapts to your expertise: teaches beginners, assists intermediates, stays quiet for experts. Trace from any line of code back to the original hypothesis in under 2 minutes. No forced adoption, no rip-and-replace."
 
 **Mental Models by Role:**
 - **For Engineers**: "Git for reasoning—trace why a function exists like you trace code history"

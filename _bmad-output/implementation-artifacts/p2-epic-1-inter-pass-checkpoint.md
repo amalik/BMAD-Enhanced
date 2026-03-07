@@ -173,7 +173,7 @@ The following documentation changes are expected from Epics 2-5. Each may introd
 |------|----------------|-------------|
 | README rewrite | Landing page, value proposition, visual overview | README.md major changes — stale reference risk |
 | Output previews | Screenshot/preview content in README | New links and paths to validate |
-| CLI test coverage | `bmad-update.js` and `bmad-version.js` at 85% | docs/testing.md coverage thresholds may change |
+| CLI test coverage | `convoke-update.js` and `convoke-version.js` at 85% | docs/testing.md coverage thresholds may change |
 | User feedback | Structured feedback mechanism | May add docs/faq.md content |
 
 ### Known Audit Tool Limitations

@@ -1,10 +1,10 @@
-# BMAD-Enhanced: Greenfield Architecture Analysis
+# Convoke: Greenfield Architecture Analysis
 ## Option 3 - Optimal Ground-Up Design
 
 **Version:** 1.0.0
 **Date:** 2026-02-05
 **Status:** Analysis Complete
-**Owner:** BMAD-Enhanced Architecture Team
+**Owner:** Convoke Architecture Team
 
 ---
 
@@ -1013,7 +1013,7 @@ LIMIT 10;
 | **Phase 9: CLI** | 3 weeks | 2 engineers | TypeScript CLI, interactive prompts |
 | **Phase 10: Testing** | 6 weeks | 4 engineers | Unit + integration + e2e tests |
 | **Phase 11: Documentation + Launch** | 3 weeks | 2 engineers | Docs, migration guides, launch |
-| **Total** | **36 weeks** | 4-5 FTEs average | Fully functional BMAD-Enhanced |
+| **Total** | **36 weeks** | 4-5 FTEs average | Fully functional Convoke |
 
 **Critical Path:** Phase 2 → Phase 3 → Phase 4 (Core API + Workflows + Agents = 20 weeks)
 
@@ -1604,7 +1604,7 @@ Then reconsider Greenfield. Otherwise, **proceed with BMAD-First**.
 
 ## Document Metadata
 
-**Author:** BMAD-Enhanced Architecture Analysis Team
+**Author:** Convoke Architecture Analysis Team
 **Date:** 2026-02-05
 **Version:** 1.0.0
 **Total Analysis Time:** 24+ hours

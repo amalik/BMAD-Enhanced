@@ -245,6 +245,6 @@ version: 1.0
 
 ---
 
-**Created with:** BMAD-Enhanced v1.5.0 - Vortex Pattern (Empathize Stream)
+**Created with:** Convoke v1.5.0 - Vortex Pattern (Empathize Stream)
 **Agent:** Isla (Discovery & Empathy Expert)
 **Workflow:** user-interview

@@ -261,7 +261,7 @@ status: DRAFT
 ---
 
 **Created by:** TestUser
-**Created with:** Emma (empathy-mapper) - BMAD Enhanced
+**Created with:** Emma (empathy-mapper) - Convoke
 **Date:** 2026-02-14
 **Version:** 1.0
 **Status:** DRAFT

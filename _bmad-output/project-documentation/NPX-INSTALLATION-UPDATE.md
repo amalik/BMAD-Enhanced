@@ -151,9 +151,9 @@ ls _bmad/  # Should show BMAD directory structure
 git clone https://github.com/bmadhub/bmad.git
 cd bmad && npm install
 
-# Step 2: Install BMAD-Enhanced agents (extension)
-npm install bmad-enhanced
-npx bmad-install-agents
+# Step 2: Install Convoke agents (extension)
+npm install convoke
+npx convoke-install
 ```
 ```
 
@@ -163,9 +163,9 @@ npx bmad-install-agents
 # Step 1: Install BMAD Method (required)
 npx bmad-method@alpha install
 
-# Step 2: Install BMAD-Enhanced agents (extension)
-npm install bmad-enhanced
-npx bmad-install-agents
+# Step 2: Install Convoke agents (extension)
+npm install convoke
+npx convoke-install
 ```
 ```
 
@@ -192,14 +192,14 @@ What happens:
 - Creates `_bmad/` directory structure
 - Sets up BMAD Method core
 
-**Step 2: Install BMAD-Enhanced**
+**Step 2: Install Convoke**
 ```bash
-npm install bmad-enhanced
-npx bmad-install-agents
+npm install convoke
+npx convoke-install
 ```
 
 What happens:
-- npm installs bmad-enhanced package
+- npm installs convoke package
 - Checks for `_bmad/` directory (BMAD Method prerequisite)
 - If found: Copies Emma + Wade agents to `_bmad/bme/_designos/`
 - If not found: Error with instruction to run `npx bmad-method@alpha install`
@@ -214,13 +214,13 @@ cat _bmad/bme/_designos/agents/wireframe-designer.md  # Activate Wade
 
 ## Error Message
 
-If user tries to install BMAD-Enhanced without BMAD Method:
+If user tries to install Convoke without BMAD Method:
 
 **Before:**
 ```
 ✗ BMAD Method not found!
 
-BMAD-Enhanced requires BMAD Method to be installed first.
+Convoke requires BMAD Method to be installed first.
 
 Please install BMAD Method:
   git clone https://github.com/bmadhub/bmad.git
@@ -236,7 +236,7 @@ Then run this installer again.
 ```
 ✗ BMAD Method not found!
 
-BMAD-Enhanced requires BMAD Method to be installed first.
+Convoke requires BMAD Method to be installed first.
 
 Please install BMAD Method:
   npx bmad-method@alpha install
@@ -267,9 +267,9 @@ npx bmad-method install         # Default (latest)
 ```
 
 ### Compatibility
-BMAD-Enhanced can recommend specific BMAD Method versions:
+Convoke can recommend specific BMAD Method versions:
 ```bash
-# For compatibility with BMAD-Enhanced v1.0.0-alpha
+# For compatibility with Convoke v1.0.0-alpha
 npx bmad-method@alpha install
 
 # Future: Specific version requirement
@@ -345,14 +345,14 @@ rm -rf _bmad/
 npx bmad-method@alpha install
 ls _bmad/  # Verify directory created
 
-# Test 2: BMAD-Enhanced install
-npm install bmad-enhanced
-npx bmad-install-agents
+# Test 2: Convoke install
+npm install convoke
+npx convoke-install
 cat _bmad/bme/_designos/agents/empathy-mapper.md  # Verify Emma works
 
 # Test 3: Error handling
 rm -rf _bmad/
-npx bmad-install-agents  # Should error with npx instruction
+npx convoke-install  # Should error with npx instruction
 ```
 
 ---
@@ -394,6 +394,6 @@ All documentation now consistently shows:
 
 **Status:** ✅ COMPLETE
 **Date:** 2026-02-15
-**Version:** BMAD-Enhanced v1.0.0-alpha
+**Version:** Convoke v1.0.0-alpha
 
 All documentation and code now uses `npx bmad-method@alpha install` for BMAD Method installation.

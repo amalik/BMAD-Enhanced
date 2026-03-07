@@ -5,11 +5,11 @@ inputDocuments:
   - _bmad-output/planning-artifacts/epics-phase2.md
 ---
 
-# Convoke Phase 3 — Product Rename: BMAD-Enhanced → Convoke
+# Convoke Phase 3 — Product Rename: Convoke → Convoke
 
 ## Overview
 
-BMAD Method's trademark prohibits using "BMad" as a product name (the "BMad + qualifier" pattern is explicitly not permitted). The product is evolving from a Vortex-only validation tool into an **agentic operating system** — a team-of-teams platform for creating, delivering, and operating complex systems. Phase 3 executes the complete rename from "BMAD-Enhanced" to "Convoke" across the entire codebase: npm package, CLI commands, documentation, tests, historical artifacts, and GitHub infrastructure.
+BMAD Method's trademark prohibits using "BMad" as a product name (the "BMad + qualifier" pattern is explicitly not permitted). The product is evolving from a Vortex-only validation tool into an **agentic operating system** — a team-of-teams platform for creating, delivering, and operating complex systems. Phase 3 executes the complete rename from "Convoke" to "Convoke" across the entire codebase: npm package, CLI commands, documentation, tests, historical artifacts, and GitHub infrastructure.
 
 **Rename scope:** ~200 files, ~680+ references.
 
@@ -23,17 +23,17 @@ BMAD Method's trademark prohibits using "BMad" as a product name (the "BMad + qu
 
 | Old | New | Context |
 |-----|-----|---------|
-| `bmad-enhanced` | `convoke` | npm package name |
-| `BMAD-Enhanced` | `Convoke` | Display name |
-| `BMAD Enhanced` | `Convoke` | Prose variant |
-| `bmad-install-vortex-agents` | `convoke-install-vortex` | CLI (shortened, scales to future teams) |
-| `bmad-install-agents` | `convoke-install` | CLI (installs all teams) |
-| `bmad-update` | `convoke-update` | CLI |
-| `bmad-version` | `convoke-version` | CLI |
-| `bmad-migrate` | `convoke-migrate` | CLI |
-| `bmad-doctor` | `convoke-doctor` | CLI |
-| `BMAD-Enhanced Community` | `Convoke Contributors` | Author / copyright holder |
-| `github.com/amalik/BMAD-Enhanced` | `github.com/amalik/convoke` | Repository URL |
+| `convoke` | `convoke` | npm package name |
+| `Convoke` | `Convoke` | Display name |
+| `Convoke` | `Convoke` | Prose variant |
+| `convoke-install-vortex` | `convoke-install-vortex` | CLI (shortened, scales to future teams) |
+| `convoke-install` | `convoke-install` | CLI (installs all teams) |
+| `convoke-update` | `convoke-update` | CLI |
+| `convoke-version` | `convoke-version` | CLI |
+| `convoke-migrate` | `convoke-migrate` | CLI |
+| `convoke-doctor` | `convoke-doctor` | CLI |
+| `Convoke Community` | `Convoke Contributors` | Author / copyright holder |
+| `github.com/amalik/convoke` | `github.com/amalik/convoke` | Repository URL |
 
 **NOT renamed:** `_bmad/` directory paths, `.claude/commands/bmad-*` skill files, "BMAD Method" / "BMad Core" references, agent IDs.
 
@@ -43,16 +43,16 @@ BMAD Method's trademark prohibits using "BMad" as a product name (the "BMad + qu
 
 **Package Identity (5):**
 
-- FR1 [I]: npm package name changes from `bmad-enhanced` to `convoke` across package.json, package-lock.json, and all internal references
+- FR1 [I]: npm package name changes from `convoke` to `convoke` across package.json, package-lock.json, and all internal references
 - FR2 [I]: All 6 CLI binary commands are renamed from `bmad-*` to `convoke-*` prefix with shortened install commands (`convoke-install-vortex`, `convoke-install`)
 - FR3 [I]: All script files backing CLI commands are renamed to match new command names
 - FR4 [I]: Package version resets to `2.0.0` with correct metadata (description, author, repository URL, keywords)
-- FR5 [I]: Package ships with `bmad-enhanced` as a keyword for discoverability during transition period
+- FR5 [I]: Package ships with `convoke` as a keyword for discoverability during transition period
 
 **Migration (3):**
 
 - FR6 [I]: Migration registry contains a `1.7.x-to-2.0.0` breaking migration entry so existing users' upgrade path works
-- FR7 [I]: Users on `bmad-enhanced@1.7.x` can discover the rename through a deprecation notice on the old package
+- FR7 [I]: Users on `convoke@1.7.x` can discover the rename through a deprecation notice on the old package
 - FR8 [I]: Existing `_bmad/` directory structure and `_bmad-output/` artifacts are preserved — zero data loss on upgrade
 
 **Documentation Accuracy (5):**
@@ -71,7 +71,7 @@ BMAD Method's trademark prohibits using "BMad" as a product name (the "BMad + qu
 
 **Historical Completeness (2):**
 
-- FR17 [I]: All historical documentation in `_bmad-output/` is updated to reference Convoke. Note: `BMAD Enhanced` (space-separated) replacements require per-instance review in historical docs — "Enhanced" may be a verb in context, not part of the product name
+- FR17 [I]: All historical documentation in `_bmad-output/` is updated to reference Convoke. Note: `Convoke` (space-separated) replacements require per-instance review in historical docs — "Enhanced" may be a verb in context, not part of the product name
 - FR18 [I]: All top-level release notes, guides, and misc files reference Convoke
 
 **Platform (3):**
@@ -85,10 +85,10 @@ BMAD Method's trademark prohibits using "BMad" as a product name (the "BMad + qu
 - NFR1: Rename introduces zero functional changes — all existing behavior is preserved exactly
 - NFR2: Script file renames and test file renames are committed atomically — never a state where scripts are renamed but tests reference old paths
 - NFR3: Scripted find-and-replace in Phase 7 (historical docs) undergoes manual `git diff` review to catch false positives before committing
-- NFR4: Patterns used for find-and-replace target `bmad-enhanced` (hyphenated) and specific CLI names (e.g., `bmad-update`), never bare `bmad` — protecting `_bmad/` paths and BMAD Method references
-- NFR5: `convoke@0.0.1` placeholder is published BEFORE `bmad-enhanced` deprecation notice — no gap where users see a deprecation pointing to a nonexistent package
-- NFR6: The `bmad-enhanced` keyword is included in the new package for search discoverability during the transition period
-- NFR7: docs-audit tool gains a check for stale `bmad-enhanced` references in user-facing docs
+- NFR4: Patterns used for find-and-replace target `convoke` (hyphenated) and specific CLI names (e.g., `convoke-update`), never bare `bmad` — protecting `_bmad/` paths and BMAD Method references
+- NFR5: `convoke@0.0.1` placeholder is published BEFORE `convoke` deprecation notice — no gap where users see a deprecation pointing to a nonexistent package
+- NFR6: The `convoke` keyword is included in the new package for search discoverability during the transition period
+- NFR7: docs-audit tool gains a check for stale `convoke` references in user-facing docs
 
 ## FR Coverage Map
 
@@ -152,12 +152,12 @@ So that `npm install convoke` works and all `convoke-*` commands are available.
 
 **Acceptance Criteria:**
 
-**Given** the current `package.json` with name `bmad-enhanced` and version `1.7.1`
+**Given** the current `package.json` with name `convoke` and version `1.7.1`
 **When** the rename is applied
 **Then** `name` is `convoke` and `version` is `2.0.0`
 **And** `description` is "Agent teams for complex systems, compatible with BMad Method"
 **And** `bin` contains: `convoke-install-vortex`, `convoke-install`, `convoke-update`, `convoke-version`, `convoke-migrate`, `convoke-doctor`
-**And** `keywords` includes `convoke`, `bmad-enhanced`, and `bmad`
+**And** `keywords` includes `convoke`, `convoke`, and `bmad`
 **And** `author` is `Convoke Contributors`
 **And** `repository.url` points to `github.com/amalik/convoke`
 **And** `package-lock.json` is regenerated via `npm install --package-lock-only`
@@ -175,10 +175,10 @@ So that the renamed `bin` entries in package.json resolve to correctly-branded s
 
 **Given** the 4 script files that back CLI commands
 **When** the rename is applied
-**Then** `scripts/update/bmad-update.js` is renamed to `scripts/update/convoke-update.js` with all internal "BMAD-Enhanced" and "bmad-*" strings updated
-**And** `scripts/update/bmad-version.js` is renamed to `scripts/update/convoke-version.js` with same treatment
-**And** `scripts/update/bmad-migrate.js` is renamed to `scripts/update/convoke-migrate.js` with same treatment
-**And** `scripts/bmad-doctor.js` is renamed to `scripts/convoke-doctor.js` with same treatment
+**Then** `scripts/update/convoke-update.js` is renamed to `scripts/update/convoke-update.js` with all internal "Convoke" and "bmad-*" strings updated
+**And** `scripts/update/convoke-version.js` is renamed to `scripts/update/convoke-version.js` with same treatment
+**And** `scripts/update/convoke-migrate.js` is renamed to `scripts/update/convoke-migrate.js` with same treatment
+**And** `scripts/convoke-doctor.js` is renamed to `scripts/convoke-doctor.js` with same treatment
 **And** all user-facing console output in these files references "Convoke" and `convoke-*` commands
 **And** JSDoc headers in each file reference "Convoke"
 
@@ -194,7 +194,7 @@ So that my first interaction with the package reflects the correct product ident
 
 **Given** a user runs `npm install convoke`
 **When** the postinstall script executes
-**Then** the output says "Convoke installed!" (not "BMAD-Enhanced installed!")
+**Then** the output says "Convoke installed!" (not "Convoke installed!")
 **And** all `npx` command suggestions use `convoke-*` names
 
 **Given** a user runs `node index.js` or `npx convoke`
@@ -229,13 +229,13 @@ So that internal code consistently references the correct product name.
 **And** `backup-manager.js` JSDoc header references "Convoke"
 **And** `validator.js` JSDoc header and diagnostic messages reference "Convoke"
 **And** `agent-registry.js` is confirmed to have no product name references (agent IDs are NOT renamed) and its JSDoc is updated if needed
-**And** `scripts/docs-audit.js` references "Convoke" and gains a check for stale `bmad-enhanced` references
+**And** `scripts/docs-audit.js` references "Convoke" and gains a check for stale `convoke` references
 
 **Files:** 8 files in `scripts/update/lib/`, `scripts/docs-audit.js`
 
 ### Story 1.5: Create v2.0.0 Migration Entry
 
-As a user upgrading from bmad-enhanced 1.7.x,
+As a user upgrading from convoke 1.7.x,
 I want the migration system to recognize the 1.7.x → 2.0.0 upgrade path,
 So that `convoke-update` correctly processes my upgrade with a breaking change notice.
 
@@ -261,9 +261,9 @@ So that the full test suite passes after the rename with zero failures.
 
 **Given** the script files have been renamed (Story 1.2)
 **When** tests are updated
-**Then** `tests/unit/bmad-update.test.js` is renamed to `convoke-update.test.js` with all script paths and assertion strings updated
-**And** `tests/unit/bmad-version.test.js` is renamed to `convoke-version.test.js` with same treatment
-**And** `tests/integration/bmad-doctor.test.js` is renamed to `convoke-doctor.test.js` with same treatment
+**Then** `tests/unit/convoke-update.test.js` is renamed to `convoke-update.test.js` with all script paths and assertion strings updated
+**And** `tests/unit/convoke-version.test.js` is renamed to `convoke-version.test.js` with same treatment
+**And** `tests/integration/convoke-doctor.test.js` is renamed to `convoke-doctor.test.js` with same treatment
 **And** `tests/integration/cli-entry-points.test.js` has all 12 CLI refs updated to `convoke-*`
 **And** `tests/integration/postinstall.test.js` assertions reference "Convoke" output
 **And** `tests/unit/docs-audit.test.js` is updated for any new stale-reference checks
@@ -277,7 +277,7 @@ So that the full test suite passes after the rename with zero failures.
 ### Story 1.7: Add Migration Path Integration Test
 
 As a maintainer,
-I want an integration test that validates the upgrade path from bmad-enhanced 1.7.x to Convoke 2.0.0,
+I want an integration test that validates the upgrade path from convoke 1.7.x to Convoke 2.0.0,
 So that I have confidence the migration system correctly handles the breaking rename for existing users.
 
 **Acceptance Criteria:**
@@ -290,7 +290,7 @@ So that I have confidence the migration system correctly handles the breaking re
 **And** the migration's `apply()` method executes without errors
 **And** existing `_bmad/` directory structure is preserved (FR8)
 
-**Implementation note:** Follow the existing migration test patterns in `convoke-update.test.js` (formerly `bmad-update.test.js`) — mock the file system and config using the same helpers and assertion style.
+**Implementation note:** Follow the existing migration test patterns in `convoke-update.test.js` (formerly `convoke-update.test.js`) — mock the file system and config using the same helpers and assertion style.
 
 **Files:** New test file in `tests/integration/` or `tests/unit/`
 
@@ -300,7 +300,7 @@ So that I have confidence the migration system correctly handles the breaking re
 npm test && npm run test:integration && npm run test:p0:gate
 node index.js                    # Verify Convoke branding
 npm pack --dry-run               # Verify package name is 'convoke'
-grep -r "bmad-enhanced" scripts/ --include="*.js" | grep -v migrations/  # Should return 0
+grep -r "convoke" scripts/ --include="*.js" | grep -v migrations/  # Should return 0
 ```
 
 **Commit rule:** Stories 1.1–1.7 are developed incrementally but committed as a single atomic commit. Work in sequence (1.1 → 1.2 → ... → 1.7), verifying each step locally, but only `git add` and commit once ALL stories pass. This ensures a rollback-safe working state throughout development while guaranteeing the repo never has renamed scripts without renamed tests.
@@ -319,7 +319,7 @@ So that my first impression matches the actual product identity.
 
 **Acceptance Criteria:**
 
-**Given** the current README with BMAD ASCII art and bmad-enhanced references
+**Given** the current README with BMAD ASCII art and convoke references
 **When** the overhaul is applied
 **Then** the ASCII art banner displays "CONVOKE" in block letters
 **And** the tagline reflects the new positioning ("Agent teams for complex systems")
@@ -329,7 +329,7 @@ So that my first impression matches the actual product identity.
 **And** the cache tip references `npx -p convoke@latest convoke-update`
 **And** the "How It Fits with BMAD Core" section uses "Convoke" (keeping "BMAD Core" and "BMAD Method" as-is)
 **And** the roadmap includes a v2.0.0 entry explaining the rename
-**And** zero instances of "bmad-enhanced" or "BMAD-Enhanced" remain (except in "compatible with BMad Method" style references)
+**And** zero instances of "convoke" or "Convoke" remain (except in "compatible with BMad Method" style references)
 
 **Files:** `README.md`
 
@@ -349,7 +349,7 @@ So that I can follow instructions without encountering stale product name refere
 **And** `BMAD-METHOD-COMPATIBILITY.md` updates all 36 product name refs while keeping "BMAD Method" / "BMad Core" references intact
 **And** `PUBLISHING-GUIDE.md` updates all 40 refs and publishing instructions
 **And** `scripts/README.md` references Convoke (ships in npm package via `files` field — 3 refs)
-**And** zero instances of "bmad-enhanced" or "BMAD-Enhanced" remain in any of these files
+**And** zero instances of "convoke" or "Convoke" remain in any of these files
 
 **Files:** `INSTALLATION.md`, `UPDATE-GUIDE.md`, `CHANGELOG.md`, `BMAD-METHOD-COMPATIBILITY.md`, `PUBLISHING-GUIDE.md`, `scripts/README.md`
 
@@ -367,7 +367,7 @@ So that every touchpoint within the product reflects the correct identity.
 **And** all 7 user guides in `_bmad/bme/_vortex/guides/` update the module line and CLI refs
 **And** all ~21 workflow template/validate files update the "Created with" footer to "Convoke v2.0.0"
 **And** `_bmad/bmm/config.yaml` project_name is set to `Convoke`
-**And** zero instances of "bmad-enhanced" or "BMAD-Enhanced" remain in shipped content
+**And** zero instances of "convoke" or "Convoke" remain in shipped content
 
 **Files:** 4 docs, 7 guides, ~21 workflow templates, 1 config
 
@@ -375,7 +375,7 @@ So that every touchpoint within the product reflects the correct identity.
 
 ```bash
 npm run docs:audit               # Zero findings
-grep -r "bmad-enhanced\|BMAD-Enhanced" docs/ _bmad/bme/_vortex/ README.md INSTALLATION.md UPDATE-GUIDE.md CHANGELOG.md
+grep -r "convoke\|Convoke" docs/ _bmad/bme/_vortex/ README.md INSTALLATION.md UPDATE-GUIDE.md CHANGELOG.md
 # Should return 0 results
 ```
 
@@ -428,38 +428,38 @@ So that the entire project history consistently uses the current product name.
 
 **Given** ~100 files in `_bmad-output/` across planning-artifacts, project-documentation, implementation-artifacts, journey-examples, brainstorming, test-artifacts, and backups
 **When** scripted find-and-replace is applied using safe patterns
-**Then** all instances of `bmad-enhanced`, `BMAD-Enhanced`, `BMAD Enhanced` are replaced with `convoke` / `Convoke`
-**And** all instances of `bmad-install-vortex-agents` are replaced with `convoke-install-vortex`
-**And** all instances of `bmad-install-agents` are replaced with `convoke-install`
-**And** all instances of `bmad-update`, `bmad-version`, `bmad-migrate`, `bmad-doctor` are replaced with `convoke-*` equivalents
+**Then** all instances of `convoke`, `Convoke`, `Convoke` are replaced with `convoke` / `Convoke`
+**And** all instances of `convoke-install-vortex` are replaced with `convoke-install-vortex`
+**And** all instances of `convoke-install` are replaced with `convoke-install`
+**And** all instances of `convoke-update`, `convoke-version`, `convoke-migrate`, `convoke-doctor` are replaced with `convoke-*` equivalents
 **And** `_bmad/` path references are NOT affected
 **And** "BMAD Method" / "BMad Core" references are NOT affected
 **And** a `git diff` review is performed before committing to catch false positives (NFR3)
 
 **Safe replacement patterns (NFR4):**
-- `BMAD-Enhanced` → `Convoke` (hyphenated, distinct from bare "BMAD")
-- `BMAD Enhanced` → `Convoke` (space-separated variant)
-- `bmad-enhanced` → `convoke` (npm package name)
-- `bmad-install-vortex-agents` → `convoke-install-vortex`
-- `bmad-install-agents` → `convoke-install`
-- `bmad-update` → `convoke-update`
-- `bmad-version` → `convoke-version`
-- `bmad-migrate` → `convoke-migrate`
-- `bmad-doctor` → `convoke-doctor`
+- `Convoke` → `Convoke` (hyphenated, distinct from bare "BMAD")
+- `Convoke` → `Convoke` (space-separated variant)
+- `convoke` → `convoke` (npm package name)
+- `convoke-install-vortex` → `convoke-install-vortex`
+- `convoke-install` → `convoke-install`
+- `convoke-update` → `convoke-update`
+- `convoke-version` → `convoke-version`
+- `convoke-migrate` → `convoke-migrate`
+- `convoke-doctor` → `convoke-doctor`
 
 **Files:** ~100 files in `_bmad-output/`
 
 ### Epic 3 Verification
 
 ```bash
-# Comprehensive grep audit
+# Comprehensive grep audit — search for OLD stale product names
 grep -r "bmad-enhanced\|BMAD-Enhanced\|BMAD Enhanced" . \
   --include="*.{js,md,yml,yaml,json,sh,mjs}" \
   --exclude-dir=node_modules --exclude-dir=.claude \
   --exclude="package-lock.json"
 # Should return 0 results
 
-# CLI command audit
+# CLI command audit — search for OLD stale CLI commands
 grep -r "bmad-install\|bmad-update\|bmad-version\|bmad-migrate\|bmad-doctor" . \
   --include="*.{js,md,yml,yaml,json,sh}" \
   --exclude-dir=node_modules --exclude-dir=.claude
@@ -483,30 +483,30 @@ So that users who see the deprecation can actually find the new package.
 **Given** the `convoke` name is available on npm
 **When** a placeholder package is published
 **Then** `convoke@0.0.1` exists on npm with a "Coming soon" README
-**And** this is done BEFORE any deprecation notice on `bmad-enhanced`
+**And** this is done BEFORE any deprecation notice on `convoke`
 
 **Files:** Temporary placeholder package (not in main repo)
 
-### Story 4.2: Publish Deprecation Version of bmad-enhanced
+### Story 4.2: Publish Deprecation Version of convoke
 
-As a user on bmad-enhanced@1.7.x,
+As a user on convoke@1.7.x,
 I want to receive a clear deprecation notice pointing me to the new `convoke` package,
 So that I know how to migrate without losing my data.
 
 **Acceptance Criteria:**
 
 **Given** `convoke@0.0.1` exists on npm
-**When** `bmad-enhanced@1.8.0` is published
+**When** `convoke@1.8.0` is published
 **Then** the package.json includes a `"deprecated"` field pointing to `convoke`
 **And** the postinstall script displays a prominent banner with migration instructions
 **And** the banner assures users that `_bmad/` and `_bmad-output/` data is preserved
-**And** `npm deprecate bmad-enhanced "Renamed to convoke. Run: npm install convoke"` is executed
+**And** `npm deprecate convoke "Renamed to convoke. Run: npm install convoke"` is executed
 
 **Branch workflow (critical):** The deprecation must be published from the PRE-RENAME codebase, not from main (which has the Convoke rename):
 1. Create a `deprecation` branch from the v1.7.1 tag (pre-rename state)
 2. On that branch: add `"deprecated"` field to package.json, add deprecation banner to postinstall.js, bump version to 1.8.0
-3. Publish `bmad-enhanced@1.8.0` from the `deprecation` branch
-4. Run `npm deprecate bmad-enhanced "Renamed to convoke. Run: npm install convoke"`
+3. Publish `convoke@1.8.0` from the `deprecation` branch
+4. Run `npm deprecate convoke "Renamed to convoke. Run: npm install convoke"`
 5. Return to main branch (which has the Convoke rename) for `convoke@2.0.0` publish
 
 **Files:** `package.json`, `scripts/postinstall.js` (on `deprecation` branch only)
@@ -536,8 +536,8 @@ So that `convoke@2.0.0` ships with zero stale references and a passing test suit
 
 **Publish sequence:**
 1. Reserve `convoke@0.0.1` (Story 4.1)
-2. Publish `bmad-enhanced@1.8.0` deprecation (Story 4.2)
-3. `npm deprecate bmad-enhanced`
+2. Publish `convoke@1.8.0` deprecation (Story 4.2)
+3. `npm deprecate convoke`
 4. Rename GitHub repo → `convoke`
 5. Tag `v2.0.0`, push to trigger CI publish of `convoke@2.0.0`
 6. Create GitHub release with migration notes
@@ -565,7 +565,7 @@ After all epics:
 - Full grep audit for stale references → 0 results
 - `npm pack --dry-run` → package name `convoke`, ~242 files, ~1.1 MB
 - Fresh install test in temp directory
-- Upgrade test from bmad-enhanced@1.7.1
+- Upgrade test from convoke@1.7.1
 
 ## Process Commitments
 

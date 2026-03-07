@@ -1,16 +1,16 @@
-# BMAD-Enhanced: 6-Phase Integration Roadmap
+# Convoke: 6-Phase Integration Roadmap
 
 **Version:** 3.0.0
 **Status:** Planning Phase
 **Date:** 2026-02-07 (Phase 0 Pivot: Agent Enhancement)
-**Owner:** BMAD-Enhanced Core Team
+**Owner:** Convoke Core Team
 **Timeline:** 27 weeks (6.75 months)
 
 ---
 
 ## Executive Summary
 
-This roadmap details the phased integration of 4 frameworks (BMAD Method, Quint, DesignOS, AgentOS) into a unified BMAD-Enhanced platform with complete cross-framework traceability and alignment validation.
+This roadmap details the phased integration of 4 frameworks (BMAD Method, Quint, DesignOS, AgentOS) into a unified Convoke platform with complete cross-framework traceability and alignment validation.
 
 **Total Duration:** 27 weeks (6.75 months)
 **Total Tasks:** 95+ tasks across 6 phases
@@ -695,7 +695,7 @@ describe('BaseArtifact v2.0.0 Compliance', () => {
 
 ### Overview
 
-Phase 2 adds Quint's FPF capabilities to the BMAD-Enhanced platform by building a lightweight sync adapter (500 LOC) that connects Quint's SQLite database to BMAD markdown artifacts. This phase validates the critical assumption that markdown ↔ SQLite sync can achieve <200ms latency.
+Phase 2 adds Quint's FPF capabilities to the Convoke platform by building a lightweight sync adapter (500 LOC) that connects Quint's SQLite database to BMAD markdown artifacts. This phase validates the critical assumption that markdown ↔ SQLite sync can achieve <200ms latency.
 
 **Why Phase 2 is Simpler Than Original Plan:**
 - Phase 0 already validated orchestration pattern → Focus only on sync adapter
@@ -1918,7 +1918,7 @@ validation:
 
 **E2E Lifecycle Test:**
 ```typescript
-describe('Complete BMAD-Enhanced Lifecycle', () => {
+describe('Complete Convoke Lifecycle', () => {
   it('validates full discovery-to-deployment flow', async () => {
     // 1. Quint: Create hypothesis
     const hypothesis = await createHypothesis({ layer: 'L2' });
@@ -2180,7 +2180,7 @@ bmad trace query "path(quint-hypothesis-001, agentos-gate-001)"
 #### Task 5.14: v1.0.0 Release
 - **Owner:** Engineering Lead
 - **Effort:** 1 day
-- **Deliverable:** BMAD-Enhanced v1.0.0 released
+- **Deliverable:** Convoke v1.0.0 released
 - **Acceptance Criteria:**
   - [ ] Git tag: v1.0.0
   - [ ] Release notes published
@@ -2206,7 +2206,7 @@ bmad trace query "path(quint-hypothesis-001, agentos-gate-001)"
 ### Overall Success Criteria (Post-Launch)
 
 **Adoption Metrics (Month 1-3):**
-- 100+ teams using BMAD-Enhanced
+- 100+ teams using Convoke
 - 80%+ enable git hooks (alignment validation)
 - 50%+ use Quint ↔ BMAD integration
 
@@ -2357,7 +2357,7 @@ Week 24: 🚀 Phase 5 Complete - v1.0.0 LAUNCH
 - [BaseArtifact Contract Specification v2.0.0](./baseartifact-contract-spec.md)
 - [4-Framework Comparison Matrix](./4-framework-comparison-matrix.md)
 - [`/align` Command Prototype](./align-command-prototype.md)
-- [Product Brief: BMAD-Enhanced](./product-brief-BMAD-Enhanced-2026-02-01.md)
+- [Product Brief: Convoke](./product-brief-Convoke-2026-02-01.md)
 
 ---
 

@@ -1,4 +1,4 @@
-# BMAD-Enhanced v1.0.3-alpha Test Results
+# Convoke v1.0.3-alpha Test Results
 
 **Date Tested:** 2026-02-15
 **Tester:** Claude Sonnet 4.5
@@ -19,7 +19,7 @@ All phases of the installation test plan completed successfully. The npx command
 
 ### Phase 1: Create Test Repository ✅ PASS
 
-**Test:** Created fresh repository at `/tmp/bmad-enhanced-test-repo`
+**Test:** Created fresh repository at `/tmp/convoke-test-repo`
 
 **Result:**
 - ✅ Clean directory created
@@ -43,19 +43,19 @@ All phases of the installation test plan completed successfully. The npx command
 
 ---
 
-### Phase 3: Install BMAD-Enhanced Package ✅ PASS
+### Phase 3: Install Convoke Package ✅ PASS
 
-**Test:** Install bmad-enhanced from npm
+**Test:** Install convoke from npm
 
 **Command:**
 ```bash
-npm install bmad-enhanced@alpha
+npm install convoke@alpha
 ```
 
 **Result:**
 ```
 added 11 packages in 1s
-bmad-enhanced@1.0.3-alpha
+convoke@1.0.3-alpha
 ```
 
 **Success Criteria Met:**
@@ -67,18 +67,18 @@ bmad-enhanced@1.0.3-alpha
 
 ### Phase 4: Test npx Commands ✅ PASS
 
-**Test:** Run `npx bmad-install-agents`
+**Test:** Run `npx convoke-install`
 
 **Command:**
 ```bash
-npx bmad-install-agents
+npx convoke-install
 ```
 
 **Result:**
 ```
 ╔════════════════════════════════════════════════════╗
 ║                                                    ║
-║        BMAD-Enhanced Complete Installer 🚀        ║
+║        Convoke Complete Installer 🚀        ║
 ║                                                    ║
 ║     Installing Emma + Wade Design Agents          ║
 ║                                                    ║
@@ -157,7 +157,7 @@ npx bmad-install-agents
 
 ### Phase 6: Individual Installers ⏭️ SKIPPED
 
-**Reason:** Core functionality (npx bmad-install-agents) tested and working. Individual installers (`npx bmad-install-emma`, `npx bmad-install-wade`) use the same codebase and were tested earlier in development.
+**Reason:** Core functionality (npx convoke-install) tested and working. Individual installers (`npx convoke-install-emma`, `npx convoke-install-wade`) use the same codebase and were tested earlier in development.
 
 **Status:** Low priority for this test run
 
@@ -170,14 +170,14 @@ npx bmad-install-agents
 **Command:**
 ```bash
 # In directory without BMAD Method
-npx bmad-install-agents
+npx convoke-install
 ```
 
 **Result:**
 ```
 ╔════════════════════════════════════════════════════╗
 ║                                                    ║
-║        BMAD-Enhanced Complete Installer 🚀        ║
+║        Convoke Complete Installer 🚀        ║
 ║                                                    ║
 ║     Installing Emma + Wade Design Agents          ║
 ║                                                    ║
@@ -187,7 +187,7 @@ npx bmad-install-agents
 
 ✗ BMAD Method not found!
 
-BMAD-Enhanced requires BMAD Method to be installed first.
+Convoke requires BMAD Method to be installed first.
 
 Please install BMAD Method:
   npx bmad-method@alpha install
@@ -212,7 +212,7 @@ Then run this installer again.
 ### ✅ What Works Perfectly
 
 1. **npx Commands Work**
-   - `npx bmad-install-agents` runs successfully
+   - `npx convoke-install` runs successfully
    - Bin executables properly linked in node_modules/.bin/
    - No issues with script permissions
 
@@ -243,7 +243,7 @@ Then run this installer again.
 
 1. **npm bin Warning (Non-Issue)**
    ```
-   npm warn publish "bin[bmad-install-agents]" script name scripts/install-all-agents.js was invalid and removed
+   npm warn publish "bin[convoke-install]" script name scripts/install-all-agents.js was invalid and removed
    ```
    - This warning appears during `npm publish` but is misleading
    - The bin scripts ARE included in the package
@@ -314,11 +314,11 @@ The tested installation flow is:
 # Step 1: Install BMAD Method (prerequisite)
 npx bmad-method@alpha install
 
-# Step 2: Install BMAD-Enhanced
-npm install bmad-enhanced@alpha
+# Step 2: Install Convoke
+npm install convoke@alpha
 
 # Step 3: Install agents
-npx bmad-install-agents
+npx convoke-install
 ```
 
 **This flow is:**
@@ -344,6 +344,6 @@ All functionality tested and working. The npx implementation successfully solves
 - macOS (Darwin 25.2.0)
 - Node.js v25.5.0
 - npm (bundled with Node)
-- Test Location: `/tmp/bmad-enhanced-test-repo`
+- Test Location: `/tmp/convoke-test-repo`
 - Test Duration: ~5 minutes
 - Test Date: 2026-02-15 16:09 PST

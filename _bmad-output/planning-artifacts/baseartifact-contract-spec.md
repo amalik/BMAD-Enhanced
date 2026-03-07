@@ -3,7 +3,7 @@
 **Version:** 2.0.0
 **Status:** Design Phase
 **Date:** 2026-02-04
-**Owner:** BMAD-Enhanced Core Team
+**Owner:** Convoke Core Team
 
 ---
 
@@ -29,7 +29,7 @@ Every artifact MUST include these fields in YAML frontmatter:
 ---
 # ============================================================
 # BASE ARTIFACT CONTRACT v2.0.0
-# Required fields for all BMAD-Enhanced artifacts
+# Required fields for all Convoke artifacts
 # ============================================================
 
 # Identity
@@ -1088,7 +1088,7 @@ designos_data:
 ## 12. Related Documents
 
 - [4-Framework Comparison Matrix](./4-framework-comparison-matrix.md) - Complete framework analysis
-- [Product Brief: BMAD-Enhanced](./product-brief-BMAD-Enhanced-2026-02-01.md) - Product vision and ADRs
+- [Product Brief: Convoke](./product-brief-Convoke-2026-02-01.md) - Product vision and ADRs
 - [Integration Roadmap](./integration-roadmap.md) - Phased implementation plan (TBD)
 
 ---

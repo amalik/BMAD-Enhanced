@@ -1,4 +1,4 @@
-# BMAD-Enhanced Publishing Complete! 🎉
+# Convoke Publishing Complete! 🎉
 
 **Date:** 2026-02-15
 **Final Version:** 1.0.2-alpha
@@ -8,15 +8,15 @@
 
 ## 📦 Published Package
 
-**npm Registry:** https://www.npmjs.com/package/bmad-enhanced
+**npm Registry:** https://www.npmjs.com/package/convoke
 
 **Installation:**
 ```bash
-npm install bmad-enhanced@alpha
+npm install convoke@alpha
 ```
 
 **Package Details:**
-- Name: `bmad-enhanced`
+- Name: `convoke`
 - Version: `1.0.2-alpha`
 - Size: 55.6 kB
 - Files: 33 total
@@ -121,10 +121,10 @@ npm install bmad-enhanced@alpha
 npx bmad-method@alpha install
 ```
 
-### Step 2: Install BMAD-Enhanced
+### Step 2: Install Convoke
 ```bash
-npm install bmad-enhanced@alpha
-npx bmad-install-agents
+npm install convoke@alpha
+npx convoke-install
 ```
 
 ### Step 3: Activate Agents
@@ -203,11 +203,11 @@ git push
 - `2ee85f5` - Include user guides in npm package
 
 ### 2. Create GitHub Release
-Go to: https://github.com/amalik/BMAD-Enhanced/releases/new
+Go to: https://github.com/amalik/convoke/releases/new
 
 **Details:**
 - Tag: `v1.0.2-alpha`
-- Title: `BMAD-Enhanced v1.0.2-alpha - Bug Fixes`
+- Title: `Convoke v1.0.2-alpha - Bug Fixes`
 - Description: Use `RELEASE-NOTES-v1.0.2-alpha.md`
 - Mark as pre-release: ✅
 
@@ -217,29 +217,29 @@ Go to: https://github.com/amalik/BMAD-Enhanced/releases/new
 
 ## 🎯 Success Metrics
 
-**npm Downloads:** Track at https://www.npmjs.com/package/bmad-enhanced
+**npm Downloads:** Track at https://www.npmjs.com/package/convoke
 
-**GitHub Stars:** Track at https://github.com/amalik/BMAD-Enhanced
+**GitHub Stars:** Track at https://github.com/amalik/convoke
 
-**Issues/PRs:** Monitor at https://github.com/amalik/BMAD-Enhanced/issues
+**Issues/PRs:** Monitor at https://github.com/amalik/convoke/issues
 
 ---
 
 ## 🔗 Important Links
 
-**npm Package:** https://www.npmjs.com/package/bmad-enhanced
-**GitHub Repository:** https://github.com/amalik/BMAD-Enhanced
+**npm Package:** https://www.npmjs.com/package/convoke
+**GitHub Repository:** https://github.com/amalik/convoke
 **BMAD Method:** https://github.com/bmadhub/bmad
 
 ---
 
 ## 🎉 Congratulations!
 
-BMAD-Enhanced is now publicly available on npm! Users can install Emma and Wade with a single command.
+Convoke is now publicly available on npm! Users can install Emma and Wade with a single command.
 
 **Installation is seamless:**
 1. One command to install BMAD Method
-2. One command to install BMAD-Enhanced
+2. One command to install Convoke
 3. Both agents ready to use
 
 **Quality verified:**

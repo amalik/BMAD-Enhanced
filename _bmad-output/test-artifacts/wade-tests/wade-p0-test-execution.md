@@ -38,7 +38,7 @@
 - All required sections present
 
 **Actual Result:**
-- ✅ File loaded successfully from `/Users/amalikamriou/BMAD-Enhanced/_bmad/bme/_designos/agents/wireframe-designer.md`
+- ✅ File loaded successfully from `/Users/amalikamriou/Convoke/_bmad/bme/_designos/agents/wireframe-designer.md`
 - ✅ XML structure valid (lines 8-114)
 - ✅ All required sections present:
   - `<agent id="wireframe-designer.agent.yaml" name="Wade">` (line 9)
@@ -69,7 +69,7 @@
 - Values valid and usable
 
 **Actual Result:**
-- ✅ Config file exists at `/Users/amalikamriou/BMAD-Enhanced/_bmad/bme/_designos/config.yaml`
+- ✅ Config file exists at `/Users/amalikamriou/Convoke/_bmad/bme/_designos/config.yaml`
 - ✅ File loads successfully (25 lines, valid YAML)
 - ✅ All required fields present:
   - `user_name: "{user}"` (line 9)
@@ -280,7 +280,7 @@ Please update {project-root}/_bmad/bme/_designos/config.yaml with all required f
 - Handler type="exec" (lines 47-69): Read workflow.md and follow instructions
 
 **Workflow File Check:**
-- ✅ File exists at `/Users/amalikamriou/BMAD-Enhanced/_bmad/bme/_designos/workflows/wireframe/workflow.md`
+- ✅ File exists at `/Users/amalikamriou/Convoke/_bmad/bme/_designos/workflows/wireframe/workflow.md`
 - ✅ File contains initialization: "Load step: {project-root}/_bmad/bme/_designos/workflows/wireframe/steps/step-01-define-requirements.md"
 
 **Status:** ✅ PASS
@@ -427,7 +427,7 @@ Try typing a number (1-6) or a command like "WM" or "create wireframe".
 
 **Step 2 Load:**
 - ✅ step-01 contains next step instruction (line 85): "step-02-user-flows.md"
-- ✅ step-02-user-flows.md exists at `/Users/amalikamriou/BMAD-Enhanced/_bmad/bme/_designos/workflows/wireframe/steps/step-02-user-flows.md`
+- ✅ step-02-user-flows.md exists at `/Users/amalikamriou/Convoke/_bmad/bme/_designos/workflows/wireframe/steps/step-02-user-flows.md`
 - ✅ Step 2 prompts for: Entry points, Happy path, Alternative flows, Exit points
 - ✅ Frontmatter tracks step number (step: 2, workflow: wireframe)
 
@@ -541,7 +541,7 @@ Try typing a number (1-6) or a command like "WM" or "create wireframe".
 **Step 6 Load:**
 - ✅ step-06-synthesize.md exists and verified earlier in session (read at beginning)
 - ✅ Template path referenced (line 17): "wireframe.template.md"
-- ✅ Template file exists at `/Users/amalikamriou/BMAD-Enhanced/_bmad/bme/_designos/workflows/wireframe/wireframe.template.md`
+- ✅ Template file exists at `/Users/amalikamriou/Convoke/_bmad/bme/_designos/workflows/wireframe/wireframe.template.md`
 - ✅ Template contains all 10 sections:
   1. Executive Summary
   2. Requirements

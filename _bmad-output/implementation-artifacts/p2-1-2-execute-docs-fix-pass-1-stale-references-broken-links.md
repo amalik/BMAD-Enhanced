@@ -125,7 +125,7 @@ RIGHT: ../_bmad/bme/_vortex/guides/EMMA-USER-GUIDE.md
 
 This file references `_bmad/_config/bmad.yaml` which was the old BMAD Method config location. The document describes detection logic for BMAD Method compatibility. Options:
 - **Option A:** Update paths to current config locations (`_bmad/bmm/config.yaml`)
-- **Option B:** Mark paths as describing the BMAD Method structure (not BMAD-Enhanced)
+- **Option B:** Mark paths as describing the BMAD Method structure (not Convoke)
 - **Option C:** If the compatibility doc is outdated (references v1.0.4-alpha vs current 1.6.4), consider a broader rewrite
 
 Investigate the actual installer code (`scripts/install-vortex-agents.js`) to see what it checks for, then update the doc to match reality.

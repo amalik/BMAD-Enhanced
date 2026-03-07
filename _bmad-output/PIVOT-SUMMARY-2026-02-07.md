@@ -186,7 +186,7 @@ Follow implementation guide schedule for Quinn, Stan, integration, and decision 
 ## Decision Gate (Week 3)
 
 ### Primary Question
-Does agent enhancement approach prove viable for BMAD-Enhanced integration?
+Does agent enhancement approach prove viable for Convoke integration?
 
 ### Decision Options
 

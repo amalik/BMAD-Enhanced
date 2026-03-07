@@ -15,12 +15,12 @@ status: COMPLETE
 ## User Decisions Incorporated
 
 ### 1. Module Name: `bme`
-- Changed all references from `bmad-enhanced` to `bme`
+- Changed all references from `convoke` to `bme`
 - Updated agent frontmatter: `module: bme`
 - Updated file paths: `_bmad/bme/` (instead of `_bmad-enhanced/`)
 
 ### 2. Distribution Method: npm package
-- Package name: `@bmad/enhanced` (or `bmad-enhanced`)
+- Package name: `@bmad/enhanced` (or `convoke`)
 - Installation: `npm install -g @bmad/enhanced`
 - Added npm package structure to Appendix A
 - Documented post-install script functionality
@@ -66,10 +66,10 @@ related_docs:
 #### Appendix A: Distribution & Installation (NEW)
 
 **npm Package Structure:**
-- Package name: `@bmad/enhanced` (or `bmad-enhanced`)
+- Package name: `@bmad/enhanced` (or `convoke`)
 - Installation command: `npm install -g @bmad/enhanced`
 - Post-install script: Automatically copies module + updates manifest
-- CLI command: `bmad-enhanced install` or `bme install`
+- CLI command: `convoke install` or `bme install`
 
 **Installation Flow:**
 1. Detect BMAD Method installation
@@ -182,7 +182,7 @@ module: bme
 ### npm Package Creation (Post Phase 0)
 
 **After Week 3 (all 4 agents working):**
-1. Create package.json with BMAD Enhanced metadata
+1. Create package.json with Convoke metadata
 2. Write install.js post-install script
 3. Test installation on fresh BMAD Method install
 4. Publish to npm registry: `npm publish`

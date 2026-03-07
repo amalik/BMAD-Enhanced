@@ -1,6 +1,6 @@
 # Raya's Journey Acceptance Test
 
-**Purpose:** Scripted end-to-end walkthrough simulating a new user's journey through BMAD-Enhanced — from first discovering the README through installation, first agent use, agent handoff, prerequisite guidance, and journey example discovery. This is the Phase 2 release gate.
+**Purpose:** Scripted end-to-end walkthrough simulating a new user's journey through Convoke — from first discovering the README through installation, first agent use, agent handoff, prerequisite guidance, and journey example discovery. This is the Phase 2 release gate.
 
 **Release:** Phase 2
 **Date:** 2026-03-02
@@ -11,7 +11,7 @@
 
 ## Persona: Raya
 
-Solo founder building B2B SaaS for freelancer invoicing. Found BMAD-Enhanced via a colleague's GitHub link. Uses Claude in her IDE but feels scattered — wants a structured way to validate her product ideas before coding.
+Solo founder building B2B SaaS for freelancer invoicing. Found Convoke via a colleague's GitHub link. Uses Claude in her IDE but feels scattered — wants a structured way to validate her product ideas before coding.
 
 ---
 
@@ -58,7 +58,7 @@ _(none — all gate tooling executed cleanly)_
 
 ## Phase 1: README Discovery
 
-**Objective:** Raya opens the README for the first time. Can she understand what BMAD-Enhanced does, see how the agents work, and find the journey example in one click?
+**Objective:** Raya opens the README for the first time. Can she understand what Convoke does, see how the agents work, and find the journey example in one click?
 
 ### Steps
 
@@ -110,11 +110,11 @@ know what `cat` does or how to translate it to their workflow.
 | # | Step | What to do |
 |---|------|------------|
 | 2.1 | Check prerequisites | Confirm Node.js 18+, Git, and Claude Code or Claude.ai are available |
-| 2.2 | Run install | Execute `npm install bmad-enhanced && npx bmad-install-vortex-agents` |
+| 2.2 | Run install | Execute `npm install convoke && npx convoke-install-vortex` |
 | 2.3 | Watch installer output | Observe the 6-step install process: prerequisites check, archive deprecated, create manifest, setup output directory, install agents/workflows/config, verify |
 | 2.4 | Check verification | Confirm verification step shows green checkmarks for all 7 agents and config |
 | 2.5 | Verify file structure | Confirm `_bmad/bme/_vortex/agents/` contains 7 agent files, `_bmad/bme/_vortex/config.yaml` exists, `_bmad-output/vortex-artifacts/` directory was created |
-| 2.6 | Run npx bmad-enhanced | Execute `npx bmad-enhanced` to see the agent list and available commands |
+| 2.6 | Run npx convoke | Execute `npx convoke` to see the agent list and available commands |
 
 ### Platform Recording (NFR13)
 
@@ -134,7 +134,7 @@ know what `cat` does or how to translate it to their workflow.
 | 2c | `config.yaml` present with `user_name`, `communication_language`, `output_folder` fields | NFR13 | PASS — all 3 fields present |
 | 2d | `_bmad-output/vortex-artifacts/` directory created | NFR13 | PASS — directory exists |
 | 2e | Verification step shows all green checkmarks | NFR13 | PASS — verified via file structure check |
-| 2f | `npx bmad-enhanced` displays all 7 agents and 5 commands | NFR13 | PASS — 7 agents, 5 commands displayed |
+| 2f | `npx convoke` displays all 7 agents and 5 commands | NFR13 | PASS — 7 agents, 5 commands displayed |
 
 ### Phase 2 Result
 

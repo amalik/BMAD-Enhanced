@@ -13,7 +13,7 @@ so that I can verify the complete Phase 2 user experience works as designed and 
 1. Given all Phase 2 epics (1-5) are complete and docs Pass 2 is clean, when the maintainer executes the scripted Raya's journey walkthrough, then the script covers: install via npx → first agent invocation → agent handoff → journey example discovery (FR34)
 2. Each step has explicit pass/fail criteria documented in the script
 3. Friction points encountered during the walkthrough are recorded with severity and location
-4. The walkthrough validates that `npx bmad-enhanced` works on the target platform (NFR13)
+4. The walkthrough validates that `npx convoke` works on the target platform (NFR13)
 5. The walkthrough confirms new user can reach the journey example from README in one click (FR29 validation)
 6. The walkthrough confirms Vortex Compass provides prerequisite guidance when artifacts are missing (FR31 validation)
 7. The walkthrough must be executed with fresh-context perspective (someone who did NOT build the Phase 2 content, or simulated via fresh-context LLM agent) to validate navigation is intuitive without insider knowledge
@@ -34,7 +34,7 @@ so that I can verify the complete Phase 2 user experience works as designed and 
   - [x] 2.1 Create `_bmad-output/rayas-journey-acceptance-test.md` — the scripted walkthrough document with all phases, steps, pass/fail criteria, and friction recording sections
   - [x] 2.2 **Phase 0 (Pre-Walkthrough):** Document gate checks from Task 1 with pass/fail criteria (docs audit zero findings, P0 100% pass, test suite green, journey example exists)
   - [x] 2.3 **Phase 1 (README Discovery):** Script the README reading experience — value proposition clarity, 7-agent diagram comprehension, output previews section, one-click journey link (FR29). Pass criteria: journey link visible and clickable from README
-  - [x] 2.4 **Phase 2 (Installation):** Script `npm install bmad-enhanced && npx bmad-install-vortex-agents` — pass criteria: all 7 agents installed, config.yaml present, output directory created, verification step shows all green. Platform recording (NFR13)
+  - [x] 2.4 **Phase 2 (Installation):** Script `npm install convoke && npx convoke-install-vortex` — pass criteria: all 7 agents installed, config.yaml present, output directory created, verification step shows all green. Platform recording (NFR13)
   - [x] 2.5 **Phase 3 (First Agent - Emma):** Script `cat _bmad/bme/_vortex/agents/contextualization-expert.md` — pass criteria: config validation succeeds, greeting displays with user name, menu shows all items including [LP] Lean Persona
   - [x] 2.6 **Phase 4 (Workflow Execution):** Script selecting [LP] Lean Persona — pass criteria: workflow loads, step-01 presents, user can complete all 6 steps, artifact saves to `_bmad-output/vortex-artifacts/`, Vortex Compass displays routing options at completion
   - [x] 2.7 **Phase 5 (Agent Handoff):** Script following Compass route from Emma to Isla — pass criteria: Isla activates, Isla's menu displays, Isla can reference Emma's lean persona output
@@ -76,10 +76,10 @@ This is NOT a code story. No JavaScript changes expected. No test modifications.
 
 ### Raya Persona Context (from PRD)
 
-Raya is a solo founder building B2B SaaS for freelancer invoicing. She found BMAD-Enhanced via a colleague's GitHub link. She uses Claude in her IDE but feels scattered. Her journey:
+Raya is a solo founder building B2B SaaS for freelancer invoicing. She found Convoke via a colleague's GitHub link. She uses Claude in her IDE but feels scattered. Her journey:
 
 1. **README Discovery** — sees value proposition, 7-agent diagram, output previews
-2. **Installation** — runs `npm install bmad-enhanced && npx bmad-install-vortex-agents`
+2. **Installation** — runs `npm install convoke && npx convoke-install-vortex`
 3. **First Agent (Emma)** — invokes Emma via `cat _bmad/bme/_vortex/agents/contextualization-expert.md`, selects Lean Persona
 4. **Workflow Execution** — completes 6-step lean persona workflow, artifact saved
 5. **Vortex Compass** — sees routing options to Isla, Wade, or back to Emma
@@ -125,10 +125,10 @@ Friction-specific gate: zero BLOCKER friction points, all HIGH-severity items ha
 - `_bmad-output/journey-examples/busy-parents-7-agent-journey.md` — complete 7-agent walkthrough with real artifacts
 
 **Installation:**
-- `package.json` — bin entries: `bmad-install-vortex-agents`, `bmad-doctor`, `bmad-update`, `bmad-version`
+- `package.json` — bin entries: `convoke-install-vortex`, `convoke-doctor`, `convoke-update`, `convoke-version`
 - `scripts/install-vortex-agents.js` — 6-step install process (prerequisites → archive deprecated → manifest → output dir → install agents/workflows/config/guides → verify)
 - `scripts/postinstall.js` — fresh install messaging, upgrade detection
-- `index.js` — CLI display when `npx bmad-enhanced` invoked (agent list, available commands)
+- `index.js` — CLI display when `npx convoke` invoked (agent list, available commands)
 
 **Agent invocation (Emma):**
 - `_bmad/bme/_vortex/agents/contextualization-expert.md` — Emma's agent file with activation sequence, config validation, menu (8 items: MH, CH, LP, PV, CS, VL, PM, DA)
@@ -143,7 +143,7 @@ Friction-specific gate: zero BLOCKER friction points, all HIGH-severity items ha
 
 **Validation tools:**
 - `scripts/docs-audit.js` — zero findings required pre-walkthrough
-- `scripts/bmad-doctor.js` — installation health check pattern (structured checks with pass/fail and diagnostic messages)
+- `scripts/convoke-doctor.js` — installation health check pattern (structured checks with pass/fail and diagnostic messages)
 
 **FAQ and support:**
 - `docs/faq.md` — recommended agent order, independent agent use, handoff failure diagnostics

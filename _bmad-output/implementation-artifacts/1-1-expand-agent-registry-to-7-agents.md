@@ -71,7 +71,7 @@ The agent registry (`agent-registry.js`) drives **7 downstream consumers** — A
 | `validator.js` | `AGENT_FILES`, `AGENT_IDS`, `WORKFLOW_NAMES` | Yes — fully data-driven |
 | `refresh-installation.js` | `AGENT_FILES`, `AGENT_IDS`, `WORKFLOW_NAMES`, `USER_GUIDES` | Yes — fully data-driven |
 | `install-vortex-agents.js` | `AGENTS` (banner, manifest, verify) | Yes — iterates AGENTS |
-| `bmad-doctor.js` | `AGENT_FILES`, `WORKFLOW_NAMES` | Yes — fully data-driven |
+| `convoke-doctor.js` | `AGENT_FILES`, `WORKFLOW_NAMES` | Yes — fully data-driven |
 | `postinstall.js` | Uses registry | Yes |
 | `index.js` | `AGENTS` (prints agent list) | Yes — iterates AGENTS |
 | `tests/unit/agent-registry.test.js` | All 6 exports | **NO — has 2 hardcoded counts** |
@@ -135,7 +135,7 @@ Each new agent persona must be:
 - `config-merger.js` — agents/workflows injected from registry dynamically (description string update is Story 1.2 scope)
 - `refresh-installation.js` — fully data-driven
 - `install-vortex-agents.js` — iterates AGENTS, no changes needed
-- `bmad-doctor.js` — fully data-driven
+- `convoke-doctor.js` — fully data-driven
 - Agent `.md` files — that's Story 2.1/3.1/4.1 (persona stories)
 - Workflow directories — that's Stories 2.2-2.4, 3.2-3.4, 4.2-4.4
 - User guide files — that's Stories 2.5, 3.5, 4.5

@@ -130,7 +130,7 @@ Invoke with: /bmad-agent-bme-empathy-mapper
 npm install -g @bmad/bme
 
 # Output:
-✅ BMAD Enhanced installed successfully!
+✅ Convoke installed successfully!
 4 agents available:
   /bmad-agent-bme-empathy-mapper      (Emma - Empathy Mapping)
   /bmad-agent-bme-wireframe-designer  (Wade - Wireframes)
@@ -384,7 +384,7 @@ installAgent(AGENT_CONFIG)
 ### For Project
 
 1. **Easier Marketing**
-   - "Try Emma for free" → "Upgrade to full BMAD Enhanced"
+   - "Try Emma for free" → "Upgrade to full Convoke"
    - Showcase specific agents for specific personas
 
 2. **Better Metrics**

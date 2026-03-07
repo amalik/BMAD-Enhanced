@@ -9,7 +9,7 @@
 
 ## Executive Summary
 
-Wade (wireframe-designer), the second domain-specialized agent in BMAD-Enhanced, is complete and approved for production. Development completed in 9 hours (25% faster than Emma) with 100% test pass rate across all domains.
+Wade (wireframe-designer), the second domain-specialized agent in Convoke, is complete and approved for production. Development completed in 9 hours (25% faster than Emma) with 100% test pass rate across all domains.
 
 **Key Achievement:** Proven that BMAD Agent Architecture Framework v1.1.0 is scalable and repeatable.
 
@@ -413,14 +413,14 @@ Wade supports Party Mode for multi-agent collaboration:
 ### Long-term (Week 3)
 
 - [ ] Complete all 4 agents (Emma ✅, Wade ✅, Quinn 📋, Stan 📋)
-- [ ] BMAD-Enhanced v1.0.0 release
+- [ ] Convoke v1.0.0 release
 - [ ] Project retrospective
 
 ---
 
 ## Project Impact
 
-### BMAD-Enhanced Progress
+### Convoke Progress
 
 **Agents Complete:** 2/4 (50%)
 - ✅ Emma (empathy-mapper) - Week 1, Day 1

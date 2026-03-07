@@ -5,11 +5,11 @@ inputDocuments:
   - _bmad-output/planning-artifacts/architecture.md
 ---
 
-# BMAD-Enhanced v1.6.0 - Epic Breakdown
+# Convoke v1.6.0 - Epic Breakdown
 
 ## Overview
 
-This document provides the complete epic and story breakdown for BMAD-Enhanced v1.6.0, decomposing the requirements from the PRD and Architecture into implementable stories. Wave 3 completes the 7-stream Vortex Pattern by adding Mila (Synthesize), Liam (Hypothesize), and Noah (Sensitize).
+This document provides the complete epic and story breakdown for Convoke v1.6.0, decomposing the requirements from the PRD and Architecture into implementable stories. Wave 3 completes the 7-stream Vortex Pattern by adding Mila (Synthesize), Liam (Hypothesize), and Noah (Sensitize).
 
 ## Requirements Inventory
 
@@ -71,9 +71,9 @@ This document provides the complete epic and story breakdown for BMAD-Enhanced v
 
 **Installation & Infrastructure (5):**
 
-- FR34: The existing `npx bmad-install-agents` command installs all 7 Vortex agents without requiring a new command or flag
+- FR34: The existing `npx convoke-install` command installs all 7 Vortex agents without requiring a new command or flag
 - FR35: Agent registry (`agent-registry.js`) contains entries for all 7 agents with complete persona data
-- FR36: `bmad-doctor` validates all 7 agents, expanded workflow count, manifest integrity
+- FR36: `convoke-doctor` validates all 7 agents, expanded workflow count, manifest integrity
 - FR37: Agent manifest CSV contains rows for all 7 Vortex agents
 - FR38: Party Mode includes all 7 agents in collaborative discussions from day one
 
@@ -116,7 +116,7 @@ This document provides the complete epic and story breakdown for BMAD-Enhanced v
 **Installability (2):**
 
 - NFR6: Install time does not degrade noticeably from v1.5.x with the addition of Wave 3 content
-- NFR7: Running `npx bmad-install-agents` twice produces identical results — install is fully idempotent
+- NFR7: Running `npx convoke-install` twice produces identical results — install is fully idempotent
 
 **Maintainability (7):**
 
@@ -140,8 +140,8 @@ This document provides the complete epic and story breakdown for BMAD-Enhanced v
 **Reliability (5):**
 
 - NFR21: Every workflow can be completed from start to finish without encountering broken file references, missing step files, or undefined Compass routes
-- NFR22: `bmad-doctor` detects all structural integrity issues (missing agents, missing workflows, broken manifest, invalid config) in a single diagnostic run
-- NFR23: All `bmad-doctor` diagnostic messages include the specific issue and expected state, enabling resolution without additional investigation
+- NFR22: `convoke-doctor` detects all structural integrity issues (missing agents, missing workflows, broken manifest, invalid config) in a single diagnostic run
+- NFR23: All `convoke-doctor` diagnostic messages include the specific issue and expected state, enabling resolution without additional investigation
 - NFR24: The migration system either fully succeeds or fails cleanly with a diagnostic message — no partial migration states
 - NFR25: Party Mode functions correctly with all 7 agents loaded — no agent loading failures when manifest expands to 7 Vortex entries
 
@@ -226,7 +226,7 @@ This document provides the complete epic and story breakdown for BMAD-Enhanced v
 | FR33 | Epic 5 | Existing workflows unchanged — additive routes |
 | FR34 | Epic 1 | Install all 7 agents |
 | FR35 | Epic 1 | Registry contains 7 agents |
-| FR36 | Epic 1 | bmad-doctor validates 7 agents |
+| FR36 | Epic 1 | convoke-doctor validates 7 agents |
 | FR37 | Epic 1 | Manifest CSV has 7 rows |
 | FR38 | Epic 1 | Party Mode includes all 7 agents |
 | FR39 | Epic 1 | Migration delivers 3 new agents |
@@ -259,7 +259,7 @@ This document provides the complete epic and story breakdown for BMAD-Enhanced v
 
 ### Epic 1: Vortex Foundation — Contracts, Routing & Infrastructure
 
-Users can install the 7-agent Vortex pattern, see all agents in Party Mode and `bmad-doctor`, and rely on defined handoff contract schemas that guarantee artifact compatibility across the entire Vortex. The Compass routing reference document defines all navigation paths.
+Users can install the 7-agent Vortex pattern, see all agents in Party Mode and `convoke-doctor`, and rely on defined handoff contract schemas that guarantee artifact compatibility across the entire Vortex. The Compass routing reference document defines all navigation paths.
 
 **FRs covered:** FR24, FR25, FR26, FR27, FR28, FR29, FR34, FR35, FR36, FR37, FR38, FR39, FR40, FR41, FR42
 **NFRs addressed:** NFR1-7, NFR22-26
@@ -307,7 +307,7 @@ Users can navigate the complete 7-agent Vortex seamlessly. Existing agents route
 
 ## Epic 1: Vortex Foundation — Contracts, Routing & Infrastructure
 
-Users can install the 7-agent Vortex pattern, see all agents in Party Mode and `bmad-doctor`, and rely on defined handoff contract schemas that guarantee artifact compatibility across the entire Vortex.
+Users can install the 7-agent Vortex pattern, see all agents in Party Mode and `convoke-doctor`, and rely on defined handoff contract schemas that guarantee artifact compatibility across the entire Vortex.
 
 ### Story 1.1: Expand Agent Registry to 7 Agents
 
@@ -330,7 +330,7 @@ So that all downstream systems (validator, installer, manifest, tests) can refer
 
 ### Story 1.2: Update Validator, Config-Merger & Doctor for 7 Agents
 
-As a user running `bmad-doctor`,
+As a user running `convoke-doctor`,
 I want the validation system to expect and verify all 7 agents and 22 workflows,
 So that installation health checks confirm my complete Vortex setup.
 
@@ -340,7 +340,7 @@ So that installation health checks confirm my complete Vortex setup.
 **When** validation runs
 **Then** it expects 7 agent files and 22 workflow directories
 **And** `config-merger.js` seeds defaults for all 7 agents and 22 workflows on fresh installs
-**And** `bmad-doctor` checks all 7 agents and reports status for each
+**And** `convoke-doctor` checks all 7 agents and reports status for each
 **And** validator accepts both 4-agent (pre-migration) and 7-agent (post-migration) configurations
 **And** step-file-count smoke test asserts 4-6 `.md` files per workflow `steps/` directory (P17)
 **And** standardized filename verification checks `step-01-setup.md`, `step-02-context.md`, final `*-synthesize.md` (P20)
@@ -353,7 +353,7 @@ So that installation health checks confirm my complete Vortex setup.
 
 As a user upgrading from v1.5.x,
 I want the migration system to add all 3 new agents and 9 workflows to my existing config without losing my customizations,
-So that I get the complete 7-agent Vortex through `npx bmad-update`.
+So that I get the complete 7-agent Vortex through `npx convoke-update`.
 
 **Acceptance Criteria:**
 

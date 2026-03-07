@@ -1,7 +1,7 @@
 # Implementation Readiness Assessment Report
 
 **Date:** 2026-02-28
-**Project:** BMAD-Enhanced
+**Project:** Convoke
 
 ## Document Inventory
 
@@ -50,8 +50,8 @@
 - FR20 [I]: CI validation for stale cross-references, mismatched fields, structural inconsistencies
 
 **CLI Reliability (2):**
-- FR21 [I]: bmad-update.js at 85%+ line coverage
-- FR22 [I]: bmad-version.js at 85%+ line coverage
+- FR21 [I]: convoke-update.js at 85%+ line coverage
+- FR22 [I]: convoke-version.js at 85%+ line coverage
 
 **Extension Guidance (3):**
 - FR23 [U]: BMB/fork guidance (not hand-rolled)
@@ -186,7 +186,7 @@ All 22 stories within their respective epics follow forward-only dependency chai
 
 ### Overall Readiness Status: READY
 
-BMAD-Enhanced Phase 2 is ready for implementation. The planning artifacts are comprehensive, aligned, and hardened through multiple rounds of adversarial review.
+Convoke Phase 2 is ready for implementation. The planning artifacts are comprehensive, aligned, and hardened through multiple rounds of adversarial review.
 
 ### Evidence Summary
 

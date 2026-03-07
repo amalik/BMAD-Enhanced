@@ -7,7 +7,7 @@
 
 ## Overview
 
-This document reconciles the **100 orchestration patterns** discovered during brainstorming with the **BMAD-First Architecture** decision already made for BMAD-Enhanced.
+This document reconciles the **100 orchestration patterns** discovered during brainstorming with the **BMAD-First Architecture** decision already made for Convoke.
 
 **Key Finding:** The brainstorming patterns VALIDATE and REFINE the BMAD-First decision, providing specific implementation patterns. Phase 0 scope refinement (2026-02-06) focuses on pure markdown orchestration (1,800 LOC), deferring Quint sync adapter to Phase 2 (+ 500 LOC).
 
@@ -342,7 +342,7 @@ Based on brainstorming insights, these decisions should be explicitly documented
 
 ### 5. Product Brief (INFORMATIONAL)
 
-**File:** `_bmad-output/planning-artifacts/product-brief-BMAD-Enhanced-2026-02-01.md`
+**File:** `_bmad-output/planning-artifacts/product-brief-Convoke-2026-02-01.md`
 
 **Updates Needed:**
 - [ ] Add reference to orchestration patterns catalog

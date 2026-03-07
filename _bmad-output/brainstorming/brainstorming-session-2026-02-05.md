@@ -1,7 +1,7 @@
 ---
 stepsCompleted: [1, 2]
 inputDocuments: []
-session_topic: 'Phase 0 POC implementation for BMAD-Enhanced - orchestration capabilities across all 4 frameworks'
+session_topic: 'Phase 0 POC implementation for Convoke - orchestration capabilities across all 4 frameworks'
 session_goals: 'Explore orchestration patterns for multi-framework coordination (BMAD, Quint, DesignOS, AgentOS), identify how capabilities surface through agent library, prove cross-framework orchestration concept, focus on backend mechanics not UI/UX'
 selected_approach: 'AI-Recommended Techniques'
 techniques_used: ['Morphological Analysis', 'Pattern Clustering and Synthesis']
@@ -16,7 +16,7 @@ context_file: '_bmad/bmm/data/project-context-template.md'
 
 ## Session Overview
 
-**Topic:** Phase 0 POC implementation for BMAD-Enhanced - orchestration capabilities across all 4 frameworks
+**Topic:** Phase 0 POC implementation for Convoke - orchestration capabilities across all 4 frameworks
 
 **Goals:**
 - Explore orchestration patterns for multi-framework coordination (BMAD Method, Quint FPF, DesignOS, AgentOS)

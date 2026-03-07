@@ -5,13 +5,13 @@ status: 'complete'
 completedAt: '2026-02-23'
 inputDocuments:
   - _bmad-output/planning-artifacts/prd.md
-  - _bmad-output/planning-artifacts/product-brief-BMAD-Enhanced-2026-02-22.md
+  - _bmad-output/planning-artifacts/product-brief-Convoke-2026-02-22.md
   - _bmad-output/planning-artifacts/implementation-readiness-report-2026-02-23.md
   - docs/agents.md
   - docs/development.md
   - docs/testing.md
 workflowType: 'architecture'
-project_name: 'BMAD-Enhanced'
+project_name: 'Convoke'
 user_name: 'Amalik'
 date: '2026-02-23'
 ---
@@ -82,7 +82,7 @@ _This document builds collaboratively through step-by-step discovery. Sections a
 
 ### Primary Technology Domain
 
-**Brownfield Extension** — BMAD-Enhanced is an existing Node.js CLI/content platform (npm package). Wave 3 extends the current codebase rather than scaffolding a new project.
+**Brownfield Extension** — Convoke is an existing Node.js CLI/content platform (npm package). Wave 3 extends the current codebase rather than scaffolding a new project.
 
 ### Existing Stack (Continuation)
 
@@ -94,7 +94,7 @@ _This document builds collaboratively through step-by-step discovery. Sections a
 | Testing | `node:test` + c8 coverage | Unchanged |
 | Linting | ESLint | Unchanged |
 | Build tooling | None (raw JS, no transpilation) | Unchanged |
-| Distribution | npm (`bmad-enhanced`) | Unchanged |
+| Distribution | npm (`convoke`) | Unchanged |
 | Content format | Markdown (.md) with YAML frontmatter | Unchanged |
 
 ### Starter Decision: No New Scaffolding Required
@@ -303,7 +303,7 @@ Steps 1, 2, 5, 6 use fixed descriptors. Steps 3-4 are workflow-specific.
 Items marked with ⭐ are new in Wave 3. All other items exist today.
 
 ```
-BMAD-Enhanced/
+Convoke/
 ├── package.json                                    # MODIFY: version 1.5.x → 1.6.0
 ├── CHANGELOG.md                                    # MODIFY: add v1.6.0 entry
 ├── README.md                                       # MODIFY: update agent count, add new agents
@@ -382,7 +382,7 @@ BMAD-Enhanced/
 │   │   ├── migration-runner-orchestration.test.js
 │   │   └── 1.5.x-to-1.6.0.test.js                 ⭐ NEW: migration delta tests
 │   └── integration/
-│       ├── bmad-doctor.test.js
+│       ├── convoke-doctor.test.js
 │       ├── cli-entry-points.test.js
 │       └── installer-e2e.test.js
 │

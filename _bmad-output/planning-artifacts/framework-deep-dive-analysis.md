@@ -14,7 +14,7 @@ related_docs:
 **Purpose:** Comprehensive analysis of how BMAD agents, DesignOS, and AgentOS actually work, identify workflow overlaps, and assess artifact compatibility for Phase 0 integration.
 
 **Date:** 2026-02-07
-**Analysis Conducted By:** Claude Sonnet 4.5 (BMAD-Enhanced Planning Session)
+**Analysis Conducted By:** Claude Sonnet 4.5 (Convoke Planning Session)
 
 ---
 
@@ -970,7 +970,7 @@ _designos/
 
 ### Finding 1: DesignOS and AgentOS Are NOT Markdown Workflow Systems
 
-**Impact on BMAD-Enhanced Architecture:**
+**Impact on Convoke Architecture:**
 
 **Original Assumption (from ADR):**
 > "DesignOS/AgentOS: Native markdown modules following BMAD workflow patterns (Capabilities + Steps)"

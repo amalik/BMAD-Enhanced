@@ -1,4 +1,4 @@
-# BMAD-Enhanced v1.0.2-alpha
+# Convoke v1.0.2-alpha
 
 **Bug fix release** - Fixes critical installation issues found during npm deployment testing.
 
@@ -34,15 +34,15 @@
 npx bmad-method@alpha install
 ```
 
-**Install BMAD-Enhanced:**
+**Install Convoke:**
 ```bash
-npm install bmad-enhanced@alpha
+npm install convoke@alpha
 npm run install:agents
 ```
 
 **Or install specific version:**
 ```bash
-npm install bmad-enhanced@1.0.2-alpha
+npm install convoke@1.0.2-alpha
 ```
 
 ## ✅ Verification
@@ -76,8 +76,8 @@ All installation tests passing:
 
 ## 🔗 Links
 
-**npm package:** https://www.npmjs.com/package/bmad-enhanced
-**GitHub:** https://github.com/amalik/BMAD-Enhanced
+**npm package:** https://www.npmjs.com/package/convoke
+**GitHub:** https://github.com/amalik/convoke
 
 ## 📝 Changelog
 
@@ -98,4 +98,4 @@ All installation tests passing:
 
 ---
 
-**Full Changelog:** https://github.com/amalik/BMAD-Enhanced/compare/v1.0.0-alpha...v1.0.2-alpha
+**Full Changelog:** https://github.com/amalik/convoke/compare/v1.0.0-alpha...v1.0.2-alpha

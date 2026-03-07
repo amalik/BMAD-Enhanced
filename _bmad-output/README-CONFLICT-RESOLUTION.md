@@ -71,7 +71,7 @@ Two README files existed with conflicting information:
 **Audience:** Users, stakeholders, developers (first-time visitors)
 
 **Content:**
-- What is BMAD-Enhanced? (domain-specialized agents)
+- What is Convoke? (domain-specialized agents)
 - Quick start (how to use Emma)
 - Agent status (Emma ✅, Wade 🚧, Quinn 📋, Stan 📋)
 - Documentation links

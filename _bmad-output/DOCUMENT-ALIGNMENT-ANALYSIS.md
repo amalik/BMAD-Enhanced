@@ -37,7 +37,7 @@ status: ANALYSIS
 12. **greenfield-architecture-analysis.md** 📚 **Option 3 analysis** - Historical, shows why not chosen
 13. **technical-deep-dive-analysis.md** 📚 **50K word analysis** - Deep framework analysis, still valid
 14. **4-framework-comparison-matrix.md** 📚 **Capabilities matrix** - Framework comparison, still valid
-15. **product-brief-BMAD-Enhanced-2026-02-01.md** 📚 **Vision doc** - Product vision unchanged
+15. **product-brief-Convoke-2026-02-01.md** 📚 **Vision doc** - Product vision unchanged
 
 #### Future Planning Documents (Not Yet Relevant)
 16. **baseartifact-contract-spec.md** 🔮 **Phase 1** - Contract foundation (Weeks 4-7), no changes needed yet

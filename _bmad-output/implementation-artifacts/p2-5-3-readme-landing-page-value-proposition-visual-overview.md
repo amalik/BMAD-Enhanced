@@ -5,7 +5,7 @@ Status: done
 ## Story
 
 As a new user arriving at the README,
-I want to understand BMAD-Enhanced's value proposition within the first scroll and see a visual overview of how the 7-agent chain connects,
+I want to understand Convoke's value proposition within the first scroll and see a visual overview of how the 7-agent chain connects,
 so that I can quickly decide whether BMAD fits my needs without reading detailed documentation.
 
 ## Acceptance Criteria
@@ -27,8 +27,8 @@ so that I can quickly decide whether BMAD fits my needs without reading detailed
   - [x] 1.5 Identify insertion points for Story 5.4 content (output previews section, journey example link) — mark them in the README with HTML comments for Story 5.4 to find
 
 - [x] Task 2: Rewrite value proposition — first scroll content (AC: #1, #2)
-  - [x] 2.0 Remove the current opening paragraph (line 22: "BMAD-Enhanced extends the BMAD Method with domain-specialized agents...") and the HC summary sentence (line 53: "Every workflow ends with a Vortex Compass...Ten handoff contracts..."). The new value proposition paragraph (2.2) replaces all content between the badges and the visual diagram. The HC/Vortex Compass sentence is relocated in Task 4.3
-  - [x] 2.1 Write a 1-2 sentence hero tagline that communicates what BMAD-Enhanced does in non-technical language. Current tagline "BMAD Method enhanced by domain-specialized agents" is developer-focused. Target: a PM reading this should think "this helps me validate whether to build something"
+  - [x] 2.0 Remove the current opening paragraph (line 22: "Convoke extends the BMAD Method with domain-specialized agents...") and the HC summary sentence (line 53: "Every workflow ends with a Vortex Compass...Ten handoff contracts..."). The new value proposition paragraph (2.2) replaces all content between the badges and the visual diagram. The HC/Vortex Compass sentence is relocated in Task 4.3
+  - [x] 2.1 Write a 1-2 sentence hero tagline that communicates what Convoke does in non-technical language. Current tagline "BMAD Method enhanced by domain-specialized agents" is developer-focused. Target: a PM reading this should think "this helps me validate whether to build something"
   - [x] 2.2 Write a 3-4 sentence value proposition paragraph below the tagline explaining: (a) what problem it solves (teams build products without validating assumptions), (b) how it works at a high level (guided discovery through 7 streams), (c) what the outcome is (evidence-based go/no-go decisions). Zero jargon: no "agents", "handoffs", "contracts", "manifest"
   - [x] 2.3 Keep existing badges (version, agents, workflows, license) — they provide trust signals at a glance
   - [x] 2.4 Ensure the value proposition + visual overview fit within ~40-50 lines of markdown (approximately one screen scroll at standard viewport)
@@ -179,8 +179,8 @@ Stories 5.1 and 5.2 were CLI test stories (different work stream). Limited direc
 - [Source: scripts/update/lib/agent-registry.js] — Agent names, IDs, streams (7 agents, 22 workflows)
 - [Source: package.json] — Version 1.6.4, description, keywords
 - [Source: _bmad-output/journey-examples/busy-parents-7-agent-journey.md] — Journey example (Story 5.4 link target)
-- [Source: _bmad-output/implementation-artifacts/p2-5-1-bmad-update-js-automated-tests-at-85-coverage.md] — Previous story (CLI tests, different work stream)
-- [Source: _bmad-output/implementation-artifacts/p2-5-2-bmad-version-js-automated-tests-at-85-coverage.md] — Previous story (CLI tests, different work stream)
+- [Source: _bmad-output/implementation-artifacts/p2-5-1-convoke-update-js-automated-tests-at-85-coverage.md] — Previous story (CLI tests, different work stream)
+- [Source: _bmad-output/implementation-artifacts/p2-5-2-convoke-version-js-automated-tests-at-85-coverage.md] — Previous story (CLI tests, different work stream)
 
 ## Dev Agent Record
 

@@ -1,5 +1,5 @@
 ---
-title: "BMAD-Enhanced Distribution Strategy: Installation & Upgrade Mechanism"
+title: "Convoke Distribution Strategy: Installation & Upgrade Mechanism"
 date: 2026-02-07
 version: 2.0.0
 status: FINALIZED
@@ -10,11 +10,11 @@ decisions:
   installation: individual or bulk
 ---
 
-# BMAD-Enhanced Distribution Strategy
+# Convoke Distribution Strategy
 
 **Critical Question:** How do users add the 4 new agents (Emma, Wade, Quinn, Stan) to their existing BMAD Method installation?
 
-**User's Insight:** BMAD-Enhanced might just be **a command to upgrade a BMAD Method installation** rather than a separate product.
+**User's Insight:** Convoke might just be **a command to upgrade a BMAD Method installation** rather than a separate product.
 
 ---
 
@@ -60,17 +60,17 @@ BMAD Method appears to use a **module-based installation system** where users ca
 
 ---
 
-## Distribution Options for BMAD-Enhanced
+## Distribution Options for Convoke
 
-### Option 1: BMAD-Enhanced as New Module (RECOMMENDED)
+### Option 1: Convoke as New Module (RECOMMENDED)
 
-**Approach:** BMAD-Enhanced is a **module** that users install into existing BMAD Method.
+**Approach:** Convoke is a **module** that users install into existing BMAD Method.
 
 **Installation Command:**
 ```bash
-bmad install bmad-enhanced
+bmad install convoke
 # or
-bmad-enhanced install
+convoke install
 ```
 
 **File Structure After Installation:**
@@ -82,7 +82,7 @@ project-root/
 │   ├── cis/
 │   ├── tea/
 │   ├── bmb/
-│   └── bmad-enhanced/        # NEW MODULE
+│   └── convoke/        # NEW MODULE
 │       ├── config.yaml
 │       ├── _designos/
 │       │   ├── agents/
@@ -105,18 +105,18 @@ project-root/
 **Agent Registration:**
 ```csv
 # Added to agent-manifest.csv during installation
-"empathy-mapper","Emma","Empathy Mapping Specialist","🎨","...","bmad-enhanced","_bmad/bmad-enhanced/_designos/agents/empathy-mapper.md"
-"wireframe-designer","Wade","Wireframe Specialist","📐","...","bmad-enhanced","_bmad/bmad-enhanced/_designos/agents/wireframe-designer.md"
-"quality-gatekeeper","Quinn","Quality Gate Specialist","🚦","...","bmad-enhanced","_bmad/bmad-enhanced/_agentos/agents/quality-gatekeeper.md"
-"standards-auditor","Stan","Standards Compliance Auditor","📋","...","bmad-enhanced","_bmad/bmad-enhanced/_agentos/agents/standards-auditor.md"
+"empathy-mapper","Emma","Empathy Mapping Specialist","🎨","...","convoke","_bmad/bmad-enhanced/_designos/agents/empathy-mapper.md"
+"wireframe-designer","Wade","Wireframe Specialist","📐","...","convoke","_bmad/bmad-enhanced/_designos/agents/wireframe-designer.md"
+"quality-gatekeeper","Quinn","Quality Gate Specialist","🚦","...","convoke","_bmad/bmad-enhanced/_agentos/agents/quality-gatekeeper.md"
+"standards-auditor","Stan","Standards Compliance Auditor","📋","...","convoke","_bmad/bmad-enhanced/_agentos/agents/standards-auditor.md"
 ```
 
 **Pros:**
-- ✅ Clean separation: BMAD-Enhanced is a plugin/module
+- ✅ Clean separation: Convoke is a plugin/module
 - ✅ Users can install/uninstall independently
 - ✅ Follows BMAD Method's modular architecture
 - ✅ No conflicts with core BMAD Method
-- ✅ Easy versioning (bmad-enhanced v1.0.0, v1.1.0, etc.)
+- ✅ Easy versioning (convoke v1.0.0, v1.1.0, etc.)
 - ✅ Users opt-in (not forced upgrade)
 
 **Cons:**
@@ -125,15 +125,15 @@ project-root/
 
 ---
 
-### Option 2: BMAD-Enhanced as Upgrade to Existing Modules
+### Option 2: Convoke as Upgrade to Existing Modules
 
-**Approach:** BMAD-Enhanced **adds agents to existing CIS and TEA modules** instead of creating new module.
+**Approach:** Convoke **adds agents to existing CIS and TEA modules** instead of creating new module.
 
 **Installation Command:**
 ```bash
 bmad upgrade --add-enhanced-agents
 # or
-bmad-enhanced upgrade
+convoke upgrade
 ```
 
 **File Structure After Upgrade:**
@@ -184,14 +184,14 @@ project-root/
 
 ---
 
-### Option 3: BMAD-Enhanced as Separate Installation (Standalone)
+### Option 3: Convoke as Separate Installation (Standalone)
 
-**Approach:** BMAD-Enhanced is a **complete separate installation** with its own directory structure.
+**Approach:** Convoke is a **complete separate installation** with its own directory structure.
 
 **Installation:**
 ```bash
-git clone https://github.com/bmad-enhanced/bmad-enhanced.git
-cd bmad-enhanced
+git clone https://github.com/convoke/convoke.git
+cd convoke
 ./install.sh
 ```
 
@@ -212,7 +212,7 @@ project-root/
 ```
 
 **Agent Registration:**
-- BMAD-Enhanced has its own `_bmad-enhanced/_config/agent-manifest.csv`
+- Convoke has its own `_bmad-enhanced/_config/agent-manifest.csv`
 - OR: Installation script merges into `_bmad/_config/agent-manifest.csv`
 
 **Pros:**
@@ -228,22 +228,22 @@ project-root/
 
 ---
 
-### Option 4: BMAD-Enhanced as Quint-Style Integration (MCP Server)
+### Option 4: Convoke as Quint-Style Integration (MCP Server)
 
-**Approach:** Similar to how Quint integrates (MCP server + commands), BMAD-Enhanced could be an **external service**.
+**Approach:** Similar to how Quint integrates (MCP server + commands), Convoke could be an **external service**.
 
 **Architecture:**
 ```
 BMAD Method (host)
     ↓ (calls via MCP protocol)
-BMAD-Enhanced Server
+Convoke Server
     ↓ (provides)
 4 Agent Capabilities
 ```
 
 **Installation:**
 ```bash
-bmad-enhanced start-server
+convoke start-server
 # Server runs on localhost:3000
 # BMAD Method connects via MCP
 ```
@@ -261,14 +261,14 @@ bmad-enhanced start-server
 
 ---
 
-## Recommended Approach: Option 1 (BMAD-Enhanced as Module)
+## Recommended Approach: Option 1 (Convoke as Module)
 
 ### Why Option 1 is Best
 
 **Aligns with BMAD Method Architecture:**
 - BMAD Method is already modular (core, bmm, cis, tea, bmb)
-- BMAD-Enhanced becomes the 6th module
-- Module: `bmad-enhanced` or `bme`
+- Convoke becomes the 6th module
+- Module: `convoke` or `bme`
 
 **Clean User Experience:**
 ```bash
@@ -276,28 +276,28 @@ bmad-enhanced start-server
 bmad --version
 # BMAD Method v6.0.0
 
-# User installs BMAD-Enhanced module
-bmad install bmad-enhanced
-# or if BMAD-Enhanced provides its own installer:
-npm install -g bmad-enhanced-cli
-bmad-enhanced install
+# User installs Convoke module
+bmad install convoke
+# or if Convoke provides its own installer:
+npm install -g convoke-cli
+convoke install
 
 # Now user has 25 agents (21 + 4)
 # Slash commands work immediately:
-/bmad-agent-bmad-enhanced-empathy-mapper
-/bmad-agent-bmad-enhanced-wireframe-designer
-/bmad-agent-bmad-enhanced-quality-gatekeeper
-/bmad-agent-bmad-enhanced-standards-auditor
+/bmad-agent-convoke-empathy-mapper
+/bmad-agent-convoke-wireframe-designer
+/bmad-agent-convoke-quality-gatekeeper
+/bmad-agent-convoke-standards-auditor
 ```
 
 **Versioning:**
 - BMAD Method: v6.0.0
-- BMAD-Enhanced Module: v1.0.0
+- Convoke Module: v1.0.0
 - Independent release cycles
 
 **Uninstallation:**
 ```bash
-bmad uninstall bmad-enhanced
+bmad uninstall convoke
 # Back to 21 agents
 ```
 
@@ -319,7 +319,7 @@ bmad uninstall bmad-enhanced
 **Install Script Example:**
 ```bash
 #!/bin/bash
-# BMAD-Enhanced Module Installer
+# Convoke Module Installer
 
 # Detect BMAD Method installation
 if [ ! -d "_bmad" ]; then
@@ -332,25 +332,25 @@ BMAD_VERSION=$(cat _bmad/core/config.yaml | grep version | awk '{print $2}')
 echo "Detected BMAD Method v$BMAD_VERSION"
 
 # Copy module
-echo "Installing BMAD-Enhanced module..."
+echo "Installing Convoke module..."
 cp -r _bmad-enhanced _bmad/bmad-enhanced
 
 # Update agent manifest
 echo "Registering 4 new agents..."
 cat >> _bmad/_config/agent-manifest.csv <<EOF
-"empathy-mapper","Emma","Empathy Mapping Specialist","🎨","User Empathy Expert","Design thinking expert...","Empathetic, curious...","Design is about THEM...","bmad-enhanced","_bmad/bmad-enhanced/_designos/agents/empathy-mapper.md"
-"wireframe-designer","Wade","Wireframe Specialist","📐","UI/UX Wireframe Expert","Expert in rapid wireframe...","Visual thinker...","Simple first...","bmad-enhanced","_bmad/bmad-enhanced/_designos/agents/wireframe-designer.md"
-"quality-gatekeeper","Quinn","Quality Gate Specialist","🚦","Quality Assurance Expert","Risk-based quality...","Data-driven...","Quality gates must be objective...","bmad-enhanced","_bmad/bmad-enhanced/_agentos/agents/quality-gatekeeper.md"
-"standards-auditor","Stan","Standards Compliance Auditor","📋","Code Standards Expert","Meticulous standards...","Detail-oriented...","Consistency is maintainability...","bmad-enhanced","_bmad/bmad-enhanced/_agentos/agents/standards-auditor.md"
+"empathy-mapper","Emma","Empathy Mapping Specialist","🎨","User Empathy Expert","Design thinking expert...","Empathetic, curious...","Design is about THEM...","convoke","_bmad/bmad-enhanced/_designos/agents/empathy-mapper.md"
+"wireframe-designer","Wade","Wireframe Specialist","📐","UI/UX Wireframe Expert","Expert in rapid wireframe...","Visual thinker...","Simple first...","convoke","_bmad/bmad-enhanced/_designos/agents/wireframe-designer.md"
+"quality-gatekeeper","Quinn","Quality Gate Specialist","🚦","Quality Assurance Expert","Risk-based quality...","Data-driven...","Quality gates must be objective...","convoke","_bmad/bmad-enhanced/_agentos/agents/quality-gatekeeper.md"
+"standards-auditor","Stan","Standards Compliance Auditor","📋","Code Standards Expert","Meticulous standards...","Detail-oriented...","Consistency is maintainability...","convoke","_bmad/bmad-enhanced/_agentos/agents/standards-auditor.md"
 EOF
 
 # Create module config
 cat > _bmad/bmad-enhanced/config.yaml <<EOF
-# BMAD-Enhanced Module Configuration
-module_name: bmad-enhanced
+# Convoke Module Configuration
+module_name: convoke
 version: 1.0.0
 description: "Enhanced design and quality agents inspired by DesignOS and AgentOS"
-author: "BMAD-Enhanced Core Team"
+author: "Convoke Core Team"
 
 # Inherit from core config
 config_source: "{project-root}/_bmad/core/config.yaml"
@@ -359,13 +359,13 @@ communication_language: "{config_source}:communication_language"
 output_folder: "{config_source}:output_folder"
 EOF
 
-echo "✅ BMAD-Enhanced v1.0.0 installed successfully!"
+echo "✅ Convoke v1.0.0 installed successfully!"
 echo ""
 echo "New agents available:"
-echo "  /bmad-agent-bmad-enhanced-empathy-mapper      (Emma)"
-echo "  /bmad-agent-bmad-enhanced-wireframe-designer  (Wade)"
-echo "  /bmad-agent-bmad-enhanced-quality-gatekeeper  (Quinn)"
-echo "  /bmad-agent-bmad-enhanced-standards-auditor   (Stan)"
+echo "  /bmad-agent-convoke-empathy-mapper      (Emma)"
+echo "  /bmad-agent-convoke-wireframe-designer  (Wade)"
+echo "  /bmad-agent-convoke-quality-gatekeeper  (Quinn)"
+echo "  /bmad-agent-convoke-standards-auditor   (Stan)"
 echo ""
 echo "Run '/bmad-party-mode' to see all 25 agents!"
 ```
@@ -376,10 +376,10 @@ echo "Run '/bmad-party-mode' to see all 25 agents!"
 
 ### Option A: Long Form (Explicit Module)
 ```
-/bmad-agent-bmad-enhanced-empathy-mapper
-/bmad-agent-bmad-enhanced-wireframe-designer
-/bmad-agent-bmad-enhanced-quality-gatekeeper
-/bmad-agent-bmad-enhanced-standards-auditor
+/bmad-agent-convoke-empathy-mapper
+/bmad-agent-convoke-wireframe-designer
+/bmad-agent-convoke-quality-gatekeeper
+/bmad-agent-convoke-standards-auditor
 ```
 
 **Pros:** Clear which module agents belong to
@@ -387,7 +387,7 @@ echo "Run '/bmad-party-mode' to see all 25 agents!"
 
 ---
 
-### Option B: Short Form (Assume bmad-enhanced)
+### Option B: Short Form (Assume convoke)
 ```
 /bmad-agent-empathy-mapper
 /bmad-agent-wireframe-designer
@@ -409,14 +409,14 @@ echo "Run '/bmad-party-mode' to see all 25 agents!"
 ```
 
 **Pros:** Short but clear
-**Cons:** Users need to learn "bme" = BMAD-Enhanced
+**Cons:** Users need to learn "bme" = Convoke
 
 ---
 
 ### Recommendation: Option B with Fallback to A
 
 **Primary:** Short form (Option B) - `/bmad-agent-empathy-mapper`
-**If conflict:** Add module prefix - `/bmad-agent-bmad-enhanced-empathy-mapper`
+**If conflict:** Add module prefix - `/bmad-agent-convoke-empathy-mapper`
 
 Agent naming in manifest CSV uses short form:
 ```csv
@@ -454,7 +454,7 @@ Slash command generation strips module prefix if no conflicts.
 
 ---
 
-## User Journey: Installing BMAD-Enhanced
+## User Journey: Installing Convoke
 
 ### Scenario: Developer Upgrades BMAD Method
 
@@ -465,24 +465,24 @@ cd my-project
 # 21 agents available
 ```
 
-**Step 2: User Installs BMAD-Enhanced**
+**Step 2: User Installs Convoke**
 ```bash
 # Option A: Via BMAD CLI (if supported)
-bmad install bmad-enhanced
+bmad install convoke
 
 # Option B: Via npm (if published)
-npm install -g bmad-enhanced-cli
-bmad-enhanced install
+npm install -g convoke-cli
+convoke install
 
 # Option C: Manual installation
-git clone https://github.com/bmad-enhanced/bmad-enhanced.git
-cd bmad-enhanced
+git clone https://github.com/convoke/convoke.git
+cd convoke
 ./install.sh
 ```
 
-**Step 3: BMAD-Enhanced Installed**
+**Step 3: Convoke Installed**
 ```
-✅ BMAD-Enhanced v1.0.0 installed successfully!
+✅ Convoke v1.0.0 installed successfully!
 
 New agents available:
   /bmad-agent-empathy-mapper      (Emma - Empathy Mapping Specialist)
@@ -521,7 +521,7 @@ Welcome Amalik! All 25 BMAD agents are here and ready for a dynamic group discus
 - BMM: Mary (Analyst), Winston (Architect), John (PM), Amelia (Dev), ...
 - CIS: Maya (Design Thinking), Carson (Brainstorming), ...
 - TEA: Murat (Test Architect)
-- BMAD-Enhanced: Emma (Empathy Mapper), Wade (Wireframe), Quinn (Quality Gate), Stan (Standards)
+- Convoke: Emma (Empathy Mapper), Wade (Wireframe), Quinn (Quality Gate), Stan (Standards)
 
 What would you like to discuss with the team?
 
@@ -544,10 +544,10 @@ Murat: I'll need acceptance tests defined upfront. Let's use ATDD...
 
 ### GitHub Repository Structure
 
-**Repository:** `bmad-enhanced/bmad-enhanced`
+**Repository:** `convoke/convoke`
 
 ```
-bmad-enhanced/
+convoke/
 ├── README.md
 ├── LICENSE
 ├── package.json (if npm distribution)
@@ -578,20 +578,20 @@ bmad-enhanced/
 
 **Method 1: Direct Git Clone + Install Script**
 ```bash
-git clone https://github.com/bmad-enhanced/bmad-enhanced.git
-cd bmad-enhanced
+git clone https://github.com/convoke/convoke.git
+cd convoke
 ./install.sh
 ```
 
 **Method 2: npm Package (if published)**
 ```bash
-npm install -g bmad-enhanced-cli
-bmad-enhanced install
+npm install -g convoke-cli
+convoke install
 ```
 
 **Method 3: BMAD CLI Extension (if supported)**
 ```bash
-bmad install bmad-enhanced
+bmad install convoke
 ```
 
 ---
@@ -600,10 +600,10 @@ bmad install bmad-enhanced
 
 ### Recommended Distribution Strategy
 
-**BMAD-Enhanced as Module (Option 1)**
+**Convoke as Module (Option 1)**
 
 **What This Means:**
-1. BMAD-Enhanced is a **module** that plugs into BMAD Method
+1. Convoke is a **module** that plugs into BMAD Method
 2. Users install via `./install.sh` script
 3. Script copies `_bmad-enhanced/` into `_bmad/bmad-enhanced/`
 4. Script updates `agent-manifest.csv` with 4 new agents
@@ -617,12 +617,12 @@ bmad install bmad-enhanced
 
 **Project Positioning:**
 - **BMAD Method:** Core product (21 agents, proven workflows)
-- **BMAD-Enhanced:** Optional module (4 additional agents inspired by DesignOS/AgentOS)
+- **Convoke:** Optional module (4 additional agents inspired by DesignOS/AgentOS)
 - **Tagline:** "Enhance your BMAD Method installation with advanced design and quality agents"
 
 **Versioning:**
 - BMAD Method: v6.0.0 (independent)
-- BMAD-Enhanced: v1.0.0 (independent)
+- Convoke: v1.0.0 (independent)
 
 ---
 
@@ -637,7 +637,7 @@ bmad install bmad-enhanced
 
 **Agent Files:**
 - [ ] Update agent paths in CSV registration examples
-- [ ] Use `module: "bmad-enhanced"` in all agent files
+- [ ] Use `module: "convoke"` in all agent files
 - [ ] Update config paths to reference core config
 
 **Testing:**
@@ -660,7 +660,7 @@ bmad install bmad-enhanced
 
 ## User Decisions (Finalized 2026-02-07)
 
-1. **Module Name:** ✅ `bme` (BMAD Enhanced)
+1. **Module Name:** ✅ `bme` (Convoke)
 
 2. **Installation Method:** ✅ npm packages
 
@@ -727,7 +727,7 @@ npm install -g @bmad/bme
 # 4. Appends 4 agent entries to agent-manifest.csv
 # 5. Displays all 4 slash commands
 
-✅ BMAD Enhanced installed successfully!
+✅ Convoke installed successfully!
 4 agents available:
   /bmad-agent-bme-empathy-mapper      (Emma)
   /bmad-agent-bme-wireframe-designer  (Wade)
@@ -795,7 +795,7 @@ _bmad/bme/
 {
   "name": "@bmad/bme-core",
   "version": "1.0.0",
-  "description": "BMAD Enhanced module core infrastructure",
+  "description": "Convoke module core infrastructure",
   "files": [
     "_config/module.yaml",
     "install-helper.js"
@@ -809,7 +809,7 @@ _bmad/bme/
 {
   "name": "@bmad/bme",
   "version": "1.0.0",
-  "description": "BMAD Enhanced - All agents bundle",
+  "description": "Convoke - All agents bundle",
   "dependencies": {
     "@bmad/bme-core": "^1.0.0",
     "@bmad/bme-empathy-mapper": "^1.0.0",
@@ -845,7 +845,7 @@ npm uninstall -g @bmad/bme
 # 3. Removes all 4 entries from agent-manifest.csv
 # 4. Removes _bmad/bme/ directory
 
-✅ BMAD Enhanced uninstalled (4 agents removed)
+✅ Convoke uninstalled (4 agents removed)
 ```
 
 ### Use Cases
@@ -1005,7 +1005,7 @@ async function installAgent(config) {
     // Create module.yaml
     fs.writeFileSync(
       path.join(bmeDir, '_config', 'module.yaml'),
-      `module_name: bme\nversion: 1.0.0\ndescription: "BMAD Enhanced Module"\n`
+      `module_name: bme\nversion: 1.0.0\ndescription: "Convoke Module"\n`
     );
   }
 
@@ -1065,7 +1065,7 @@ module.exports = { installAgent, findBmadRoot };
 - Smaller package downloads
 
 **Easier Evaluation:**
-- Try Emma first to see if BMAD Enhanced is valuable
+- Try Emma first to see if Convoke is valuable
 - Upgrade to full bundle if satisfied
 
 ### For Project
@@ -1081,7 +1081,7 @@ module.exports = { installAgent, findBmadRoot };
 - Version individual agents separately
 
 **Marketing:**
-- "Try Emma free" → "Upgrade to full BMAD Enhanced"
+- "Try Emma free" → "Upgrade to full Convoke"
 - Showcase specific agents for specific use cases
 - Target different user personas (designers vs QA)
 
@@ -1091,7 +1091,7 @@ module.exports = { installAgent, findBmadRoot };
 
 ### Final Distribution Strategy (v2.0.0)
 
-**Module Name:** `bme` (BMAD Enhanced)
+**Module Name:** `bme` (Convoke)
 
 **Distribution:** 6 npm packages
 1. `@bmad/bme-core` - Shared infrastructure

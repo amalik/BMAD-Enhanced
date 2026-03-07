@@ -45,7 +45,7 @@ BMAD Workflow (orchestrator)
 ## Phase 0 Directory Structure
 
 ```
-BMAD-Enhanced/
+Convoke/
 ├── _bmad/                          # BMAD Method (orchestrator)
 │   ├── core/
 │   │   ├── orchestration/

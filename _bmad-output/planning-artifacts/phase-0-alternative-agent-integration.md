@@ -113,7 +113,7 @@ User invokes workflow using existing BMAD agents:
 | **Orchestration** | Automatic capability discovery + step loading | Manual agent invocation (user chains agents) |
 | **Validation** | Validates custom orchestration pattern | Validates agent design patterns |
 | **Risk** | Custom engine might fail → pivot | Agent system proven (21 agents already work) |
-| **Reusability** | Orchestration code specific to BMAD-Enhanced | Agents reusable in any BMAD project |
+| **Reusability** | Orchestration code specific to Convoke | Agents reusable in any BMAD project |
 | **Timeline** | 3 weeks (1,800 LOC ambitious) | 2-3 weeks (400-600 LOC realistic) |
 
 ---
@@ -132,7 +132,7 @@ User invokes workflow using existing BMAD agents:
 
 ✅ **No Custom Code Risk:** No new orchestration engine to debug/maintain
 
-✅ **Reusable Assets:** Agents can be used in any BMAD project (not BMAD-Enhanced specific)
+✅ **Reusable Assets:** Agents can be used in any BMAD project (not Convoke specific)
 
 ✅ **Natural UX:** Slash commands match existing BMAD patterns (`/bmad-agent-<module>-<name>`)
 
@@ -257,7 +257,7 @@ Where `product-flow.md` internally invokes agents in sequence.
 
 **Disadvantages:**
 - ❌ Still doesn't fully validate "Capabilities + Steps" pattern
-- ❌ Orchestration workflows are BMAD-Enhanced specific (not general)
+- ❌ Orchestration workflows are Convoke specific (not general)
 
 ---
 
@@ -291,7 +291,7 @@ Where `product-flow.md` internally invokes agents in sequence.
 2. **Lower LOC:** 700 LOC vs 1,800 LOC (60% reduction = realistic 3-week timeline)
 3. **Dual Validation:** Validates agent patterns (immediate value) + orchestration patterns (POC goal)
 4. **User Value:** Users get working agents in Week 1 (not just backend code)
-5. **Reusability:** Agents reusable beyond BMAD-Enhanced project
+5. **Reusability:** Agents reusable beyond Convoke project
 6. **Alignment:** Partial alignment with ADR (orchestration workflows similar to Capabilities + Steps)
 
 **Proposed Phase 0 Revised Plan:**
@@ -337,7 +337,7 @@ Where `product-flow.md` internally invokes agents in sequence.
 2. Defer agent integration to Phase 3/4 (full DesignOS/AgentOS implementation)
 
 **Questions for User:**
-1. Does agent-based integration align with your vision for BMAD-Enhanced?
+1. Does agent-based integration align with your vision for Convoke?
 2. Is manual agent chaining acceptable (or must orchestration be automatic)?
 3. Should Quint integrate via agents (Option A) or remain separate (Option B)?
 4. Do you want to update Phase 0 to Hybrid Approach (700 LOC) or keep current plan (1,800 LOC)?

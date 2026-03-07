@@ -3,7 +3,7 @@
 **Version:** 1.0.0
 **Status:** Prototype Design
 **Date:** 2026-02-04
-**Owner:** BMAD-Enhanced Core Team
+**Owner:** Convoke Core Team
 
 ---
 
@@ -1031,7 +1031,7 @@ bmad align --template quint→bmad
 
 - [BaseArtifact Contract Specification](./baseartifact-contract-spec.md) - Core schema
 - [4-Framework Comparison Matrix](./4-framework-comparison-matrix.md) - Integration architecture
-- [Product Brief: BMAD-Enhanced](./product-brief-BMAD-Enhanced-2026-02-01.md) - ADR-002 details
+- [Product Brief: Convoke](./product-brief-Convoke-2026-02-01.md) - ADR-002 details
 
 ---
 

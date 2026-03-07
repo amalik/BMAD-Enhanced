@@ -152,7 +152,7 @@ More nuanced decision framework based on what we learn.
 - greenfield-architecture-analysis.md
 - technical-deep-dive-analysis.md
 - 4-framework-comparison-matrix.md
-- product-brief-BMAD-Enhanced-2026-02-01.md
+- product-brief-Convoke-2026-02-01.md
 - phase-0-workflow-map.md (superseded, kept as reference)
 
 ### 🔮 Future Phase Documents (Update When Reached)
