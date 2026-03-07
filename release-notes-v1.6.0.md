@@ -1,6 +1,6 @@
 # v1.6.0: Complete 7-Agent Vortex Pattern — Wave 3 Delivery
 
-**The Innovation Vortex is now complete.** BMAD-Enhanced v1.6.0 delivers the full 7-stream [Innovation Vortex](https://unfix.com/innovation-vortex) pattern (from the [unFIX model](https://unfix.com/) by [Jurgen Appelo](https://jurgenappelo.com/)) — three new agents, nine new workflows, ten handoff contracts, and cross-agent routing that connects every stream into a non-linear product discovery system.
+**The Innovation Vortex is now complete.** Convoke v1.6.0 delivers the full 7-stream [Innovation Vortex](https://unfix.com/innovation-vortex) pattern (from the [unFIX model](https://unfix.com/) by [Jurgen Appelo](https://jurgenappelo.com/)) — three new agents, nine new workflows, ten handoff contracts, and cross-agent routing that connects every stream into a non-linear product discovery system.
 
 ## What's New
 
@@ -89,7 +89,7 @@ A documented 4-step pattern for adding new agents validates the framework's exte
 ## Upgrading
 
 ```bash
-npm install bmad-enhanced@1.6.0
+npm install convoke@1.6.0
 ```
 
 The package includes an automatic migration from v1.5.x that adds the three new agents and nine new workflows to your existing configuration while preserving all user preferences.
@@ -100,4 +100,4 @@ The [Innovation Vortex](https://unfix.com/innovation-vortex) is a pattern from t
 
 ---
 
-**Full changelog:** [CHANGELOG.md](https://github.com/amalik/BMAD-Enhanced/blob/main/CHANGELOG.md)
+**Full changelog:** [CHANGELOG.md](https://github.com/amalik/convoke/blob/main/CHANGELOG.md)
