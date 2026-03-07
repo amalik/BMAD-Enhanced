@@ -1,4 +1,4 @@
-# BMAD-Enhanced v1.0.3-alpha
+# Convoke v1.0.3-alpha
 
 **Release Date:** 2026-02-15
 **Type:** Feature Release (Alpha)
@@ -17,11 +17,11 @@ The biggest improvement in this release is **user-friendly installation**. No mo
 # Step 1: Install BMAD Method
 npx bmad-method@alpha install
 
-# Step 2: Install BMAD-Enhanced
-npm install bmad-enhanced@alpha
+# Step 2: Install Convoke
+npm install convoke@alpha
 
 # Step 3: Install agents (NEW - this now works!)
-npx bmad-install-agents
+npx convoke-install
 ```
 
 **What Changed:**
@@ -38,25 +38,25 @@ npx bmad-install-agents
 Three new executable commands are now available after installing the package:
 
 ```bash
-npx bmad-install-agents  # Install all agents (Emma + Wade)
-npx bmad-install-emma    # Install Emma only
-npx bmad-install-wade    # Install Wade only
+npx convoke-install  # Install all agents (Emma + Wade)
+npx convoke-install-emma    # Install Emma only
+npx convoke-install-wade    # Install Wade only
 ```
 
 ### Updated Postinstall Message
 
-After running `npm install bmad-enhanced@alpha`, you'll see:
+After running `npm install convoke@alpha`, you'll see:
 
 ```
-BMAD-Enhanced installed!
+Convoke installed!
 
 To install agents into your project, run:
 
-  npx bmad-install-agents  - Install all agents (Emma + Wade)
+  npx convoke-install  - Install all agents (Emma + Wade)
 
 Or install individually:
-  npx bmad-install-emma    - Install Emma (empathy-mapper)
-  npx bmad-install-wade    - Install Wade (wireframe-designer)
+  npx convoke-install-emma    - Install Emma (empathy-mapper)
+  npx convoke-install-wade    - Install Wade (wireframe-designer)
 ```
 
 ---
@@ -95,7 +95,7 @@ Or install individually:
 - Updated postinstall message with npx commands
 
 ### Changed
-- **BREAKING:** Installation command changed from `npm run install:agents` to `npx bmad-install-agents`
+- **BREAKING:** Installation command changed from `npm run install:agents` to `npx convoke-install`
 - Updated all documentation to use npx commands:
   - README.md
   - INSTALLATION.md
@@ -154,20 +154,20 @@ All documentation has been updated to reflect the new npx commands:
 
 **Old (didn't work):**
 ```bash
-npm install bmad-enhanced@alpha
+npm install convoke@alpha
 npm run install:agents  # ❌ This never worked
 ```
 
 **New (works!):**
 ```bash
-npm install bmad-enhanced@alpha
-npx bmad-install-agents  # ✅ This works!
+npm install convoke@alpha
+npx convoke-install  # ✅ This works!
 ```
 
 **Note:** If you already have v1.0.2-alpha installed, simply upgrade:
 ```bash
-npm install bmad-enhanced@alpha  # Upgrades to v1.0.3-alpha
-npx bmad-install-agents           # Use new command
+npm install convoke@alpha  # Upgrades to v1.0.3-alpha
+npx convoke-install           # Use new command
 ```
 
 ---
@@ -204,10 +204,10 @@ None. All tests passing.
 
 ## 🔗 Links
 
-- **npm Package:** https://www.npmjs.com/package/bmad-enhanced
-- **GitHub Repository:** https://github.com/amalik/BMAD-Enhanced
+- **npm Package:** https://www.npmjs.com/package/convoke
+- **GitHub Repository:** https://github.com/amalik/convoke
 - **BMAD Method:** https://github.com/bmadhub/bmad
-- **Issues:** https://github.com/amalik/BMAD-Enhanced/issues
+- **Issues:** https://github.com/amalik/convoke/issues
 
 ---
 
@@ -220,11 +220,11 @@ BMAD Method must be installed first:
 npx bmad-method@alpha install
 ```
 
-### Install BMAD-Enhanced
+### Install Convoke
 
 ```bash
-npm install bmad-enhanced@alpha
-npx bmad-install-agents
+npm install convoke@alpha
+npx convoke-install
 ```
 
 That's it! Emma and Wade are now installed.
@@ -270,7 +270,7 @@ To verify your installation:
 
 ```bash
 # Check installed version
-npm list bmad-enhanced
+npm list convoke
 
 # Verify agents installed
 ls -lh _bmad/bme/_designos/agents/
@@ -280,7 +280,7 @@ ls -lh _bmad-output/design-artifacts/
 ```
 
 Expected output:
-- bmad-enhanced@1.0.3-alpha
+- convoke@1.0.3-alpha
 - empathy-mapper.md (7.0 KB)
 - wireframe-designer.md (7.7 KB)
 - EMMA-USER-GUIDE.md (19 KB)
@@ -290,10 +290,10 @@ Expected output:
 
 **Questions or Issues?**
 
-- 📝 [Open an Issue](https://github.com/amalik/BMAD-Enhanced/issues)
-- 📖 [Read the Docs](https://github.com/amalik/BMAD-Enhanced)
+- 📝 [Open an Issue](https://github.com/amalik/convoke/issues)
+- 📖 [Read the Docs](https://github.com/amalik/convoke)
 - 💬 Check existing issues for solutions
 
 ---
 
-**Thank you for using BMAD-Enhanced!** 🎉
+**Thank you for using Convoke!** 🎉
