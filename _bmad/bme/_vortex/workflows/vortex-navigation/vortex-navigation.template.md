@@ -95,7 +95,7 @@ status: DRAFT
 ---
 
 **Created by:** {creator-name}
-**Created with:** Max (learning-decision-expert) - BMAD Enhanced
+**Created with:** Max (learning-decision-expert) - Convoke v2.0.0
 **Date:** {creation-date}
 **Version:** 1.0
 **Status:** {status}
