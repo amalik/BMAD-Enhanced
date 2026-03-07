@@ -4,7 +4,7 @@ This file provides guidance to WARP (warp.dev) when working with code in this re
 
 ## Project Overview
 
-BMAD-Enhanced is a composable toolbox for product development lifecycle management that preserves reasoning and maintains traceability from hypothesis through implementation. It's built as a federated module architecture where each module (BMAD, DesignOS, AgentOS, Quint, TEA, CIS) provides specialized agents and workflows for different lifecycle phases.
+Convoke is a composable toolbox for product development lifecycle management that preserves reasoning and maintains traceability from hypothesis through implementation. It's built as a federated module architecture where each module (BMAD, DesignOS, AgentOS, Quint, TEA, CIS) provides specialized agents and workflows for different lifecycle phases.
 
 **Core Philosophy**: Eliminates the "context reconstruction tax" by capturing decision rationale at decision-time and maintaining bidirectional traceability across all artifacts.
 
@@ -263,7 +263,7 @@ System designed for conversational interaction:
 ## Project-Specific Notes
 
 - **Phase**: Currently Phase 0 (Framework Integration) - Beta 4
-- **Status**: BMAD-Enhanced building BMAD-Enhanced (dogfooding from Day 1)
+- **Status**: Convoke building Convoke (dogfooding from Day 1)
 - **Target Users**: Technical teams (engineers, PMs, designers, QA)
 - **Distribution**: Private GitHub → Open Source pathway
 - **Interface**: CLI + VSCode (Claude Code MCP server) for v1.0
@@ -278,7 +278,7 @@ When using Warp in this repository:
 4. **Respect frontmatter** - Artifacts use structured YAML headers for traceability
 5. **Use natural language** - The system is designed for conversational interaction
 6. **Check configuration** - User preferences in `_bmad/core/config.yaml` and module configs
-7. **Reference product brief** - `_bmad-output/planning-artifacts/product-brief-BMAD-Enhanced-2026-02-01.md` has comprehensive context
+7. **Reference product brief** - `_bmad-output/planning-artifacts/product-brief-Convoke-2026-02-01.md` has comprehensive context
 
 ## Common Tasks
 
