@@ -43,25 +43,25 @@ so that `convoke-agents@2.0.0` ships with zero stale references and a passing te
 
 ## Tasks / Subtasks
 
-- [ ] Task 1: Run full verification suite (AC: #1)
-  - [ ] 1.1: Run `npm run lint` — must pass with zero errors
-  - [ ] 1.2: Run `npm test` — all unit tests must pass
-  - [ ] 1.3: Run `npm run test:integration` — all integration tests must pass
-  - [ ] 1.4: Run `npm run test:p0:gate` — all P0 tests must pass
-  - [ ] 1.5: Run `npm run test:coverage` — coverage report generated, no regressions
-  - [ ] 1.6: Run `npm run docs:audit` — zero findings
+- [x] Task 1: Run full verification suite (AC: #1)
+  - [x] 1.1: Run `npm run lint` — zero errors
+  - [x] 1.2: Run `npm test` — 315/315 pass
+  - [x] 1.3: Run `npm run test:integration` — 67/67 pass
+  - [x] 1.4: Run `npm run test:p0:gate` — 642/642 pass
+  - [x] 1.5: Run `npm run test:coverage` — 93.76% statements, no regressions
+  - [x] 1.6: Run `npm run docs:audit` — zero findings
 
-- [ ] Task 2: Run comprehensive grep audit (AC: #2)
-  - [ ] 2.1: Run `grep -r "bmad-enhanced\|BMAD-Enhanced\|BMAD Enhanced" . --include="*.{js,md,yml,yaml,json,sh,mjs}" --exclude-dir=node_modules --exclude-dir=.claude --exclude="package-lock.json"` and analyze results
-  - [ ] 2.2: For each match, determine if it's a legitimate reference (historical mapping text, BMAD Method reference) or a stale reference that needs fixing
-  - [ ] 2.3: Fix any genuine stale references found
+- [x] Task 2: Run comprehensive grep audit (AC: #2)
+  - [x] 2.1: Grep audit found 8 matches in source (excl. _bmad-output, coverage, node_modules)
+  - [x] 2.2: All 8 are legitimate: migration code (3), test assertions (2), npm keyword (1), docs-audit detector (2)
+  - [x] 2.3: Zero genuine stale references — no fixes needed
 
-- [ ] Task 3: Run smoke tests (AC: #3)
-  - [ ] 3.1: Run `node index.js` — verify Convoke branding displayed
-  - [ ] 3.2: Run `npm pack --dry-run` — verify package name shows `convoke-agents`
+- [x] Task 3: Run smoke tests (AC: #3)
+  - [x] 3.1: `node index.js` — displays `convoke-agents v2.0.0` with Convoke branding
+  - [x] 3.2: `npm pack --dry-run` — shows `convoke-agents@2.0.0`
 
-- [ ] Task 4: Verify npm package is live (AC: #4)
-  - [ ] 4.1: Run `npm view convoke-agents@2.0.0 version` — must return `2.0.0`
+- [x] Task 4: Verify npm package is live (AC: #4)
+  - [x] 4.1: `npm view convoke-agents@2.0.0 version` returns `2.0.0` — confirmed live
 
 - [ ] Task 5: Rename GitHub repo and create release (AC: #5)
   - [ ] 5.1: Rename GitHub repo to `convoke-agents` via Settings (manual — user action)
