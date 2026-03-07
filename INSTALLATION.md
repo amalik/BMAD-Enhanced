@@ -1,6 +1,6 @@
 # Installation Guide
 
-Complete guide to installing BMAD-Enhanced Vortex agents into your project.
+Complete guide to installing Convoke Vortex agents into your project.
 
 ---
 
@@ -10,14 +10,14 @@ Complete guide to installing BMAD-Enhanced Vortex agents into your project.
 - Git
 - Claude Code or Claude.ai
 
-BMAD-Enhanced works **standalone** or as an extension to [BMAD Method](https://github.com/bmadhub/bmad). No prior BMAD installation required.
+Convoke works **standalone** or as an extension to [BMAD Method](https://github.com/bmadhub/bmad). No prior BMAD installation required.
 
 ---
 
 ## Quick Install
 
 ```bash
-npm install bmad-enhanced && npx bmad-install-vortex-agents
+npm install convoke && npx convoke-install-vortex
 ```
 
 All 7 Vortex agents (Emma, Isla, Mila, Liam, Wade, Noah, Max) with 22 workflows are installed and ready to use.
@@ -30,10 +30,10 @@ All 7 Vortex agents (Emma, Isla, Mila, Liam, Wade, Noah, Max) with 22 workflows 
 
 ```bash
 # Install into your project
-npm install bmad-enhanced
+npm install convoke
 
 # Install all Vortex agents and workflows
-npx bmad-install-vortex-agents
+npx convoke-install-vortex
 ```
 
 ### Option 2: Clone from Source (Contributors Only)
@@ -41,8 +41,8 @@ npx bmad-install-vortex-agents
 For contributors or developers who want to modify agents or contribute to the project. This sets up a development environment — not an end-user installation.
 
 ```bash
-git clone https://github.com/amalik/BMAD-Enhanced.git
-cd BMAD-Enhanced
+git clone https://github.com/amalik/convoke.git
+cd convoke
 npm install
 ```
 
@@ -153,7 +153,7 @@ Hey Amalik! I'm Emma — your Contextualization Expert...
 If the agent doesn't activate or you see raw markdown instead, run diagnostics:
 
 ```bash
-npx bmad-doctor
+npx convoke-doctor
 ```
 
 This checks project root, config validity, agent files, workflows, output directory, and version consistency — with actionable fix suggestions for each issue.
@@ -165,14 +165,14 @@ This checks project root, config validity, agent files, workflows, output direct
 Start with diagnostics — it catches most issues:
 
 ```bash
-npx bmad-doctor
+npx convoke-doctor
 ```
 
 ### Permission denied errors
 
 ```bash
 chmod +x scripts/*.js
-npx bmad-install-vortex-agents
+npx convoke-install-vortex
 ```
 
 ### Config file already exists
@@ -181,7 +181,7 @@ The installer preserves your custom settings and only adds missing entries. To f
 
 ```bash
 rm -rf _bmad/bme/_vortex/
-npx bmad-install-vortex-agents
+npx convoke-install-vortex
 ```
 
 ### Installation succeeds but agents don't activate
@@ -191,7 +191,7 @@ Check that files are in place:
 ```bash
 ls -la _bmad/bme/_vortex/agents/
 ls -la _bmad/bme/_vortex/workflows/
-npx bmad-doctor
+npx convoke-doctor
 ```
 
 ---
@@ -201,7 +201,7 @@ npx bmad-doctor
 1. **Read the user guides** in `_bmad-output/vortex-artifacts/`
 2. **Activate an agent** — start with Emma for strategic framing or Isla for user research
 3. **Follow a workflow** — each agent presents a menu of guided workflows
-4. **Check updates** — run `npx bmad-version` periodically
+4. **Check updates** — run `npx convoke-version` periodically
 
 See the [Agent Guide](docs/agents.md) for detailed workflow descriptions and the recommended Vortex flow.
 
@@ -222,7 +222,7 @@ rm -rf _bmad/bme/_vortex/
 rm -rf _bmad-output/vortex-artifacts/
 
 # 4. Uninstall npm package
-npm uninstall bmad-enhanced
+npm uninstall convoke
 ```
 
 ---
