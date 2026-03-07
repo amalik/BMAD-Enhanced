@@ -1,25 +1,25 @@
 <div align="center">
 
 <pre>
- ██████╗ ███╗   ███╗ █████╗ ██████╗
- ██╔══██╗████╗ ████║██╔══██╗██╔══██╗
- ██████╔╝██╔████╔██║███████║██║  ██║
- ██╔══██╗██║╚██╔╝██║██╔══██║██║  ██║
- ██████╔╝██║ ╚═╝ ██║██║  ██║██████╔╝
- ╚═════╝ ╚═╝     ╚═╝╚═╝  ╚═╝╚═════╝
-       E N H A N C E D
+  ██████╗ ██████╗ ███╗   ██╗██╗   ██╗ ██████╗ ██╗  ██╗███████╗
+ ██╔════╝██╔═══██╗████╗  ██║██║   ██║██╔═══██╗██║ ██╔╝██╔════╝
+ ██║     ██║   ██║██╔██╗ ██║██║   ██║██║   ██║█████╔╝ █████╗
+ ██║     ██║   ██║██║╚██╗██║╚██╗ ██╔╝██║   ██║██╔═██╗ ██╔══╝
+ ╚██████╗╚██████╔╝██║ ╚████║ ╚████╔╝ ╚██████╔╝██║  ██╗███████╗
+  ╚═════╝ ╚═════╝ ╚═╝  ╚═══╝  ╚═══╝   ╚═════╝ ╚═╝  ╚═╝╚══════╝
+       Agent teams for complex systems
 </pre>
 
-**Validate your product ideas before writing a single line of code**
+**Validate your product ideas before writing a single line of code — 7 discovery agents guide you from insight to evidence**
 
-[![Version](https://img.shields.io/badge/version-1.7.1-blue)](https://github.com/amalik/BMAD-Enhanced)
+[![Version](https://img.shields.io/badge/version-2.0.0-blue)](https://github.com/amalik/convoke)
 [![Agents](https://img.shields.io/badge/agents-7-brightgreen)](docs/agents.md)
 [![Workflows](https://img.shields.io/badge/workflows-22-success)](docs/agents.md)
 [![License](https://img.shields.io/badge/license-MIT-blue)](LICENSE)
 
 </div>
 
-Most teams skip validation and build on assumptions. BMAD-Enhanced guides you through seven discovery streams — from understanding your users to testing your riskiest assumptions — so you can make evidence-based decisions before committing to code. Each stream builds on the previous one's findings, and when gaps appear, the system routes you back to fill them.
+Most teams skip validation and build on assumptions. Convoke guides you through seven discovery streams — from understanding your users to testing your riskiest assumptions — so you can make evidence-based decisions before committing to code. Each stream builds on the previous one's findings, and when gaps appear, the system routes you back to fill them.
 
 ```
                          7 Streams · 7 Agents
@@ -65,7 +65,7 @@ Each agent above runs one of these streams. You don't follow a fixed path — th
 ### Install
 
 ```bash
-npm install bmad-enhanced && npx bmad-install-vortex-agents
+npm install convoke && npx convoke-install-vortex
 ```
 
 All 7 agents with 22 workflows are installed and ready to use.
@@ -124,17 +124,17 @@ your-project/
 ## Updating
 
 ```bash
-npx bmad-version              # Check current version
-npx bmad-update --dry-run     # Preview changes
-npx bmad-update               # Apply update (auto-backup)
-npx bmad-doctor               # Diagnose issues
+npx convoke-version              # Check current version
+npx convoke-update --dry-run     # Preview changes
+npx convoke-update               # Apply update (auto-backup)
+npx convoke-doctor               # Diagnose issues
 ```
 
 Your data in `_bmad-output/` is never touched. Automatic backups are created before every update.
 
-> **Tip:** If `npx bmad-update` reports "Already up to date" but you know a newer version exists, npx may be serving a cached copy. Force the latest with:
+> **Tip:** If `npx convoke-update` reports "Already up to date" but you know a newer version exists, npx may be serving a cached copy. Force the latest with:
 > ```bash
-> npx -p bmad-enhanced@latest bmad-update
+> npx -p convoke@latest convoke-update
 > ```
 
 See [UPDATE-GUIDE.md](UPDATE-GUIDE.md) for migration paths and troubleshooting.
@@ -211,10 +211,10 @@ For detailed workflow descriptions and usage examples, see the [Agent Guide](doc
 
 ## How It Fits with BMAD Core
 
-BMAD-Enhanced handles **pre-implementation validation**. BMAD Core handles **implementation**.
+Convoke handles **pre-implementation validation**. BMAD Core handles **implementation**.
 
 ```
-BMAD-Enhanced (Vortex)                          BMAD Core
+Convoke (Vortex)                                BMAD Core
 ┌──────────────────────────────────────┐       ┌──────────────────────┐
 │ Isla → Mila → Liam → Wade → Noah    │ ───>  │ PM → Architect → Dev │
 │   ↑                          ↓       │       │ "Let's build it"     │
@@ -224,7 +224,7 @@ BMAD-Enhanced (Vortex)                          BMAD Core
 └──────────────────────────────────────┘
 ```
 
-BMAD-Enhanced works standalone or as an extension — no BMAD Method installation required.
+Convoke works standalone or as an extension — no BMAD Method installation required.
 
 ---
 
@@ -246,7 +246,8 @@ BMAD-Enhanced works standalone or as an extension — no BMAD Method installatio
 - **v1.1.0–v1.5.x** — Waves 1-2: Foundation (Emma, Isla, Wade, Max — agent definitions, workflows, update system, CI/CD)
 - **v1.6.x** — Wave 3: Complete 7-stream Vortex (added Mila, Liam, Noah — 7 agents, 22 workflows, handoff contracts, Compass routing)
 - **v1.7.0** — Wave 4: Quality & onboarding (P0 test suite, docs audit tool, all 22 workflows production-ready, README overhaul, package size fix)
-- **v2.0.0+** — Multi-agent collaboration, cross-agent workflows, analytics
+- **v2.0.0** — Product renamed to Convoke. CLI commands renamed to `convoke-*`. Package: `npm install convoke`
+- **Next** — Multi-agent collaboration, cross-agent workflows, analytics
 
 ---
 
