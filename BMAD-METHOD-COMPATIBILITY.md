@@ -1,10 +1,10 @@
 # BMAD Method Compatibility Guide
 
-**BMAD-Enhanced** works standalone or as an extension of the **BMAD Method**. This document explains the relationship, compatibility behavior, and update strategy.
+**Convoke** works standalone or as an extension of the **BMAD Method**. This document explains the relationship, compatibility behavior, and update strategy.
 
 ---
 
-## Relationship Between BMAD Method and BMAD-Enhanced
+## Relationship Between BMAD Method and Convoke
 
 ### Architecture
 
@@ -21,7 +21,7 @@
                       │ extends
                       │
 ┌─────────────────────────────────────────────────┐
-│        BMAD-Enhanced (Extension Package)        │
+│           Convoke (Extension Package)            │
 │  - 7 domain-specialized Vortex agents           │
 │  - Emma (contextualization-expert)              │
 │  - Isla (discovery-empathy-expert)              │
@@ -35,12 +35,12 @@
 
 ### Key Principle
 
-**BMAD-Enhanced works standalone — BMAD Method is optional.**
+**Convoke works standalone — BMAD Method is optional.**
 
-- BMAD-Enhanced creates the `_bmad/` directory automatically if missing
-- If BMAD Method is already installed, BMAD-Enhanced detects it and logs confirmation
+- Convoke creates the `_bmad/` directory automatically if missing
+- If BMAD Method is already installed, Convoke detects it and logs confirmation
 - If BMAD Method is not installed, the installer warns but proceeds in standalone mode
-- No npm dependency on BMAD Method — BMAD-Enhanced is fully self-contained
+- No npm dependency on BMAD Method — Convoke is fully self-contained
 
 ---
 
@@ -49,22 +49,22 @@
 ### Standard Installation (Standalone)
 
 ```bash
-npm install bmad-enhanced
-npx bmad-install-vortex-agents
+npm install convoke
+npx convoke-install-vortex
 ```
 
 ### With Existing BMAD Method
 
 ```bash
-# If BMAD Method is already installed, BMAD-Enhanced detects it automatically
-npm install bmad-enhanced
-npx bmad-install-vortex-agents
+# If BMAD Method is already installed, Convoke detects it automatically
+npm install convoke
+npx convoke-install-vortex
 # Installer logs: "✓ BMAD Method configuration found"
 ```
 
 ### What Gets Installed
 
-**BMAD-Enhanced creates:**
+**Convoke creates:**
 ```
 your-project/
 └── _bmad/
@@ -85,14 +85,14 @@ your-project/
 
 ### Current Version
 
-**BMAD-Enhanced v1.6.4**
+**Convoke v2.0.0**
 - Compatible with: BMAD Method v1.x (optional — works standalone)
 - Creates `_bmad/` directory automatically if missing
 - Optional detection: BMAD Method config (bmad.yaml in _bmad/_config/)
 
 ### Detection Logic
 
-BMAD-Enhanced installers check:
+Convoke installers check:
 
 1. **Required:** `_bmad/` directory exists
    - If missing: Created automatically by the installer
@@ -111,8 +111,8 @@ BMAD-Enhanced installers check:
 
 **Your Responsibility:**
 - Monitor BMAD Method releases
-- Test BMAD-Enhanced compatibility with new BMAD versions
-- Update BMAD-Enhanced if breaking changes occur
+- Test Convoke compatibility with new BMAD versions
+- Update Convoke if breaking changes occur
 
 **Recommended Process:**
 
@@ -121,29 +121,29 @@ BMAD-Enhanced installers check:
    # Install new BMAD Method version
    cd bmad && git pull && npm install
 
-   # Test BMAD-Enhanced agents
+   # Test Convoke agents
    cat _bmad/bme/_vortex/agents/contextualization-expert.md
    # Verify Emma still works
 
    # Run diagnostics to check all 7 agents
-   npx bmad-doctor
+   npx convoke-doctor
    ```
 
 2. **If agents break:**
    - Identify breaking changes in BMAD Method
-   - Update BMAD-Enhanced agents/workflows
-   - Increment BMAD-Enhanced version
+   - Update Convoke agents/workflows
+   - Increment Convoke version
    - Update compatibility documentation
 
 3. **If agents work:**
    - Update compatibility matrix below
-   - No BMAD-Enhanced changes needed
+   - No Convoke changes needed
 
 ---
 
 ## Compatibility Matrix
 
-| BMAD-Enhanced Version | Compatible BMAD Method Versions | Notes |
+| Convoke Version | Compatible BMAD Method Versions | Notes |
 |----------------------|--------------------------------|-------|
 | 1.6.4                | 1.x (optional — works standalone) | Current release — 7 agents, 22 workflows, Compass routing |
 | 1.6.0                | 1.x (optional — works standalone) | Added Mila, Liam, Noah; HC contracts; Compass routing |
@@ -162,12 +162,12 @@ BMAD-Enhanced installers check:
 
 **Example:** BMAD moves from `_bmad/` to `bmad/`
 
-**Impact:** BMAD-Enhanced installers will fail (can't find `_bmad/`)
+**Impact:** Convoke installers will fail (can't find `_bmad/`)
 
 **Solution:**
 1. Update all installer scripts to check for new path
 2. Support both old and new paths during transition
-3. Release BMAD-Enhanced v1.1.0 with updated paths
+3. Release Convoke patch with updated paths
 4. Document minimum BMAD Method version
 
 ---
@@ -182,7 +182,7 @@ BMAD-Enhanced installers check:
 1. Convert all agent definitions to new format
 2. Update workflow files if format changes
 3. Update templates if needed
-4. Release BMAD-Enhanced v2.0.0 (major version bump)
+4. Release Convoke major version bump
 5. Document breaking change and migration path
 
 ---
@@ -191,13 +191,13 @@ BMAD-Enhanced installers check:
 
 **Example:** BMAD changes `config.yaml` structure
 
-**Impact:** BMAD-Enhanced config.yaml becomes invalid
+**Impact:** Convoke config.yaml becomes invalid
 
 **Solution:**
 1. Update installer config generation
 2. Migrate existing configs (provide migration script)
 3. Test with both old and new BMAD versions
-4. Release BMAD-Enhanced v1.1.0
+4. Release Convoke patch
 5. Document minimum BMAD Method version
 
 ---
@@ -206,7 +206,7 @@ BMAD-Enhanced installers check:
 
 ### Semantic Versioning
 
-BMAD-Enhanced follows semver:
+Convoke follows semver:
 
 - **Major (X.0.0):** Breaking changes (requires user action)
 - **Minor (1.X.0):** New agents, features (backward compatible)
@@ -215,7 +215,7 @@ BMAD-Enhanced follows semver:
 ### When to Bump Versions
 
 **Major version bump (e.g., 1.x → 2.0):**
-- BMAD Method breaking change requires BMAD-Enhanced updates
+- BMAD Method breaking change requires Convoke updates
 - Agent architecture fundamentally changes
 - Incompatible with previous BMAD Method versions
 
@@ -238,23 +238,23 @@ BMAD-Enhanced follows semver:
 When new BMAD Method version releases:
 
 - [ ] Install new BMAD Method version
-- [ ] Run `npx bmad-install-vortex-agents`
+- [ ] Run `npx convoke-install-vortex`
 - [ ] Verify all files copied correctly
 - [ ] Activate Emma: `cat _bmad/bme/_vortex/agents/contextualization-expert.md`
 - [ ] Test Emma workflow: Type `LP` (Lean Persona) and complete all steps
 - [ ] Activate Mila (or another recent agent): `cat _bmad/bme/_vortex/agents/research-convergence-specialist.md`
-- [ ] Run `npx bmad-doctor` to verify all 7 agents and 22 workflows
+- [ ] Run `npx convoke-doctor` to verify all 7 agents and 22 workflows
 - [ ] Verify artifacts generated correctly
 - [ ] Check for errors or warnings
 - [ ] Update compatibility matrix if successful
 
 ### Automated Testing
 
-BMAD-Enhanced v1.6.4 includes automated test coverage:
+Convoke includes automated test coverage:
 
 - **P0 activation tests:** Verify all 7 agents activate correctly (642 assertions)
 - **Content correctness tests:** Validate voice consistency, handoff contracts, Compass routing
-- **CLI tests:** bmad-update.js (92.91% coverage), bmad-version.js (95.52% coverage)
+- **CLI tests:** convoke-update.js (92.91% coverage), convoke-version.js (95.52% coverage)
 - **Docs audit:** Programmatic stale-reference, broken-link, and broken-path detection across 16 user-facing files
 - **Total:** 293 tests, 0 failures, CI-integrated
 
@@ -287,7 +287,7 @@ BMAD-Enhanced v1.6.4 includes automated test coverage:
 
 ## Recommendations
 
-### For BMAD-Enhanced Maintainers
+### For Convoke Maintainers
 
 1. **Monitor BMAD Method releases:**
    - Watch BMAD Method repository
@@ -295,7 +295,7 @@ BMAD-Enhanced v1.6.4 includes automated test coverage:
    - Update compatibility matrix
 
 2. **Maintain clear separation:**
-   - Never include BMAD Method code in BMAD-Enhanced
+   - Never include BMAD Method code in Convoke
    - Always check for BMAD Method presence
    - Document dependencies clearly
 
@@ -312,17 +312,17 @@ BMAD-Enhanced v1.6.4 includes automated test coverage:
 ### For Users
 
 1. **Install directly:**
-   - Run `npm install bmad-enhanced && npx bmad-install-vortex-agents`
+   - Run `npm install convoke && npx convoke-install-vortex`
    - No prerequisite installation needed
    - BMAD Method is optional — installer handles both cases
 
 2. **If using both packages:**
    - Check compatibility matrix before updating either
-   - Test BMAD-Enhanced after updating BMAD Method
+   - Test Convoke after updating BMAD Method
    - Report compatibility issues
 
 3. **Stay informed:**
-   - Watch for BMAD-Enhanced release notes
+   - Watch for Convoke release notes
    - Check compatibility guide before updating
    - Report bugs or compatibility issues
 
@@ -332,7 +332,7 @@ BMAD-Enhanced v1.6.4 includes automated test coverage:
 
 **Key Points:**
 
-✅ BMAD-Enhanced works standalone — no BMAD Method required
+✅ Convoke works standalone — no BMAD Method required
 ✅ If BMAD Method is present, the installer detects and logs it
 ✅ Installers create `_bmad/` automatically if missing
 ✅ Compatibility should be tested if using both together
@@ -340,13 +340,13 @@ BMAD-Enhanced v1.6.4 includes automated test coverage:
 
 **For Maintainers:**
 
-- Maintain BMAD-Enhanced agents separately from BMAD Method
+- Maintain Convoke agents separately from BMAD Method
 - Test compatibility if BMAD Method releases breaking changes
 - Update compatibility matrix when verified
 
 **For Users:**
 
-- Install with `npm install bmad-enhanced && npx bmad-install-vortex-agents`
+- Install with `npm install convoke && npx convoke-install-vortex`
 - No prerequisite installation needed
 - If using BMAD Method alongside, check compatibility matrix before updating either package
 
