@@ -110,7 +110,7 @@ know what `cat` does or how to translate it to their workflow.
 | # | Step | What to do |
 |---|------|------------|
 | 2.1 | Check prerequisites | Confirm Node.js 18+, Git, and Claude Code or Claude.ai are available |
-| 2.2 | Run install | Execute `npm install convoke && npx convoke-install-vortex` |
+| 2.2 | Run install | Execute `npm install convoke-agents && npx convoke-install-vortex` |
 | 2.3 | Watch installer output | Observe the 6-step install process: prerequisites check, archive deprecated, create manifest, setup output directory, install agents/workflows/config, verify |
 | 2.4 | Check verification | Confirm verification step shows green checkmarks for all 7 agents and config |
 | 2.5 | Verify file structure | Confirm `_bmad/bme/_vortex/agents/` contains 7 agent files, `_bmad/bme/_vortex/config.yaml` exists, `_bmad-output/vortex-artifacts/` directory was created |

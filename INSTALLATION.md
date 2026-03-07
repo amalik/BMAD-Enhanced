@@ -17,7 +17,7 @@ Convoke works **standalone** or as an extension to [BMAD Method](https://github.
 ## Quick Install
 
 ```bash
-npm install convoke && npx convoke-install-vortex
+npm install convoke-agents && npx convoke-install-vortex
 ```
 
 All 7 Vortex agents (Emma, Isla, Mila, Liam, Wade, Noah, Max) with 22 workflows are installed and ready to use.
@@ -41,7 +41,7 @@ npx convoke-install-vortex
 For contributors or developers who want to modify agents or contribute to the project. This sets up a development environment — not an end-user installation.
 
 ```bash
-git clone https://github.com/amalik/convoke.git
+git clone https://github.com/amalik/convoke-agents.git
 cd convoke
 npm install
 ```

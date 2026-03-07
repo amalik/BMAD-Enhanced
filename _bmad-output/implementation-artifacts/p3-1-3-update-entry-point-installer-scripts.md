@@ -10,7 +10,7 @@ So that my first interaction with the package reflects the correct product ident
 
 ## Acceptance Criteria
 
-1. **Given** a user runs `npm install convoke`
+1. **Given** a user runs `npm install convoke-agents`
    **When** the postinstall script executes
    **Then** the output says "Convoke installed!" (not "BMAD-Enhanced installed!")
    **And** all `npx` command suggestions use `convoke-*` names

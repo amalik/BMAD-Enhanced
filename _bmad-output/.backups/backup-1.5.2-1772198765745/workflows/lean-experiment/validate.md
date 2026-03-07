@@ -26,5 +26,5 @@ This validation workflow will be available alongside the lean-experiment workflo
 ## Questions?
 
 For questions or to request early access:
-- GitHub Issues: https://github.com/amalik/convoke/issues
+- GitHub Issues: https://github.com/amalik/convoke-agents/issues
 - Tag with: `workflow:lean-experiment` and `v1.2.0`

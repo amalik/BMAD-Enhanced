@@ -49,13 +49,13 @@ All phases of the installation test plan completed successfully. The npx command
 
 **Command:**
 ```bash
-npm install convoke@alpha
+npm install convoke-agents@alpha
 ```
 
 **Result:**
 ```
 added 11 packages in 1s
-convoke@1.0.3-alpha
+convoke-agents@1.0.3-alpha
 ```
 
 **Success Criteria Met:**
@@ -315,7 +315,7 @@ The tested installation flow is:
 npx bmad-method@alpha install
 
 # Step 2: Install Convoke
-npm install convoke@alpha
+npm install convoke-agents@alpha
 
 # Step 3: Install agents
 npx convoke-install

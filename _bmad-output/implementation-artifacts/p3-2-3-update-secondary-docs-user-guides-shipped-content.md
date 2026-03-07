@@ -29,7 +29,7 @@ So that every touchpoint within the product reflects the correct identity.
 
 4. **Given** all ~8 workflow validate files under `_bmad/bme/_vortex/workflows/`
    **When** the rename is applied
-   **Then** all GitHub issue URLs (`github.com/amalik/BMAD-Enhanced`) are updated to `github.com/amalik/convoke`
+   **Then** all GitHub issue URLs (`github.com/amalik/BMAD-Enhanced`) are updated to `github.com/amalik/convoke-agents`
    **And** any "Created with" footers in validate files are also updated
    **And** zero instances of `bmad-enhanced`/`BMAD-Enhanced` remain
 
@@ -62,7 +62,7 @@ So that every touchpoint within the product reflects the correct identity.
   - [x] 3.3: Grep verify zero stale refs across all template files
 
 - [x] Task 4: Update workflow validate files (AC: #4)
-  - [x] 4.1: Update GitHub issue URLs in 7 validate files: `github.com/amalik/BMAD-Enhanced` → `github.com/amalik/convoke` (lowercase!) — contextualize-scope, lean-experiment, lean-persona, mvp, proof-of-concept, proof-of-value, product-vision
+  - [x] 4.1: Update GitHub issue URLs in 7 validate files: `github.com/amalik/BMAD-Enhanced` → `github.com/amalik/convoke-agents` (lowercase!) — contextualize-scope, lean-experiment, lean-persona, mvp, proof-of-concept, proof-of-value, product-vision
   - [x] 4.2: Update "Created with" footer in `user-interview/validate.md` L140 (only validate file with this footer)
   - [x] 4.3: Grep verify zero stale refs across all validate files
 
@@ -93,7 +93,7 @@ So that every touchpoint within the product reflects the correct identity.
 - `bmad-doctor` → `convoke-doctor`
 - `bmad-update` → `convoke-update`
 - `bmad-version` → `convoke-version`
-- `github.com/amalik/BMAD-Enhanced` → `github.com/amalik/convoke` (lowercase in URLs!)
+- `github.com/amalik/BMAD-Enhanced` → `github.com/amalik/convoke-agents` (lowercase in URLs!)
 
 **DO NOT replace:**
 - `_bmad` in any path reference
@@ -106,7 +106,7 @@ So that every touchpoint within the product reflects the correct identity.
 
 ### Previous Story Intelligence (from Stories 2.1 & 2.2)
 
-**Lesson 1 — URL case sensitivity:** `replace_all` for `BMAD-Enhanced` → `Convoke` produces uppercase `C` in URL contexts. GitHub URLs need lowercase: `github.com/amalik/convoke`. Always post-check URLs after bulk replace.
+**Lesson 1 — URL case sensitivity:** `replace_all` for `BMAD-Enhanced` → `Convoke` produces uppercase `C` in URL contexts. GitHub URLs need lowercase: `github.com/amalik/convoke-agents`. Always post-check URLs after bulk replace.
 
 **Lesson 2 — Docs-audit false positives:** Avoid exact `BMAD-Enhanced` string in new content. Describe the rename narratively: "Product renamed to Convoke" rather than repeating the old brand.
 
@@ -133,7 +133,7 @@ So that every touchpoint within the product reflects the correct identity.
 - Includes 1 deprecated template (`_deprecated/empathy-map/empathy-map.template.md`)
 
 **Workflow validates (8 files, 8 refs):**
-- 7 validate files have GitHub issue URL: `https://github.com/amalik/BMAD-Enhanced/issues` → `https://github.com/amalik/convoke/issues`
+- 7 validate files have GitHub issue URL: `https://github.com/amalik/BMAD-Enhanced/issues` → `https://github.com/amalik/convoke-agents/issues`
 - 1 validate file (`user-interview/validate.md` L140) also has a "Created with: BMAD-Enhanced v1.5.0" footer
 - **URL case critical:** Must be lowercase `convoke` in URLs
 
@@ -192,7 +192,7 @@ None — all tasks completed without errors.
 - `docs/agents.md`: 1 additional product ref found at L346 ("extend BMAD-Enhanced") and updated. Initial audit missed it. Framework refs preserved.
 - 7 user guides: `BMAD Enhanced (bme)` → `Convoke (bme)` (14 module line replacements), `bmad-install-vortex-agents` → `convoke-install-vortex` (12 instances), `bmad-doctor` → `convoke-doctor` (6 instances). Total 33 replacements.
 - 14 workflow templates: "Created with" footers updated to `Convoke v2.0.0`. 10 with `BMAD-Enhanced vX.X.X` pattern, 4 with `BMAD Enhanced` pattern.
-- 8 workflow validate files: 7 GitHub issue URLs updated to `github.com/amalik/convoke` (lowercase). 1 "Created with" footer updated.
+- 8 workflow validate files: 7 GitHub issue URLs updated to `github.com/amalik/convoke-agents` (lowercase). 1 "Created with" footer updated.
 - Cross-file verification: Zero stale brand refs, zero stale CLI refs. `docs-audit` returns zero findings (was 21 before this story).
 
 ### File List

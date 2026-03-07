@@ -8,7 +8,7 @@
 
 ## 🚀 Publication Summary
 
-**Package URL:** https://www.npmjs.com/package/convoke
+**Package URL:** https://www.npmjs.com/package/convoke-agents
 **Version:** 1.0.3-alpha
 **Tag:** alpha (latest alpha release)
 
@@ -35,7 +35,7 @@ Tested the published package from npm registry:
 
 ✅ **Installation Works:**
 ```bash
-npm install convoke@alpha
+npm install convoke-agents@alpha
 # Successfully installs v1.0.3-alpha
 ```
 
@@ -103,7 +103,7 @@ The working installation flow is now:
 npx bmad-method@alpha install
 
 # Step 2: Install Convoke
-npm install convoke@alpha
+npm install convoke-agents@alpha
 
 # Step 3: Install agents
 npx convoke-install
@@ -185,8 +185,8 @@ npx convoke-install
 
 ## 🔗 Important Links
 
-**npm Package:** https://www.npmjs.com/package/convoke
-**GitHub Repository:** https://github.com/amalik/convoke
+**npm Package:** https://www.npmjs.com/package/convoke-agents
+**GitHub Repository:** https://github.com/amalik/convoke-agents
 **BMAD Method:** https://github.com/bmadhub/bmad
 
 **Documentation:**
@@ -207,7 +207,7 @@ For sharing on social media, forums, or GitHub:
 ✨ What's new:
 - User-friendly npx installation commands
 - No more npm run confusion!
-- Simply: npm install convoke@alpha && npx convoke-install
+- Simply: npm install convoke-agents@alpha && npx convoke-install
 
 🎨 Includes:
 - Emma (empathy-mapper) - Empathy Mapping Specialist
@@ -215,11 +215,11 @@ For sharing on social media, forums, or GitHub:
 
 📦 Install:
 npx bmad-method@alpha install
-npm install convoke@alpha
+npm install convoke-agents@alpha
 npx convoke-install
 
-📚 Docs: https://github.com/amalik/convoke
-📦 npm: https://www.npmjs.com/package/convoke
+📚 Docs: https://github.com/amalik/convoke-agents
+📦 npm: https://www.npmjs.com/package/convoke-agents
 ```
 
 ---

@@ -17,7 +17,7 @@ module.exports = {
     return {
       actions: [
         'Product renamed from BMAD-Enhanced to Convoke',
-        'npm package: bmad-enhanced -> convoke',
+        'npm package: bmad-enhanced -> convoke-agents',
         'CLI commands renamed: bmad-install-vortex-agents -> convoke-install-vortex, bmad-install-agents -> convoke-install, bmad-update -> convoke-update, bmad-version -> convoke-version, bmad-migrate -> convoke-migrate, bmad-doctor -> convoke-doctor',
         'Internal _bmad/ directory structure preserved (no data loss)',
         'No version-specific changes needed (refresh handles all updates)'

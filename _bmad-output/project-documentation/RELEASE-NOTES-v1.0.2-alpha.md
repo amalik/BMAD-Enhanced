@@ -36,13 +36,13 @@ npx bmad-method@alpha install
 
 **Install Convoke:**
 ```bash
-npm install convoke@alpha
+npm install convoke-agents@alpha
 npm run install:agents
 ```
 
 **Or install specific version:**
 ```bash
-npm install convoke@1.0.2-alpha
+npm install convoke-agents@1.0.2-alpha
 ```
 
 ## ✅ Verification
@@ -76,8 +76,8 @@ All installation tests passing:
 
 ## 🔗 Links
 
-**npm package:** https://www.npmjs.com/package/convoke
-**GitHub:** https://github.com/amalik/convoke
+**npm package:** https://www.npmjs.com/package/convoke-agents
+**GitHub:** https://github.com/amalik/convoke-agents
 
 ## 📝 Changelog
 
@@ -98,4 +98,4 @@ All installation tests passing:
 
 ---
 
-**Full Changelog:** https://github.com/amalik/convoke/compare/v1.0.0-alpha...v1.0.2-alpha
+**Full Changelog:** https://github.com/amalik/convoke-agents/compare/v1.0.0-alpha...v1.0.2-alpha

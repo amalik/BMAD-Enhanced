@@ -76,7 +76,7 @@ ls -la _bmad/_config/
 
 ```bash
 # Step 3.1: Install convoke from npm
-npm install convoke@alpha
+npm install convoke-agents@alpha
 
 # Step 3.2: Verify package installation
 ls -la node_modules/convoke/
@@ -84,7 +84,7 @@ npm list convoke
 ```
 
 **Expected Result:**
-- convoke@1.0.3-alpha installed in node_modules
+- convoke-agents@1.0.3-alpha installed in node_modules
 - Package appears in npm list
 
 **Success Criteria:**
@@ -224,7 +224,7 @@ cd /tmp/bmad-test-emma-only
 npx bmad-method@alpha install
 
 # Step 6.1.3: Install Convoke
-npm install convoke@alpha
+npm install convoke-agents@alpha
 
 # Step 6.1.4: Install Emma only
 npx convoke-install-emma
@@ -256,7 +256,7 @@ cd /tmp/bmad-test-wade-only
 npx bmad-method@alpha install
 
 # Step 6.2.3: Install Convoke
-npm install convoke@alpha
+npm install convoke-agents@alpha
 
 # Step 6.2.4: Install Wade only
 npx convoke-install-wade
@@ -289,7 +289,7 @@ mkdir -p /tmp/bmad-test-no-prereq
 cd /tmp/bmad-test-no-prereq
 
 # Step 7.1.2: Install Convoke
-npm install convoke@alpha
+npm install convoke-agents@alpha
 
 # Step 7.1.3: Try to install agents (should fail)
 npx convoke-install

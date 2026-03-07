@@ -11,7 +11,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
-- **Product renamed to Convoke.** Package name is now `convoke` on npm (`npm install convoke`).
+- **Product renamed to Convoke.** Package name is now `convoke` on npm (`npm install convoke-agents`).
 - **All CLI commands renamed** from `bmad-*` to `convoke-*`:
   - `convoke-install-vortex` (was `bmad-install-vortex-agents`)
   - `convoke-install` (was `bmad-install-agents`)
@@ -19,9 +19,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - `convoke-version` (was `bmad-version`)
   - `convoke-doctor` (was `bmad-doctor`)
   - `convoke-migrate` (was `bmad-migrate`)
-- **Migration path from v1.7.x** — Run `npm install convoke && npx convoke-update` to migrate
+- **Migration path from v1.7.x** — Run `npm install convoke-agents && npx convoke-update` to migrate
 - **`_bmad/` directory preserved** — All agent files, workflows, and user data remain in `_bmad/` for BMAD Method compatibility
-- **Repository URL** updated to `github.com/amalik/convoke`
+- **Repository URL** updated to `github.com/amalik/convoke-agents`
 
 ---
 
@@ -321,7 +321,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - All necessary agent and workflow files
 
 **⚠️ Action Required:**
-- If you installed v1.3.0 or v1.3.1: `npm install convoke@1.3.2`
+- If you installed v1.3.0 or v1.3.1: `npm install convoke-agents@1.3.2`
 - Fresh installations now work: `npx convoke-install`
 - Migrations now work: `npx convoke-update`
 
@@ -458,7 +458,7 @@ This release introduces a comprehensive update/migration system that makes it sa
 
 **Before Update:**
 ```bash
-npm install convoke@1.3.0
+npm install convoke-agents@1.3.0
 # Postinstall shows:
 # ⚠ UPGRADE DETECTED
 # Current version: 1.1.0
@@ -720,7 +720,7 @@ This release represents a fundamental repositioning of Convoke from design-focus
    rm -rf _bmad-output/design-artifacts
 
    # Install v1.1.0
-   npm install convoke@1.1.0
+   npm install convoke-agents@1.1.0
    npx convoke-install
    ```
 
@@ -753,7 +753,7 @@ This creates a clear value proposition: Use Emma + Wade for Lean Startup validat
 ## [1.0.4-alpha] - 2026-02-16
 
 ### Fixed
-- **Documentation:** All installation commands now correctly use `npm install convoke@alpha` instead of `npm install convoke`
+- **Documentation:** All installation commands now correctly use `npm install convoke-agents@alpha` instead of `npm install convoke-agents`
 - Updated installation instructions across all documentation files:
   - README.md
   - INSTALLATION.md
@@ -882,13 +882,13 @@ This creates a clear value proposition: Use Emma + Wade for Lean Startup validat
 
 **Old:**
 ```bash
-npm install convoke@alpha
+npm install convoke-agents@alpha
 npm run install:agents  # This doesn't work
 ```
 
 **New:**
 ```bash
-npm install convoke@alpha
+npm install convoke-agents@alpha
 npx convoke-install  # This works!
 ```
 
@@ -906,10 +906,10 @@ No changes to installation flow. Reinstallation will fix the Wade workflow bug.
 
 ## Links
 
-- **npm Package:** https://www.npmjs.com/package/convoke
-- **GitHub Repository:** https://github.com/amalik/convoke
+- **npm Package:** https://www.npmjs.com/package/convoke-agents
+- **GitHub Repository:** https://github.com/amalik/convoke-agents
 - **BMAD Method:** https://github.com/bmadhub/bmad
-- **Issues:** https://github.com/amalik/convoke/issues
+- **Issues:** https://github.com/amalik/convoke-agents/issues
 
 ---
 

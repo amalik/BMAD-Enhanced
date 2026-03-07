@@ -89,7 +89,7 @@ A documented 4-step pattern for adding new agents validates the framework's exte
 ## Upgrading
 
 ```bash
-npm install convoke@1.6.0
+npm install convoke-agents@1.6.0
 ```
 
 The package includes an automatic migration from v1.5.x that adds the three new agents and nine new workflows to your existing configuration while preserving all user preferences.
@@ -100,4 +100,4 @@ The [Innovation Vortex](https://unfix.com/innovation-vortex) is a pattern from t
 
 ---
 
-**Full changelog:** [CHANGELOG.md](https://github.com/amalik/convoke/blob/main/CHANGELOG.md)
+**Full changelog:** [CHANGELOG.md](https://github.com/amalik/convoke-agents/blob/main/CHANGELOG.md)

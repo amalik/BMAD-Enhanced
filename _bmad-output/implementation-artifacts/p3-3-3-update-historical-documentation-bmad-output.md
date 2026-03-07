@@ -155,8 +155,8 @@ So that the entire project history consistently uses the current product name.
 ### Replacement Ordering (Standing Rule from Epic 2 Retro)
 
 **CRITICAL:** Replace longer patterns FIRST to avoid partial matches. Apply URL-specific replacements before general display name replacements:
-1. `github.com/amalik/BMAD-Enhanced` -> `github.com/amalik/convoke` (URL, lowercase)
-2. `npmjs.com/package/bmad-enhanced` -> `npmjs.com/package/convoke` (URL)
+1. `github.com/amalik/BMAD-Enhanced` -> `github.com/amalik/convoke-agents` (URL, lowercase)
+2. `npmjs.com/package/bmad-enhanced` -> `npmjs.com/package/convoke-agents` (URL)
 3. `bmad-install-vortex-agents` -> `convoke-install-vortex`
 4. `bmad-install-agents` -> `convoke-install`
 5. `bmad-install-emma` -> `convoke-install-emma`
@@ -171,7 +171,7 @@ So that the entire project history consistently uses the current product name.
 ### Post-Replace Audit (from Epic 2 Retro Action Item #2)
 
 After any `replace_all`, specifically audit:
-- **URL contexts** — must be lowercase (`github.com/amalik/convoke`, NOT `github.com/amalik/Convoke`)
+- **URL contexts** — must be lowercase (`github.com/amalik/convoke-agents`, NOT `github.com/amalik/Convoke`)
 - **Filesystem path contexts** — case-sensitive, verify correctness
 - **"was" / comparison contexts** — do NOT replace old names that are being referenced as historical values (e.g., CHANGELOG.md "was" column pattern)
 

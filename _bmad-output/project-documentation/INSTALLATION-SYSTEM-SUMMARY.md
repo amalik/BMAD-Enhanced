@@ -20,7 +20,7 @@ cd Convoke
 
 **After:**
 ```bash
-npm install convoke && npx convoke-install
+npm install convoke-agents && npx convoke-install
 # Done! Agents installed and ready to use.
 ```
 
@@ -246,7 +246,7 @@ Added:
 ### One-Command Installation
 
 ```bash
-npm install convoke && npx convoke-install
+npm install convoke-agents && npx convoke-install
 ```
 
 That's it! Both Emma and Wade are ready to use.
@@ -352,7 +352,7 @@ Users can now install Convoke agents with a single npm command. The installation
 **Next Steps:**
 1. Update GitHub repository URL in package.json
 2. Publish to npm registry: `npm publish`
-3. Test installation from npm: `npm install convoke`
+3. Test installation from npm: `npm install convoke-agents`
 4. Announce availability to users
 
 ---

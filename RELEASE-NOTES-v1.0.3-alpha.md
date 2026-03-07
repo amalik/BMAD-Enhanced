@@ -18,7 +18,7 @@ The biggest improvement in this release is **user-friendly installation**. No mo
 npx bmad-method@alpha install
 
 # Step 2: Install Convoke
-npm install convoke@alpha
+npm install convoke-agents@alpha
 
 # Step 3: Install agents (NEW - this now works!)
 npx convoke-install
@@ -45,7 +45,7 @@ npx convoke-install-wade    # Install Wade only
 
 ### Updated Postinstall Message
 
-After running `npm install convoke@alpha`, you'll see:
+After running `npm install convoke-agents@alpha`, you'll see:
 
 ```
 Convoke installed!
@@ -154,19 +154,19 @@ All documentation has been updated to reflect the new npx commands:
 
 **Old (didn't work):**
 ```bash
-npm install convoke@alpha
+npm install convoke-agents@alpha
 npm run install:agents  # ❌ This never worked
 ```
 
 **New (works!):**
 ```bash
-npm install convoke@alpha
+npm install convoke-agents@alpha
 npx convoke-install  # ✅ This works!
 ```
 
 **Note:** If you already have v1.0.2-alpha installed, simply upgrade:
 ```bash
-npm install convoke@alpha  # Upgrades to v1.0.3-alpha
+npm install convoke-agents@alpha  # Upgrades to v1.0.3-alpha
 npx convoke-install           # Use new command
 ```
 
@@ -204,10 +204,10 @@ None. All tests passing.
 
 ## 🔗 Links
 
-- **npm Package:** https://www.npmjs.com/package/convoke
-- **GitHub Repository:** https://github.com/amalik/convoke
+- **npm Package:** https://www.npmjs.com/package/convoke-agents
+- **GitHub Repository:** https://github.com/amalik/convoke-agents
 - **BMAD Method:** https://github.com/bmadhub/bmad
-- **Issues:** https://github.com/amalik/convoke/issues
+- **Issues:** https://github.com/amalik/convoke-agents/issues
 
 ---
 
@@ -223,7 +223,7 @@ npx bmad-method@alpha install
 ### Install Convoke
 
 ```bash
-npm install convoke@alpha
+npm install convoke-agents@alpha
 npx convoke-install
 ```
 
@@ -280,7 +280,7 @@ ls -lh _bmad-output/design-artifacts/
 ```
 
 Expected output:
-- convoke@1.0.3-alpha
+- convoke-agents@1.0.3-alpha
 - empathy-mapper.md (7.0 KB)
 - wireframe-designer.md (7.7 KB)
 - EMMA-USER-GUIDE.md (19 KB)
@@ -290,8 +290,8 @@ Expected output:
 
 **Questions or Issues?**
 
-- 📝 [Open an Issue](https://github.com/amalik/convoke/issues)
-- 📖 [Read the Docs](https://github.com/amalik/convoke)
+- 📝 [Open an Issue](https://github.com/amalik/convoke-agents/issues)
+- 📖 [Read the Docs](https://github.com/amalik/convoke-agents)
 - 💬 Check existing issues for solutions
 
 ---

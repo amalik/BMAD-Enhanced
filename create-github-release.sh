@@ -16,4 +16,4 @@ gh release create v1.0.3-alpha \
 echo ""
 echo "✅ Release created successfully!"
 echo ""
-echo "View at: https://github.com/amalik/convoke/releases/tag/v1.0.3-alpha"
+echo "View at: https://github.com/amalik/convoke-agents/releases/tag/v1.0.3-alpha"

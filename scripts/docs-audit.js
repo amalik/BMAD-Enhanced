@@ -404,7 +404,7 @@ function checkInternalNamingLeaks(content, filePath) {
 
 /**
  * Check for stale product brand references (bmad-enhanced / BMAD-Enhanced).
- * These should have been replaced with "convoke" / "Convoke" during the rename.
+ * These should have been replaced with "convoke-agents" / "Convoke" during the rename.
  *
  * @param {string} content - File content
  * @param {string} filePath - Relative file path (for reporting)

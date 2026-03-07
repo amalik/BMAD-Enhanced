@@ -20,11 +20,11 @@ So that my first impression matches the actual product identity.
 
 3. **Given** the version badge
    **When** the overhaul is applied
-   **Then** the version badge shows 2.0.0 with the new repo URL (`github.com/amalik/convoke`)
+   **Then** the version badge shows 2.0.0 with the new repo URL (`github.com/amalik/convoke-agents`)
 
 4. **Given** the install command
    **When** the overhaul is applied
-   **Then** the install command is `npm install convoke && npx convoke-install-vortex`
+   **Then** the install command is `npm install convoke-agents && npx convoke-install-vortex`
 
 5. **Given** all CLI examples in the README
    **When** the overhaul is applied
@@ -32,7 +32,7 @@ So that my first impression matches the actual product identity.
 
 6. **Given** the cache tip
    **When** the overhaul is applied
-   **Then** it references `npx -p convoke@latest convoke-update`
+   **Then** it references `npx -p convoke-agents@latest convoke-update`
 
 7. **Given** the "How It Fits with BMAD Core" section
    **When** the overhaul is applied
@@ -54,16 +54,16 @@ So that my first impression matches the actual product identity.
   - [x] 1.3: Update the bold tagline below the banner (line 13): extended with "7 discovery agents guide you from insight to evidence"
 
 - [x] Task 2: Update badges and intro paragraph (AC: #3, #9)
-  - [x] 2.1: Update version badge from `1.7.1` to `2.0.0` and URL from `github.com/amalik/BMAD-Enhanced` to `github.com/amalik/convoke` (line 15)
+  - [x] 2.1: Update version badge from `1.7.1` to `2.0.0` and URL from `github.com/amalik/BMAD-Enhanced` to `github.com/amalik/convoke-agents` (line 15)
   - [x] 2.2: Update intro paragraph (line 22): `BMAD-Enhanced guides you through...` -> `Convoke guides you through...`
 
 - [x] Task 3: Update Quick Start install command (AC: #4)
-  - [x] 3.1: Update install command (line 68): `npm install bmad-enhanced && npx bmad-install-vortex-agents` -> `npm install convoke && npx convoke-install-vortex`
+  - [x] 3.1: Update install command (line 68): `npm install bmad-enhanced && npx bmad-install-vortex-agents` -> `npm install convoke-agents && npx convoke-install-vortex`
 
 - [x] Task 4: Update Updating section CLI commands (AC: #5, #6)
   - [x] 4.1: Update CLI commands (lines 127-130): `bmad-version` -> `convoke-version`, `bmad-update` -> `convoke-update`, `bmad-doctor` -> `convoke-doctor`
   - [x] 4.2: Update tip text (line 135): `npx bmad-update` -> `npx convoke-update`
-  - [x] 4.3: Update cache tip command (line 137): `npx -p bmad-enhanced@latest bmad-update` -> `npx -p convoke@latest convoke-update`
+  - [x] 4.3: Update cache tip command (line 137): `npx -p bmad-enhanced@latest bmad-update` -> `npx -p convoke-agents@latest convoke-update`
 
 - [x] Task 5: Update "How It Fits with BMAD Core" section (AC: #7)
   - [x] 5.1: Update product name refs (line 214): `BMAD-Enhanced handles` -> `Convoke handles`
@@ -126,13 +126,13 @@ Note: The banner in `install-vortex-agents.js` uses `${GREY}` prefix and `${RESE
 
 | Line | Old Command | New Command |
 |------|------------|-------------|
-| 68 | `npm install bmad-enhanced && npx bmad-install-vortex-agents` | `npm install convoke && npx convoke-install-vortex` |
+| 68 | `npm install bmad-enhanced && npx bmad-install-vortex-agents` | `npm install convoke-agents && npx convoke-install-vortex` |
 | 127 | `npx bmad-version` | `npx convoke-version` |
 | 128 | `npx bmad-update --dry-run` | `npx convoke-update --dry-run` |
 | 129 | `npx bmad-update` | `npx convoke-update` |
 | 130 | `npx bmad-doctor` | `npx convoke-doctor` |
 | 135 | `npx bmad-update` | `npx convoke-update` |
-| 137 | `npx -p bmad-enhanced@latest bmad-update` | `npx -p convoke@latest convoke-update` |
+| 137 | `npx -p bmad-enhanced@latest bmad-update` | `npx -p convoke-agents@latest convoke-update` |
 
 **Tagline replacement (1 instance):**
 
@@ -216,7 +216,7 @@ None — all tasks completed without errors.
 - Bold tagline: Extended original to include agent context: "Validate your product ideas before writing a single line of code — 7 discovery agents guide you from insight to evidence". Preserves Vortex-specific value prop while adding product identity.
 - Version badge: `1.7.1` -> `2.0.0`, repo URL `BMAD-Enhanced` -> `convoke`.
 - Intro paragraph: `BMAD-Enhanced` -> `Convoke` (1 replacement).
-- Install command: `npm install bmad-enhanced && npx bmad-install-vortex-agents` -> `npm install convoke && npx convoke-install-vortex`.
+- Install command: `npm install bmad-enhanced && npx bmad-install-vortex-agents` -> `npm install convoke-agents && npx convoke-install-vortex`.
 - Updating section: 4 CLI commands updated (version, update, update --dry-run, doctor). Tip text and cache tip updated (2 more refs).
 - "How It Fits with BMAD Core" section: 3 product name refs updated. "BMAD Core" and "BMAD Method" refs preserved (framework names).
 - Roadmap: v2.0.0+ placeholder replaced with specific v2.0.0 rename entry + "Next" future entry.

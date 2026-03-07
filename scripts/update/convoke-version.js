@@ -80,8 +80,8 @@ async function main() {
   } else if (compareVersions(currentVersion, targetVersion) < 0) {
     console.log(chalk.yellow('Status: ⚠ Update available'));
     console.log('');
-    console.log('Run: ' + chalk.cyan('npx -p convoke@latest convoke-update --dry-run') + ' (to preview)');
-    console.log('     ' + chalk.cyan('npx -p convoke@latest convoke-update') + ' (to apply)');
+    console.log('Run: ' + chalk.cyan('npx -p convoke-agents@latest convoke-update --dry-run') + ' (to preview)');
+    console.log('     ' + chalk.cyan('npx -p convoke-agents@latest convoke-update') + ' (to apply)');
   } else {
     console.log(chalk.yellow(`Status: Package version (${targetVersion}) is older than installed (${currentVersion})`));
   }

@@ -28,7 +28,7 @@ git push
 - `0aacaab` - Update Wade status to complete in README
 
 After pushing, verify at:
-https://github.com/amalik/convoke/commits/main
+https://github.com/amalik/convoke-agents/commits/main
 
 ---
 
@@ -52,7 +52,7 @@ gh release create v1.0.3-alpha \
 
 ### Option B: Using GitHub Web Interface
 
-1. Go to: https://github.com/amalik/convoke/releases/new
+1. Go to: https://github.com/amalik/convoke-agents/releases/new
 
 2. Fill in the form:
    - **Tag:** `v1.0.3-alpha`
@@ -91,11 +91,11 @@ See: [RELEASE-NOTES-v1.0.3-alpha.md](RELEASE-NOTES-v1.0.3-alpha.md)
 After creating the release:
 
 1. **Check release page:**
-   https://github.com/amalik/convoke/releases/tag/v1.0.3-alpha
+   https://github.com/amalik/convoke-agents/releases/tag/v1.0.3-alpha
 
 2. **Verify npm package:**
    ```bash
-   npm view convoke@alpha
+   npm view convoke-agents@alpha
    # Should show: 1.0.3-alpha
    ```
 
@@ -104,7 +104,7 @@ After creating the release:
    mkdir -p /tmp/test-release
    cd /tmp/test-release
    mkdir -p _bmad/_config && echo "test: true" > _bmad/_config/bmad.yaml
-   npm install convoke@alpha
+   npm install convoke-agents@alpha
    npx convoke-install
    ```
 
@@ -120,15 +120,15 @@ After creating the release:
 ✨ What's new:
 - User-friendly npx installation
 - No more npm run confusion!
-- Just: npm install convoke@alpha && npx convoke-install
+- Just: npm install convoke-agents@alpha && npx convoke-install
 
 🎨 Includes:
 - Emma (empathy-mapper)
 - Wade (wireframe-designer)
 
-📦 Install: https://www.npmjs.com/package/convoke
-📖 Docs: https://github.com/amalik/convoke
-🔖 Release: https://github.com/amalik/convoke/releases/tag/v1.0.3-alpha
+📦 Install: https://www.npmjs.com/package/convoke-agents
+📖 Docs: https://github.com/amalik/convoke-agents
+🔖 Release: https://github.com/amalik/convoke-agents/releases/tag/v1.0.3-alpha
 
 #BMAD #AI #Agents #DesignThinking #UX
 ```
@@ -146,7 +146,7 @@ The biggest improvement is **user-friendly installation**. No more confusion abo
 
 **New Installation:**
 \`\`\`bash
-npm install convoke@alpha
+npm install convoke-agents@alpha
 npx convoke-install  # This works now!
 \`\`\`
 
@@ -159,9 +159,9 @@ npx convoke-install  # This works now!
 
 ## Links
 
-- 📦 npm: https://www.npmjs.com/package/convoke
-- 🔖 Release Notes: https://github.com/amalik/convoke/releases/tag/v1.0.3-alpha
-- 📖 Documentation: https://github.com/amalik/convoke
+- 📦 npm: https://www.npmjs.com/package/convoke-agents
+- 🔖 Release Notes: https://github.com/amalik/convoke-agents/releases/tag/v1.0.3-alpha
+- 📖 Documentation: https://github.com/amalik/convoke-agents
 
 ## Feedback
 
@@ -227,7 +227,7 @@ gh release create v1.0.3-alpha \
 
 # Verify
 gh release view v1.0.3-alpha
-npm view convoke@alpha
+npm view convoke-agents@alpha
 ```
 
 ---

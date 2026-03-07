@@ -111,7 +111,7 @@ npx bmad-method@alpha install
 Once BMAD Method is installed:
 
 ```bash
-npm install convoke && npx convoke-install
+npm install convoke-agents && npx convoke-install
 ```
 
 That's it! Emma and Wade are now **added to your BMAD installation**.

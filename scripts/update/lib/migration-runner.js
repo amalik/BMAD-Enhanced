@@ -343,7 +343,7 @@ async function createErrorLog(projectRoot, fromVersion, toVersion, error, backup
     backupMetadata ? `Backup: ${backupMetadata.backup_dir}` : 'No backup created',
     backupMetadata ? 'Status: ROLLED BACK' : 'Status: FAILED (no backup)',
     '',
-    'Please report this issue at: https://github.com/amalik/convoke/issues'
+    'Please report this issue at: https://github.com/amalik/convoke-agents/issues'
   ].join('\n');
 
   await fs.writeFile(logFile, logContent, 'utf8');

@@ -49,14 +49,14 @@ So that the renamed `bin` entries in package.json resolve to correctly-branded s
   - [x] 1.2: Update JSDoc header: `BMAD-Enhanced Update CLI` → `Convoke Update CLI`
   - [x] 1.3: Update console banner: `BMAD-Enhanced Update Manager` → `Convoke Update Manager`
   - [x] 1.4: Update CLI command refs: `npx bmad-install-agents` → `npx convoke-install` (4 occurrences, lines 89, 97, 105, 113)
-  - [x] 1.5: Update cached package refs: `npx -p bmad-enhanced@latest bmad-update` → `npx -p convoke@latest convoke-update` (2 occurrences, lines 122, 134)
-  - [x] 1.6: Update install ref: `npm install bmad-enhanced@latest` → `npm install convoke@latest` (line 137)
+  - [x] 1.5: Update cached package refs: `npx -p bmad-enhanced@latest bmad-update` → `npx -p convoke-agents@latest convoke-update` (2 occurrences, lines 122, 134)
+  - [x] 1.6: Update install ref: `npm install bmad-enhanced@latest` → `npm install convoke-agents@latest` (line 137)
 - [x] Task 2: Rename and update `bmad-version.js` → `convoke-version.js` (AC: #2, #6, #7)
   - [x] 2.1: Rename file `scripts/update/bmad-version.js` → `scripts/update/convoke-version.js`
   - [x] 2.2: Update JSDoc header: `BMAD-Enhanced Version CLI` → `Convoke Version CLI`
   - [x] 2.3: Update console banner: `BMAD-Enhanced Version Information` → `Convoke Version Information`
   - [x] 2.4: Update CLI command refs: `npx bmad-install-agents` → `npx convoke-install` (4 occurrences, lines 28, 41, 53, 67)
-  - [x] 2.5: Update cached package refs: `npx -p bmad-enhanced@latest bmad-update` → `npx -p convoke@latest convoke-update` (2 occurrences, line 83-84)
+  - [x] 2.5: Update cached package refs: `npx -p bmad-enhanced@latest bmad-update` → `npx -p convoke-agents@latest convoke-update` (2 occurrences, line 83-84)
 - [x] Task 3: Rename and update `bmad-migrate.js` → `convoke-migrate.js` (AC: #3, #6, #7)
   - [x] 3.1: Rename file `scripts/update/bmad-migrate.js` → `scripts/update/convoke-migrate.js`
   - [x] 3.2: Update JSDoc header: `BMAD-Enhanced Migrate CLI` → `Convoke Migrate CLI`
@@ -128,8 +128,8 @@ The renames are safe — no `require()` paths in other files will break.
 | `npx bmad-install-vortex-agents` | `npx convoke-install-vortex` | 2 in bmad-doctor.js |
 | `npx bmad-update` | `npx convoke-update` | 4 across bmad-doctor.js + bmad-migrate.js |
 | `npx bmad-migrate` | `npx convoke-migrate` | 2 in bmad-migrate.js |
-| `npx -p bmad-enhanced@latest bmad-update` | `npx -p convoke@latest convoke-update` | 4 across bmad-update.js + bmad-version.js |
-| `npm install bmad-enhanced@latest` | `npm install convoke@latest` | 1 in bmad-update.js |
+| `npx -p bmad-enhanced@latest bmad-update` | `npx -p convoke-agents@latest convoke-update` | 4 across bmad-update.js + bmad-version.js |
+| `npm install bmad-enhanced@latest` | `npm install convoke-agents@latest` | 1 in bmad-update.js |
 
 **"BMAD project" user-facing message replacements:**
 

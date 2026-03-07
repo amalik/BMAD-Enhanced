@@ -26,5 +26,5 @@ This validation workflow will be available alongside the product-vision workflow
 ## Questions?
 
 For questions or to request early access:
-- GitHub Issues: https://github.com/amalik/convoke/issues
+- GitHub Issues: https://github.com/amalik/convoke-agents/issues
 - Tag with: `workflow:product-vision` and `v1.2.0`

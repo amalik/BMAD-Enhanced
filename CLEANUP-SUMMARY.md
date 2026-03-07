@@ -91,8 +91,8 @@ _bmad-output/
 - No outdated `npm run` commands ✅
 
 **Links:**
-- GitHub repository: github.com/amalik/convoke ✅
-- npm package: npmjs.com/package/convoke ✅
+- GitHub repository: github.com/amalik/convoke-agents ✅
+- npm package: npmjs.com/package/convoke-agents ✅
 - BMAD Method references correct ✅
 
 ---

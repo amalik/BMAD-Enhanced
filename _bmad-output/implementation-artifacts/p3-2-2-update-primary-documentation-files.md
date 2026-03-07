@@ -12,7 +12,7 @@ So that I can follow instructions without encountering stale product name refere
 
 1. **Given** `INSTALLATION.md`
    **When** the rename is applied
-   **Then** it uses `npm install convoke`, `npx convoke-install-vortex`, and all `convoke-*` commands
+   **Then** it uses `npm install convoke-agents`, `npx convoke-install-vortex`, and all `convoke-*` commands
    **And** zero instances of `bmad-enhanced`/`BMAD-Enhanced` remain
 
 2. **Given** `UPDATE-GUIDE.md`
@@ -77,7 +77,7 @@ So that I can follow instructions without encountering stale product name refere
 - [x] Task 5: Update `PUBLISHING-GUIDE.md` (AC: #5)
   - [x] 5.1: Replace all `bmad-enhanced` / `BMAD-Enhanced` product name refs (40 instances)
   - [x] 5.2: Replace all CLI command refs (5 instances)
-  - [x] 5.3: Update GitHub repo URL refs: `github.com/amalik/BMAD-Enhanced` -> `github.com/amalik/convoke`
+  - [x] 5.3: Update GitHub repo URL refs: `github.com/amalik/BMAD-Enhanced` -> `github.com/amalik/convoke-agents`
   - [x] 5.4: Verify `BMAD Method` refs preserved
   - [x] 5.5: Grep verify zero stale refs
 
@@ -111,7 +111,7 @@ So that I can follow instructions without encountering stale product name refere
 - `bmad-install-vortex-agents` -> `convoke-install-vortex`
 - `bmad-install-agents` -> `convoke-install`
 - `bmad-migrate` -> `convoke-migrate`
-- `github.com/amalik/BMAD-Enhanced` -> `github.com/amalik/convoke`
+- `github.com/amalik/BMAD-Enhanced` -> `github.com/amalik/convoke-agents`
 
 **DO NOT replace:**
 - `_bmad` in any path reference

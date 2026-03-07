@@ -85,7 +85,7 @@ npm pack
 **Expected output:**
 ```
 npm notice
-npm notice 📦  convoke@1.0.0-alpha
+npm notice 📦  convoke-agents@1.0.0-alpha
 npm notice === Tarball Contents ===
 npm notice 38.6kB package.json
 npm notice 45.2kB _bmad/bme/_designos/agents/empathy-mapper.md
@@ -186,7 +186,7 @@ rm convoke-1.0.0-alpha.tgz
 
 #### 3.1 Verify Repository URL
 
-Current: `https://github.com/amalik/convoke.git`
+Current: `https://github.com/amalik/convoke-agents.git`
 
 Verify this repository exists and is accessible.
 
@@ -210,7 +210,7 @@ cd /Users/amalikamriou/convoke
 git init
 
 # Add remote (if not already)
-git remote add origin https://github.com/amalik/convoke.git
+git remote add origin https://github.com/amalik/convoke-agents.git
 
 # Add all files
 git add .
@@ -235,7 +235,7 @@ git push -u origin main
 
 #### 3.4 Create GitHub Release
 
-1. Go to: `https://github.com/amalik/convoke/releases/new`
+1. Go to: `https://github.com/amalik/convoke-agents/releases/new`
 2. Tag version: `v1.0.0-alpha`
 3. Release title: `Convoke v1.0.0-alpha - Initial Release`
 4. Description:
@@ -254,7 +254,7 @@ Domain-specialized agents for BMAD Method - expert agents for design, quality, a
 - **Wade (wireframe-designer)** - Wireframe Design Expert
 
 ### Features
-- ✅ One-command installation (`npm install convoke@alpha && npx convoke-install`)
+- ✅ One-command installation (`npm install convoke-agents@alpha && npx convoke-install`)
 - ✅ BMAD Method prerequisite checking
 - ✅ 100% test pass rate (36 total tests across both agents)
 - ✅ Comprehensive user guides (16KB each)
@@ -269,7 +269,7 @@ npx bmad-method@alpha install
 
 **Install Convoke:**
 ```bash
-npm install convoke@alpha
+npm install convoke-agents@alpha
 npx convoke-install
 ```
 
@@ -298,8 +298,8 @@ Upcoming agents:
 
 ---
 
-**npm package:** https://www.npmjs.com/package/convoke
-**GitHub:** https://github.com/amalik/convoke
+**npm package:** https://www.npmjs.com/package/convoke-agents
+**GitHub:** https://github.com/amalik/convoke-agents
 ```
 
 5. Publish release
@@ -340,7 +340,7 @@ npm publish --access public --tag alpha
 
 Users install with:
 ```bash
-npm install convoke@alpha
+npm install convoke-agents@alpha
 ```
 
 **Option B: Publish as latest**
@@ -358,7 +358,7 @@ npm install convoke
 
 #### 4.4 Verify npm Publication
 
-1. Go to: `https://www.npmjs.com/package/convoke`
+1. Go to: `https://www.npmjs.com/package/convoke-agents`
 2. Verify package shows up
 3. Check version is correct (1.0.0-alpha)
 4. Verify README displays correctly
@@ -375,7 +375,7 @@ mkdir -p _bmad/_config
 echo "test: true" > _bmad/_config/bmad.yaml
 
 # Install from npm
-npm install convoke@alpha
+npm install convoke-agents@alpha
 
 # Test
 npx convoke-install
@@ -390,8 +390,8 @@ npx convoke-install
 Add npm version badge to README:
 
 ```markdown
-[![npm version](https://badge.fury.io/js/convoke.svg)](https://www.npmjs.com/package/convoke)
-[![Downloads](https://img.shields.io/npm/dm/convoke.svg)](https://www.npmjs.com/package/convoke)
+[![npm version](https://badge.fury.io/js/convoke-agents.svg)](https://www.npmjs.com/package/convoke-agents)
+[![Downloads](https://img.shields.io/npm/dm/convoke-agents.svg)](https://www.npmjs.com/package/convoke-agents)
 ```
 
 #### 5.2 Announce Release
@@ -412,10 +412,10 @@ Domain-specialized agents for BMAD Method:
 - Wade: Wireframe Design Expert
 
 Install:
-npm install convoke@alpha && npx convoke-install
+npm install convoke-agents@alpha && npx convoke-install
 
-Docs: https://github.com/amalik/convoke
-npm: https://www.npmjs.com/package/convoke
+Docs: https://github.com/amalik/convoke-agents
+npm: https://www.npmjs.com/package/convoke-agents
 ```
 
 #### 5.3 Create CHANGELOG.md
@@ -470,7 +470,7 @@ npm version 1.0.0
 npm publish --access public
 
 # Update alpha tag to point to latest
-npm dist-tag add convoke@1.0.0 latest
+npm dist-tag add convoke-agents@1.0.0 latest
 ```
 
 ---
@@ -518,8 +518,8 @@ After publishing, track:
 - **Pull requests** - Community contributions
 
 **Access stats:**
-- npm: `https://www.npmjs.com/package/convoke`
-- GitHub Insights: `https://github.com/amalik/convoke/pulse`
+- npm: `https://www.npmjs.com/package/convoke-agents`
+- GitHub Insights: `https://github.com/amalik/convoke-agents/pulse`
 
 ---
 

@@ -8,11 +8,11 @@
 
 ## 📦 Published Package
 
-**npm Registry:** https://www.npmjs.com/package/convoke
+**npm Registry:** https://www.npmjs.com/package/convoke-agents
 
 **Installation:**
 ```bash
-npm install convoke@alpha
+npm install convoke-agents@alpha
 ```
 
 **Package Details:**
@@ -123,7 +123,7 @@ npx bmad-method@alpha install
 
 ### Step 2: Install Convoke
 ```bash
-npm install convoke@alpha
+npm install convoke-agents@alpha
 npx convoke-install
 ```
 
@@ -203,7 +203,7 @@ git push
 - `2ee85f5` - Include user guides in npm package
 
 ### 2. Create GitHub Release
-Go to: https://github.com/amalik/convoke/releases/new
+Go to: https://github.com/amalik/convoke-agents/releases/new
 
 **Details:**
 - Tag: `v1.0.2-alpha`
@@ -217,18 +217,18 @@ Go to: https://github.com/amalik/convoke/releases/new
 
 ## 🎯 Success Metrics
 
-**npm Downloads:** Track at https://www.npmjs.com/package/convoke
+**npm Downloads:** Track at https://www.npmjs.com/package/convoke-agents
 
-**GitHub Stars:** Track at https://github.com/amalik/convoke
+**GitHub Stars:** Track at https://github.com/amalik/convoke-agents
 
-**Issues/PRs:** Monitor at https://github.com/amalik/convoke/issues
+**Issues/PRs:** Monitor at https://github.com/amalik/convoke-agents/issues
 
 ---
 
 ## 🔗 Important Links
 
-**npm Package:** https://www.npmjs.com/package/convoke
-**GitHub Repository:** https://github.com/amalik/convoke
+**npm Package:** https://www.npmjs.com/package/convoke-agents
+**GitHub Repository:** https://github.com/amalik/convoke-agents
 **BMAD Method:** https://github.com/bmadhub/bmad
 
 ---

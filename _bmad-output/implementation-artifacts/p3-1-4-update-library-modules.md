@@ -80,7 +80,7 @@ So that internal code consistently references the correct product name.
   - [x] 5.3: Update dry-run CLI ref: `npx bmad-update` -> `npx convoke-update` (line 225)
   - [x] 5.4: Update migration log title: `BMAD-Enhanced Migration Log` -> `Convoke Migration Log` (line 308)
   - [x] 5.5: Update error log title: `BMAD-Enhanced Migration Error Log` -> `Convoke Migration Error Log` (line 333)
-  - [x] 5.6: Update GitHub issues URL: `github.com/amalik/BMAD-Enhanced/issues` -> `github.com/amalik/convoke/issues` (line 346)
+  - [x] 5.6: Update GitHub issues URL: `github.com/amalik/BMAD-Enhanced/issues` -> `github.com/amalik/convoke-agents/issues` (line 346)
   - [x] 5.7: Grep verify zero stale refs
 
 - [x] Task 6: Update `scripts/update/lib/backup-manager.js` (AC: #6)
@@ -159,7 +159,7 @@ So that internal code consistently references the correct product name.
 | 225 | `npx bmad-update` | `npx convoke-update` |
 | 308 | `BMAD-Enhanced Migration Log` | `Convoke Migration Log` |
 | 333 | `BMAD-Enhanced Migration Error Log` | `Convoke Migration Error Log` |
-| 346 | `github.com/amalik/BMAD-Enhanced/issues` | `github.com/amalik/convoke/issues` |
+| 346 | `github.com/amalik/BMAD-Enhanced/issues` | `github.com/amalik/convoke-agents/issues` |
 
 **backup-manager.js (1 replacement):**
 

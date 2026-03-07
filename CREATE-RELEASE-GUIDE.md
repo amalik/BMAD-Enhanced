@@ -3,7 +3,7 @@
 ## Option 1: Using GitHub Web Interface (Recommended)
 
 1. **Go to the releases page:**
-   https://github.com/amalik/convoke/releases/new
+   https://github.com/amalik/convoke-agents/releases/new
 
 2. **Fill in the form:**
    - **Tag version:** `v1.0.2-alpha`
@@ -60,4 +60,4 @@ Once the release is created:
 ## Quick Link
 
 After creating the release, it will be available at:
-https://github.com/amalik/convoke/releases/tag/v1.0.2-alpha
+https://github.com/amalik/convoke-agents/releases/tag/v1.0.2-alpha

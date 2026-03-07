@@ -136,7 +136,7 @@ So that no stale product name references exist outside of `_bmad-output/`.
 ### Post-Replace Audit (from Epic 2 Retro Action Item #2)
 
 After any `replace_all`, specifically audit:
-- **URL contexts** — must be lowercase (`github.com/amalik/convoke`, NOT `github.com/amalik/Convoke`)
+- **URL contexts** — must be lowercase (`github.com/amalik/convoke-agents`, NOT `github.com/amalik/Convoke`)
 - **Filesystem path contexts** — case-sensitive, verify correctness
 - **"was" / comparison contexts** — do NOT replace old names that are being referenced as historical values
 

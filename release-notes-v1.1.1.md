@@ -58,7 +58,7 @@ If you're upgrading from v1.0.x, note these **breaking changes** from v1.1.0:
 Clean reinstall recommended when upgrading from v1.0.x:
 ```bash
 # Backup any custom configs first
-npm install convoke@latest
+npm install convoke-agents@latest
 npx convoke-install
 ```
 
@@ -79,10 +79,10 @@ npx convoke-install  # Install all agents
 
 ## 📝 Full Changelog
 
-See [CHANGELOG.md](https://github.com/amalik/convoke/blob/main/CHANGELOG.md) for complete details.
+See [CHANGELOG.md](https://github.com/amalik/convoke-agents/blob/main/CHANGELOG.md) for complete details.
 
 ## 🔗 Links
 
-- **npm package:** https://www.npmjs.com/package/convoke
+- **npm package:** https://www.npmjs.com/package/convoke-agents
 - **Version:** 1.1.1
-- **Previous release:** [v1.1.0](https://github.com/amalik/convoke/releases/tag/v1.1.0)
+- **Previous release:** [v1.1.0](https://github.com/amalik/convoke-agents/releases/tag/v1.1.0)

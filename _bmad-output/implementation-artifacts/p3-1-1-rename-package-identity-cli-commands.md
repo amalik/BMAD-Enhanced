@@ -6,7 +6,7 @@ Status: done
 
 As a maintainer,
 I want the npm package name, version, metadata, and all CLI binary definitions updated to the Convoke brand,
-So that `npm install convoke` works and all `convoke-*` commands are available.
+So that `npm install convoke-agents` works and all `convoke-*` commands are available.
 
 ## Acceptance Criteria
 
@@ -38,7 +38,7 @@ So that `npm install convoke` works and all `convoke-*` commands are available.
 
 6. **Given** the `repository.url` field in `package.json`
    **When** the rename is applied
-   **Then** `repository.url` is `git+https://github.com/amalik/convoke.git`
+   **Then** `repository.url` is `git+https://github.com/amalik/convoke-agents.git`
 
 7. **Given** the `package-lock.json` file
    **When** the identity rename is complete
@@ -55,7 +55,7 @@ So that `npm install convoke` works and all `convoke-*` commands are available.
   - [x] 1.2: Change `version` from `1.7.1` to `2.0.0`
   - [x] 1.3: Change `description` to `"Agent teams for complex systems, compatible with BMad Method"`
   - [x] 1.4: Change `author` from `BMAD-Enhanced Community` to `Convoke Contributors`
-  - [x] 1.5: Change `repository.url` from `git+https://github.com/amalik/BMAD-Enhanced.git` to `git+https://github.com/amalik/convoke.git`
+  - [x] 1.5: Change `repository.url` from `git+https://github.com/amalik/BMAD-Enhanced.git` to `git+https://github.com/amalik/convoke-agents.git`
 - [x] Task 2: Update package.json bin entries (AC: #3)
   - [x] 2.1: Rename all 6 bin keys from `bmad-*` to `convoke-*` prefix
   - [x] 2.2: Keep bin values pointing to current script file paths (files renamed in Story 1.2)
@@ -125,7 +125,7 @@ The other 4 commands are simple prefix swaps: `bmad-update` → `convoke-update`
   "author": "Convoke Contributors",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/amalik/convoke.git"
+    "url": "git+https://github.com/amalik/convoke-agents.git"
   },
   "bin": {
     "convoke-install-vortex": "scripts/install-vortex-agents.js",

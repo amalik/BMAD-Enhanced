@@ -33,7 +33,7 @@ BMAD Method's trademark prohibits using "BMad" as a product name (the "BMad + qu
 | `convoke-migrate` | `convoke-migrate` | CLI |
 | `convoke-doctor` | `convoke-doctor` | CLI |
 | `Convoke Community` | `Convoke Contributors` | Author / copyright holder |
-| `github.com/amalik/convoke` | `github.com/amalik/convoke` | Repository URL |
+| `github.com/amalik/convoke-agents` | `github.com/amalik/convoke-agents` | Repository URL |
 
 **NOT renamed:** `_bmad/` directory paths, `.claude/commands/bmad-*` skill files, "BMAD Method" / "BMad Core" references, agent IDs.
 
@@ -52,7 +52,7 @@ BMAD Method's trademark prohibits using "BMad" as a product name (the "BMad + qu
 **Migration (3):**
 
 - FR6 [I]: Migration registry contains a `1.7.x-to-2.0.0` breaking migration entry so existing users' upgrade path works
-- FR7 [I]: Users on `convoke@1.7.x` can discover the rename through a deprecation notice on the old package
+- FR7 [I]: Users on `convoke-agents@1.7.x` can discover the rename through a deprecation notice on the old package
 - FR8 [I]: Existing `_bmad/` directory structure and `_bmad-output/` artifacts are preserved — zero data loss on upgrade
 
 **Documentation Accuracy (5):**
@@ -86,7 +86,7 @@ BMAD Method's trademark prohibits using "BMad" as a product name (the "BMad + qu
 - NFR2: Script file renames and test file renames are committed atomically — never a state where scripts are renamed but tests reference old paths
 - NFR3: Scripted find-and-replace in Phase 7 (historical docs) undergoes manual `git diff` review to catch false positives before committing
 - NFR4: Patterns used for find-and-replace target `convoke` (hyphenated) and specific CLI names (e.g., `convoke-update`), never bare `bmad` — protecting `_bmad/` paths and BMAD Method references
-- NFR5: `convoke@0.0.1` placeholder is published BEFORE `convoke` deprecation notice — no gap where users see a deprecation pointing to a nonexistent package
+- NFR5: `convoke-agents@0.0.1` placeholder is published BEFORE `convoke` deprecation notice — no gap where users see a deprecation pointing to a nonexistent package
 - NFR6: The `convoke` keyword is included in the new package for search discoverability during the transition period
 - NFR7: docs-audit tool gains a check for stale `convoke` references in user-facing docs
 
@@ -148,7 +148,7 @@ The npm package, CLI commands, script files, library modules, migration registry
 
 As a maintainer,
 I want the npm package name, version, metadata, and all CLI binary definitions updated to the Convoke brand,
-So that `npm install convoke` works and all `convoke-*` commands are available.
+So that `npm install convoke-agents` works and all `convoke-*` commands are available.
 
 **Acceptance Criteria:**
 
@@ -159,7 +159,7 @@ So that `npm install convoke` works and all `convoke-*` commands are available.
 **And** `bin` contains: `convoke-install-vortex`, `convoke-install`, `convoke-update`, `convoke-version`, `convoke-migrate`, `convoke-doctor`
 **And** `keywords` includes `convoke`, `convoke`, and `bmad`
 **And** `author` is `Convoke Contributors`
-**And** `repository.url` points to `github.com/amalik/convoke`
+**And** `repository.url` points to `github.com/amalik/convoke-agents`
 **And** `package-lock.json` is regenerated via `npm install --package-lock-only`
 **And** `LICENSE` copyright holder is `Convoke Contributors`
 
@@ -192,7 +192,7 @@ So that my first interaction with the package reflects the correct product ident
 
 **Acceptance Criteria:**
 
-**Given** a user runs `npm install convoke`
+**Given** a user runs `npm install convoke-agents`
 **When** the postinstall script executes
 **Then** the output says "Convoke installed!" (not "Convoke installed!")
 **And** all `npx` command suggestions use `convoke-*` names
@@ -324,9 +324,9 @@ So that my first impression matches the actual product identity.
 **Then** the ASCII art banner displays "CONVOKE" in block letters
 **And** the tagline reflects the new positioning ("Agent teams for complex systems")
 **And** the version badge shows 2.0.0 with the new repo URL
-**And** the install command is `npm install convoke && npx convoke-install-vortex`
+**And** the install command is `npm install convoke-agents && npx convoke-install-vortex`
 **And** all CLI examples use `convoke-*` command names
-**And** the cache tip references `npx -p convoke@latest convoke-update`
+**And** the cache tip references `npx -p convoke-agents@latest convoke-update`
 **And** the "How It Fits with BMAD Core" section uses "Convoke" (keeping "BMAD Core" and "BMAD Method" as-is)
 **And** the roadmap includes a v2.0.0 entry explaining the rename
 **And** zero instances of "convoke" or "Convoke" remain (except in "compatible with BMad Method" style references)
@@ -343,7 +343,7 @@ So that I can follow instructions without encountering stale product name refere
 
 **Given** the 5 primary documentation files
 **When** the rename is applied
-**Then** `INSTALLATION.md` uses `npm install convoke`, `npx convoke-install-vortex`, and all `convoke-*` commands
+**Then** `INSTALLATION.md` uses `npm install convoke-agents`, `npx convoke-install-vortex`, and all `convoke-*` commands
 **And** `UPDATE-GUIDE.md` updates all 22 CLI refs and package name references
 **And** `CHANGELOG.md` has a v2.0.0 entry explaining the rename with migration instructions, and all historical entries are updated
 **And** `BMAD-METHOD-COMPATIBILITY.md` updates all 36 product name refs while keeping "BMAD Method" / "BMad Core" references intact

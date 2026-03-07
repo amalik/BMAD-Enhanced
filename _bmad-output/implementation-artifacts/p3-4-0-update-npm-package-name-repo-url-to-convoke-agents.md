@@ -1,6 +1,6 @@
 # Story 4.0: Update npm Package Name & Repo URL to convoke-agents
 
-Status: ready-for-dev
+Status: done
 
 ## Story
 
@@ -16,7 +16,7 @@ So that the package can be published to npm under an available name.
    **And** the `convoke` keyword is replaced with `convoke-agents` (keep `bmad-enhanced` keyword for discoverability)
    **And** `repository.url` points to `github.com/amalik/convoke-agents`
    **And** `bugs.url` points to `github.com/amalik/convoke-agents/issues`
-   **And** `homepage` points to `github.com/amalik/convoke-agents#readme`
+   **And** `homepage` is added pointing to `github.com/amalik/convoke-agents#readme`
    **And** `package-lock.json` is regenerated via `npm install --package-lock-only`
 
 2. **Given** all documentation files outside `_bmad-output/`
@@ -57,36 +57,36 @@ So that the package can be published to npm under an available name.
 
 ## Tasks / Subtasks
 
-- [ ] Task 1: Update `package.json` (AC: #1)
-  - [ ] 1.1: Change `name` from `"convoke"` to `"convoke-agents"`
-  - [ ] 1.2: Change keyword `"convoke"` to `"convoke-agents"` in keywords array
-  - [ ] 1.3: Update `repository.url` to `git+https://github.com/amalik/convoke-agents.git`
-  - [ ] 1.4: Update `bugs.url` to `https://github.com/amalik/convoke-agents/issues`
-  - [ ] 1.5: Update `homepage` to `https://github.com/amalik/convoke-agents#readme`
-  - [ ] 1.6: Run `npm install --package-lock-only` to regenerate `package-lock.json`
+- [x] Task 1: Update `package.json` (AC: #1)
+  - [x] 1.1: Change `name` from `"convoke"` to `"convoke-agents"`
+  - [x] 1.2: Change keyword `"convoke"` to `"convoke-agents"` in keywords array
+  - [x] 1.3: Update `repository.url` to `git+https://github.com/amalik/convoke-agents.git`
+  - [x] 1.4: Update `bugs.url` to `https://github.com/amalik/convoke-agents/issues`
+  - [x] 1.5: Add `homepage` field: `https://github.com/amalik/convoke-agents#readme`
+  - [x] 1.6: Run `npm install --package-lock-only` to regenerate `package-lock.json`
 
-- [ ] Task 2: Update code files (AC: #3, #4, #6)
-  - [ ] 2.1: `scripts/update/lib/migration-runner.js` — update GitHub issues URL
-  - [ ] 2.2: 7 workflow `validate.md` files — update GitHub issues URLs
-  - [ ] 2.3: `scripts/docs-audit.js` L407 — update comment to reference `convoke-agents`
-  - [ ] 2.4: `scripts/update/convoke-update.js` — update `npx -p convoke@` refs
-  - [ ] 2.5: `scripts/update/convoke-version.js` — update `npx -p convoke@` refs
+- [x] Task 2: Update code files (AC: #3, #4, #6)
+  - [x] 2.1: `scripts/update/lib/migration-runner.js` — update GitHub issues URL
+  - [x] 2.2: 7 workflow `validate.md` files — update GitHub issues URLs
+  - [x] 2.3: `scripts/docs-audit.js` L407 — update comment to reference `convoke-agents`
+  - [x] 2.4: `scripts/update/convoke-update.js` — update 2 `npx -p convoke@` refs + 1 `install convoke@` ref (3 total)
+  - [x] 2.5: `scripts/update/convoke-version.js` — update `npx -p convoke@` refs
 
-- [ ] Task 3: Update documentation files (AC: #2)
-  - [ ] 3.1: Apply sed pipeline to 14 documentation files (README, INSTALLATION, UPDATE-GUIDE, CHANGELOG, BMAD-METHOD-COMPATIBILITY, PUBLISHING-GUIDE, scripts/README, release notes ×4, CREATE-RELEASE-GUIDE, CREATE-v1.0.3-RELEASE, TEST-PLAN-REAL-INSTALL, CLEANUP-SUMMARY)
-  - [ ] 3.2: Update `create-github-release.sh` — repo URL
-  - [ ] 3.3: Grep verify all docs — zero bare `convoke` in package/URL contexts
+- [x] Task 3: Update documentation files (AC: #2)
+  - [x] 3.1: Apply sed pipeline to 14 documentation files (README, INSTALLATION, UPDATE-GUIDE, CHANGELOG, BMAD-METHOD-COMPATIBILITY, PUBLISHING-GUIDE, scripts/README, release notes ×4, CREATE-RELEASE-GUIDE, CREATE-v1.0.3-RELEASE, TEST-PLAN-REAL-INSTALL, CLEANUP-SUMMARY)
+  - [x] 3.2: Update `create-github-release.sh` — repo URL
+  - [x] 3.3: Grep verify all docs — zero bare `convoke` in package/URL contexts
 
-- [ ] Task 4: Update `_bmad-output/` historical docs (AC: #5)
-  - [ ] 4.1: Apply sed pipeline to ~23 non-backup files with stale refs
-  - [ ] 4.2: Apply sed pipeline to ~21 `.backups/` files with stale refs
-  - [ ] 4.3: Grep verify — zero bare `convoke` in package/URL contexts
+- [x] Task 4: Update `_bmad-output/` historical docs (AC: #5)
+  - [x] 4.1: Apply sed pipeline to ~23 non-backup files with stale refs
+  - [x] 4.2: Apply sed pipeline to ~21 `.backups/` files with stale refs
+  - [x] 4.3: Grep verify — zero bare `convoke` in package/URL contexts
 
-- [ ] Task 5: Verification (AC: #7)
-  - [ ] 5.1: Run `npm test` — all pass
-  - [ ] 5.2: Run `npm run docs:audit` — zero findings
-  - [ ] 5.3: Grep audit for stale bare `convoke` in package/URL contexts — zero matches
-  - [ ] 5.4: Verify display name "Convoke" and CLI commands `convoke-*` are untouched
+- [x] Task 5: Verification (AC: #7)
+  - [x] 5.1: Run `npm test` — all pass (315/315)
+  - [x] 5.2: Run `npm run docs:audit` — zero findings
+  - [x] 5.3: Grep audit for stale bare `convoke` in package/URL contexts — zero matches
+  - [x] 5.4: Verify display name "Convoke" and CLI commands `convoke-*` are untouched
 
 ## Dev Notes
 
@@ -197,10 +197,78 @@ The `package.json` changes should be done with the Edit tool, not sed:
 
 ### Agent Model Used
 
-{{agent_model_name_version}}
+Claude Opus 4.6
 
 ### Debug Log References
 
+None
+
 ### Completion Notes List
 
+- Task 1: Updated package.json — name, keyword, repository.url, bugs.url, added homepage field. Regenerated package-lock.json.
+- Task 2: Updated 12 code files — migration-runner.js (1 URL), 7 validate.md files (1 URL each), docs-audit.js (1 comment), convoke-update.js (3 refs), convoke-version.js (2 refs).
+- Task 3: Applied context-aware sed pipeline to 15 documentation files. Two-pass approach needed: first pass for URL/install/npx patterns, second pass for version-qualified refs (convoke@alpha, convoke@latest). Fixed corrupted version strings where `convoke@[0-9]` sed pattern ate leading digit.
+- Task 4: Applied sed pipeline to 41 _bmad-output files (20 non-backup + 21 backup validate.md files). Fixed double-replacement corruption in sprint-change-proposal and epics-phase3 where "before → after" mapping text had the "before" side wrongly replaced.
+- Task 5: All verification passes — 315/315 tests, zero docs:audit findings, zero stale grep matches, display name "Convoke" intact (785 refs), all 6 CLI commands intact.
+
+### Change Log
+
+- 2026-03-07: Story 4.0 implemented — npm package name and repo URL updated from convoke to convoke-agents across entire codebase
+- 2026-03-07: Code review fixes — H1: Fixed migration preview text in 1.7.x-to-2.0.0.js (convoke → convoke-agents). M2: Added sprint-status.yaml and migration file to File List.
+
 ### File List
+
+**Modified:**
+- package.json
+- package-lock.json
+- scripts/update/lib/migration-runner.js
+- scripts/update/migrations/1.7.x-to-2.0.0.js
+- scripts/docs-audit.js
+- scripts/update/convoke-update.js
+- scripts/update/convoke-version.js
+- _bmad/bme/_vortex/workflows/proof-of-concept/validate.md
+- _bmad/bme/_vortex/workflows/mvp/validate.md
+- _bmad/bme/_vortex/workflows/proof-of-value/validate.md
+- _bmad/bme/_vortex/workflows/lean-experiment/validate.md
+- _bmad/bme/_vortex/workflows/product-vision/validate.md
+- _bmad/bme/_vortex/workflows/lean-persona/validate.md
+- _bmad/bme/_vortex/workflows/contextualize-scope/validate.md
+- README.md
+- INSTALLATION.md
+- UPDATE-GUIDE.md
+- CHANGELOG.md
+- BMAD-METHOD-COMPATIBILITY.md
+- PUBLISHING-GUIDE.md
+- RELEASE-NOTES-v1.0.3-alpha.md
+- release-notes-v1.1.1.md
+- release-notes-v1.1.2.md
+- release-notes-v1.6.0.md
+- CREATE-RELEASE-GUIDE.md
+- CREATE-v1.0.3-RELEASE.md
+- TEST-PLAN-REAL-INSTALL.md
+- CLEANUP-SUMMARY.md
+- create-github-release.sh
+- _bmad-output/rayas-journey-acceptance-test.md
+- _bmad-output/planning-artifacts/prd-phase2.md
+- _bmad-output/planning-artifacts/sprint-change-proposal-2026-03-07.md
+- _bmad-output/planning-artifacts/epics-phase3.md
+- _bmad-output/planning-artifacts/distribution-strategy.md
+- _bmad-output/implementation-artifacts/p2-6-3-scripted-end-to-end-rayas-journey-acceptance-test.md
+- _bmad-output/implementation-artifacts/p3-1-1-rename-package-identity-cli-commands.md
+- _bmad-output/implementation-artifacts/p3-1-2-rename-script-files-update-internal-strings.md
+- _bmad-output/implementation-artifacts/p3-1-3-update-entry-point-installer-scripts.md
+- _bmad-output/implementation-artifacts/p3-1-4-update-library-modules.md
+- _bmad-output/implementation-artifacts/p3-2-1-overhaul-readme.md
+- _bmad-output/implementation-artifacts/p3-2-2-update-primary-documentation-files.md
+- _bmad-output/implementation-artifacts/p3-2-3-update-secondary-docs-user-guides-shipped-content.md
+- _bmad-output/implementation-artifacts/p3-3-2-update-miscellaneous-top-level-files.md
+- _bmad-output/implementation-artifacts/p3-3-3-update-historical-documentation-bmad-output.md
+- _bmad-output/implementation-artifacts/p3-epic-3-retro-2026-03-07.md
+- _bmad-output/project-documentation/INSTALLATION-SYSTEM-SUMMARY.md
+- _bmad-output/project-documentation/PUBLICATION-SUCCESS-v1.0.3-alpha.md
+- _bmad-output/project-documentation/RELEASE-NOTES-v1.0.2-alpha.md
+- _bmad-output/project-documentation/PREREQUISITE-CHECK-UPDATE.md
+- _bmad-output/project-documentation/TEST-RESULTS-v1.0.3-alpha.md
+- _bmad-output/project-documentation/PUBLISHING-COMPLETE.md
+- _bmad-output/implementation-artifacts/sprint-status.yaml
+- _bmad-output/.backups/backup-1.5.2-*/workflows/*/validate.md (21 files)

@@ -312,7 +312,7 @@ Convoke includes automated test coverage:
 ### For Users
 
 1. **Install directly:**
-   - Run `npm install convoke && npx convoke-install-vortex`
+   - Run `npm install convoke-agents && npx convoke-install-vortex`
    - No prerequisite installation needed
    - BMAD Method is optional — installer handles both cases
 
@@ -346,7 +346,7 @@ Convoke includes automated test coverage:
 
 **For Users:**
 
-- Install with `npm install convoke && npx convoke-install-vortex`
+- Install with `npm install convoke-agents && npx convoke-install-vortex`
 - No prerequisite installation needed
 - If using BMAD Method alongside, check compatibility matrix before updating either package
 

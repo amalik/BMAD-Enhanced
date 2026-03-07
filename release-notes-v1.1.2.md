@@ -23,7 +23,7 @@ npx convoke-install-wade
 - Agent-manifest.csv generation
 - Quick Start instructions in output
 
-**Impact:** Users can now successfully install convoke agents via npx commands.
+**Impact:** Users can now successfully install convoke-agents agents via npx commands.
 
 ---
 
@@ -54,16 +54,16 @@ Convoke has evolved from design-focused tooling to the **Vortex Pattern** for Le
 - Build-Measure-Learn cycles, MVPs, validated learning
 - Guides teams through the "Externalize" stream
 
-See [v1.1.1 release notes](https://github.com/amalik/convoke/releases/tag/v1.1.1) for full details on the Vortex Pattern repositioning.
+See [v1.1.1 release notes](https://github.com/amalik/convoke-agents/releases/tag/v1.1.1) for full details on the Vortex Pattern repositioning.
 
 ---
 
 ## 📝 Full Changelog
 
-See [CHANGELOG.md](https://github.com/amalik/convoke/blob/main/CHANGELOG.md) for complete details.
+See [CHANGELOG.md](https://github.com/amalik/convoke-agents/blob/main/CHANGELOG.md) for complete details.
 
 ## 🔗 Links
 
-- **npm package:** https://www.npmjs.com/package/convoke
+- **npm package:** https://www.npmjs.com/package/convoke-agents
 - **Version:** 1.1.2
-- **Previous release:** [v1.1.1](https://github.com/amalik/convoke/releases/tag/v1.1.1)
+- **Previous release:** [v1.1.1](https://github.com/amalik/convoke-agents/releases/tag/v1.1.1)

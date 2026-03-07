@@ -8,7 +8,7 @@ How to update your Convoke installation to the latest version.
 
 ```bash
 # Update the package
-npm install convoke@latest
+npm install convoke-agents@latest
 
 # Preview changes (dry run)
 npx convoke-update --dry-run
@@ -92,7 +92,7 @@ What happens:
 - 7 agents installed (Emma, Isla, Mila, Liam, Wade, Noah, Max)
 
 ```bash
-npm install convoke@latest
+npm install convoke-agents@latest
 npx convoke-update --dry-run  # Preview
 npx convoke-update            # Apply
 ```
@@ -184,10 +184,10 @@ cp -r _bmad-output/.backups/{backup-dir}/workflows _bmad/bme/_vortex/
 npx caches package binaries. If you installed at an older version, `npx convoke-update` may keep running the cached script instead of the latest. Force-fetch the latest:
 
 ```bash
-npx -p convoke@latest convoke-update
+npx -p convoke-agents@latest convoke-update
 ```
 
-This tells npx to download `convoke@latest` first, then run the `convoke-update` bin from it.
+This tells npx to download `convoke-agents@latest` first, then run the `convoke-update` bin from it.
 
 ### "Installation appears corrupted"
 
@@ -213,7 +213,7 @@ If you encounter issues:
 1. Run `npx convoke-doctor` for diagnostics
 2. Check migration logs in `_bmad-output/.logs/`
 3. Restore from backup in `_bmad-output/.backups/`
-4. [Report an issue](https://github.com/amalik/convoke/issues) — include your version (`npx convoke-version`) and error message
+4. [Report an issue](https://github.com/amalik/convoke-agents/issues) — include your version (`npx convoke-version`) and error message
 
 ---
 

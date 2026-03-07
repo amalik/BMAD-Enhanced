@@ -34,7 +34,7 @@ so that I can verify the complete Phase 2 user experience works as designed and 
   - [x] 2.1 Create `_bmad-output/rayas-journey-acceptance-test.md` — the scripted walkthrough document with all phases, steps, pass/fail criteria, and friction recording sections
   - [x] 2.2 **Phase 0 (Pre-Walkthrough):** Document gate checks from Task 1 with pass/fail criteria (docs audit zero findings, P0 100% pass, test suite green, journey example exists)
   - [x] 2.3 **Phase 1 (README Discovery):** Script the README reading experience — value proposition clarity, 7-agent diagram comprehension, output previews section, one-click journey link (FR29). Pass criteria: journey link visible and clickable from README
-  - [x] 2.4 **Phase 2 (Installation):** Script `npm install convoke && npx convoke-install-vortex` — pass criteria: all 7 agents installed, config.yaml present, output directory created, verification step shows all green. Platform recording (NFR13)
+  - [x] 2.4 **Phase 2 (Installation):** Script `npm install convoke-agents && npx convoke-install-vortex` — pass criteria: all 7 agents installed, config.yaml present, output directory created, verification step shows all green. Platform recording (NFR13)
   - [x] 2.5 **Phase 3 (First Agent - Emma):** Script `cat _bmad/bme/_vortex/agents/contextualization-expert.md` — pass criteria: config validation succeeds, greeting displays with user name, menu shows all items including [LP] Lean Persona
   - [x] 2.6 **Phase 4 (Workflow Execution):** Script selecting [LP] Lean Persona — pass criteria: workflow loads, step-01 presents, user can complete all 6 steps, artifact saves to `_bmad-output/vortex-artifacts/`, Vortex Compass displays routing options at completion
   - [x] 2.7 **Phase 5 (Agent Handoff):** Script following Compass route from Emma to Isla — pass criteria: Isla activates, Isla's menu displays, Isla can reference Emma's lean persona output
@@ -79,7 +79,7 @@ This is NOT a code story. No JavaScript changes expected. No test modifications.
 Raya is a solo founder building B2B SaaS for freelancer invoicing. She found Convoke via a colleague's GitHub link. She uses Claude in her IDE but feels scattered. Her journey:
 
 1. **README Discovery** — sees value proposition, 7-agent diagram, output previews
-2. **Installation** — runs `npm install convoke && npx convoke-install-vortex`
+2. **Installation** — runs `npm install convoke-agents && npx convoke-install-vortex`
 3. **First Agent (Emma)** — invokes Emma via `cat _bmad/bme/_vortex/agents/contextualization-expert.md`, selects Lean Persona
 4. **Workflow Execution** — completes 6-step lean persona workflow, artifact saved
 5. **Vortex Compass** — sees routing options to Isla, Wade, or back to Emma

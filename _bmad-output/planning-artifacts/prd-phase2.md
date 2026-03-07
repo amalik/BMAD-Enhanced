@@ -387,7 +387,7 @@ Existing artifacts from Emma, Isla, Wade, and Max remain usable as inputs to upd
 |--------|---------|--------|
 | Fresh install | `npx convoke` | Working |
 | Update | `npx convoke-update` | Working (cache hint added in v1.6.4) |
-| Force latest | `npx -p convoke@latest convoke-update` | Working (added in v1.6.4) |
+| Force latest | `npx -p convoke-agents@latest convoke-update` | Working (added in v1.6.4) |
 
 ### Implementation Considerations
 

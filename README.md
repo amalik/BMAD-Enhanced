@@ -12,7 +12,7 @@
 
 **Validate your product ideas before writing a single line of code — 7 discovery agents guide you from insight to evidence**
 
-[![Version](https://img.shields.io/badge/version-2.0.0-blue)](https://github.com/amalik/convoke)
+[![Version](https://img.shields.io/badge/version-2.0.0-blue)](https://github.com/amalik/convoke-agents)
 [![Agents](https://img.shields.io/badge/agents-7-brightgreen)](docs/agents.md)
 [![Workflows](https://img.shields.io/badge/workflows-22-success)](docs/agents.md)
 [![License](https://img.shields.io/badge/license-MIT-blue)](LICENSE)
@@ -65,7 +65,7 @@ Each agent above runs one of these streams. You don't follow a fixed path — th
 ### Install
 
 ```bash
-npm install convoke && npx convoke-install-vortex
+npm install convoke-agents && npx convoke-install-vortex
 ```
 
 All 7 agents with 22 workflows are installed and ready to use.
@@ -134,7 +134,7 @@ Your data in `_bmad-output/` is never touched. Automatic backups are created bef
 
 > **Tip:** If `npx convoke-update` reports "Already up to date" but you know a newer version exists, npx may be serving a cached copy. Force the latest with:
 > ```bash
-> npx -p convoke@latest convoke-update
+> npx -p convoke-agents@latest convoke-update
 > ```
 
 See [UPDATE-GUIDE.md](UPDATE-GUIDE.md) for migration paths and troubleshooting.
@@ -246,7 +246,7 @@ Convoke works standalone or as an extension — no BMAD Method installation requ
 - **v1.1.0–v1.5.x** — Waves 1-2: Foundation (Emma, Isla, Wade, Max — agent definitions, workflows, update system, CI/CD)
 - **v1.6.x** — Wave 3: Complete 7-stream Vortex (added Mila, Liam, Noah — 7 agents, 22 workflows, handoff contracts, Compass routing)
 - **v1.7.0** — Wave 4: Quality & onboarding (P0 test suite, docs audit tool, all 22 workflows production-ready, README overhaul, package size fix)
-- **v2.0.0** — Product renamed to Convoke. CLI commands renamed to `convoke-*`. Package: `npm install convoke`
+- **v2.0.0** — Product renamed to Convoke. CLI commands renamed to `convoke-*`. Package: `npm install convoke-agents`
 - **Next** — Multi-agent collaboration, cross-agent workflows, analytics
 
 ---
