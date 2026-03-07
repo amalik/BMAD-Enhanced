@@ -1,6 +1,6 @@
 # Story 4.3: Final Verification & Publish
 
-Status: review
+Status: done
 
 ## Story
 
