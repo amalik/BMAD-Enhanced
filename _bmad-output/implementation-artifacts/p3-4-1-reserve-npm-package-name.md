@@ -1,6 +1,6 @@
 # Story 4.1: Reserve npm Package Name
 
-Status: ready-for-dev
+Status: done
 
 ## Story
 
@@ -27,37 +27,24 @@ So that users who see the deprecation can actually find the new package.
 
 ## Tasks / Subtasks
 
-- [ ] Task 1: Verify npm name availability (AC: #1)
-  - [ ] 1.1: Run `npm info convoke-agents` and confirm it returns a 404 / "not found"
-  - [ ] 1.2: If already taken, HALT — course correction required
+- [x] Task 1: Verify npm name availability (AC: #1)
+  - [x] 1.1: Run `npm info convoke-agents` and confirm it returns a 404 / "not found"
+  - [x] 1.2: If already taken, HALT — course correction required
 
-- [ ] Task 2: Create temporary placeholder directory (AC: #1, #2)
-  - [ ] 2.1: Create a temporary directory outside the main repo (e.g., `/tmp/convoke-agents-placeholder`)
-  - [ ] 2.2: Create `package.json` with:
-    - `"name": "convoke-agents"`
-    - `"version": "0.0.1"`
-    - `"description": "Agent teams for complex systems — coming soon. Successor to bmad-enhanced."`
-    - `"license": "MIT"`
-    - `"author": "Convoke Contributors"`
-    - `"repository": { "type": "git", "url": "git+https://github.com/amalik/convoke-agents.git" }`
-    - `"bugs": { "url": "https://github.com/amalik/convoke-agents/issues" }`
-    - `"homepage": "https://github.com/amalik/convoke-agents#readme"`
-    - `"keywords": ["convoke-agents", "bmad-enhanced", "agents", "vortex"]`
-  - [ ] 2.3: Create `README.md` with:
-    - Package name and "Coming soon" header
-    - Brief description: "Successor to `bmad-enhanced`. Full release coming as `convoke-agents@2.0.0`."
-    - Link to the GitHub repository
-    - Note: "If you're looking for the current stable package, install `bmad-enhanced`."
+- [x] Task 2: Create temporary placeholder directory (AC: #1, #2)
+  - [x] 2.1: Create a temporary directory outside the main repo (`/tmp/convoke-agents-placeholder`)
+  - [x] 2.2: Create `package.json` with placeholder metadata
+  - [x] 2.3: Create `README.md` with "Coming soon" content
 
-- [ ] Task 3: Publish placeholder to npm (AC: #1, #2)
-  - [ ] 3.1: Verify npm login: `npm whoami` (must be logged in)
-  - [ ] 3.2: From the placeholder directory, run `npm publish`
-  - [ ] 3.3: Verify publication: `npm view convoke-agents version` returns `0.0.1`
-  - [ ] 3.4: Verify metadata: `npm info convoke-agents` shows correct author, license, repository
+- [x] Task 3: Publish to npm (AC: #1, #2)
+  - [x] 3.1: Verify npm login: `npm whoami` → `amalik`
+  - [x] 3.2: User published `convoke-agents@2.0.0` directly from main repo (supersedes placeholder approach)
+  - [x] 3.3: Verify publication: `npm view convoke-agents version` returns `2.0.0`
+  - [x] 3.4: Verify metadata: author=amalik, license=MIT, repo=github.com/amalik/convoke-agents — all correct
 
-- [ ] Task 4: Cleanup (AC: #1)
-  - [ ] 4.1: Remove the temporary placeholder directory
-  - [ ] 4.2: No changes to the main repository are needed for this story
+- [x] Task 4: Cleanup (AC: #1)
+  - [x] 4.1: Remove the temporary placeholder directory
+  - [x] 4.2: No changes to the main repository needed
 
 ## Dev Notes
 
@@ -113,10 +100,24 @@ npm pack convoke-agents
 
 ### Agent Model Used
 
-{{agent_model_name_version}}
+Claude Opus 4.6
 
 ### Debug Log References
 
+None
+
 ### Completion Notes List
 
+- Task 1: Confirmed `convoke-agents` was available on npm (404 response).
+- Task 2: Created placeholder directory with package.json and README.md at `/tmp/convoke-agents-placeholder`.
+- Task 3: User opted to publish `convoke-agents@2.0.0` directly from the main repo instead of the `0.0.1` placeholder. This supersedes the placeholder approach — the package name is reserved AND the full release is live. Verified: version=2.0.0, author=amalik, license=MIT, repo=github.com/amalik/convoke-agents.
+- Task 4: Cleaned up `/tmp/convoke-agents-placeholder`.
+- **Note:** AC #1 specified `0.0.1` placeholder, but user published `2.0.0` directly. The intent (reserve name before deprecation) is fully satisfied — the package exists on npm and users can install it.
+
+### Change Log
+
+- 2026-03-07: Story 4.1 completed — `convoke-agents@2.0.0` published to npm (full release, superseding placeholder approach)
+
 ### File List
+
+No main repository files modified. Operational story (npm publish only).
