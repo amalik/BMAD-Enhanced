@@ -22,7 +22,7 @@ so that I understand the pain Vortex solves before seeing the agent map.
   - [x] 1.3: Add it as a standalone bold line immediately before the diagram code block: `**Most teams skip validation and build on assumptions.**`
   - [x] 1.4: The remaining paragraph should start with "Vortex guides you through..." and still read naturally
   - [x] 1.5: Ensure blank lines above and below the bold line for proper markdown rendering
-  - [ ] 1.6: Verify the bold line renders correctly on GitHub (push or use local preview)
+  - [x] 1.6: Verify the bold line renders correctly on GitHub (push or use local preview)
 
 ## Dev Notes
 
