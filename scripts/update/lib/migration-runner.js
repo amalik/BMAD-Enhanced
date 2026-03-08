@@ -222,7 +222,7 @@ async function previewMigrations(migrations) {
   console.log(chalk.gray('  - Update user guides (with .bak backup)'));
   console.log('');
   console.log(chalk.green('To apply these changes, run:'));
-  console.log(chalk.cyan('  npx convoke-update'));
+  console.log(chalk.cyan('  npx -p convoke-agents convoke-update'));
   console.log('');
 
   return { success: true, dryRun: true, previews };
