@@ -32,6 +32,7 @@
 | D2 | **Add output examples for more agents** — Isla (empathy map), Wade (experiment card), or Noah (signal report) in README | Vortex review (Liam, Wade) | 6 | 1 | 70% | 2 | 2.1 | Move the needle | Backlog |
 | D3 | **BMAD Core return arrow in diagram** — Show feedback loop from production back to Convoke in the README diagram | Vortex review (Noah) | 4 | 0.25 | 90% | 1 | 0.9 | Keep the lights on | Backlog |
 | D6 | **Reduce narrative overlap in journey example** — Trim ~950-1,100 words of overlap between narrative paragraphs and transition notes in the 7-agent journey | Scope-adjacent backlog (P2 E4) | 4 | 0.5 | 80% | 1 | 1.6 | Keep the lights on | Backlog |
+| D7 | **Fix ASCII art banner and Vortex stream diagram** — README banner has misaligned characters and the 7-stream Vortex diagram has layout/spacing issues. Both are the first visual impression for new users | Product owner | 9 | 1 | 90% | 1 | 8.1 | Move the needle | Backlog |
 
 ### Update & Migration System
 
@@ -100,11 +101,26 @@ These initiatives are promising but need discovery work before scoring. Not yet 
 
 Initiatives that should be bundled together for efficient delivery:
 
-### Epic: "First Impression" (D5 + D1 + D4 + S1)
-Improve the first-time user experience from README to first workflow completion.
+### Epic: "First Impression" (D7 + D5 + D1 + D2 + D4 + S1)
+Improve the first-time user experience from README visuals to first workflow completion. D7 and D5 are quick wins; D1 and D2 add depth; D4 and S1 are higher-effort anchors.
 
 ### Epic: "Update System Hardening" (U1 + U4 + T3 + T4)
 Harden the migration and update system with idempotency checks and integration tests.
+
+### Epic: "CI/CD Pipeline" (I1 + I2)
+Automate the publish and release flow. I1 (NPM_TOKEN) is the prerequisite; I2 (gh auth releases) builds on it.
+
+### Epic: "Test Debt Cleanup" (T1 + T2 + T5)
+Batch low-priority coverage gaps in existing CLI scripts. All low-score housekeeping that benefits from a single focused pass.
+
+### Epic: "Platform Foundation" (P3 + P4 → P1 → P2)
+The multi-team future. P3 (installer architecture) and P4 (Enhance module) are independent prerequisites; P1 (second team) follows; P2 (cross-team workflows) depends on P1.
+
+### Epic: "Agent Compliance Sweep" (A1 + A2 + A3 + A4)
+Four small agent quality items that can be swept in a single pass: validate menus, source files, npm keywords, temp dir prefix.
+
+### Epic: "Update System Robustness" (U2 + U3 + U5)
+Remaining update system items not in Hardening: load-time validation, version detection fallback, and npx command fix.
 
 ---
 
@@ -112,35 +128,36 @@ Harden the migration and update system with idempotency checks and integration t
 
 | Rank | # | Initiative | Score | Track | Category |
 |------|---|-----------|-------|-------|----------|
-| 1 | D5 | Problem-framing sentence in README | 8.1 | Move the needle | Documentation |
-| 2 | D1 | Workflow list in README or docs | 5.6 | Move the needle | Documentation |
-| 3 | U5 | `postinstall.js` npx command fix | 4.0 | Keep the lights on | Update System |
-| 4 | U1 | Check migration history before delta execution | 3.2 | Keep the lights on | Update System |
-| 5 | P4 | Enhance module | 2.8 | Move the needle | Platform |
-| 6 | T3 | End-to-end update test on real project | 2.7 | Keep the lights on | Testing |
-| 7 | T4 | Migration idempotency CLI test | 2.4 | Keep the lights on | Testing |
-| 8 | I2 | `gh auth` for CI release creation | 2.4 | Keep the lights on | Infrastructure |
-| 9 | D4 | Video walkthrough or tutorial | 2.3 | Move the needle | Documentation |
-| 10 | D2 | Add output examples for more agents | 2.1 | Move the needle | Documentation |
-| 11 | I1 | NPM_TOKEN secret for CI publish | 1.8 | Keep the lights on | Infrastructure |
-| 12 | D6 | Reduce narrative overlap in journey example | 1.6 | Keep the lights on | Documentation |
-| 13 | U4 | Test upgrade-path step file cleanup | 1.4 | Keep the lights on | Update System |
-| 14 | P1 | Second domain-specialized team | 1.2 | Move the needle | Platform |
-| 15 | P3 | Team installer architecture | 1.2 | Move the needle | Platform |
-| 16 | S1 | Interactive installer | 1.0 | Move the needle | Infrastructure |
-| 17 | D3 | BMAD Core return arrow in diagram | 0.9 | Keep the lights on | Documentation |
-| 18 | A1 | Add validate menu items to Wave 3 agents | 0.8 | Keep the lights on | Agent Quality |
-| 19 | A3 | Add npm keywords (`agentic`, `team-of-teams`) | 0.8 | Keep the lights on | Agent Quality |
-| 20 | T1 | `convoke-update.js` coverage to 80%+ | 0.8 | Keep the lights on | Testing |
-| 21 | U2 | Validate migration modules at load time | 0.8 | Keep the lights on | Update System |
-| 22 | S2 | Simplified entry point | 0.7 | Move the needle | Infrastructure |
-| 23 | U3 | Robust version detection fallback | 0.5 | Keep the lights on | Update System |
-| 24 | P2 | Multi-team collaboration workflows | 0.4 | Move the needle | Platform |
-| 25 | T2 | `convoke-version.js` coverage to 80%+ | 0.4 | Keep the lights on | Testing |
-| 26 | I3 | CSV parser library for manifest | 0.4 | Keep the lights on | Infrastructure |
-| 27 | T5 | Expand docs audit — remaining gaps | 0.3 | Keep the lights on | Testing |
-| 28 | A4 | Fix temp dir prefix inconsistency | 0.3 | Keep the lights on | Agent Quality |
-| 29 | A2 | Create `.agent.yaml` source files | 0.2 | Keep the lights on | Agent Quality |
+| 1 | D7 | Fix ASCII art banner and Vortex stream diagram | 8.1 | Move the needle | Documentation |
+| 2 | D5 | Problem-framing sentence in README | 8.1 | Move the needle | Documentation |
+| 3 | D1 | Workflow list in README or docs | 5.6 | Move the needle | Documentation |
+| 4 | U5 | `postinstall.js` npx command fix | 4.0 | Keep the lights on | Update System |
+| 5 | U1 | Check migration history before delta execution | 3.2 | Keep the lights on | Update System |
+| 6 | P4 | Enhance module | 2.8 | Move the needle | Platform |
+| 7 | T3 | End-to-end update test on real project | 2.7 | Keep the lights on | Testing |
+| 8 | T4 | Migration idempotency CLI test | 2.4 | Keep the lights on | Testing |
+| 9 | I2 | `gh auth` for CI release creation | 2.4 | Keep the lights on | Infrastructure |
+| 10 | D4 | Video walkthrough or tutorial | 2.3 | Move the needle | Documentation |
+| 11 | D2 | Add output examples for more agents | 2.1 | Move the needle | Documentation |
+| 12 | I1 | NPM_TOKEN secret for CI publish | 1.8 | Keep the lights on | Infrastructure |
+| 13 | D6 | Reduce narrative overlap in journey example | 1.6 | Keep the lights on | Documentation |
+| 14 | U4 | Test upgrade-path step file cleanup | 1.4 | Keep the lights on | Update System |
+| 15 | P1 | Second domain-specialized team | 1.2 | Move the needle | Platform |
+| 16 | P3 | Team installer architecture | 1.2 | Move the needle | Platform |
+| 17 | S1 | Interactive installer | 1.0 | Move the needle | Infrastructure |
+| 18 | D3 | BMAD Core return arrow in diagram | 0.9 | Keep the lights on | Documentation |
+| 19 | A1 | Add validate menu items to Wave 3 agents | 0.8 | Keep the lights on | Agent Quality |
+| 20 | A3 | Add npm keywords (`agentic`, `team-of-teams`) | 0.8 | Keep the lights on | Agent Quality |
+| 21 | T1 | `convoke-update.js` coverage to 80%+ | 0.8 | Keep the lights on | Testing |
+| 22 | U2 | Validate migration modules at load time | 0.8 | Keep the lights on | Update System |
+| 23 | S2 | Simplified entry point | 0.7 | Move the needle | Infrastructure |
+| 24 | U3 | Robust version detection fallback | 0.5 | Keep the lights on | Update System |
+| 25 | P2 | Multi-team collaboration workflows | 0.4 | Move the needle | Platform |
+| 26 | T2 | `convoke-version.js` coverage to 80%+ | 0.4 | Keep the lights on | Testing |
+| 27 | I3 | CSV parser library for manifest | 0.4 | Keep the lights on | Infrastructure |
+| 28 | T5 | Expand docs audit — remaining gaps | 0.3 | Keep the lights on | Testing |
+| 29 | A4 | Fix temp dir prefix inconsistency | 0.3 | Keep the lights on | Agent Quality |
+| 30 | A2 | Create `.agent.yaml` source files | 0.2 | Keep the lights on | Agent Quality |
 
 ---
 
@@ -164,6 +181,7 @@ These items were identified and resolved during the 2026-03-08 review session:
 
 | Date | Change |
 |------|--------|
+| 2026-03-08 | Added D7 (Fix ASCII art banner and Vortex stream diagram, score 8.1). Backlog now at 30 scored items + 4 exploration candidates. |
 | 2026-03-08 | Merged 4 items from scope-adjacent backlog: A5 (Wade placeholder steps, score 2.3), D6 (journey overlap, 1.6), U6 (preserve custom agents, 1.2), T5 (docs audit content patterns, 0.9). Backlog now at 31 scored items + 4 exploration candidates. |
 | 2026-03-08 | Added exploration candidates: P1-disc updated with team candidates (Data Science/AI Engineering, Ethics & Legal Compliance, Standard Authority), P5 (Convoke website), P6 (Tool-enabled agents). |
 | 2026-03-08 | Added P4 (Enhance module) — new BME section for upgrading existing BMAD agents with Convoke-provided workflows. Ranked #5 (score 2.8). |
