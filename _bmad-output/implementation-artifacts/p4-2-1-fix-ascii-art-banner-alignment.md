@@ -1,6 +1,6 @@
 # Story 2.1: Fix CONVOKE ASCII Art Banner Alignment
 
-Status: ready-for-dev
+Status: in-progress
 
 ## Story
 
@@ -18,19 +18,19 @@ so that the project looks polished and professional at first glance.
 
 ## Tasks / Subtasks
 
-- [ ] Task 1: Analyze current banner alignment issues (AC: #1, #2)
-  - [ ] 1.1: In `README.md`, locate the banner inside the `<pre>...</pre>` block (within `<div align="center">`)
-  - [ ] 1.2: Count leading spaces per line — currently inconsistent (2 spaces on lines 1 and 6, 1 space on lines 2-5)
-  - [ ] 1.3: Check if any columns are misaligned across the 6 rows by verifying character positions match vertically
-- [ ] Task 2: Fix leading space consistency (AC: #1)
-  - [ ] 2.1: Normalize all 6 banner lines to the same number of leading spaces
-  - [ ] 2.2: Ensure the left edge of the letterforms aligns vertically after normalization
-- [ ] Task 3: Verify column alignment (AC: #2)
-  - [ ] 3.1: Check that each letter (C-O-N-V-O-K-E) occupies consistent column widths across all 6 rows
-  - [ ] 3.2: Fix any columns where block characters don't line up vertically
-- [ ] Task 4: Center tagline (AC: #3)
-  - [ ] 4.1: Verify "Agent teams for complex systems" is visually centered beneath the banner block
-  - [ ] 4.2: Adjust leading spaces on the tagline if needed
+- [x] Task 1: Analyze current banner alignment issues (AC: #1, #2)
+  - [x] 1.1: In `README.md`, locate the banner inside the `<pre>...</pre>` block (within `<div align="center">`)
+  - [x] 1.2: Count leading spaces per line — currently inconsistent (2 spaces on lines 1 and 6, 1 space on lines 2-5)
+  - [x] 1.3: Check if any columns are misaligned across the 6 rows by verifying character positions match vertically
+- [x] Task 2: Fix leading space consistency (AC: #1)
+  - [x] 2.1: Normalize all 6 banner lines to the same number of leading spaces
+  - [x] 2.2: Ensure the left edge of the letterforms aligns vertically after normalization
+- [x] Task 3: Verify column alignment (AC: #2)
+  - [x] 3.1: Check that each letter (C-O-N-V-O-K-E) occupies consistent column widths across all 6 rows
+  - [x] 3.2: Fix any columns where block characters don't line up vertically
+- [x] Task 4: Center tagline (AC: #3)
+  - [x] 4.1: Verify "Agent teams for complex systems" is visually centered beneath the banner block
+  - [x] 4.2: Adjust leading spaces on the tagline if needed
 - [ ] Task 5: Visual verification (AC: #4, #5)
   - [ ] 5.1: Verify rendering on GitHub by pushing and checking the rendered preview
   - [ ] 5.2: Verify rendering with `cat README.md` in terminal (80-column width)
@@ -86,8 +86,19 @@ Story 1.1 also modified README.md (different section — Vortex paragraph). Key 
 
 ### Agent Model Used
 
+Claude Opus 4.6
+
 ### Debug Log References
 
 ### Completion Notes List
 
+- **Task 1 (Analysis):** Leading space variance (2 on rows 1,6 vs 1 on rows 2-5) confirmed as intentional figlet "C" letter shaping — NOT a bug. Column alignment verified correct across all 7 letters (C-O-N-V-O-K-E). Display widths: rows 1,2,5,6 = 62 chars; rows 3,4 = 60 chars (E letter's middle crossbar is naturally shorter).
+- **Task 2 (Leading spaces):** No normalization needed — the leading spaces are correct figlet output. The "C" character's top bar and bottom bar are naturally indented 1 extra space relative to the vertical strokes.
+- **Task 3 (Column alignment):** All columns verified aligned. Standard figlet "ANSI Shadow" font output confirmed correct.
+- **Task 4 (Tagline centering):** Fixed — changed from 7 leading spaces to 16. Banner width = 62 chars, tagline = 31 chars, (62-31)/2 = 15.5 → 16 spaces. Tagline midpoint now 31.5 vs banner midpoint 31.0.
+- **Task 5 (Visual verification):** Terminal rendering verified with `cat`. GitHub verification pending push.
+- No tests needed — pure README.md text edit
+
 ### File List
+
+- `README.md` (modified — re-centered tagline from 7 to 16 leading spaces)
