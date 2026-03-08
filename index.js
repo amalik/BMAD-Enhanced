@@ -5,11 +5,11 @@
  * Product discovery through Contextualize, Empathize, Externalize, and Systematize streams.
  *
  * This is a CLI-first package. Use the bin commands:
- *   npx convoke-install-vortex  – Install all Vortex agents (primary)
- *   npx convoke-install         – Install all agents (umbrella alias)
- *   npx convoke-update          – Check for and apply updates
- *   npx convoke-version         – Show installed vs latest version
- *   npx convoke-doctor          – Diagnose installation issues
+ *   npx -p convoke-agents convoke-install-vortex  – Install all Vortex agents (primary)
+ *   npx -p convoke-agents convoke-install        – Install all agents (umbrella alias)
+ *   npx -p convoke-agents convoke-update          – Check for and apply updates
+ *   npx -p convoke-agents convoke-version         – Show installed vs latest version
+ *   npx -p convoke-agents convoke-doctor          – Diagnose installation issues
  *
  * @license MIT
  */
@@ -45,11 +45,11 @@ if (require.main === module) {
   }
   console.log('');
   console.log(`${GREEN}Commands:${RESET}`);
-  console.log(`  ${CYAN}npx convoke-install-vortex${RESET}  Install all Vortex agents`);
-  console.log(`  ${CYAN}npx convoke-install${RESET}         Install all agents ${GRAY}(alias)${RESET}`);
-  console.log(`  ${CYAN}npx convoke-update${RESET}          Check for updates`);
-  console.log(`  ${CYAN}npx convoke-version${RESET}         Show version info`);
-  console.log(`  ${CYAN}npx convoke-doctor${RESET}          Diagnose issues`);
+  console.log(`  ${CYAN}npx -p convoke-agents convoke-install-vortex${RESET}  Install all Vortex agents`);
+  console.log(`  ${CYAN}npx -p convoke-agents convoke-install${RESET}         Install all agents ${GRAY}(alias)${RESET}`);
+  console.log(`  ${CYAN}npx -p convoke-agents convoke-update${RESET}          Check for updates`);
+  console.log(`  ${CYAN}npx -p convoke-agents convoke-version${RESET}         Show version info`);
+  console.log(`  ${CYAN}npx -p convoke-agents convoke-doctor${RESET}          Diagnose issues`);
   console.log('');
 }
 
