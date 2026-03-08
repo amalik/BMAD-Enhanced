@@ -1,6 +1,6 @@
 # Story 1.1: Add Problem-Framing Sentence Above Vortex Diagram
 
-Status: ready-for-dev
+Status: in-progress
 
 ## Story
 
@@ -16,12 +16,12 @@ so that I understand the pain Vortex solves before seeing the agent map.
 
 ## Tasks / Subtasks
 
-- [ ] Task 1: Extract and reposition the problem-framing sentence (AC: #1, #2, #3)
-  - [ ] 1.1: In `README.md`, locate the paragraph that starts with "Most teams skip validation and build on assumptions. Vortex guides you through..." (currently between the workflow badges and the diagram code block)
-  - [ ] 1.2: Extract the first sentence ("Most teams skip validation and build on assumptions.") from that paragraph
-  - [ ] 1.3: Add it as a standalone bold line immediately before the diagram code block: `**Most teams skip validation and build on assumptions.**`
-  - [ ] 1.4: The remaining paragraph should start with "Vortex guides you through..." and still read naturally
-  - [ ] 1.5: Ensure blank lines above and below the bold line for proper markdown rendering
+- [x] Task 1: Extract and reposition the problem-framing sentence (AC: #1, #2, #3)
+  - [x] 1.1: In `README.md`, locate the paragraph that starts with "Most teams skip validation and build on assumptions. Vortex guides you through..." (currently between the workflow badges and the diagram code block)
+  - [x] 1.2: Extract the first sentence ("Most teams skip validation and build on assumptions.") from that paragraph
+  - [x] 1.3: Add it as a standalone bold line immediately before the diagram code block: `**Most teams skip validation and build on assumptions.**`
+  - [x] 1.4: The remaining paragraph should start with "Vortex guides you through..." and still read naturally
+  - [x] 1.5: Ensure blank lines above and below the bold line for proper markdown rendering
   - [ ] 1.6: Verify the bold line renders correctly on GitHub (push or use local preview)
 
 ## Dev Notes
@@ -78,8 +78,18 @@ The bold line sits between the badges and the explanatory paragraph, immediately
 
 ### Agent Model Used
 
+Claude Opus 4.6
+
 ### Debug Log References
 
 ### Completion Notes List
 
+- Extracted "Most teams skip validation and build on assumptions." from the Vortex description paragraph
+- Placed it as a standalone bold line (`**...**`) between the workflow badges and the remaining paragraph
+- Remaining paragraph flows naturally starting with "Vortex guides you through..."
+- Proper blank line spacing confirmed above and below the bold line
+- No tests needed — pure text restructuring, no code changes
+
 ### File List
+
+- `README.md` (modified — extracted bold problem-framing sentence above Vortex paragraph)
