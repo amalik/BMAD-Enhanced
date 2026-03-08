@@ -56,21 +56,27 @@ Directory names from `_bmad/bme/_vortex/workflows/`:
 | 13 | pivot-resynthesis | Pivot Resynthesis |
 | 14 | product-vision | Product Vision |
 | 15 | production-monitoring | Production Monitoring |
-| 16 | proof-of-concept | Proof Of Concept |
-| 17 | proof-of-value | Proof Of Value |
+| 16 | proof-of-concept | Proof of Concept |
+| 17 | proof-of-value | Proof of Value |
 | 18 | research-convergence | Research Convergence |
 | 19 | signal-interpretation | Signal Interpretation |
 | 20 | user-discovery | User Discovery |
 | 21 | user-interview | User Interview |
 | 22 | vortex-navigation | Vortex Navigation |
 
-**Note on "mvp":** Title-case transform yields "Mvp" — override to "MVP" (industry-standard acronym).
+**Title-case exceptions:**
+- "mvp" → "MVP" (industry-standard acronym, not "Mvp")
+- "proof-of-concept" → "Proof of Concept" (lowercase "of" per standard title-case rules)
+- "proof-of-value" → "Proof of Value" (lowercase "of" per standard title-case rules)
+- General rule: lowercase small words ("of", "in", "for", "the", "and") unless they're the first word
 
 ### Insertion Point
 
 The `<details>` block goes between:
 - **Above:** The `*Suggested flow. Each workflow ends with a Compass routing...*` italic note
 - **Below:** The agent table (`| Agent | Stream | What they do |`)
+
+**Blank line formatting:** Maintain a blank line above and below the `<details>` block to ensure proper markdown rendering. Currently there is one blank line between the "Suggested flow" note and the agent table — the `<details>` block replaces that gap, so ensure blank lines surround it.
 
 ### Previous Story Intelligence (Story 1.1)
 
