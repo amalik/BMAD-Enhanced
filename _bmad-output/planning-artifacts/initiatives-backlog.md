@@ -31,6 +31,7 @@
 | D4 | **Video walkthrough or tutorial** — Screencast of a first-time user going through Emma's Lean Persona workflow | Contributing section, adjusted (Maya, Carson) | 5 | 2 | 70% | 3 | 2.3 | Move the needle | Backlog |
 | D2 | **Add output examples for more agents** — Isla (empathy map), Wade (experiment card), or Noah (signal report) in README | Vortex review (Liam, Wade) | 6 | 1 | 70% | 2 | 2.1 | Move the needle | Backlog |
 | D3 | **BMAD Core return arrow in diagram** — Show feedback loop from production back to Convoke in the README diagram | Vortex review (Noah) | 4 | 0.25 | 90% | 1 | 0.9 | Keep the lights on | Backlog |
+| D6 | **Reduce narrative overlap in journey example** — Trim ~950-1,100 words of overlap between narrative paragraphs and transition notes in the 7-agent journey | Scope-adjacent backlog (P2 E4) | 4 | 0.5 | 80% | 1 | 1.6 | Keep the lights on | Backlog |
 
 ### Update & Migration System
 
@@ -40,6 +41,7 @@
 | U4 | **Test upgrade-path step file cleanup** — Integration test simulating real upgrade with renamed step files | Murat review (M2) | 3 | 1 | 90% | 2 | 1.4 | Keep the lights on | Backlog |
 | U2 | **Validate migration modules at load time** — Fail fast if a migration module lacks `apply()` instead of crashing at execution | Murat review | 2 | 0.5 | 80% | 1 | 0.8 | Keep the lights on | Backlog |
 | U3 | **Robust version detection fallback** — Improve `guessVersionFromFileStructure()` with more markers (agent files, config presence) | Winston review (W3) | 3 | 0.5 | 60% | 2 | 0.5 | Keep the lights on | Backlog |
+| ~~U6~~ | ~~**Preserve user-customized agents on update**~~ — ~~Resolved: `mergeConfig()` smart-merges user agents since v1.4.0, with unit test coverage~~ | Scope-adjacent backlog (P2 E5) | — | — | — | — | — | — | Done |
 
 ### Testing & CI
 
@@ -48,6 +50,7 @@
 | T4 | **Migration idempotency CLI test** — Test that running `convoke-migrate` twice doesn't break state | Murat review | 3 | 1 | 80% | 1 | 2.4 | Keep the lights on | Backlog |
 | T1 | **`convoke-update.js` coverage to 80%+** — Currently at 29%, CLI orchestration paths untested | Test debt | 3 | 1 | 80% | 3 | 0.8 | Keep the lights on | Backlog |
 | T2 | **`convoke-version.js` coverage to 80%+** — Currently at 56%, CLI branch paths untested | Test debt | 2 | 0.5 | 80% | 2 | 0.4 | Keep the lights on | Backlog |
+| T5 | **Expand docs audit — remaining gaps** — Stale counts, broken links, naming leaks, and incomplete tables already implemented. Remaining: tense consistency checks and prose quality patterns | Scope-adjacent backlog (P2 E1) | 2 | 0.5 | 60% | 2 | 0.3 | Keep the lights on | Backlog |
 
 ### Infrastructure
 
@@ -66,6 +69,7 @@
 | A1 | **Add validate menu items to Wave 3 agents** — Mila, Liam, Noah currently lack validate items that Emma/Isla/Wade/Max have | BMB review (W1) | 4 | 0.5 | 80% | 2 | 0.8 | Keep the lights on | Backlog |
 | A3 | **Add `agentic` and `team-of-teams` npm keywords** — Discoverability improvement deferred since Phase 3 Epic 1 | Phase 3 tech debt | 3 | 0.25 | 100% | 1 | 0.8 | Keep the lights on | Backlog |
 | A4 | **Fix temp dir prefix inconsistency** — Internal `bmad-` vs `convoke-` prefix in temporary directories | Phase 3 tech debt | 1 | 0.25 | 100% | 1 | 0.3 | Keep the lights on | Backlog |
+| ~~A5~~ | ~~**Complete Wade's placeholder workflow steps**~~ — ~~Resolved: all 3 workflows have full content since v1.5.x~~ | Scope-adjacent backlog (P2 E2) | — | — | — | — | — | — | Done |
 | A2 | **Create `.agent.yaml` source files for Vortex agents** — Enable standard BMAD authoring pipeline (validate/edit via Agent Builder) | BMB review (B1) | 2 | 0.5 | 60% | 4 | 0.2 | Keep the lights on | Backlog |
 
 ### Platform & Product Vision
@@ -119,22 +123,24 @@ Harden the migration and update system with idempotency checks and integration t
 | 9 | D4 | Video walkthrough or tutorial | 2.3 | Move the needle | Documentation |
 | 10 | D2 | Add output examples for more agents | 2.1 | Move the needle | Documentation |
 | 11 | I1 | NPM_TOKEN secret for CI publish | 1.8 | Keep the lights on | Infrastructure |
-| 12 | U4 | Test upgrade-path step file cleanup | 1.4 | Keep the lights on | Update System |
-| 13 | P1 | Second domain-specialized team | 1.2 | Move the needle | Platform |
-| 14 | P3 | Team installer architecture | 1.2 | Move the needle | Platform |
-| 15 | S1 | Interactive installer | 1.0 | Move the needle | Infrastructure |
-| 16 | D3 | BMAD Core return arrow in diagram | 0.9 | Keep the lights on | Documentation |
-| 17 | A1 | Add validate menu items to Wave 3 agents | 0.8 | Keep the lights on | Agent Quality |
-| 18 | A3 | Add npm keywords (`agentic`, `team-of-teams`) | 0.8 | Keep the lights on | Agent Quality |
-| 19 | T1 | `convoke-update.js` coverage to 80%+ | 0.8 | Keep the lights on | Testing |
-| 20 | U2 | Validate migration modules at load time | 0.8 | Keep the lights on | Update System |
-| 21 | S2 | Simplified entry point | 0.7 | Move the needle | Infrastructure |
-| 22 | U3 | Robust version detection fallback | 0.5 | Keep the lights on | Update System |
-| 23 | P2 | Multi-team collaboration workflows | 0.4 | Move the needle | Platform |
-| 24 | T2 | `convoke-version.js` coverage to 80%+ | 0.4 | Keep the lights on | Testing |
-| 25 | I3 | CSV parser library for manifest | 0.4 | Keep the lights on | Infrastructure |
-| 26 | A4 | Fix temp dir prefix inconsistency | 0.3 | Keep the lights on | Agent Quality |
-| 27 | A2 | Create `.agent.yaml` source files | 0.2 | Keep the lights on | Agent Quality |
+| 12 | D6 | Reduce narrative overlap in journey example | 1.6 | Keep the lights on | Documentation |
+| 13 | U4 | Test upgrade-path step file cleanup | 1.4 | Keep the lights on | Update System |
+| 14 | P1 | Second domain-specialized team | 1.2 | Move the needle | Platform |
+| 15 | P3 | Team installer architecture | 1.2 | Move the needle | Platform |
+| 16 | S1 | Interactive installer | 1.0 | Move the needle | Infrastructure |
+| 17 | D3 | BMAD Core return arrow in diagram | 0.9 | Keep the lights on | Documentation |
+| 18 | A1 | Add validate menu items to Wave 3 agents | 0.8 | Keep the lights on | Agent Quality |
+| 19 | A3 | Add npm keywords (`agentic`, `team-of-teams`) | 0.8 | Keep the lights on | Agent Quality |
+| 20 | T1 | `convoke-update.js` coverage to 80%+ | 0.8 | Keep the lights on | Testing |
+| 21 | U2 | Validate migration modules at load time | 0.8 | Keep the lights on | Update System |
+| 22 | S2 | Simplified entry point | 0.7 | Move the needle | Infrastructure |
+| 23 | U3 | Robust version detection fallback | 0.5 | Keep the lights on | Update System |
+| 24 | P2 | Multi-team collaboration workflows | 0.4 | Move the needle | Platform |
+| 25 | T2 | `convoke-version.js` coverage to 80%+ | 0.4 | Keep the lights on | Testing |
+| 26 | I3 | CSV parser library for manifest | 0.4 | Keep the lights on | Infrastructure |
+| 27 | T5 | Expand docs audit — remaining gaps | 0.3 | Keep the lights on | Testing |
+| 28 | A4 | Fix temp dir prefix inconsistency | 0.3 | Keep the lights on | Agent Quality |
+| 29 | A2 | Create `.agent.yaml` source files | 0.2 | Keep the lights on | Agent Quality |
 
 ---
 
@@ -158,6 +164,7 @@ These items were identified and resolved during the 2026-03-08 review session:
 
 | Date | Change |
 |------|--------|
+| 2026-03-08 | Merged 4 items from scope-adjacent backlog: A5 (Wade placeholder steps, score 2.3), D6 (journey overlap, 1.6), U6 (preserve custom agents, 1.2), T5 (docs audit content patterns, 0.9). Backlog now at 31 scored items + 4 exploration candidates. |
 | 2026-03-08 | Added exploration candidates: P1-disc updated with team candidates (Data Science/AI Engineering, Ethics & Legal Compliance, Standard Authority), P5 (Convoke website), P6 (Tool-enabled agents). |
 | 2026-03-08 | Added P4 (Enhance module) — new BME section for upgrading existing BMAD agents with Convoke-provided workflows. Ranked #5 (score 2.8). |
 | 2026-03-08 | Multi-agent review by Vortex team, CIS team (Victor, Maya, Carson), and Sally. Scoring adjustments: I1 (7.2→1.8), D1 (2.8→5.6), D4 (1.3→2.3), T3 (2.3→2.7). Added 4 new initiatives: D5, N1, S1, S2. Added track labels, exploration candidates section, and epic groupings. |
