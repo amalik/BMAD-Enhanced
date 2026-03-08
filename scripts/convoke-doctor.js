@@ -69,7 +69,7 @@ function checkProjectRoot(projectRoot) {
     name: 'Project root',
     passed: false,
     error: 'Could not find _bmad/ directory',
-    fix: 'Run this command from inside a Convoke project, or run: npx convoke-install'
+    fix: 'Run this command from inside a Convoke project, or run: npx -p convoke-agents convoke-install'
   };
 }
 
@@ -81,7 +81,7 @@ function checkConfig(projectRoot) {
       name: 'Config file',
       passed: false,
       error: 'config.yaml not found',
-      fix: 'Run: npx convoke-install'
+      fix: 'Run: npx -p convoke-agents convoke-install'
     };
   }
 
@@ -94,7 +94,7 @@ function checkConfig(projectRoot) {
         name: 'Config file',
         passed: false,
         error: 'config.yaml is empty or invalid',
-        fix: 'Delete _bmad/bme/_vortex/config.yaml and run: npx convoke-install'
+        fix: 'Delete _bmad/bme/_vortex/config.yaml and run: npx -p convoke-agents convoke-install'
       };
     }
 
@@ -103,7 +103,7 @@ function checkConfig(projectRoot) {
         name: 'Config file',
         passed: false,
         error: 'config.yaml missing agents section',
-        fix: 'Run: npx convoke-update'
+        fix: 'Run: npx -p convoke-agents convoke-update'
       };
     }
 
@@ -113,7 +113,7 @@ function checkConfig(projectRoot) {
       name: 'Config file',
       passed: false,
       error: `YAML parse error: ${err.message}`,
-      fix: 'Check config.yaml for syntax errors, or delete and run: npx convoke-install'
+      fix: 'Check config.yaml for syntax errors, or delete and run: npx -p convoke-agents convoke-install'
     };
   }
 }
@@ -127,7 +127,7 @@ function checkAgents(projectRoot) {
       name: 'Agent files',
       passed: false,
       error: 'agents/ directory not found',
-      fix: 'Run: npx convoke-install-vortex'
+      fix: 'Run: npx -p convoke-agents convoke-install-vortex'
     };
   }
 
@@ -138,7 +138,7 @@ function checkAgents(projectRoot) {
       name: 'Agent files',
       passed: false,
       error: `Missing: ${missing.join(', ')}`,
-      fix: 'Run: npx convoke-install-vortex to reinstall'
+      fix: 'Run: npx -p convoke-agents convoke-install-vortex to reinstall'
     };
   }
 
@@ -153,7 +153,7 @@ function checkAgents(projectRoot) {
       name: 'Agent files',
       passed: false,
       error: `Empty agent files: ${empty.join(', ')}`,
-      fix: 'Run: npx convoke-install to restore agent files'
+      fix: 'Run: npx -p convoke-agents convoke-install to restore agent files'
     };
   }
 
@@ -169,7 +169,7 @@ function checkWorkflows(projectRoot) {
       name: 'Workflow directories',
       passed: false,
       error: 'workflows/ directory not found',
-      fix: 'Run: npx convoke-install'
+      fix: 'Run: npx -p convoke-agents convoke-install'
     };
   }
 
@@ -182,7 +182,7 @@ function checkWorkflows(projectRoot) {
       name: 'Workflow directories',
       passed: false,
       error: `Missing: ${missing.join(', ')}`,
-      fix: 'Run: npx convoke-update to restore workflows'
+      fix: 'Run: npx -p convoke-agents convoke-update to restore workflows'
     };
   }
 
@@ -284,7 +284,7 @@ function checkVersionConsistency(projectRoot) {
       name: 'Version consistency',
       passed: false,
       error: `Package: ${packageVersion}, Config: ${installedVersion}`,
-      fix: 'Run: npx convoke-update'
+      fix: 'Run: npx -p convoke-agents convoke-update'
     };
   } catch (_err) {
     return { name: 'Version consistency', passed: true, info: 'Could not read config version' };
