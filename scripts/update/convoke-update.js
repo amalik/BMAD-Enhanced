@@ -86,7 +86,7 @@ async function main() {
     case 'no-project':
       console.log(chalk.red('Not in a Convoke project. Could not find _bmad/ directory.'));
       console.log('');
-      console.log('Run: ' + chalk.cyan('npx convoke-install'));
+      console.log('Run: ' + chalk.cyan('npx -p convoke-agents convoke-install'));
       console.log('');
       process.exit(1);
       break;
@@ -94,7 +94,7 @@ async function main() {
     case 'fresh':
       console.log(chalk.yellow('No previous installation detected.'));
       console.log('');
-      console.log('Run: ' + chalk.cyan('npx convoke-install'));
+      console.log('Run: ' + chalk.cyan('npx -p convoke-agents convoke-install'));
       console.log('');
       process.exit(0);
       break;
@@ -102,7 +102,7 @@ async function main() {
     case 'broken':
       console.log(chalk.red('Installation appears incomplete or corrupted.'));
       console.log('');
-      console.log('Recommend running: ' + chalk.cyan('npx convoke-install'));
+      console.log('Recommend running: ' + chalk.cyan('npx -p convoke-agents convoke-install'));
       console.log('');
       process.exit(1);
       break;
@@ -110,7 +110,7 @@ async function main() {
     case 'no-version':
       console.log(chalk.yellow('Could not detect current version.'));
       console.log('');
-      console.log('Run: ' + chalk.cyan('npx convoke-install'));
+      console.log('Run: ' + chalk.cyan('npx -p convoke-agents convoke-install'));
       console.log('');
       process.exit(0);
       break;
