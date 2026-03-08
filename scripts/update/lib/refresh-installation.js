@@ -73,8 +73,14 @@ async function refreshInstallation(projectRoot, options = {}) {
   if (!isSameRoot) {
     for (const wf of WORKFLOW_NAMES) {
       const src = path.join(workflowsSource, wf);
+      const dest = path.join(workflowsTarget, wf);
       if (fs.existsSync(src)) {
-        await fs.copy(src, path.join(workflowsTarget, wf), { overwrite: true });
+        // Remove existing workflow directory first to clear stale files
+        // (e.g., renamed step files from previous versions)
+        if (fs.existsSync(dest)) {
+          await fs.remove(dest);
+        }
+        await fs.copy(src, dest, { overwrite: true });
         changes.push(`Refreshed workflow: ${wf}`);
         if (verbose) console.log(`    Refreshed workflow: ${wf}`);
       }
