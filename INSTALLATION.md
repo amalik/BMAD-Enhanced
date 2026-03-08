@@ -17,7 +17,7 @@ Convoke works **standalone** or as an extension to [BMAD Method](https://github.
 ## Quick Install
 
 ```bash
-npm install convoke-agents && npx convoke-install-vortex
+npm install convoke-agents && npx -p convoke-agents convoke-install-vortex
 ```
 
 All 7 Vortex agents (Emma, Isla, Mila, Liam, Wade, Noah, Max) with 22 workflows are installed and ready to use.
@@ -30,10 +30,10 @@ All 7 Vortex agents (Emma, Isla, Mila, Liam, Wade, Noah, Max) with 22 workflows 
 
 ```bash
 # Install into your project
-npm install convoke
+npm install convoke-agents
 
 # Install all Vortex agents and workflows
-npx convoke-install-vortex
+npx -p convoke-agents convoke-install-vortex
 ```
 
 ### Option 2: Clone from Source (Contributors Only)
@@ -42,7 +42,7 @@ For contributors or developers who want to modify agents or contribute to the pr
 
 ```bash
 git clone https://github.com/amalik/convoke-agents.git
-cd convoke
+cd convoke-agents
 npm install
 ```
 
@@ -153,7 +153,7 @@ Hey Amalik! I'm Emma — your Contextualization Expert...
 If the agent doesn't activate or you see raw markdown instead, run diagnostics:
 
 ```bash
-npx convoke-doctor
+npx -p convoke-agents convoke-doctor
 ```
 
 This checks project root, config validity, agent files, workflows, output directory, and version consistency — with actionable fix suggestions for each issue.
@@ -165,14 +165,14 @@ This checks project root, config validity, agent files, workflows, output direct
 Start with diagnostics — it catches most issues:
 
 ```bash
-npx convoke-doctor
+npx -p convoke-agents convoke-doctor
 ```
 
 ### Permission denied errors
 
 ```bash
 chmod +x scripts/*.js
-npx convoke-install-vortex
+npx -p convoke-agents convoke-install-vortex
 ```
 
 ### Config file already exists
@@ -191,7 +191,7 @@ Check that files are in place:
 ```bash
 ls -la _bmad/bme/_vortex/agents/
 ls -la _bmad/bme/_vortex/workflows/
-npx convoke-doctor
+npx -p convoke-agents convoke-doctor
 ```
 
 ---
@@ -201,7 +201,7 @@ npx convoke-doctor
 1. **Read the user guides** in `_bmad-output/vortex-artifacts/`
 2. **Activate an agent** — start with Emma for strategic framing or Isla for user research
 3. **Follow a workflow** — each agent presents a menu of guided workflows
-4. **Check updates** — run `npx convoke-version` periodically
+4. **Check updates** — run `npx -p convoke-agents convoke-version` periodically
 
 See the [Agent Guide](docs/agents.md) for detailed workflow descriptions and the recommended Vortex flow.
 
@@ -222,7 +222,7 @@ rm -rf _bmad/bme/_vortex/
 rm -rf _bmad-output/vortex-artifacts/
 
 # 4. Uninstall npm package
-npm uninstall convoke
+npm uninstall convoke-agents
 ```
 
 ---
