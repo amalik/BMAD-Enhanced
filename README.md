@@ -26,7 +26,9 @@ Convoke organizes AI agents into domain-specialized teams. Each team brings deep
 [![Agents](https://img.shields.io/badge/agents-7-brightgreen)](docs/agents.md)
 [![Workflows](https://img.shields.io/badge/workflows-22-success)](docs/agents.md)
 
-Most teams skip validation and build on assumptions. Vortex guides you through seven discovery streams — from understanding your users to interpreting production signals — so you can make evidence-based decisions before, during, and after you build. Each stream builds on the previous one's findings, and when gaps appear, the system routes you back to fill them.
+**Most teams skip validation and build on assumptions.**
+
+Vortex guides you through seven discovery streams — from understanding your users to interpreting production signals — so you can make evidence-based decisions before, during, and after you build. Each stream builds on the previous one's findings, and when gaps appear, the system routes you back to fill them.
 
 ```
                          7 Streams · 7 Agents
