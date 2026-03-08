@@ -72,6 +72,7 @@
 
 | # | Initiative | Source | R | I | C | E | Score | Track | Status |
 |---|-----------|--------|---|---|---|---|-------|-------|--------|
+| P4 | **Enhance module** — New BME section (`_bmad/bme/_enhance/`) that adds workflows and menu items to existing BMAD agents (BMM, CIS, BMB, TEA, Core). First enhancement: RICE initiatives backlog workflow for John PM. Positions Convoke as both "new teams" and "BMAD made better." | Product owner | 8 | 3 | 70% | 6 | 2.8 | Move the needle | Backlog |
 | P1 | **Second domain-specialized team** — Design and build the next Convoke team beyond Vortex. Requires user discovery to identify which team to build. | Product vision, adjusted (Isla) | 8 | 3 | 50% | 10 | 1.2 | Move the needle | Backlog |
 | P3 | **Team installer architecture** — Generalize `convoke-install-vortex` to `convoke-install <team-name>` for multi-team support | Platform architecture | 6 | 1 | 80% | 4 | 1.2 | Move the needle | Backlog |
 | P2 | **Multi-team collaboration workflows** — Cross-team handoffs and routing between Vortex and future teams | Product vision, README roadmap | 5 | 2 | 30% | 8 | 0.4 | Move the needle | Blocked (needs P1) |
@@ -109,28 +110,29 @@ Harden the migration and update system with idempotency checks and integration t
 | 2 | D1 | Workflow list in README or docs | 5.6 | Move the needle | Documentation |
 | 3 | U5 | `postinstall.js` npx command fix | 4.0 | Keep the lights on | Update System |
 | 4 | U1 | Check migration history before delta execution | 3.2 | Keep the lights on | Update System |
-| 5 | T3 | End-to-end update test on real project | 2.7 | Keep the lights on | Testing |
-| 6 | T4 | Migration idempotency CLI test | 2.4 | Keep the lights on | Testing |
-| 7 | I2 | `gh auth` for CI release creation | 2.4 | Keep the lights on | Infrastructure |
-| 8 | D4 | Video walkthrough or tutorial | 2.3 | Move the needle | Documentation |
-| 9 | D2 | Add output examples for more agents | 2.1 | Move the needle | Documentation |
-| 10 | I1 | NPM_TOKEN secret for CI publish | 1.8 | Keep the lights on | Infrastructure |
-| 11 | U4 | Test upgrade-path step file cleanup | 1.4 | Keep the lights on | Update System |
-| 12 | P1 | Second domain-specialized team | 1.2 | Move the needle | Platform |
-| 13 | P3 | Team installer architecture | 1.2 | Move the needle | Platform |
-| 14 | S1 | Interactive installer | 1.0 | Move the needle | Infrastructure |
-| 15 | D3 | BMAD Core return arrow in diagram | 0.9 | Keep the lights on | Documentation |
-| 16 | A1 | Add validate menu items to Wave 3 agents | 0.8 | Keep the lights on | Agent Quality |
-| 17 | A3 | Add npm keywords (`agentic`, `team-of-teams`) | 0.8 | Keep the lights on | Agent Quality |
-| 18 | T1 | `convoke-update.js` coverage to 80%+ | 0.8 | Keep the lights on | Testing |
-| 19 | U2 | Validate migration modules at load time | 0.8 | Keep the lights on | Update System |
-| 20 | S2 | Simplified entry point | 0.7 | Move the needle | Infrastructure |
-| 21 | U3 | Robust version detection fallback | 0.5 | Keep the lights on | Update System |
-| 22 | P2 | Multi-team collaboration workflows | 0.4 | Move the needle | Platform |
-| 23 | T2 | `convoke-version.js` coverage to 80%+ | 0.4 | Keep the lights on | Testing |
-| 24 | I3 | CSV parser library for manifest | 0.4 | Keep the lights on | Infrastructure |
-| 25 | A4 | Fix temp dir prefix inconsistency | 0.3 | Keep the lights on | Agent Quality |
-| 26 | A2 | Create `.agent.yaml` source files | 0.2 | Keep the lights on | Agent Quality |
+| 5 | P4 | Enhance module | 2.8 | Move the needle | Platform |
+| 6 | T3 | End-to-end update test on real project | 2.7 | Keep the lights on | Testing |
+| 7 | T4 | Migration idempotency CLI test | 2.4 | Keep the lights on | Testing |
+| 8 | I2 | `gh auth` for CI release creation | 2.4 | Keep the lights on | Infrastructure |
+| 9 | D4 | Video walkthrough or tutorial | 2.3 | Move the needle | Documentation |
+| 10 | D2 | Add output examples for more agents | 2.1 | Move the needle | Documentation |
+| 11 | I1 | NPM_TOKEN secret for CI publish | 1.8 | Keep the lights on | Infrastructure |
+| 12 | U4 | Test upgrade-path step file cleanup | 1.4 | Keep the lights on | Update System |
+| 13 | P1 | Second domain-specialized team | 1.2 | Move the needle | Platform |
+| 14 | P3 | Team installer architecture | 1.2 | Move the needle | Platform |
+| 15 | S1 | Interactive installer | 1.0 | Move the needle | Infrastructure |
+| 16 | D3 | BMAD Core return arrow in diagram | 0.9 | Keep the lights on | Documentation |
+| 17 | A1 | Add validate menu items to Wave 3 agents | 0.8 | Keep the lights on | Agent Quality |
+| 18 | A3 | Add npm keywords (`agentic`, `team-of-teams`) | 0.8 | Keep the lights on | Agent Quality |
+| 19 | T1 | `convoke-update.js` coverage to 80%+ | 0.8 | Keep the lights on | Testing |
+| 20 | U2 | Validate migration modules at load time | 0.8 | Keep the lights on | Update System |
+| 21 | S2 | Simplified entry point | 0.7 | Move the needle | Infrastructure |
+| 22 | U3 | Robust version detection fallback | 0.5 | Keep the lights on | Update System |
+| 23 | P2 | Multi-team collaboration workflows | 0.4 | Move the needle | Platform |
+| 24 | T2 | `convoke-version.js` coverage to 80%+ | 0.4 | Keep the lights on | Testing |
+| 25 | I3 | CSV parser library for manifest | 0.4 | Keep the lights on | Infrastructure |
+| 26 | A4 | Fix temp dir prefix inconsistency | 0.3 | Keep the lights on | Agent Quality |
+| 27 | A2 | Create `.agent.yaml` source files | 0.2 | Keep the lights on | Agent Quality |
 
 ---
 
@@ -154,5 +156,6 @@ These items were identified and resolved during the 2026-03-08 review session:
 
 | Date | Change |
 |------|--------|
+| 2026-03-08 | Added P4 (Enhance module) — new BME section for upgrading existing BMAD agents with Convoke-provided workflows. Ranked #5 (score 2.8). |
 | 2026-03-08 | Multi-agent review by Vortex team, CIS team (Victor, Maya, Carson), and Sally. Scoring adjustments: I1 (7.2→1.8), D1 (2.8→5.6), D4 (1.3→2.3), T3 (2.3→2.7). Added 4 new initiatives: D5, N1, S1, S2. Added track labels, exploration candidates section, and epic groupings. |
 | 2026-03-08 | Initial backlog created from Vortex team README review, Winston/Murat update system review, Bond/Morgan/Wendy agent compliance review, and Phase 3 tech debt |
