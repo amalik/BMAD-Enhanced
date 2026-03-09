@@ -186,6 +186,132 @@ describe('runMigrations lock conflict', () => {
   });
 });
 
+describe('runMigrations double-run safety (history filtering)', () => {
+  let tmpDir;
+  let originalCwd;
+
+  before(async () => {
+    tmpDir = await fs.mkdtemp(path.join(os.tmpdir(), 'bmad-double-'));
+    await createInstallation(tmpDir, '1.4.0');
+    originalCwd = process.cwd();
+  });
+
+  after(async () => {
+    process.chdir(originalCwd);
+    restoreConsole();
+    await fs.remove(tmpDir);
+  });
+
+  it('skips already-applied migrations on second run', async () => {
+    process.chdir(tmpDir);
+    silenceConsole();
+
+    // First run: applies migrations and writes history
+    const first = await runMigrations('1.4.0');
+    assert.equal(first.success, true);
+
+    // Count delta results (excluding refresh-installation)
+    const firstDeltas = first.results.filter(r => r.name !== 'refresh-installation');
+    assert.ok(firstDeltas.length > 0, 'first run should apply at least one migration delta');
+
+    // Second run: same fromVersion — deltas should be skipped, refresh still runs
+    const second = await runMigrations('1.4.0');
+    restoreConsole();
+
+    assert.equal(second.success, true);
+
+    // Second run should have only refresh-installation (no deltas re-applied)
+    const secondDeltas = second.results.filter(r => r.name !== 'refresh-installation');
+    assert.equal(secondDeltas.length, 0, 'second run should not re-apply any migration deltas');
+
+    // Refresh should still have run
+    const refreshResult = second.results.find(r => r.name === 'refresh-installation');
+    assert.ok(refreshResult, 'refresh-installation should still run on second invocation');
+  });
+});
+
+describe('runMigrations partial history (selective filtering)', () => {
+  let tmpDir;
+  let originalCwd;
+
+  before(async () => {
+    tmpDir = await fs.mkdtemp(path.join(os.tmpdir(), 'bmad-partial-'));
+    await createInstallation(tmpDir, '1.3.0');
+    originalCwd = process.cwd();
+  });
+
+  after(async () => {
+    process.chdir(originalCwd);
+    restoreConsole();
+    await fs.remove(tmpDir);
+  });
+
+  it('skips pre-applied migration and continues with remaining flow', async () => {
+    process.chdir(tmpDir);
+
+    // Pre-seed config.yaml with partial migration history (only one migration applied)
+    const configPath = path.join(tmpDir, '_bmad/bme/_vortex/config.yaml');
+    const config = yaml.load(fs.readFileSync(configPath, 'utf8'));
+    config.migration_history = [{
+      timestamp: new Date().toISOString(),
+      from_version: '1.3.0',
+      to_version: '1.5.0',
+      migrations_applied: ['1.3.x-to-1.5.0']
+    }];
+    fs.writeFileSync(configPath, yaml.dump(config), 'utf8');
+
+    silenceConsole();
+    const result = await runMigrations('1.3.0');
+    restoreConsole();
+
+    assert.equal(result.success, true);
+
+    // The pre-seeded migration should NOT appear in results
+    const deltaNames = result.results
+      .filter(r => r.name !== 'refresh-installation')
+      .map(r => r.name);
+    assert.ok(!deltaNames.includes('1.3.x-to-1.5.0'), 'pre-applied migration should be skipped');
+
+    // Other applicable migrations (e.g., 1.5.x-to-1.6.0 etc.) should still apply
+    // Note: they may or may not apply depending on version matching logic,
+    // but the key assertion is the pre-seeded one was filtered out
+  });
+});
+
+describe('runMigrations dry-run respects history filter', () => {
+  let tmpDir;
+  let originalCwd;
+
+  before(async () => {
+    tmpDir = await fs.mkdtemp(path.join(os.tmpdir(), 'bmad-dry-hist-'));
+    await createInstallation(tmpDir, '1.4.0');
+    originalCwd = process.cwd();
+  });
+
+  after(async () => {
+    process.chdir(originalCwd);
+    restoreConsole();
+    await fs.remove(tmpDir);
+  });
+
+  it('dry-run after real run shows no migrations to preview', async () => {
+    process.chdir(tmpDir);
+    silenceConsole();
+
+    // First: real run to populate history
+    const real = await runMigrations('1.4.0');
+    assert.equal(real.success, true);
+
+    // Second: dry-run should show empty preview (all filtered)
+    const dry = await runMigrations('1.4.0', { dryRun: true });
+    restoreConsole();
+
+    assert.equal(dry.success, true);
+    assert.equal(dry.dryRun, true);
+    assert.deepEqual(dry.previews, []);
+  });
+});
+
 describe('runMigrations error handling and rollback', () => {
   let tmpDir;
   let originalCwd;
