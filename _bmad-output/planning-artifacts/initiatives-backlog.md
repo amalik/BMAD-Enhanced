@@ -2,7 +2,7 @@
 
 **Created:** 2026-03-08
 **Method:** RICE (Reach, Impact, Confidence, Effort)
-**Last Updated:** 2026-03-08
+**Last Updated:** 2026-03-09
 
 ---
 
@@ -24,9 +24,9 @@
 
 | # | Initiative | Source | R | I | C | E | Score | Track | Status |
 |---|-----------|--------|---|---|---|---|-------|-------|--------|
-| D7 | **Fix ASCII art banner and Vortex stream diagram** — README banner has misaligned characters and the 7-stream Vortex diagram has layout/spacing issues. Both are the first visual impression for new users | Product owner | 9 | 1 | 90% | 1 | 8.1 | Move the needle | Backlog |
-| D5 | **Problem-framing sentence in README** — Add a one-liner above the diagram: "Most teams skip validation and build on assumptions. Vortex fixes that." | Multi-agent review (Emma) | 9 | 3 | 90% | 1 | 8.1 | Move the needle | Backlog |
-| D1 | **Workflow list in README or docs** — Surface the 22 workflow names somewhere accessible (collapsed `<details>` block or dedicated page) | Vortex review (Wade), adjusted (Mila) | 7 | 1 | 80% | 1 | 5.6 | Move the needle | Backlog |
+| D7 | **Fix ASCII art banner and Vortex stream diagram** — README banner has misaligned characters and the 7-stream Vortex diagram has layout/spacing issues. Both are the first visual impression for new users | Product owner | 9 | 1 | 90% | 1 | 8.1 | Move the needle | Done (v2.0.1) |
+| D5 | **Problem-framing sentence in README** — Add a one-liner above the diagram: "Most teams skip validation and build on assumptions. Vortex fixes that." | Multi-agent review (Emma) | 9 | 3 | 90% | 1 | 8.1 | Move the needle | Done (v2.0.1) |
+| D1 | **Workflow list in README or docs** — Surface the 22 workflow names somewhere accessible (collapsed `<details>` block or dedicated page) | Vortex review (Wade), adjusted (Mila) | 7 | 1 | 80% | 1 | 5.6 | Move the needle | Done (v2.0.1) |
 | D2 | **Add output examples for more agents** — Isla (empathy map), Wade (experiment card), or Noah (signal report) in README | Vortex review (Liam, Wade) | 6 | 1 | 70% | 2 | 2.1 | Move the needle | Backlog |
 | D6 | **Reduce narrative overlap in journey example** — Trim ~950-1,100 words of overlap between narrative paragraphs and transition notes in the 7-agent journey | Scope-adjacent backlog (P2 E4) | 4 | 0.5 | 80% | 1 | 1.6 | Keep the lights on | Backlog |
 | D3 | **BMAD Core return arrow in diagram** — Show feedback loop from production back to Convoke in the README diagram | Vortex review (Noah) | 4 | 0.25 | 90% | 1 | 0.9 | Keep the lights on | Backlog |
@@ -35,8 +35,8 @@
 
 | # | Initiative | Source | R | I | C | E | Score | Track | Status |
 |---|-----------|--------|---|---|---|---|-------|-------|--------|
-| U5 | **`postinstall.js` npx command fix** — Update postinstall messages to use `npx -p convoke-agents` pattern | User testing | 8 | 0.5 | 100% | 1 | 4.0 | Keep the lights on | Backlog |
-| U1 | **Check migration history before delta execution** — Prevent double-application if `convoke-update` runs twice | Winston review (W2) | 4 | 1 | 80% | 1 | 3.2 | Keep the lights on | Backlog |
+| U5 | **`postinstall.js` npx command fix** — Update postinstall messages to use `npx -p convoke-agents` pattern | User testing | 8 | 0.5 | 100% | 1 | 4.0 | Keep the lights on | Done (v2.0.1) |
+| U1 | **Check migration history before delta execution** — Prevent double-application if `convoke-update` runs twice | Winston review (W2) | 4 | 1 | 80% | 1 | 3.2 | Keep the lights on | Done (v2.0.1) |
 | U4 | **Test upgrade-path step file cleanup** — Integration test simulating real upgrade with renamed step files | Murat review (M2) | 3 | 1 | 90% | 2 | 1.4 | Keep the lights on | Backlog |
 | U2 | **Validate migration modules at load time** — Fail fast if a migration module lacks `apply()` instead of crashing at execution | Murat review | 2 | 0.5 | 80% | 1 | 0.8 | Keep the lights on | Backlog |
 | U3 | **Robust version detection fallback** — Improve `guessVersionFromFileStructure()` with more markers (agent files, config presence) | Winston review (W3) | 3 | 0.5 | 60% | 2 | 0.5 | Keep the lights on | Backlog |
@@ -126,11 +126,11 @@ Remaining update system items not in Hardening: load-time validation, version de
 
 | Rank | # | Initiative | Score | Track | Category |
 |------|---|-----------|-------|-------|----------|
-| 1 | D7 | Fix ASCII art banner and Vortex stream diagram | 8.1 | Move the needle | Documentation |
-| 2 | D5 | Problem-framing sentence in README | 8.1 | Move the needle | Documentation |
-| 3 | D1 | Workflow list in README or docs | 5.6 | Move the needle | Documentation |
-| 4 | U5 | `postinstall.js` npx command fix | 4.0 | Keep the lights on | Update System |
-| 5 | U1 | Check migration history before delta execution | 3.2 | Keep the lights on | Update System |
+| ~~1~~ | D7 | ~~Fix ASCII art banner and Vortex stream diagram~~ | 8.1 | Move the needle | Done (v2.0.1) |
+| ~~2~~ | D5 | ~~Problem-framing sentence in README~~ | 8.1 | Move the needle | Done (v2.0.1) |
+| ~~3~~ | D1 | ~~Workflow list in README or docs~~ | 5.6 | Move the needle | Done (v2.0.1) |
+| ~~4~~ | U5 | ~~`postinstall.js` npx command fix~~ | 4.0 | Keep the lights on | Done (v2.0.1) |
+| ~~5~~ | U1 | ~~Check migration history before delta execution~~ | 3.2 | Keep the lights on | Done (v2.0.1) |
 | 6 | P4 | Enhance module | 2.8 | Move the needle | Platform |
 | 7 | T3 | End-to-end update test on real project | 2.7 | Keep the lights on | Testing |
 | 8 | T4 | Migration idempotency CLI test | 2.4 | Keep the lights on | Testing |
@@ -180,6 +180,7 @@ These items were identified and resolved during the 2026-03-08 review session:
 
 | Date | Change |
 |------|--------|
+| 2026-03-09 | Marked 5 initiatives Done (v2.0.1): D7, D5, D1, U5, U1. Shipped in Phase 4 sprint (3 epics, 6 stories). 24 scored items remain. |
 | 2026-03-08 | Added D7 (Fix ASCII art banner and Vortex stream diagram, score 8.1). Backlog now at 30 scored items + 4 exploration candidates. |
 | 2026-03-08 | Merged 4 items from scope-adjacent backlog: A5 (Wade placeholder steps, score 2.3), D6 (journey overlap, 1.6), U6 (preserve custom agents, 1.2), T5 (docs audit content patterns, 0.9). Backlog now at 31 scored items + 4 exploration candidates. |
 | 2026-03-08 | Added exploration candidates: P1-disc updated with team candidates (Data Science/AI Engineering, Ethics & Legal Compliance, Standard Authority), P5 (Convoke website), P6 (Tool-enabled agents). |
