@@ -1,6 +1,6 @@
 # Story 2.3: Add Workflow List to README
 
-Status: ready-for-dev
+Status: in-progress
 
 ## Story
 
@@ -17,15 +17,15 @@ so that I can quickly assess whether Convoke covers my discovery needs.
 
 ## Tasks / Subtasks
 
-- [ ] Task 1: Create the `<details>` block content (AC: #1, #2, #3, #4)
-  - [ ] 1.1: In `README.md`, locate the insertion point — below the "Suggested flow" note after the Vortex diagram, and above the agent table
-  - [ ] 1.2: Create a `<details><summary>22 Vortex Workflows</summary>` block (collapsed by default)
-  - [ ] 1.3: List all 22 workflows in title-case format (see verified inventory below)
-  - [ ] 1.4: Group workflows by agent/stream if it improves readability (optional — flat list is acceptable)
+- [x] Task 1: Create the `<details>` block content (AC: #1, #2, #3, #4)
+  - [x] 1.1: In `README.md`, locate the insertion point — below the "Suggested flow" note after the Vortex diagram, and above the agent table
+  - [x] 1.2: Create a `<details><summary>22 Vortex Workflows</summary>` block (collapsed by default)
+  - [x] 1.3: List all 22 workflows in title-case format (see verified inventory below)
+  - [x] 1.4: Flat alphabetical list used — clear and scannable without grouping
 - [ ] Task 2: Visual verification (AC: #1, #3)
   - [ ] 2.1: Verify the `<details>` block renders collapsed by default on GitHub
   - [ ] 2.2: Verify it expands correctly when clicked
-  - [ ] 2.3: Verify it doesn't break the surrounding markdown layout
+  - [x] 2.3: Verify it doesn't break the surrounding markdown layout
 
 ## Dev Notes
 
@@ -101,8 +101,15 @@ Story 1.1 modified README.md (Vortex paragraph section). Key learnings:
 
 ### Agent Model Used
 
+Claude Opus 4.6
+
 ### Debug Log References
 
 ### Completion Notes List
 
+- **Task 1 (Content creation):** Inserted `<details><summary>22 Vortex Workflows</summary>` block between the "Suggested flow" italic note and the agent table in README.md. All 22 workflows listed alphabetically in title-case format with correct exceptions (MVP, Proof of Concept, Proof of Value). Flat list chosen over grouped layout for clarity and scannability. Blank lines maintained above and below the block for proper markdown rendering.
+- Task 2 (Visual verification) pending — requires push and GitHub/terminal checks.
+
 ### File List
+
+- `README.md` (modified — added `<details>` block with 22 Vortex Workflows list)
