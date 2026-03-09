@@ -101,4 +101,4 @@ Claude Opus 4.6
 
 ### File List
 
-- `README.md` (modified — re-centered tagline from 7 to 16 leading spaces)
+- `README.md` (modified — re-centered tagline from 7 to 16 leading spaces; normalized leading spaces to 1 on rows 1 and 6; changed banner from `<pre>` to fenced code block to fix per-line centering inside `<div align="center">`)
