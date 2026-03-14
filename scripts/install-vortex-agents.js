@@ -29,7 +29,7 @@ function printBanner() {
 }
 
 function checkPrerequisites(projectRoot) {
-  console.log(`${CYAN}[1/6]${RESET} Checking prerequisites...`);
+  console.log(`${CYAN}[1/5]${RESET} Checking prerequisites...`);
 
   const bmadDir = path.join(projectRoot, '_bmad');
 
@@ -53,7 +53,7 @@ function checkPrerequisites(projectRoot) {
 }
 
 function archiveDeprecatedWorkflows(projectRoot) {
-  console.log(`${CYAN}[2/6]${RESET} Archiving deprecated workflows...`);
+  console.log(`${CYAN}[2/5]${RESET} Archiving deprecated workflows...`);
 
   const sourceDir = path.join(__dirname, '..', '_bmad', 'bme', '_vortex');
   const targetDir = path.join(projectRoot, '_bmad', 'bme', '_vortex');
@@ -94,32 +94,8 @@ function cleanupLegacyFiles(projectRoot) {
   console.log(`${GREEN}  ✓${RESET} Legacy cleanup complete`);
 }
 
-function csvEscape(value) {
-  return `"${String(value).replace(/"/g, '""')}"`;
-}
-
-function createAgentManifest(projectRoot) {
-  console.log(`${CYAN}[3/6]${RESET} Creating agent manifest...`);
-
-  const manifestPath = path.join(projectRoot, '_bmad', '_config', 'agent-manifest.csv');
-  fs.mkdirSync(path.dirname(manifestPath), { recursive: true });
-
-  const header = '"agent_id","name","title","icon","role","identity","communication_style","expertise","submodule","path"\n';
-  const rows = AGENTS.map(a => {
-    const p = a.persona;
-    return [
-      a.id, a.name, a.title, a.icon,
-      p.role, p.identity, p.communication_style, p.expertise,
-      'bme', `_bmad/bme/_vortex/agents/${a.id}.md`,
-    ].map(csvEscape).join(',');
-  }).join('\n') + '\n';
-
-  fs.writeFileSync(manifestPath, header + rows);
-  console.log(`${GREEN}  ✓${RESET} Created agent-manifest.csv`);
-}
-
 function createOutputDirectory(projectRoot) {
-  console.log(`${CYAN}[4/6]${RESET} Setting up output directory...`);
+  console.log(`${CYAN}[3/5]${RESET} Setting up output directory...`);
 
   const outputDir = path.join(projectRoot, '_bmad-output', 'vortex-artifacts');
   fs.mkdirSync(outputDir, { recursive: true });
@@ -128,11 +104,11 @@ function createOutputDirectory(projectRoot) {
 }
 
 function verifyInstallation(projectRoot) {
-  console.log(`${CYAN}[6/6]${RESET} Verifying installation...`);
+  console.log(`${CYAN}[5/5]${RESET} Verifying installation...`);
 
   const checks = [
     ...AGENTS.map(a => ({ path: `_bmad/bme/_vortex/agents/${a.id}.md`, name: `${a.name} agent file` })),
-    ...AGENTS.map(a => ({ path: `.claude/commands/bmad-agent-bme-${a.id}.md`, name: `${a.name} slash command` })),
+    ...AGENTS.map(a => ({ path: `.claude/skills/bmad-agent-bme-${a.id}/SKILL.md`, name: `${a.name} skill` })),
     { path: '_bmad/bme/_vortex/config.yaml', name: 'Configuration file' },
   ];
 
@@ -175,7 +151,7 @@ function printSuccess() {
   console.log(`  ${YELLOW}1.${RESET} Personalize your config:`);
   console.log(`     Edit ${CYAN}_bmad/bme/_vortex/config.yaml${RESET} and replace ${YELLOW}{user}${RESET} with your name`);
   console.log('');
-  console.log(`  ${YELLOW}2.${RESET} Activate an agent with a slash command (Claude Code):`);
+  console.log(`  ${YELLOW}2.${RESET} Activate an agent (skill) in Claude Code:`);
   for (const agent of AGENTS) {
     console.log(`     ${CYAN}/bmad-agent-bme-${agent.id}${RESET}  (${agent.name})`);
   }
@@ -193,11 +169,10 @@ async function main() {
     printBanner();
     checkPrerequisites(projectRoot);
     archiveDeprecatedWorkflows(projectRoot);
-    createAgentManifest(projectRoot);
     createOutputDirectory(projectRoot);
 
-    // Use refreshInstallation for agents, workflows, config, and user guides
-    console.log(`${CYAN}[5/6]${RESET} Installing agents, workflows, config, and guides...`);
+    // Use refreshInstallation for agents, workflows, config, guides, manifest, and skills
+    console.log(`${CYAN}[4/5]${RESET} Installing agents, workflows, config, and guides...`);
     await refreshInstallation(projectRoot, { backupGuides: false });
     console.log(`${GREEN}  ✓${RESET} Installation refreshed`);
 
