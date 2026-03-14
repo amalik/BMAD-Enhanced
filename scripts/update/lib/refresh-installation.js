@@ -171,6 +171,44 @@ async function refreshInstallation(projectRoot, options = {}) {
     if (verbose) console.log('    Skipped guide copy (dev environment)');
   }
 
+  // 6. Generate .claude/commands/ slash command files for each agent
+  const commandsTarget = path.join(projectRoot, '.claude', 'commands');
+  await fs.ensureDir(commandsTarget);
+
+  // Remove deprecated command files (agents no longer in registry)
+  const currentCommandFiles = new Set(AGENTS.map(a => `bmad-agent-bme-${a.id}.md`));
+  const existingCommands = (await fs.readdir(commandsTarget)).filter(f => f.startsWith('bmad-agent-bme-'));
+  for (const file of existingCommands) {
+    if (!currentCommandFiles.has(file)) {
+      await fs.remove(path.join(commandsTarget, file));
+      changes.push(`Removed deprecated command: ${file}`);
+      if (verbose) console.log(`    Removed deprecated command: ${file}`);
+    }
+  }
+
+  for (const agent of AGENTS) {
+    const filename = `bmad-agent-bme-${agent.id}.md`;
+    const content = `---
+name: '${agent.id}'
+description: '${agent.id} agent'
+---
+
+You must fully embody this agent's persona and follow all activation instructions exactly as specified. NEVER break character until given an exit command.
+
+<agent-activation CRITICAL="TRUE">
+1. LOAD the FULL agent file from {project-root}/_bmad/bme/_vortex/agents/${agent.id}.md
+2. READ its entire contents - this contains the complete agent persona, menu, and instructions
+3. FOLLOW every step in the <activation> section precisely
+4. DISPLAY the welcome/greeting as instructed
+5. PRESENT the numbered menu
+6. WAIT for user input before proceeding
+</agent-activation>
+`;
+    await fs.writeFile(path.join(commandsTarget, filename), content, 'utf8');
+    changes.push(`Refreshed command: ${filename}`);
+    if (verbose) console.log(`    Refreshed command: ${filename}`);
+  }
+
   return changes;
 }
 
