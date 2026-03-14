@@ -72,8 +72,66 @@ describe('Fresh Install (refreshInstallation on empty project)', () => {
     assert.ok(Array.isArray(changes));
     assert.ok(changes.length > 0, 'should report at least one change');
     assert.ok(changes.some(c => c.includes('config.yaml')), 'should mention config update');
+    assert.ok(changes.some(c => c.includes('Refreshed command:')), 'should mention command creation');
 
     await fs.remove(tmpDir2);
+  });
+});
+
+describe('Fresh Install creates slash command files', () => {
+  let tmpDir;
+
+  before(async () => {
+    tmpDir = await fs.mkdtemp(path.join(os.tmpdir(), 'bmad-commands-'));
+    await fs.ensureDir(path.join(tmpDir, '_bmad'));
+    await refreshInstallation(tmpDir, { backupGuides: false, verbose: false });
+  });
+
+  after(async () => {
+    await fs.remove(tmpDir);
+  });
+
+  it('creates all 7 command files', async () => {
+    const { AGENTS } = require('../../scripts/update/lib/agent-registry');
+    for (const agent of AGENTS) {
+      const cmdPath = path.join(tmpDir, '.claude', 'commands', `bmad-agent-bme-${agent.id}.md`);
+      assert.ok(fs.existsSync(cmdPath), `Command file for ${agent.name} should exist`);
+    }
+  });
+
+  it('command files have correct frontmatter', async () => {
+    const cmdPath = path.join(tmpDir, '.claude', 'commands', 'bmad-agent-bme-contextualization-expert.md');
+    const content = fs.readFileSync(cmdPath, 'utf8');
+    assert.ok(content.includes("name: 'contextualization-expert'"), 'should have correct name');
+    assert.ok(content.includes("description: 'contextualization-expert agent'"), 'should have correct description');
+  });
+
+  it('command files reference correct agent path', async () => {
+    const cmdPath = path.join(tmpDir, '.claude', 'commands', 'bmad-agent-bme-lean-experiments-specialist.md');
+    const content = fs.readFileSync(cmdPath, 'utf8');
+    assert.ok(content.includes('_bmad/bme/_vortex/agents/lean-experiments-specialist.md'), 'should reference correct agent file');
+  });
+
+  it('is idempotent — running twice produces same result', async () => {
+    const { AGENTS } = require('../../scripts/update/lib/agent-registry');
+
+    // Capture content before second run
+    const contentsBefore = {};
+    for (const agent of AGENTS) {
+      const cmdPath = path.join(tmpDir, '.claude', 'commands', `bmad-agent-bme-${agent.id}.md`);
+      contentsBefore[agent.id] = fs.readFileSync(cmdPath, 'utf8');
+    }
+
+    // Run again
+    await refreshInstallation(tmpDir, { backupGuides: false, verbose: false });
+
+    // Verify all files exist with identical content
+    for (const agent of AGENTS) {
+      const cmdPath = path.join(tmpDir, '.claude', 'commands', `bmad-agent-bme-${agent.id}.md`);
+      assert.ok(fs.existsSync(cmdPath), `Command file for ${agent.name} should still exist after re-run`);
+      const contentAfter = fs.readFileSync(cmdPath, 'utf8');
+      assert.equal(contentAfter, contentsBefore[agent.id], `${agent.name} content should be identical after re-run`);
+    }
   });
 });
 
