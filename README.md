@@ -155,7 +155,7 @@ Open `_bmad/bme/_vortex/config.yaml` and replace `{user}` with your name. Agents
 
 #### Activate an Agent
 
-**Claude Code (slash commands)**
+**Claude Code (skills)**
 
 ```
 /bmad-agent-bme-contextualization-expert          # Emma  🎯
