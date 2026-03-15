@@ -45,7 +45,7 @@ This document provides the complete epic and story breakdown for the P4 Enhance 
 - FR20: The workflow can regenerate the prioritized view table with all items (existing + new) sorted by composite score
 - FR21: The workflow can add provenance tags to new items ("Added from [source], [date]")
 - FR22: The workflow can add rescore provenance to changed items in Review mode ("Rescored [old]→[new], Review, [date]")
-- FR23: The workflow can add changelog entries in the correct format (### YYYY-MM-DD with bullet items)
+- FR23: The workflow can add changelog entries in the correct format (table with Date and Change columns, newest first)
 - FR24: The workflow can validate structural format of the backlog file before writing (section headings, table columns, changelog section)
 - FR25: Product Owner can proceed or abort when pre-write validation detects a structural mismatch
 
@@ -477,7 +477,7 @@ So that the backlog is updated correctly without corrupting existing content.
 **And** new items are appended to the correct category section identified by section heading (FR19)
 **And** the prioritized view table is regenerated with all items (existing + new) sorted by composite score (FR20)
 **And** provenance tags are added: "Added from [source], [date]" (FR21)
-**And** changelog entries are added in the correct format: `### YYYY-MM-DD` with bullet items (FR23)
+**And** changelog entries are added in the correct format: table with Date and Change columns, newest first (FR23)
 **And** all output is standard markdown — no proprietary extensions, HTML embeds, or tool-specific syntax (NFR6)
 
 **Given** the backlog file is updated
