@@ -125,9 +125,10 @@ describe('Upgrade from v1.3.x (simulated)', () => {
     assert.equal(migrations[0].name, '1.3.x-to-1.5.0');
   });
 
-  it('reports no breaking changes for v1.3.8', () => {
+  it('reports breaking changes for v1.3.8 (chain reaches 1.7.x-to-2.0.0)', () => {
     const changes = registry.getBreakingChanges('1.3.8');
-    assert.equal(changes.length, 0);
+    assert.equal(changes.length, 1);
+    assert.ok(changes[0].includes('Product rename'));
   });
 
   it('migration path shows upgrade-needed and breaking (v2.0.0 rename)', () => {
