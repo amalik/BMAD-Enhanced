@@ -2,7 +2,7 @@
 
 const fs = require('fs-extra');
 const yaml = require('js-yaml');
-const { compareVersions } = require('../lib/utils');
+
 
 /**
  * Migration Registry for Convoke
@@ -73,38 +73,75 @@ const MIGRATIONS = [
 
 /**
  * Get migrations applicable for upgrading from a given version.
- * Target version is always the current package version (read at runtime).
+ * Walks the full migration chain: finds the entry-point migration matching
+ * the user's version, then follows the chain forward by parsing each
+ * migration's target version and finding the next hop.
  *
  * @param {string} fromVersion - Current installed version (e.g., "1.0.5")
- * @returns {Array} List of applicable migrations with loaded modules
+ * @returns {Array} List of applicable migrations with loaded modules, in chain order
  */
 function getMigrationsFor(fromVersion) {
   const applicable = [];
 
+  // Step 1: Find the entry-point migration matching the user's current version
+  let entryMigration = null;
   for (const migration of MIGRATIONS) {
     if (matchesVersionRange(fromVersion, migration.fromVersion)) {
-      // Lazy load the migration module
-      if (!migration.module) {
-        try {
-          migration.module = require(`./${migration.name}`);
-        } catch (error) {
-          console.error(`Failed to load migration ${migration.name}:`, error.message);
-          continue;
-        }
-      }
-
-      applicable.push(migration);
+      entryMigration = migration;
+      break;
     }
   }
 
-  // Sort by version order (oldest fromVersion first)
-  applicable.sort((a, b) => {
-    const aV = a.fromVersion.replace('.x', '.0');
-    const bV = b.fromVersion.replace('.x', '.0');
-    return compareVersions(aV, bV);
-  });
+  if (!entryMigration) return applicable;
+
+  // Load and add entry migration
+  if (!loadMigrationModule(entryMigration)) return applicable;
+  applicable.push(entryMigration);
+
+  // Step 2: Chain forward — parse target version from migration name,
+  // then find the next migration whose fromVersion matches that target
+  let targetVersion = parseTargetVersion(entryMigration.name);
+
+  while (targetVersion) {
+    const nextMigration = MIGRATIONS.find(m =>
+      matchesVersionRange(targetVersion, m.fromVersion) && !applicable.includes(m)
+    );
+
+    if (!nextMigration) break;
+    if (!loadMigrationModule(nextMigration)) break;
+
+    applicable.push(nextMigration);
+    targetVersion = parseTargetVersion(nextMigration.name);
+  }
 
   return applicable;
+}
+
+/**
+ * Parse the target version from a migration name.
+ * E.g., "1.0.x-to-1.3.0" → "1.3.0"
+ * @param {string} migrationName
+ * @returns {string|null} Target version or null if unparseable
+ */
+function parseTargetVersion(migrationName) {
+  const match = migrationName.match(/-to-(\d+\.\d+\.\d+)$/);
+  return match ? match[1] : null;
+}
+
+/**
+ * Lazy-load a migration's module file.
+ * @param {object} migration - Migration entry from MIGRATIONS array
+ * @returns {boolean} True if module loaded successfully
+ */
+function loadMigrationModule(migration) {
+  if (migration.module) return true;
+  try {
+    migration.module = require(`./${migration.name}`);
+    return true;
+  } catch (error) {
+    console.error(`Failed to load migration ${migration.name}:`, error.message);
+    return false;
+  }
 }
 
 /**
@@ -190,5 +227,6 @@ module.exports = {
   hasMigrationBeenApplied,
   getBreakingChanges,
   matchesVersionRange,
+  parseTargetVersion,
   getAllMigrations
 };
