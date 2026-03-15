@@ -13,7 +13,8 @@ const {
   validateManifest,
   validateUserDataIntegrity,
   validateDeprecatedWorkflows,
-  validateWorkflowStepStructure
+  validateWorkflowStepStructure,
+  validateEnhanceModule
 } = require('../../scripts/update/lib/validator');
 const { fullConfig, createValidInstallation } = require('../helpers');
 
@@ -428,5 +429,181 @@ describe('validateInstallation', () => {
     assert.ok(result.checks.some(c => !c.passed));
 
     await fs.remove(brokenDir);
+  });
+});
+
+// === validateEnhanceModule ===
+
+describe('validateEnhanceModule', () => {
+  let tmpDir;
+
+  before(async () => {
+    tmpDir = await fs.mkdtemp(path.join(os.tmpdir(), 'convoke-enh-val-'));
+  });
+
+  after(async () => {
+    await fs.remove(tmpDir);
+  });
+
+  /** Helper: create a valid Enhance installation in tmpDir */
+  async function createValidEnhance(dir) {
+    const enhDir = path.join(dir, '_bmad/bme/_enhance');
+    const wfDir = path.join(enhDir, 'workflows/initiatives-backlog');
+    await fs.ensureDir(wfDir);
+
+    const config = {
+      name: 'enhance',
+      version: '1.0.0',
+      description: 'Enhance module',
+      workflows: [{
+        name: 'initiatives-backlog',
+        entry: 'workflows/initiatives-backlog/workflow.md',
+        target_agent: 'bmm/agents/pm.md',
+        menu_patch_name: 'initiatives-backlog'
+      }]
+    };
+    await fs.writeFile(path.join(enhDir, 'config.yaml'), yaml.dump(config), 'utf8');
+    await fs.writeFile(path.join(wfDir, 'workflow.md'), '# Workflow', 'utf8');
+
+    // Create target agent with menu patch
+    const pmDir = path.join(dir, '_bmad/bmm/agents');
+    await fs.ensureDir(pmDir);
+    await fs.writeFile(path.join(pmDir, 'pm.md'), '<menu>\n    <item cmd="initiatives-backlog">[IB] Test</item>\n</menu>', 'utf8');
+
+    // Create skill wrapper (Check 6)
+    const skillDir = path.join(dir, '.claude/skills/bmad-enhance-initiatives-backlog');
+    await fs.ensureDir(skillDir);
+    await fs.writeFile(path.join(skillDir, 'SKILL.md'), '---\nname: bmad-enhance-initiatives-backlog\n---\nContent', 'utf8');
+  }
+
+  it('passes with info when _enhance/ directory does not exist', async () => {
+    const emptyDir = await fs.mkdtemp(path.join(os.tmpdir(), 'convoke-enh-empty-'));
+    const result = await validateEnhanceModule(emptyDir);
+    assert.equal(result.passed, true);
+    assert.ok(result.info && result.info.includes('not installed'));
+    await fs.remove(emptyDir);
+  });
+
+  it('passes when all 6 checks pass', async () => {
+    const dir = await fs.mkdtemp(path.join(os.tmpdir(), 'convoke-enh-valid-'));
+    await createValidEnhance(dir);
+    const result = await validateEnhanceModule(dir);
+    assert.equal(result.passed, true);
+    assert.equal(result.error, null);
+    await fs.remove(dir);
+  });
+
+  it('fails when config.yaml is missing but _enhance/ dir exists', async () => {
+    const dir = await fs.mkdtemp(path.join(os.tmpdir(), 'convoke-enh-nocfg-'));
+    await fs.ensureDir(path.join(dir, '_bmad/bme/_enhance'));
+    const result = await validateEnhanceModule(dir);
+    assert.equal(result.passed, false);
+    assert.ok(result.error.includes('config.yaml not found'));
+    await fs.remove(dir);
+  });
+
+  it('fails when config.yaml is unparseable', async () => {
+    const dir = await fs.mkdtemp(path.join(os.tmpdir(), 'convoke-enh-badyaml-'));
+    const enhDir = path.join(dir, '_bmad/bme/_enhance');
+    await fs.ensureDir(enhDir);
+    await fs.writeFile(path.join(enhDir, 'config.yaml'), '{{{invalid', 'utf8');
+    const result = await validateEnhanceModule(dir);
+    assert.equal(result.passed, false);
+    assert.ok(result.error.includes('parse error'));
+    await fs.remove(dir);
+  });
+
+  it('fails when config.yaml is missing required fields', async () => {
+    const dir = await fs.mkdtemp(path.join(os.tmpdir(), 'convoke-enh-missingf-'));
+    const enhDir = path.join(dir, '_bmad/bme/_enhance');
+    await fs.ensureDir(enhDir);
+    await fs.writeFile(path.join(enhDir, 'config.yaml'), yaml.dump({ name: 'test' }), 'utf8');
+    const result = await validateEnhanceModule(dir);
+    assert.equal(result.passed, false);
+    assert.ok(result.error.includes('config missing fields'));
+    assert.ok(result.error.includes('version'));
+    await fs.remove(dir);
+  });
+
+  it('fails when workflow entry point file does not exist', async () => {
+    const dir = await fs.mkdtemp(path.join(os.tmpdir(), 'convoke-enh-noentry-'));
+    const enhDir = path.join(dir, '_bmad/bme/_enhance');
+    await fs.ensureDir(path.join(enhDir, 'workflows/initiatives-backlog'));
+    const config = {
+      name: 'enhance', version: '1.0.0', description: 'test',
+      workflows: [{ name: 'initiatives-backlog', entry: 'workflows/initiatives-backlog/workflow.md', target_agent: 'bmm/agents/pm.md', menu_patch_name: 'initiatives-backlog' }]
+    };
+    await fs.writeFile(path.join(enhDir, 'config.yaml'), yaml.dump(config), 'utf8');
+    // No workflow.md created
+    const result = await validateEnhanceModule(dir);
+    assert.equal(result.passed, false);
+    assert.ok(result.error.includes('entry point not found'));
+    await fs.remove(dir);
+  });
+
+  it('fails when menu patch not found in target agent file', async () => {
+    const dir = await fs.mkdtemp(path.join(os.tmpdir(), 'convoke-enh-nopatch-'));
+    await createValidEnhance(dir);
+    // Overwrite pm.md without the patch
+    await fs.writeFile(path.join(dir, '_bmad/bmm/agents/pm.md'), '<menu>\n    <item cmd="test">[T] Test</item>\n</menu>', 'utf8');
+    const result = await validateEnhanceModule(dir);
+    assert.equal(result.passed, false);
+    assert.ok(result.error.includes('menu patch'));
+    assert.ok(result.error.includes('not found'));
+    await fs.remove(dir);
+  });
+
+  it('fails when config references a workflow that has no directory', async () => {
+    const dir = await fs.mkdtemp(path.join(os.tmpdir(), 'convoke-enh-nodir-'));
+    const enhDir = path.join(dir, '_bmad/bme/_enhance');
+    await fs.ensureDir(enhDir);
+    const config = {
+      name: 'enhance', version: '1.0.0', description: 'test',
+      workflows: [{ name: 'nonexistent-workflow', entry: 'workflows/nonexistent-workflow/workflow.md', target_agent: 'bmm/agents/pm.md', menu_patch_name: 'nonexistent' }]
+    };
+    await fs.writeFile(path.join(enhDir, 'config.yaml'), yaml.dump(config), 'utf8');
+    const result = await validateEnhanceModule(dir);
+    assert.equal(result.passed, false);
+    assert.ok(result.error.includes('workflow directory not found'));
+    await fs.remove(dir);
+  });
+
+  it('passes check 6 when skill wrapper exists', async () => {
+    const dir = await fs.mkdtemp(path.join(os.tmpdir(), 'convoke-enh-skill-ok-'));
+    await createValidEnhance(dir);
+    const result = await validateEnhanceModule(dir);
+    assert.equal(result.passed, true);
+    assert.equal(result.error, null);
+    await fs.remove(dir);
+  });
+
+  it('fails check 6 when skill wrapper is missing', async () => {
+    const dir = await fs.mkdtemp(path.join(os.tmpdir(), 'convoke-enh-skill-miss-'));
+    await createValidEnhance(dir);
+    // Remove skill wrapper
+    await fs.remove(path.join(dir, '.claude/skills/bmad-enhance-initiatives-backlog'));
+    const result = await validateEnhanceModule(dir);
+    assert.equal(result.passed, false);
+    assert.ok(result.error.includes('skill wrapper not found'));
+    assert.ok(result.error.includes('bmad-enhance-initiatives-backlog'));
+    await fs.remove(dir);
+  });
+
+  it('reports multiple failures in single error string', async () => {
+    const dir = await fs.mkdtemp(path.join(os.tmpdir(), 'convoke-enh-multi-'));
+    const enhDir = path.join(dir, '_bmad/bme/_enhance');
+    await fs.ensureDir(enhDir);
+    // Config with workflow that has no entry file, no directory, and no agent file
+    const config = {
+      name: 'enhance', version: '1.0.0', description: 'test',
+      workflows: [{ name: 'missing-wf', entry: 'workflows/missing-wf/workflow.md', target_agent: 'bmm/agents/pm.md', menu_patch_name: 'missing-wf' }]
+    };
+    await fs.writeFile(path.join(enhDir, 'config.yaml'), yaml.dump(config), 'utf8');
+    const result = await validateEnhanceModule(dir);
+    assert.equal(result.passed, false);
+    // Should contain multiple failures separated by "; "
+    const failureCount = result.error.split('; ').length;
+    assert.ok(failureCount >= 2, `Expected multiple failures, got: ${result.error}`);
+    await fs.remove(dir);
   });
 });
