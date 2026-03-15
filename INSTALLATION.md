@@ -181,7 +181,7 @@ The installer preserves your custom settings and only adds missing entries. To f
 
 ```bash
 rm -rf _bmad/bme/_vortex/
-npx convoke-install-vortex
+npx -p convoke-agents convoke-install-vortex
 ```
 
 ### Installation succeeds but agents don't activate
