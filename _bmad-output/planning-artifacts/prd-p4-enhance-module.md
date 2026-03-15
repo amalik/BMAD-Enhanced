@@ -59,7 +59,7 @@ The workflow is tri-modal — Triage (ingest review findings), Review (rescore e
 
 P4 is deliberately scoped as Option C (full pattern establishment) rather than a minimal workflow addition, because the Enhance pattern — one module upgrading another module's agent — is the architectural proof-of-concept for a proposed BMAD core `<extensions>` mechanism. The v1 investment in directory structure, config, guide, and extension documentation serves that upstream goal. If the pattern proves valuable, it becomes the basis for declarative agent extensibility across the BMAD ecosystem.
 
-**v1 scope:** Workflow content (11 step files, 3 modes), installer integration, menu patch, config, and guide. **Deferred:** Workflow manifests, skill manifests, BMAD external module registration, dynamic extensions mechanism, individual initiative files.
+**v1 scope:** Workflow content (11 step files, 3 modes), installer integration, menu patch, skill wrapper, workflow-manifest registration, skill-manifest registration, config, and guide. **Deferred:** BMAD external module registration, dynamic extensions mechanism, individual initiative files.
 
 ### What Makes This Special
 
@@ -338,13 +338,14 @@ workflows:
 - **Menu patch format:** Installer adds an `<item name="initiatives-backlog" exec="...">` tag to target agent file. Detection matches the `name` attribute value regardless of quote style or whitespace. If tag with matching name exists, skip. If target agent file missing from target project, fail-fast: "pm.md not found — BMM module must be installed first."
 - **Anchor pattern:** Installer inserts the `<item>` tag before `</menu>` in the target agent file. If `</menu>` not found, fall back to inserting after the last existing `<item>` tag. If neither found, fail-fast: "pm.md menu structure not recognized — manual patch required."
 - **`exec` path resolution:** The `exec` path in the `<item>` tag is relative to `{project-root}/_bmad/`. Example: `exec="bme/_enhance/workflows/initiatives-backlog/workflow.md"` resolves to `{project-root}/_bmad/bme/_enhance/workflows/initiatives-backlog/workflow.md`.
-- **Runtime dispatch dependency:** The `<item exec="...">` tag relies on BMAD core's menu system to load the referenced workflow file when the user selects the menu item. **This is a technical dependency that must be validated before implementation.** If BMAD core does not already support `exec` path loading for `<item>` tags, this becomes a significant additional implementation requirement. Identify an existing `<item exec="...">` example in BMAD core to confirm.
+- **Runtime dispatch dependency (RESOLVED):** The `<item exec="...">` tag relies on BMAD core's menu system to load the referenced workflow file when the user selects the menu item. **Validated:** BMAD core v6.1.0 fully supports `exec` path loading — all pm.md and Vortex agent menu items use this pattern with `{project-root}` prefix paths.
 - **Re-add behavior:** If a user manually removes the `<item>` tag and runs the installer again, the tag will be re-added. To permanently disable an enhancement, remove the workflow from `config.yaml`.
 - **Verification:** `verifyInstallation()` confirms: (1) enhance directory exists, (2) workflow entry point resolves, (3) menu patch is present in target agent, (4) config.yaml is valid against schema, (5) config-to-filesystem consistency — every workflow registered in config.yaml has a corresponding directory and entry point file. **v1 verifies at install time only.** Runtime integrity checks (e.g., `convoke-doctor` detecting missing patches after BMAD updates) are deferred.
 - **Verification behavior:** Verification runs all checks and reports all failures, not fail-on-first. The developer should see the complete installation state in one run.
 - **Modular verification:** Enhance verification checks should be modular — callable independently for Enhance-only validation, and integrated into the existing `verifyInstallation()` pipeline.
-- **Idempotency:** Running installer twice produces identical results — no duplicate patches, no file conflicts
-- **Uninstall path:** Removing the `<item>` tag from `pm.md` disables the enhancement until next install. John PM works exactly as before. No cleanup of enhance files required (they're inert without the menu entry).
+- **Idempotency:** Running installer twice produces identical results — no duplicate patches, no file conflicts, no duplicate manifest entries
+- **v6.1.0 skill registration:** For each workflow in config.yaml, the installer generates a `.claude/skills/bmad-enhance-{workflow-name}/SKILL.md` wrapper that references the workflow entry point. The installer also appends entries to `workflow-manifest.csv` and `skill-manifest.csv` if not already present. Detection uses the canonicalId column to prevent duplicates. The skill wrapper follows the standard BMAD v6.1.0 pattern: YAML frontmatter (`name`, `description`) with a body instruction to load the workflow file.
+- **Uninstall path:** Removing the `<item>` tag from `pm.md` disables the enhancement until next install. John PM works exactly as before. No cleanup of enhance files required (they're inert without the menu entry). Skill wrapper and manifest entries persist but are inert without the menu activation path.
 
 ### Backlog Safety Requirements
 
@@ -365,7 +366,7 @@ Write safety, pre-write format validation, and concurrent manual edit support ar
 
 **Why all three modes in MVP:** Triage is the critical path, but Review and Create are necessary for a complete backlog lifecycle. Without Review, scores drift over time with no correction mechanism. Without Create, new projects must manually bootstrap the backlog before Triage can append to it. All three modes share the same templates, config, and installer — the incremental cost of shipping Review and Create alongside Triage is low relative to the standalone infrastructure investment.
 
-**Pre-implementation spike:** Validate that BMAD core's `<item exec="...">` menu dispatch loads workflow files at runtime. This determines whether the installer design works as specified or requires an alternative approach. Must be completed before story creation. **Spike fallback:** If BMAD core does not support `<item exec="...">` dispatch, the fallback is a `.claude/skills/` entry that loads the workflow directly. The `<item>` tag would reference the skill name instead of an exec path. This changes the installer to write a skill file instead of patching a menu tag. **Fallback impact:** If the spike fallback is triggered, the Installer Integration Requirements section must be revised. The skill file approach changes: (1) menu patch → skill file generation, (2) anchor pattern → not applicable, (3) verification checks menu patch → verification checks skill file existence, (4) re-add behavior → skill file recreation. The rest of the PRD (workflow content, templates, config, safety requirements) is unaffected.
+**Pre-implementation spike: RESOLVED** — `<item exec="...">` menu dispatch is fully supported in BMAD core (confirmed in pm.md, Vortex agent files). No fallback needed. The installer uses both approaches in parallel: (1) menu patch via `<item exec="...">` for agent-level activation, and (2) `.claude/skills/` wrapper + manifest entries for v6.1.0 skill discovery compliance. These are complementary — the menu patch is the primary activation path, the skill wrapper ensures the workflow is discoverable via the BMAD v6.1.0 skill system.
 
 ### MVP Feature Set (Phase 1)
 
@@ -392,6 +393,8 @@ Write safety, pre-write format validation, and concurrent manual edit support ar
 | Modular verification | Enhance checks callable independently + integrated into pipeline |
 | Config.yaml | Workflow registry for installer discovery |
 | Menu patch (`<item>` tag) | Agent activation mechanism |
+| Skill wrapper (`.claude/skills/`) | v6.1.0 discovery compliance |
+| Workflow-manifest + skill-manifest entries | v6.1.0 registration compliance |
 | ENHANCE-GUIDE.md | Pattern documentation for future module authors |
 | Directory structure | `_bmad/bme/_enhance/` with full Option C layout |
 
@@ -400,7 +403,7 @@ Write safety, pre-write format validation, and concurrent manual edit support ar
 - Individual initiative files (v2)
 - Cross-agent routing (v2)
 - Runtime integrity checks / `convoke-doctor` integration (deferred)
-- BMAD external module registration
+- BMAD external module registration (deferred — Enhance uses direct installer integration, not a registration API)
 - Dynamic `<extensions>` mechanism (v3)
 - Prioritized view pagination or category grouping (v2 if backlog exceeds ~75 items)
 
@@ -426,7 +429,7 @@ Write safety, pre-write format validation, and concurrent manual edit support ar
 
 | Risk | Likelihood | Impact | Mitigation |
 |------|-----------|--------|-----------|
-| `<item exec="...">` not supported by BMAD core | Medium | Critical — blocks installer design | Pre-implementation spike + defined fallback (skill file alternative) |
+| `<item exec="...">` not supported by BMAD core | ~~Medium~~ **Resolved** | ~~Critical~~ | Spike confirmed: `<item exec="...">` fully supported in BMAD core v6.1.0 |
 | BMAD upstream changes `pm.md` structure | Low (per release) | High — breaks menu patch | `verifyInstallation()` fail-fast detection + ADR-2 |
 | Backlog corruption from agent write errors | Medium | High — data loss | Write safety + pre-write format validation (both MVP) |
 | RICE score clustering (useless prioritization) | Medium | Medium — undermines value | Guard metric (no more than 3 identical in top 10) + scoring guide calibration |
@@ -539,6 +542,11 @@ Pre-implementation spike (exec validation)
 - FR48: Product Owner can view an item's current provenance before deciding to rescore in Review mode
 - FR49: The installer fails fast with a clear error if config.yaml is missing or unparseable
 
+#### v6.1.0 Skill Registration (FR50–FR52)
+- FR50: The installer can generate a `.claude/skills/` wrapper directory for each Enhance workflow, following the BMAD v6.1.0 skill directory pattern (`SKILL.md` with frontmatter referencing the workflow entry point)
+- FR51: The installer can add an entry to `workflow-manifest.csv` for each Enhance workflow, with module=`bme`, path to the workflow entry point, and canonicalId matching the skill directory name
+- FR52: The installer can add an entry to `skill-manifest.csv` for each Enhance workflow skill, with module=`bme`, path to the SKILL.md file, and install_to_bmad=`true`
+
 ## Non-Functional Requirements
 
 ### Data Integrity
@@ -564,3 +572,7 @@ Pre-implementation spike (exec validation)
 ### Workflow Integrity
 
 - NFR8: All step file frontmatter references (nextStepFile, outputFile, template paths) must resolve to existing files at install time. Verification: `verifyInstallation()` walks the step chain from entry point to terminal step, confirming every referenced file exists.
+
+### v6.1.0 Registration Compliance
+
+- NFR9: Skill wrapper generation, workflow-manifest entry, and skill-manifest entry must be idempotent — running the installer twice produces no changes to these artifacts detectable by `git diff`. Existing entries must be detected and skipped, not duplicated.
