@@ -91,7 +91,8 @@ _bmad/bme/_enhance/
 │       │   ├── step-c-03-score.md           # RICE score each initiative
 │       │   └── step-c-04-prioritize.md      # Generate prioritized view
 │       └── templates/
-│           └── backlog-template.md          # Output template
+│           ├── rice-scoring-guide.md        # RICE methodology reference for agent scoring
+│           └── backlog-format-spec.md      # Heading structure, table columns, changelog format
 └── guides/
     └── ENHANCE-GUIDE.md
 ```
@@ -146,17 +147,18 @@ This is a one-line backwards-compatible change to the BMAD agent activation patt
 ## Config
 
 ```yaml
-submodule_name: _enhance
-description: Capability upgrades for existing BMAD agents
-module: bme
-output_folder: '{project-root}/_bmad-output/planning-artifacts'
-version: 2.1.0
-enhancements:
-  - target: bmm/pm
-    workflow: initiatives-backlog
-    menu_cmd: IB
-    description: RICE-scored initiatives backlog management
+name: enhance
+version: 1.0.0
+description: "Enhance module — capability upgrades for existing BMAD agents"
+workflows:
+  - name: initiatives-backlog
+    entry: workflows/initiatives-backlog/workflow.md
+    target_agent: bmm/agents/pm.md
+    menu_patch_name: "initiatives-backlog"
+# dependencies: reserved for future use
 ```
+
+*Updated 2026-03-15: Aligned with PRD config.yaml schema per implementation readiness review. Previous schema used `submodule_name`/`enhancements[]` — replaced with `name`/`workflows[]` to match installer integration requirements.*
 
 Output goes to the target module's existing output folder (e.g., `planning-artifacts` for BMM), not a new one.
 
