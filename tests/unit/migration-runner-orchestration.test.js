@@ -278,6 +278,71 @@ describe('runMigrations partial history (selective filtering)', () => {
   });
 });
 
+describe('runMigrations multi-version chain traversal', () => {
+  let tmpDir;
+  let originalCwd;
+
+  before(async () => {
+    tmpDir = await fs.mkdtemp(path.join(os.tmpdir(), 'bmad-chain-'));
+    // Create installation at 1.5.2 — should chain through 3 migrations
+    await createInstallation(tmpDir, '1.5.2');
+    originalCwd = process.cwd();
+  });
+
+  after(async () => {
+    process.chdir(originalCwd);
+    restoreConsole();
+    await fs.remove(tmpDir);
+  });
+
+  it('applies full migration chain from 1.5.2 and records all in history', async () => {
+    process.chdir(tmpDir);
+    silenceConsole();
+
+    const result = await runMigrations('1.5.2');
+    restoreConsole();
+
+    assert.equal(result.success, true);
+    assert.equal(result.fromVersion, '1.5.2');
+
+    // Should have applied 3 migration deltas + refresh-installation
+    const deltaNames = result.results
+      .filter(r => r.name !== 'refresh-installation')
+      .map(r => r.name);
+    assert.deepEqual(deltaNames, [
+      '1.5.x-to-1.6.0',
+      '1.6.x-to-1.7.0',
+      '1.7.x-to-2.0.0'
+    ]);
+
+    // Migration history should record all 3
+    const configPath = path.join(tmpDir, '_bmad/bme/_vortex/config.yaml');
+    const config = yaml.load(fs.readFileSync(configPath, 'utf8'));
+    assert.ok(config.migration_history);
+
+    const lastEntry = config.migration_history[config.migration_history.length - 1];
+    assert.deepEqual(lastEntry.migrations_applied, [
+      '1.5.x-to-1.6.0',
+      '1.6.x-to-1.7.0',
+      '1.7.x-to-2.0.0'
+    ]);
+  });
+
+  it('second run is idempotent — zero deltas applied', async () => {
+    process.chdir(tmpDir);
+    silenceConsole();
+
+    const result = await runMigrations('1.5.2');
+    restoreConsole();
+
+    assert.equal(result.success, true);
+    const deltaNames = result.results
+      .filter(r => r.name !== 'refresh-installation')
+      .map(r => r.name);
+    assert.equal(deltaNames.length, 0, 'second run should apply zero deltas');
+  });
+});
+
 describe('runMigrations dry-run respects history filter', () => {
   let tmpDir;
   let originalCwd;
