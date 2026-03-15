@@ -1,0 +1,8 @@
+name: enhance
+version: 1.0.0
+description: "Enhance module — capability upgrades for existing BMAD agents"
+workflows:
+  - name: initiatives-backlog
+    entry: workflows/initiatives-backlog/workflow.md
+    target_agent: bmm/agents/pm.md
+    menu_patch_name: "initiatives-backlog"
