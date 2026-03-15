@@ -44,6 +44,9 @@ async function validateInstallation(preMigrationData = {}, projectRoot) {
   // 7. Workflow step structure validation (P17 count + P20 filenames)
   checks.push(await validateWorkflowStepStructure(projectRoot));
 
+  // 8. Enhance module validation (optional — passes if not installed)
+  checks.push(await validateEnhanceModule(projectRoot));
+
   const allPassed = checks.every(c => c.passed);
 
   return {
@@ -348,6 +351,123 @@ async function validateWorkflowStepStructure(projectRoot) {
   return check;
 }
 
+/**
+ * Validate Enhance module installation (optional — passes if not installed)
+ * Performs 5-point verification: directory, entry point, menu patch, config, filesystem consistency
+ * @param {string} projectRoot - Absolute path to project root
+ * @returns {Promise<object>} Validation check result
+ */
+async function validateEnhanceModule(projectRoot) {
+  const check = {
+    name: 'Enhance module',
+    passed: false,
+    error: null
+  };
+
+  try {
+    const enhanceDir = path.join(projectRoot, '_bmad/bme/_enhance');
+
+    // Check 1: Directory exists — if not, Enhance is simply not installed (optional)
+    if (!fs.existsSync(enhanceDir)) {
+      check.passed = true;
+      check.info = 'Enhance module not installed (optional)';
+      return check;
+    }
+
+    const failures = [];
+
+    // Check 4 (first — needed by checks 2, 3, 5): Config valid
+    const configPath = path.join(enhanceDir, 'config.yaml');
+    let config = null;
+
+    if (!fs.existsSync(configPath)) {
+      failures.push('config.yaml not found');
+    } else {
+      try {
+        config = yaml.load(fs.readFileSync(configPath, 'utf8'));
+      } catch (err) {
+        failures.push(`config.yaml parse error: ${err.message}`);
+      }
+
+      if (config) {
+        const missing = [];
+        if (!config.name) missing.push('name');
+        if (!config.version) missing.push('version');
+        if (!config.description) missing.push('description');
+        if (!Array.isArray(config.workflows) || config.workflows.length === 0) {
+          missing.push('workflows (must be non-empty array)');
+        } else {
+          config.workflows.forEach((wf, i) => {
+            const wfMissing = [];
+            if (!wf.name) wfMissing.push('name');
+            if (!wf.entry) wfMissing.push('entry');
+            if (!wf.target_agent) wfMissing.push('target_agent');
+            if (!wf.menu_patch_name) wfMissing.push('menu_patch_name');
+            if (wfMissing.length > 0) {
+              missing.push(`workflows[${i}] missing: ${wfMissing.join(', ')}`);
+            }
+          });
+        }
+        if (missing.length > 0) {
+          failures.push(`config missing fields: ${missing.join('; ')}`);
+        }
+      }
+    }
+
+    // Checks 2, 3, 5 require a valid config with workflows
+    if (config && Array.isArray(config.workflows)) {
+      for (const wf of config.workflows) {
+        // Check 2: Workflow entry point resolves
+        if (wf.entry) {
+          const entryPath = path.join(enhanceDir, wf.entry);
+          if (!fs.existsSync(entryPath)) {
+            failures.push(`workflow entry point not found: ${wf.entry}`);
+          }
+        }
+
+        // Check 3: Menu patch present in target agent
+        if (wf.target_agent) {
+          const agentPath = path.join(projectRoot, '_bmad', wf.target_agent);
+          if (fs.existsSync(agentPath)) {
+            const agentContent = fs.readFileSync(agentPath, 'utf8');
+            const patchName = wf.menu_patch_name || wf.name;
+            if (!agentContent.includes(patchName)) {
+              failures.push(`menu patch "${patchName}" not found in ${wf.target_agent}`);
+            }
+          }
+          // If agent file doesn't exist, that's already caught by agent validation — not an Enhance-specific failure
+        }
+
+        // Check 5: Config-to-filesystem consistency — workflow directory exists
+        if (wf.name) {
+          const wfDir = path.join(enhanceDir, 'workflows', wf.name);
+          if (!fs.existsSync(wfDir)) {
+            failures.push(`workflow directory not found for registered workflow: ${wf.name}`);
+          }
+        }
+
+        // Check 6: Skill wrapper exists for workflow
+        if (wf.name) {
+          const skillWrapperPath = path.join(projectRoot, '.claude', 'skills', `bmad-enhance-${wf.name}`, 'SKILL.md');
+          if (!fs.existsSync(skillWrapperPath)) {
+            failures.push(`skill wrapper not found: .claude/skills/bmad-enhance-${wf.name}/SKILL.md`);
+          }
+        }
+      }
+    }
+
+    if (failures.length > 0) {
+      check.error = `Enhance: ${failures.join('; ')}`;
+    } else {
+      check.passed = true;
+    }
+  } catch (error) {
+    check.error = error.message;
+  }
+
+  return check;
+}
+
 module.exports = {
   validateInstallation,
   validateConfigStructure,
@@ -356,5 +476,6 @@ module.exports = {
   validateManifest,
   validateUserDataIntegrity,
   validateDeprecatedWorkflows,
-  validateWorkflowStepStructure
+  validateWorkflowStepStructure,
+  validateEnhanceModule
 };
