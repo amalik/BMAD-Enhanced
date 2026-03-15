@@ -176,7 +176,7 @@ development_status:
   # ============================================================
 
   # Epic 1: Install & Triage Review Findings into Scored Backlog
-  enh-epic-1: in-progress
+  enh-epic-1: done
   enh-1-1-create-directory-structure-templates: done
   enh-1-2-installer-integration-file-copy-menu-patch-verification: done
   enh-1-2a-v610-skill-registration-skill-wrapper-manifest-entries: done
@@ -184,6 +184,7 @@ development_status:
   enh-1-4-triage-mode-finding-extraction-gate-1: done
   enh-1-5-triage-mode-rice-scoring-gate-2: done
   enh-1-6-triage-mode-backlog-update-safety-completion: done
+  enh-epic-1-retrospective: done
 
   # Epic 2: Review Mode — Rescore Existing Backlog Items
   enh-epic-2: backlog
