@@ -159,7 +159,7 @@ None found. (Expected — P4 is a CLI workflow with no visual UI component.)
 
 ## Epic Coverage Validation
 
-**Status: No epics document exists for P4.**
+**Status: ✅ Epics document created — `epics-p4-enhance-module.md`**
 
 The PRD includes a **Dependency Map** (in Project Scoping & Phased Development) that defines the story breakdown:
 
@@ -189,17 +189,19 @@ Pre-implementation spike (exec validation)
 ### Coverage Statistics
 
 - Total PRD FRs: **49**
-- FRs with implied story coverage: **49** (all accounted for in dependency map)
-- FRs in formal epics document: **0** (epics not yet created)
-- Coverage percentage: **0% formal / 100% implied**
+- FRs with formal story coverage: **49/49** (100%)
+- NFRs with formal story coverage: **9/9** (100%)
+- Coverage percentage: **100% formal**
 
-### Recommendation
+### Epic Structure (3 Epics, 9 Stories)
 
-**Epics document must be created before implementation.** The PRD's dependency map provides a strong foundation for epic breakdown — all 49 FRs have clear story assignments. The epics workflow should formalize this into proper epics with:
-- Explicit FR-to-story traceability
-- Acceptance criteria per story
-- Story point estimates
-- Story sequencing aligned with dependency map
+| Epic | Stories | FRs | Description |
+|------|---------|-----|-------------|
+| Epic 1: Triage Mode (End-to-End) | 1.1–1.6 | 42 | Templates + Installer + Mode shell + Extraction + Scoring + Backlog update |
+| Epic 2: Review Mode | 2.1 | 5 | Rescore existing backlog items |
+| Epic 3: Create Mode & Documentation | 3.1–3.2 | 3 | Bootstrap new backlogs + ENHANCE-GUIDE.md |
+
+All stories include Given/When/Then acceptance criteria, FR traceability, and NFR coverage mapping. Reviewed via party mode (John PM, Bob Architect, Winston QA) with 6 improvements applied.
 
 ---
 
@@ -234,45 +236,27 @@ The step files **are** the UX specification for a CLI workflow — no separate U
 
 ## Epic Quality Review
 
-**Status: No epics document exists for P4.**
+**Status: ✅ Complete — reviewed via party mode session.**
 
-Cannot perform epic quality review — epics have not been created yet. However, the PRD's **Dependency Map** can be pre-assessed against epic best practices to flag potential issues before the epics workflow runs.
+### Quality Assessment
 
-### Pre-Assessment of PRD Dependency Map Against Epic Standards
+| Criterion | Status | Notes |
+|-----------|--------|-------|
+| User Value Focus | ✅ Pass | Epic 1 delivers end-to-end Triage value (not just infra). Epic 2/3 independently valuable. |
+| FR Coverage | ✅ 49/49 | All FRs mapped to stories with traceability |
+| NFR Coverage | ✅ 9/9 | All NFRs mapped to enforcing stories |
+| Acceptance Criteria | ✅ Complete | Given/When/Then format for all 9 stories |
+| Independence | ✅ Pass | Epic 1 sequential internally; Epics 2/3 independent after Epic 1 |
+| Brownfield Compliance | ✅ Pass | Integration with `refreshInstallation()`, `pm.md` patching, NFR7a/NFR7b compatibility |
 
-#### User Value Focus
+### Party Mode Improvements Applied
 
-| Implied Story | User Value? | Assessment |
-|---------------|-------------|------------|
-| Pre-implementation spike | No — technical validation | **Acceptable** — spikes are pre-epic work, not deliverable stories |
-| Installer integration | Indirect — enables activation | ⚠️ **Risk:** Could become a technical epic. Must frame as "Product Owner can activate the initiatives-backlog workflow via standard install" |
-| Directory + config + templates | Indirect — enables workflow | ⚠️ **Risk:** Infrastructure story. Should be bundled with first mode story or framed as "Template authors can create scoring guides" |
-| Triage mode | **Yes** — J1/J2 direct user value | ✅ Strong user value |
-| Review mode | **Yes** — backlog lifecycle | ✅ User value |
-| Create mode | **Yes** — new project bootstrap | ✅ User value |
-| ENHANCE-GUIDE.md | **Yes** — module author enablement | ✅ User value (secondary persona) |
-
-#### Independence Check
-
-- Spike → Installer → Infrastructure → Mode stories: This is a **strict linear dependency chain** for the first 3 layers
-- Mode stories are independent of each other ✅
-- ENHANCE-GUIDE.md is independent ✅
-
-⚠️ **Concern:** The dependency chain means Epic 1 (likely Installer + Infrastructure) is purely technical setup with no user-visible outcome until a mode story ships. **Recommendation:** Bundle installer + infrastructure + Triage mode into Epic 1 so the first epic delivers end-to-end user value.
-
-#### Brownfield Indicators
-
-- ✅ Integration with existing system (`refreshInstallation()`, `pm.md` patching)
-- ✅ Compatibility requirements (NFR7a/NFR7b)
-- ✅ Existing file format compliance (backlog format spec)
-
-### Recommendations for Epic Creation
-
-1. **Bundle installer + templates + Triage into Epic 1** — first epic must deliver usable end-to-end value
-2. **Frame installer stories around user outcomes** — "PO can install and activate" not "copy files and patch XML"
-3. **Keep Review and Create as separate epics** — each independently valuable
-4. **ENHANCE-GUIDE.md can be a story in any epic** — it's independent
-5. **Pre-implementation spike is pre-work, not a story** — complete before epic creation
+1. Reworded forward references in Story 1.1 to avoid dependency on unwritten stories
+2. Reframed installer persona from technical to user-outcome framing
+3. Added fallback anchor AC for `</menu>` detection
+4. Added early exit mechanism AC for zero-findings path
+5. Added existing backlog edge case AC (first-time vs. existing)
+6. Added documentation testability AC for ENHANCE-GUIDE.md
 
 ---
 
@@ -315,7 +299,7 @@ Cannot perform epic quality review — epics have not been created yet. However,
 
 ### Overall Readiness Status
 
-**NEEDS WORK** — PRD is implementation-ready. Architecture aligned. One artifact remaining: **epics**.
+**READY** — All artifacts complete. PRD polished (49 FRs, 9 NFRs), architecture aligned, epics created (3 epics, 9 stories, 100% FR/NFR coverage), spike validated.
 
 ### Issues Resolved During This Assessment
 
@@ -325,13 +309,13 @@ Cannot perform epic quality review — epics have not been created yet. However,
 
 3. ~~**Template naming divergence**~~ → **RESOLVED.** Architecture doc updated: `backlog-template.md` replaced with `rice-scoring-guide.md` + `backlog-format-spec.md`.
 
-### Remaining Critical Issue
+### All Issues Resolved
 
-1. **No epics document** — Cannot begin implementation without formal epic breakdown with FR traceability, acceptance criteria, and story sequencing. The PRD's dependency map provides a strong foundation. **Creating now.**
-
-### Non-Blocking Recommendation
-
-2. **Epic structuring risk** — Dependency map creates a long technical setup chain before user value. Recommendation: bundle installer + templates + Triage into Epic 1.
+All critical issues identified during this assessment have been resolved:
+1. ~~Pre-implementation spike~~ → Validated (`<item exec="...">` confirmed in BMAD core)
+2. ~~Config schema mismatch~~ → Architecture updated to match PRD
+3. ~~Template naming divergence~~ → Architecture updated to two-template approach
+4. ~~No epics document~~ → Created `epics-p4-enhance-module.md` (3 epics, 9 stories, 100% coverage)
 
 ### Readiness Scorecard
 
@@ -340,9 +324,9 @@ Cannot perform epic quality review — epics have not been created yet. However,
 | PRD | ✅ Complete, polished, 49 FRs + 9 NFRs | **Ready** |
 | Architecture | ✅ Aligned (config + templates fixed) | **Ready** |
 | UX Design | ⏭️ Not applicable | **N/A** |
-| Epics & Stories | ❌ Not created | **Not Ready** |
+| Epics & Stories | ✅ 3 epics, 9 stories, 100% FR/NFR coverage | **Ready** |
 | Pre-implementation Spike | ✅ Validated — exec dispatch confirmed | **Ready** |
 
 ### Final Note
 
-This assessment initially identified 2 critical issues and 3 non-blocking issues. During the assessment, 3 were resolved (spike validated, config schema reconciled, template naming aligned). The remaining blocker is epic creation — proceeding now.
+This assessment initially identified 2 critical issues and 3 non-blocking issues. All 4 have been resolved during this session: spike validated, config schema reconciled, template naming aligned, and epics created with full coverage. **P4 is implementation-ready.**
