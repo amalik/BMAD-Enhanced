@@ -1,8 +1,10 @@
 # Convoke Real Installation Test Plan
 
+> **ARCHIVED** — This document reflects the v1.0.3-alpha test plan and contains outdated commands (e.g., `npx convoke-install`, `convoke-install-emma`, `convoke-install-wade`). Retained for historical context. For current commands, see [README.md](../README.md) and [INSTALLATION.md](../INSTALLATION.md).
+
 **Date:** 2026-02-15
 **Version:** 1.0.3-alpha
-**Purpose:** Verify complete installation flow in a fresh repository
+**Purpose:** Archived — was used to verify installation flow for v1.0.3-alpha
 
 ---
 
