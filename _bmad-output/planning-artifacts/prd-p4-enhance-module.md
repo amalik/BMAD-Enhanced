@@ -1,5 +1,5 @@
 ---
-stepsCompleted: [step-01-init, step-02-discovery, step-02b-vision, step-02c-executive-summary, step-03-success, step-04-journeys, step-05-domain-skipped, step-06-innovation]
+stepsCompleted: [step-01-init, step-02-discovery, step-02b-vision, step-02c-executive-summary, step-03-success, step-04-journeys, step-05-domain-skipped, step-06-innovation, step-07-project-type, step-08-scoping, step-09-functional, step-10-nonfunctional, step-11-polish]
 inputDocuments:
   - _bmad-output/planning-artifacts/P4-enhance-module-architecture.md
   - _bmad-output/planning-artifacts/initiatives-backlog.md
@@ -81,7 +81,6 @@ Success metric: 80% reduction in time-to-backlog-update.
 - **Triage completes without lost actionable findings** — every actionable item (proposes a change, identifies a gap, or flags a risk) in a review transcript appears in the proposed batch. Observations and commentary excluded unless user escalates during validation.
 - **Scoring requires minimal correction** — user accepts 80%+ of proposed RICE scores without modification. Guard: no more than 3 items with identical scores in the top 10 of the prioritized view.
 - **Backlog update is fast** — under 10 minutes for a 12-finding transcript (baseline: estimated 20-40 minutes manual).
-- **The interaction feels like strategic conversation** — RICE scoring questions prompt genuine reflection, not rubber-stamping.
 
 ### Business Success
 
@@ -105,6 +104,8 @@ Success metric: 80% reduction in time-to-backlog-update.
 | Time-to-backlog-update | Under 10 min (12-finding transcript) | Stopwatch on real session |
 | Installer success | Pass on first run | `verifyInstallation()` all checks green |
 | Test regression | Zero failures | Existing PM test suite |
+| Idempotency | Zero diff on second run | `git diff` on installer-managed files after second run |
+| Update resilience | Patch survives BMAD update | `verifyInstallation()` passes after `pm.md` upstream update |
 
 ## Product Scope
 
@@ -130,6 +131,10 @@ Success metric: 80% reduction in time-to-backlog-update.
 - **Dynamic `<extensions>` tag** (v3) — proposed BMAD core mechanism for declarative agent extensibility
 - **Enhance ecosystem** — multiple modules contributing enhancements to shared agents
 - **BMAD external module registration** — Convoke listed in `external-official-modules.yaml`
+
+### Strategic Reassessment
+
+Pattern establishment requirements (config.yaml extensibility, guide documentation, validation checks) are strategic investments. If no second enhancement is added within 6 months, reassess whether the Enhance module should be simplified to a single-workflow integration.
 
 ### Architecture Constraints (from ADRs)
 
@@ -247,6 +252,7 @@ The Enhance pattern brings the extension/plugin model to BMAD's agent ecosystem,
 - **H1 (Gate effectiveness):** Extraction modification rate >2x scoring modification rate — confirming the gates focus attention on distinct cognitive tasks
 - **H2 (Batch efficiency):** Time-per-item validation decreases as batch size increases — confirming cognitive warm-up effect. If time-per-item *increases*, batch model breaks down and pagination is needed.
 - **H3 (Trust building):** Completion summary increases user confidence that nothing was lost — measured by whether users re-check the backlog after triage (lower re-check rate = higher trust)
+- **H4 (Strategic conversation):** RICE scoring questions prompt genuine reflection, not rubber-stamping — measured by whether users modify their initial instinct on at least 1 score per session (modification = engagement, not rubber-stamping)
 
 ### Risk Mitigation
 
@@ -254,3 +260,307 @@ The Enhance pattern brings the extension/plugin model to BMAD's agent ecosystem,
 - **Gate rigidity:** Strict separation may feel rigid if users want to annotate during extraction. v1 starts strict to validate; if users consistently try to score during extraction, consider lightweight annotation in v2.
 - **Batch size limits:** Large transcripts (30+ findings) may make batch review overwhelming. Consider pagination or grouping by category if batch exceeds 15 items. H2 will signal when this threshold is hit.
 - **Extension pattern coupling:** If BMAD upstream changes `pm.md` structure, the `<item>` patch may break. Mitigated by ADR-2 (fail-fast verification on install).
+
+## Content Platform & Workflow System Requirements
+
+### Project-Type Overview
+
+P4 delivers markdown workflow files and YAML configuration, shipped via npm as part of Convoke. The deliverable is not code — it's structured content that agents execute at runtime. This means:
+
+- No compilation, transpilation, or build step
+- The installer copies files; the agent interprets them
+- Versioning is handled by the npm package, not by the workflow files themselves
+
+**Scope boundary:** The initiatives backlog markdown file is the authoritative source for RICE-scored priorities. The workflow does not sync with external tracking tools (Linear, Notion, etc.).
+
+**Module independence:** Enhance and Vortex are independent submodules under `_bmad/bme/`. They share the installer pipeline and npm package but have no runtime dependencies on each other. Vortex agents do not read or write Enhance artifacts. BMM agents (Winston, Bob, etc.) may read the backlog output as a reference document but do not write to it. Only the Enhance workflow modifies the backlog file.
+
+### Workflow File Requirements — *Consumed by: step file authors*
+
+- **Step file format:** Markdown with YAML frontmatter, following the existing BMAD step-file pattern (as used by the PRD workflow, create-story workflow, etc.)
+- **Frontmatter fields:** `name`, `description`, file references (`nextStepFile`, `outputFile`), task references as needed
+- **Step file convention:** Sequential numbering (`step-01-*.md`, `step-02-*.md`), self-contained instructions per step, explicit next-step loading at completion
+- **Entry point:** `workflow.md` presenting the T/R/C mode selection menu with one-line descriptions:
+  - **T — Triage:** Ingest findings from a review or notes
+  - **R — Review:** Rescore existing backlog items
+  - **C — Create:** Build a new backlog from scratch
+- **Mode exit contract:** Each mode terminates with a completion summary and returns to the T/R/C menu. The user can then select another mode or exit the workflow. No automatic mode chaining.
+- **Phase requirements per mode:**
+  - **Triage:** Input parsing → extraction + Gate 1 validation → scoring + Gate 2 validation → backlog update
+  - **Review:** Backlog load → rescore walkthrough → prioritized view regeneration
+  - **Create:** Initialization → initiative gathering → scoring → output generation
+- **Per-mode instruction framing:** Each mode may require distinct agent instruction framing within its step files. Triage emphasizes extraction and deduplication. Review emphasizes comparative rescoring. Create emphasizes open-ended gathering. Step files should set the appropriate cognitive context for John PM at mode entry.
+- **Instruction override precedence:** Step file instructions override agent persona behavior for procedural actions (what to present, when to halt, what format to use). Agent persona governs tone and interaction style — how the agent communicates, not what it communicates. If a step file says "present the numbered list," John presents it in his voice but does not add unsolicited commentary.
+- **Content validation:** Step file quality validated by `verifyInstallation()` — all frontmatter paths resolve, all steps reachable from entry point, required templates exist
+
+#### Triage Mode Specifications
+
+- **Actionable finding definition:** Per FR2. Observations, confirmations, and commentary are excluded unless user escalates during Gate 1 validation.
+- **Gate 1 presentation format:** Each finding presented with: (1) extracted finding statement, (2) proposed category, (3) source reference (which part of the transcript it came from). Overlap flags shown inline with the potentially matching existing backlog item title and ID.
+- **Gate 2 presentation format:** Scores presented as a numbered list with item title, RICE components (R/I/C/E individually), composite score, and one-line rationale. User can adjust individual items by number (e.g., "change #4's Confidence from 3 to 2") without re-reviewing the full batch.
+
+### Template Requirements — *Consumed by: template authors*
+
+- **Format:** Pure markdown — no template variables, no runtime resolution
+- **Two template files** (separated by audience and purpose):
+  - **`templates/rice-scoring-guide.md`** — Loaded by the agent during scoring. Contains scoring criteria, scale definitions, and calibration examples. This is the reference document for RICE methodology. **The scoring scale and formula must be consistent with the existing backlog's scoring convention, producing scores in the range currently used (approximately 1.0–10.0).** If the existing backlog was scored with a different method, the first Review mode session should establish the new RICE baseline.
+  - **`templates/backlog-format-spec.md`** — Loaded by the agent during file operations. Contains exact heading structure, table columns for prioritized view, changelog entry format (`### YYYY-MM-DD` with bullet items), insertion rules (new items appended to category section, prioritized view regenerated by score), provenance tag format, and RICE composite formula with sort order.
+- **RICE composite formula:** Prioritized view sorted by RICE composite score (R × I × C ÷ E, descending). Ties broken by Confidence (higher first), then by insertion order (newer first).
+- **Provenance conventions:**
+  - **Triage — new items:** `"Added from [source], [date]"` — the score recorded is the final score after any Gate 2 user adjustments (John's proposal is not recorded separately)
+  - **Review — rescored items:** `"Rescored [old]→[new], Review, [date]"` — only applies when an existing item's score changes during Review mode
+  - **Triage Gate 2 adjustments are not rescores** — they are the initial score. No rescore provenance is generated.
+- **Backlog output:** Must produce output matching the exact current format of `initiatives-backlog.md` as specified in the backlog format spec
+- **Template update policy:** `templates/` is installer-managed content — overwritten on update. User customizations to calibration examples should be made in the target project's output folder, not in source template files.
+
+### Configuration Requirements
+
+- **`config.yaml` schema:**
+
+```yaml
+name: enhance
+version: 1.0.0
+description: "Enhance module — capability upgrades for existing BMAD agents"
+workflows:
+  - name: initiatives-backlog
+    entry: workflows/initiatives-backlog/workflow.md
+    target_agent: bmm/agents/pm.md
+    menu_patch_name: "initiatives-backlog"
+# dependencies: reserved for future use
+```
+
+- **Workflow registry:** Each workflow entry specifies name, entry point path (relative to `_enhance/`), target agent file (relative to `_bmad/`), and menu patch identifier
+- **v1 uses static config only.** The RICE scoring guide template is loaded at agent runtime but is not configurable. Runtime config (e.g., custom output paths) deferred to v2 if needed.
+
+### Installer Integration Requirements — *Consumed by: installer developer*
+
+- **New section in `refreshInstallation()`:** Copies `_bmad/bme/_enhance/` directory tree to target project
+- **Menu patch format:** Installer adds an `<item name="initiatives-backlog" exec="...">` tag to target agent file. Detection matches the `name` attribute value regardless of quote style or whitespace. If tag with matching name exists, skip. If target agent file missing from target project, fail-fast: "pm.md not found — BMM module must be installed first."
+- **Anchor pattern:** Installer inserts the `<item>` tag before `</menu>` in the target agent file. If `</menu>` not found, fall back to inserting after the last existing `<item>` tag. If neither found, fail-fast: "pm.md menu structure not recognized — manual patch required."
+- **`exec` path resolution:** The `exec` path in the `<item>` tag is relative to `{project-root}/_bmad/`. Example: `exec="bme/_enhance/workflows/initiatives-backlog/workflow.md"` resolves to `{project-root}/_bmad/bme/_enhance/workflows/initiatives-backlog/workflow.md`.
+- **Runtime dispatch dependency:** The `<item exec="...">` tag relies on BMAD core's menu system to load the referenced workflow file when the user selects the menu item. **This is a technical dependency that must be validated before implementation.** If BMAD core does not already support `exec` path loading for `<item>` tags, this becomes a significant additional implementation requirement. Identify an existing `<item exec="...">` example in BMAD core to confirm.
+- **Re-add behavior:** If a user manually removes the `<item>` tag and runs the installer again, the tag will be re-added. To permanently disable an enhancement, remove the workflow from `config.yaml`.
+- **Verification:** `verifyInstallation()` confirms: (1) enhance directory exists, (2) workflow entry point resolves, (3) menu patch is present in target agent, (4) config.yaml is valid against schema, (5) config-to-filesystem consistency — every workflow registered in config.yaml has a corresponding directory and entry point file. **v1 verifies at install time only.** Runtime integrity checks (e.g., `convoke-doctor` detecting missing patches after BMAD updates) are deferred.
+- **Verification behavior:** Verification runs all checks and reports all failures, not fail-on-first. The developer should see the complete installation state in one run.
+- **Modular verification:** Enhance verification checks should be modular — callable independently for Enhance-only validation, and integrated into the existing `verifyInstallation()` pipeline.
+- **Idempotency:** Running installer twice produces identical results — no duplicate patches, no file conflicts
+- **Uninstall path:** Removing the `<item>` tag from `pm.md` disables the enhancement until next install. John PM works exactly as before. No cleanup of enhance files required (they're inert without the menu entry).
+
+### Backlog Safety Requirements
+
+Write safety, pre-write format validation, and concurrent manual edit support are specified in FR18, FR24, FR25, NFR1, NFR2, and NFR3.
+
+- **Staleness nudge (Deferred — see Post-MVP Features):** When Triage mode loads the existing backlog, detect staleness by counting distinct Triage-sourced changelog dates. If any existing item's last provenance date is older than the 3rd most recent Triage changelog date, surface a non-blocking suggestion: "Some items haven't been rescored in 3+ sessions. Consider running Review mode after this triage."
+
+### Implementation Considerations
+
+- **Installer test surface:** The new installer section and verification checks are the only new JavaScript. This includes file copying, menu patch insertion with anchor detection and name-attribute matching across quote styles, config schema validation, config-to-filesystem consistency checks, idempotency logic, and fail-fast error paths — each independently testable.
+- **Semantic correctness requires manual testing:** `verifyInstallation()` validates structural integrity (frontmatter paths, step reachability, template existence). Whether step file instructions produce correct agent behavior can only be verified through manual walkthrough — each mode story should include this as an acceptance criterion.
+
+## Project Scoping & Phased Development
+
+### MVP Strategy & Philosophy
+
+**MVP Approach:** Problem-solving MVP — deliver the complete review-to-backlog feedback loop with all three modes operational. The MVP validates the two-gate batch validation model and the cross-module extension pattern simultaneously.
+
+**Why all three modes in MVP:** Triage is the critical path, but Review and Create are necessary for a complete backlog lifecycle. Without Review, scores drift over time with no correction mechanism. Without Create, new projects must manually bootstrap the backlog before Triage can append to it. All three modes share the same templates, config, and installer — the incremental cost of shipping Review and Create alongside Triage is low relative to the standalone infrastructure investment.
+
+**Pre-implementation spike:** Validate that BMAD core's `<item exec="...">` menu dispatch loads workflow files at runtime. This determines whether the installer design works as specified or requires an alternative approach. Must be completed before story creation. **Spike fallback:** If BMAD core does not support `<item exec="...">` dispatch, the fallback is a `.claude/skills/` entry that loads the workflow directly. The `<item>` tag would reference the skill name instead of an exec path. This changes the installer to write a skill file instead of patching a menu tag. **Fallback impact:** If the spike fallback is triggered, the Installer Integration Requirements section must be revised. The skill file approach changes: (1) menu patch → skill file generation, (2) anchor pattern → not applicable, (3) verification checks menu patch → verification checks skill file existence, (4) re-add behavior → skill file recreation. The rest of the PRD (workflow content, templates, config, safety requirements) is unaffected.
+
+### MVP Feature Set (Phase 1)
+
+**Core User Journeys Supported:**
+- J1: Triage after review (happy path)
+- J2: Triage from non-BMAD source
+- J3: Zero actionable findings (edge case)
+- J4: BMM consumer reading the backlog (passive — no workflow changes needed)
+
+**Must-Have Capabilities:**
+
+| Capability | Rationale |
+|-----------|-----------|
+| Triage mode (all phases) | Critical path — highest-value deliverable |
+| Review mode (all phases) | Prevents score drift, completes backlog lifecycle |
+| Create mode (all phases) | Enables new project bootstrapping |
+| Two-gate validation (Triage) | Primary innovation — must be validated in v1 |
+| Completion summary (all modes) | UX closure + trust building — shows items added/merged/changed + new top 3. *Implementation note: completion summary is an acceptance criterion on each mode story, not a standalone story.* |
+| Write safety | Prerequisite for all modes — protects backlog integrity |
+| Pre-write format validation | Highest-risk failure mode mitigation — prevents backlog corruption |
+| RICE scoring guide template | Scoring consistency across sessions |
+| Backlog format spec template | File operation safety and format compliance |
+| Installer integration | File copy, menu patch, verification |
+| Modular verification | Enhance checks callable independently + integrated into pipeline |
+| Config.yaml | Workflow registry for installer discovery |
+| Menu patch (`<item>` tag) | Agent activation mechanism |
+| ENHANCE-GUIDE.md | Pattern documentation for future module authors |
+| Directory structure | `_bmad/bme/_enhance/` with full Option C layout |
+
+**Explicitly NOT in MVP:**
+- Staleness nudge (deferred — independently implementable enhancement, core workflow is complete without it, can be added post-MVP without changing existing step files)
+- Individual initiative files (v2)
+- Cross-agent routing (v2)
+- Runtime integrity checks / `convoke-doctor` integration (deferred)
+- BMAD external module registration
+- Dynamic `<extensions>` mechanism (v3)
+- Prioritized view pagination or category grouping (v2 if backlog exceeds ~75 items)
+
+### Post-MVP Features
+
+**Phase 2 (Growth):**
+- Staleness nudge in Triage mode
+- Individual initiative files with RICE frontmatter + auto-generated summary view
+- Cross-agent routing ("next actions by agent" section)
+- Runtime config support (custom output paths)
+- Prioritized view scaling (pagination or category-grouped views if backlog exceeds ~75 items)
+- Second enhancement workflow for another BMAD agent
+
+**Phase 3 (Expansion):**
+- Dynamic `<extensions>` tag — proposed BMAD core mechanism
+- Enhance ecosystem — multiple modules contributing enhancements
+- BMAD external module registration
+- `convoke-doctor` integration for runtime integrity checks
+
+### Risk Mitigation Strategy
+
+**Technical Risks:**
+
+| Risk | Likelihood | Impact | Mitigation |
+|------|-----------|--------|-----------|
+| `<item exec="...">` not supported by BMAD core | Medium | Critical — blocks installer design | Pre-implementation spike + defined fallback (skill file alternative) |
+| BMAD upstream changes `pm.md` structure | Low (per release) | High — breaks menu patch | `verifyInstallation()` fail-fast detection + ADR-2 |
+| Backlog corruption from agent write errors | Medium | High — data loss | Write safety + pre-write format validation (both MVP) |
+| RICE score clustering (useless prioritization) | Medium | Medium — undermines value | Guard metric (no more than 3 identical in top 10) + scoring guide calibration |
+| Installer works in source repo but fails on target | Medium | High — blocks first real usage | Installer must be tested on a clean target project (not the source repo) before v1 is complete |
+| Step file instructions don't produce intended agent behavior | High | Medium — workflow feels broken | Semantic correctness requires manual testing (structural validation catches path/template issues only). Each mode story should include manual walkthrough as acceptance criterion. |
+
+**Market Risks:**
+
+| Risk | Likelihood | Impact | Mitigation |
+|------|-----------|--------|-----------|
+| No second enhancement added (pattern unused) | Medium | Low for users, Medium for strategy | Strategic reassessment at 6 months (documented in Product Scope) |
+| Two-gate model feels tedious | Low | Medium — users skip Gate 1 | Gate 1 can be made optional post-MVP if feedback warrants |
+
+**Resource Risks:**
+
+| Risk | Likelihood | Impact | Mitigation |
+|------|-----------|--------|-----------|
+| Step file authoring takes longer than expected | Medium | Schedule slip | Triage mode first — ship if Review/Create delayed |
+| Installer integration more complex than estimated | Low | Schedule slip | Installer is one story — scope bounded by existing `refreshInstallation()` pattern |
+
+### Dependency Map
+
+```
+Pre-implementation spike (exec validation)
+    └── Story: Installer integration (file copy + menu patch + verification)
+         └── Story: Directory structure + config.yaml + template authoring
+              │     (includes rice-scoring-guide.md and backlog-format-spec.md content)
+              ├── Story: Triage mode step files (AC includes completion summary + manual walkthrough)
+              ├── Story: Review mode step files (AC includes completion summary + manual walkthrough)
+              ├── Story: Create mode step files (AC includes completion summary + manual walkthrough)
+              └── Story: ENHANCE-GUIDE.md (can parallel any mode story)
+```
+
+*Note: Mode stories are independent and can be developed in parallel. Template authoring is a prerequisite for all mode stories — step files reference templates at runtime.*
+
+### Cross-Reference: Completion Summary Requirement
+
+*The completion summary is specified in the Innovation & Design Patterns section (UX Design Principles) as: "after backlog update, show what was added/merged/changed + new top 3 positions." This applies to all three modes. Implementation: completion summary is an acceptance criterion on each mode story's final step, before returning to the T/R/C menu — not a standalone story.*
+
+## Functional Requirements
+
+### Finding Extraction & Classification
+
+- FR1: Product Owner can submit any text input (review transcript, meeting notes, markdown) to Triage mode for finding extraction
+- FR2: The workflow can extract actionable findings from unstructured text input, where actionable = proposes a change, identifies a gap, or flags a risk
+- FR3: The workflow can classify each extracted finding into a backlog category
+- FR4: The workflow can identify the source reference for each finding (which part of the input it came from)
+- FR5: The workflow can detect potential overlaps between extracted findings and existing backlog items, presenting them with the matching item's title and ID
+- FR6: Product Owner can resolve overlap flags by choosing merge, skip, or add-as-new for each flagged finding
+- FR7: Product Owner can escalate observations to actionable status during Gate 1 validation
+- FR8: Product Owner can add findings the workflow missed during Gate 1 validation
+- FR9: Product Owner can remove findings from the extraction batch during Gate 1 validation
+- FR10: The workflow can report zero actionable findings gracefully, with an escape hatch for user-directed re-examination of specific passages
+
+### RICE Scoring & Prioritization
+
+- FR11: The workflow can propose RICE scores (Reach, Impact, Confidence, Effort) for each confirmed finding in batch
+- FR12: The workflow can present each score with a one-line rationale explaining the scoring basis
+- FR13: Product Owner can adjust individual RICE component scores by item number without re-reviewing the full batch
+- FR14: Product Owner can drop items from the scoring batch during Gate 2 without returning to Gate 1
+- FR15: The workflow can calculate composite RICE scores per the formula in Template Requirements and sort by descending score with tiebreaking (Confidence first, then insertion order)
+- FR16: The workflow can load and reference the RICE scoring guide template during scoring for consistent calibration
+- FR17: The workflow can produce scores conforming to the range derived from the scoring guide's defined RICE component scales and composite formula (R × I × C ÷ E)
+
+### Backlog Management
+
+- FR18: Product Owner's existing backlog content is preserved when the workflow appends new items, including items added manually between sessions
+- FR19: The workflow can append new items to the correct category section of the backlog, identified by section heading
+- FR20: The workflow can regenerate the prioritized view table with all items (existing + new) sorted by composite score
+- FR21: The workflow can add provenance tags to new items ("Added from [source], [date]")
+- FR22: The workflow can add rescore provenance to changed items in Review mode ("Rescored [old]→[new], Review, [date]")
+- FR23: The workflow can add changelog entries in the correct format (### YYYY-MM-DD with bullet items)
+- FR24: The workflow can validate structural format of the backlog file before writing (section headings, table columns, changelog section)
+- FR25: Product Owner can proceed or abort when pre-write validation detects a structural mismatch
+
+### Mode Management
+
+- FR26: Product Owner can select between Triage, Review, and Create modes from a single entry point with mode descriptions
+- FR27: The workflow can present a completion summary after each mode showing items added/merged/changed and new top 3 positions
+- FR28: Product Owner can return to the T/R/C menu after any mode completes
+- FR29: Product Owner can exit the workflow from the T/R/C menu
+- FR30: The workflow can load the existing backlog for Review mode and walk through items for rescoring
+- FR31: Product Owner can change or confirm the score for each item during Review mode walkthrough
+- FR32: The workflow can initialize a new backlog file in Create mode
+- FR33: Product Owner can provide initiatives interactively during Create mode gathering phase
+
+### Installation & Activation
+
+- FR34: The installer can copy the `_enhance/` directory tree to a target project
+- FR35: The installer can add an `<item>` tag to the target agent file at the correct anchor point
+- FR36: The installer can detect an existing `<item>` tag by name attribute and skip if present
+- FR37a: The installer can fail-fast with a clear error if the target agent file is missing
+- FR37b: The installer can fail-fast with a clear error if the target agent file's menu structure is unrecognized
+- FR38: The installer can read `config.yaml` to discover registered workflows and their target agents
+- FR39: The installer can perform the 5-point verification defined in Installer Integration Requirements (enhance directory, entry point, menu patch, config validity, config-to-filesystem consistency)
+- FR40: The installer can report all verification failures in a single run (not fail-on-first)
+- FR41: The installer can produce identical results when run twice (idempotency)
+- FR42: Product Owner can disable an enhancement by removing the `<item>` tag (temporary) or removing the workflow from config.yaml (permanent)
+
+### Pattern Documentation
+
+- FR43: A module author can read ENHANCE-GUIDE.md to understand: directory structure, workflow creation, agent menu patching, config registration, and validation
+- FR44: The installer can discover and deploy enhancement workflows based on config.yaml entries
+
+### Cross-Cutting Capabilities
+
+- FR45: The workflow can load and reference the backlog format spec template during file operations for consistent output formatting
+- FR46: The workflow processes the complete input text regardless of length without truncation
+- FR47: Product Owner can skip items during Review mode walkthrough without rescoring them
+- FR48: Product Owner can view an item's current provenance before deciding to rescore in Review mode
+- FR49: The installer fails fast with a clear error if config.yaml is missing or unparseable
+
+## Non-Functional Requirements
+
+### Data Integrity
+
+- NFR1: The workflow must never delete, overwrite, or reorder existing backlog category section content during any write operation. The prioritized view table is excluded from this constraint — it is regenerated per FR20. Verification: diff of backlog file before/after shows only additions to category sections and a regenerated prioritized view.
+- NFR2: Pre-write format validation must detect mismatches in: section heading names that serve as insertion anchors, prioritized view table column count, and changelog section existence. Zero silent corruption for checked structures.
+- NFR3: The backlog file must remain parseable by the workflow on next load and manually editable in any text editor after every workflow operation. No workflow-specific encoding, markers, or formatting that would break either round-trip processing or manual editing.
+
+### Installer Reliability
+
+- NFR4: Installer operations must be idempotent — running the installer twice produces no changes to installer-managed files detectable by `git diff`. Idempotency is scoped to files the installer creates or modifies, not the entire working tree.
+- NFR5: All installer failures must be displayed to the user via stdout, stating: (1) what failed, (2) why it failed, (3) what to do next. No silent failures, no stack traces without context.
+
+### Content Portability
+
+- NFR6: All workflow output (backlog file, changelog, prioritized view) must be standard markdown readable by any markdown renderer. No proprietary extensions, no HTML embeds, no tool-specific syntax. Provenance tags are plain text, not structured metadata.
+
+### Backward Compatibility
+
+- NFR7a: Installing the Enhance module must not alter the behavior of any existing BMAD agent when the enhancement is not invoked. John PM without the `<item>` tag must work identically to pre-Enhance John PM.
+- NFR7b: Removing the `<item>` tag from `pm.md` must fully disable the enhancement with no residual effects — no orphaned state, no error messages from missing references.
+
+### Workflow Integrity
+
+- NFR8: All step file frontmatter references (nextStepFile, outputFile, template paths) must resolve to existing files at install time. Verification: `verifyInstallation()` walks the step chain from entry point to terminal step, confirming every referenced file exists.
