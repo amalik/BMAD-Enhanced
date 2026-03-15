@@ -82,7 +82,12 @@ This document provides the complete epic and story breakdown for the P4 Enhance 
 - FR48: Product Owner can view an item's current provenance before deciding to rescore in Review mode
 - FR49: The installer fails fast with a clear error if config.yaml is missing or unparseable
 
-**Total FRs: 49** (FR37 split into FR37a/FR37b)
+#### v6.1.0 Skill Registration (FR50–FR52)
+- FR50: The installer can generate a `.claude/skills/` wrapper directory for each Enhance workflow (BMAD v6.1.0 skill pattern)
+- FR51: The installer can add an entry to `workflow-manifest.csv` for each Enhance workflow
+- FR52: The installer can add an entry to `skill-manifest.csv` for each Enhance workflow skill
+
+**Total FRs: 52** (FR37 split into FR37a/FR37b)
 
 ### NonFunctional Requirements
 
@@ -105,7 +110,10 @@ This document provides the complete epic and story breakdown for the P4 Enhance 
 #### Workflow Integrity (NFR8)
 - NFR8: All step file frontmatter references must resolve to existing files at install time — `verifyInstallation()` walks the step chain confirming every referenced file exists
 
-**Total NFRs: 9** (NFR7 split into NFR7a/NFR7b)
+#### v6.1.0 Registration Compliance (NFR9)
+- NFR9: Skill wrapper, workflow-manifest entry, and skill-manifest entry must be idempotent — no duplicates on repeated runs
+
+**Total NFRs: 10** (NFR7 split into NFR7a/NFR7b)
 
 ### Additional Requirements
 
@@ -181,8 +189,11 @@ Not applicable — P4 is a CLI workflow with no visual UI component. The step fi
 | FR47 | 2 | 2.1 | Skip items in Review walkthrough |
 | FR48 | 2 | 2.1 | View provenance before rescoring |
 | FR49 | 1 | 1.2 | Fail-fast: config.yaml missing/unparseable |
+| FR50 | 1 | 1.2a | Generate `.claude/skills/` wrapper for Enhance workflows |
+| FR51 | 1 | 1.2a | Add workflow-manifest.csv entry |
+| FR52 | 1 | 1.2a | Add skill-manifest.csv entry |
 
-**Coverage: 49/49 FRs mapped (100%)**
+**Coverage: 52/52 FRs mapped (100%)**
 
 ### NFR Coverage Map
 
@@ -197,16 +208,17 @@ Not applicable — P4 is a CLI workflow with no visual UI component. The step fi
 | NFR7a | 1 | 1.2 | No behavior change when not invoked |
 | NFR7b | 1 | 1.2 | Clean disable on tag removal |
 | NFR8 | 1 | 1.2 | Step chain file resolution at install |
+| NFR9 | 1 | 1.2a | Skill/manifest registration idempotency |
 
-**Coverage: 9/9 NFRs mapped (100%)**
+**Coverage: 10/10 NFRs mapped (100%)**
 
 ## Epic List
 
 ### Epic 1: Install & Triage Review Findings into Scored Backlog
 Product Owner can install the Enhance module, activate it in John PM's menu, and immediately triage review findings into RICE-scored backlog items with two-gate validation. This is the critical path — from `npm install` to a scored backlog entry.
-**FRs covered:** FR1–FR21, FR23–FR29, FR34–FR42, FR44–FR46, FR49 (42 FRs)
-**NFRs covered:** NFR1–NFR8 (all 9)
-**Stories:** 6 (dependency chain: 1.1 → 1.2 → 1.3 → 1.4 → 1.5 → 1.6)
+**FRs covered:** FR1–FR21, FR23–FR29, FR34–FR42, FR44–FR46, FR49–FR52 (45 FRs)
+**NFRs covered:** NFR1–NFR9 (all 10)
+**Stories:** 7 (dependency chain: 1.1 → 1.2 → 1.2a → 1.3 → 1.4 → 1.5 → 1.6)
 
 ### Epic 2: Review Mode — Rescore Existing Backlog Items
 Product Owner can walk through existing backlog items, view their current provenance, and rescore them with updated RICE assessments to prevent score drift. Reuses mode shell, templates, and backlog management from Epic 1.
@@ -221,7 +233,7 @@ Product Owner can bootstrap a new RICE-scored backlog from scratch. Module autho
 **Design notes from party mode review:**
 - FR27 (completion summary) is a shared capability — first implemented in Epic 1 Story 1.6, reused by Epics 2 & 3
 - Mode management shell (Story 1.3) shows all 3 modes from day one — Review and Create display "coming soon" until their epics ship
-- Implementation order within Epic 1: templates → installer → mode shell → extraction → scoring → backlog update
+- Implementation order within Epic 1: templates → installer → v6.1.0 registration → mode shell → extraction → scoring → backlog update
 
 ## Epic 1: Install & Triage Review Findings into Scored Backlog
 
@@ -304,6 +316,59 @@ So that the initiatives-backlog workflow is activated in John PM's menu without 
 **Given** the installer has already run once
 **When** it runs a second time with no changes
 **Then** `git diff` shows no changes to installer-managed files (NFR4)
+
+### Story 1.2a: v6.1.0 Skill Registration — Skill Wrapper & Manifest Entries
+
+As a developer maintaining BMAD v6.1.0 compliance,
+I want the Enhance module's workflows registered in the skill system,
+So that they are discoverable via `.claude/skills/` and listed in `workflow-manifest.csv` and `skill-manifest.csv`.
+
+**Context:** BMAD v6.1.0 introduced `.claude/skills/` directory-per-skill registration, `skill-manifest.csv`, and `workflow-manifest.csv`. The P4 PRD originally deferred skill/manifest registration, but this infrastructure now exists as a core framework feature. This story brings the Enhance module into full compliance.
+
+**Acceptance Criteria:**
+
+**Given** the installer runs `refreshInstallation()` on a target project
+**When** Enhance config.yaml is present with registered workflows
+**Then** for each workflow, a `.claude/skills/bmad-enhance-{workflow-name}/SKILL.md` directory and file is generated (FR50)
+**And** the SKILL.md follows the standard v6.1.0 pattern: YAML frontmatter (`name`, `description`) with a body instruction to load the workflow entry point file
+
+**Given** the installer generates an Enhance skill wrapper
+**When** the SKILL.md content is written
+**Then** the `name` field matches the canonicalId pattern `bmad-enhance-{workflow-name}`
+**And** the `description` field includes a user-facing trigger phrase (e.g., "Manage RICE initiatives backlog...")
+**And** the body references the workflow entry point via `{project-root}` path, consistent with the `bmad-code-review` SKILL.md pattern
+
+**Given** the installer runs `refreshInstallation()` on a target project
+**When** Enhance config.yaml is present with registered workflows
+**Then** an entry is appended to `workflow-manifest.csv` with: name=`{workflow-name}`, description, module=`bme`, path to workflow entry point, canonicalId=`bmad-enhance-{workflow-name}` (FR51)
+
+**Given** the installer runs `refreshInstallation()` on a target project
+**When** Enhance config.yaml is present with registered workflows
+**Then** an entry is appended to `skill-manifest.csv` with: canonicalId=`bmad-enhance-{workflow-name}`, name matching canonicalId, description, module=`bme`, path to SKILL.md, install_to_bmad=`true` (FR52)
+
+**Given** `workflow-manifest.csv` or `skill-manifest.csv` already contains an entry with matching canonicalId
+**When** the installer runs again
+**Then** the existing entry is not duplicated — skip silently (NFR9)
+
+**Given** the installer generates the skill wrapper
+**When** it runs in the dev environment (packageRoot === projectRoot)
+**Then** it skips skill wrapper generation with a logged message (consistent with isSameRoot guard pattern from Story 1.2)
+
+**Given** the installer has already run once (all artifacts generated)
+**When** it runs a second time with no changes
+**Then** `git diff` shows no changes to skill wrapper, workflow-manifest.csv, or skill-manifest.csv (NFR9)
+
+**Given** `validateInstallation()` runs after installation
+**When** Enhance module is installed
+**Then** the existing 5-point verification from Story 1.2 continues to pass
+**And** a 6th verification point confirms the skill wrapper exists at the expected path
+
+**Dev Notes:**
+- **Naming convention:** `bmad-enhance-{workflow-name}` (e.g., `bmad-enhance-initiatives-backlog`) — decided in cross-module party mode review (2026-03-15)
+- **Activation pattern:** Dual-path — menu patch (primary, through John PM) + standalone skill (direct workflow loader). Matches BMM/CIS convention, NOT the WDS menu-only or TEA standalone-only patterns.
+- **SKILL.md pattern:** Direct workflow reference (like `bmad-code-review`), NOT a dispatcher through John PM. The workflow step files are self-contained.
+- **CSV idempotency (Murat):** Manifest duplicate detection MUST use exact-match on `canonicalId` column, NOT substring. `bmad-enhance` must not accidentally match `bmad-enhance-initiatives-backlog`.
+- **isSameRoot guard:** Skill wrapper generation and manifest entry must be skipped in dev environment, consistent with Story 1.2 pattern.
 
 ### Story 1.3: Mode Management Shell — T/R/C Menu & Dispatch
 
