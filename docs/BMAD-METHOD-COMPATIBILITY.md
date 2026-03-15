@@ -49,16 +49,16 @@
 ### Standard Installation (Standalone)
 
 ```bash
-npm install convoke
-npx convoke-install-vortex
+npm install convoke-agents
+npx -p convoke-agents convoke-install-vortex
 ```
 
 ### With Existing BMAD Method
 
 ```bash
 # If BMAD Method is already installed, Convoke detects it automatically
-npm install convoke
-npx convoke-install-vortex
+npm install convoke-agents
+npx -p convoke-agents convoke-install-vortex
 # Installer logs: "✓ BMAD Method configuration found"
 ```
 
@@ -126,7 +126,7 @@ Convoke installers check:
    # Verify Emma still works
 
    # Run diagnostics to check all 7 agents
-   npx convoke-doctor
+   npx -p convoke-agents convoke-doctor
    ```
 
 2. **If agents break:**
@@ -238,12 +238,12 @@ Convoke follows semver:
 When new BMAD Method version releases:
 
 - [ ] Install new BMAD Method version
-- [ ] Run `npx convoke-install-vortex`
+- [ ] Run `npx -p convoke-agents convoke-install-vortex`
 - [ ] Verify all files copied correctly
 - [ ] Activate Emma: `cat _bmad/bme/_vortex/agents/contextualization-expert.md`
 - [ ] Test Emma workflow: Type `LP` (Lean Persona) and complete all steps
 - [ ] Activate Mila (or another recent agent): `cat _bmad/bme/_vortex/agents/research-convergence-specialist.md`
-- [ ] Run `npx convoke-doctor` to verify all 7 agents and 22 workflows
+- [ ] Run `npx -p convoke-agents convoke-doctor` to verify all 7 agents and 22 workflows
 - [ ] Verify artifacts generated correctly
 - [ ] Check for errors or warnings
 - [ ] Update compatibility matrix if successful
@@ -312,7 +312,7 @@ Convoke includes automated test coverage:
 ### For Users
 
 1. **Install directly:**
-   - Run `npm install convoke-agents && npx convoke-install-vortex`
+   - Run `npm install convoke-agents && npx -p convoke-agents convoke-install-vortex`
    - No prerequisite installation needed
    - BMAD Method is optional — installer handles both cases
 
@@ -346,7 +346,7 @@ Convoke includes automated test coverage:
 
 **For Users:**
 
-- Install with `npm install convoke-agents && npx convoke-install-vortex`
+- Install with `npm install convoke-agents && npx -p convoke-agents convoke-install-vortex`
 - No prerequisite installation needed
 - If using BMAD Method alongside, check compatibility matrix before updating either package
 
