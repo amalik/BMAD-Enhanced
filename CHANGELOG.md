@@ -7,6 +7,23 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [2.3.1] - 2026-03-15
+
+### Fixed
+
+- **Migration chaining bug** — `getMigrationsFor()` now walks the full migration chain instead of only matching the first hop. Users jumping multiple versions (e.g., `1.0.x` → `2.x`) previously skipped all intermediate migrations silently. The `1.5.x-to-1.6.0` config delta (Wave 3 agents) was being skipped for anyone upgrading from `1.0.x–1.4.x`.
+- **README version badge** — Updated from stale `2.0.1` to current version
+- **INSTALLATION.md** — Added missing `-p convoke-agents` to `npx` command in troubleshooting section
+- **BMAD-METHOD-COMPATIBILITY.md** — Fixed wrong package name (`convoke` → `convoke-agents`) and added missing `-p convoke-agents` to all `npx` commands
+- **Archived outdated docs** — PUBLISHING-GUIDE.md and TEST-PLAN-REAL-INSTALL.md marked as historical (contained legacy commands)
+
+### Added
+
+- **Chain traversal tests** — 10 new unit tests for migration chain resolution, parallel entry exclusion, and breaking change detection across chains
+- **Multi-version integration test** — Verifies full `1.5.2 → current` update path with all 3 deltas executing and complete migration history
+
+---
+
 ## [2.2.0] - 2026-03-14
 
 ### Changed
