@@ -1,6 +1,6 @@
 # Story 2.1: Review Mode — Backlog Walkthrough & Rescoring
 
-Status: ready-for-dev
+Status: done
 
 ## Story
 
@@ -28,33 +28,33 @@ So that the backlog stays calibrated over time and doesn't drift from reality.
 
 ## Tasks / Subtasks
 
-- [ ] Task 1: Author `step-r-01-load.md` — Backlog Load & Walkthrough Setup (AC: 1, 2)
-  - [ ] 1.1 Create step file with BMAD step frontmatter (name, description, nextStepFile to step-r-02-rescore.md, outputFile, templateFile for rice-scoring-guide.md)
-  - [ ] 1.2 MANDATORY EXECUTION RULES section with review analyst role
-  - [ ] 1.3 MANDATORY SEQUENCE: (1) Load existing backlog from `{outputFile}`, (2) Load RICE scoring guide from `{templateFile}`, (3) Parse all category tables to collect items with current scores and provenance, (4) Count total items for walkthrough progress tracking
-  - [ ] 1.4 Menu: [C] Continue only (no A/P — this is data loading, not content refinement)
-  - [ ] 1.5 On C: pass loaded items to step-r-02-rescore.md
+- [x] Task 1: Author `step-r-01-load.md` — Backlog Load & Walkthrough Setup (AC: 1, 2)
+  - [x] 1.1 Create step file with BMAD step frontmatter (name, description, nextStepFile to step-r-02-rescore.md, outputFile, templateFile for rice-scoring-guide.md)
+  - [x] 1.2 MANDATORY EXECUTION RULES section with review analyst role
+  - [x] 1.3 MANDATORY SEQUENCE: (0) Check if `{outputFile}` exists — if not, display "No backlog found at `{outputFile}` — use **Triage (T)** or **Create (C)** mode first to create one." then return to T/R/C menu via `{workflowFile}`, (1) Load existing backlog from `{outputFile}`, (2) Load RICE scoring guide from `{templateFile}`, (3) Parse all category tables **under `## Backlog`** to collect items with current scores and provenance, (4) Count total items for walkthrough progress tracking
+  - [x] 1.4 Menu: [C] Continue only (no A/P — this is data loading, not content refinement)
+  - [x] 1.5 On C: pass loaded items to step-r-02-rescore.md
 
-- [ ] Task 2: Author `step-r-02-rescore.md` — Item Walkthrough & Rescoring (AC: 2, 3, 4, 5, 6)
-  - [ ] 2.1 Create step file with BMAD step frontmatter (name, description, nextStepFile to step-r-03-update.md, outputFile, templateFile for rice-scoring-guide.md, advancedElicitationTask, partyModeWorkflow)
-  - [ ] 2.2 MANDATORY EXECUTION RULES section with rescoring analyst role
-  - [ ] 2.3 MANDATORY SEQUENCE part 1 — Present Item: Show current item with title, category, R/I/C/E scores, composite score, and current provenance. Show walkthrough progress (e.g., "Item 3 of 29").
-  - [ ] 2.4 MANDATORY SEQUENCE part 2 — Per-Item Menu: command-based score adjustments (`R [value]`, `I [value]`, `CF [value]`, `E [value]` for current item), `K` to confirm/keep current score, `S` to skip without rescoring, `X` to exit walkthrough early, `A` for Advanced Elicitation, `P` for Party Mode, `C` to apply changes and advance to next item
-  - [ ] 2.5 Per-item handling: On score adjustment — recalculate composite, redisplay updated scores. On K — mark as confirmed, advance. On S — mark as skipped, advance. On X — exit walkthrough, proceed to step-r-03 with only rescored items. On C — record rescore provenance if scores changed, advance to next item.
-  - [ ] 2.6 After last item (or X exit): pass all rescored/confirmed/skipped results to step-r-03-update.md
+- [x] Task 2: Author `step-r-02-rescore.md` — Item Walkthrough & Rescoring (AC: 2, 3, 4, 5, 6)
+  - [x] 2.1 Create step file with BMAD step frontmatter (name, description, nextStepFile to step-r-03-update.md, outputFile, templateFile for rice-scoring-guide.md, advancedElicitationTask, partyModeWorkflow)
+  - [x] 2.2 MANDATORY EXECUTION RULES section with rescoring analyst role
+  - [x] 2.3 MANDATORY SEQUENCE part 1 — Present Item: Show current item with title, category, R/I/C/E scores, composite score, and current provenance. Show walkthrough progress (e.g., "Item 3 of 29").
+  - [x] 2.4 MANDATORY SEQUENCE part 2 — Per-Item Menu: command-based score adjustments (`R [value]`, `I [value]`, `CF [value]`, `E [value]` for current item), `K` to confirm/keep current score, `S` to skip without rescoring, `X` to exit walkthrough early, `A` for Advanced Elicitation, `P` for Party Mode, `C` to apply changes and advance to next item
+  - [x] 2.5 Per-item handling: On score adjustment — recalculate composite, redisplay updated scores. On K — mark as confirmed, advance. On S — mark as skipped, advance. On X — exit walkthrough, proceed to step-r-03 with only rescored items. On C — record rescore provenance if scores changed, advance to next item. On C with no score changes — treat as confirmed (same as K).
+  - [x] 2.6 After last item (or X exit): pass all rescored/confirmed/skipped results to step-r-03-update.md
 
-- [ ] Task 3: Author `step-r-03-update.md` — Backlog Update & Completion (AC: 4, 6, 7)
-  - [ ] 3.1 Create step file with BMAD step frontmatter (name, description, outputFile, templateFile for backlog-format-spec.md, workflowFile for return-to-menu). No nextStepFile (Type 10 final step).
-  - [ ] 3.2 MANDATORY EXECUTION RULES section with backlog operations specialist role (reuse pattern from step-t-04-update.md)
-  - [ ] 3.3 MANDATORY SEQUENCE part 1 — Pre-Write Validation: Same as step-t-04 (7 H2 section headings, 6-col prioritized view, 10-col category tables, changelog existence). Mismatch handling with [Y]/[X].
-  - [ ] 3.4 MANDATORY SEQUENCE part 2 — Apply Rescores: For each rescored item, update R/I/C/E and composite score in category table. Add rescore provenance: "Rescored [old]→[new], Review, [date]" (FR22). Preserve all non-rescored items unchanged.
-  - [ ] 3.5 MANDATORY SEQUENCE part 3 — Regenerate Prioritized View: Same as step-t-04 (all active items sorted by composite score descending, tiebreak by Confidence then insertion order).
-  - [ ] 3.6 MANDATORY SEQUENCE part 4 — Add Changelog Entry: Prepend to changelog table. Format: "Review: Rescored [N] items, confirmed [N], skipped [N]."
-  - [ ] 3.7 MANDATORY SEQUENCE part 5 — Update Last Updated Date.
-  - [ ] 3.8 MANDATORY SEQUENCE part 6 — Completion Summary: Display items rescored/confirmed/skipped, new top 3 positions. Then return to T/R/C menu via `{workflowFile}`.
+- [x] Task 3: Author `step-r-03-update.md` — Backlog Update & Completion (AC: 4, 6, 7)
+  - [x] 3.1 Create step file with BMAD step frontmatter (name, description, outputFile, templateFile for backlog-format-spec.md, workflowFile for return-to-menu). No nextStepFile (Type 10 final step).
+  - [x] 3.2 MANDATORY EXECUTION RULES section with backlog operations specialist role (reuse pattern from step-t-04-update.md)
+  - [x] 3.3 MANDATORY SEQUENCE part 1 — Pre-Write Validation: Same as step-t-04 (7 H2 section headings, 6-col prioritized view, 10-col category tables, changelog existence). Mismatch handling with [Y]/[X].
+  - [x] 3.4 MANDATORY SEQUENCE part 2 — Apply Rescores: For each rescored item, update R/I/C/E and composite score in category table. Add rescore provenance: "Rescored [old]→[new], Review, [date]" (FR22). Preserve all non-rescored items unchanged.
+  - [x] 3.5 MANDATORY SEQUENCE part 3 — Regenerate Prioritized View: Same as step-t-04 (all active items sorted by composite score descending, tiebreak by Confidence then insertion order).
+  - [x] 3.6 MANDATORY SEQUENCE part 4 — Add Changelog Entry: Prepend to changelog table. Format: "Review: Rescored [N] items, confirmed [N], skipped [N]."
+  - [x] 3.7 MANDATORY SEQUENCE part 5 — Update Last Updated Date.
+  - [x] 3.8 MANDATORY SEQUENCE part 6 — Completion Summary: Display items rescored/confirmed/skipped, new top 3 positions. Then return to T/R/C menu via `{workflowFile}`.
 
-- [ ] Task 4: Update `workflow.md` — Enable Review Mode Dispatch (AC: 8)
-  - [ ] 4.1 Replace "Coming soon" message for R option with: Load, read the entire file, and execute `{project-root}/_bmad/bme/_enhance/workflows/initiatives-backlog/steps-r/step-r-01-load.md`
+- [x] Task 4: Update `workflow.md` — Enable Review Mode Dispatch (AC: 8)
+  - [x] 4.1 Replace "Coming soon" message for R option with: Load, read the entire file, and execute `{project-root}/_bmad/bme/_enhance/workflows/initiatives-backlog/steps-r/step-r-01-load.md`
 
 ## Dev Notes
 
@@ -138,6 +138,7 @@ Items are presented **one at a time** (not batch like Triage). Each item shows:
 - `C` — Apply current changes and advance to next item
 
 After each score adjustment: recalculate composite, redisplay scores, halt and wait.
+C with no score changes = confirmed (same as K) — ensures every visited item is tracked as rescored, confirmed, or skipped.
 
 **BMAD reserved letter management:**
 - `A` = Advanced Elicitation (standard BMAD reserved)
@@ -174,6 +175,7 @@ Example: `Rescored 1.8→2.4, Review, 2026-03-15`
 **step-r-01-load.md should follow step-t-01-ingest.md pattern:**
 - Same C-only menu approach (data loading, not content refinement)
 - **Difference:** Loads and parses existing backlog instead of accepting user input
+- **Difference:** Must guard for missing backlog file (Triage can create new; Review cannot)
 
 **step-r-02-rescore.md should follow step-t-03-score.md pattern:**
 - Same A/P frontmatter references
@@ -258,10 +260,27 @@ If any step exceeds its maximum, extract to a `data/` file.
 
 ### Agent Model Used
 
+Claude Opus 4.6
+
 ### Debug Log References
+
+None — content-only story, no runtime errors.
 
 ### Completion Notes List
 
+- Task 1: Created step-r-01-load.md (87 lines, Type 5 C-only). Includes backlog-not-found guard (step 0), loads backlog + RICE guide, parses items under ## Backlog only, displays count/categories/score range summary.
+- Task 2: Created step-r-02-rescore.md (131 lines, Type 4 with A/P). Per-item walkthrough with R/I/CF/E score adjustments, K/S/X decisions, C-without-changes = confirmed. Tracks rescored/confirmed/skipped for completion summary.
+- Task 3: Created step-r-03-update.md (143 lines, Type 10 final). Pre-write validation (7 H2s, column counts, changelog), in-place rescore with provenance "Rescored [old]->[new], Review, [date]", prioritized view regeneration, changelog entry, completion summary, return-to-menu.
+- Task 4: Updated workflow.md R handler — replaced "Coming soon" with step chain dispatch to step-r-01-load.md, matching T handler pattern exactly.
+
 ### File List
 
+- _bmad/bme/_enhance/workflows/initiatives-backlog/steps-r/step-r-01-load.md (created)
+- _bmad/bme/_enhance/workflows/initiatives-backlog/steps-r/step-r-02-rescore.md (created)
+- _bmad/bme/_enhance/workflows/initiatives-backlog/steps-r/step-r-03-update.md (created)
+- _bmad/bme/_enhance/workflows/initiatives-backlog/workflow.md (modified)
+
 ### Change Log
+
+- 2026-03-15: Implemented Review mode — 3 step files (load, rescore, update) + workflow.md dispatch edit. Content-only, no JS or tests.
+- 2026-03-15: Code review fixes — (1) MEDIUM: removed stale "After R" execution rule from workflow.md, (2) LOW: aligned arrow character in step-r-03 provenance format to match backlog-format-spec.md (`->` not `→`).
