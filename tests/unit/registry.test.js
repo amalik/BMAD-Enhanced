@@ -26,41 +26,29 @@ describe('matchesVersionRange', () => {
   });
 });
 
+describe('parseTargetVersion', () => {
+  it('parses standard migration names', () => {
+    assert.equal(registry.parseTargetVersion('1.0.x-to-1.3.0'), '1.3.0');
+    assert.equal(registry.parseTargetVersion('1.5.x-to-1.6.0'), '1.6.0');
+    assert.equal(registry.parseTargetVersion('1.7.x-to-2.0.0'), '2.0.0');
+  });
+
+  it('returns null for unparseable names', () => {
+    assert.equal(registry.parseTargetVersion('no-version-here'), null);
+    assert.equal(registry.parseTargetVersion(''), null);
+  });
+});
+
 describe('getMigrationsFor', () => {
-  it('returns migration for 1.0.x versions', () => {
-    const migrations = registry.getMigrationsFor('1.0.5');
-    assert.ok(migrations.length >= 1);
-    assert.equal(migrations[0].name, '1.0.x-to-1.3.0');
-  });
-
-  it('returns migration for 1.1.x versions', () => {
-    const migrations = registry.getMigrationsFor('1.1.3');
-    assert.ok(migrations.length >= 1);
-    assert.equal(migrations[0].name, '1.1.x-to-1.3.0');
-  });
-
-  it('returns migration for 1.2.x versions', () => {
-    const migrations = registry.getMigrationsFor('1.2.0');
-    assert.ok(migrations.length >= 1);
-    assert.equal(migrations[0].name, '1.2.x-to-1.3.0');
-  });
-
-  it('returns migration for 1.3.x versions to 1.5.0', () => {
-    const migrations = registry.getMigrationsFor('1.3.8');
-    assert.ok(migrations.length >= 1);
-    assert.equal(migrations[0].name, '1.3.x-to-1.5.0');
-  });
-
-  it('returns migration for 1.4.x versions to 1.5.0', () => {
-    const migrations = registry.getMigrationsFor('1.4.1');
-    assert.ok(migrations.length >= 1);
-    assert.equal(migrations[0].name, '1.4.x-to-1.5.0');
-  });
-
-  it('returns migration for 1.5.x versions to 1.6.0', () => {
-    const migrations = registry.getMigrationsFor('1.5.2');
-    assert.ok(migrations.length >= 1);
-    assert.equal(migrations[0].name, '1.5.x-to-1.6.0');
+  it('returns correct entry point for each starting version', () => {
+    assert.equal(registry.getMigrationsFor('1.0.5')[0].name, '1.0.x-to-1.3.0');
+    assert.equal(registry.getMigrationsFor('1.1.3')[0].name, '1.1.x-to-1.3.0');
+    assert.equal(registry.getMigrationsFor('1.2.0')[0].name, '1.2.x-to-1.3.0');
+    assert.equal(registry.getMigrationsFor('1.3.8')[0].name, '1.3.x-to-1.5.0');
+    assert.equal(registry.getMigrationsFor('1.4.1')[0].name, '1.4.x-to-1.5.0');
+    assert.equal(registry.getMigrationsFor('1.5.2')[0].name, '1.5.x-to-1.6.0');
+    assert.equal(registry.getMigrationsFor('1.6.0')[0].name, '1.6.x-to-1.7.0');
+    assert.equal(registry.getMigrationsFor('1.7.1')[0].name, '1.7.x-to-2.0.0');
   });
 
   it('returns empty for unknown future version', () => {
@@ -68,26 +56,117 @@ describe('getMigrationsFor', () => {
     assert.equal(migrations.length, 0);
   });
 
-  it('sorts migrations by version order', () => {
-    // 1.0.x matches only 1.0.x migration, so test order implicitly
-    const migrations = registry.getMigrationsFor('1.0.0');
-    if (migrations.length > 1) {
-      const first = migrations[0].fromVersion.replace('.x', '.0');
-      const second = migrations[1].fromVersion.replace('.x', '.0');
-      const { compareVersions } = require('../../scripts/update/lib/utils');
-      assert.ok(compareVersions(first, second) <= 0);
-    }
+  it('returns empty for current version', () => {
+    const migrations = registry.getMigrationsFor('2.3.1');
+    assert.equal(migrations.length, 0);
+  });
+});
+
+describe('getMigrationsFor - chain traversal', () => {
+  it('chains from 1.0.5 through all 5 hops', () => {
+    const migrations = registry.getMigrationsFor('1.0.5');
+    const names = migrations.map(m => m.name);
+    assert.deepEqual(names, [
+      '1.0.x-to-1.3.0',
+      '1.3.x-to-1.5.0',
+      '1.5.x-to-1.6.0',
+      '1.6.x-to-1.7.0',
+      '1.7.x-to-2.0.0'
+    ]);
+  });
+
+  it('chains from 1.1.3 through all 5 hops', () => {
+    const migrations = registry.getMigrationsFor('1.1.3');
+    const names = migrations.map(m => m.name);
+    assert.deepEqual(names, [
+      '1.1.x-to-1.3.0',
+      '1.3.x-to-1.5.0',
+      '1.5.x-to-1.6.0',
+      '1.6.x-to-1.7.0',
+      '1.7.x-to-2.0.0'
+    ]);
+  });
+
+  it('chains from 1.3.7 through 4 hops', () => {
+    const migrations = registry.getMigrationsFor('1.3.7');
+    const names = migrations.map(m => m.name);
+    assert.deepEqual(names, [
+      '1.3.x-to-1.5.0',
+      '1.5.x-to-1.6.0',
+      '1.6.x-to-1.7.0',
+      '1.7.x-to-2.0.0'
+    ]);
+  });
+
+  it('chains from 1.5.2 through 3 hops', () => {
+    const migrations = registry.getMigrationsFor('1.5.2');
+    const names = migrations.map(m => m.name);
+    assert.deepEqual(names, [
+      '1.5.x-to-1.6.0',
+      '1.6.x-to-1.7.0',
+      '1.7.x-to-2.0.0'
+    ]);
+  });
+
+  it('chains from 1.6.0 through 2 hops', () => {
+    const migrations = registry.getMigrationsFor('1.6.0');
+    const names = migrations.map(m => m.name);
+    assert.deepEqual(names, [
+      '1.6.x-to-1.7.0',
+      '1.7.x-to-2.0.0'
+    ]);
+  });
+
+  it('returns single hop from 1.7.1', () => {
+    const migrations = registry.getMigrationsFor('1.7.1');
+    const names = migrations.map(m => m.name);
+    assert.deepEqual(names, ['1.7.x-to-2.0.0']);
+  });
+});
+
+describe('getMigrationsFor - parallel entry exclusion', () => {
+  it('1.1.3 does not include 1.0.x or 1.2.x parallel entries', () => {
+    const migrations = registry.getMigrationsFor('1.1.3');
+    const names = migrations.map(m => m.name);
+    assert.ok(!names.includes('1.0.x-to-1.3.0'), 'should not include 1.0.x-to-1.3.0');
+    assert.ok(!names.includes('1.2.x-to-1.3.0'), 'should not include 1.2.x-to-1.3.0');
+  });
+
+  it('1.0.5 does not include 1.1.x or 1.2.x parallel entries', () => {
+    const migrations = registry.getMigrationsFor('1.0.5');
+    const names = migrations.map(m => m.name);
+    assert.ok(!names.includes('1.1.x-to-1.3.0'), 'should not include 1.1.x-to-1.3.0');
+    assert.ok(!names.includes('1.2.x-to-1.3.0'), 'should not include 1.2.x-to-1.3.0');
+  });
+
+  it('1.4.1 does not include 1.3.x parallel entry', () => {
+    const migrations = registry.getMigrationsFor('1.4.1');
+    const names = migrations.map(m => m.name);
+    assert.ok(!names.includes('1.3.x-to-1.5.0'), 'should not include 1.3.x-to-1.5.0');
+    assert.equal(names[0], '1.4.x-to-1.5.0');
   });
 });
 
 describe('getBreakingChanges', () => {
-  it('returns breaking changes for 1.0.x', () => {
+  it('returns breaking changes for 1.0.x (chain includes 1.0.x and 1.7.x)', () => {
     const changes = registry.getBreakingChanges('1.0.5');
-    assert.ok(changes.length > 0);
+    assert.equal(changes.length, 2);
   });
 
-  it('returns empty for 1.1.x (non-breaking)', () => {
+  it('returns breaking change for 1.1.x (chain reaches 1.7.x-to-2.0.0)', () => {
     const changes = registry.getBreakingChanges('1.1.0');
+    assert.equal(changes.length, 1);
+    assert.ok(changes[0].includes('Product rename'));
+  });
+
+  it('returns breaking change for 1.5.x (chain reaches 1.7.x-to-2.0.0)', () => {
+    const changes = registry.getBreakingChanges('1.5.2');
+    assert.equal(changes.length, 1);
+    assert.ok(changes[0].includes('Product rename'));
+  });
+
+  it('returns empty for current version', () => {
+    const changes = registry.getBreakingChanges('2.3.1');
     assert.equal(changes.length, 0);
   });
 });
@@ -96,7 +175,7 @@ describe('getAllMigrations', () => {
   it('returns a copy of all migrations', () => {
     const all = registry.getAllMigrations();
     assert.ok(Array.isArray(all));
-    assert.ok(all.length >= 6);
+    assert.ok(all.length >= 8);
     // Verify it is a copy
     all.push({ name: 'fake' });
     assert.ok(registry.getAllMigrations().length < all.length);
@@ -108,7 +187,7 @@ describe('hasMigrationBeenApplied', () => {
   let configPath;
 
   before(async () => {
-    tmpDir = await fs.mkdtemp(path.join(os.tmpdir(), 'bmad-reg-'));
+    tmpDir = await fs.mkdtemp(path.join(os.tmpdir(), 'convoke-reg-'));
     configPath = path.join(tmpDir, 'config.yaml');
   });
 
