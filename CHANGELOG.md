@@ -7,6 +7,25 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [2.4.0] - 2026-03-15
+
+### Added
+
+- **Enhance module — Agent Skills architecture** — New module type alongside Teams. Skills add capabilities to existing agents via menu patching without modifying agent files.
+- **Initiatives Backlog skill (PM agent)** — RICE-scored backlog management with 3 modes:
+  - **Triage** — Ingest review findings, extract actionable items, propose RICE scores with two-gate validation, append to existing backlog (4 step files)
+  - **Review** — Walk through existing items one at a time, rescore where priorities shifted, regenerate prioritized view (3 step files)
+  - **Create** — Gather initiatives interactively, batch-score with RICE, generate complete backlog from scratch (4 step files)
+- **Enhance module installer integration** — File copy, PM agent menu patching (`[IB] Initiatives Backlog`), 6-point verification in `convoke-doctor`, skill wrapper + manifest registration
+- **ENHANCE-GUIDE.md** — Pattern documentation for module authors: directory structure, step file architecture, menu patching, config registration, verification integration
+- **Enhance module validation** — `validateEnhanceModule()` with 6-point check: directory exists, entry point resolves, menu patch present, config valid, filesystem consistency, skill wrapper exists
+
+### Changed
+
+- **README** — Repositioned Convoke around two extensibility axes: Teams (new agents) and Skills (new capabilities). Full Enhance section with mode diagram, activation instructions, and link to pattern guide. Updated architecture diagram, install tree, and roadmap.
+
+---
+
 ## [2.3.1] - 2026-03-15
 
 ### Fixed
