@@ -2,6 +2,7 @@
 
 const fs = require('fs-extra');
 const path = require('path');
+const yaml = require('js-yaml');
 const { getPackageVersion } = require('./utils');
 const configMerger = require('./config-merger');
 const { AGENTS, AGENT_FILES, AGENT_IDS, WORKFLOW_NAMES, USER_GUIDES } = require('./agent-registry');
@@ -88,6 +89,97 @@ async function refreshInstallation(projectRoot, options = {}) {
   } else {
     changes.push('Skipped workflow copy (dev environment — files already in place)');
     if (verbose) console.log('    Skipped workflow copy (dev environment)');
+  }
+
+  // 2a. Enhance module — read config, copy directory tree, patch target agent menu
+  const packageEnhance = path.join(packageRoot, '_bmad', 'bme', '_enhance');
+  const enhanceConfigPath = path.join(packageEnhance, 'config.yaml');
+
+  let enhanceConfig = null;
+  if (fs.existsSync(enhanceConfigPath)) {
+    try {
+      enhanceConfig = yaml.load(fs.readFileSync(enhanceConfigPath, 'utf8'));
+    } catch (err) {
+      const msg = `Enhance config.yaml parse error: ${err.message} — skipping Enhance installation`;
+      changes.push(msg);
+      if (verbose) console.log(`    ⚠ ${msg}`);
+    }
+  } else {
+    changes.push('Enhance config.yaml not found — skipping Enhance installation');
+    if (verbose) console.log('    ⚠ Enhance config.yaml not found — skipping Enhance installation');
+  }
+
+  if (enhanceConfig) {
+    // 2b. Copy _enhance/ directory tree
+    const targetEnhance = path.join(projectRoot, '_bmad', 'bme', '_enhance');
+
+    if (!isSameRoot) {
+      await fs.copy(packageEnhance, targetEnhance, { overwrite: true });
+      changes.push('Refreshed Enhance module: _bmad/bme/_enhance/');
+      if (verbose) console.log('    Refreshed Enhance module: _bmad/bme/_enhance/');
+    } else {
+      changes.push('Skipped Enhance copy (dev environment — files already in place)');
+      if (verbose) console.log('    Skipped Enhance copy (dev environment)');
+    }
+
+    // 2c. Patch target agent menu for each registered workflow
+    if (isSameRoot) {
+      changes.push('Skipped Enhance menu patch (dev environment — source files unchanged)');
+      if (verbose) console.log('    Skipped Enhance menu patch (dev environment)');
+    }
+
+    for (const workflow of (isSameRoot ? [] : enhanceConfig.workflows || [])) {
+      const targetAgentRel = workflow.target_agent;
+      const targetAgentPath = path.join(projectRoot, '_bmad', targetAgentRel);
+
+      if (!fs.existsSync(targetAgentPath)) {
+        const msg = `${targetAgentRel} not found — BMM module must be installed first. Skipping Enhance menu patch.`;
+        changes.push(msg);
+        if (verbose) console.log(`    ⚠ ${msg}`);
+        continue;
+      }
+
+      let agentContent = fs.readFileSync(targetAgentPath, 'utf8');
+      const patchName = workflow.menu_patch_name || workflow.name;
+
+      // Idempotency: skip if patch already present
+      if (agentContent.includes(patchName)) {
+        changes.push(`Enhance menu patch already present in ${targetAgentRel} — skipping`);
+        if (verbose) console.log(`    Enhance menu patch already present in ${targetAgentRel} — skipping`);
+        continue;
+      }
+
+      // Build the <item> tag
+      const entryPath = `{project-root}/_bmad/bme/_enhance/${workflow.entry}`;
+      const itemTag = `    <item cmd="IB or fuzzy match on ${patchName}" exec="${entryPath}">[IB] 📦 Initiatives Backlog (Convoke Enhance)</item>`;
+
+      // Find insertion anchor: prefer </menu>, fallback to last <item>
+      const menuCloseIdx = agentContent.lastIndexOf('</menu>');
+      if (menuCloseIdx !== -1) {
+        // Insert before the </menu> line (not at the </menu> character position,
+        // which would prepend existing line indentation to the inserted tag)
+        const lineStart = agentContent.lastIndexOf('\n', menuCloseIdx - 1) + 1;
+        agentContent = agentContent.slice(0, lineStart) + itemTag + '\n' + agentContent.slice(lineStart);
+      } else {
+        // Fallback: insert after last <item>...</item> line
+        const lastItemMatch = agentContent.match(/.*<item[^]*?<\/item>/g);
+        if (lastItemMatch) {
+          const lastItem = lastItemMatch[lastItemMatch.length - 1];
+          const lastItemIdx = agentContent.lastIndexOf(lastItem);
+          const insertIdx = lastItemIdx + lastItem.length;
+          agentContent = agentContent.slice(0, insertIdx) + '\n' + itemTag + agentContent.slice(insertIdx);
+        } else {
+          const msg = `${targetAgentRel} menu structure not recognized — manual patch required. Skipping Enhance menu patch.`;
+          changes.push(msg);
+          if (verbose) console.log(`    ⚠ ${msg}`);
+          continue;
+        }
+      }
+
+      fs.writeFileSync(targetAgentPath, agentContent, 'utf8');
+      changes.push(`Patched ${targetAgentRel} with Enhance menu item: ${patchName}`);
+      if (verbose) console.log(`    Patched ${targetAgentRel} with Enhance menu item: ${patchName}`);
+    }
   }
 
   // 3. Update config.yaml (merge, preserving user prefs)
@@ -284,6 +376,53 @@ You must fully embody this agent's persona and follow all activation instruction
     await fs.writeFile(path.join(skillDir, 'SKILL.md'), content, 'utf8');
     changes.push(`Refreshed skill: bmad-agent-bme-${agent.id}/SKILL.md`);
     if (verbose) console.log(`    Refreshed skill: bmad-agent-bme-${agent.id}/SKILL.md`);
+  }
+
+  // 6a. Copy Enhance workflow skill wrappers and register in manifests
+  if (enhanceConfig && !isSameRoot) {
+    for (const workflow of enhanceConfig.workflows || []) {
+      const canonicalId = `bmad-enhance-${workflow.name}`;
+      const skillDir = path.join(skillsDir, canonicalId);
+      await fs.ensureDir(skillDir);
+
+      // Copy source SKILL.md from package (shipped via npm, not generated)
+      const sourceSkillPath = path.join(packageRoot, '_bmad', 'bme', '_enhance', 'workflows', workflow.name, 'SKILL.md');
+      const targetSkillPath = path.join(skillDir, 'SKILL.md');
+      await fs.copy(sourceSkillPath, targetSkillPath, { overwrite: true });
+      changes.push(`Refreshed Enhance skill: ${canonicalId}/SKILL.md`);
+      if (verbose) console.log(`    Refreshed Enhance skill: ${canonicalId}/SKILL.md`);
+
+      // Append to workflow-manifest.csv if not already present
+      const wfManifestPath = path.join(projectRoot, '_bmad', '_config', 'workflow-manifest.csv');
+      if (fs.existsSync(wfManifestPath)) {
+        const wfCsv = fs.readFileSync(wfManifestPath, 'utf8');
+        if (!wfCsv.includes(`"${canonicalId}"`)) {
+          const wfRow = `\n"${workflow.name}","Manage RICE initiatives backlog — triage review findings, rescore existing items, or bootstrap new backlogs.","bme","_bmad/bme/_enhance/${workflow.entry}","${canonicalId}"`;
+          fs.appendFileSync(wfManifestPath, wfRow, 'utf8');
+          changes.push(`Added ${canonicalId} to workflow-manifest.csv`);
+          if (verbose) console.log(`    Added ${canonicalId} to workflow-manifest.csv`);
+        }
+      } else {
+        if (verbose) console.log('    ⚠ workflow-manifest.csv not found — skipping manifest registration');
+      }
+
+      // Append to skill-manifest.csv if not already present
+      const skManifestPath = path.join(projectRoot, '_bmad', '_config', 'skill-manifest.csv');
+      if (fs.existsSync(skManifestPath)) {
+        const skCsv = fs.readFileSync(skManifestPath, 'utf8');
+        if (!skCsv.includes(`"${canonicalId}"`)) {
+          const skRow = `\n"${canonicalId}","${canonicalId}","Manage RICE initiatives backlog — triage review findings, rescore existing items, or bootstrap new backlogs.","bme","_bmad/bme/_enhance/workflows/${workflow.name}/SKILL.md","true"`;
+          fs.appendFileSync(skManifestPath, skRow, 'utf8');
+          changes.push(`Added ${canonicalId} to skill-manifest.csv`);
+          if (verbose) console.log(`    Added ${canonicalId} to skill-manifest.csv`);
+        }
+      } else {
+        if (verbose) console.log('    ⚠ skill-manifest.csv not found — skipping manifest registration');
+      }
+    }
+  } else if (enhanceConfig && isSameRoot) {
+    changes.push('Skipped Enhance skill registration (dev environment — source files unchanged)');
+    if (verbose) console.log('    Skipped Enhance skill registration (dev environment)');
   }
 
   // 7. Generate agent customize files (only if they don't already exist)
