@@ -9,6 +9,9 @@ inputDocuments:
   - _bmad-output/planning-artifacts/research/domain-operational-readiness-research-2026-03-19.md
   - _bmad-output/vortex-artifacts/lean-experiment-gyre-discovery-interviews-2026-03-20.md
   - _bmad-output/planning-artifacts/implementation-readiness-report-2026-03-20.md
+editHistory:
+  - date: '2026-03-21'
+    changes: "Added Convoke Ecosystem Integration section: workspace infrastructure, module registry extension, convoke-install-gyre installer, version management, project root detection, config bridge (deferred), terminology distinction. Driven by Vortex-Gyre consistency analysis."
 workflowType: 'architecture'
 project_name: 'Gyre'
 user_name: 'Amalik'
@@ -925,6 +928,109 @@ User runs: gyre analyze .
            │ review.js    │──→ optional: editor launch, amendments, feedback
            └──────────────┘     (writes via state/manifest.js, state/feedback.js)
 ```
+
+## Convoke Ecosystem Integration
+
+### Workspace Infrastructure
+
+Gyre introduces `packages/gyre/` — the first use of npm workspaces in Convoke. This requires root-level infrastructure changes before any Gyre code exists:
+
+1. Create `packages/` directory
+2. Add `"workspaces": ["packages/*"]` to root `package.json`
+3. Verify existing Convoke scripts (`convoke-install`, `convoke-update`, `convoke-doctor`) are unaffected by workspace addition
+
+**Risk:** npm workspaces change how `node_modules` resolves dependencies. Existing Convoke tests must pass after workspace addition — this is a zero-regression gate.
+
+### Module Registry Extension
+
+Vortex uses `scripts/update/lib/agent-registry.js` as the single source of truth for all agents, workflows, and derived lists. Every consumer (validator, doctor, installer, refresh) reads from it.
+
+Gyre introduces a second module type. The registry should be extended with a **module concept**:
+
+```javascript
+// Extend agent-registry.js (or rename to module-registry.js)
+const MODULES = [
+  {
+    id: 'vortex',
+    type: 'discovery-framework',  // markdown agents + workflows
+    version: null,                // shares convoke-agents version
+    agents: AGENTS,               // existing Vortex agent array
+    workflows: WORKFLOWS          // existing Vortex workflow array
+  },
+  {
+    id: 'gyre',
+    type: 'cli-tool',             // JS package with own binary
+    package: 'packages/gyre',
+    version: null,                // read from packages/gyre/package.json
+    binary: 'gyre'
+  }
+];
+```
+
+**Consumers that need updating:**
+- `convoke-doctor` — validate Gyre installation when present (not mandatory — Gyre is optional)
+- `validator.js` — add module-level validation (package exists, binary works)
+- `convoke-install` — offer Gyre installation alongside Vortex
+
+### Installer: `convoke-install-gyre`
+
+Follows the same pattern as `install-vortex-agents.js` but handles a JS package instead of markdown files:
+
+1. Check prerequisites (Node ≥20, npm available)
+2. Install `gyre` package globally or link from workspace
+3. Verify `gyre --version` works
+4. Register Gyre in module manifest
+5. Display success with "Next steps: run `gyre setup` to configure your LLM provider"
+
+**Key difference from Vortex installer:** Vortex copies markdown files via `refreshInstallation()`. Gyre installs an npm package — different mechanism, same UX pattern (check → install → verify → register → guide).
+
+### Version Management
+
+Gyre versions **independently** from `convoke-agents`:
+
+| Package | Version | Source of Truth | Rationale |
+|---------|---------|-----------------|-----------|
+| `convoke-agents` | 2.x.x | Root `package.json` | Vortex + infrastructure versioning |
+| `gyre` | 0.x.x → 1.0.0 | `packages/gyre/package.json` | Independent product lifecycle; starts at 0.x during MVP |
+
+**Rules:**
+- Gyre reads its own version from `packages/gyre/package.json` — never from root
+- No hardcoded versions (consistent with existing Convoke rule)
+- Root `convoke-agents` version bumps do NOT require Gyre version bumps (independent)
+- `convoke-doctor` reports both versions: "Convoke v2.4.0, Gyre v0.1.0"
+
+### Project Root Detection
+
+Vortex uses `findProjectRoot()` which walks up to find `_bmad/`. Gyre runs in the **user's project directory** — a fundamentally different runtime context.
+
+| Tool | "Project root" means | Detection method |
+|------|---------------------|-----------------|
+| Convoke/Vortex | Convoke installation root (contains `_bmad/`) | Walk up from CWD looking for `_bmad/` |
+| Gyre | User's project root (contains `.git` or `.gyre/`) | Walk up from CWD looking for `.git`, `.gyre/`, or package manifest |
+
+**Rule:** Gyre does NOT use Convoke's `findProjectRoot()`. It implements its own root detection in `lib/state/gyre-dir.js` — looks for `.git` or `.gyre/` walking up from CWD. Falls back to CWD if neither found (single-directory analysis).
+
+### Configuration Bridge (Deferred to v2)
+
+Vortex config (`_bmad/bme/_vortex/config.yaml`) and Gyre config (`.gyre/config.yaml`) are **separate and unaware of each other** in MVP. A Convoke user installing both gets two independent config files.
+
+**Acceptable for MVP because:**
+- Vortex config contains persona/workflow preferences (user_name, communication_language)
+- Gyre config contains LLM provider credentials and analysis settings
+- No shared fields that would benefit from bridging in MVP
+
+**v2 consideration:** If Gyre adds user preferences (output language, verbosity defaults), consider reading from Vortex config as fallback.
+
+### Terminology Distinction
+
+"Agent" means two different things in Convoke:
+
+| Context | "Agent" means | Architecture | Example |
+|---------|--------------|--------------|---------|
+| Vortex | Persona-driven markdown facilitator | XML activation protocol, menu system, step-file workflows | Isla (Discovery & Empathy Expert) |
+| Gyre | JavaScript async generator domain analyzer | `async function*`, yields findings, no persona | Observability Readiness agent |
+
+**Documentation rule:** In cross-module docs (README, user guides), always qualify: "Vortex agent" or "Gyre domain agent." Within Gyre-only docs, unqualified "agent" is fine.
 
 ## Architecture Validation Results
 
