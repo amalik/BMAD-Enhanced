@@ -2,39 +2,51 @@
 step: 3
 workflow: full-analysis
 title: Generate Model
-status: stub
-implements: Epic 2 (Story 2.2)
 ---
 
-# Step 3: Generate Model (Stub)
+# Step 3: Generate Model
 
-> **This step will be implemented in Epic 2 — Contextual Model Generation.**
->
-> Atlas loads GC1 (Stack Profile), generates a capabilities manifest contextual to the detected stack, and writes GC2 (Capabilities Manifest) to `.gyre/capabilities.yaml`.
+Run the model-generation workflow inline. Atlas generates a capabilities manifest contextual to the detected stack.
 
-## STUB BEHAVIOR
+## MANDATORY EXECUTION RULES
 
-When this step is reached during full-analysis:
+- GC1 (Stack Profile) must have been written in step 2 — if missing, STOP
+- If cached model exists and mode is **Anticipation**, load cached and skip generation
+- If mode is **Regeneration** or **Crisis**, run full model generation
+- Execute the model-generation workflow steps sequentially
+
+## EXECUTION
+
+### If Anticipation Mode (capabilities.yaml exists)
+
+Present the existing model summary:
 
 ```
-## Model Generation — Not Yet Implemented
+Your capabilities model was previously generated: [N] capabilities for [stack summary].
 
-This step requires the Atlas agent (model-curator) workflows from Epic 2.
-
-**What will happen here:**
-1. Atlas loads GC1 (Stack Profile) from .gyre/stack-profile.yaml
-2. Generates ≥20 capabilities relevant to your detected stack
-3. Uses web search for current best practices
-4. Writes GC2 (Capabilities Manifest) to .gyre/capabilities.yaml
-
-**For now:** Stack detection is complete. Your GC1 Stack Profile has been written.
-
-Run `/bmad-agent-bme-stack-detective` to use Scout's other workflows,
-or activate any Gyre agent from the menu.
+Would you like to:
+a) Keep this model and continue to gap analysis
+b) Regenerate (fresh model even with existing amendments)
 ```
+
+If user chooses (a), skip to next step.
+If user chooses (b), proceed with generation below.
+
+### If Crisis or Regeneration Mode
+
+Execute the model-generation workflow steps in sequence:
+
+1. Load and execute: `{project-root}/_bmad/bme/_gyre/workflows/model-generation/steps/step-01-load-profile.md`
+2. Load and execute: `{project-root}/_bmad/bme/_gyre/workflows/model-generation/steps/step-02-generate-capabilities.md`
+3. Load and execute: `{project-root}/_bmad/bme/_gyre/workflows/model-generation/steps/step-03-web-enrichment.md`
+4. Load and execute: `{project-root}/_bmad/bme/_gyre/workflows/model-generation/steps/step-04-write-manifest.md`
+
+After completion, GC2 is written to `.gyre/capabilities.yaml`.
 
 ---
 
-## NEXT STEP (when implemented)
+## NEXT STEP
+
+With GC2 written, proceed to gap analysis:
 
 Load step: {project-root}/_bmad/bme/_gyre/workflows/full-analysis/steps/step-04-analyze-gaps.md
