@@ -70,11 +70,14 @@
 
 | # | Initiative | Source | R | I | C | E | Score | Track | Status |
 |---|-----------|--------|---|---|---|---|-------|-------|--------|
-| P1 | **Gyre team — Operational Readiness** — Second Convoke team for production readiness discovery. Domain research validated (2026-03-19), product brief complete (2026-03-20). 4 readiness agents: Observability, Deployment, Compliance & Security, Capacity & FinOps. MVP: 2 agents (Observability + Deployment) with generated contextual models (any stack, no pre-built models), cross-domain gap correlation, architecture intent guard question, RICE-scored readiness backlog, markdown outputs. Discovery method: code analysis (observation over declaration), dual-mode static + generated `.gyre/capabilities.yaml`. Completes Vortex → BMM → Gyre lifecycle pipeline. Complementary to IDPs — Gyre discovers, IDPs enforce. Research: `research/domain-operational-readiness-research-2026-03-19.md`. Brief: `product-brief-gyre-2026-03-19.md` | Product vision. Domain research: 2026-03-19. Product brief: 2026-03-20 | 8 | 3 | 80% | 10 | 1.9 | Move the needle | Backlog |
+| P1 | **Gyre team — Operational Readiness (Convoke team module)** — Redesigned 2026-03-21 as conversational persona agents (like Vortex), not CLI tool. 4 agents: Scout 🔎 (stack detective), Atlas 📐 (model curator), Lens 🔬 (readiness analyst), Coach 🏋️ (review coach). 4 contracts (GC1-GC4), 7 workflows. No application code — markdown agents + step-file workflows. Module at `_bmad/bme/_gyre/`. MVP: Observability + Deployment domain analysis with cross-domain correlation, generated contextual models, RICE-scored readiness backlog. Forge integration via FG-HC1/HC2/GF-HC1 contracts (designed 2026-03-21). PRD, architecture, and epics all redesigned 2026-03-21. Research: `research/domain-operational-readiness-research-2026-03-19.md`. Brief: `product-brief-gyre-2026-03-19.md` | Product vision. Domain research: 2026-03-19. Redesign: 2026-03-21 | 8 | 3 | 90% | 6 | 3.6 | Move the needle | Backlog |
 | P3 | **Team installer architecture** — Generalize `convoke-install-vortex` to `convoke-install <module-name>` for multi-module support. Note: Enhance module proves the extensibility pattern (v2.4.0). v6.2.0 introduced `bmad-skill-manifest.yaml` for skill package discovery — installer should understand this convention. | Platform architecture | 6 | 1 | 80% | 4 | 1.2 | Move the needle | Backlog |
 | P2 | **Multi-module collaboration workflows** — Cross-module handoffs and routing between Teams (Vortex) and Skills (Enhance). Scope expanded: not just cross-team, but cross-module (e.g., Enhance backlog feeding Vortex discovery). | Product vision, README roadmap | 5 | 2 | 30% | 8 | 0.4 | Move the needle | Blocked (needs P1) |
-| P7 | **ML/AI Engineering team exploration** — Discovery spike to determine team-vs-skill question for ML/AI domain. Map ML lifecycle (problem → data exploration → experiment → validate → deploy → monitor) against Vortex streams and BMM workflow. Options: new team (3-4 dedicated agents) vs Enhance-style skill modules for existing agents. Added from party-mode team exploration, 2026-03-17 | Party-mode review (Victor, Winston, user) | 6 | 2 | 30% | 3 | 1.2 | Move the needle | Backlog |
-| P8 | **Governance & Support skill set** — Transversal advisory skills (compliance, coaching, change management, organizational health) that augment existing agents. "Review and advise" pattern — not a team but cross-cutting capability. Skills for PM (compliance), SM (coaching), Architect (change management). Reframe of Ethics & Legal into broader scope. Added from party-mode team exploration, 2026-03-17 | Party-mode review (Emma, Victor, user) | 5 | 1 | 30% | 3 | 0.5 | Move the needle | Backlog |
+| P7 | **ML/AI Engineering team exploration** — Discovery spike to determine team-vs-skill question for ML/AI domain. Map ML lifecycle (problem → data exploration → experiment → validate → deploy → monitor) against Vortex streams and BMM workflow. Options: new team (3-4 dedicated agents) vs Enhance-style skill modules for existing agents. **Note (2026-03-21):** Should be evaluated through Capability Evaluation Framework (skill→agent→team) before committing form factor. Added from party-mode team exploration, 2026-03-17 | Party-mode review (Victor, Winston, user) | 6 | 2 | 30% | 3 | 1.2 | Move the needle | Backlog |
+| P8 | **Governance & Support skill set** — Transversal advisory skills (compliance, coaching, change management, organizational health) that augment existing agents. "Review and advise" pattern — not a team but cross-cutting capability. Skills for PM (compliance), SM (coaching), Architect (change management). Reframe of Ethics & Legal into broader scope. **Note (2026-03-21):** Evaluate through Capability Evaluation Framework before committing form factor. Added from party-mode team exploration, 2026-03-17 | Party-mode review (Emma, Victor, user) | 5 | 1 | 30% | 3 | 0.5 | Move the needle | Backlog |
+| P9 | **Forge team — Domain Knowledge Extraction (KORE)** — Third Convoke team for brownfield knowledge capture. Conversational persona agents (like Vortex and Gyre). Vortex scope decision complete (scored 4.65/5). Phase A: Silo (Survey) + Rune (Excavate) targeting engagement weeks 1-4. Phase B: Aria (Codify). Phase C: Sage (Validate) + Warden (Steward). Forge↔Gyre handoff contracts designed (FG-HC1: TKAs→Gyre contextual model, FG-HC2: RCAs→Gyre compliance, GF-HC1: Gyre gaps→Forge queue). Epic breakdown: 5 epics, ~5 sprints for Phase A. Module at `_bmad/bme/_forge/`. Artifacts: `convoke-ecosystem-vision.md`, `epics-forge-phase-a.md`, `forge-gyre-handoff-contract.md`, `scope-decision-forge-2026-03-21.md` (in progress). Vortex discovery in progress (Stream 1 complete, Streams 2-7 pending). | Validated demand from consulting teams. Vortex evaluation: 2026-03-21 | 9 | 3 | 90% | 8 | 3.0 | Move the needle | Backlog |
+| P10 | **Capability Evaluation Framework** — Decision tool for ecosystem growth: skill→agent→team tiers with bidirectional promotion/demotion triggers. Overlap analysis template (Gyre pattern). Sentinel evaluated as proof-of-concept (result: 1 agent in Gyre, not standalone team). Framework document complete. Operationalize: integrate into team review process, link to friction logs. Artifact: `capability-evaluation-framework.md` | Ecosystem strategy session, 2026-03-21 | 7 | 2 | 80% | 2 | 5.6 | Move the needle | Backlog |
+| P11 | **Friction log capture for consulting teams** — Template and quarterly review process for tracking capability gaps across real engagements. Template complete, needs distribution to consulting teams. Links to Capability Evaluation Framework (P10) — friction logs feed the decision tree. Artifact: `friction-log-template.md` | Ecosystem strategy session, 2026-03-21 | 8 | 1 | 70% | 1 | 5.6 | Move the needle | Backlog |
 
 ---
 
@@ -88,6 +91,7 @@ These initiatives are promising but need discovery work before scoring. Not yet 
 | P1-disc | **User discovery for Gyre team** — Domain research complete (2026-03-19), product brief complete (2026-03-20). Remaining: Wade's experiment — interview 5 teams (same cohort serves as MVP pilot testers). 4 discovery questions: (1) what was the hardest part going to production, (2) what did you discover too late, (3) how do you currently assess readiness, (4) would you trust code-analysis findings over self-assessment. Categorize against 4 readiness domains (observability, deployment, compliance & security, capacity & finops). MVP success criteria: generated model accuracy >70% (kill switch), novel findings per assessment, cross-domain correlation value. Also: study Google PRR, AWS ORR, DORA research for agent knowledge base. | Multi-agent review (Isla), product owner. Domain research: 2026-03-19. Product brief: 2026-03-20 | Wade's 5-team interview (same cohort for MVP pilot) + Google PRR/AWS ORR deep-dive |
 | P5 | **Convoke website** — Public website for Convoke: positioning, documentation, team showcase, getting started guide, and community | Product owner | Define scope (landing page vs. full docs site), hosting, and content strategy |
 | P6 | **Tool-enabled agents** — Allow select agents to use external tools (MCP servers, CLI commands, file operations) beyond pure conversation. Evaluate which agents benefit from tool access and what guardrails are needed | Product owner | Identify candidate agents, define tool access model, assess security/trust implications |
+| P9-disc | **Forge user discovery (Vortex streams 2-7)** — Contextualize stream complete (scope decision: Forge #1 at 4.65/5, boundaries defined, strategic fit validated). Remaining: Empathize (who are Forge's users?), Synthesize, Hypothesize, Externalize, Sensitize, Systematize. Paused after Stream 1 Step 5. Artifact: `scope-decision-forge-2026-03-21.md` | Vortex discovery session, 2026-03-21 | Resume Vortex discovery from Stream 1 Step 6 (synthesize), then Stream 2 (Isla) |
 | H4 | **Validate "strategic conversation" hypothesis** — Do RICE scoring questions prompt genuine reflection or rubber-stamping? Measure whether users modify their initial instinct on at least 1 score per triage session (modification = engagement). Source: P4 PRD Innovation Hypothesis H4 | P4 PRD (Innovation Hypotheses) | Run 3+ triage sessions, track per-session score modification rate |
 | D4 | **Video walkthrough or tutorial** — Screencast of a first-time user going through Emma's Lean Persona workflow. Format, hosting, and maintenance strategy all undefined | Contributing section, adjusted (Maya, Carson) | Define format (video vs. interactive), hosting platform, and update strategy |
 
@@ -109,8 +113,11 @@ Automate the publish and release flow. I1 (NPM_TOKEN) is the prerequisite; I2 (g
 ### Epic: "Test Debt Cleanup" (T1 + T2 + T5)
 Batch low-priority coverage gaps in existing CLI scripts. All low-score housekeeping that benefits from a single focused pass.
 
-### Epic: "Platform Foundation" (P3 → P1 → P2)
-The multi-module future. P4 (Enhance module) is done (v2.4.0) — proved the Skills extensibility pattern. P3 (installer architecture) generalizes for multi-module support; P1 (second team) follows; P2 (cross-module workflows) depends on P1.
+### Epic: "Platform Foundation" (P3 → P1 → P9 → P2)
+The multi-module future. P4 (Enhance module) is done (v2.4.0) — proved the Skills extensibility pattern. P3 (installer architecture) generalizes for multi-module support; P1 (Gyre, second team) and P9 (Forge, third team) follow; P2 (cross-module workflows) depends on P1. Gyre and Forge share handoff contracts (FG-HC1/HC2/GF-HC1) — integration is a design dependency.
+
+### Epic: "Ecosystem Governance" (P10 + P11)
+Decision framework for ecosystem growth. P10 (Capability Evaluation Framework) defines how new capabilities enter the ecosystem (skill→agent→team). P11 (Friction logs) provides the demand signal input. Together they prevent speculative building. Both artifacts complete — need operationalization and team distribution.
 
 ### Epic: "Agent Compliance Sweep" (A1 + A2 + A3 + A4)
 Four small agent quality items that can be swept in a single pass: validate menus, source files, npm keywords, temp dir prefix.
@@ -124,32 +131,35 @@ Remaining update system items not in Hardening: load-time validation, version de
 
 | Rank | # | Initiative | Score | Track | Category |
 |------|---|-----------|-------|-------|----------|
-| 1 | T3 | End-to-end update test on real project | 2.7 | Keep the lights on | Testing |
-| 2 | T4 | Migration idempotency CLI test | 2.4 | Keep the lights on | Testing |
-| 3 | I2 | `gh auth` for CI release creation | 2.4 | Keep the lights on | Infrastructure |
-| 4 | D2 | Add output examples for more agents | 2.1 | Move the needle | Documentation |
-| 5 | I4 | BMAD v6.2.0 convention alignment | 1.8 | Keep the lights on | Infrastructure |
-| 6 | I1 | NPM_TOKEN secret for CI publish | 1.8 | Keep the lights on | Infrastructure |
-| 7 | P1 | Gyre team — Operational Readiness | 1.9 | Move the needle | Platform |
-| 8 | D6 | Reduce narrative overlap in journey example | 1.6 | Keep the lights on | Documentation |
-| 9 | U4 | Test upgrade-path step file cleanup | 1.4 | Keep the lights on | Update System |
-| 10 | P3 | Team installer architecture | 1.2 | Move the needle | Platform |
-| 11 | P7 | ML/AI Engineering team exploration | 1.2 | Move the needle | Platform |
-| 12 | S1 | Interactive installer | 1.0 | Move the needle | Infrastructure |
-| 13 | D3 | BMAD Core return arrow in diagram | 0.9 | Keep the lights on | Documentation |
-| 14 | A1 | Add validate menu items to Wave 3 agents | 0.8 | Keep the lights on | Agent Quality |
-| 15 | A3 | Add npm keywords (`agentic`, `team-of-teams`) | 0.8 | Keep the lights on | Agent Quality |
-| 16 | T1 | `convoke-update.js` coverage to 80%+ | 0.8 | Keep the lights on | Testing |
-| 17 | U2 | Validate migration modules at load time | 0.8 | Keep the lights on | Update System |
-| 18 | S2 | Simplified entry point | 0.7 | Move the needle | Infrastructure |
-| 19 | P8 | Governance & Support skill set | 0.5 | Move the needle | Platform |
-| 20 | U3 | Robust version detection fallback | 0.5 | Keep the lights on | Update System |
-| 21 | P2 | Multi-module collaboration workflows | 0.4 | Move the needle | Platform |
-| 22 | T2 | `convoke-version.js` coverage to 80%+ | 0.4 | Keep the lights on | Testing |
-| 23 | I3 | CSV parser library for manifest | 0.4 | Keep the lights on | Infrastructure |
-| 24 | T5 | Expand docs audit — remaining gaps | 0.3 | Keep the lights on | Testing |
-| 25 | A4 | Fix temp dir prefix inconsistency | 0.3 | Keep the lights on | Agent Quality |
-| 26 | A2 | Create `.agent.yaml` source files | 0.2 | Keep the lights on | Agent Quality |
+| 1 | P10 | Capability Evaluation Framework | 5.6 | Move the needle | Platform |
+| 2 | P11 | Friction log capture for consulting teams | 5.6 | Move the needle | Platform |
+| 3 | P1 | Gyre team — Operational Readiness (Convoke team module) | 3.6 | Move the needle | Platform |
+| 4 | P9 | Forge team — Domain Knowledge Extraction (KORE) | 3.0 | Move the needle | Platform |
+| 5 | T3 | End-to-end update test on real project | 2.7 | Keep the lights on | Testing |
+| 6 | T4 | Migration idempotency CLI test | 2.4 | Keep the lights on | Testing |
+| 7 | I2 | `gh auth` for CI release creation | 2.4 | Keep the lights on | Infrastructure |
+| 8 | D2 | Add output examples for more agents | 2.1 | Move the needle | Documentation |
+| 9 | I4 | BMAD v6.2.0 convention alignment | 1.8 | Keep the lights on | Infrastructure |
+| 10 | I1 | NPM_TOKEN secret for CI publish | 1.8 | Keep the lights on | Infrastructure |
+| 11 | D6 | Reduce narrative overlap in journey example | 1.6 | Keep the lights on | Documentation |
+| 12 | U4 | Test upgrade-path step file cleanup | 1.4 | Keep the lights on | Update System |
+| 13 | P3 | Team installer architecture | 1.2 | Move the needle | Platform |
+| 14 | P7 | ML/AI Engineering team exploration | 1.2 | Move the needle | Platform |
+| 15 | S1 | Interactive installer | 1.0 | Move the needle | Infrastructure |
+| 16 | D3 | BMAD Core return arrow in diagram | 0.9 | Keep the lights on | Documentation |
+| 17 | A1 | Add validate menu items to Wave 3 agents | 0.8 | Keep the lights on | Agent Quality |
+| 18 | A3 | Add npm keywords (`agentic`, `team-of-teams`) | 0.8 | Keep the lights on | Agent Quality |
+| 19 | T1 | `convoke-update.js` coverage to 80%+ | 0.8 | Keep the lights on | Testing |
+| 20 | U2 | Validate migration modules at load time | 0.8 | Keep the lights on | Update System |
+| 21 | S2 | Simplified entry point | 0.7 | Move the needle | Infrastructure |
+| 22 | P8 | Governance & Support skill set | 0.5 | Move the needle | Platform |
+| 23 | U3 | Robust version detection fallback | 0.5 | Keep the lights on | Update System |
+| 24 | P2 | Multi-module collaboration workflows | 0.4 | Move the needle | Platform |
+| 25 | T2 | `convoke-version.js` coverage to 80%+ | 0.4 | Keep the lights on | Testing |
+| 26 | I3 | CSV parser library for manifest | 0.4 | Keep the lights on | Infrastructure |
+| 27 | T5 | Expand docs audit — remaining gaps | 0.3 | Keep the lights on | Testing |
+| 28 | A4 | Fix temp dir prefix inconsistency | 0.3 | Keep the lights on | Agent Quality |
+| 29 | A2 | Create `.agent.yaml` source files | 0.2 | Keep the lights on | Agent Quality |
 
 ---
 
@@ -198,6 +208,7 @@ Remaining update system items not in Hardening: load-time validation, version de
 
 | Date | Change |
 |------|--------|
+| 2026-03-21 | Major update: P1 redesigned (CLI→Convoke team module, score 1.9→3.6, effort 10→6, confidence 80%→90%). Added P9 (Forge team, score 3.0), P10 (Capability Evaluation Framework, score 5.6), P11 (Friction log capture, score 5.6). Added P9-disc exploration candidate (Vortex discovery streams 2-7). P7/P8 noted for Capability Evaluation Framework review. New epic groupings: "Platform Foundation" updated with P9, "Ecosystem Governance" added (P10+P11). Forge↔Gyre handoff contracts designed (FG-HC1/HC2/GF-HC1). Ecosystem vision document split into 3 purpose-built documents. Sentinel evaluated through framework → 1 agent in Gyre, not standalone team. 29 active items. |
 | 2026-03-20 | Review: P1 updated with product brief findings — 4 agents (Compliance & Security merged), generated contextual models (any stack), thickened MVP (2 agents + cross-domain correlation + architecture intent + RICE-scored backlog + markdown outputs), confidence 70%→80%, score 1.7→1.9. P1-disc updated with refined experiment design (4 questions, 5 interviews, same cohort for interviews + MVP pilot, MVP success criteria). Product brief: `product-brief-gyre-2026-03-19.md`. 26 active items. |
 | 2026-03-19 | Review: P1 updated with domain research findings — renamed to "Gyre team — Operational Readiness", confidence 50%→70%, score 1.2→1.7. P1-disc sharpened with validated 3-domain scope (observability, deployment, compliance). Prioritized view re-ranked. Research document: `domain-operational-readiness-research-2026-03-19.md`. 26 active items. |
 | 2026-03-17 | Triage: Added P7 (ML/AI Engineering team exploration, score 1.2), P8 (Governance & Support skill set, score 0.5). Merged Gyre team details into P1 + P1-disc (operational readiness scope, 5-interview experiment, best practices). Party-mode team exploration with Vortex + CIS teams. 26 active items. |
