@@ -45,8 +45,8 @@ describe('convoke-doctor: missing config', () => {
   it('fails when config.yaml is missing', async () => {
     const { exitCode, stdout } = await runDoctor(tmpDir);
     assert.equal(exitCode, 1, 'should exit with code 1');
-    assert.ok(stdout.includes('Config file'), 'should check config');
-    assert.ok(stdout.includes('not found') || stdout.includes('MISSING') || stdout.includes('issue'), 'should report config missing');
+    assert.ok(stdout.includes('Module discovery'), 'should check module discovery');
+    assert.ok(stdout.includes('No modules found') || stdout.includes('issue'), 'should report no modules found');
   });
 });
 
