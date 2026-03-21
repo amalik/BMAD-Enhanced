@@ -78,9 +78,9 @@ Validated by domain research ($4.5B SRE platform market, 14.2% CAGR, zero compet
 
 **Generated contextual model.** No pre-built models. Gyre generates for any detected architecture, producing the "aha!" findings — gaps teams didn't know to check. The `.gyre/capabilities.yaml` manifest persists as a team-owned artifact that improves with each amendment.
 
-**Accurate by design.** Adapts to your stack, prevents category errors with an architecture intent guard question ("container-based or serverless?"), learns from your corrections via review-and-amend, and tags every finding with confidence level and source. Gyre never sends source code to an AI provider — static analysis runs locally, and only structured metadata reaches the LLM. Gyre asks what it missed — after each analysis, a feedback prompt captures gaps Gyre didn't catch, the only way to improve absence detection over time.
+**Accuracy as a product feature.** Adapts to your stack, prevents category errors with an architecture intent guard question ("container-based or serverless?"), learns from your corrections via review-and-amend, and tags every finding with confidence level and source. First-run accuracy improves with each amendment — the review-and-amend workflow is part of the experience, not a workaround. Gyre never sends source code to an AI provider — static analysis runs locally, and only structured metadata reaches the LLM. Gyre asks what it missed — after each analysis, a feedback prompt captures gaps Gyre didn't catch, the only way to improve absence detection over time.
 
-**Cross-domain compound findings.** Findings across domains that no single-domain tool can see. "No rollback telemetry + no deployment markers = blind rollbacks." This is the moment teams realize Gyre sees what they couldn't.
+**Cross-domain compound findings.** Findings across domains that no single-domain tool can see. "No rollback telemetry + no deployment markers = blind rollbacks." MVP validates the cross-domain mechanism with two related domains (Observability + Deployment); Phase 2 extends to genuinely distant domains (Compliance, FinOps) where compound findings become harder to discover manually.
 
 ## Project Classification
 
@@ -719,6 +719,10 @@ Drops: guard question (accept category error risk), confidence tagging (accept t
 - Multi-repo organizational portfolio view
 - `gyre reanalyze --reclassify` for guard correction without full re-analysis
 
+### Monetization (Deferred)
+
+Pricing and business model decisions are explicitly deferred until post-pilot. The MVP is a Learning MVP — its primary goal is validating whether teams act on Gyre's findings, not generating revenue. Pilot outcomes (adoption patterns, willingness to configure API keys, portfolio vs individual usage split) will inform the monetization strategy. Candidate models to evaluate post-pilot: open-source CLI with paid cloud features, per-seat SaaS for portfolio view (Ravi persona), or enterprise license for org-wide deployment.
+
 ### Risk Mitigation Strategy
 
 *For innovation-specific risks with fallback strategies, see Innovation Architecture & Differentiation. Below covers project-level technical, market, and resource risks.*
@@ -783,6 +787,7 @@ Drops: guard question (accept category error risk), confidence tagging (accept t
 - **FR21:** System can classify each finding by severity (blocker/recommended/nice-to-have)
 - **FR22a:** System can reason about relationships between findings across different domains to identify compound gaps
 - **FR22b:** System can express compound finding relationships as a text-based reasoning chain in CLI output
+- **FR23:** Static analysis produces a structured capability evidence report (capability ID, evidence type: present/absent/partial, detection method, no file contents) that serves as the sole input from local analysis to LLM reasoning
 
 ### Capability Area 4: Review, Amendment & Feedback
 
@@ -853,7 +858,7 @@ Drops: guard question (accept category error risk), confidence tagging (accept t
 | DC2: Compound visual | FR35 | J1, J5 | — | S | Unit |
 | DC3: Novelty ratio | FR34 | J1 | — | S | Unit |
 | DC4: Readable descriptions | FR13 | J1, J4 | — | M | Human |
-| DC5: Privacy architecture | — | All | — | L | Integration + Audit |
+| DC5: Privacy architecture | FR23 | All | — | L | Integration + Audit |
 | Cross-cutting: CLI | FR32, FR36, FR42, FR43, FR44, FR45, FR46, FR47, FR48, FR49, FR51, FR52, FR53, FR54, FR55, FR56, FR57 | All | Time-to-first-finding <2min | M-L | Integration |
 
 **Size key:** S = hours, M = days, L = sprints. **Test key:** Unit = automated, Integration = end-to-end CLI test, Human = manual evaluation, Pilot = requires real users, Synthetic = synthetic ground truth repos, Audit = security review.
@@ -879,7 +884,11 @@ Drops: guard question (accept category error risk), confidence tagging (accept t
 | NFR8: LLM input boundary | LLM receives: (a) stack classification, (b) guard question answer, (c) list of detected capabilities with evidence type, (d) web search results. LLM does NOT receive: file contents, file paths, directory structures, or secrets | Reduces exposure surface; makes privacy promise concrete and auditable |
 | NFR9: Artifact safety | Generated artifacts (capabilities.yaml, feedback.yaml) must not contain source code snippets, file contents, or secrets found during analysis | Artifacts are committed to VCS — must be safe to share |
 
-**Pre-pilot privacy validation:** Measure model accuracy under metadata-only constraint vs metadata+code. If accuracy delta is <5%, privacy architecture is validated. If >15%, architecture must be reconsidered before shipping.
+**Pre-pilot privacy validation:** Measure model accuracy under metadata-only constraint vs metadata+code. Decision criteria by delta range:
+- **<5%:** Privacy architecture validated — ship as designed.
+- **5-10%:** Ship with enhanced limited-coverage warnings on affected capability areas; prioritize review-and-amend prompting for those areas.
+- **10-15%:** Architecture review required — evaluate selective metadata enrichment (e.g., dependency graph structure without file contents) to close the gap without violating the no-source-code constraint.
+- **>15%:** Architecture must be reconsidered before shipping — the metadata-only constraint may be fundamentally incompatible with accurate absence detection.
 
 ### Reliability
 
