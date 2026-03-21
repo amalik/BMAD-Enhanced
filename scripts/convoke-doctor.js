@@ -5,11 +5,12 @@ const path = require('path');
 const chalk = require('chalk');
 const yaml = require('js-yaml');
 const { findProjectRoot, getPackageVersion } = require('./update/lib/utils');
-const { AGENT_FILES, WORKFLOW_NAMES } = require('./update/lib/agent-registry');
 
 /**
  * convoke-doctor — Diagnose common Convoke installation issues.
- * Runs a series of checks and reports pass/fail with actionable fix suggestions.
+ *
+ * Config-driven: discovers all modules by scanning _bmad/bme/*/config.yaml
+ * and validates file existence dynamically per module.
  */
 
 async function main() {
@@ -30,31 +31,82 @@ async function main() {
     return;
   }
 
-  // 2. Config file
-  checks.push(checkConfig(projectRoot));
+  // 2. Discover modules from _bmad/bme/*/config.yaml
+  const modules = discoverModules(projectRoot);
 
-  // 3. Agent files
-  checks.push(checkAgents(projectRoot));
+  if (modules.length === 0) {
+    checks.push({
+      name: 'Module discovery',
+      passed: false,
+      error: 'No modules found — expected config.yaml files in _bmad/bme/*/',
+      fix: 'Run: npx -p convoke-agents convoke-install'
+    });
+    printResults(checks);
+    process.exit(1);
+    return;
+  }
 
-  // 4. Workflow directories
-  checks.push(checkWorkflows(projectRoot));
+  checks.push({
+    name: 'Module discovery',
+    passed: true,
+    info: `Found ${modules.length} module(s): ${modules.map(m => m.name).join(', ')}`
+  });
 
-  // 5. Output directory writable
+  // 3. Per-module checks
+  for (const mod of modules) {
+    checks.push(checkModuleConfig(mod));
+    if (mod.config) {
+      checks.push(checkModuleAgents(mod));
+      checks.push(checkModuleWorkflows(mod));
+    }
+  }
+
+  // 4. Global checks (module-agnostic)
   checks.push(await checkOutputDir(projectRoot));
-
-  // 6. Stale migration lock
   checks.push(checkMigrationLock(projectRoot));
-
-  // 7. Version consistency
-  checks.push(checkVersionConsistency(projectRoot));
-
-  // 8. Workflow step structure
-  checks.push(checkWorkflowStepStructure(projectRoot));
+  checks.push(checkVersionConsistency(projectRoot, modules));
 
   printResults(checks);
 
   const failed = checks.filter(c => !c.passed);
   process.exit(failed.length > 0 ? 1 : 0);
+}
+
+/**
+ * Scan _bmad/bme/ for subdirectories containing config.yaml.
+ * Returns an array of module descriptors with parsed config (or null on error).
+ */
+function discoverModules(projectRoot) {
+  const bmeDir = path.join(projectRoot, '_bmad/bme');
+  if (!fs.existsSync(bmeDir)) return [];
+
+  const entries = fs.readdirSync(bmeDir, { withFileTypes: true });
+  const modules = [];
+
+  for (const entry of entries) {
+    if (!entry.isDirectory()) continue;
+    const configPath = path.join(bmeDir, entry.name, 'config.yaml');
+    if (!fs.existsSync(configPath)) continue;
+
+    let config = null;
+    let parseError = null;
+    try {
+      const content = fs.readFileSync(configPath, 'utf8');
+      config = yaml.load(content);
+    } catch (err) {
+      parseError = err.message;
+    }
+
+    modules.push({
+      name: entry.name,
+      dir: path.join(bmeDir, entry.name),
+      configPath,
+      config,
+      parseError,
+    });
+  }
+
+  return modules;
 }
 
 function checkProjectRoot(projectRoot) {
@@ -73,120 +125,123 @@ function checkProjectRoot(projectRoot) {
   };
 }
 
-function checkConfig(projectRoot) {
-  const configPath = path.join(projectRoot, '_bmad/bme/_vortex/config.yaml');
+function checkModuleConfig(mod) {
+  const label = `${mod.name} config`;
 
-  if (!fs.existsSync(configPath)) {
+  if (mod.parseError) {
     return {
-      name: 'Config file',
+      name: label,
       passed: false,
-      error: 'config.yaml not found',
-      fix: 'Run: npx -p convoke-agents convoke-install'
+      error: `YAML parse error: ${mod.parseError}`,
+      fix: `Check ${mod.configPath} for syntax errors`
     };
   }
 
-  try {
-    const content = fs.readFileSync(configPath, 'utf8');
-    const config = yaml.load(content);
-
-    if (!config || typeof config !== 'object') {
-      return {
-        name: 'Config file',
-        passed: false,
-        error: 'config.yaml is empty or invalid',
-        fix: 'Delete _bmad/bme/_vortex/config.yaml and run: npx -p convoke-agents convoke-install'
-      };
-    }
-
-    if (!config.agents) {
-      return {
-        name: 'Config file',
-        passed: false,
-        error: 'config.yaml missing agents section',
-        fix: 'Run: npx -p convoke-agents convoke-update'
-      };
-    }
-
-    return { name: 'Config file', passed: true, info: 'Valid YAML with agents section' };
-  } catch (err) {
+  if (!mod.config || typeof mod.config !== 'object') {
     return {
-      name: 'Config file',
+      name: label,
       passed: false,
-      error: `YAML parse error: ${err.message}`,
-      fix: 'Check config.yaml for syntax errors, or delete and run: npx -p convoke-agents convoke-install'
+      error: 'config.yaml is empty or invalid',
+      fix: `Reinstall the ${mod.name} module`
     };
   }
+
+  if (!Array.isArray(mod.config.agents) || mod.config.agents.length === 0) {
+    return {
+      name: label,
+      passed: false,
+      error: 'config.yaml missing or empty agents section',
+      fix: `Check ${mod.configPath}`
+    };
+  }
+
+  if (!Array.isArray(mod.config.workflows) || mod.config.workflows.length === 0) {
+    return {
+      name: label,
+      passed: false,
+      error: 'config.yaml missing or empty workflows section',
+      fix: `Check ${mod.configPath}`
+    };
+  }
+
+  return {
+    name: label,
+    passed: true,
+    info: `${mod.config.agents.length} agents, ${mod.config.workflows.length} workflows`
+  };
 }
 
-function checkAgents(projectRoot) {
-  const agentsDir = path.join(projectRoot, '_bmad/bme/_vortex/agents');
-  const required = AGENT_FILES;
+function checkModuleAgents(mod) {
+  const label = `${mod.name} agents`;
+  const agentsDir = path.join(mod.dir, 'agents');
+  const agentIds = mod.config.agents;
 
   if (!fs.existsSync(agentsDir)) {
     return {
-      name: 'Agent files',
+      name: label,
       passed: false,
       error: 'agents/ directory not found',
-      fix: 'Run: npx -p convoke-agents convoke-install-vortex'
+      fix: `Reinstall the ${mod.name} module`
     };
   }
 
-  const missing = required.filter(f => !fs.existsSync(path.join(agentsDir, f)));
+  const missing = agentIds.filter(id => !fs.existsSync(path.join(agentsDir, `${id}.md`)));
 
   if (missing.length > 0) {
     return {
-      name: 'Agent files',
+      name: label,
       passed: false,
-      error: `Missing: ${missing.join(', ')}`,
-      fix: 'Run: npx -p convoke-agents convoke-install-vortex to reinstall'
+      error: `Missing: ${missing.map(id => `${id}.md`).join(', ')}`,
+      fix: `Reinstall the ${mod.name} module`
     };
   }
 
   // Check files are non-empty
-  const empty = required.filter(f => {
-    const stat = fs.statSync(path.join(agentsDir, f));
+  const empty = agentIds.filter(id => {
+    const stat = fs.statSync(path.join(agentsDir, `${id}.md`));
     return stat.size === 0;
   });
 
   if (empty.length > 0) {
     return {
-      name: 'Agent files',
+      name: label,
       passed: false,
-      error: `Empty agent files: ${empty.join(', ')}`,
-      fix: 'Run: npx -p convoke-agents convoke-install to restore agent files'
+      error: `Empty agent files: ${empty.map(id => `${id}.md`).join(', ')}`,
+      fix: `Reinstall the ${mod.name} module`
     };
   }
 
-  return { name: 'Agent files', passed: true, info: `${required.length} agents present` };
+  return { name: label, passed: true, info: `${agentIds.length} agents present` };
 }
 
-function checkWorkflows(projectRoot) {
-  const workflowsDir = path.join(projectRoot, '_bmad/bme/_vortex/workflows');
-  const required = WORKFLOW_NAMES;
+function checkModuleWorkflows(mod) {
+  const label = `${mod.name} workflows`;
+  const workflowsDir = path.join(mod.dir, 'workflows');
+  const workflowNames = mod.config.workflows;
 
   if (!fs.existsSync(workflowsDir)) {
     return {
-      name: 'Workflow directories',
+      name: label,
       passed: false,
       error: 'workflows/ directory not found',
-      fix: 'Run: npx -p convoke-agents convoke-install'
+      fix: `Reinstall the ${mod.name} module`
     };
   }
 
-  const missing = required.filter(w =>
+  const missing = workflowNames.filter(w =>
     !fs.existsSync(path.join(workflowsDir, w, 'workflow.md'))
   );
 
   if (missing.length > 0) {
     return {
-      name: 'Workflow directories',
+      name: label,
       passed: false,
       error: `Missing: ${missing.join(', ')}`,
-      fix: 'Run: npx -p convoke-agents convoke-update to restore workflows'
+      fix: `Reinstall the ${mod.name} module`
     };
   }
 
-  return { name: 'Workflow directories', passed: true, info: `${required.length} workflows present` };
+  return { name: label, passed: true, info: `${workflowNames.length} workflows present` };
 }
 
 async function checkOutputDir(projectRoot) {
@@ -251,75 +306,32 @@ function checkMigrationLock(projectRoot) {
   }
 }
 
-function checkVersionConsistency(projectRoot) {
-  const configPath = path.join(projectRoot, '_bmad/bme/_vortex/config.yaml');
+function checkVersionConsistency(projectRoot, modules) {
   const packageVersion = getPackageVersion();
+  const mismatched = [];
 
-  if (!fs.existsSync(configPath)) {
-    return { name: 'Version consistency', passed: true, info: 'No config to check' };
+  for (const mod of modules) {
+    if (!mod.config) continue;
+    const installedVersion = mod.config.version || mod.config.installed_version;
+    if (installedVersion && installedVersion !== packageVersion) {
+      mismatched.push(`${mod.name}: ${installedVersion}`);
+    }
   }
 
-  try {
-    const content = fs.readFileSync(configPath, 'utf8');
-    const config = yaml.load(content);
-    const installedVersion = config.version || config.installed_version;
-
-    if (!installedVersion) {
-      return {
-        name: 'Version consistency',
-        passed: true,
-        info: `Package: ${packageVersion} (no installed version recorded in config)`
-      };
-    }
-
-    if (installedVersion === packageVersion) {
-      return {
-        name: 'Version consistency',
-        passed: true,
-        info: `${packageVersion} — package and config match`
-      };
-    }
-
+  if (mismatched.length > 0) {
     return {
       name: 'Version consistency',
       passed: false,
-      error: `Package: ${packageVersion}, Config: ${installedVersion}`,
+      error: `Package: ${packageVersion}, ${mismatched.join(', ')}`,
       fix: 'Run: npx -p convoke-agents convoke-update'
     };
-  } catch (_err) {
-    return { name: 'Version consistency', passed: true, info: 'Could not read config version' };
-  }
-}
-
-function checkWorkflowStepStructure(projectRoot) {
-  const workflowsDir = path.join(projectRoot, '_bmad/bme/_vortex/workflows');
-
-  if (!fs.existsSync(workflowsDir)) {
-    return { name: 'Workflow step structure', passed: true, info: 'No workflows directory' };
   }
 
-  const issues = [];
-
-  for (const wf of WORKFLOW_NAMES) {
-    const stepsDir = path.join(workflowsDir, wf, 'steps');
-    if (!fs.existsSync(stepsDir)) continue;
-
-    const files = fs.readdirSync(stepsDir).filter(f => f.endsWith('.md'));
-    if (files.length < 4 || files.length > 6) {
-      issues.push(`${wf}: ${files.length} step files (expected 4-6)`);
-    }
-  }
-
-  if (issues.length > 0) {
-    return {
-      name: 'Workflow step structure',
-      passed: false,
-      error: issues.join('; '),
-      fix: 'Run: npx -p convoke-agents convoke-install-vortex to reinstall clean workflow files'
-    };
-  }
-
-  return { name: 'Workflow step structure', passed: true, info: 'All workflows have valid step counts' };
+  return {
+    name: 'Version consistency',
+    passed: true,
+    info: `${packageVersion} — package and config versions consistent`
+  };
 }
 
 function printResults(checks) {
