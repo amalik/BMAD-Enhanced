@@ -1,4 +1,4 @@
-const { describe, it, before, after, beforeEach, afterEach } = require('node:test');
+const { describe, it, beforeEach, afterEach } = require('node:test');
 const assert = require('node:assert/strict');
 const path = require('path');
 const fs = require('fs-extra');
