@@ -4,22 +4,18 @@ status: 'complete'
 completedAt: '2026-03-21'
 editHistory:
   - date: '2026-03-21'
-    changes: "Vortex-Gyre consistency review: added AR20-AR25 (workspace infra, module registry, versioning, installer, root detection, terminology). Expanded Story 1.1 (workspace + installer + zero-regression gate), Story 1.4 (project root detection), Story 1.8 (module registry + doctor integration). Updated Epic 1 header and coverage maps."
+    changes: "Full rewrite: Epics regenerated from Convoke team architecture. Replaces CLI-tool epics (32 stories across 5 epics) with Convoke team module epics (4 epics, ~24 stories). No application code — only markdown agent definitions, workflow step-files, contracts, and integration scripts."
 inputDocuments:
   - _bmad-output/planning-artifacts/prd-gyre.md
   - _bmad-output/planning-artifacts/architecture-gyre.md
   - _bmad-output/planning-artifacts/product-brief-gyre-2026-03-19.md
-  - _bmad-output/planning-artifacts/prd-gyre-validation-report.md
-  - _bmad-output/planning-artifacts/implementation-readiness-report-2026-03-20.md
-  - _bmad-output/planning-artifacts/research/domain-operational-readiness-research-2026-03-19.md
-  - _bmad-output/vortex-artifacts/lean-experiment-gyre-discovery-interviews-2026-03-20.md
 ---
 
-# Gyre - Epic Breakdown
+# Gyre - Epic Breakdown (Convoke Team Module)
 
 ## Overview
 
-This document provides the complete epic and story breakdown for Gyre, decomposing the requirements from the PRD and Architecture into implementable stories.
+This document provides the complete epic and story breakdown for Gyre as a Convoke team module — conversational persona agents running inside Claude Code. All "implementation" is markdown (agent definitions, workflow step-files, contracts) plus integration scripts following existing Convoke patterns.
 
 ## Requirements Inventory
 
@@ -32,7 +28,7 @@ FR3: System can detect CI/CD platform (GitHub Actions, GitLab CI, Jenkins) from 
 FR4: System can detect observability tooling (Datadog, Prometheus, OpenTelemetry) from config and dependency files
 FR5: System can detect cloud provider (AWS, GCP, Azure) from IaC templates and config files
 FR6: System can present architecture intent guard questions to the user to confirm stack classification (≤3 questions, derived from detection)
-FR7: User can override guard question answers via CLI flags (`--guard deployment=containerized,protocol=grpc`)
+FR7: User can provide guard question answers conversationally, including correcting previous answers without re-running the full analysis
 FR8: System can re-classify the stack based on corrected guard answers without re-running the full analysis pipeline
 FR9: System can generate a capabilities manifest (`.gyre/capabilities.yaml`) unique to the detected stack, using LLM reasoning and web search
 FR10: System can incorporate industry standards (DORA, OpenTelemetry, Google PRR) into the generated model
@@ -41,113 +37,95 @@ FR12: System can adjust the generated model based on the guard question classifi
 FR13: Each generated capability includes a plain-language description (1-3 sentences)
 FR14: System can generate ≥20 capabilities for supported stack archetypes
 FR15: System can surface a limited-coverage warning when fewer than 20 capabilities are generated
-FR16: Observability Readiness agent can analyze the project for observability gaps
-FR17: Deployment Readiness agent can analyze the project for deployment gaps
+FR16: Observability Readiness workflow can analyze the project for observability gaps
+FR17: Deployment Readiness workflow can analyze the project for deployment gaps
 FR18: System can identify capabilities listed in the contextual model for which no evidence was found
 FR19: System can tag each finding with its source (static analysis vs contextual model)
 FR20: System can tag each finding with a confidence level (high/medium/low)
 FR21: System can classify each finding by severity (blocker/recommended/nice-to-have)
 FR22a: System can identify cross-domain compound gaps (causal or amplifying relationships between domains)
-FR22b: System can express compound finding relationships as a text-based reasoning chain in CLI output
-FR23: Static analysis produces a structured capability evidence report (capability ID, evidence type, detection method, no file contents)
-FR24: User can review the generated capabilities manifest via $EDITOR or interactive CLI walkthrough (default for first-time)
-FR25: User can amend the capabilities manifest by adding, removing, or modifying capabilities
+FR22b: System can express compound finding relationships as a reasoning chain in conversational output and YAML
+FR23: Analysis produces a structured capability evidence report (capability ID, evidence type, detection method, no file contents)
+FR24: User can review the generated capabilities manifest through conversational walkthrough with Coach
+FR25: User can amend the capabilities manifest through conversational interaction with Coach
 FR26: System respects user amendments on subsequent runs (amendment persistence, per-repo MVP)
 FR27: When user removes capabilities, system excludes those and associated findings on re-run (model subtraction)
 FR28: System prompts user for feedback after each analysis ("Did Gyre miss anything you know about?")
 FR29: User feedback is persisted to `.gyre/feedback.yaml` with timestamp
 FR30: System explains that feedback.yaml should be committed for team-wide model improvement
 FR31: System can display a model summary before findings (capability count, detected stack)
-FR32: System can display each finding to CLI as soon as produced (streaming, not batch)
 FR33: System can display a severity-first leadership summary (blockers, recommended, nice-to-have counts)
 FR34: System can display the novelty ratio ("X of Y findings are contextual")
-FR35: System can display compound findings with visually distinct indented reasoning chain
-FR36: System can output analysis results in machine-readable JSON format
+FR35: System can display compound findings with reasoning chain
 FR37: System can display mode indicator (crisis or anticipation) at start of output
 FR38: System can detect whether a previous analysis exists and auto-select crisis/anticipation mode
 FR39: System can persist findings history across runs
 FR40: System can compute delta between current and previous run (new, carried-forward, resolved)
 FR41: System can display delta-tagged findings ([NEW], [CARRIED]) and resolved finding summary
 FR42: System can create `.gyre/` directory structure on first run
-FR43: System can prompt user to review capabilities manifest with options (y/n/later)
-FR44: User can install Gyre via npm (`npm install -g gyre` or `npx gyre analyze .`)
-FR45: User can configure AI provider via environment variable or config file
-FR46: User can complete first-run setup with exactly one action (env var or `gyre setup`)
-FR47: System can fail fast with actionable error message when AI provider is unreachable
-FR48: System can select the most capable model for the configured provider (`provider.model: auto`)
+FR43: System can prompt user to review capabilities manifest
+FR44: User can install Gyre via `convoke-install-gyre`
 FR49: User can copy/paste severity summary and findings into external tools without formatting artifacts
 FR50: System can provide a brief rationale for each finding's severity classification
-FR51: System can detect service boundaries in monorepos using explicit signals (package manifests + deployment config)
+FR51: System can detect service boundaries in monorepos and ask user to select
 FR52: When limited-coverage warning triggered, system presents option to continue or abort
 FR53: System can display existing `.gyre/feedback.yaml` entries at start of analysis
-FR54: JSON output includes `status` field matching CLI exit code semantics
 FR55: System can persist "review deferred" flag and display reminder on next run
-FR56: If analysis fails after model generation, system saves manifest and informs user of retry without regeneration
-FR57: System treats analysis as complete-or-nothing for persistence; streamed CLI output may show partial, with clear error on failure
+FR56: If analysis fails after model generation, manifest is saved; agent informs user of retry without regeneration
 
-### NonFunctional Requirements
+**Removed FRs (CLI-specific):** FR32 (CLI streaming), FR36 (JSON output), FR45 (provider config), FR46 (setup command), FR47 (fail-fast provider), FR48 (auto model selection), FR54 (JSON status field), FR57 (complete-or-nothing persistence)
 
-NFR1: Time-to-first-finding <2 minutes (intermediate: detection <10s, guard <15s, model gen <90s)
+### Non-Functional Requirements
+
+NFR1: Time-to-first-finding <2 minutes from workflow start (intermediate: detection <10s, guard <15s, model gen <90s)
 NFR2: Total analysis time <10 minutes for typical project (≤500 files, ≤2 domains)
 NFR3: Guard question response time <1 second
 NFR4: Re-run with existing model ≤50% of first-run time
-NFR5: CLI startup time <3 seconds from command to first output
-NFR6: API keys stored in env vars or local config (permissions 600); never logged, never in artifacts
-NFR7: Static analysis runs locally; only structured findings and stack metadata sent to LLM. No source code to AI provider.
-NFR8: LLM receives stack classification, guard answer, capability evidence, web search results. NOT file contents, paths, directory structures, or secrets.
+NFR5: Agent activation time <3 seconds from activation to first output
+NFR7: Committed artifacts contain only structured metadata — never source code, file contents, paths, or secrets
+NFR8: Artifact content boundary — what enters `.gyre/` artifacts is constrained by contract schemas
 NFR9: Generated artifacts must not contain source code snippets, file contents, or secrets
-NFR10: Same project + same guard + same provider + same model version → substantially similar manifest (temperature=0, seed). Cache after first run.
-NFR11: If LLM provider unreachable, fail within 10 seconds with actionable error
-NFR12: Gyre never modifies, deletes, or writes outside `.gyre/` directory
+NFR10: Same project + same guard → substantially similar manifest. Cache after first run (capabilities.yaml IS the cache).
+NFR11: Graceful analysis failure — agent reports what it found and offers retry
+NFR12: Gyre agents never modify, delete, or write outside `.gyre/` directory
 NFR13: Run exclusivity via `.gyre/.lock` — abort if another analysis running
-NFR14: Supports ≥2 LLM providers (Anthropic + OpenAI) with provider abstraction
-NFR15: Node.js ≥20 (updated from ≥18 per architecture decision — Node 18 EOL + Commander v14)
-NFR16: OS compatibility — macOS, Linux, Windows (via WSL or native)
-NFR17: JSON schema versioned; breaking changes require version bump + `--unstable` flag
-NFR18: Pipeline phases independently re-runnable where feasible
+NFR15: Node.js ≥20 for installer scripts; agents are markdown, no Node.js dependency
+NFR16: OS compatibility — wherever Claude Code runs
+NFR17: YAML artifact schemas versioned; breaking changes require version bump
+NFR18: Each Gyre workflow independently runnable
 NFR19: Model accuracy ≥70% across ≥3 stack archetypes (pre-pilot release gate)
 NFR20: Guard options cover ≥95% of common architectures without expert knowledge
 NFR21: Web search results from current calendar year; no cross-run caching
 NFR22: Compound findings suppressed when either component has confidence "low"
 
-### Additional Requirements
+**Removed NFRs:** NFR6 (API key storage), NFR14 (multi-provider)
 
-Architecture-derived requirements that impact implementation:
+### Architecture Requirements
 
-- AR1: Package scaffolding — `packages/gyre/` with own `package.json`, npm workspaces in root, `bin: { gyre: './gyre.js' }`
-- AR2: Dual install path — `convoke-install-gyre` (Convoke users) + `npm install -g gyre` (standalone)
-- AR3: No starter template — scaffold from existing Convoke patterns (hand-rolled CLI, node:test, Chalk, js-yaml, fs-extra)
-- AR4: Commander v14.0.3 for CLI framework — subcommand routing (`gyre analyze`, `gyre init`, `gyre diff`, `gyre setup`)
-- AR5: Tiered context objects (detectionCtx / analysisCtx) — shape enforces privacy boundary and testability
-- AR6: PromptPayload `{ system, user }` interface — all prompt builders return this shape
-- AR7: Async generator agent pattern — agents yield findings, orchestrator iterates
-- AR8: Two-method LLM provider interface (`generate()` + `stream()`) with stream timeout (30s per-chunk)
-- AR9: Error class hierarchy (GyreError → DetectionError/ProviderError/AnalysisError/StreamTimeoutError)
-- AR10: Exit codes 0-4 mapping to failure modes; JSON status field for granular reporting
-- AR11: Finding shape — 8 required fields, `---FINDING---` delimiter parsing contract
-- AR12: 8 enforcement rules with contract tests, ESLint, unit tests, integration tests
-- AR13: Checkpoint 1 (Model Generation Demo) → Checkpoint 2 (Full Analysis Pipeline) implementation sequence
-- AR14: Privacy-accuracy decision tree — pre-pilot validation after model gen, before agents (Tier 1 only vs Tier 1+2 delta)
-- AR15: ESLint import boundary rules — agents never import providers, providers never import pipeline
-- AR16: Chalk restricted to `output/` directory via ESLint rule
-- AR17: File size guard (1MB cap) before YAML parsing
-- AR18: Atomic writes (write-to-temp + rename) for YAML artifacts
-- AR19: `types.js` for cross-module JSDoc typedefs only; module-private types stay local
-- AR20: npm workspaces infrastructure — add `"workspaces": ["packages/*"]` to root `package.json`, create `packages/` directory, verify existing Convoke scripts unaffected
-- AR21: Module registry — extend `agent-registry.js` with a `MODULES` concept so `convoke-doctor` and `convoke-install` can discover and validate Gyre alongside Vortex
-- AR22: Independent versioning — Gyre versions in `packages/gyre/package.json` (starts 0.x), independent from `convoke-agents` version
-- AR23: `convoke-install-gyre` installer — same UX pattern as `install-vortex-agents.js` (check → install → verify → register → guide), but installs npm package instead of copying markdown
-- AR24: Project root detection — Gyre uses its own root detection (walk up for `.git`/`.gyre/`), NOT Convoke's `findProjectRoot()` which looks for `_bmad/`
-- AR25: Terminology — "Vortex agent" (persona markdown) vs "Gyre domain agent" (JS async generator). Always qualify in cross-module docs.
+AR1: Module at `_bmad/bme/_gyre/` — config.yaml, README, compass-routing-reference, agents/, workflows/, contracts/
+AR2: 4 persona agents: Scout (stack-detective), Atlas (model-curator), Lens (readiness-analyst), Coach (review-coach)
+AR3: XML activation protocol following Vortex pattern — 7 steps, mandatory config loading at step 2
+AR4: 4 handoff contracts: GC1 (Stack Profile), GC2 (Capabilities Manifest), GC3 (Findings Report), GC4 (Feedback Loop)
+AR5: 7 workflows: full-analysis, stack-detection, model-generation, model-review, gap-analysis, delta-report, accuracy-validation
+AR6: Step-file architecture following Vortex pattern — each workflow has 3-5 step files
+AR7: Compass routing tables in final step of each workflow
+AR8: Contract schemas enforce privacy boundary (GC1 must not contain file contents, paths, or secrets)
+AR9: `convoke-install-gyre` installer following `install-vortex-agents.js` pattern
+AR10: Agent registry extension — GYRE_AGENTS and GYRE_WORKFLOWS arrays in agent-registry.js
+AR11: `convoke-doctor` validation — 4 agents, 7 workflows, config.yaml, contracts
+AR12: `refreshInstallation` gains Gyre module section
+AR13: Agent manifest (`agent-manifest.csv`) updated with 4 Gyre agents
 
 ### UX Design Requirements
 
-N/A — Gyre is a CLI tool with no UI design document.
+N/A — Gyre is a conversational agent team with no UI design document.
 
 ### FR Coverage Map
 
 | FR | Epic | Brief Description |
 |----|------|-------------------|
+| FR44 | E1 | Install via convoke-install-gyre |
+| FR42 | E1 | Create `.gyre/` directory structure on first run |
 | FR1 | E1 | Detect primary tech stack from file system artifacts |
 | FR1b | E1 | Detect multiple stacks, surface secondary as warning |
 | FR2 | E1 | Detect container orchestration platform |
@@ -155,17 +133,10 @@ N/A — Gyre is a CLI tool with no UI design document.
 | FR4 | E1 | Detect observability tooling |
 | FR5 | E1 | Detect cloud provider |
 | FR6 | E1 | Present guard questions to confirm classification |
-| FR7 | E1 | CLI flag override for guard answers |
+| FR7 | E1 | Conversational guard answer correction |
 | FR8 | E1 | Re-classify stack from corrected guard answers |
-| FR42 | E1 | Create `.gyre/` directory structure on first run |
-| FR44 | E1 | Install via npm |
-| FR45 | E1 | Configure AI provider via env var or config |
-| FR46 | E1 | First-run setup with one action |
-| FR47 | E1 | Fail fast with actionable error on provider failure |
-| FR48 | E1 | Auto-select most capable model |
 | FR51 | E1 | Detect monorepo service boundaries |
-| FR52 | E2 | Limited-coverage continuation/abort option |
-| FR9 | E2 | Generate capabilities manifest via LLM |
+| FR9 | E2 | Generate capabilities manifest via LLM reasoning |
 | FR10 | E2 | Incorporate industry standards into model |
 | FR11 | E2 | Incorporate web search results into model |
 | FR12 | E2 | Adjust model based on guard classification |
@@ -173,64 +144,57 @@ N/A — Gyre is a CLI tool with no UI design document.
 | FR14 | E2 | Generate ≥20 capabilities for supported archetypes |
 | FR15 | E2 | Surface limited-coverage warning (<20 capabilities) |
 | FR31 | E2 | Display model summary (capability count, detected stack) |
-| FR43-stub | E2 | Prompt user to review manifest (stub: "later" only) |
-| FR16 | E3 | Observability Readiness agent |
-| FR17 | E3 | Deployment Readiness agent |
+| FR52 | E2 | Limited-coverage continuation/abort option |
+| FR16 | E3 | Observability Readiness analysis |
+| FR17 | E3 | Deployment Readiness analysis |
 | FR18 | E3 | Identify capabilities with no evidence of implementation |
 | FR19 | E3 | Tag finding source (static vs contextual) |
 | FR20 | E3 | Tag finding confidence (high/medium/low) |
 | FR21 | E3 | Classify finding severity (blocker/recommended/nice-to-have) |
 | FR22a | E3 | Identify cross-domain compound gaps |
-| FR22b | E3 | Express compounds as text reasoning chain |
+| FR22b | E3 | Express compounds as reasoning chain |
 | FR23 | E3 | Structured capability evidence report |
-| FR32 | E3 | Stream findings as produced |
 | FR33 | E3 | Severity-first leadership summary |
 | FR34 | E3 | Novelty ratio display |
-| FR35 | E3 | Compound findings with indented reasoning |
-| FR36 | E3 | JSON output format |
-| FR37 | E3 | Mode indicator (stub: "crisis" until E5) |
-| FR49 | E3 | Paste-friendly output |
+| FR35 | E3 | Compound findings with reasoning chain |
+| FR37 | E3 | Mode indicator (crisis or anticipation) |
+| FR49 | E3 | Copy-pasteable output |
 | FR50 | E3 | Severity rationale per finding |
-| FR54 | E3 | JSON status field |
-| FR56 | E3 | Save manifest on partial failure, inform of retry (BLOCKING) |
-| FR57 | E3 | Complete-or-nothing persistence with streaming caveat (BLOCKING) |
-| FR24 | E4 | Review manifest via $EDITOR or interactive walkthrough |
-| FR25 | E4 | Amend manifest (add/remove/modify) |
+| FR56 | E3 | Save manifest on partial failure, inform of retry |
+| FR24 | E4 | Review manifest via conversational walkthrough |
+| FR25 | E4 | Amend manifest through conversation |
 | FR26 | E4 | Amendment persistence on subsequent runs |
 | FR27 | E4 | Model subtraction (exclude removed capabilities) |
 | FR28 | E4 | Feedback prompt after analysis |
 | FR29 | E4 | Persist feedback to `.gyre/feedback.yaml` |
 | FR30 | E4 | Explain feedback.yaml commit for team improvement |
-| FR43-full | E4 | Full manifest review handler (y/n/later) |
+| FR43 | E4 | Prompt user to review manifest |
 | FR53 | E4 | Display existing feedback entries at analysis start |
 | FR55 | E4 | Persist "review deferred" flag and reminder |
-| FR38 | E5 | Auto-detect crisis/anticipation mode |
-| FR39 | E5 | Persist findings history across runs |
-| FR40 | E5 | Compute delta (new, carried-forward, resolved) |
-| FR41 | E5 | Display delta-tagged findings |
+| FR38 | E4 | Auto-detect crisis/anticipation mode |
+| FR39 | E4 | Persist findings history across runs |
+| FR40 | E4 | Compute delta (new, carried-forward, resolved) |
+| FR41 | E4 | Display delta-tagged findings |
 
 ### NFR Coverage Map
 
 | NFR | Epic | Enforcement |
 |-----|------|-------------|
-| NFR1 | E2 (intermediate), E3 (full) | Performance acceptance criteria |
+| NFR1 | E2 (intermediate), E3 (full) | Performance acceptance criteria in workflow step timing |
 | NFR2 | E3 | Total time AC |
 | NFR3 | E1 | Guard response time AC |
-| NFR4 | E5 | Re-run time AC |
-| NFR5 | E1 | Startup time AC |
-| NFR6 | E1 | API key storage AC |
-| NFR7 | E2 | Privacy boundary contract test |
-| NFR8 | E2 | LLM input boundary contract test |
+| NFR5 | E1 | Agent activation time AC |
+| NFR7 | E2 | Privacy boundary: contract schema validation |
+| NFR8 | E2 | Artifact content: GC1-GC3 schema rules |
 | NFR9 | E2, E4 | Artifact safety AC |
-| NFR10 | E2 | Model caching AC |
-| NFR11 | E1 | Fail-fast timeout AC |
-| NFR12 | E1 | File system safety contract test |
+| NFR10 | E2 | Model caching AC (capabilities.yaml IS the cache) |
+| NFR11 | E3 | Graceful failure AC (agent reports + retry offer) |
+| NFR12 | E1 | File system safety: write only to `.gyre/` |
 | NFR13 | E1 | Lock file AC |
-| NFR14 | E3 | Provider abstraction AC |
-| NFR15 | E1 | Node ≥20 in package.json engines |
-| NFR16 | E1 | OS compatibility CI matrix |
-| NFR17 | E3 | JSON schema versioning AC |
-| NFR18 | E5 | Phase independence AC |
+| NFR15 | E1 | Node ≥20 in package.json engines (installer only) |
+| NFR16 | E1 | Claude Code platform support (inherited) |
+| NFR17 | E2 | YAML schema versioning AC |
+| NFR18 | E3, E4 | Workflow independence AC |
 | NFR19 | E2 | Model accuracy gate (≥70%, spike story) |
 | NFR20 | E1 | Guard coverage AC |
 | NFR21 | E2 | Web search freshness AC |
@@ -240,968 +204,579 @@ N/A — Gyre is a CLI tool with no UI design document.
 
 | AR | Epic | Description |
 |----|------|-------------|
-| AR1 | E1 | Package scaffolding (packages/gyre/, package.json, bin entry) |
-| AR2 | E1 | Dual install path (convoke-install-gyre + npm global) |
-| AR3 | E1 | No starter template — scaffold from Convoke patterns |
-| AR4 | E1 | Commander v14.0.3 CLI framework |
-| AR5 | E1 | Tiered context objects (detectionCtx) |
-| AR6 | E2 | PromptPayload { system, user } interface |
-| AR7 | E3 | Async generator agent pattern |
-| AR8 | E2 (generate), E3 (stream) | Two-method LLM provider interface |
-| AR9 | E1 | Error class hierarchy |
-| AR10 | E1 | Exit codes 0-4 mapping |
-| AR11 | E3 | Finding shape (8 fields, delimiter parsing) |
-| AR12 | E1 (rules 7,8), E2 (rules 1,4), E3 (rules 2,3,5,6) | Enforcement rules via contract/lint/unit tests |
-| AR13 | E1+E2 (CP1), E3 (CP2) | Checkpoint implementation sequence |
-| AR14 | E2 | Privacy-accuracy decision tree |
-| AR15 | E3 | ESLint import boundary rules |
-| AR16 | E3 | Chalk restricted to output/ |
-| AR17 | E2 | File size guard (1MB) before YAML parsing |
-| AR18 | E2 | Atomic writes for YAML artifacts |
-| AR19 | E3 | types.js cross-module typedefs only |
-| AR20 | E1 | npm workspaces infrastructure (root package.json, packages/ dir) |
-| AR21 | E1 | Module registry extension (agent-registry.js MODULES concept) |
-| AR22 | E1 | Independent Gyre versioning (packages/gyre/package.json) |
-| AR23 | E1 | convoke-install-gyre installer script |
-| AR24 | E1 | Project root detection (gyre-dir.js, not findProjectRoot) |
-| AR25 | E1 | Terminology distinction in cross-module docs |
-
-### Enforcement Rule Distribution
-
-| Rule | Epic | Test Type |
-|------|------|-----------|
-| Rule 1: Privacy boundary | E2 | Contract test |
-| Rule 2: Context immutability | E3 | Contract test |
-| Rule 3: No cross-layer imports | E3 | ESLint |
-| Rule 4: PromptPayload shape | E2 | Contract test |
-| Rule 5: Exit code mapping | E3 | Unit test |
-| Rule 6: Finding shape | E3 | Unit test |
-| Rule 7: File system boundary | E1 | Contract test |
-| Rule 8: Config precedence | E1 | Integration test |
+| AR1 | E1 | Module structure at `_bmad/bme/_gyre/` |
+| AR2 | E1 | 4 persona agents (Scout, Atlas, Lens, Coach) |
+| AR3 | E1 | XML activation protocol |
+| AR4 | E1, E3, E4 | 4 handoff contracts (GC1-GC4) |
+| AR5 | E1, E2, E3, E4 | 7 workflows with step-files |
+| AR6 | E1, E2, E3, E4 | Step-file architecture |
+| AR7 | E1, E2, E3, E4 | Compass routing tables |
+| AR8 | E2 | Privacy boundary via contract schema |
+| AR9 | E1 | `convoke-install-gyre` installer |
+| AR10 | E1 | Agent registry extension |
+| AR11 | E1 | `convoke-doctor` validation |
+| AR12 | E1 | `refreshInstallation` Gyre section |
+| AR13 | E1 | Agent manifest update |
 
 ## Epic List
 
-### Epic 1: Install, Configure & Stack Discovery
-User can install Gyre, configure their AI provider, point it at their project (including monorepos), and see their technology stack correctly identified with guard question confirmation. Includes workspace infrastructure, package scaffolding, CLI framework, error handling foundation, `.gyre/` directory creation, and Convoke ecosystem integration (installer, registry, doctor).
+### Epic 1: Module Foundation & Stack Detection
 
-**FRs covered:** FR1, FR1b, FR2, FR3, FR4, FR5, FR6, FR7, FR8, FR42, FR44, FR45, FR46, FR47, FR48, FR51 (16 FRs)
-**ARs:** AR1-AR5, AR9-AR10, AR12 (rules 7, 8), AR20-AR25
-**NFRs enforced:** NFR3, NFR5, NFR6, NFR11, NFR12, NFR13, NFR15, NFR16, NFR20
-**Dedicated enforcement stories:** Contract test for fs-boundary (rule 7), integration test for config precedence (rule 8)
-**Risk:** Medium — mostly deterministic file system and CLI code
+User can install the Gyre module, activate Scout agent, and get their technology stack correctly identified with guard question confirmation. Includes module scaffolding (config.yaml, agents, workflows, contracts directories), Convoke ecosystem integration (installer, registry, doctor, manifest), and the complete stack-detection workflow.
+
+**FRs covered:** FR1, FR1b, FR2, FR3, FR4, FR5, FR6, FR7, FR8, FR42, FR44, FR51 (12 FRs)
+**ARs:** AR1-AR3, AR4 (GC1), AR5 (stack-detection, full-analysis skeleton), AR6, AR7, AR9-AR13
+**NFRs enforced:** NFR3, NFR5, NFR12, NFR13, NFR15, NFR16, NFR20
+**Risk:** Low — mostly markdown scaffolding + existing Convoke patterns
 
 ### Epic 2: Contextual Model Generation
-User can generate a capabilities model unique to their detected stack — incorporating industry standards, web search, and guard answers — see a summary of what was generated, and be prompted to review later. **Includes accuracy validation spike (NFR19 ≥70%) as the first story — this is the go/no-go gate for the entire product.**
 
-**FRs covered:** FR9, FR10, FR11, FR12, FR13, FR14, FR15, FR31, FR43-stub, FR52 (10 FRs)
-**ARs:** AR6, AR8 (generate), AR12 (rules 1, 4), AR13 (CP1), AR14, AR17, AR18
-**NFRs enforced:** NFR1 (intermediate), NFR7, NFR8, NFR9, NFR10, NFR19, NFR20, NFR21
-**Dedicated enforcement stories:** Contract test for privacy boundary (rule 1), contract test for PromptPayload shape (rule 4)
-**Risk:** HIGH — prompt engineering iteration, accuracy gate, privacy-accuracy validation
+User can have Atlas generate a capabilities manifest unique to their detected stack — incorporating industry standards, web search, and guard answers — and see a summary of what was generated. **Includes accuracy validation spike (NFR19 ≥70%) as the first story — this is the go/no-go gate for the entire product.**
 
-### Epic 3: Absence Detection & Streaming Output
-Two domain agents analyze the project against the model, streaming findings with severity, confidence, and source tagging. Cross-domain correlation surfaces compound gaps. Output available in CLI (streaming, paste-friendly) and JSON formats. Graceful degradation on partial failure. **FR56-FR57 are blocking stories — epic not complete until resilience passes.** Three parallelizable workstreams: agents, output/renderer, resilience/orchestrator.
+**FRs covered:** FR9, FR10, FR11, FR12, FR13, FR14, FR15, FR31, FR52 (9 FRs)
+**ARs:** AR4 (GC2), AR5 (model-generation), AR6, AR7, AR8
+**NFRs enforced:** NFR1 (intermediate), NFR7, NFR8, NFR9, NFR10, NFR17, NFR19, NFR21
+**Risk:** High — model generation quality is the critical path. Prompt iteration for Atlas is the main effort.
 
-**FRs covered:** FR16, FR17, FR18, FR19, FR20, FR21, FR22a, FR22b, FR23, FR32, FR33, FR34, FR35, FR36, FR37, FR49, FR50, FR54, FR56, FR57 (20 FRs)
-**ARs:** AR7, AR8 (stream), AR11, AR12 (rules 2, 3, 5, 6), AR15, AR16, AR19
-**NFRs enforced:** NFR1 (full), NFR2, NFR4, NFR14, NFR17, NFR22
-**Dedicated enforcement stories:** Contract test for context immutability (rule 2), ESLint import boundaries (rule 3), unit test for exit codes (rule 5), unit test for finding shape (rule 6)
-**Risk:** Medium-high — LLM-dependent agents, streaming complexity
+### Epic 3: Absence Detection & Findings
 
-### Epic 4: Review, Amendment & Feedback
-User can review and customize the capabilities model via editor or interactive walkthrough, provide feedback on analysis accuracy, and Gyre respects amendments on future runs. Builds team knowledge through committable artifacts.
+Lens can analyze the project for gaps across two domains (observability + deployment), tag findings with source/confidence/severity, identify cross-domain compounds, and present a severity-first summary with novelty ratio. Includes the gap-analysis workflow and full-analysis orchestration.
 
-**FRs covered:** FR24, FR25, FR26, FR27, FR28, FR29, FR30, FR43-full, FR53, FR55 (10 FRs)
-**NFRs enforced:** NFR9 (artifact safety on amended files)
-**Risk:** Low — well-understood YAML editing and persistence patterns
+**FRs covered:** FR16, FR17, FR18, FR19, FR20, FR21, FR22a, FR22b, FR23, FR33, FR34, FR35, FR37, FR49, FR50, FR56 (16 FRs)
+**ARs:** AR4 (GC3), AR5 (gap-analysis, full-analysis complete), AR6, AR7
+**NFRs enforced:** NFR1 (full), NFR2, NFR4, NFR11, NFR18, NFR22
+**Risk:** Medium — prompt engineering for Lens analysis accuracy + compound correlation quality
 
-### Epic 5: Run Lifecycle & Delta Analysis
-User can re-run Gyre and see what changed — new findings, carried forward, and resolved gaps — tracking progress over time. Mode auto-detection (crisis/anticipation) replaces the stub from Epic 3.
+### Epic 4: Review, Feedback & Delta
 
-**FRs covered:** FR38, FR39, FR40, FR41 (4 FRs)
-**NFRs enforced:** NFR4 (re-run ≤50% time), NFR18 (phase independence)
-**Risk:** Low — deterministic computation on YAML data
+Coach guides user through reviewing findings and amending the capabilities manifest. Captures feedback on missed gaps. Delta-report workflow compares current vs previous runs. Completes the full Gyre analysis cycle.
+
+**FRs covered:** FR24, FR25, FR26, FR27, FR28, FR29, FR30, FR38, FR39, FR40, FR41, FR43, FR53, FR55 (14 FRs)
+**ARs:** AR4 (GC4), AR5 (model-review, delta-report), AR6, AR7
+**NFRs enforced:** NFR4, NFR9, NFR18
+**Risk:** Low — conversational walkthrough is straightforward; delta computation uses YAML diffing
 
 ---
 
-## Epic 1: Install, Configure & Stack Discovery
+## Epic 1: Module Foundation & Stack Detection
 
-**Goal:** A user can install Gyre, configure their LLM provider, run stack detection on their project, confirm intent via guard questions, and have a validated StackProfile ready for model generation — including monorepo boundaries. Includes workspace infrastructure, Convoke ecosystem integration, and installer.
+**Goal:** User can install Gyre, activate Scout, and see their technology stack correctly identified.
 
-### Story 1.1: Workspace Infrastructure & Package Scaffolding
+### Story 1.1: Module Scaffolding & Config
 
-As a developer,
-I want to install Gyre globally via `npm install -g gyre` and run `gyre` from my terminal,
-So that I can begin using the tool with no additional setup beyond installation.
-
-**Requirements:** FR44, AR1, AR2, AR3, AR4, AR20, AR22, AR23, AR25
+As a Convoke developer,
+I want the Gyre module directory structure created at `_bmad/bme/_gyre/`,
+So that all Gyre agents, workflows, and contracts have a home.
 
 **Acceptance Criteria:**
 
-**Given** the Convoke monorepo has no `packages/` directory
-**When** workspace infrastructure is created
-**Then** a `packages/` directory is created at the repo root
-**And** root `package.json` has `"workspaces": ["packages/*"]` added
-**And** all existing Convoke tests pass (zero-regression gate)
-**And** existing `convoke-install`, `convoke-update`, `convoke-doctor` commands still work
+**Given** the Gyre module is being created
+**When** the module structure is scaffolded
+**Then** the following exists:
+- `_bmad/bme/_gyre/config.yaml` with submodule_name, description, module, output_folder, agents list, workflows list, version, user_name, communication_language, party_mode_enabled, core_module fields
+- `_bmad/bme/_gyre/README.md` with module overview, agent table, workflow list (following Vortex README pattern)
+- `_bmad/bme/_gyre/agents/` directory (empty, populated by subsequent stories)
+- `_bmad/bme/_gyre/workflows/` directory (empty, populated by subsequent stories)
+- `_bmad/bme/_gyre/contracts/` directory (empty, populated by subsequent stories)
+**And** config.yaml lists 4 agents: stack-detective, model-curator, readiness-analyst, review-coach
+**And** config.yaml lists 7 workflows: full-analysis, stack-detection, model-generation, model-review, gap-analysis, delta-report, accuracy-validation
 
-**Given** the workspace infrastructure exists
-**When** `packages/gyre/` is scaffolded
-**Then** `packages/gyre/package.json` exists with its own `name: "gyre"`, `version: "0.1.0"`, `bin: { gyre: './gyre.js' }`, and `engines: { node: ">=20" }`
-**And** Gyre version is independent from root `convoke-agents` version (AR22)
-**And** a `gyre` binary is available after `npm link` or `npm install -g gyre`
-**And** running `gyre --version` prints the version from `packages/gyre/package.json`
-**And** running `gyre --help` prints usage information with all top-level commands
-**And** running `gyre` with no arguments prints help text and exits with code 0
-**And** the CLI uses Commander v14 with Node.js ≥20 as the minimum engine
+### Story 1.2: Scout Agent Definition
 
-**Given** the Convoke ecosystem dual install path (AR2)
-**When** `convoke-install-gyre` is implemented
-**Then** a `scripts/install-gyre.js` script follows the same UX pattern as `install-vortex-agents.js`: check prerequisites (Node ≥20) → install gyre package → verify `gyre --version` works → display success with next steps
-**And** the `convoke-install-gyre` bin entry is added to root `package.json`
-**And** `convoke-install` is updated to offer Gyre installation alongside Vortex
-
-**Given** cross-module documentation (AR25)
-**When** README or user-facing docs reference both modules
-**Then** "Vortex agent" and "Gyre domain agent" are used (never unqualified "agent" in cross-module context)
-
-### Story 1.2: Configuration Resolution & Setup Wizard
-
-As a developer using Gyre for the first time,
-I want to run `gyre init` and be guided through provider configuration,
-So that my API key and provider preferences are saved and I don't have to configure them again.
-
-**Requirements:** FR45, FR46, AR5, AR9, AR10
+As a user,
+I want to activate Scout and have it greet me and show its menu,
+So that I can start a stack analysis conversation.
 
 **Acceptance Criteria:**
 
-**Given** no `.gyre/config.yaml` exists in the project
-**When** the user runs `gyre init`
-**Then** an interactive wizard prompts for provider selection (OpenAI, Anthropic, or Ollama)
-**And** the wizard prompts for the API key (masked input)
-**And** a `.gyre/config.yaml` is created with the selected provider and key reference
-**And** the wizard validates the API key by making a lightweight test call to the provider
-**And** if validation fails, the user is prompted to re-enter or skip validation
+**Given** the Scout agent file is created at `_bmad/bme/_gyre/agents/stack-detective.md`
+**When** the agent is activated
+**Then** it follows the XML activation protocol:
+- Step 1: Load persona from agent file
+- Step 2: Load `_bmad/bme/_gyre/config.yaml` — error handling if missing or invalid
+- Step 3: Store user_name from config
+- Step 4: Greet user by name, communicate in configured language, display numbered menu
+- Step 5: Wait for user input (number, text, or fuzzy match)
+- Step 6: Process input via menu handlers
+- Step 7: Execute selected menu item
+**And** Scout's menu includes: [1] Detect Stack, [2] Full Analysis
+**And** menu items use `workflow` handler type pointing to workflow.md files
+**And** Scout's persona is "methodical investigator" — reports evidence, never guesses
 
-**Given** a `.gyre/config.yaml` already exists
-**When** the user runs `gyre init`
-**Then** the wizard shows current settings and asks whether to overwrite
+### Story 1.3: Stack Detection Workflow
 
-**Given** environment variable `GYRE_PROVIDER` or `GYRE_API_KEY` is set
-**When** configuration is resolved
-**Then** env vars take precedence over config file values (env > config > defaults)
-
-### Story 1.3: Provider Abstraction & Fail-Fast Error Handling
-
-As a developer running Gyre,
-I want the system to validate my provider configuration before starting any analysis,
-So that I get a clear error message immediately if my API key is invalid or the provider is unreachable.
-
-**Requirements:** FR47, FR48, AR8, AR9, AR10
+As a user,
+I want Scout to scan my project and tell me what technology stack it detected,
+So that I can confirm or correct the classification before analysis.
 
 **Acceptance Criteria:**
 
-**Given** a configured provider in `.gyre/config.yaml`
-**When** the pipeline starts
-**Then** the provider adapter is resolved via `createProvider(config)` factory
-**And** a fail-fast validation call is made before any pipeline work begins
-**And** if the provider is unreachable, the process exits with a descriptive error and exit code 2
-**And** if the API key is invalid, the process exits with a specific "invalid credentials" message
+**Given** the stack-detection workflow exists at `_bmad/bme/_gyre/workflows/stack-detection/`
+**When** Scout runs the workflow
+**Then** it has 3 step files:
 
-**Given** the provider abstraction
-**When** any module needs LLM access
-**Then** it receives the provider via the `analysisCtx` context object (phases 3-5 only)
-**And** the provider exposes exactly two methods: `generate()` and `stream()`
-**And** the provider implements a 30-second per-chunk timeout on streaming responses
+**step-01-scan-filesystem.md:**
+**Given** Scout has access to Claude Code tools
+**When** it scans the project
+**Then** it uses Glob to find: package manifests (package.json, go.mod, requirements.txt, Cargo.toml, pom.xml), Dockerfiles, docker-compose.yaml, k8s manifests, CI configs (.github/workflows/, .gitlab-ci.yml, Jenkinsfile), IaC templates (terraform/, cloudformation/), cloud provider configs
+**And** it uses Grep to search for: framework imports, observability tool references (opentelemetry, prometheus, datadog), cloud provider SDKs
+**And** it uses Read to examine: detected config files for specific settings
+**And** covers FR1, FR1b, FR2, FR3, FR4, FR5
 
-### Story 1.4: `.gyre/` Directory, Lock File & Project Root Detection
+**step-02-classify-stack.md:**
+**Given** Scout has scan results
+**When** it classifies the stack
+**Then** it identifies: primary language/framework, container orchestration, CI/CD platform, observability tooling, cloud provider, communication protocol
+**And** it identifies ambiguities requiring guard questions
+**And** if multiple stacks detected (FR1b), it selects primary and surfaces secondary as warning
 
-As a developer running Gyre,
-I want all Gyre artifacts stored in a `.gyre/` directory with a lock file preventing concurrent runs,
-So that my project stays organized and parallel runs cannot corrupt state.
+**step-03-guard-questions.md:**
+**Given** Scout has classification with potential ambiguities
+**When** it needs to confirm architecture intent
+**Then** it asks ≤3 guard questions derived from what was detected (not a fixed list) (FR6)
+**And** questions cover: deployment model, communication protocol, ambiguous detections
+**And** user answers conversationally (FR7)
+**And** if user corrects a previous answer, Scout re-classifies without re-scanning (FR8)
+**And** guard response processing takes <1 second (NFR3)
+**And** guard options cover ≥95% of common architectures (NFR20)
+**And** if detection is unambiguous, guard questions are skipped entirely
 
-**Requirements:** FR42, NFR12, NFR13, AR24
+### Story 1.4: GC1 Stack Profile Contract
 
-**Acceptance Criteria:**
-
-**Given** the user runs any Gyre command from a project directory
-**When** project root detection runs
-**Then** `gyre-dir.js` walks up from CWD looking for `.git` or `.gyre/` to determine project root (AR24)
-**And** this is Gyre's own root detection — it does NOT use Convoke's `findProjectRoot()` (which looks for `_bmad/`)
-**And** if neither `.git` nor `.gyre/` is found, CWD is used as project root (single-directory analysis)
-
-**Given** the user runs any Gyre command that writes artifacts
-**When** the command starts
-**Then** it creates `.gyre/` at the detected project root if it doesn't exist
-**And** it acquires a lock file at `.gyre/.lock` before proceeding
-**And** if a lock file already exists and the owning process is still running, the command exits with a clear "another Gyre process is running" message
-**And** if the lock file is stale (owning process no longer exists), it is reclaimed
-
-**Given** a Gyre command completes (success or failure)
-**When** the process exits
-**Then** the lock file is released
-**And** `.gyre/` is added to `.gitignore` suggestions on first run (if not already present)
-
-### Story 1.5: Stack Detection Engine
-
-As a developer running `gyre analyze`,
-I want Gyre to automatically detect my project's technology stack from file system artifacts,
-So that I don't have to manually specify my stack and the detection is accurate.
-
-**Requirements:** FR1, FR1b, FR2, FR3, FR4, FR5
+As an Atlas agent,
+I want Scout's detection results in a structured format,
+So that I can generate a contextually relevant capabilities manifest.
 
 **Acceptance Criteria:**
 
-**Given** a project directory with standard file system artifacts
-**When** the detection phase runs
-**Then** the system identifies the primary language/framework from package manifests and config files
-**And** detects container orchestration platform (Kubernetes, ECS, Docker Compose) from project files
-**And** detects CI/CD platform (GitHub Actions, GitLab CI, Jenkins) from pipeline config files
-**And** detects observability tooling (Datadog, Prometheus, OpenTelemetry) from config and dependency files
-**And** detects cloud provider (AWS, GCP, Azure) from IaC templates and config files
+**Given** the GC1 contract is created at `_bmad/bme/_gyre/contracts/gc1-stack-profile.md`
+**When** Scout completes stack detection
+**Then** it writes the Stack Profile to `.gyre/stack-profile.yaml` following the GC1 schema:
+- stack_profile.primary_language, primary_framework, secondary_stacks, container_orchestration, ci_cd_platform, observability_tooling, cloud_provider, communication_protocol, guard_answers, detection_confidence, detection_summary
+**And** GC1 contract frontmatter declares: source_agent: scout, target_agents: [atlas, lens]
+**And** **PRIVACY RULE:** GC1 contains technology categories only — NOT file contents, file paths, version numbers, dependency counts, dependency names, or secrets (AR8)
+**And** `.gyre/` directory is created on first run if it doesn't exist (FR42)
+**And** `.gyre/.lock` prevents concurrent analysis (NFR13)
+**And** write is atomic (write to temp, rename)
 
-**Given** a project with multiple technology stacks
-**When** detection completes
-**Then** the primary stack is selected for model generation
-**And** secondary stacks are surfaced as warnings to the user
+### Story 1.5: Monorepo Service Boundary Detection
 
-**Given** detection runs
-**When** it accesses the filesystem
-**Then** it operates within a `detectionCtx` (no LLM provider access)
-**And** it produces a Tier 1 (coarse) StackProfile containing only category-level classifications
-**And** no project file contents are included in the Tier 1 output — only labels and counts
-
-### Story 1.6: Guard Questions & CLI Override
-
-As a developer,
-I want Gyre to ask me ≤3 confirmation questions about my stack before proceeding,
-So that I can correct any misdetection and the model is built on accurate assumptions.
-
-**Requirements:** FR6, FR7, FR8, NFR3, NFR20
+As a user with a monorepo,
+I want Scout to detect multiple services and ask me which one to analyze,
+So that each service gets its own contextual model.
 
 **Acceptance Criteria:**
 
-**Given** stack detection has completed and produced a Tier 1 StackProfile
-**When** the guard question phase begins
-**Then** the system presents ≤3 architecture intent questions derived from the detection results
-**And** questions are displayed interactively in the terminal
+**Given** Scout detects multiple directories with their own package manifest AND deployment config
+**When** ≥2 service roots are detected
+**Then** Scout lists them conversationally and asks user to select one (FR51)
+**And** system does NOT attempt implicit boundary detection (directory naming conventions)
+**And** each selected service gets its own `.gyre/` directory at its service root
 
-**Given** guard questions are presented
-**When** the user answers them
-**Then** answers are merged into the StackProfile, correcting any misdetection
-**And** the total interaction takes ≤30 seconds of user time (NFR3)
+### Story 1.6: Ecosystem Integration — Installer, Registry, Doctor
 
-**Given** the user wants to skip interactive questions
-**When** they provide `--guard deployment=containerized,protocol=grpc` flags
-**Then** the CLI flags override the interactive flow and answers are applied directly
-**And** no interactive prompts are shown for the overridden questions
-
-**Given** guard questions complete
-**When** answers have been applied
-**Then** the Tier 2 (detailed) StackProfile is generated locally (no LLM call)
-**And** Tier 2 stays local and is never sent to the LLM provider
-
-### Story 1.7: Monorepo Service Boundary Detection
-
-As a developer working in a monorepo,
-I want Gyre to detect service boundaries and analyze each service's stack independently,
-So that the analysis covers my entire project accurately rather than treating it as a single stack.
-
-**Requirements:** FR51
+As a Convoke user,
+I want to install Gyre with `convoke-install-gyre` and have it validated by `convoke-doctor`,
+So that Gyre integrates cleanly with my existing Convoke setup.
 
 **Acceptance Criteria:**
 
-**Given** a monorepo project with multiple service directories
-**When** stack detection runs
-**Then** the system identifies service boundaries (e.g., separate `package.json`, `go.mod`, or `Dockerfile` per directory)
-**And** each detected service gets its own StackProfile entry
-**And** service boundaries are surfaced in the detection output for user confirmation
+**Given** `convoke-install-gyre` script is created following `install-vortex-agents.js` pattern (AR9)
+**When** user runs `convoke-install-gyre`
+**Then** it copies `_bmad/bme/_gyre/` contents to the project
+**And** registers Gyre agents in `agent-manifest.csv` (AR13)
+**And** bin entry `convoke-install-gyre` added to `package.json`
 
-**Given** a single-service project
-**When** detection runs
-**Then** monorepo detection completes with a single boundary (no user disruption)
+**Given** `agent-registry.js` is extended (AR10)
+**When** registry is loaded
+**Then** it exports GYRE_AGENTS (4 agents) and GYRE_WORKFLOWS (7 workflows) arrays
+**And** derived lists (GYRE_AGENT_FILES, GYRE_WORKFLOW_DIRS) follow existing derivation pattern
 
-### Story 1.8: Enforcement Rules, Module Registry & Ecosystem Integration
+**Given** `convoke-doctor` is extended (AR11)
+**When** doctor runs with Gyre installed
+**Then** it validates: 4 agent files, 7 workflow directories, config.yaml, compass-routing-reference.md, 4 contract files
 
-As a maintainer of the Gyre codebase,
-I want contract tests enforcing architectural boundaries, and Convoke's tooling aware of Gyre as a module,
-So that the privacy boundary, configuration correctness, and ecosystem cohesion are verified on every CI run.
+**Given** `refreshInstallation` is extended (AR12)
+**When** refresh runs
+**Then** it copies all Gyre markdown files from source to project
 
-**Requirements:** AR12 (rules 7, 8), AR21, AR23
+### Story 1.7: Compass Routing Reference & Full-Analysis Skeleton
+
+As a user completing any Gyre workflow,
+I want to see routing options for what to do next,
+So that I can navigate between Gyre agents and workflows.
 
 **Acceptance Criteria:**
 
-**Given** the detection phase modules (`src/detection/`)
-**When** CI runs
-**Then** a contract test verifies that no file in `src/detection/` imports from `src/providers/` or `analysisCtx`
-**And** the test fails if any such import is introduced
+**Given** `compass-routing-reference.md` is created at `_bmad/bme/_gyre/` (AR7)
+**When** a user finishes any Gyre workflow step
+**Then** the compass table shows: agent, workflow, and rationale for each option
+**And** includes inter-module routing (Gyre → Vortex) for findings that impact product discovery
 
-**Given** the configuration resolution module
-**When** CI runs
-**Then** a unit test verifies precedence: env var > CLI flag > config file > default
-**And** the test covers all four levels with explicit assertions for each override scenario
-
-**Given** any new module added to `src/detection/`
-**When** the contract test suite runs
-**Then** the new module is automatically included in the boundary check (glob-based, not hardcoded file list)
-
-**Given** the Convoke agent registry (`scripts/update/lib/agent-registry.js`) (AR21)
-**When** Gyre is installed
-**Then** a `MODULES` array is added to the registry listing both Vortex (type: discovery-framework) and Gyre (type: cli-tool, package: packages/gyre)
-**And** `convoke-doctor` reports Gyre installation status and version when Gyre is present
-**And** `convoke-doctor` does NOT fail if Gyre is absent (Gyre is optional)
-**And** existing Vortex AGENTS and WORKFLOWS arrays are unchanged — MODULES is additive
+**Given** `full-analysis/workflow.md` skeleton is created (AR5)
+**When** full-analysis is invoked
+**Then** it orchestrates: step-01-initialize (check `.gyre/`, detect mode) → step-02-detect-stack (invoke Scout) → remaining steps stubbed for E2-E4
 
 ---
 
 ## Epic 2: Contextual Model Generation
 
-**Goal:** Generate a capabilities manifest unique to the detected stack — incorporating industry standards, web search, and guard answers — with a validated accuracy gate and privacy boundary enforcement.
+**Goal:** Atlas generates a capabilities manifest unique to the user's detected stack.
 
-### Story 2.1a: Prompt Builder & LLM Generate Call
+### Story 2.1: Model Accuracy Spike (NFR19 Gate)
 
-As a developer running `gyre analyze`,
-I want Gyre to construct a prompt from my stack profile and generate capabilities via LLM,
-So that I get a structured model of what capabilities my production stack should have.
-
-**Requirements:** FR9, FR12, FR13, FR14, AR6, AR8 (generate), NFR10
+As the product team,
+I want to validate that Atlas can achieve ≥70% model accuracy across ≥3 stack archetypes,
+So that we have a go/no-go decision for the entire product.
 
 **Acceptance Criteria:**
 
-**Given** a validated Tier 1 StackProfile and guard answers from Epic 1
-**When** model generation runs
-**Then** a prompt builder constructs a `PromptPayload { system, user }` from the StackProfile and guard answers
-**And** the prompt is sent to `provider.generate()` with `temperature=0` and `seed` for deterministic output
-**And** the LLM response is parsed into a structured capabilities manifest
+**Given** the accuracy-validation workflow exists at `_bmad/bme/_gyre/workflows/accuracy-validation/`
+**When** the spike is run against ≥3 synthetic ground truth repos (CNCF Go/K8s, Node.js web service, Python data pipeline)
+**Then** Atlas generates a capabilities manifest for each
+**And** each capability is scored: relevant (1.0), partially-relevant (0.5), irrelevant (0.0)
+**And** accuracy = sum of relevance / total capabilities
+**And** ≥70% accuracy across all 3 archetypes (NFR19)
+**And** methodology is documented and repeatable
 
-**Given** the parsed manifest
-**When** capabilities are extracted
-**Then** each capability includes a plain-language description (1-3 sentences) (FR13)
-**And** supported stack archetypes produce ≥20 capabilities (FR14)
+**BLOCKER:** If <70% accuracy, iterate Atlas prompts before proceeding to E3.
 
-**Given** guard answers corrected a misdetection (FR12)
-**When** model generation runs
-**Then** the corrected classification is reflected in the prompt — not the original detection
+### Story 2.2: Atlas Agent Definition
 
-### Story 2.1b: Manifest Serialization & Artifact Safety
-
-As a developer running `gyre analyze`,
-I want the generated capabilities manifest written safely to disk with integrity guarantees,
-So that partial writes cannot corrupt my manifest and re-reads are validated.
-
-**Requirements:** AR17, AR18
+As a user,
+I want to activate Atlas and have it offer to generate or review my capabilities model,
+So that I can get a contextual readiness model for my stack.
 
 **Acceptance Criteria:**
 
-**Given** a parsed capabilities object from Story 2.1a
-**When** serialization runs
-**Then** the object is serialized to valid YAML conforming to the manifest schema
-**And** the serialized YAML is written to `.gyre/capabilities.yaml` via a reusable `writeAtomicYaml(filePath, data)` utility
-**And** `writeAtomicYaml` writes to `{filePath}.tmp` then renames to `{filePath}` (AR18)
-**And** this utility is the single atomic write implementation for all `.gyre/` YAML operations (reused by Stories 4.2, 4.4)
-**And** a 1MB file size guard is enforced before any YAML re-parse (AR17)
+**Given** the Atlas agent file is created at `_bmad/bme/_gyre/agents/model-curator.md`
+**When** the agent is activated
+**Then** it follows the XML activation protocol (same as Scout — 7 steps, config load, greeting, menu)
+**And** Atlas's menu includes: [1] Generate Model, [2] Regenerate Model, [3] Full Analysis
+**And** Atlas's persona is "knowledgeable curator" — balances standards with practical relevance, transparent about confidence
 
-**Given** the atomic write fails (e.g., disk full)
-**When** the error is caught
-**Then** the `.tmp` file is cleaned up and the previous manifest (if any) is not corrupted
-**And** a clear error message is displayed with the failure reason
+### Story 2.3: Model Generation Workflow
 
-### Story 2.2: Privacy Boundary & PromptPayload Contract Tests
-
-As a maintainer of the Gyre codebase,
-I want contract tests enforcing that LLM-bound data contains only Tier 1 classifications and that all prompt builders return the correct shape,
-So that the privacy boundary is machine-verified on every CI run before any prompt iteration begins.
-
-**Requirements:** AR12 (rules 1, 4), NFR7, NFR8, NFR9
+As a user,
+I want Atlas to generate a capabilities manifest using my stack profile, industry standards, and web search,
+So that I have a contextual model of what should exist in my production stack.
 
 **Acceptance Criteria:**
 
-**Given** the Tier 1 StackProfile shape
-**When** the privacy boundary contract test runs
-**Then** it verifies that Tier 1 contains ONLY category-level classifications (e.g., "Go/Kubernetes/AWS")
-**And** it fails if any Tier 1 field contains: file contents, file paths, version numbers, dependency counts, or secrets
+**Given** the model-generation workflow exists at `_bmad/bme/_gyre/workflows/model-generation/`
+**When** Atlas runs the workflow
+**Then** it has 4 step files:
 
-**Given** any prompt builder module in `src/model/`
-**When** the PromptPayload shape contract test runs
-**Then** it verifies each builder returns exactly `{ system, user }` — no additional fields
-**And** it verifies the `system` and `user` fields are non-empty strings
+**step-01-load-profile.md:**
+**Given** GC1 (stack-profile.yaml) exists
+**When** Atlas loads it
+**Then** it reads the stack classification and guard answers
+**And** checks for existing amendments (GC4 feedback loop) to respect on regeneration
 
-**Given** the LLM input boundary (NFR8)
-**When** the contract test inspects what the provider receives
-**Then** it confirms the payload contains: stack classification, guard answers, capability evidence, web search results
-**And** it confirms the payload does NOT contain: file contents, file paths, directory structures, or secrets
+**step-02-generate-capabilities.md:**
+**Given** Atlas has the stack profile
+**When** it generates capabilities
+**Then** each capability has: id, category, name, description (1-3 sentences), source (standard/practice/reasoning), relevance (why it matters for this stack) (FR9, FR13)
+**And** it incorporates DORA, OpenTelemetry, Google PRR standards (FR10)
+**And** it adjusts based on guard answers (FR12) — e.g., gRPC health checks vs HTTP health endpoints
 
-**Given** the generated capabilities manifest artifact (NFR9)
-**When** the artifact safety contract test runs
-**Then** it verifies the output YAML contains no source code snippets, file contents, or secrets
+**step-03-web-enrichment.md:**
+**Given** Atlas has generated initial capabilities
+**When** it uses WebSearch for current best practices (FR11)
+**Then** web results are from current calendar year (NFR21)
+**And** when conflicting advice is found, Atlas selects the most authoritative source and notes the conflict
+**And** each capability's source field indicates if web-search-derived
 
-### Story 2.3: Model Accuracy Validation Spike
+**step-04-write-manifest.md:**
+**Given** Atlas has the complete capabilities list
+**When** it writes to `.gyre/capabilities.yaml` (GC2 schema)
+**Then** manifest includes: version, generated_at, stack_summary, capability_count, limited_coverage flag, capabilities array, provenance metadata
+**And** if <20 capabilities generated, limited_coverage=true and Atlas warns user (FR15)
+**And** if limited_coverage, Atlas offers: continue (with emphasis on review-and-amend) or abort (FR52)
+**And** Atlas presents model summary: "Generated N capabilities for your X/Y stack" (FR31)
+**And** model caching: capabilities.yaml IS the cache; re-runs load it, no regeneration unless explicit (NFR10)
 
-As the product owner,
-I want a pre-pilot validation confirming ≥70% model accuracy across ≥3 stack archetypes,
-So that we have a documented go/no-go gate before investing in analysis agents.
+### Story 2.4: GC2 Capabilities Manifest Contract
 
-**Requirements:** NFR19, AR14, AR13 (CP1)
-
-**Acceptance Criteria:**
-
-**Given** the model generation pipeline is functional (Story 2.1)
-**When** the accuracy spike runs
-**Then** it tests against ≥3 distinct stack archetypes (e.g., Node.js/K8s/AWS, Go/ECS/GCP, Python/Docker Compose/Azure)
-**And** for each archetype, a human reviewer scores which generated capabilities are relevant to the stack
-**And** the accuracy metric is: (relevant capabilities / total generated) ≥ 70%
-
-**Given** the privacy-accuracy decision tree (AR14)
-**When** the spike runs
-**Then** it measures accuracy under Tier 1 only
-**And** if Tier 1 accuracy ≥70%, the privacy boundary is validated — ship with Tier 1
-**And** if accuracy is 55-70%, evaluate Tier 1.5 (add technology categories without versions/counts)
-**And** if accuracy <55%, escalate to product decision (privacy vs accuracy trade-off)
-**And** the decision and evidence are documented as a checkpoint artifact
-
-**Given** this is Checkpoint 1 (AR13)
-**When** the spike completes
-**Then** the team has a go/no-go decision before proceeding to Epic 3
-
-**Given** the spike deliverables
-**When** the spike is complete
-**Then** it produces: (a) a test fixture directory with ≥3 archetype project snapshots, each including a `.gyre-test-config` with pre-set guard answers and provider mock configuration for non-interactive automation, (b) a scoring script that runs the pipeline against each fixture and collects capability lists, (c) a decision document recording accuracy results, tier assessment, and go/no-go recommendation
-
-### Story 2.4: Industry Standards Integration
-
-As a developer,
-I want Gyre's model to incorporate established standards like DORA, OpenTelemetry, and Google PRR,
-So that the generated capabilities reflect industry consensus — not just the LLM's training data.
-
-**Requirements:** FR10
+As a Lens agent,
+I want the capabilities manifest in a structured format,
+So that I can compare each capability against filesystem evidence.
 
 **Acceptance Criteria:**
 
-**Given** model generation runs for any stack archetype
-**When** the prompt builder constructs the PromptPayload
-**Then** the system prompt references applicable industry standards (DORA metrics, OpenTelemetry signals, Google PRR checklist)
-**And** the standards referenced are appropriate to the detected stack (e.g., DORA for CI/CD, OTel for observability)
+**Given** the GC2 contract is created at `_bmad/bme/_gyre/contracts/gc2-capabilities-manifest.md`
+**When** Atlas completes model generation
+**Then** GC2 contract frontmatter declares: source_agent: atlas, target_agents: [lens, coach]
+**And** schema matches the architecture specification (gyre_manifest with version, capabilities array, provenance)
+**And** **ARTIFACT SAFETY:** capabilities.yaml must not contain source code, file contents, or secrets (NFR9)
+**And** YAML schema version field enables future breaking changes (NFR17)
 
-**Given** the generated capabilities manifest
-**When** reviewed
-**Then** capabilities derived from standards are distinguishable in the model (tagged or grouped)
-**And** the model does not simply reproduce a standards checklist — it is contextualized to the specific stack
+### Story 2.5: Full-Analysis Steps 2-3 Integration
 
-### Story 2.5: Web Search Integration
-
-As a developer,
-I want Gyre to incorporate current best practices via web search into my model,
-So that the capabilities reflect the latest ecosystem recommendations — not just static knowledge.
-
-**Requirements:** FR11, NFR21
+As a user running full-analysis,
+I want the pipeline to flow from stack detection to model generation seamlessly,
+So that I don't have to manually invoke each workflow.
 
 **Acceptance Criteria:**
 
-**Given** model generation runs
-**When** the prompt builder constructs the PromptPayload
-**Then** web search results for the detected stack's best practices are included in the user prompt
-**And** search results are from the current calendar year (NFR21)
-
-**Given** web search results are obtained
-**When** they are incorporated into the prompt
-**Then** they are passed as structured context within the PromptPayload `user` field
-**And** no cross-run caching of web search results occurs (NFR21 — each run gets fresh results)
-
-**Given** web search as an integration point
-**When** the web search adapter is invoked
-**Then** it is a separate adapter in the provider layer — not LLM tool-use
-**And** it has its own configuration (API key, endpoint) independent of the LLM provider
-**And** the adapter returns structured results that the prompt builder incorporates into the PromptPayload
-
-**Given** the web search provider is unavailable
-**When** model generation runs
-**Then** generation proceeds without web search results (graceful degradation)
-**And** a warning is logged indicating web search was skipped
-
-### Story 2.6: Limited Coverage Warning & Abort Option
-
-As a developer,
-I want to be warned if Gyre generated fewer than 20 capabilities and given the option to continue or abort,
-So that I'm aware of potential model quality issues before the analysis phase begins.
-
-**Requirements:** FR15, FR52
-
-**Acceptance Criteria:**
-
-**Given** model generation completes
-**When** fewer than 20 capabilities are in the manifest
-**Then** a warning is displayed: "Only N capabilities generated (expected ≥20). This may indicate limited coverage for your stack archetype."
-**And** the user is prompted: "Continue with analysis? (y/n)"
-
-**Given** the limited-coverage warning is shown
-**When** the user selects "y" (continue)
-**Then** analysis proceeds normally with the generated manifest
-
-**Given** the limited-coverage warning is shown
-**When** the user selects "n" (abort)
-**Then** the manifest is still saved to `.gyre/capabilities.yaml` (work is not lost)
-**And** the process exits with code 0 and a message explaining how to retry or review
-
-**Given** ≥20 capabilities are generated
-**When** model generation completes
-**Then** no warning is shown and the pipeline continues automatically
-
-### Story 2.7: Model Summary & Deferred Review Stub
-
-As a developer,
-I want to see a summary of what Gyre generated and be prompted about reviewing later,
-So that I have visibility into the model before analysis begins without being forced to review immediately.
-
-**Requirements:** FR31, FR43-stub
-
-**Acceptance Criteria:**
-
-**Given** model generation completes successfully
-**When** the summary is displayed
-**Then** it shows: capability count, detected stack classification, and guard answers applied (FR31)
-**And** the summary is shown before any analysis output begins
-
-**Given** the model summary is displayed
-**When** the review prompt appears
-**Then** it asks: "Review capabilities manifest? (y/n/later)"
-**And** only the "later" option is functional in this epic (stub implementation)
-**And** selecting "y" or "n" also proceeds to analysis (with a note that full review is available via `gyre review`)
-**And** the "later" selection is persisted as a deferred review flag for Epic 4 to consume
+**Given** full-analysis workflow has step-02-detect-stack and step-03-generate-model
+**When** Scout completes detection (step 2)
+**Then** control passes to Atlas for model generation (step 3)
+**And** if cached model exists (anticipation mode), Atlas loads it and skips generation
+**And** if user requests regeneration, Atlas generates fresh model even with existing cache
 
 ---
 
-## Epic 3: Absence Detection & Streaming Output
+## Epic 3: Absence Detection & Findings
 
-**Goal:** Two domain agents analyze the project against the capabilities model, streaming findings with severity/confidence/source tagging. Cross-domain correlation surfaces compound gaps. Output in CLI (streaming, paste-friendly) and JSON formats. Graceful degradation on partial failure.
+**Goal:** Lens analyzes the project for production readiness gaps and presents findings.
 
-### Story 3.1: Finding Shape & Async Generator Agent Pattern
+### Story 3.1: Lens Agent Definition
 
-As a developer building Gyre's analysis pipeline,
-I want a well-defined finding data shape and async generator agent pattern,
-So that all agents produce uniform output and the orchestrator can iterate findings as they stream.
-
-**Requirements:** AR11, AR7, AR8 (stream)
+As a user,
+I want to activate Lens and have it offer gap analysis options,
+So that I can find what's missing from my production stack.
 
 **Acceptance Criteria:**
 
-**Given** an agent producing findings
-**When** the agent runs
-**Then** each finding contains exactly 8 required fields: capability ID, domain, severity (blocker/recommended/nice-to-have), confidence (high/medium/low), source (static/contextual), description, rationale, and evidence summary
-**And** findings are delimited by `---FINDING---` markers in the LLM response
+**Given** the Lens agent file is created at `_bmad/bme/_gyre/agents/readiness-analyst.md`
+**When** the agent is activated
+**Then** it follows the XML activation protocol
+**And** Lens's menu includes: [1] Analyze Gaps, [2] Full Analysis, [3] Delta Report
+**And** Lens's persona is "thorough analyst" — finds gaps methodically, source-tags everything, never inflates severity
 
-**Given** the finding delimiter parser (`agents/finding-parser.js`)
-**When** it processes an LLM streaming response
-**Then** it extracts individual findings as they arrive, yielding each as a parsed object
-**And** malformed findings (missing required fields) are logged and skipped with a warning — not fatal
+### Story 3.2: Observability Readiness Analysis
 
-**Given** the async generator agent pattern
-**When** an agent runs
-**Then** it yields findings as `AsyncIterable<Finding>` — the orchestrator iterates without waiting for completion
-**And** the provider's `stream()` method enforces a 30-second per-chunk timeout (AR8)
-**And** if timeout fires, a `StreamTimeoutError` is thrown
-
-### Story 3.1b: Capability Evidence Report from Static Analysis
-
-As a developer running `gyre analyze`,
-I want static analysis to produce a structured evidence report mapping capabilities to project artifacts,
-So that agents have a factual baseline of what exists before identifying gaps.
-
-**Requirements:** FR23
+As a user,
+I want Lens to analyze my project for observability gaps,
+So that I know what monitoring and instrumentation is missing.
 
 **Acceptance Criteria:**
 
-**Given** a capabilities manifest and the project's Tier 2 StackProfile
-**When** the static analysis evidence phase runs
-**Then** it produces a capability evidence report: an array of `{ capabilityId, evidenceFound: boolean, evidenceType: 'file_match' | 'config_entry' | 'dependency' | null, detectionMethod: string, summary: string }` — no file contents
-**And** the report covers all capabilities in the manifest — marking each as "evidence found" or "no evidence"
-**And** the evidence report shape is defined as a JSDoc typedef in `types.js`
+**Given** the gap-analysis workflow step-02-observability-analysis.md exists
+**When** Lens runs observability analysis
+**Then** for each observability capability in GC2:
+- Uses Glob to search for relevant files (e.g., health check endpoints, metrics configs, logging setups)
+- Uses Grep to search for implementation evidence (e.g., `opentelemetry`, `prometheus`, `healthz`)
+- Uses Read to examine config files for completeness
+**And** classifies each capability as: present (evidence found), absent (no evidence), partial (config exists but incomplete) (FR18)
+**And** tags each finding with source: static-analysis (file evidence) or contextual-model (inferred from manifest) (FR19)
+**And** tags each finding with confidence: high/medium/low (FR20)
+**And** classifies each finding by severity: blocker/recommended/nice-to-have with rationale (FR21, FR50)
+**And** produces structured evidence report per FR23 (capability ID, evidence type, detection method, no file contents)
 
-**Given** the evidence phase's execution context
-**When** it runs
-**Then** it is implemented in `src/detection/evidence.js` — part of the detection layer, covered by Story 1.8's FS boundary contract test
-**And** it operates within a `detectionCtx` (filesystem access, no LLM provider)
-**And** the evidence report is passed to agents via `analysisCtx` — agents do not read the filesystem directly
+### Story 3.3: Deployment Readiness Analysis
 
-**Given** the evidence report
-**When** consumed by agents
-**Then** agents use it to distinguish static findings (evidence-based) from contextual findings (LLM-inferred)
-
-### Story 3.2: Observability Readiness Agent
-
-As a developer running `gyre analyze`,
-I want an Observability Readiness agent that identifies gaps in my monitoring, logging, and alerting setup,
-So that I know what observability capabilities are missing from my production stack.
-
-**Requirements:** FR16, FR18, FR19, FR20, FR21, FR50
+As a user,
+I want Lens to analyze my project for deployment gaps,
+So that I know what CI/CD and deployment safety mechanisms are missing.
 
 **Acceptance Criteria:**
 
-**Given** a capabilities manifest and the capability evidence report from Story 3.1b
-**When** the Observability agent runs
-**Then** it identifies capabilities from the manifest for which no evidence was found (FR18)
-**And** each finding is tagged with its source: static analysis vs contextual model (FR19)
-**And** each finding is tagged with confidence: high/medium/low (FR20)
-**And** each finding is classified by severity: blocker/recommended/nice-to-have (FR21)
-**And** each finding includes a brief rationale for its severity classification (FR50)
-
-**Given** the agent's execution context
-**When** it runs
-**Then** it receives an `analysisCtx` (has LLM provider, no filesystem access)
-**And** the evidence report is available in the context — the agent does not read the filesystem directly
-
-**Given** the agent yields findings
-**When** the orchestrator iterates
-**Then** findings stream as `AsyncIterable<Finding>` following the pattern from Story 3.1
-
-### Story 3.3: Deployment Readiness Agent
-
-As a developer running `gyre analyze`,
-I want a Deployment Readiness agent that identifies gaps in my CI/CD, containerization, and infrastructure setup,
-So that I know what deployment capabilities are missing from my production stack.
-
-**Requirements:** FR17
-
-**Acceptance Criteria:**
-
-**Given** a capabilities manifest and the project's Tier 2 StackProfile
-**When** the Deployment agent runs
-**Then** it analyzes deployment-related capabilities (CI/CD, container orchestration, IaC, rollback)
-**And** it produces findings using the same shape and tagging as the Observability agent (same 8 fields)
-**And** it is a self-contained module with its own LLM prompt — independent of the Observability agent
-
-**Given** both agents have run
-**When** findings from both are collected
-**Then** they are distinguishable by the `domain` field (observability vs deployment)
-**And** the system supports adding new domain agents in v2 by adding a module — no pipeline modification required
+**Given** the gap-analysis workflow step-03-deployment-analysis.md exists
+**When** Lens runs deployment analysis
+**Then** same analysis pattern as Story 3.2 but for deployment capabilities
+**And** covers: CI/CD pipelines, deployment manifests, rollback mechanisms, graceful shutdown, blue-green/canary configs, health checks, deployment event markers
+**And** all finding tagging rules apply (FR17, FR19, FR20, FR21)
 
 ### Story 3.4: Cross-Domain Correlation
 
-As a developer,
-I want Gyre to surface compound gaps that span both observability and deployment domains,
-So that I can see interaction effects like "no rollback telemetry + no deployment markers = blind rollbacks."
-
-**Requirements:** FR22a, FR22b, NFR22
+As a user,
+I want Lens to identify compound findings that span observability and deployment,
+So that I can see interaction effects between domains.
 
 **Acceptance Criteria:**
 
-**Given** both agents have completed successfully with confirmed findings
-**When** the correlator runs
-**Then** it uses LLM reasoning to discover compound patterns across domains (FR22a)
+**Given** the gap-analysis workflow step-04-cross-domain-correlation.md exists
+**When** both domain analyses are complete
+**Then** Lens identifies causal or amplifying relationships between domains (FR22a)
 **And** each compound finding references exactly 2 existing findings from different domains
-**And** compound findings express relationships as a text-based reasoning chain (FR22b)
+**And** compound confidence = lower of the two component confidences
+**And** compounds suppressed when either component has confidence "low" (NFR22)
+**And** each compound includes: related_findings[], combined_impact reasoning chain (FR22b)
+**And** correlation only runs when both domains succeed — omitted (not partial) on domain failure
 
-**Given** the confidence threshold (NFR22)
-**When** compound findings are evaluated
-**Then** compounds are suppressed when either component finding has confidence "low"
+### Story 3.5: GC3 Findings Report Contract & Presentation
 
-**Given** one or both agents failed
-**When** the correlation phase would run
-**Then** correlation is skipped entirely (graceful degradation — omitted, not partial)
-**And** a warning is displayed: "Cross-domain correlation skipped due to agent failure"
-
-### Story 3.5: Streaming CLI Renderer
-
-As a developer running `gyre analyze`,
-I want to see findings stream to my terminal as they're produced, with a severity-first summary at the end,
-So that I get immediate feedback and a leadership-ready summary without waiting for the full analysis.
-
-**Requirements:** FR32, FR33, FR34, FR35, FR37, FR49, AR16
+As a Coach agent and user,
+I want findings in a structured format with a clear conversational presentation,
+So that I can understand what's missing and decide what to act on.
 
 **Acceptance Criteria:**
 
-**Given** the analysis pipeline is running
-**When** agents yield findings
-**Then** each finding is displayed to CLI as soon as produced — not batched (FR32)
-**And** findings stream with `provisional` status; status upgrades to `confirmed` on agent completion
+**Given** the GC3 contract is created at `_bmad/bme/_gyre/contracts/gc3-findings-report.md`
+**When** Lens completes analysis
+**Then** it writes findings to `.gyre/findings.yaml` following the GC3 schema:
+- version, analyzed_at, mode, stack_summary, summary (counts), findings array, compound_findings array, sanity_check
+**And** contract frontmatter declares: source_agent: lens, target_agents: [coach]
+**And** every finding references a valid capability_ref from GC2
 
-**Given** analysis completes
-**When** the summary is rendered
-**Then** a severity-first leadership summary shows: blocker count, recommended count, nice-to-have count (FR33)
-**And** the novelty ratio is displayed: "X of Y findings are contextual" (FR34)
-**And** compound findings are displayed with visually distinct indented reasoning chains (FR35)
-**And** a mode indicator is displayed at the start of output — hardcoded to "crisis" until Epic 5 implements auto-detection (FR37)
+**When** Lens presents findings conversationally (step-05-present-findings.md)
+**Then** it shows:
+- Mode indicator: crisis or anticipation (FR37)
+- Severity-first summary: "X blockers, Y recommended, Z nice-to-have" (FR33)
+- Novelty ratio: "X of Y findings are contextual — gaps a static linter would miss" (FR34)
+- Detailed findings by severity (blockers first)
+- Compound findings with reasoning chains (FR35)
+- Output is copy-pasteable into Slack/Jira/docs (FR49)
 
-**Given** any CLI output
-**When** the user copies text
-**Then** output is paste-friendly — no ANSI escape sequences in copied text (FR49)
-**And** Chalk usage is restricted to `src/output/` directory only (AR16)
+**Given** analysis fails after model generation
+**When** Lens encounters a failure
+**Then** `.gyre/capabilities.yaml` is already saved (FR56)
+**And** Lens reports what it found and offers to retry the failed domain (NFR11)
 
-### Story 3.6: JSON Output & Schema Versioning
+### Story 3.6: Full-Analysis Steps 4-5 Integration
 
-As a developer integrating Gyre with other tools,
-I want to get analysis results in machine-readable JSON format with a versioned schema,
-So that I can programmatically consume findings and build automation.
-
-**Requirements:** FR36, FR54, NFR17
-
-**Acceptance Criteria:**
-
-**Given** the user runs `gyre analyze --json`
-**When** analysis completes
-**Then** results are output as valid JSON to stdout
-**And** the JSON includes a `status` field matching CLI exit code semantics (FR54)
-**And** the JSON schema includes a `schemaVersion` field
-
-**Given** a breaking change to the JSON schema
-**When** the change is introduced
-**Then** the schema version is bumped
-**And** the previous schema version requires `--unstable` flag to access (NFR17)
-
-**Given** analysis fails partway through
-**When** JSON output is produced
-**Then** the `status` field reflects the failure mode
-**And** partial findings (if any) are included with their status (provisional/unverified)
-
-### Story 3.7: Pipeline Resilience & Graceful Degradation
-
-As a developer running `gyre analyze`,
-I want the pipeline to handle partial failures gracefully — saving what it can and telling me exactly what went wrong,
-So that I don't lose work and can retry efficiently.
-
-**Requirements:** FR56, FR57, NFR1, NFR2
+As a user running full-analysis,
+I want the pipeline to flow from model generation through gap analysis,
+So that the complete pipeline works end-to-end.
 
 **Acceptance Criteria:**
 
-**Given** model generation succeeds but analysis fails (failure mode 2)
-**When** the pipeline handles the failure
-**Then** the capabilities manifest is saved to `.gyre/capabilities.yaml` (FR56)
-**And** the user is informed they can retry analysis without regenerating the model
-**And** on retry, the cached manifest is loaded — no LLM call for model generation
+**Given** full-analysis workflow has step-04-analyze-gaps
+**When** Atlas completes model generation (step 3)
+**Then** control passes to Lens for gap analysis (step 4)
+**And** Lens runs both domain analyses + cross-domain correlation
+**And** step-05-review-findings hands off to Coach (E4 integration point)
 
-**Given** one agent fails but the other succeeds (failure mode 2)
-**When** the pipeline handles the failure
-**Then** the successful agent's findings are displayed with `confirmed` status
-**And** the failed agent's partial findings (if any) are marked `unverified`
-**And** correlation is skipped with a warning
-**And** the exit code reflects partial failure
-
-**Given** the LLM returns garbage (failure mode 4)
-**When** the sanity validator detects anomalies (>80% capabilities flagged, uniform confidence, phantom capabilities)
-**Then** an `analysis_suspect` warning banner is displayed
-**And** findings are still shown but flagged as suspect
-
-**Given** findings persistence (FR57)
-**When** analysis completes or fails
-**Then** findings are written atomically — complete-or-nothing for `.gyre/findings.yaml`
-**And** streamed CLI output may show partial findings, but the persisted file is never partial
-**And** if write fails, a clear error explains what happened
-
-**Given** performance targets
-**When** the full pipeline runs on a typical project (≤500 files, ≤2 domains)
-**Then** time-to-first-finding is <2 minutes (NFR1)
-**And** total analysis time is <10 minutes (NFR2)
-
-### Story 3.8: Enforcement Rules — Context Immutability, Import Boundaries, Exit Codes, Finding Shape
-
-As a maintainer of the Gyre codebase,
-I want automated enforcement of context immutability, module import boundaries, exit code correctness, and finding shape compliance,
-So that architectural invariants are verified on every CI run.
-
-**Requirements:** AR12 (rules 2, 3, 5, 6), AR15, AR19
-
-**Acceptance Criteria:**
-
-**Given** the `analysisCtx` object passed to agents (rule 2)
-**When** the contract test runs
-**Then** it verifies that agents cannot mutate the context — context is frozen or defensively copied
-**And** the test fails if any agent writes to the context object
-
-**Given** the module import graph (rule 3, AR15)
-**When** ESLint runs
-**Then** agents (`src/agents/`) never import from providers (`src/providers/`)
-**And** providers never import from pipeline (`src/pipeline/`)
-**And** violations are reported as ESLint errors, not warnings
-
-**Given** the exit code mapping (rule 5)
-**When** the unit test runs
-**Then** it verifies exit codes 0-4 each map to the documented failure mode
-**And** no two failure modes share an exit code
-
-**Given** the finding shape (rule 6)
-**When** the unit test runs
-**Then** it verifies all 8 required fields are present on every Finding object
-**And** it fails if a finding is missing any required field
-**And** `types.js` contains the cross-module JSDoc typedef for Finding (AR19)
+**Given** time-to-first-finding target (NFR1)
+**When** full pipeline runs
+**Then** first finding is presented <2 minutes from workflow start
+**And** total analysis completes <10 minutes for ≤500 files (NFR2)
 
 ---
 
-## Epic 4: Review, Amendment & Feedback
+## Epic 4: Review, Feedback & Delta
 
-**Goal:** User can review and customize the capabilities model via editor or interactive walkthrough, provide feedback on analysis accuracy, and Gyre respects amendments on future runs. Builds team knowledge through committable artifacts.
+**Goal:** Coach guides review and amendment; delta-report tracks progress over time.
 
-### Story 4.1: Manifest Review via Editor & Interactive Walkthrough
+### Story 4.1: Coach Agent Definition
 
-As a developer,
-I want to review the generated capabilities manifest through my preferred editor or an interactive CLI walkthrough,
-So that I can understand what Gyre thinks my stack should have before or after analysis.
-
-**Requirements:** FR24, FR43-full
+As a user,
+I want to activate Coach and have it offer review and feedback options,
+So that I can customize the capabilities model and report missed gaps.
 
 **Acceptance Criteria:**
 
-**Given** the user runs `gyre review` or selects "y" from the review prompt
-**When** the review starts
-**Then** first-time users (`.gyre/capabilities.yaml` has no `reviewed: true` flag) get an interactive CLI walkthrough (default) showing capabilities one at a time with descriptions
-**And** returning users (`reviewed: true` present) open `$EDITOR` on `.gyre/capabilities.yaml` directly
+**Given** the Coach agent file is created at `_bmad/bme/_gyre/agents/review-coach.md`
+**When** the agent is activated
+**Then** it follows the XML activation protocol
+**And** Coach's menu includes: [1] Review Findings, [2] Review Model, [3] Full Analysis
+**And** Coach's persona is "patient guide" — respects user expertise, presents clearly, never pushes
 
-**Given** the deferred review flag was set in Epic 2 (FR43-stub)
-**When** the user runs `gyre analyze` on a subsequent run
-**Then** a reminder is displayed: "You deferred review of the capabilities manifest. Run `gyre review` to review."
+### Story 4.2: Conversational Model Review & Amendment
 
-**Given** the full review prompt (FR43-full)
-**When** the user is asked "Review capabilities manifest? (y/n/later)"
-**Then** "y" opens the review flow (walkthrough or editor)
-**And** "n" skips review and proceeds
-**And** "later" sets the deferred review flag (FR55)
-
-### Story 4.2: Manifest Amendment — Add, Remove, Modify
-
-As a developer reviewing the capabilities manifest,
-I want to add, remove, or modify capabilities,
-So that the model reflects my actual priorities and domain knowledge.
-
-**Requirements:** FR25, NFR9, AR18
+As a user,
+I want Coach to walk me through my capabilities manifest one capability at a time,
+So that I can customize it to my stack without editing YAML.
 
 **Acceptance Criteria:**
 
-**Given** the user is in the interactive walkthrough
-**When** they review a capability
-**Then** they can mark it for removal, modify its description, or skip (keep as-is)
-**And** at the end, they can add new capabilities with a description
+**Given** the model-review workflow exists at `_bmad/bme/_gyre/workflows/model-review/`
+**When** Coach runs the walkthrough (step-02-walkthrough.md)
+**Then** it presents each capability with: name, description, category, source
+**And** for each capability asks: keep / remove / edit / skip remaining (FR24)
+**And** user responds conversationally — "remove this", "keep", "change the description to..." (FR25)
+**And** removed capabilities get `removed: true` flag (FR27 — model subtraction)
+**And** edited capabilities get `amended: true` flag
+**And** user can add new capabilities by describing them conversationally
 
-**Given** the user edits via `$EDITOR`
-**When** they save and close the editor
-**Then** the modified YAML is validated for structural correctness
-**And** if invalid YAML, the user is prompted to re-edit or discard changes
+**When** Coach applies amendments (step-03-apply-amendments.md)
+**Then** amendments are written directly to `.gyre/capabilities.yaml` (GC4)
+**And** amendments persist on subsequent runs — Atlas respects them on regeneration (FR26)
+**And** amended artifacts must not contain source code or secrets (NFR9)
 
-**Given** amendments are made
-**When** saved
-**Then** the manifest is written atomically (temp + rename) (AR18)
-**And** amended capabilities are marked with `amended: true` and a timestamp
-**And** the amended manifest is validated via format-based pattern matching (NFR9): rejects values containing multi-line code blocks, file path patterns (e.g., `/src/`, `C:\`), or secret-like strings (e.g., `AKIA*`, `sk-*`) — not content-level semantic analysis
+### Story 4.3: GC4 Feedback Loop Contract
 
-### Story 4.3: Amendment Persistence & Model Subtraction
-
-As a developer who has customized the manifest,
-I want my amendments to be respected on subsequent runs,
-So that Gyre doesn't regenerate capabilities I removed or revert my modifications.
-
-**Requirements:** FR26, FR27
+As an Atlas agent,
+I want amendment and feedback data in a structured format,
+So that I can respect user changes when regenerating the model.
 
 **Acceptance Criteria:**
 
-**Given** the user has removed capabilities from the manifest
-**When** a subsequent analysis run occurs
-**Then** removed capabilities are excluded from the analysis
-**And** findings associated with removed capabilities are not generated (FR27)
+**Given** the GC4 contract is created at `_bmad/bme/_gyre/contracts/gc4-feedback-loop.md`
+**When** Coach completes a review
+**Then** GC4 contract frontmatter declares: source_agent: coach, target_agents: [atlas]
+**And** amendments are tracked in capabilities.yaml (removed/amended flags)
+**And** feedback is written to `.gyre/feedback.yaml` with entries: timestamp, reporter, type, description, domain (FR29)
 
-**Given** the user has modified or added capabilities
-**When** a subsequent analysis run occurs
-**Then** modifications are preserved — the cached manifest includes user amendments
-**And** if model regeneration is triggered (StackProfile hash change), user amendments are merged into the new model with conflict warnings
+### Story 4.4: Feedback Capture & Display
 
-**Given** amendment persistence scope
-**When** amendments are saved
-**Then** they are stored per-repo in `.gyre/capabilities.yaml` (MVP scope)
-
-### Story 4.4: Post-Analysis Feedback Collection
-
-As a developer who has reviewed analysis results,
-I want to provide feedback on what Gyre missed or got wrong,
-So that the model can improve over time for my team.
-
-**Requirements:** FR28, FR29, FR30, AR18
+As a user,
+I want Coach to ask if Gyre missed anything and show me what my team previously reported,
+So that the model improves over time and my team's knowledge is preserved.
 
 **Acceptance Criteria:**
 
-**Given** analysis completes
-**When** the feedback prompt appears
-**Then** the system asks: "Did Gyre miss anything you know about?" (FR28)
-**And** the user can provide free-text feedback
+**Given** Coach reaches the feedback step
+**When** it prompts "Did Gyre miss anything you know about?" (FR28)
+**Then** user response is persisted to `.gyre/feedback.yaml` with timestamp (FR29)
+**And** Coach explains: "Commit feedback.yaml to share improvements with your team" (FR30)
 
-**Given** the user provides feedback
-**When** it is saved
-**Then** feedback is persisted to `.gyre/feedback.yaml` with a timestamp (FR29)
-**And** multiple feedback entries accumulate — new entries append, not overwrite
-
-**Given** feedback is saved
-**When** the save completes
-**Then** the system explains: "Consider committing feedback.yaml so your team benefits from this input" (FR30)
-**And** the explanation is shown once per session, not on every feedback entry
-**And** feedback.yaml is written via read-modify-write atomic pattern: read existing entries → append new entry → write full file to temp → rename (AR18) — uses the `writeAtomicYaml()` utility from Story 2.1b
-
-### Story 4.5: Display Existing Feedback & Deferred Review Flag
-
-As a developer running a subsequent analysis,
-I want to see any existing feedback entries and be reminded about deferred reviews,
-So that team knowledge is visible and nothing falls through the cracks.
-
-**Requirements:** FR53, FR55
-
-**Acceptance Criteria:**
-
-**Given** `.gyre/feedback.yaml` exists with entries
+**Given** `.gyre/feedback.yaml` has existing entries
 **When** a new analysis starts
-**Then** existing feedback entries are displayed at the start of output (FR53)
-**And** display is concise — summary count + most recent entry, not the full history
+**Then** existing feedback entries are displayed at the start (FR53)
 
-**Given** the "review deferred" flag was set (FR55)
-**When** the user runs any Gyre command
-**Then** a reminder is displayed: "Capabilities review deferred from previous run. Run `gyre review` to review."
-**And** the reminder is non-blocking — the command proceeds after displaying it
+**Given** user deferred model review (FR55)
+**When** next analysis starts
+**Then** Coach displays reminder: "You deferred reviewing your capabilities manifest last time — would you like to review now?"
 
----
+### Story 4.5: Mode Detection & Review Prompt Integration
 
-## Epic 5: Run Lifecycle & Delta Analysis
-
-**Goal:** User can re-run Gyre and see what changed — new findings, carried forward, and resolved gaps — tracking progress over time. Mode auto-detection replaces the stub from Epic 3.
-
-### Story 5.1: Findings History Persistence & Mode Auto-Detection
-
-As a developer re-running Gyre,
-I want the system to remember previous findings and automatically detect whether I'm in crisis or anticipation mode,
-So that re-runs are contextualized and I see the right framing for my situation.
-
-**Requirements:** FR38, FR39
+As a user running full-analysis,
+I want the system to detect whether this is my first run or a re-run,
+So that anticipation mode can skip model generation and show delta.
 
 **Acceptance Criteria:**
 
-**Given** analysis completes
-**When** findings are persisted
-**Then** they are saved to `.gyre/findings.yaml` (current run) and appended to `.gyre/history.yaml` (all runs)
-**And** each history entry includes a timestamp and the StackProfile Tier 1 hash
+**Given** full-analysis step-01-initialize.md
+**When** `.gyre/` does not exist
+**Then** mode = crisis (first run), creates `.gyre/` directory (FR38, FR42)
 
-**Given** a previous analysis exists in `.gyre/history.yaml`
-**When** a new analysis starts
-**Then** the system auto-detects mode: "crisis" (first run or significant new blockers) vs "anticipation" (re-run with improvements)
-**And** the mode indicator replaces the hardcoded "crisis" stub from Epic 3 (FR37)
+**When** `.gyre/capabilities.yaml` exists
+**Then** mode = anticipation (re-run), loads cached model (FR38)
+**And** re-run time ≤50% of first-run (NFR4 — model generation skipped)
 
-**Given** no previous analysis exists
-**When** the first run completes
-**Then** mode defaults to "crisis" and history is initialized
+**Given** full-analysis step-05-review-findings.md reaches Coach
+**When** Coach presents findings
+**Then** it prompts user to review manifest (FR43)
+**And** offers: "Walk through now" / "Later" (deferred flag) / "Skip"
 
-### Story 5.2: Delta Computation & Display
+### Story 4.6: Delta Report Workflow
 
-As a developer who has addressed some findings,
-I want to see what's new, what carried forward, and what's resolved since my last run,
-So that I can track my progress and focus on what changed.
-
-**Requirements:** FR40, FR41, NFR4
+As a user who has run Gyre before,
+I want to see what changed since my last analysis,
+So that I can track my team's progress on production readiness.
 
 **Acceptance Criteria:**
 
-**Given** a previous run exists in `.gyre/history.yaml`
-**When** a new analysis completes
-**Then** the system computes the delta: new findings, carried-forward findings, and resolved findings (FR40)
-**And** delta is computed by capability ID + domain matching — not by text similarity
+**Given** the delta-report workflow exists at `_bmad/bme/_gyre/workflows/delta-report/`
+**When** Lens runs the delta workflow
 
-**Given** delta has been computed
-**When** findings are displayed
-**Then** new findings are tagged `[NEW]`
-**And** carried-forward findings are tagged `[CARRIED]`
-**And** resolved findings are shown in a separate summary: "N findings resolved since last run" (FR41)
+**step-01-load-history.md:**
+**Then** it loads `.gyre/history.yaml` (previous findings) and `.gyre/findings.yaml` (current findings) (FR39)
 
-**Given** re-run performance (NFR4)
-**When** a re-run uses the cached manifest (no regeneration)
-**Then** total time is ≤50% of first-run time
-**And** model generation phase is skipped entirely — only analysis + delta computation
+**step-02-compute-delta.md:**
+**Then** it computes: new findings, carried-forward findings, resolved findings (FR40)
+**And** new = in current but not in previous
+**And** carried-forward = in both current and previous
+**And** resolved = in previous but not in current
+
+**step-03-present-delta.md:**
+**Then** it presents: delta summary, new findings tagged [NEW], carried-forward tagged [CARRIED], resolved listed briefly (FR41)
+**And** after presenting, saves current findings as history for next run
+**And** ends with compass routing table
+
+### Story 4.7: Full-Analysis Completion & Compass
+
+As a user finishing a full analysis,
+I want to see my options for what to do next,
+So that I can continue with review, re-run, or move to Vortex.
+
+**Acceptance Criteria:**
+
+**Given** full-analysis step-05-review-findings.md is the final step
+**When** Coach finishes review and feedback
+**Then** it displays the Gyre compass routing table with all options
+**And** includes inter-module routing to Vortex for findings that impact product discovery
+**And** all 7 Gyre workflows are independently runnable from this point (NFR18)
