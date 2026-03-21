@@ -248,7 +248,7 @@ describe('Agent manifest v6.1.0 schema', () => {
     const lines = fs.readFileSync(manifestPath, 'utf8').trim().split('\n');
     const dataRows = lines.slice(1);
 
-    assert.equal(dataRows.length, 7, 'should have 7 bme agent rows');
+    assert.equal(dataRows.length, 11, 'should have 11 agent rows (7 vortex + 4 gyre)');
 
     for (const row of dataRows) {
       // Count fields by parsing quoted CSV
@@ -284,7 +284,7 @@ describe('Agent manifest v6.1.0 schema', () => {
     assert.ok(content.includes('"Emma"'), 'should add Emma bme row');
 
     const lines = content.trim().split('\n');
-    assert.equal(lines.length, 9, 'should have header + 1 bmm + 7 bme rows');
+    assert.equal(lines.length, 13, 'should have header + 1 bmm + 11 bme rows');
 
     await fs.remove(tmpDir2);
   });
