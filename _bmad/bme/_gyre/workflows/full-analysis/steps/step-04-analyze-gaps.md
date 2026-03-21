@@ -2,35 +2,41 @@
 step: 4
 workflow: full-analysis
 title: Analyze Gaps
-status: stub
-implements: Epic 3 (Story 3.1)
 ---
 
-# Step 4: Analyze Gaps (Stub)
+# Step 4: Analyze Gaps
 
-> **This step will be implemented in Epic 3 — Absence Detection & Correlation.**
->
-> Lens loads GC2 (Capabilities Manifest), runs observability and deployment domain analyses with cross-domain correlation, and writes GC3 (Findings Report) to `.gyre/findings.yaml`.
+Run the gap-analysis workflow inline. Lens compares each capability against filesystem evidence.
 
-## STUB BEHAVIOR
+## MANDATORY EXECUTION RULES
 
-When this step is reached during full-analysis:
+- GC2 (Capabilities Manifest) must have been written in step 3 — if missing, STOP
+- Execute the gap-analysis workflow steps sequentially
+- Time target: first finding presented <2 minutes from workflow start (NFR1)
 
-```
-## Gap Analysis — Not Yet Implemented
+## EXECUTION
 
-This step requires the Lens agent (readiness-analyst) workflows from Epic 3.
+Execute the gap-analysis workflow steps in sequence:
 
-**What will happen here:**
-1. Lens loads GC2 (Capabilities Manifest) from .gyre/capabilities.yaml
-2. Runs observability domain analysis — structured logging, tracing, metrics
-3. Runs deployment domain analysis — container config, CI/CD, rollback
-4. Cross-domain correlation identifies compound findings
-5. Writes GC3 (Findings Report) to .gyre/findings.yaml
-```
+1. Load and execute: `{project-root}/_bmad/bme/_gyre/workflows/gap-analysis/steps/step-01-load-manifest.md`
+2. Load and execute: `{project-root}/_bmad/bme/_gyre/workflows/gap-analysis/steps/step-02-observability-analysis.md`
+3. Load and execute: `{project-root}/_bmad/bme/_gyre/workflows/gap-analysis/steps/step-03-deployment-analysis.md`
+4. Load and execute: `{project-root}/_bmad/bme/_gyre/workflows/gap-analysis/steps/step-04-cross-domain-correlation.md`
+5. Load and execute: `{project-root}/_bmad/bme/_gyre/workflows/gap-analysis/steps/step-05-present-findings.md`
+
+After completion, GC3 is written to `.gyre/findings.yaml`.
+
+## ERROR RECOVERY
+
+If a domain analysis fails:
+- GC2 (capabilities.yaml) is already safe — it was written in step 3
+- Report what was found so far
+- Offer to retry the failed domain or continue with partial results
 
 ---
 
-## NEXT STEP (when implemented)
+## NEXT STEP
+
+With GC3 written, proceed to findings review:
 
 Load step: {project-root}/_bmad/bme/_gyre/workflows/full-analysis/steps/step-05-review-findings.md
