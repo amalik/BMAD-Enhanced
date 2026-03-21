@@ -71,7 +71,7 @@ describe('convoke-doctor: invalid config YAML', () => {
   it('reports YAML parse error', async () => {
     const { exitCode, stdout } = await runDoctor(tmpDir);
     assert.equal(exitCode, 1, 'should exit with code 1');
-    assert.ok(stdout.includes('Config file'), 'should check config');
+    assert.ok(stdout.includes('config'), 'should check config');
   });
 });
 
@@ -97,7 +97,7 @@ describe('convoke-doctor: missing agent files', () => {
   it('reports missing agent files', async () => {
     const { exitCode, stdout } = await runDoctor(tmpDir);
     assert.equal(exitCode, 1, 'should exit with code 1');
-    assert.ok(stdout.includes('Agent files'), 'should check agents');
+    assert.ok(stdout.includes('agents'), 'should check agents');
     assert.ok(stdout.includes('Missing') || stdout.includes('issue'), 'should report missing agents');
   });
 });
@@ -129,7 +129,7 @@ describe('convoke-doctor: empty agent files', () => {
   it('reports empty agent files', async () => {
     const { exitCode, stdout } = await runDoctor(tmpDir);
     assert.equal(exitCode, 1, 'should exit with code 1');
-    assert.ok(stdout.includes('Agent files'), 'should check agents');
+    assert.ok(stdout.includes('agents'), 'should check agents');
     assert.ok(stdout.includes('Empty') || stdout.includes('empty'), 'should report empty agents');
   });
 });
