@@ -19,37 +19,17 @@ classification:
 lastEdited: '2026-03-21'
 editHistory:
   - date: '2026-03-21'
+    changes: "Structural edit for LLM readability: cut How to Read, Project Classification (redundant with frontmatter), What Makes This Special (merged privacy into exec summary), Market Context, Monetization, Divergence note. Condensed journeys to structured format, Innovation Architecture to table, Resource Requirements, Post-MVP Roadmap. Moved Traceability Matrix to after Product Scope. Added status marker to Emergency Cut."
+  - date: '2026-03-21'
     changes: "Post-validation edits: scope pivot acknowledgment, scoping section consolidation, J6 traceability, FR13/FR22a/FR47/FR48 measurability refinements"
+  - date: '2026-03-21'
+    changes: "Adversarial review fixes (14 items): removed unsourced 98% stat, qualified pilot as qualitative n=5, anchored novel findings metric to team confirmation, added privacy test timing after H2, acknowledged cross-domain 2-agent limitation, resolved FR32/FR57 streaming contradiction, expanded guard question to ≤3 detection-derived questions, softened NFR10 determinism to behavioral consistency + caching, added interactive walkthrough UX for review-and-amend, added capability-level source tagging and web search conflict resolution, specified monorepo detection heuristics with explicit signals, retained M1 in Emergency Cut, added exit code 5 for config errors, added intermediate phase performance targets for NFR1."
 ---
 
 # Product Requirements Document - Gyre
 
 **Author:** Amalik
 **Date:** 2026-03-20
-
-## How to Read This Document
-
-**By audience:**
-- **VP / Stakeholder (5 min):** Executive Summary + Success Criteria
-- **Engineer / Sana-type (15 min):** Executive Summary + User Journeys + CLI Requirements
-- **Architect (20 min):** Executive Summary + Functional Requirements + Non-Functional Requirements + Innovation Architecture
-- **PM / Epic Creator (full):** All sections. Start with Traceability Matrix (end of Functional Requirements) to see the full feature → FR → journey → metric mapping.
-
-**Section dependency chain:**
-```
-Executive Summary (standalone)
-├── Success Criteria (what we measure)
-├── Product Scope (what we build, in what order)
-├── User Journeys (how users experience it)
-├── Domain Requirements (constraints and quality gates)
-├── Innovation Architecture (why this is novel, what protects differentiation)
-├── CLI Requirements (project-type specifics)
-├── Scoping (MVP strategy, resources, risks)
-├── Functional Requirements (THE capability contract — synthesizes all above)
-└── Non-Functional Requirements (how well the system performs)
-```
-
-**Traceability:** Vision → Success Criteria → User Journeys → Functional Requirements. Every FR traces back to a journey, which traces to a success metric, which traces to the vision. If you disagree with an FR, trace it back through the chain.
 
 ### Terminology
 
@@ -68,7 +48,7 @@ Executive Summary (standalone)
 
 Gyre is the second Convoke team module — an AI discovery agent that detects what's *absent but should exist* in your production stack. Where Vortex covers product discovery and BMM handles implementation, Gyre closes the final gap: the transition from "built" to "runs reliably at scale."
 
-The core problem is not a lack of expertise — SRE books, DORA research, and compliance frameworks exist. Teams cannot map existing knowledge to their specific product context, leaving critical gaps invisible until they cause incidents. 98% of engineering leaders report major fallout from launching inadequately prepared services. Existing tools (Cortex, Backstage) measure *how ready* you are against predefined criteria. Gyre discovers *what ready means* for your specific stack — the criteria themselves. No current product offers agent-guided discovery of context-specific readiness.
+The core problem is not a lack of expertise — SRE books, DORA research, and compliance frameworks exist. Teams cannot map existing knowledge to their specific product context, leaving critical gaps invisible until they cause incidents. Existing tools (Cortex, Backstage) measure *how ready* you are against predefined criteria. Gyre discovers *what ready means* for your specific stack — the criteria themselves. No current product offers agent-guided discovery of context-specific readiness.
 
 Gyre's primary innovation is the **generated contextual model**: the agent detects the team's stack, generates a capabilities manifest (`.gyre/capabilities.yaml`) of what *should* exist — using agent knowledge of industry standards (DORA, OpenTelemetry, Google PRR), web search for current best practices, and a guard question to confirm architecture intent — then compares it against what *does* exist. Absence detection — finding what's missing, not just what's misconfigured — is the core value. The model is team-owned: reviewed, amended, version-controlled, and respected on re-run. Gyre detects any stack; model richness varies by community knowledge density (a Node.js/Kubernetes model will be richer than a Rust/bare-metal model out of the box — team amendments close the gap).
 
@@ -76,25 +56,7 @@ Two MVP agents (Observability Readiness + Deployment Readiness) with cross-domai
 
 Target users: Sana (engineering lead, primary — pulls readiness items into sprints), Ravi (SRE/platform engineer — deploys org-wide, tracks portfolio risk trends), Priya (compliance officer — validates regulatory findings from v2).
 
-Validated by domain research ($4.5B SRE platform market, 14.2% CAGR, zero competitors in agent-guided discovery). MVP pilot: 5 teams, same cohort for user interviews and product testing.
-
-### What Makes This Special
-
-**Generated contextual model.** No pre-built models. Gyre generates for any detected architecture, producing the "aha!" findings — gaps teams didn't know to check. The `.gyre/capabilities.yaml` manifest persists as a team-owned artifact that improves with each amendment.
-
-**Accuracy as a product feature.** Adapts to your stack, prevents category errors with an architecture intent guard question ("container-based or serverless?"), learns from your corrections via review-and-amend, and tags every finding with confidence level and source. First-run accuracy improves with each amendment — the review-and-amend workflow is part of the experience, not a workaround. Gyre never sends source code to an AI provider — static analysis runs locally, and only structured metadata reaches the LLM. Gyre asks what it missed — after each analysis, a feedback prompt captures gaps Gyre didn't catch, the only way to improve absence detection over time.
-
-**Cross-domain compound findings.** Findings across domains that no single-domain tool can see. "No rollback telemetry + no deployment markers = blind rollbacks." MVP validates the cross-domain mechanism with two related domains (Observability + Deployment); Phase 2 extends to genuinely distant domains (Compliance, FinOps) where compound findings become harder to discover manually.
-
-## Project Classification
-
-| Dimension | Value |
-|-----------|-------|
-| **Project Type** | AI Discovery Agent (primary) — npm/CLI delivery |
-| **Domain** | Production Readiness Discovery |
-| **Complexity** | High — product novelty & trust requirements, not regulatory |
-| **Project Context** | Brownfield infrastructure (Convoke module system), greenfield product (new domain, new agents, new knowledge base) |
-| **Lifecycle Position** | Completes Vortex → BMM → Gyre pipeline (long-term moat, not MVP narrative) |
+Validated by domain research ($4.5B SRE platform market, 14.2% CAGR, zero competitors in agent-guided discovery). MVP pilot: 5 teams, same cohort for user interviews and product testing. Gyre never sends source code to an AI provider — static analysis runs locally, and only structured metadata reaches the LLM.
 
 ## Success Criteria
 
@@ -124,15 +86,15 @@ Validated by domain research ($4.5B SRE platform market, 14.2% CAGR, zero compet
 | False negative detection | Feedback prompt captures ≥1 missed gap per pilot team | `.gyre/feedback.yaml` data |
 | Review-and-amend adoption | ≥60% of pilot teams modify the generated manifest | Manifest amendment tracking |
 | Cross-domain hit rate | ≥1 cross-domain compound finding per analysis run | Finding source tags |
-| Novel findings | ≥30% of findings sourced from contextual model (not static analysis alone) | Source tag ratio |
+| Novel findings | ≥30% of findings sourced from contextual model (not static analysis alone), validated by team confirmation that the finding was previously unknown to them | Source tag ratio cross-referenced with post-pilot interview |
 
 ### Qualitative Validation
+
+**Note on sample size:** All pilot metrics use n=5. Thresholds are directional signals for go/no-go decisions, not statistically significant benchmarks. Interpret results qualitatively — a single team's experience can swing any metric by 20%.
 
 | Metric | Target | Measurement |
 |--------|--------|-------------|
 | "Aha!" discovery | ≥4/5 pilot teams report at least one finding they would not have discovered without Gyre | Post-pilot interview |
-
-**Divergence note:** Novel findings (quantitative) and "aha!" discovery (qualitative) measure the same promise differently. If they diverge — high novel % but low "aha!" — Gyre's value is breadth (many small discoveries). If low novel % but high "aha!" — value is depth (few shocking ones). Both are valid but inform different positioning.
 
 ### Measurable MVP Outcomes
 
@@ -193,15 +155,43 @@ Features are classified into three tiers based on their role in validating the p
 
 **Scope note:** The Product Brief's artifact-generation vision — SLO definitions, observability-as-code, policy-as-code ("code, not counsel") — is deferred to v2. MVP validates the discovery hypothesis first; if teams act on findings, v2 adds generated remediation artifacts.
 
+### Traceability Matrix
+
+| Feature | FRs | Journeys | Success Metric | Size | Test Method |
+|---------|-----|----------|---------------|------|-------------|
+| M1: Guard question | FR6, FR7, FR8 | J1, J4, J5 | Architecture intent accuracy ≥90% | M | Integration |
+| M2: Source tagging | FR19 | J1, J4, J5 | Novel findings ≥30% | S | Unit |
+| M3: Confidence tagging | FR20 | J4, J5 | Model accuracy measurement | S | Unit |
+| M4: Review-and-amend | FR24, FR25, FR26, FR27 | J1, J2, J4, J5, J6 | Adoption ≥60% | L | Integration + Pilot |
+| M5: Findings history | FR39 | J2 | Re-run rate ≥3/5 | M | Integration |
+| H1: Stack detection | FR1, FR1b, FR2, FR3, FR4, FR5 | J1, J3, J4, J5, J6 | Stack diversity ≥3 | L | Integration |
+| H2: Model generation | FR9, FR10, FR11, FR12, FR13, FR14, FR15 | J1, J2, J3, J4, J5, J6 | First-run accuracy ≥70% | L | Human + Synthetic |
+| H3: Observability agent | FR16, FR18 | J1 | Cross-domain hit rate ≥1 | L | Human + Pilot |
+| H4: Deployment agent | FR17, FR18 | J1 | Cross-domain hit rate ≥1 | L | Human + Pilot |
+| H5: Cross-domain correlator | FR22a, FR22b | J1, J5 | "Aha!" ≥4/5 teams | L | Pilot |
+| H6: Feedback prompt | FR28, FR29, FR30 | J1, J4, J5, J6 | False neg detection ≥1/team | M | Integration + Pilot |
+| H7: Delta analysis | FR38, FR40, FR41 | J2 | Re-run rate ≥3/5 | M | Integration |
+| Q1: RICE scoring | FR21, FR50 | J1, J2, J3 | Severity agreement ≥4/5 | M | Pilot |
+| Q2: Severity summary | FR33 | J1, J2, J3 | — | S | Unit |
+| Q3: Mode labels | FR37, FR38 | J1, J2 | Mode selection distribution | S | Unit |
+| DC1: Model before findings | FR31 | J1 | — | S | Unit |
+| DC2: Compound visual | FR35 | J1, J5 | — | S | Unit |
+| DC3: Novelty ratio | FR34 | J1 | — | S | Unit |
+| DC4: Readable descriptions | FR13 | J1, J4 | — | M | Human |
+| DC5: Privacy architecture | FR23 | All | — | L | Integration + Audit |
+| Cross-cutting: CLI | FR32, FR36, FR42, FR43, FR44, FR45, FR46, FR47, FR48, FR49, FR51, FR52, FR53, FR54, FR55, FR56, FR57 | All | Time-to-first-finding <2min | M-L | Integration |
+
+**Size key:** S = hours, M = days, L = sprints. **Test key:** Unit = automated, Integration = end-to-end CLI test, Human = manual evaluation, Pilot = requires real users, Synthetic = synthetic ground truth repos, Audit = security review.
+
 ## User Journeys
 
-Journeys 1, 4, and 5 demonstrate Gyre's core discovery value — finding what teams didn't know was missing. Journeys 2 and 3 demonstrate the operational workflows that sustain and scale that value.
+Journeys 1, 4, and 5 validate core discovery value. Journeys 2 and 3 validate operational workflows that sustain and scale that value. Journey 6 validates graceful degradation.
 
 ### Journey 1: Sana — Crisis Mode (First Run)
 
-**Opening Scene.** Third production incident in a month. Sana's team shipped their payment processing service three months ago, and tonight Datadog is screaming again — a 500-error spike on the checkout endpoint. She fixes the immediate issue with a hotfix, but this time the accumulated frustration tips over. Three incidents. Three nights of guessing which deploy caused what. She actively searches for something — anything — that can show her what she can't see.
-
-**Rising Action.** Sana finds Gyre through a colleague's Slack mention from weeks ago that she'd bookmarked. She runs `gyre analyze .` in her repo. Gyre asks one question: *"Container-based or serverless?"* — she answers, and the analysis begins. Within 90 seconds, findings start streaming:
+**Trigger:** Repeated production incidents; team cannot correlate errors with deploys due to missing observability.
+**Action:** Runs `gyre analyze .`, answers guard question ("Container-based or serverless?").
+**Key finding:** Cross-domain compound finding — missing deployment markers + missing rollback telemetry = blind rollbacks. This directly explains last night's incident.
 
 ```
 Mode: crisis (one-shot analysis)
@@ -217,13 +207,7 @@ Finding 3 [RECOMMENDED] No structured error context on retry paths
   Source: contextual model | Confidence: medium
 ```
 
-Finding 2 stops her cold. That's exactly what happened last night — she couldn't correlate the error spike with the deploy because there were no markers. Gyre didn't just find the gap, it connected it across domains.
-
-**Climax.** Gyre generates `.gyre/capabilities.yaml` — a manifest of 34 capabilities her stack *should* have. She opens it, scans the list, and realizes she can *see* her stack's readiness for the first time. She amends two items (removes a Kafka capability — they use SQS), confirms the rest, and saves. The final summary reads: *"0 blockers after amendment, 7 recommended, 19 nice-to-have."* She sorts by RICE score — the liveness probe blocker is obvious, but Gyre ranked the deployment markers above the retry path logging. She checks the rationale: higher reach (affects all deploys) and higher impact (blocks rollback decisions). She agrees, and pulls the blocker and top 3 recommended items into Jira for next sprint.
-
-**Sharing.** Before sprint planning, Sana pastes the severity-first summary into her team's Slack channel: "Ran a new tool on our repo. Found 7 things we should fix, including the deployment marker gap that bit us last Tuesday. I've pulled the top 4 into the sprint." Two teammates click through to the findings.
-
-**Resolution.** The feedback prompt asks: *"Did Gyre miss anything you know about?"* She types: "We have a manual runbook for database failover that isn't codified anywhere — Gyre didn't catch that." This goes into `.gyre/feedback.yaml`. Two weeks later, Sana re-runs Gyre. The amended model is respected, the fixed gaps are gone, and one new finding appears from a dependency update. Gyre is now part of her sprint planning prep.
+**Outcome:** Generates 34-capability manifest, amends 2 items (removes Kafka — uses SQS), pulls blocker + top 3 recommended into sprint. Shares severity-first summary in Slack. Feedback prompt captures a missed gap (uncodified database failover runbook). Re-runs 2 weeks later — amended model respected, fixed gaps gone, new finding from dependency update.
 
 **Capabilities revealed:** stack detection, model generation, cross-domain correlation, CLI output streaming, review-and-amend, feedback prompt, re-run with amendment persistence, RICE scoring, severity-first summary, shareable output format.
 
@@ -231,19 +215,11 @@ Finding 2 stops her cold. That's exactly what happened last night — she couldn
 
 ### Journey 2: Sana — Re-run After Amendments (Anticipation Mode)
 
-**Opening Scene.** Three sprints after her first run. Sana's team has closed 8 of the original 10 recommended findings. A new team member added a Redis cache layer last week. Sana runs `gyre analyze .` before sprint planning.
+**Trigger:** Three sprints after first run; team closed 8/10 findings; new Redis cache layer added.
+**Action:** Runs `gyre analyze .` — auto-detects anticipation mode from existing `.gyre/`.
+**Key finding:** 2 new Redis-related gaps (cache eviction monitoring, connection pool health checks) sourced from contextual model. 8 resolved findings removed. 2 original findings carried forward.
 
-```
-Mode: anticipation (continuous — comparing against previous run)
-```
-
-**Rising Action.** Gyre detects the amended `.gyre/capabilities.yaml`, respects all prior amendments, and runs a delta analysis. It finds 2 new findings related to the Redis addition — no cache eviction monitoring and no connection pool health checks — both sourced from the contextual model. The 8 resolved findings are gone. The 2 remaining original findings persist with a note: *"Still open from previous run."*
-
-**Climax.** The leadership summary reads: *"0 blockers, 2 new recommended (Redis cache), 2 carried forward, 11 nice-to-have."* Sana pulls the 2 Redis findings into the sprint, assigns them to the engineer who added the cache. The carried-forward items go to the backlog with a "tech debt" label.
-
-**Incident Prevention Coda.** Six weeks later, Sana's team deploys a breaking change to the checkout endpoint. But the rollback is clean — Gyre had flagged missing rollback telemetry in run 1, and they'd fixed it in sprint 2. The incident happened, but recovery took 4 minutes instead of 4 hours. Sana notes in retro: "We fixed that because Gyre found it."
-
-**Resolution.** Sana realizes Gyre is now tracking her stack's evolution. Each re-run is faster — the model is mostly confirmed, only new capabilities need review. She mentions this in standup: "Gyre caught the Redis gaps before we had an incident." Her colleague asks for the install link.
+**Outcome:** Delta summary: "0 blockers, 2 new recommended, 2 carried forward, 11 nice-to-have." Pulls Redis findings into sprint. Six weeks later, a rollback is clean because Gyre had flagged missing rollback telemetry in run 1 — incident recovery takes 4 minutes instead of 4 hours. Colleague asks for install link (organic referral).
 
 **Capabilities revealed:** amendment persistence, delta analysis, carried-forward tracking, re-run speed, anticipation mode, organic referral trigger, incident prevention evidence.
 
@@ -251,9 +227,8 @@ Mode: anticipation (continuous — comparing against previous run)
 
 ### Journey 3: Ravi — Portfolio Assessment (Delegation)
 
-**Opening Scene.** Ravi is a platform engineer at a mid-size company. He supports 12 teams, each running their own services. Leadership just asked him: *"How production-ready are we across the board?"* He has no answer. He's been doing ad-hoc assessments — hopping into each team's repo, checking dashboards, asking questions. It takes a full day per team and the results are inconsistent.
-
-**Rising Action.** Ravi installs Gyre and sends each team's lead the install link with a note: "Run `gyre analyze . --format json` and send me the output." Five teams respond within the week. Each produces its own `.gyre/capabilities.yaml` and JSON findings report across diverse stacks:
+**Trigger:** Leadership asks "How production-ready are we across the board?" — no consistent answer exists.
+**Action:** Sends 12 team leads the install link: "Run `gyre analyze . --format json` and send me the output." Five respond within a week.
 
 ```
 payments-api (Go):        1 blocker, 4 recommended, 12 nice-to-have
@@ -263,9 +238,7 @@ notifications (Python):   0 blockers, 1 recommended, 8 nice-to-have
 search-indexer (Java):    2 blockers, 5 recommended, 11 nice-to-have
 ```
 
-**Climax.** For the first time, Ravi can see readiness *comparatively* — and he can answer leadership's question the same day instead of "give me two weeks." User-dashboard and search-indexer have blockers — those teams get his attention this quarter. He sends each team their findings report with a note: "Amend the model if anything's off — I'll check back in 2 weeks." He replaces his ad-hoc assessment spreadsheet with Gyre summaries.
-
-**Resolution.** At the quarterly architecture review, Ravi presents readiness trends: "We went from 6 blockers to 1 across the portfolio." Leadership gets a clear, evidence-based picture without Ravi having to manually audit each team. His next ad-hoc assessment request gets redirected: "Run Gyre first, then let's talk about what's left."
+**Outcome:** Answers leadership's question same-day instead of "give me two weeks." Replaces ad-hoc assessment spreadsheet. Presents readiness trends at quarterly review: "6 blockers → 1 across portfolio."
 
 **Capabilities revealed:** multi-repo usage, `--format json --unstable` output, comparative summary, portfolio-level visibility, delegation workflow (Ravi → team leads), stack diversity (Go, Node, Python, Java), trend tracking over time.
 
@@ -273,9 +246,8 @@ search-indexer (Java):    2 blockers, 5 recommended, 11 nice-to-have
 
 ### Journey 4: Sana — Trust Failure and Recovery
 
-**Opening Scene.** Sana runs `gyre analyze .` on her Go microservice that uses gRPC, not REST. Gyre's guard question correctly identifies "container-based," but the contextual model generates capabilities assuming HTTP health endpoints. Three findings reference HTTP-based monitoring that doesn't apply to gRPC.
-
-**Rising Action.** Sana sees the irrelevant findings. Her confidence drops. She considers closing the terminal. But the findings are tagged prominently:
+**Trigger:** Go/gRPC microservice — guard question correctly identifies "container-based" but contextual model generates HTTP-specific capabilities (e.g., `/healthz` endpoint). Three irrelevant findings.
+**Key mechanism:** Confidence tag (`[CONFIDENCE: medium]`) signals model suggestion, not definitive claim.
 
 ```
 Finding 7 [RECOMMENDED] No HTTP health endpoint on /healthz
@@ -283,13 +255,9 @@ Finding 7 [RECOMMENDED] No HTTP health endpoint on /healthz
   [CONFIDENCE: medium]
 ```
 
-The confidence tag — displayed on its own line, impossible to miss — signals this isn't a definitive claim. It's a model suggestion. She opens `.gyre/capabilities.yaml` and sees the HTTP assumptions listed as capabilities.
+**Outcome:** Amends manifest — removes 3 HTTP capabilities, adds gRPC health checking and reflection. Re-run produces 2 real gRPC-specific findings (deadline propagation monitoring, connection drain on shutdown). Feedback captures: "gRPC stacks need different health check patterns than HTTP." Trust recovers because user could see why the model was wrong, fix it, and get better results.
 
-**Climax.** She amends the manifest: removes the 3 HTTP-specific capabilities, adds "gRPC health checking service" and "gRPC reflection for service discovery." She re-runs. The irrelevant findings disappear. Two new findings appear that are specific to her amended model — no gRPC deadline propagation monitoring and no connection drain on shutdown. These are real. The model learned from her correction.
-
-**Resolution.** The feedback prompt asks what Gyre missed. She notes: "gRPC stacks need different health check patterns than HTTP — the default model assumed REST." This feedback improves future gRPC detection. Sana's trust recovers — not because Gyre was perfect, but because she could see *why* it was wrong, fix it, and get better results. The review-and-amend workflow did exactly what it promised.
-
-**Guard Failure Variant.** In a related scenario, a junior dev on Sana's team answers the guard question incorrectly (says "serverless" for their containerized stack). Gyre's findings are off-target. The dev re-runs with the correct answer after a colleague corrects them. The guard question's simplicity — one question, not ten — makes recovery fast. *(Implies functional requirement: guard correction should not require full re-analysis.)*
+**Guard failure variant:** Junior dev answers guard incorrectly ("serverless" for containerized stack). Re-runs with correct answer — one question, fast recovery. Implies FR: guard correction should not require full re-analysis.
 
 **Capabilities revealed:** confidence tagging as trust signal, review-and-amend as recovery mechanism, model learning from corrections, feedback prompt for ecosystem improvement, graceful degradation for edge-case stacks, guard re-answerability.
 
@@ -297,9 +265,8 @@ The confidence tag — displayed on its own line, impossible to miss — signals
 
 ### Journey 5: Reluctant Dev — Delegated Onboarding
 
-**Opening Scene.** Dev on the notifications team. Ravi sent the install link two days ago. The dev hasn't installed it — another tool, another dashboard, another thing to maintain. Ravi pings again: "Just run it once, send me the JSON." The dev installs it to get Ravi off their back.
-
-**Rising Action.** They run `gyre analyze .` expecting noise — the kind of 200-warning dump that linters produce. Gyre asks one question: *"Container-based or serverless?"* They answer. Findings stream in 80 seconds:
+**Trigger:** Dev on notifications team installs Gyre only because Ravi asked twice. Expects linter-style noise.
+**Key finding:** Missing SIGTERM handler — explains mysterious message loss during deploys that the team had been debugging for two weeks. Cross-domain compound finding connects it to in-flight message loss.
 
 ```
 Mode: crisis (one-shot analysis)
@@ -313,11 +280,7 @@ Finding 2 [RECOMMENDED] No dead letter queue monitoring
   [CONFIDENCE: medium]
 ```
 
-Finding 1 catches them off guard. They've been debugging mysterious message loss for two weeks. Every deploy drops a handful of messages and they couldn't figure out why. Gyre connected it to the missing SIGTERM handler — during rolling deploys, the container gets killed mid-processing.
-
-**Climax.** The dev opens `.gyre/capabilities.yaml`. It's shorter than expected — 22 capabilities for their relatively simple Python service. They remove 2 irrelevant items (no Kafka, no gRPC), confirm the rest, and run `gyre analyze . --format json` to send to Ravi.
-
-**Resolution.** The feedback prompt appears. They type: "Actually... can it check our message retry logic too?" Then they send Ravi a Slack message: "That SIGTERM thing — Gyre caught it. We've been chasing that for two weeks." Ravi adds it to his portfolio summary. Value flows back up the delegation chain. The dev doesn't become a Gyre champion, but they don't resist the next time Ravi asks them to run it.
+**Outcome:** 22-capability manifest (simple Python service). Amends 2 items, sends JSON to Ravi. Feedback: "Can it check message retry logic too?" Reports SIGTERM finding to Ravi — value flows back up delegation chain. Dev does not resist future runs.
 
 **Capabilities revealed:** minimal onboarding friction (one question), non-champion time-to-value (<2 min), skeptic-to-curious conversion, JSON output from producer side, low-effort amendment, delegation loop completion (value flows Ravi → dev → Ravi).
 
@@ -325,9 +288,8 @@ Finding 1 catches them off guard. They've been debugging mysterious message loss
 
 ### Journey 6: The Unsupported Stack — Graceful Degradation
 
-**Opening Scene.** A platform team runs a Rust service on bare-metal infrastructure — no Kubernetes, no standard cloud provider, no off-the-shelf observability stack. They run `gyre analyze .` after Ravi sends the install link.
-
-**Rising Action.** Gyre detects the Rust toolchain and bare-metal deployment patterns. The contextual model generates 12 capabilities — well below the 20-capability threshold. A prominent warning appears:
+**Trigger:** Rust/bare-metal service — no Kubernetes, no standard cloud provider, no off-the-shelf observability.
+**Key mechanism:** Limited-coverage warning when model generates only 12 capabilities (below 20-capability threshold).
 
 ```
 ⚠️  Limited coverage for this stack (12 capabilities generated).
@@ -335,11 +297,7 @@ Finding 1 catches them off guard. They've been debugging mysterious message loss
     Your amendments are especially important — continue analysis? (y/abort)
 ```
 
-The team continues. Findings are sparse — 1 recommended (no structured logging format), 2 nice-to-have — all from static analysis, none from the contextual model. The novelty ratio reads: "0 of 3 findings are contextual."
-
-**Climax.** The review-and-amend workflow becomes the primary value driver. The team opens `.gyre/capabilities.yaml`, sees the thin model, and adds 9 capabilities they know should exist — custom health check endpoints, bare-metal IPMI monitoring, manual failover runbook triggers. On re-run, Gyre finds 4 new gaps from their amendments. The model went from Gyre-generated to team-authored with Gyre as scaffold.
-
-**Resolution.** The feedback prompt captures: "Rust/bare-metal needs custom capability sets — the generated model was too generic but the amendment workflow saved it." The team's experience is "useful but thin" — not broken, not impressive, but honest. They'd use Gyre again after amendments, not before. This data point informs stack diversity limits and model improvement priorities.
+**Outcome:** Sparse findings (1 recommended, 2 nice-to-have) — all from static analysis, 0 contextual. Team adds 9 capabilities manually (IPMI monitoring, failover runbook triggers). Re-run finds 4 new gaps from amendments. Model shifts from Gyre-generated to team-authored with Gyre as scaffold. Experience is "useful but thin" — honest product boundaries.
 
 **Capabilities revealed:** limited-coverage warning, graceful degradation, amendment-as-primary-value, feedback for ecosystem improvement, honest product boundaries.
 
@@ -437,19 +395,17 @@ Contextual model must generate successfully for ≥3 distinct stack archetypes b
 
 ### Constraint 4: Knowledge Currency (Risk — Deferred Mitigation)
 
-Agent knowledge and web search provide baseline currency for current best practices. However, web search may return outdated or conflicting advice. Source tagging provides transparency — users can see "Source: web search" — but there is no freshness indicator in MVP.
+Agent knowledge and web search provide baseline currency for current best practices. However, web search may return outdated or conflicting advice. Source tagging provides transparency — users can see "Source: web search" — but there is no freshness indicator in MVP. Team amendments close gaps for specific stacks.
 
-**Mitigation:** Web search provides baseline currency. Source tagging provides transparency. Team amendments close gaps for specific stacks.
+**MVP mitigation:** Each capability in `.gyre/capabilities.yaml` includes a `source` field (`agent_knowledge` | `web_search` | `standard:<name>`) so users can see which capabilities were web-search-derived and apply appropriate skepticism during review-and-amend. When web search returns conflicting advice for the same capability, the model generation prompt must select the recommendation backed by the most authoritative source (official docs > vendor blog > community post) and note the conflict in the capability description.
 
 **Deferred to v2:** Freshness indicator on web-search-sourced capabilities (e.g., "Last verified: 2026-Q1").
 
 ## Innovation Architecture & Differentiation
 
-*This section defines the innovation dependency chain and requirements that protect competitive positioning. Cutting features listed here as "differentiation-critical" destroys the product's market position. For innovation-specific risks and fallbacks, see the Risk Mitigation table below. For project-level risks (market, resource), see Project Scoping & Phased Development.*
+Cutting features listed here as "differentiation-critical" destroys the product's market position.
 
 ### Innovation Dependency Chain
-
-Gyre's four innovations form a **strictly linear dependency chain**:
 
 ```
 Generated Contextual Model (foundation)
@@ -459,48 +415,18 @@ Generated Contextual Model (foundation)
 Accuracy Ecosystem (sustainability layer — improves all above, not required for first-run)
 ```
 
-**Consequence:** Model quality is the single point of failure for all three innovation layers. Investment in model quality has **3x the downstream impact** of investment in any other layer. A bad model doesn't produce "fewer good findings" — it produces misleading findings that compound across domains.
+**Consequence:** Model quality is the single point of failure for all three innovation layers. A bad model produces misleading findings that compound across domains.
 
-### Innovation 1: Generated Contextual Model (Primary — Foundation)
-
-Instead of shipping pre-built readiness checklists, Gyre *generates* a capabilities manifest at runtime for any detected stack. This is a paradigm shift from "measure against our criteria" to "discover what your criteria should be."
-
-The model generation combines three knowledge sources:
-- **Agent knowledge** of industry standards (DORA, OpenTelemetry, Google PRR)
-- **Web search** for current best practices
-- **Architecture intent guard question** to confirm stack classification
-
-The `.gyre/capabilities.yaml` file is a new artifact type — not a config file, not a report, but a generated-then-owned knowledge artifact. Each capability includes a human-readable description, not just machine keys.
-
-**Risk:** Model quality depends entirely on agent knowledge breadth and web search quality. If the generated model is too generic ("have monitoring, have logging"), the innovation collapses into the checklist it replaces.
-
-### Innovation 2: Absence Detection (Category Innovation)
-
-Existing tools detect *misconfiguration* — your health check is wrong. Gyre detects *absence* — you don't have a health check at all. This is a different category of analysis requiring the contextual model to define the expected state first.
-
-Absence is harder to detect than presence. You can grep for a misconfigured value; you can't grep for something that doesn't exist. The contextual model makes absence detection possible by defining what *should* exist, then comparing against what *does* exist.
-
-**Risk:** False absences (saying something is missing when it exists but is implemented differently than expected) erode trust faster than false presences. Review-and-amend is the mitigation.
-
-### Innovation 3: Cross-Domain Compound Findings (Interaction Innovation)
-
-Findings across domains that no single-domain tool can see: *"No rollback telemetry + no deployment markers = blind rollbacks."* The correlation engine operates on *absences*, not on data — finding patterns in what doesn't exist.
-
-**Risk:** Compound findings require both component findings to be accurate. One false positive in either domain produces a misleading compound finding. Compound findings may need their own confidence score derived from both components.
-
-### Innovation 4: Accuracy Ecosystem (Sustainability Innovation)
-
-Not a single feature but an interconnected system: stack detection → guard question → model generation → confidence tagging → source tagging → review-and-amend → feedback prompt → model improvement.
-
-**Classification:** This is a **sustainability innovation** — not needed for first-run value, but essential for re-run value and trust recovery. Without it, Innovations 1-3 work once and degrade. With it, each run improves the next.
-
-Most tools treat accuracy as a quality metric. Gyre treats accuracy as a product feature — the review-and-amend workflow is part of the user experience, not a bug report mechanism. Users improve the product by using it normally.
-
-**Risk:** System innovations are hard to explain and debug. If accuracy is low, which component failed? Need clear instrumentation at each stage.
+| Innovation | Type | Core Mechanism | Key Risk |
+|-----------|------|---------------|----------|
+| 1. Generated Contextual Model | Foundation | Runtime generation of `.gyre/capabilities.yaml` from agent knowledge + web search + guard question — generates criteria, not measures against them | Model too generic → collapses into checklist |
+| 2. Absence Detection | Category | Detects what's missing (not misconfigured) by comparing project state against contextual model | False absences erode trust faster than false presences |
+| 3. Cross-Domain Compound Findings | Interaction | Correlates absences across domains — patterns in what doesn't exist. **MVP limitation:** with only 2 agents, "cross-domain" is a single pairwise comparison (observability × deployment). The "aha!" metric depends entirely on this one pair producing surprising interactions. If it doesn't, the core differentiator is unvalidated until v2 adds more agents. | One false positive in either domain → misleading compound finding; single pair may not produce compelling compounds for all stacks |
+| 4. Accuracy Ecosystem | Sustainability | Interconnected system: detection → guard → model → confidence/source tagging → review-and-amend → feedback → improvement. Not needed for first-run; essential for re-run value and trust recovery. | Hard to debug — need instrumentation at each stage |
 
 ### Differentiation-Critical Requirements
 
-These requirements prevent Gyre from being perceived as "just a fancy linter." They are formatting and visibility features, but cutting them destroys competitive positioning:
+These prevent Gyre from being perceived as "just a fancy linter." Cutting them destroys competitive positioning:
 
 | # | Requirement | Why It Matters |
 |---|------------|----------------|
@@ -509,19 +435,6 @@ These requirements prevent Gyre from being perceived as "just a fancy linter." T
 | DC3 | Novelty ratio shown to user: "X of Y findings are contextual — gaps a static linter would miss" | Users see the differentiation in real-time. Without this, the distinction is invisible. |
 | DC4 | capabilities.yaml includes human-readable descriptions per capability | Amendment must feel like editing a knowledge document, not configuring a tool. |
 | DC5 | Static analysis runs locally; source code never sent to LLM provider | Enterprise trust signal; competitive differentiator vs AI tools that require code access. |
-
-### Market Context & Competitive Landscape
-
-| Dimension | Cortex/Backstage | Gyre |
-|-----------|-----------------|------|
-| Model source | Pre-defined by platform team | Generated per stack |
-| Detection type | Compliance (what's wrong) | Discovery (what's missing) |
-| Assessment method | Scorecard/checklist | Agent-guided analysis |
-| Cross-domain | Per-domain only | Compound findings |
-| Accuracy method | Binary (pass/fail) | Ecosystem (confidence, source, amendment) |
-| Artifact output | Score/dashboard | Owned manifest + backlog |
-
-Market gap confirmed: no existing product combines generated models + absence detection + cross-domain correlation.
 
 ### Validation Approach
 
@@ -555,7 +468,7 @@ Gyre is an **npm-distributed CLI tool** that ships AI discovery agents. The prim
 |---------|---------|------|
 | `gyre analyze .` | Run full analysis pipeline (stack detection → model generation → agent analysis → findings) | Yes |
 | `gyre analyze . --format json` | Machine-readable output for scripting (unstable in v1) | Yes |
-| `gyre analyze . --guard containerized` | Non-interactive guard override for CI/CD or correction | Yes |
+| `gyre analyze . --guard deployment=containerized,protocol=grpc` | Non-interactive guard override for CI/CD or correction | Yes |
 | `gyre reanalyze --reclassify` | Re-run model generation with new guard answer without re-running static analysis | Consider |
 | `gyre init` | Generate `.gyre/capabilities.yaml` without running analysis (model-only mode) | Consider |
 | `gyre diff` | Show delta from previous run (anticipation mode explicit trigger) | Consider |
@@ -649,9 +562,10 @@ jq '.summary' /tmp/gyre-*.json
 |------|---------|
 | 0 | Analysis complete, no blockers |
 | 1 | Analysis complete, blockers found |
-| 2 | Stack detection failure |
-| 3 | API/provider failure |
-| 4 | Analysis error |
+| 2 | Stack detection failure (project unanalyzable) |
+| 3 | API/provider failure — retryable (timeout, rate limit, auth error) |
+| 4 | Analysis error — agent failure during analysis (partial results not persisted per FR57) |
+| 5 | Configuration error (missing API key, invalid config, monorepo ambiguity requiring user input) |
 
 ### Implementation Considerations
 
@@ -678,9 +592,13 @@ See **Product Scope > MVP Feature Classification** for the full M/H/Q tables (15
 
 ### Emergency Cut (Minimum Viable Scope)
 
-**6 features: M2 + M4 + H1 + H2 + H3 + H6**
+**Status:** Contingency plan — not the current scope. Activates only if schedule forces a scope reduction.
 
-Drops: guard question (accept category error risk), confidence tagging (accept trust erosion), deployment agent (single-domain only), cross-domain correlator (no compound findings), findings-history persistence + delta analysis.
+**7 features: M1 + M2 + M4 + H1 + H2 + H3 + H6**
+
+Drops: confidence tagging (accept trust erosion), deployment agent (single-domain only), cross-domain correlator (no compound findings), findings-history persistence + delta analysis.
+
+**M1 (guard question) is retained even in emergency cut.** Dropping it while keeping H2 (model generation) is architecturally incoherent — the guard question prevents category errors that contaminate the contextual model. Without it, the ≥70% model accuracy gate becomes much harder to pass because the model has no architecture intent signal. The guard question is low-cost (≤3 questions, ≤1 day of implementation) relative to the accuracy risk it mitigates.
 
 **Advisory:** This scope validates model quality only, not product differentiation. If H5 (compound findings) cannot ship on schedule:
 1. Run micro-pilot (2 teams, single-domain only)
@@ -689,37 +607,11 @@ Drops: guard question (accept category error risk), confidence tagging (accept t
 
 ### Resource Requirements
 
-| Role | Count | Focus | Risk Profile |
-|------|-------|-------|-------------|
-| CLI/infrastructure engineer | 1 | CLI framework, streaming, file system, YAML, persistence | Low uncertainty — predictable patterns |
-| AI/prompt engineer | 1 | LLM integration, model generation quality, agent prompting, accuracy iteration | **High uncertainty — critical path** |
-| SRE domain expert | 0.5 | Validate model quality, define capability taxonomies, synthetic ground truth scoring | Pre-pilot phase |
-
-**Build strategy:** CLI/infrastructure first (provides test harness), then AI/prompt iteration inside working CLI. The AI/prompt engineer is the critical path — model accuracy targets may require many prompt iterations.
-
-**Minimum team:** 2 engineers. A solo engineer could build the CLI but prompt engineering iteration for ≥70% accuracy across diverse stacks is research-heavy work that stretches the timeline significantly.
+Build strategy: CLI/infrastructure first (provides test harness), then AI/prompt iteration inside working CLI. The AI/prompt engineer is the critical path — model accuracy targets may require many prompt iterations. Minimum team: 2 engineers.
 
 ### Post-MVP Roadmap
 
-**Phase 2 (Growth — v2):**
-- Compliance & Security Readiness agent
-- Capacity & FinOps Readiness agent
-- Priya persona support
-- JSON output schema stabilization (drop `--unstable`)
-- CI/CD integration (`--guard` as non-interactive default)
-- Team-shared model library
-- Freshness indicator on web-search-sourced capabilities
-
-**Phase 3 (Expansion — v3+):**
-- Community model marketplace
-- Historical trend analysis
-- Predictive gap detection
-- Multi-repo organizational portfolio view
-- `gyre reanalyze --reclassify` for guard correction without full re-analysis
-
-### Monetization (Deferred)
-
-Pricing and business model decisions are explicitly deferred until post-pilot. The MVP is a Learning MVP — its primary goal is validating whether teams act on Gyre's findings, not generating revenue. Pilot outcomes (adoption patterns, willingness to configure API keys, portfolio vs individual usage split) will inform the monetization strategy. Candidate models to evaluate post-pilot: open-source CLI with paid cloud features, per-seat SaaS for portfolio view (Ravi persona), or enterprise license for org-wide deployment.
+**Phase 2 (v2):** Compliance/Security + FinOps agents, Priya persona, JSON schema stabilization, CI/CD integration, team-shared model library, web search freshness indicator. **Phase 3 (v3+):** Community model marketplace, historical trends, predictive gap detection, multi-repo portfolio view, `gyre reanalyze --reclassify`.
 
 ### Risk Mitigation Strategy
 
@@ -762,9 +654,9 @@ Pricing and business model decisions are explicitly deferred until post-pilot. T
 - **FR3:** System can detect CI/CD platform (GitHub Actions, GitLab CI, Jenkins) from project files
 - **FR4:** System can detect observability tooling (Datadog, Prometheus, OpenTelemetry) from config and dependency files
 - **FR5:** System can detect cloud provider (AWS, GCP, Azure) from IaC templates and config files
-- **FR6:** System can present an architecture intent guard question to the user to confirm stack classification
-- **FR7:** User can override the guard question answer via CLI flag (`--guard`) without interactive prompt
-- **FR8:** System can re-classify the stack based on a corrected guard answer without re-running the full analysis pipeline
+- **FR6:** System can present architecture intent guard questions to the user to confirm stack classification. Guard questions are derived from what was detected (not a fixed list) and cover deployment model (container-based, serverless, bare-metal), communication protocol (HTTP/REST, gRPC, message queue), and any ambiguous detection results. Limit to ≤3 questions to preserve onboarding speed.
+- **FR7:** User can override guard question answers via CLI flags (`--guard deployment=containerized,protocol=grpc`) without interactive prompt
+- **FR8:** System can re-classify the stack based on corrected guard answers without re-running the full analysis pipeline
 
 ### Capability Area 2: Contextual Model Generation
 
@@ -790,8 +682,8 @@ Pricing and business model decisions are explicitly deferred until post-pilot. T
 
 ### Capability Area 4: Review, Amendment & Feedback
 
-- **FR24:** User can review the generated capabilities manifest in their preferred editor
-- **FR25:** User can amend the capabilities manifest by adding, removing, or modifying capabilities
+- **FR24:** User can review the generated capabilities manifest in their preferred editor. The review prompt offers two modes: (a) `$EDITOR` for full YAML editing, (b) an interactive CLI walkthrough that presents each capability one at a time with keep/remove/edit options. The walkthrough mode is the default for first-time reviews to reduce the barrier for non-SRE users (Sana persona). Walkthrough displays each capability's description and asks: `[k]eep / [r]emove / [e]dit / [s]kip remaining? `
+- **FR25:** User can amend the capabilities manifest by adding, removing, or modifying capabilities via either the interactive walkthrough or direct YAML editing
 - **FR26:** System respects user amendments on subsequent runs (amendment persistence). *Scope: per-repo learning only in MVP. Cross-repo learning (amendments improving model for other users) deferred to v2.*
 - **FR27:** When user removes capabilities, system excludes those capabilities and their associated findings on re-run (model subtraction)
 - **FR28:** System prompts user for feedback after each analysis with the question "Did Gyre miss anything you know about?" — this is measurement infrastructure for absence accuracy, not a satisfaction survey
@@ -818,7 +710,7 @@ Pricing and business model decisions are explicitly deferred until post-pilot. T
 - **FR41:** System can display delta-tagged findings ([NEW], [CARRIED]) and resolved finding summary
 - **FR42:** System can create `.gyre/` directory structure on first run
 - **FR43:** System can prompt user to review capabilities manifest with options (y/n/later), with "later" reminding on next run
-- **FR51:** System can detect service boundaries in monorepos and create `.gyre/` at the service root, or prompt the user to specify the service directory when run from a repo root containing multiple services
+- **FR51:** System can detect service boundaries in monorepos using explicit signals: directories containing their own package manifest (package.json, go.mod, requirements.txt, Cargo.toml) AND their own Dockerfile or deployment config. If ≥2 service roots are detected, system lists them and prompts: "Multiple services detected: [list]. Run `gyre analyze <path>` for a specific service, or select one now." System does NOT attempt implicit boundary detection (e.g., directory naming conventions). When run from a repo root containing multiple services without explicit selection, system aborts with guidance rather than guessing.
 - **FR52:** When a limited-coverage warning is triggered, system presents the warning with the option to continue analysis (with higher emphasis on review-and-amend) or abort
 - **FR53:** System can display existing entries from `.gyre/feedback.yaml` at the start of analysis, showing what gaps were previously reported by team members
 - **FR55:** System can persist a "review deferred" flag in `.gyre/` and display a reminder to review the capabilities manifest at the start of the next analysis run
@@ -832,35 +724,7 @@ Pricing and business model decisions are explicitly deferred until post-pilot. T
 - **FR48:** System can select the most capable model supported by the configured provider, preferring models optimized for reasoning tasks (`provider.model: auto`)
 - **FR54:** In JSON output mode, the output includes a `status` field indicating analysis result (clean, blockers_found, detection_failure, provider_failure, analysis_error) matching CLI exit code semantics
 - **FR56:** If analysis fails after model generation completes, system saves the generated manifest and informs user that analysis can be retried without regenerating the model
-- **FR57:** System treats analysis as complete-or-nothing — partial agent results are not displayed or persisted. On failure, user receives clear error with retry guidance.
-
-### Traceability Matrix
-
-| Feature | FRs | Journeys | Success Metric | Size | Test Method |
-|---------|-----|----------|---------------|------|-------------|
-| M1: Guard question | FR6, FR7, FR8 | J1, J4, J5 | Architecture intent accuracy ≥90% | M | Integration |
-| M2: Source tagging | FR19 | J1, J4, J5 | Novel findings ≥30% | S | Unit |
-| M3: Confidence tagging | FR20 | J4, J5 | Model accuracy measurement | S | Unit |
-| M4: Review-and-amend | FR24, FR25, FR26, FR27 | J1, J2, J4, J5, J6 | Adoption ≥60% | L | Integration + Pilot |
-| M5: Findings history | FR39 | J2 | Re-run rate ≥3/5 | M | Integration |
-| H1: Stack detection | FR1, FR1b, FR2, FR3, FR4, FR5 | J1, J3, J4, J5, J6 | Stack diversity ≥3 | L | Integration |
-| H2: Model generation | FR9, FR10, FR11, FR12, FR13, FR14, FR15 | J1, J2, J3, J4, J5, J6 | First-run accuracy ≥70% | L | Human + Synthetic |
-| H3: Observability agent | FR16, FR18 | J1 | Cross-domain hit rate ≥1 | L | Human + Pilot |
-| H4: Deployment agent | FR17, FR18 | J1 | Cross-domain hit rate ≥1 | L | Human + Pilot |
-| H5: Cross-domain correlator | FR22a, FR22b | J1, J5 | "Aha!" ≥4/5 teams | L | Pilot |
-| H6: Feedback prompt | FR28, FR29, FR30 | J1, J4, J5, J6 | False neg detection ≥1/team | M | Integration + Pilot |
-| H7: Delta analysis | FR38, FR40, FR41 | J2 | Re-run rate ≥3/5 | M | Integration |
-| Q1: RICE scoring | FR21, FR50 | J1, J2, J3 | Severity agreement ≥4/5 | M | Pilot |
-| Q2: Severity summary | FR33 | J1, J2, J3 | — | S | Unit |
-| Q3: Mode labels | FR37, FR38 | J1, J2 | Mode selection distribution | S | Unit |
-| DC1: Model before findings | FR31 | J1 | — | S | Unit |
-| DC2: Compound visual | FR35 | J1, J5 | — | S | Unit |
-| DC3: Novelty ratio | FR34 | J1 | — | S | Unit |
-| DC4: Readable descriptions | FR13 | J1, J4 | — | M | Human |
-| DC5: Privacy architecture | FR23 | All | — | L | Integration + Audit |
-| Cross-cutting: CLI | FR32, FR36, FR42, FR43, FR44, FR45, FR46, FR47, FR48, FR49, FR51, FR52, FR53, FR54, FR55, FR56, FR57 | All | Time-to-first-finding <2min | M-L | Integration |
-
-**Size key:** S = hours, M = days, L = sprints. **Test key:** Unit = automated, Integration = end-to-end CLI test, Human = manual evaluation, Pilot = requires real users, Synthetic = synthetic ground truth repos, Audit = security review.
+- **FR57:** System treats analysis as complete-or-nothing for *persistence* — partial agent results are not saved to `.gyre/` or included in JSON output. However, streamed CLI output (FR32) may have already displayed partial findings before a failure occurs. On failure, the CLI appends a clear error indicating which agent failed, that displayed findings are incomplete, and retry guidance. The incomplete run does not update findings history (M5).
 
 ## Non-Functional Requirements
 
@@ -868,7 +732,7 @@ Pricing and business model decisions are explicitly deferred until post-pilot. T
 
 | NFR | Target | Rationale |
 |-----|--------|-----------|
-| NFR1: Time-to-first-finding | <2 minutes from `gyre analyze .` to first finding displayed | Success metric; drives "wow, fast" perception that predicts re-run behavior |
+| NFR1: Time-to-first-finding | <2 minutes from `gyre analyze .` to first finding displayed. **Intermediate targets (measurable before agents exist):** stack detection <10s, guard question display <15s after detection, model generation <90s. These phase targets guide implementation and sum to the <2min envelope. | Success metric; drives "wow, fast" perception that predicts re-run behavior |
 | NFR2: Total analysis time | <10 minutes for a typical project (≤500 files, ≤2 domains) | Operational constraint; must complete within a coffee break |
 | NFR3: Guard question response time | <1 second after user answers | Interactive prompt must feel instant |
 | NFR4: Re-run with existing model | ≤50% of first-run time | Model generation skipped; anticipation mode should be noticeably faster |
@@ -883,7 +747,7 @@ Pricing and business model decisions are explicitly deferred until post-pilot. T
 | NFR8: LLM input boundary | LLM receives: (a) stack classification, (b) guard question answer, (c) list of detected capabilities with evidence type, (d) web search results. LLM does NOT receive: file contents, file paths, directory structures, or secrets | Reduces exposure surface; makes privacy promise concrete and auditable |
 | NFR9: Artifact safety | Generated artifacts (capabilities.yaml, feedback.yaml) must not contain source code snippets, file contents, or secrets found during analysis | Artifacts are committed to VCS — must be safe to share |
 
-**Pre-pilot privacy validation:** Measure model accuracy under metadata-only constraint vs metadata+code. Decision criteria by delta range:
+**Pre-pilot privacy validation:** Measure model accuracy under metadata-only constraint vs metadata+code. **Timing: run this validation immediately after H2 (model generation) is functional, before building H3/H4 agents.** If the >15% delta materializes after agents are built, the entire analysis pipeline is wasted. Decision criteria by delta range:
 - **<5%:** Privacy architecture validated — ship as designed.
 - **5-10%:** Ship with enhanced limited-coverage warnings on affected capability areas; prioritize review-and-amend prompting for those areas.
 - **10-15%:** Architecture review required — evaluate selective metadata enrichment (e.g., dependency graph structure without file contents) to close the gap without violating the no-source-code constraint.
@@ -893,7 +757,7 @@ Pricing and business model decisions are explicitly deferred until post-pilot. T
 
 | NFR | Target | Rationale |
 |-----|--------|-----------|
-| NFR10: Deterministic model generation | Same project + same guard answer + same provider + same model version = same capabilities manifest (temperature=0) | Users expect consistency; model caching supports this |
+| NFR10: Model generation consistency | Same project + same guard answers + same provider + same model version should produce a substantially similar capabilities manifest (temperature=0, seed parameter where supported). LLM providers do not guarantee bitwise determinism even at temperature=0 — the requirement is behavioral consistency (same capabilities identified), not output identity. Cache the generated model after first run to ensure re-run consistency. | Users expect consistency; model caching is the primary mechanism, not LLM determinism |
 | NFR11: Graceful API failure | If LLM provider unreachable, fail within 10 seconds with actionable error message | FR47 specifies fail-fast; this adds the timeout |
 | NFR12: File system safety | Gyre never modifies, deletes, or writes outside the `.gyre/` directory | Users grant read access; Gyre must not touch source code |
 | NFR13: Run exclusivity | If `.gyre/.lock` exists, abort with "Another analysis is running" message. Full concurrent safety deferred to v2/CI | Simple lock file for MVP; prevents `.gyre/` corruption |
