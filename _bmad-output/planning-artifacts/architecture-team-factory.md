@@ -1,5 +1,5 @@
 ---
-stepsCompleted: [1, 2, 3, 4]
+stepsCompleted: [1, 2, 3, 4, 5]
 inputDocuments:
   - _bmad-output/planning-artifacts/prd-team-factory.md
   - _bmad-output/vortex-artifacts/vision-team-factory-2026-03-21.md
@@ -494,3 +494,133 @@ Phase 1 is an **architecture validation phase**, not just "write a reference doc
 - D-Q3 (validation layering) feeds D-S2 (spec file carries semantic type fields)
 - D-TL (template location) feeds D-Q2 (writers know where templates live)
 - D-Q6 (fragments) could eliminate registry-writer from D-Q2 entirely
+
+---
+
+## Implementation Patterns & Consistency Rules
+
+_Enhanced through Code Review Gauntlet (3 senior reviewers) and party mode session (Bond/Amelia/Murat)._
+
+### Governing Principle
+
+> **Every factory output must be validated before write.**
+
+All naming, structure, format, and process rules flow from this single enforcement principle. The five rules below are concrete applications.
+
+### Naming Patterns
+
+AI agents and humans use these conventions. **Authoritative enforcement is in JSON Schema files** — the regexes below are documented for human readability; schemas are the single enforcement point.
+
+| Entity | Convention | Regex | Example |
+|--------|-----------|-------|---------|
+| Team module directory | `_bmad/bme/_` + kebab-case team name | `/^[a-z][a-z0-9]*(-[a-z0-9]+)*$/` | `_bmad/bme/_onboarding/` |
+| Agent file | Role-based kebab-case `.md` | `/^[a-z]+(-[a-z]+)*\.md$/` | `task-runner.md` |
+| Agent ID | Matches filename stem | `/^[a-z]+(-[a-z]+)*$/` | `task-runner` |
+| Workflow file | Kebab-case `.md` | `/^[a-z]+(-[a-z]+)*\.md$/` | `process-data.md` |
+| Spec file | `team-spec-{team-name}.yaml` | — | `team-spec-onboarding.yaml` |
+| Schema file | `schema-{pattern}.json` | `/^schema-[a-z]+(-[a-z]+)*\.json$/` | `schema-independent.json` |
+| JS utility | Kebab-case `.js` or `.mjs` | `/^[a-z]+(-[a-z]+)*\.(js\|mjs)$/` | `naming-enforcer.js` |
+| Check ID | Semantic per property-pattern section | `{PROP}-{NOUN}(-{NOUN})*` | `DISC-MANIFEST-ENTRY`, `INST-REGISTRY-BLOCK` |
+
+**Check ID namespace:** Controlled via `enum` arrays in per-pattern JSON Schema files. Each property section (`discoverability`, `installability`, `configurability`, `composability`) defines its valid check IDs. Validation rejects unknown IDs. The Architecture Reference lists IDs for human reference; schemas are authoritative.
+
+### Structure Patterns
+
+```
+_bmad/bme/_team-factory/
+  agents/
+  workflows/
+  schemas/
+    schema-independent.json         ← per-pattern, naming regexes embedded
+    schema-sequential.json
+  lib/
+    types/
+      factory-types.js              ← canonical source for all shapes (JSDoc-typed)
+    naming-enforcer.js
+    cascade-logic.js
+    collision-detector.js
+    manifest-tracker.js
+    writers/
+      registry-writer.js            ← may be replaced by D-Q6
+      config-creator.js
+      csv-creator.js
+      activation-validator.js
+  templates/
+    team-spec-template.yaml         ← Express Mode skeleton (commented)
+
+_bmad/core/resources/templates/     ← shared BMB templates (P1/P6 target)
+  agent-template.md
+  workflow-template.md
+  skill-template.md
+  contract-template.md
+
+tests/
+  team-factory/
+    unit/
+    fixtures/
+      independent-single-agent.yaml
+      sequential-three-agents.yaml
+      malformed-missing-fields.yaml
+      collision-existing-agent.yaml
+    golden/                          ← ≤50 lines per file, split by concern
+      golden-registry-block.js
+      golden-config.yaml
+      golden-help-csv.csv
+```
+
+**Types definition file (`types/factory-types.js`):** Single entry point for all factory conventions. AI agents and IDE autocomplete consume this file.
+
+Contains:
+- `ValidationError` — `{ file: string, line?: number, message: string, rule: string, severity: 'error' | 'warning' | 'info', expected?: string, actual?: string }`
+- Writer/creator result — `{ written: string[], skipped: string[], errors: ValidationError[] }`
+- Progress entry — `'complete' | 'failed' | 'pending'`
+- File manifest entry — `{ path: string, operation: 'created' | 'modified', module: string }`
+
+### Format Patterns
+
+| Format | Specification |
+|--------|--------------|
+| YAML indent | 2 spaces (BMAD standard) |
+| JSON Schema | Draft-07 (existing BMAD usage) |
+| Error output | `ValidationError` from `types/factory-types.js` — includes severity + expected/actual per NFR11 |
+| File manifest | Array of `{ path, operation, module }` — generated per factory run (NFR16) |
+| Check ID format | `{PROP}-{SEMANTIC-NAME}` — no sequential counters, no renumbering debt |
+
+### Process Patterns
+
+**Validation function signature:**
+```javascript
+// Every validator: stateless, spec-in → result-out
+function validateNaming(spec) → { valid: boolean, errors: ValidationError[] }
+```
+
+**Writer/creator signature:**
+```javascript
+// Every writer/creator returns a composable result
+function writeRegistryBlock(spec, options) → { written: string[], skipped: string[], errors: ValidationError[] }
+```
+
+**Idempotency rule:** Writers must be safe to re-run. If target exists and matches expected content, skip. If different, warn and require explicit overwrite flag. Never silently overwrite divergent content.
+
+**Progress tracking with partial failure:** Spec file records per-step status: `complete | failed | pending`. On failure, the step's entry includes the error context. Resume (NFR9) skips `complete` steps, retries from first non-complete.
+
+**Shared file writes (registry-writer only):** Read → parse full structure → modify in-memory → validate complete result → dirty-tree check → write → verify via re-parse + `require()`. Never append blindly. The writer receives and returns structured objects — parsing is the writer's responsibility.
+
+**New file creation (creators):** Write to `.tmp` → validate parse → rename to target. Atomic. No dirty-tree check needed (factory-owned files).
+
+### Golden File Testing
+
+- Golden files must be **≤50 lines** — split by concern if larger (e.g., separate `golden-registry-block.js` and `golden-config.yaml`)
+- Keeps `git diff` reviewable as the sole change explanation — no companion notes needed
+- **Update workflow:** Run tests with `updateGolden: true` → `git diff` to review changes → commit. Test utilities must support this mode.
+- Golden files test **factory-authored wiring only** — template-generated content uses structural validation (not exact match)
+
+### Enforcement Rules
+
+Applications of the governing principle — **every factory output must be validated before write:**
+
+1. **Schema-first naming:** All naming rules are enforced via JSON Schema `pattern` properties. The architecture document lists conventions for human consumption; schemas are authoritative.
+2. **Typed returns:** Every writer/creator returns `{ written, skipped, errors }`. Pipeline composition depends on this contract.
+3. **Idempotent operations:** All writers safe to re-run. Skip matching content, warn on divergence, never silently overwrite.
+4. **Atomic writes:** New files via `.tmp` → validate → rename. Shared files via full read-modify-write cycle with post-write verification.
+5. **Regression by default:** End-to-end validation runs existing `validator.js` against all teams. `--changed-only` available for development speed.
