@@ -1,5 +1,5 @@
 ---
-stepsCompleted: [1, 2, 3, 4, 5]
+stepsCompleted: [1, 2, 3, 4, 5, 6]
 inputDocuments:
   - _bmad-output/planning-artifacts/prd-team-factory.md
   - _bmad-output/vortex-artifacts/vision-team-factory-2026-03-21.md
@@ -624,3 +624,198 @@ Applications of the governing principle — **every factory output must be valid
 3. **Idempotent operations:** All writers safe to re-run. Skip matching content, warn on divergence, never silently overwrite.
 4. **Atomic writes:** New files via `.tmp` → validate → rename. Shared files via full read-modify-write cycle with post-write verification.
 5. **Regression by default:** End-to-end validation runs existing `validator.js` against all teams. `--changed-only` available for development speed.
+
+---
+
+## Project Structure & Boundaries
+
+_Enhanced through Red Team vs Blue Team analysis (6 attacks, 4.5/6 Red score) and party mode session (Morgan/Amelia/Bond)._
+
+### Requirements → Structure Mapping
+
+**Phase 1 (FR1-FR7) — Architecture Reference:**
+
+| FR | Component | Location |
+|----|-----------|----------|
+| FR1-FR5 (Reference content) | Architecture Reference document | `_bmad-output/planning-artifacts/architecture-reference-teams.md` |
+| FR6 (Gyre bidirectional validation) | Validation notes appended to reference | Same file + Gyre team audit |
+| FR7 (Integration surface documentation) | Reference YAML blocks with check IDs | Embedded in reference sections |
+
+**Phase 2 (FR8-FR24) — Factory Workflow:**
+
+| FR Cluster | Component | Location |
+|------------|-----------|----------|
+| FR8 (Orient — intent classification) | Module-level routing step | `workflows/step-00-route.md` |
+| FR9 (Scope — agent inventory + contracts) | Workflow step | `workflows/add-team/step-01-scope.md` |
+| FR10 (Connect — integration wiring) | Workflow step | `workflows/add-team/step-02-connect.md` |
+| FR11-FR13 (Wiring + overlap + validation) | JS utilities | `lib/` (collision-detector, naming-enforcer, writers/) |
+| FR14-FR16 (Express Mode + generation) | Spec parser + Express pipeline | `lib/spec-parser.js` + `schemas/` |
+| FR17-FR18 (Cascade + defaults) | Cascade logic | `lib/cascade-logic.js` |
+| FR19-FR21 (BMB delegation + preview + approval) | Workflow steps | `workflows/add-team/step-04-generate.md` |
+| FR22-FR24 (Naming + idempotency + manifest) | Enforcement utilities | `lib/naming-enforcer.js`, `lib/manifest-tracker.js` |
+
+**Phase 3 (FR25-FR26) — Extension Workflows (future):**
+
+| FR | Component | Planned Location |
+|----|-----------|-----------------|
+| FR25 (Add Agent) | Separate workflow | `workflows/add-agent/` (created when Phase 3 begins) |
+| FR26 (Add Skill) | Separate workflow | `workflows/add-skill/` (created when Phase 3 begins) |
+
+No placeholder directories — locations documented here only.
+
+### Complete Project Directory Structure
+
+```
+_bmad/
+  bme/
+    _team-factory/                              ← Factory module root
+      config.yaml                               ← Module config + module metadata block
+      module-help.csv                            ← Module discovery (NFR10)
+      agents/
+        team-factory.md                         ← Factory agent — BMAD Core compliant
+                                                   (activation XML, persona, menu)
+                                                   Registered via convoke-install, NOT self-bootstrapped
+      workflows/
+        step-00-route.md                        ← Module-level intent routing (FR8)
+                                                   Routes to: add-team | add-agent | add-skill
+        add-team/
+          step-01-scope.md                      ← Agent inventory + contract decisions (FR9)
+          step-02-connect.md                    ← Integration wiring decisions (FR10)
+          step-03-review.md                     ← Decision summary + Express Mode gate (FR14)
+          step-04-generate.md                   ← BMB delegation + file generation (FR19-FR21)
+          step-05-validate.md                   ← End-to-end validation + manifest (FR16, FR24)
+      schemas/
+        schema-independent.json                 ← Spec schema: Independent pattern
+        schema-sequential.json                  ← Spec schema: Sequential pattern
+      lib/
+        types/
+          factory-types.js                      ← All type definitions (JSDoc-typed)
+        spec-parser.js                          ← Load YAML → select schema → validate → return
+        spec-writer.js                          ← Serialize → atomic .tmp → validate → rename
+        spec-differ.js                          ← Resume point detection (NFR9)
+        naming-enforcer.js                      ← Naming validation against schemas (FR22)
+        cascade-logic.js                        ← Pattern-aware decision elimination (FR17) [A6'-coupled]
+        collision-detector.js                   ← Agent/workflow overlap detection (FR12)
+        manifest-tracker.js                     ← File manifest generation (FR24, NFR16)
+        writers/
+          registry-writer.js                    ← agent-registry.js block insertion [D-Q6 may replace]
+          config-creator.js                     ← Per-team config.yaml creation
+          csv-creator.js                        ← Per-team module-help.csv creation
+          activation-validator.js               ← Activation block path validation (read-only)
+      templates/
+        team-spec-template.yaml                 ← Express Mode skeleton (commented)
+
+  core/
+    resources/
+      templates/                                ← Shared BMB templates (D-TL)
+        agent-template.md                          Created by P1/P6 spike — prerequisite for
+        workflow-template.md                        any factory template consumption.
+        skill-template.md                          Factory workflows that consume templates
+        contract-template.md                        MUST run after P1/P6 completes.
+
+tests/
+  team-factory/
+    spec-lifecycle/                             ← Parser, writer, differ, schema validation
+      schema-regexes.test.js                       Regex known-good/known-bad validation
+    naming-collision/                           ← Naming enforcer, collision detector
+    wiring/                                     ← Registry-writer, config-creator, csv-creator,
+                                                   activation-validator
+    end-to-end/                                 ← Full pipeline, regression, manifest
+    fixtures/
+      independent-single-agent.yaml             ← Simplest path
+      sequential-three-agents.yaml              ← Full path with contracts
+      malformed-missing-fields.yaml             ← Error handling
+      collision-existing-agent.yaml             ← Safety path
+    golden/                                     ← ≤50 lines per file, split by concern
+      golden-registry-block.js
+      golden-config.yaml
+      golden-help-csv.csv
+      golden-manifest.json
+    spikes/                                     ← Transient spike artifacts (P2b, etc.)
+                                                   Deleted after spike validates/invalidates
+```
+
+### Module Config Schema
+
+```yaml
+# _bmad/bme/_team-factory/config.yaml
+module:
+  name: team-factory
+  description: "Create BMAD-compliant teams"
+  version: 1
+  phase: 2
+project_name: "BMAD-Enhanced"
+user_skill_level: expert
+planning_artifacts: "{project-root}/_bmad-output/planning-artifacts"
+user_name: Amalik
+communication_language: English
+```
+
+### Architectural Boundaries
+
+**LLM/JS Boundary (Concern #1):**
+
+| Step | LLM Reasoning | JS Deterministic |
+|------|--------------|-----------------|
+| Route (step-00) | Intent classification, workflow selection | — |
+| Scope (step-01) | Agent inventory curation, contract decisions | Overlap detection (`collision-detector.js`) |
+| Connect (step-02) | Integration decision guidance | Config collision detection |
+| Review (step-03) | Summary presentation (Guided) | Full validation batch (Express) |
+| Generate (step-04) | BMB delegation prompting, content curation | Template substitution, file writing |
+| Validate (step-05) | — | End-to-end validation, regression, manifest |
+
+**Module Boundary:**
+- Factory module (`_bmad/bme/_team-factory/`) owns all factory-specific code
+- Shared templates (`_bmad/core/resources/templates/`) consumed **read-only** — prerequisite: P1/P6 complete
+- External write target: `scripts/update/lib/agent-registry.js` (via registry-writer)
+- External read targets: `_bmad/_config/agent-manifest.csv`, existing team modules
+
+**Bootstrap Boundary:**
+- The factory agent (`team-factory.md`) is registered via `convoke-install` — the standard BMAD module installation process
+- The factory creates OTHER teams' agents — it cannot create itself
+- Agent file conforms to existing agent schema (activation XML, persona fields, menu) for `agent-registry.js` compatibility
+
+**Write Boundaries:**
+
+| Target | Writer | Safety Level |
+|--------|--------|-------------|
+| Spec file (factory-owned) | `spec-writer.js` | Atomic (`.tmp` → validate → rename) |
+| Team module files (new) | BMB delegation + creators | Simple (write → verify) |
+| `agent-registry.js` (shared) | `registry-writer.js` | Full Write Safety Protocol |
+| Existing team files | **Never** — additive only (NFR17) | — |
+
+**Data Flow:**
+```
+User intent → [LLM: step-00-route] → workflow selection
+  → [LLM: step-01] → spec file created (YAML)
+  → [LLM: step-02] → spec file updated with integration decisions
+  → [JS: step-03 Express / LLM: step-03 Guided] → validated spec
+  → [JS+LLM: step-04] → generated files + wiring
+  → [JS: step-05] → validation report + file manifest
+```
+
+### Cross-Cutting Concern Locations
+
+| Concern | Primary Location(s) |
+|---------|-------------------|
+| #1 LLM/JS Boundary | Workflow step files (LLM) vs. `lib/` (JS) |
+| #2 Write Safety | `writers/registry-writer.js` + `lib/spec-writer.js` |
+| #3 Format Heterogeneity | `lib/writers/` — one module per format |
+| #4 Context Window | Steps load only their deps; spec file is JIT ground truth |
+| #5 Triple-Audience Reference | `architecture-reference-teams.md` (Phase 1 output) |
+| #6 Mode Parity | `schemas/` + `lib/` — all validation spec-driven, not conversation-dependent |
+| #7 Intent Discoverability | `module-help.csv` + `step-00-route.md` |
+| #8 Hypothesis Sensitivity | `cascade-logic.js` + `schemas/` — isolated, replaceable pair [A6'-coupled] |
+| #9 Self-Instrumentation | Spec file `metrics` section + post-completion questions in step-05 |
+
+### Hypothesis-Coupled Components (Isolation Map)
+
+Components that must be revised together if A5' or A6' are falsified:
+
+| Hypothesis | Coupled Components | Revision Unit |
+|------------|-------------------|---------------|
+| A6' (composition patterns) | `cascade-logic.js` + `schema-*.json` | Add third schema file + third cascade branch |
+| A5' (four quality properties) | Architecture Reference sections + check ID enums in schemas | Restructure reference + update enums |
+| Both | `spec-parser.js` (selects schema by pattern) | Update pattern enum |
+
+All coupled components are isolated in the factory module — no framework-level changes needed for hypothesis revision.
