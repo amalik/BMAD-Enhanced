@@ -1,5 +1,5 @@
 ---
-stepsCompleted: [1, 2, 3]
+stepsCompleted: [1, 2, 3, 4]
 inputDocuments:
   - _bmad-output/planning-artifacts/prd-team-factory.md
   - _bmad-output/vortex-artifacts/vision-team-factory-2026-03-21.md
@@ -282,3 +282,215 @@ The spec file is the factory's central stateful component — read, written, val
 | `scripts/update/lib/refresh-installation.js` | Extends with new module paths |
 | `_bmad/_config/agent-manifest.csv` | Read for overlap detection |
 | `_bmad/bmb/` | Shared templates consumed via Option C embedding |
+
+---
+
+## Core Architectural Decisions
+
+_Enhanced through multiple elicitation rounds (Tree of Thoughts, Self-Consistency Validation, Debate Club Showdown, First Principles Analysis) and party mode sessions._
+
+### Decision Priority Analysis
+
+**Critical Decisions (resolved):**
+- D-Q1: Architecture Reference format
+- D-Q2: Format-aware writer design
+- D-Q3: Validation layering
+- D-S2: Spec file architecture
+- D-TL: Template location
+
+**Open Decision (deferred to Phase 1):**
+- D-Q6: Registry fragment architecture
+
+**Important Decisions (principles established, design deferred):**
+- D-Q5: Factory evolution
+- D-VB: Visibility boundary
+
+### D-Q1: Architecture Reference Format — RESOLVED
+
+**Decision:** Option B — Markdown with embedded YAML data blocks
+
+**Format:**
+- Single `.md` file — Architecture Reference
+- Human-readable prose sections explain "why" (FR2)
+- Fenced YAML blocks contain machine-extractable checklists with structured check IDs
+- Factory and validator extract YAML blocks only — decoupled from heading structure
+
+**Section granularity:** One section per quality property × composition pattern (~8 sections). Example: `## Discoverable — Independent`, `## Discoverable — Sequential`. Factory loads only the section matching the team's declared pattern. Optimized for JIT loading (concern #4).
+
+**YAML block detection:** Structure-based, not convention-based. Factory identifies extractable blocks by presence of `quality_property`, `composition_pattern`, and `checks` top-level keys. Non-checklist YAML blocks (code examples, spec file samples) lack these keys and are ignored. Self-describing — no special syntax to remember when authoring.
+
+**Check ID structure:**
+```yaml
+checks:
+  - id: DISC-01
+    rule: "Agent appears in module-help.csv"
+    target_file: "_bmad/_config/module-help.csv"
+    validation: "row exists with module={module_path}, agent={agent_name}"
+```
+
+**Drift prevention:** Prose references check IDs inline (e.g., "**DISC-01** — module-help.csv is the primary discovery surface because..."). Orphan detection: grep for check IDs in prose that no longer appear in YAML blocks.
+
+**Hypothesis resilience (#8):** If A5' fails and the four quality properties change, YAML blocks update `quality_property` values and prose headings restructure. Factory parser extracts by fenced-block detection + key presence — survives restructuring without parser changes.
+
+**Validation:** P2b spike — write one complete section (e.g., Discoverable — Independent) in this format, then write a mock extraction script. Acceptance criteria: script extracts all checks with IDs, rules, target files, and validation criteria without parsing prose.
+
+### D-Q2: Format-Aware Writer Design — PARTIALLY RESOLVED
+
+**Decision:** Not four writers — **1 writer, 2 creators, 1 validator.** Shared write-safety protocol applies only to the registry-writer.
+
+**Module reclassification:**
+
+| Module | Type | Operation | Safety Protocol |
+|--------|------|-----------|----------------|
+| `registry-writer.js` | **Writer** (shared file) | Add module block to agent-registry.js — agents, workflows, derived lists, exports. Full Write Safety Protocol + `node require()` post-write validation. | Full: stage → validate → check → apply → verify → require() |
+| `config-creator.js` | **Creator** (new file) | Create per-module config.yaml at `_bmad/bme/_team-name/config.yaml`. | Simple: write → verify parse |
+| `csv-creator.js` | **Creator** (new file) | Create per-module module-help.csv at `_bmad/bme/_team-name/module-help.csv` with header + rows. | Simple: write → verify header match |
+| `activation-validator.js` | **Validator** (read-only) | Validate that BMB-generated activation blocks reference correct config paths and module paths. No file writes. | N/A — read-only |
+
+**Shared-file risk surface:** Only `agent-registry.js`. The registry-writer must preserve exact JS export structure, derived lists, and module pattern. Post-write validation: `node -e "require('./agent-registry')"` confirms structural integrity.
+
+**Note:** Registry-writer may be replaced entirely by D-Q6 (fragment-based registration). Decision pending.
+
+**Real file structures (discovered during elicitation):**
+
+| Target | Actual Structure | Operation |
+|--------|-----------------|-----------|
+| `agent-registry.js` | Per-module const blocks (AGENTS, WORKFLOWS, derived lists, module.exports). ~40-80 lines per module. | `add_module_block` |
+| `config.yaml` | Per-module config files. New team = new file. | `create_module_config` |
+| `module-help.csv` | Per-module CSV files. New team = new file with header + rows. | `create_module_csv` |
+| Activation XML | Embedded in agent `.md` files. BMB templates generate these. | `validate_activation_paths` |
+
+**Deferred to Phase 1 Architecture Reference:** Exact format contract schema per module — the reference defines integration surfaces (FR7), then the contract codifies them for the writers.
+
+### D-Q3: Validation Layering — RESOLVED
+
+**Decision:** Four validation layers with semantic validation via B-lite approach.
+
+| Layer | When | What It Checks | Implementation | Mode |
+|-------|------|----------------|---------------|------|
+| **Per-step** | During factory flow (Steps 1-4) | Decision validity — naming, pattern consistency, collision, overlap | JS utilities + LLM reasoning | Both |
+| **Per-agent** | During generation (Step 5) | Single agent structural completeness — files, naming, activation paths | JS validation + activation-validator | Both |
+| **Semantic** | After contracts defined (Step 3) + spec validation (Express) | Contract compatibility — artifact type match between connected agents | JS type-match validator (~10 lines) + LLM content-level in Guided | Both (format-level) |
+| **End-to-end** | After generation (Step 6) | Full team structural compliance + regression on existing teams | Extended validator.js + regression | Both |
+
+**Semantic Validation — B-lite:**
+Artifact types as constrained enum: `markdown | yaml | json | text | binary`. Validator checks `from_agent.outputs[artifact].type === to_agent.inputs[artifact].type`. Catches format mismatches (the 80% case). Content-level compatibility handled by LLM in Guided Mode; accepted gap in Express Mode for v1.
+
+**Step 4 Dual Profile:**
+
+| Mode | Step 4 Behavior |
+|------|----------------|
+| **Guided** | Display decision summary. Light re-confirmation. User approves. |
+| **Express** | **Full validation gate.** All per-step + semantic checks run in batch against spec file before generation begins. |
+
+**Validation Function Design Principle:** Every validation function is stateless — takes spec object as input, returns structured result. No conversation context dependency. Mode Parity guaranteed by construction.
+
+**Regression optimization:** Default = all teams. `--changed-only` = new team + teams sharing wiring targets. Full regression on demand.
+
+### D-S2: Spec File Architecture — RESOLVED
+
+**Schema approach:** Per-pattern JSON Schema files — `team-spec-v1-independent.schema.json`, `team-spec-v1-sequential.schema.json`. Parser reads `composition_pattern`, selects matching schema. Flat schemas, no conditional logic. Third pattern = add third file. Hypothesis-resilient.
+
+**Module design:**
+
+| Module | Responsibility |
+|--------|---------------|
+| `spec-parser.js` | Load YAML → select schema by `schema_version` + `composition_pattern` → validate → return structured object |
+| `spec-writer.js` | Serialize spec to YAML. Atomic write: `.tmp` → validate → rename. |
+| `spec-differ.js` | Read `progress` section, confirm filesystem matches claimed state, return resume point |
+
+**Rationale as structured data:**
+```yaml
+decisions:
+  - step: orient
+    decision: "Sequential — 3 agents with handoffs"
+    default_accepted: true
+    rationale: "User described sequential onboarding flow matching Sequential pattern"
+```
+
+**Progress tracking — atomic per-agent:**
+```yaml
+progress:
+  orient: complete
+  scope: complete
+  connect: complete
+  review: complete
+  generate:
+    task-runner: complete
+    data-processor: pending
+  validate: pending
+```
+Only write `complete` after full per-agent cycle (generate → wire → verify). Interrupted mid-cycle = `pending`, resume re-runs full cycle. Safe via FR23 idempotency.
+
+**Write safety:** Atomic — `.tmp` → validate parse + schema → rename. No dirty-tree check (factory-owned).
+
+**Version evolution (Q4):** Additive schema files. Migration function bridges versions. Factory detects old version at parse time, offers upgrade.
+
+**Express Mode template:** `templates/team-spec-template.yaml` — commented skeleton for colleagues. Schema for machines, template for humans.
+
+**Cross-spec reporting:** Separate utility, not spec-parser responsibility. Deferred to post-Phase 2.
+
+### D-TL: Template Location — RESOLVED
+
+**Decision:** `_bmad/core/resources/templates/`
+
+```
+_bmad/core/resources/
+  excalidraw/              ← existing shared resources
+  templates/               ← new — shared artifact templates
+    agent-template.md
+    workflow-template.md
+    skill-template.md
+    contract-template.md
+```
+
+**Rationale (First Principles):** Templates are extracted framework knowledge with multiple consumers (BMB, factory, future tools). `core/resources/` is the established home for shared non-code resources. Neither BMB nor factory owns what multiple modules need.
+
+**P1/P6 externalization target:** BMB template spike writes here. Both BMB and factory consume from the same source — zero drift risk.
+
+### D-Q6: Registry Fragment Architecture — OPEN (Deferred to Phase 1)
+
+**Question:** Direct write to agent-registry.js (ship with registry-writer) vs. fragment-based registration (each team owns a registry fragment, agent-registry.js aggregates)?
+
+**Strategic note:** If fragments win, the registry-writer (the most complex factory component — only shared-file writer with full Write Safety Protocol) is eliminated entirely. Replaced by a simple fragment-creator. Significant architectural simplification. Weight this decision accordingly during Phase 1.
+
+Deferred — resolve during Phase 1 when P1/P6 spike reveals real template extraction mechanics and the Architecture Reference codifies integration surfaces.
+
+### D-Q5: Factory Evolution — PRINCIPLE ESTABLISHED, DESIGN DEFERRED
+
+**Principle:** Spec files are versioned (`schema_version`). Schemas are additive. Migration functions bridge versions. The factory never breaks a valid old spec file — it offers upgrade, not rejection.
+
+**Deferred:** Cross-version behavior design deferred to post-v1. No version transitions exist yet.
+
+### D-VB: Visibility Boundary — PRINCIPLE ESTABLISHED, MAPPING DEFERRED
+
+**Principle:** Every factory operation classified visible or silent. Concept budget (≤3 per step) constrains what crosses the visibility boundary. Write Safety Protocol's 5 stages are silent — colleague sees only the approval prompt and result.
+
+**Deferred:** Per-step visibility mapping deferred to Phase 2 workflow step authoring.
+
+### Phase 1 Scope Expansion
+
+Phase 1 is an **architecture validation phase**, not just "write a reference document":
+
+| Phase 1 Deliverable | What It Validates |
+|---------------------|------------------|
+| Architecture Reference (Option B format) | A5' (four properties), A6' (two patterns), FR1-FR7 |
+| P2b spike — factory-consumability test | D1 (reference format works for machine consumption) |
+| Template externalization (P1/P6) | R1 (BMB templates extractable), D2 |
+| D-Q6 investigation — registry fragments | Whether registry-writer exists or is replaced |
+| P2 — human consumability test | A19 (colleague reads reference without mentoring) |
+| P3 — colleague test | A22 (factory discoverable) |
+
+**Phase 1 exit criteria:** All 6 deliverables complete. Phase 2 begins only after Phase 1 validates foundational assumptions.
+
+### Decision Impact Analysis
+
+**Implementation sequence:**
+1. Phase 1: Architecture Reference + P2b + P1/P6 + D-Q6 + P2 + P3
+2. Phase 2: Spec file modules → validation utilities → creators → registry-writer (or fragment-creator) → workflow steps → integration testing
+
+**Cross-decision dependencies:**
+- D-Q1 (reference format) feeds D-Q2 (format contract derived from reference)
+- D-Q3 (validation layering) feeds D-S2 (spec file carries semantic type fields)
+- D-TL (template location) feeds D-Q2 (writers know where templates live)
+- D-Q6 (fragments) could eliminate registry-writer from D-Q2 entirely
