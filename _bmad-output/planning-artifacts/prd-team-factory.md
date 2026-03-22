@@ -4,7 +4,7 @@ inputDocuments:
   - _bmad-output/vortex-artifacts/product-vision-team-factory-2026-03-21.md
   - _bmad-output/vortex-artifacts/scope-decision-team-factory-2026-03-21.md
   - _bmad-output/vortex-artifacts/assumption-map-team-factory-2026-03-22.md
-  - _bmad-output/planning-artifacts/product-brief-gyre-2026-03-19.md
+  - _bmad-output/planning-artifacts/brief-gyre-2026-03-19.md
 workflowType: 'prd'
 documentCounts:
   briefs: 1
@@ -61,6 +61,8 @@ The Team Factory is an internal tool that enables BMAD framework contributors to
 **Success criterion:** A framework contributor creates a valid, fully-wired team without assistance — zero post-creation fixes, validator passes on first run.
 
 **Key risks:** BMB template extraction (spike required), discoverability (systemic gap), shared file safety (modular registration in Phase 2).
+
+**Document scope:** This PRD is detailed because the factory touches 8 integration surfaces and requires zero post-creation fixes — the Architecture will be substantially simpler. 6 elicitation rounds and 8 party mode sessions surfaced root cause analysis that shaped the requirements.
 
 ---
 
@@ -246,21 +248,24 @@ Extending the BMAD framework with new teams, agents, or skills requires both arc
 | FR21 | Decision state persisted as team spec file — serves as audit trail, resume point, and express mode input | Must |
 | FR22 | Active naming convention enforcement during factory flow | Must |
 | FR23 | Idempotent output — same decisions produce same output | Must |
+| FR24 | Error recovery — when generation or wiring fails mid-flow, rollback to last validated state. No partial writes persist. User sees which step failed and why. | Must |
 
 ### Phase 3: Extension Workflows
 
 | # | Requirement | Priority |
 |---|------------|----------|
-| FR24 | Add Agent to existing team — scope check, registration, contract wiring | Should |
-| FR25 | Add Skill/Workflow to existing agent — manifest update, template, menu wiring | Should |
+| FR25 | Add Agent to existing team — scope check, registration, contract wiring | Should |
+| FR26 | Add Skill/Workflow to existing agent — manifest update, template, menu wiring | Should |
 
-### Cross-Cutting
+### Cross-Cutting Design Principles
 
-| # | Requirement | Priority |
-|---|------------|----------|
-| FR26 | Zero-assistance completion for framework contributors | Must |
-| FR27 | User-facing complexity must feel Low despite medium implementation complexity | Must |
-| FR28 | No decisions that require verbal fallback to the framework creator | Must |
+These are not features to build — they are quality attributes that every FR must satisfy. They overlap with NFRs and success criteria intentionally to ensure visibility at every level.
+
+| Principle | Restated In | Rationale |
+|-----------|-------------|-----------|
+| Zero-assistance completion for framework contributors | SC1, NFR1, North Star | The factory's reason for existing |
+| User-facing complexity must feel Low despite medium implementation complexity | NFR1, Classification | Dual complexity model — implementation reality vs. user perception |
+| No decisions that require verbal fallback to the framework creator | SC1, C8 mitigations | Eliminates the scaling bottleneck |
 
 ---
 
@@ -354,7 +359,8 @@ The spec file is the factory's central artifact — audit trail, resume state, e
 
 | Section | Field | Type | Set At |
 |---------|-------|------|--------|
-| **header** | team_name | string | Step 1 |
+| **header** | schema_version | string | Auto |
+| | team_name | string | Step 1 |
 | | composition_pattern | Independent / Sequential | Step 1 |
 | | created_by | string | Auto |
 | | created_date | date | Auto |
@@ -607,10 +613,12 @@ Tracks converge at Step 5 (Generate).
 | M1.3 | Colleague presented with novel scenario identifies composition pattern with reasoning. 4/4 rubric. |
 | M1.4 | Colleague finds factory entry point without being told. |
 
-### Prerequisites (Sequential: P6/P1 → P5)
+### Prerequisites (Gate Between Phase 1 and Phase 2)
 
-| Milestone | Done When |
-|-----------|-----------|
+Prerequisites are a formal phase gate — Phase 2 tracks cannot begin until these pass. They are sequenced: P6/P1 must pass before P5 can be attempted.
+
+| Gate | Done When |
+|------|-----------|
 | P6/P1 | One agent template generates output passing validator.js + matching spec. BMB and factory share the template. |
 | P5 | One-agent Independent team: registered, manifest-visible, validator-passing, config + help CSV added. Zero manual edits. |
 
@@ -787,9 +795,11 @@ Each layer is a gate — if it fails, don't proceed to the next.
 | Product Vision: Team Factory | Vortex artifact | `_bmad-output/vortex-artifacts/product-vision-team-factory-2026-03-21.md` |
 | Scope Decision: Team Factory | Vortex artifact | `_bmad-output/vortex-artifacts/scope-decision-team-factory-2026-03-21.md` |
 | Assumption Risk Map: Team Factory | Vortex artifact | `_bmad-output/vortex-artifacts/assumption-map-team-factory-2026-03-22.md` |
-| Product Brief: Gyre | Planning artifact | `_bmad-output/planning-artifacts/product-brief-gyre-2026-03-19.md` |
+| Product Brief: Gyre | Planning artifact | `_bmad-output/planning-artifacts/brief-gyre-2026-03-19.md` |
 
 ### Assumption Traceability
+
+Assumptions (A4, A5', etc.) are defined in the upstream Assumption Risk Map (`assumption-map-team-factory-2026-03-22.md`). This table maps them to their validation mechanisms within this PRD.
 
 | Assumption | Validated By | PRD Section |
 |-----------|-------------|-------------|
