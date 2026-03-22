@@ -1,9 +1,9 @@
 ---
 stepsCompleted: [step-01-init, step-02-discovery, step-03-functional-requirements, step-04-nfr, step-05-interaction-design, step-06-architecture, step-07-risks, step-08-metrics, step-09-dependencies, step-10-timeline, step-11-stakeholders, step-12-acceptance, step-13-assembly]
 inputDocuments:
-  - _bmad-output/vortex-artifacts/product-vision-team-factory-2026-03-21.md
-  - _bmad-output/vortex-artifacts/scope-decision-team-factory-2026-03-21.md
-  - _bmad-output/vortex-artifacts/assumption-map-team-factory-2026-03-22.md
+  - _bmad-output/vortex-artifacts/vision-team-factory-2026-03-21.md
+  - _bmad-output/vortex-artifacts/decision-scope-team-factory-2026-03-21.md
+  - _bmad-output/vortex-artifacts/adr-assumption-map-team-factory-2026-03-22.md
   - _bmad-output/planning-artifacts/brief-gyre-2026-03-19.md
 workflowType: 'prd'
 documentCounts:
@@ -19,7 +19,11 @@ classification:
   userMentalModel: "Team Builder / Create a new team"
   projectContext: brownfield
 status: DRAFT
-version: 1.0
+version: 1.1
+lastEdited: '2026-03-22'
+editHistory:
+  - date: '2026-03-22'
+    changes: 'Post-validation fixes: 3 frontmatter path corrections, 4 measurability improvements (FR18, NFR6, NFR9, NFR11), terminology mapping note'
 ---
 
 # Product Requirements Document — Team Factory
@@ -261,7 +265,7 @@ Extending the BMAD framework with new teams, agents, or skills requires both arc
 | FR15 | Abort path: creation manifest lists all files created, with removal instructions | Must |
 | FR16 | Validation rules vary by composition pattern — per-pattern requirements (e.g., contracts required for Sequential, optional for Independent) | Must |
 | FR17 | Decision tree — composition pattern selection cascades to eliminate irrelevant decisions | Must |
-| FR18 | Sensible defaults with guidance at each decision point. User confirms or overrides. | Should |
+| FR18 | Defaults selected by most-common pattern in existing teams, with reasoning shown. User confirms or overrides at each decision point. | Should |
 | FR19 | Decision summary checkpoint — all decisions presented for approval before generation begins | Must |
 | FR20 | End-to-end validation pass as final step | Must |
 | FR21 | Decision state persisted as team spec file — serves as audit trail, resume point, and express mode input | Must |
@@ -291,12 +295,12 @@ Zero-assistance (SC1, NFR1), must-feel-Low (NFR1, Classification), and no verbal
 | NFR3 | Reliability | Factory output passes validation on first run — zero manual fixes required | Must |
 | NFR4 | Reliability | FR23 idempotency verified by automated regression — same spec file produces identical output across factory versions | Must |
 | NFR5 | Maintainability | Architecture Reference is single source of truth — factory reads rules at runtime, zero hardcoded values in workflow step files. Reference sections cite source files for staleness detection. | Must |
-| NFR6 | Maintainability | Factory delegates artifact generation to shared templates. Factory-authored code limited to integration wiring. No factory-authored agent files, workflow steps, or skill templates. | Must |
+| NFR6 | Maintainability | Factory delegates artifact generation to shared templates. Factory-authored code limited to integration wiring (registry entries, config fields, refresh file paths, activation XML). Factory never authors agent files, workflow steps, or skill templates. | Must |
 | NFR7 | Compatibility | Output passes same validation rules and refresh pipeline as native teams | Must |
 | NFR8 | Compatibility | Works within existing Claude Code interaction model. Fully local — no external tooling or network dependencies. | Must |
-| NFR9 | Resumability | If interrupted, user resumes by loading team spec file. Resume presents decision summary and continues from last incomplete step. | Should |
+| NFR9 | Resumability | If interrupted, user resumes by loading team spec file. Resume presents decision summary and continues from last step whose output is absent from the spec file. | Should |
 | NFR10 | Discoverability | Factory entry point exists in: agent menu, module-help.csv, BMad Master "what's available?" response, README. Every discovery surface enumerated and wired. | Must |
-| NFR11 | Recoverability | When validation fails, errors are traceable to the specific factory decision or step that caused them | Must |
+| NFR11 | Recoverability | When validation fails, error messages include step name, decision ID, and expected-vs-actual values — traceable to the specific factory decision that caused them | Must |
 | NFR12 | Safety | Factory detects dirty working tree and warns before shared file writes. Safe to run with uncommitted changes — detect and warn about conflicts. | Should |
 | NFR13 | Safety | Factory modifications to shared files validated in isolation before being applied — no partial writes | Must |
 | NFR14 | Security | Factory-generated code uses safe templating — no raw string interpolation of user input into executable files | Must |
@@ -811,10 +815,14 @@ Each layer is a gate — if it fails, don't proceed to the next.
 
 | Document | Type | Location |
 |----------|------|----------|
-| Product Vision: Team Factory | Vortex artifact | `_bmad-output/vortex-artifacts/product-vision-team-factory-2026-03-21.md` |
-| Scope Decision: Team Factory | Vortex artifact | `_bmad-output/vortex-artifacts/scope-decision-team-factory-2026-03-21.md` |
-| Assumption Risk Map: Team Factory | Vortex artifact | `_bmad-output/vortex-artifacts/assumption-map-team-factory-2026-03-22.md` |
+| Product Vision: Team Factory | Vortex artifact | `_bmad-output/vortex-artifacts/vision-team-factory-2026-03-21.md` |
+| Scope Decision: Team Factory | Vortex artifact | `_bmad-output/vortex-artifacts/decision-scope-team-factory-2026-03-21.md` |
+| Assumption Risk Map: Team Factory | Vortex artifact | `_bmad-output/vortex-artifacts/adr-assumption-map-team-factory-2026-03-22.md` |
 | Product Brief: Gyre | Planning artifact | `_bmad-output/planning-artifacts/brief-gyre-2026-03-19.md` |
+
+### Terminology Mapping
+
+The Product Vision used "Classic Module / Orchestrated Submodule / Extension" for composition archetypes. Through elicitation, the PRD adopted "Independent / Sequential / Extension" — clearer labels for the same three patterns.
 
 ### Assumption Traceability
 
@@ -839,12 +847,12 @@ This PRD was developed through 13 steps of structured discovery including:
 ### Quick Reference Card
 
 **Functional Requirements (FR1-FR26):**
-FR1 Machine-consumable team checklist per pattern | FR2 Human-readable context (why) | FR3 Four quality properties | FR4 Composition patterns with examples | FR5 Extension mechanism documented | FR6 Bidirectional Gyre validation | FR7 Integration surface enumerated | FR8 Forced decision points before generation | FR9 Step-by-step validation | FR10 Delegate to BMB, own integration | FR11 Complete integration wiring | FR12 Overlap detection for human review | FR13 Contextual examples at decisions | FR14 Discoverable entry point | FR15 Abort path with creation manifest | FR16 Per-pattern validation rules | FR17 Decision cascade elimination | FR18 Sensible defaults with guidance | FR19 Decision summary checkpoint | FR20 End-to-end validation pass | FR21 Spec file persistence (audit + resume + express) | FR22 Naming convention enforcement | FR23 Idempotent output | FR24 Error recovery with rollback | FR25 Add Agent workflow | FR26 Add Skill workflow
+FR1 Machine-consumable team checklist per pattern | FR2 Human-readable context (why) | FR3 Four quality properties | FR4 Composition patterns with examples | FR5 Extension mechanism documented | FR6 Bidirectional Gyre validation | FR7 Integration surface enumerated | FR8 Forced decision points before generation | FR9 Step-by-step validation | FR10 Delegate to BMB, own integration | FR11 Complete integration wiring | FR12 Overlap detection for human review | FR13 Contextual examples at decisions | FR14 Discoverable entry point | FR15 Abort path with creation manifest | FR16 Per-pattern validation rules | FR17 Decision cascade elimination | FR18 Defaults by most-common pattern, reasoning shown | FR19 Decision summary checkpoint | FR20 End-to-end validation pass | FR21 Spec file persistence (audit + resume + express) | FR22 Naming convention enforcement | FR23 Idempotent output | FR24 Error recovery with rollback | FR25 Add Agent workflow | FR26 Add Skill workflow
 
 **Cross-Cutting Design Principles:** Zero-assistance completion | Must feel Low complexity | No verbal fallback dependency
 
 **Non-Functional Requirements (NFR1-NFR18):**
-NFR1 Under 60/90 min, plain language | NFR2 Progressive disclosure (≤3 concepts/step) | NFR3 Validator pass first run | NFR4 FR23 idempotency regression across versions | NFR5 Reference as single source of truth (runtime read, zero hardcode) | NFR6 Delegate generation, own wiring only | NFR7 Same validation as native teams | NFR8 Local only, no external deps | NFR9 Resumable via spec file | NFR10 Discoverable in 4 surfaces (agent menu, help CSV, BMad Master, README) | NFR11 Traceable errors | NFR12 Dirty tree detection before shared writes | NFR13 Isolated validation before shared writes | NFR14 Safe templating, no injection | NFR15 Config field collision check | NFR16 File manifest every run | NFR17 Additive-only shared files | NFR18 Sequential per-agent, JIT loading
+NFR1 Under 60/90 min, plain language | NFR2 Progressive disclosure (≤3 concepts/step) | NFR3 Validator pass first run | NFR4 FR23 idempotency regression across versions | NFR5 Reference as single source of truth (runtime read, zero hardcode) | NFR6 Delegate generation, own wiring only (registry, config, refresh, activation XML) | NFR7 Same validation as native teams | NFR8 Local only, no external deps | NFR9 Resumable via spec file (from last absent output) | NFR10 Discoverable in 4 surfaces (agent menu, help CSV, BMad Master, README) | NFR11 Traceable errors (step name + decision ID + expected-vs-actual) | NFR12 Dirty tree detection before shared writes | NFR13 Isolated validation before shared writes | NFR14 Safe templating, no injection | NFR15 Config field collision check | NFR16 File manifest every run | NFR17 Additive-only shared files | NFR18 Sequential per-agent, JIT loading
 
 ### Key Decisions Made During PRD
 
