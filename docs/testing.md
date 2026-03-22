@@ -76,7 +76,7 @@ Six jobs run on every push and pull request:
 
 Quality Gates: 6/6 PASSED (coverage, pass rate, critical path, risk mitigation, usability, documentation)
 
-See: [Emma P0 Test Results](../_bmad-output/test-artifacts/emma-tests/emma-p0-test-results.md)
+See: [Emma P0 Test Results](../_bmad-output/_archive/phase-1/emma-p0-test-results.md)
 
 ### Wade - P0 Suite: 18/18 PASSED
 
@@ -91,7 +91,7 @@ Live Test Suite: 5/5 PASSED (activation, full workflow, validation, chat, party 
 
 Quality Gates: 6/6 PASSED
 
-See: [Wade P0 Test Results](../_bmad-output/test-artifacts/wade-tests/wade-p0-test-execution.md)
+See: [Wade P0 Test Results](../_bmad-output/_archive/phase-2/wade-p0-test-execution.md)
 
 ### Isla - Infrastructure Validated
 
