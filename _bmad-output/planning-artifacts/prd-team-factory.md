@@ -257,7 +257,7 @@ Extending the BMAD framework with new teams, agents, or skills requires both arc
 | FR11 | Factory produces complete integration: registry entries, config fields, contracts, validation rules, manifest entries, activation, naming | Must |
 | FR12 | Overlap detection — surface potential overlaps against existing agent manifest for human review. User can override with acknowledgment. | Must |
 | FR13 | Contextual examples surfaced at each decision point (drawn from Vortex, native teams) | Must |
-| FR14 | Discoverable entry point in every surface where colleagues discover agents and skills | Must |
+| FR14 | Discoverable entry point in surfaces enumerated in NFR10 (agent menu, module-help.csv, BMad Master, README) | Must |
 | FR15 | Abort path: creation manifest lists all files created, with removal instructions | Must |
 | FR16 | Validation rules vary by composition pattern — per-pattern requirements (e.g., contracts required for Sequential, optional for Independent) | Must |
 | FR17 | Decision tree — composition pattern selection cascades to eliminate irrelevant decisions | Must |
@@ -278,13 +278,7 @@ Extending the BMAD framework with new teams, agents, or skills requires both arc
 
 ### Cross-Cutting Design Principles
 
-These are not features to build — they are quality attributes that every FR must satisfy. They overlap with NFRs and success criteria intentionally to ensure visibility at every level.
-
-| Principle | Restated In | Rationale |
-|-----------|-------------|-----------|
-| Zero-assistance completion for framework contributors | SC1, NFR1, North Star | The factory's reason for existing |
-| User-facing complexity must feel Low despite medium implementation complexity | NFR1, Classification | Dual complexity model — implementation reality vs. user perception |
-| No decisions that require verbal fallback to the framework creator | SC1, C8 mitigations | Eliminates the scaling bottleneck |
+Zero-assistance (SC1, NFR1), must-feel-Low (NFR1, Classification), and no verbal fallback (C8 mitigations) are quality attributes enforced across all FRs — not features to build independently.
 
 ---
 
@@ -295,7 +289,7 @@ These are not features to build — they are quality attributes that every FR mu
 | NFR1 | Usability | User-facing complexity must feel Low — contributor completes team creation without consulting external documentation. Target: under 60 minutes for Independent, under 90 minutes for Sequential. Use plain language at decision points, not framework internals. | Must |
 | NFR2 | Usability | Progressive disclosure — each step introduces ≤3 new concepts. Early steps are simple, later steps introduce detail only as needed. | Must |
 | NFR3 | Reliability | Factory output passes validation on first run — zero manual fixes required | Must |
-| NFR4 | Reliability | Idempotent — same decisions produce same output across runs | Must |
+| NFR4 | Reliability | FR23 idempotency verified by automated regression — same spec file produces identical output across factory versions | Must |
 | NFR5 | Maintainability | Architecture Reference is single source of truth — factory reads rules at runtime, zero hardcoded values in workflow step files. Reference sections cite source files for staleness detection. | Must |
 | NFR6 | Maintainability | Factory delegates artifact generation to shared templates. Factory-authored code limited to integration wiring. No factory-authored agent files, workflow steps, or skill templates. | Must |
 | NFR7 | Compatibility | Output passes same validation rules and refresh pipeline as native teams | Must |
@@ -596,16 +590,15 @@ Two consecutive colleague failures on the same step = step flagged for redesign.
 
 | # | Constraint | Impact |
 |---|-----------|--------|
-| C1 | Claude Code conversation model | Micro-file architecture, JIT loading, context efficiency |
+| C1 | Claude Code context window constraints | Micro-file architecture, JIT loading, sequential per-agent processing, file-based state |
 | C2 | Fully local operation | No network dependencies during execution |
 | C3 | BMAD directory conventions | `_bmad/` paths unchanged |
 | C4 | Additive-only shared files | Append, never modify existing entries |
-| C5 | Architecture Reference as single source of truth | Factory reads, doesn't hardcode |
+| C5 | Architecture Reference integrity | See NFR5 — factory reads at runtime, reference cites sources for staleness |
 | C6 | No BMB duplication | Delegate via shared templates |
 | C7 | Existing tool compatibility | convoke-doctor, convoke-update, convoke-install |
 | C8 | Single framework creator | All knowledge extraction depends on Amalik |
 | C9 | Reference maintenance | Not sole-creator dependent — sections cite source files for staleness |
-| C10 | Sequential per-agent processing | JIT loading, file-based state, micro-file workflow |
 
 ### C8 Mitigations
 
@@ -851,7 +844,7 @@ FR1 Machine-consumable team checklist per pattern | FR2 Human-readable context (
 **Cross-Cutting Design Principles:** Zero-assistance completion | Must feel Low complexity | No verbal fallback dependency
 
 **Non-Functional Requirements (NFR1-NFR18):**
-NFR1 Under 60/90 min, plain language | NFR2 Progressive disclosure | NFR3 Validator pass first run | NFR4 Idempotent | NFR5 Reference as single source of truth | NFR6 Delegate generation, own wiring only | NFR7 Same validation as native teams | NFR8 Local only, no external deps | NFR9 Resumable via spec file | NFR10 Discoverable in all surfaces | NFR11 Traceable errors | NFR12 Safe with uncommitted changes | NFR13 Isolated validation before shared writes | NFR14 Safe templating, no injection | NFR15 Config field collision check | NFR16 File manifest every run | NFR17 Additive-only shared files | NFR18 Sequential per-agent, JIT loading
+NFR1 Under 60/90 min, plain language | NFR2 Progressive disclosure (≤3 concepts/step) | NFR3 Validator pass first run | NFR4 FR23 idempotency regression across versions | NFR5 Reference as single source of truth (runtime read, zero hardcode) | NFR6 Delegate generation, own wiring only | NFR7 Same validation as native teams | NFR8 Local only, no external deps | NFR9 Resumable via spec file | NFR10 Discoverable in 4 surfaces (agent menu, help CSV, BMad Master, README) | NFR11 Traceable errors | NFR12 Dirty tree detection before shared writes | NFR13 Isolated validation before shared writes | NFR14 Safe templating, no injection | NFR15 Config field collision check | NFR16 File manifest every run | NFR17 Additive-only shared files | NFR18 Sequential per-agent, JIT loading
 
 ### Key Decisions Made During PRD
 
