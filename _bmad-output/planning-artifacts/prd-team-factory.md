@@ -28,6 +28,26 @@ version: 1.0
 **Date:** 2026-03-22
 **Status:** Draft v1.0
 
+### Table of Contents
+
+1. [Executive Summary](#1-executive-summary)
+2. [Product Vision](#2-product-vision)
+3. [Problem Statement](#3-problem-statement)
+4. [Target Users](#4-target-users)
+5. [User Journeys](#5-user-journeys)
+6. [Success Criteria](#6-success-criteria)
+7. [Functional Requirements](#7-functional-requirements)
+8. [Non-Functional Requirements](#8-non-functional-requirements)
+9. [User Interaction & Design](#9-user-interaction--design)
+10. [Technical Architecture Overview](#10-technical-architecture-overview)
+11. [Risks & Mitigations](#11-risks--mitigations)
+12. [Success Metrics](#12-success-metrics)
+13. [Dependencies & Constraints](#13-dependencies--constraints)
+14. [Timeline & Milestones](#14-timeline--milestones)
+15. [Stakeholders](#15-stakeholders)
+16. [Acceptance Criteria](#16-acceptance-criteria)
+17. [Appendix](#17-appendix)
+
 ---
 
 ## 1. Executive Summary
@@ -327,6 +347,38 @@ Step 6: VALIDATE
 **Express Mode:** User provides a complete team spec file (YAML). Factory validates the declaration, skips to Step 4 (Review), then generates. Same quality gates, fewer conversation turns. The spec file doubles as guided mode output and express mode input.
 
 **Abort:** At any point, creation manifest shows what was created. User can cleanly remove partial output.
+
+### Team Spec File Schema
+
+The spec file is the factory's central artifact — audit trail, resume state, express mode input, and metrics store. Required fields:
+
+| Section | Field | Type | Set At |
+|---------|-------|------|--------|
+| **header** | team_name | string | Step 1 |
+| | composition_pattern | Independent / Sequential | Step 1 |
+| | created_by | string | Auto |
+| | created_date | date | Auto |
+| | factory_version | string | Auto |
+| | status | in_progress / complete / aborted | Auto |
+| **agents[]** | name | string | Step 2 |
+| | role | string | Step 2 |
+| | inputs | string[] | Step 2 |
+| | outputs | string[] | Step 2 |
+| | capabilities | string[] | Step 2 |
+| | overlap_check | clear / overridden (reason) | Step 2 |
+| **contracts[]** | from_agent | string | Step 3 |
+| *(Sequential only)* | to_agent | string | Step 3 |
+| | artifact | string | Step 3 |
+| **config** | module_path | string | Step 1 |
+| | shared_fields | key-value[] | Step 3 |
+| | module_fields | key-value[] | Step 3 |
+| **orchestration** | mode | standalone / master-routed | Step 3 |
+| **decisions[]** | step | string | Each step |
+| | decision | string | Each step |
+| | default_accepted | boolean | Each step |
+| **metrics** | pattern_fit | yes / partial / no | Step 6 |
+| | hardest_step | string | Step 6 |
+| | would_use_again | yes / no / with_changes | Step 6 |
 
 ### Interaction Principles
 
@@ -754,6 +806,14 @@ This PRD was developed through 13 steps of structured discovery including:
 - 6 Advanced Elicitation rounds (First Principles Analysis ×2, Thesis Defense ×2, Stakeholder Round Table ×2, Reverse Brainstorming ×2, Five Whys ×2)
 - 8 Party Mode sessions (classification, problem statement, functional requirements, NFRs, interaction design, architecture, risks/metrics, dependencies/timeline, stakeholders, acceptance criteria)
 - Agents consulted: Emma, Liam, Bond, Morgan, Winston, Isla, John, Wendy, Barry, Murat, Noah, Wade, Max, Bob, Amelia, BMad Master
+
+### Quick Reference Card
+
+**Functional Requirements (FR1-FR28):**
+FR1 Machine-consumable team checklist per pattern | FR2 Human-readable context (why) | FR3 Four quality properties | FR4 Composition patterns with examples | FR5 Extension mechanism documented | FR6 Bidirectional Gyre validation | FR7 Integration surface enumerated | FR8 Forced decision points before generation | FR9 Step-by-step validation | FR10 Delegate to BMB, own integration | FR11 Complete integration wiring | FR12 Overlap detection for human review | FR13 Contextual examples at decisions | FR14 Discoverable entry point | FR15 Abort path with creation manifest | FR16 Per-pattern validation rules | FR17 Decision cascade elimination | FR18 Sensible defaults with guidance | FR19 Decision summary checkpoint | FR20 End-to-end validation pass | FR21 Spec file persistence (audit + resume + express) | FR22 Naming convention enforcement | FR23 Idempotent output | FR24 Add Agent workflow | FR25 Add Skill workflow | FR26 Zero-assistance completion | FR27 Must feel Low complexity | FR28 No verbal fallback dependency
+
+**Non-Functional Requirements (NFR1-NFR18):**
+NFR1 Under 60/90 min, plain language | NFR2 Progressive disclosure | NFR3 Validator pass first run | NFR4 Idempotent | NFR5 Reference as single source of truth | NFR6 Delegate generation, own wiring only | NFR7 Same validation as native teams | NFR8 Local only, no external deps | NFR9 Resumable via spec file | NFR10 Discoverable in all surfaces | NFR11 Traceable errors | NFR12 Safe with uncommitted changes | NFR13 Isolated validation before shared writes | NFR14 Safe templating, no injection | NFR15 Config field collision check | NFR16 File manifest every run | NFR17 Additive-only shared files | NFR18 Sequential per-agent, JIT loading
 
 ### Key Decisions Made During PRD
 
