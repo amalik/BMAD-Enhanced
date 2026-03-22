@@ -258,7 +258,7 @@ Extending the BMAD framework with new teams, agents, or skills requires both arc
 | FR8 | Forced architectural decision points before any file generation (composition pattern, agent scope, contracts, orchestration mode) | Must |
 | FR9 | Step-by-step validation — each step confirms output before next begins | Must |
 | FR10 | Factory delegates artifact generation to BMB with full context (composition pattern, existing agents, scope boundaries). Factory owns all integration wiring. | Must |
-| FR11 | Factory produces complete integration: registry entries, config fields, contracts, validation rules, manifest entries, activation, naming | Must |
+| FR11 | Factory produces complete integration: registry entries, config fields, contracts, validation rules, manifest entries, activation, naming (includes both factory-authored wiring and delegated artifacts) | Must |
 | FR12 | Overlap detection — surface potential overlaps against existing agent manifest for human review. User can override with acknowledgment. | Must |
 | FR13 | Contextual examples surfaced at each decision point (drawn from Vortex, native teams) | Must |
 | FR14 | Discoverable entry point in surfaces enumerated in NFR10 (agent menu, module-help.csv, BMad Master, README) | Must |
@@ -826,7 +826,7 @@ The Product Vision used "Classic Module / Orchestrated Submodule / Extension" fo
 
 ### Assumption Traceability
 
-Assumptions (A4, A5', etc.) are defined in the upstream Assumption Risk Map (`assumption-map-team-factory-2026-03-22.md`). This table maps them to their validation mechanisms within this PRD.
+Assumptions (A4, A5', etc.) are defined in the upstream Assumption Risk Map (`adr-assumption-map-team-factory-2026-03-22.md`). This table maps them to their validation mechanisms within this PRD.
 
 | Assumption | Validated By | PRD Section |
 |-----------|-------------|-------------|
