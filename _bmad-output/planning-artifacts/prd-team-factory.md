@@ -1,5 +1,5 @@
 ---
-stepsCompleted: [step-01-init]
+stepsCompleted: [step-01-init, step-02-discovery, step-03-functional-requirements, step-04-nfr, step-05-interaction-design, step-06-architecture, step-07-risks, step-08-metrics, step-09-dependencies, step-10-timeline, step-11-stakeholders, step-12-acceptance, step-13-assembly]
 inputDocuments:
   - _bmad-output/vortex-artifacts/product-vision-team-factory-2026-03-21.md
   - _bmad-output/vortex-artifacts/scope-decision-team-factory-2026-03-21.md
@@ -18,9 +18,672 @@ classification:
   userFacingComplexity: must-feel-low
   userMentalModel: "Team Builder / Create a new team"
   projectContext: brownfield
+status: DRAFT
+version: 1.0
 ---
 
-# Product Requirements Document - Team Factory
+# Product Requirements Document — Team Factory
 
 **Author:** Amalik
 **Date:** 2026-03-22
+**Status:** Draft v1.0
+
+---
+
+## 1. Product Vision
+
+> For framework contributors who need to extend BMAD with new teams, agents, and skills, the Team Factory is a guided orchestration layer that enforces architectural decision-making and produces fully wired, BMAD-compliant modules. Unlike directly editing files or using BMB alone, the Team Factory makes architectural decisions visible and unavoidable, while automating integration wiring — producing output indistinguishable from native BMAD teams.
+
+**Classification:**
+
+| Field | Value |
+|-------|-------|
+| Project Type | Internal Tooling — Guided Factory |
+| Domain | AI Agent Framework Extensibility |
+| Implementation Complexity | Medium |
+| User-Facing Complexity | Must feel Low |
+| User Mental Model | "Team Builder" / "Create a new team" |
+| Project Context | Brownfield |
+
+The factory doesn't extend the framework — it's a tool that helps people build things *for* the framework.
+
+---
+
+## 2. Problem Statement
+
+Extending the BMAD framework with new teams, agents, or skills requires both architectural understanding and manual integration wiring across multiple files. This makes it impossible for colleagues to self-serve — demand is active (requested implementations), not projected.
+
+**Impact:**
+- **Scale blocker:** 7 teams incoming, all additions flow through one person (the framework creator)
+- **Quality gap:** Colleagues who attempt extensions independently skip thinking steps, produce structurally valid but architecturally broken teams (no contracts, no scope boundaries, orphaned files)
+- **No entry point:** Colleagues don't know where to start — they don't resist the process, they can't find it
+- **No feedback loop:** Colleagues don't know when wiring is wrong — errors surface at runtime, not at creation time
+
+**Current Alternatives:**
+
+| Alternative | Coverage | Gap |
+|-------------|----------|-----|
+| Manual creation | Full control | Error-prone, no quality gates, no integration wiring, no validation feedback |
+| BMB alone | ~55% (agent files, workflows, scaffolds) | No registry, config, contracts, submodule awareness, or discovery process |
+| Copy-paste from Vortex | Structural patterns | Cannot handle context-specific decisions: composition pattern, contract design, scope boundaries, overlap detection |
+
+**The factory addresses two gaps:**
+- **Decision forcing:** The guided steps make architectural decisions visible and unavoidable — you can't skip the thinking because the factory won't proceed without the decision
+- **Integration automation:** The factory handles wiring that templates can't — registry, config, contracts, validation, manifest entries
+
+**What templates handle (deterministic):** Directory structure, boilerplate files, naming conventions, registration entry format.
+
+**What the factory handles (context-specific reasoning):** Composition pattern selection, agent scope boundaries, contract design, config field patterns, overlap detection, orchestration mode.
+
+**Maintenance:** Team update/migration workflows are explicitly out of scope for v1.
+
+---
+
+## 3. Target Users
+
+### Segmentation (by framework relationship, not role)
+
+| Segment | Relationship | Version |
+|---------|-------------|---------|
+| **Framework contributors** | Use BMAD daily, want to extend it | v1 |
+| Framework adopters | Installed BMAD, learning it | v2 |
+| Framework evaluators | Considering BMAD, browsing GitHub | v3 |
+
+### v1 Target Persona
+
+**Framework contributor:** Understands BMAD concepts and can use agents, but cannot wire new components into the framework. The knowledge gap is mechanical, not conceptual — they understand the *what*, they don't know the *how* of wiring.
+
+**They know:** What teams and agents are, how to invoke agents, what config.yaml does, what output looks like.
+
+**They don't know:** How agent-registry.js connects agents to the system, how refresh-installation.js copies files, what validator.js checks, how contracts enforce handoffs, how config fields map to behavior, how module-help.csv drives discoverability, how activation XML structures initialization.
+
+### Design Principles for Target Users
+
+- **Zero-assistance completion:** Framework contributor completes without asking anyone
+- **No verbal fallback dependency:** No decisions that require messaging the framework creator
+- **Don't actively exclude community users:** No decisions that require rewrite for v2 community support
+
+---
+
+## 4. Functional Requirements
+
+### Phase 1: Architecture Reference
+
+| # | Requirement | Priority |
+|---|------------|----------|
+| FR1 | Machine-consumable checklist of what constitutes a valid BMAD team (directory structure, required files, naming conventions, registration entries) — per composition pattern | Must |
+| FR2 | Human-readable context explaining *why* each checklist item matters | Must |
+| FR3 | Organized around four quality properties: Discoverable, Installable, Configurable, Composable | Must |
+| FR4 | Composition pattern definitions (Independent, Sequential) with examples from existing teams | Must |
+| FR5 | Extension deployment mechanism documented separately from composition patterns | Must |
+| FR6 | Validated bidirectionally against Gyre — predicts structure AND can guide building from scratch | Must |
+| FR7 | Integration surface enumerated: agent-registry.js, refresh-installation.js, validator.js, contracts, config.yaml, module-help.csv, activation XML, naming conventions | Must |
+
+### Phase 2: Add Team Factory Workflow
+
+| # | Requirement | Priority |
+|---|------------|----------|
+| FR8 | Forced architectural decision points before any file generation (composition pattern, agent scope, contracts, orchestration mode) | Must |
+| FR9 | Step-by-step validation — each step confirms output before next begins | Must |
+| FR10 | Factory curates BMB inputs with full context (composition pattern, existing agents, scope boundaries) and delegates via shared templates (Option C). Guided handoff as fallback (Option B). | Must |
+| FR11 | Factory owns integration wiring: registry, config, contracts, validation, manifest entries | Must |
+| FR12 | Overlap detection — surface potential overlaps against existing agent manifest for human review. User can override with acknowledgment. | Must |
+| FR13 | Contextual examples surfaced at each decision point (drawn from Vortex, native teams) | Must |
+| FR14 | Discoverable entry point in every surface where colleagues discover agents and skills | Must |
+| FR15 | Abort path: creation manifest lists all files created, with removal instructions. Not automated rollback. | Must |
+| FR16 | Factory-BMB integration via template embedding (Option C primary, sequential handoff Option B as fallback) | Must |
+| FR23 | Validation rules vary by composition pattern — per-pattern requirements (e.g., contracts required for Sequential, optional for Independent) | Must |
+| FR24 | Decision tree — composition pattern selection cascades to eliminate irrelevant decisions | Must |
+| FR25 | "Help me decide" guidance with sensible defaults + explanation. User confirms or overrides. | Should |
+| FR26 | Decision summary checkpoint — all decisions presented for approval before generation begins | Must |
+| FR27 | End-to-end validator.js pass as final step | Must |
+| FR28 | Decision state persisted as team spec file (YAML with comments) — serves as audit trail, resume point, and express mode input | Must |
+| FR29 | Active naming convention enforcement during factory flow | Must |
+| FR30 | Idempotent output — same decisions produce same output | Must |
+
+### Phase 3: Extension Workflows
+
+| # | Requirement | Priority |
+|---|------------|----------|
+| FR17 | Add Agent to existing team — scope check, registration, contract wiring | Should |
+| FR18 | Add Skill/Workflow to existing agent — manifest update, template, menu wiring | Should |
+
+### Cross-Cutting
+
+| # | Requirement | Priority |
+|---|------------|----------|
+| FR19 | Zero-assistance completion for framework contributors | Must |
+| FR20 | User-facing complexity must feel Low despite medium implementation complexity | Must |
+| FR21 | No decisions that require verbal fallback to the framework creator | Must |
+
+---
+
+## 5. Non-Functional Requirements
+
+| # | Category | Requirement | Priority |
+|---|----------|------------|----------|
+| NFR1 | Usability | User-facing complexity must feel Low — contributor completes team creation without consulting external documentation. Target: under 60 minutes for Independent, under 90 minutes for Sequential. Design guideline: use plain language at decision points, not framework internals. | Must |
+| NFR3 | Reliability | Factory output passes validator.js on first run — zero manual fixes required | Must |
+| NFR4 | Reliability | Idempotent — same decisions produce same output across runs | Must |
+| NFR5 | Maintainability | Architecture Reference is single source of truth — factory reads rules from it, doesn't hardcode. Reference sections cite source files for staleness detection (C9). | Must |
+| NFR6 | Maintainability | Factory delegates artifact generation to shared templates. Factory-authored code limited to integration wiring (registry entries, config fields, manifest lines). No factory-authored agent files, workflow steps, or skill templates. Minimal post-processing for integration allowed. | Must |
+| NFR7 | Compatibility | Output passes same validator.js rules and refresh-installation.js pipeline as native teams | Must |
+| NFR8 | Compatibility | Works within existing Claude Code interaction model — no external tooling dependencies. Fully local operation — no network dependencies. | Must |
+| NFR9 | Resumability | If interrupted, user resumes by loading team spec file. Resume presents decision summary and continues from last incomplete step. | Should |
+| NFR10 | Discoverability | Factory entry point exists in every surface where colleagues discover agents and skills | Must |
+| NFR-errors | Recoverability | When validation fails, errors are traceable to the specific factory decision or step that caused them | Must |
+| NFR-isolation | Safety | Factory operations safe to run with uncommitted changes — detect and warn about conflicts | Should |
+| NFR-progressive | Usability | Progressive disclosure — early steps are simple, later steps introduce detail only as needed | Must |
+| NFR-regression | Safety | Factory modifications to shared files validated in isolation before being applied — no partial writes | Must |
+| NFR-safe-template | Security | Factory-generated code uses safe templating — no raw string interpolation of user input into executable files | Must |
+| NFR-no-collide | Safety | Factory validates new config fields don't collide with existing fields before writing | Must |
+| NFR-file-manifest | Auditability | File manifest of created + modified files produced at end of every factory run | Must |
+| NFR-additive | Safety | Factory operations are additive to shared files — append new entries, never modify or remove existing | Must |
+| C10 | Performance | Sequential per-agent processing (not batch). JIT resource loading. File-based state persistence. Micro-file architecture for workflow steps. | Must |
+
+---
+
+## 6. User Interaction & Design
+
+### Entry Points
+
+| Entry | Route |
+|-------|-------|
+| "build/create a team" or multi-agent problem | → Create Team (Step 1) |
+| "add an agent to [team]" | → Add Agent (Phase 3, v1 fallback: reference checklist) |
+| "add a skill to [agent]" | → Add Skill (Phase 3, v1 fallback: reference checklist) |
+| Vague / unclear | → Discovery questions to determine route |
+
+### User Flow
+
+```
+Step 0: DISCOVER (optional)
+  "What problem are you trying to solve?"
+  Routes to correct workflow. v1: Create Team only.
+  Others get graceful fallback with reference checklist.
+        │
+Step 1: ORIENT
+  "What kind of team are you building?"
+  Plain language → factory suggests composition pattern
+  with explanation + examples. User confirms or overrides.
+        │ Decision: Composition pattern
+Step 2: SCOPE (iterative, per agent)
+  For each agent: name, role, inputs, outputs, capabilities.
+  Overlap check against manifest. Naming enforcement.
+        │ Decision: Agents, scope, names
+Step 3: CONNECT (Sequential only — skipped for Independent)
+  Contract definition, orchestration mode, config fields.
+        │ Decision: Contracts, config
+Step 4: REVIEW (FR26 — decision checkpoint)
+  Full decision summary. Spec file persisted (FR28).
+  User approves, edits, or aborts.
+        │ Approval gate
+Step 4b: DRY-RUN PREVIEW (optional)
+  What will be generated. Proposed diffs to shared files.
+  User approves before execution.
+        │
+Step 5: GENERATE (per-agent sequential loop)
+  For each agent:
+    Generate from template → user reviews intent →
+    wire integration → validate wiring → next agent.
+  Shared file diffs shown for explicit approval.
+        │
+Step 6: VALIDATE
+  End-to-end validator.js pass. File manifest output.
+  Regression check on existing teams.
+  Pinpointed errors: specific file + line + originating decision.
+  Metrics captured in spec file.
+  Two post-completion questions: hardest step + would use again.
+```
+
+### Alternative Paths
+
+**Express Mode:** User provides a complete team spec file (YAML). Factory validates the declaration, skips to Step 4 (Review), then generates. Same quality gates, fewer conversation turns. The spec file doubles as guided mode output and express mode input.
+
+**Abort:** At any point, creation manifest shows what was created. User can cleanly remove partial output.
+
+### Interaction Principles
+
+| Principle | Implementation |
+|-----------|---------------|
+| Progressive disclosure | Each step shows only what's relevant |
+| Decision forcing with guidance | Suggested default + "here's how to tell" + examples |
+| Cascade elimination | Pattern selection removes irrelevant steps |
+| Resumable | Spec file persisted, re-read at each step |
+| Context-efficient | One step file at a time, JIT resource loading, file-based state |
+
+---
+
+## 7. Technical Architecture Overview
+
+### Runtime Model
+
+The factory is a **standard BMAD workflow** — step files loaded one at a time, LLM reasoning for analysis, JavaScript utility functions for deterministic operations. Not two separate "engines" to build — a design principle:
+
+- **Deterministic operations (codify as JS utilities):** Directory validation, naming enforcement, cascade logic, config collision check, registration format, file manifest tracking
+- **Reasoning operations (LLM in conversation):** Overlap detection, BMB input curation, output review, contract design assistance, Step 0 routing
+
+### Component Overview
+
+```
+┌─────────────────────────────────────────────┐
+│  TEAM FACTORY (BMAD workflow)                │
+│                                              │
+│  Conversation flow (Steps 0-4)               │
+│    + JS validation utilities                 │
+│    + Team spec file (YAML state)             │
+│                                              │
+│  Generation loop (Step 5)                    │
+│    + Shared templates (from BMB)             │
+│    + Integration wiring (4 file formats)     │
+│    + Per-agent sequential processing         │
+│                                              │
+│  Validation (Step 6)                         │
+│    + Pattern-aware validator.js              │
+│    + Regression check                        │
+│    + File manifest + metrics                 │
+└──────────────┬──────────────┬───────────────┘
+               │              │
+               ▼              ▼
+┌──────────────────┐  ┌──────────────────────┐
+│ Architecture      │  │ Shared Templates     │
+│ Reference         │  │ (externalized from   │
+│ - Machine-readable│  │  BMB)                │
+│   checklist       │  │ - Agent template     │
+│ - Pattern rules   │  │ - Workflow template  │
+│ - Examples        │  │ - Skill template     │
+└──────────────────┘  └──────────────────────┘
+               │              │
+               ▼              ▼
+┌─────────────────────────────────────────────┐
+│ BMAD Framework (target files)                │
+│ agent-registry.js  │  config.yaml           │
+│ refresh-install.js │  module-help.csv       │
+│ validator.js       │  activation XML        │
+│ contracts/         │  agents/               │
+└─────────────────────────────────────────────┘
+```
+
+### Key Architecture Decisions
+
+| Decision | Choice | Rationale |
+|----------|--------|-----------|
+| Factory runtime | BMAD workflow (step files + frontmatter) | Follows existing patterns, no new infrastructure |
+| BMB integration | Template embedding (Option C) — factory loads shared templates directly | No BMB refactor needed, no agent invocation, cleanest integration. Fallback: Option B (guided handoff). |
+| Validation | Per-step + end-to-end + regression | Trust BMB output structurally. User reviews intent. Validate only factory-written wiring. Final full pass. |
+| Shared file writes | Additive, preview-first, validated in isolation | Prevents corruption of existing teams |
+| State persistence | Team spec file (YAML with comments) | Triple duty: audit trail, resume point, express mode input |
+| Context management | Micro-file architecture, JIT loading, sequential per-agent | Required for Claude Code context window constraints |
+| Integration wiring | 4 format-specific write operations | JS (registry), YAML (config), CSV (help), XML (activation) — each with own validation |
+
+---
+
+## 8. Risks & Mitigations
+
+### High Priority — Address Before Phase 2
+
+| # | Risk | L | I | Mitigation |
+|---|------|---|---|------------|
+| R1 | **BMB template extraction fails** — generation knowledge locked inside agent persona, not externalized as reusable templates | M | H | Root cause fix: externalize generation templates as shared resources — BMB becomes wrapper around shared templates. Spike: extract one template, test standalone. Fallback: Option B (guided handoff). |
+| R2 | **Overlap detection false positives** — users lose trust, override everything | M | H | Surface with confidence + evidence. User can override. Tune after first 2-3 teams. |
+| R3 | **Factory not discoverable** — instance of systemic gap: BMAD has no capability discovery mechanism for multi-user | M | H | Entry point in all discovery surfaces. BMad Master "what's available?" enhancement as parallel workstream. |
+| R4 | **Shared file corruption** — centralized registration assumes manual edits, not automation | L | Crit | v1: additive writes, isolated validation, diff preview, creation manifest. Root cause: modular registration (per-team fragments + merge) in Phase 2. |
+
+### Medium Priority — Address During Phase 2
+
+| # | Risk | L | I | Mitigation |
+|---|------|---|---|------------|
+| R5 | **Reference format wrong** for factory consumption | M | M | Bidirectional Gyre validation. If factory can't parse reference to produce Gyre decisions, format needs revision. |
+| R6 | **Decision fatigue** despite cascade elimination | M | M | Progressive disclosure. Sensible defaults. Monitor completion time. |
+| R7 | **BMB output doesn't match user intent** | M | M | User review gate between generation and wiring (guided mode). Express mode trusts spec. |
+| R8 | **Spec file format conflicts** across three purposes | L | M | YAML with comments. Optimize for parsing, add readable comments. Test early. |
+| R-context | **Context window limits** — factory loads too much content | M | M | Micro-file architecture, JIT loading, sequential per-agent, spec file as ground truth at every step. |
+| R-drift | **Template drift** — BMB and factory consume different templates | M | M | Both must consume same shared templates. Externalization must be complete before Phase 2. |
+
+### Low Priority — Monitor
+
+| # | Risk | L | I | Mitigation |
+|---|------|---|---|------------|
+| R9 | Composition patterns don't cover edge cases | L | M | Gather descriptions of undefined teams. Extend model if third pattern emerges. |
+| R10 | Reference becomes stale | L | L | Reference sections cite source files. Changes to framework files flag reference for update. |
+| R11 | Colleague can't complete without help | M | L | This IS the validation. First test reveals what's missing. |
+
+### Prerequisites (Gates)
+
+| # | Prerequisite | Validates | Definition of Done |
+|---|-------------|-----------|-------------------|
+| P1/P6 | BMB template externalization + validation (merged workstream) | A12, R1 | One agent template generates output that passes validator.js AND matches provided spec (name, role, capabilities). Both BMB and factory consume same shared template. |
+| P2 | Architecture Reference validated against Gyre (bidirectional) | A4, R5 | Reference predicts Gyre's structure. Person holding only the reference produces written team spec matching Gyre's actual structure. |
+| P3 | Colleague reads reference without mentoring | A19 | Colleague presented with novel team scenario identifies correct composition pattern with reasoning. 4/4 rubric: pattern, files, registration, contracts. |
+| P4 | Factory entry point wired into surfaces | A22 | Colleague finds factory without being told where it is. |
+| P5 | Minimal factory prototype | Runtime model | One-agent Independent team: registered, manifest-visible, validator-passing, config added, help CSV added — zero manual edits, all via conversation workflow. |
+
+---
+
+## 9. Success Metrics
+
+### North Star
+
+**Can a framework contributor create a valid, fully-wired team without assistance?**
+
+### Primary Metrics
+
+| # | Metric | How Measured |
+|---|--------|-------------|
+| M1 | **First colleague completes without assistance** — track friction points (where they paused, struggled, felt uncertain) | Observation during colleague tests (AC19, AC20) |
+| M2 | **Validator pass on first run** — 100% of factory output | validator.js results in spec file |
+| M3 | **Learning curve slope** — measurable improvement between first guided run, second guided run, first express run | Conversation turn count per step across runs |
+| M4 | **Validator coverage gaps** — does validator catch every integration issue, or are there gaps the factory exposes? | Track manual fixes needed despite validator pass |
+
+### Secondary Metrics (Artifact-Based Collection)
+
+| Metric | Collection | Stored In |
+|--------|-----------|-----------|
+| Pattern fit | `pattern_fit: yes/partial/no` per team | Spec file metrics section |
+| Decision overrides | `default_accepted: true/false` per decision | Spec file metrics section |
+| Hardest step | Post-completion question (1 of 2) | Spec file metrics section |
+| Satisfaction | "Would you use this again?" (2 of 2) | Spec file metrics section |
+| Adoption | Teams with vs. without corresponding spec files | Project-level audit |
+
+### Failure Modes
+
+| Mode | Signal | Detection | Response |
+|------|--------|-----------|----------|
+| **Nobody uses it** | Teams built manually despite factory available | Teams without spec files | Discoverability problem — fix entry points |
+| **Bad output** | Validator failures, manual edits within 48h | validator.js + git blame | Technical problem — fix generation or validation |
+| **Painful process** | Completes but won't return, high override rate | Satisfaction question + override tracking | UX problem — simplify steps, improve defaults |
+| **Breaks at scale** | Simple teams succeed, complex teams fail | Success rate by pattern + agent count | Architecture problem — model or implementation gap |
+
+### Pivot Trigger
+
+Two consecutive colleague failures on the same step = step flagged for redesign. Two fix iterations on output quality without improvement = written decision document on whether to continue factory approach or rely on Architecture Reference alone.
+
+### Anti-Metrics
+
+| Anti-Metric | Why |
+|-------------|-----|
+| Speed at expense of quality | A bad team is worse than no team |
+| Number of teams created | Volume without quality is meaningless |
+| Factory feature count | Simplicity over capability |
+
+---
+
+## 10. Dependencies & Constraints
+
+### Dependencies
+
+| # | Dependency | Blocks | Status |
+|---|-----------|--------|--------|
+| D1 | Architecture Reference (Phase 1) | Phase 2 — factory reads rules from reference | Not started |
+| D2 | BMB template externalization | Phase 2 generation — shared templates | Not started |
+| D3 | validator.js | Phase 2 validation — may need pattern-aware extension | Exists |
+| D4-D6 | agent-registry.js, refresh-installation.js, config.yaml | Phase 2 wiring targets | Exist |
+| D7 | BMad Master capability discovery | Discoverability (parallel workstream) | Not started |
+| D8 | Gyre product brief | P2 validation target | Exists |
+| D9 | **Colleague availability** | M1.3, M2.1 observation, M3.3 tests | Not scheduled |
+
+### Constraints
+
+| # | Constraint | Impact |
+|---|-----------|--------|
+| C1 | Claude Code conversation model | Micro-file architecture, JIT loading, context efficiency |
+| C2 | Fully local operation | No network dependencies during execution |
+| C3 | BMAD directory conventions | `_bmad/` paths unchanged |
+| C4 | Additive-only shared files | Append, never modify existing entries |
+| C5 | Architecture Reference as single source of truth | Factory reads, doesn't hardcode |
+| C6 | No BMB duplication | Delegate via shared templates |
+| C7 | Existing tool compatibility | convoke-doctor, convoke-update, convoke-install |
+| C8 | Single framework creator | All knowledge extraction depends on Amalik |
+| C9 | Reference maintenance | Not sole-creator dependent — sections cite source files for staleness |
+| C10 | Sequential per-agent processing | JIT loading, file-based state, micro-file workflow |
+
+### C8 Mitigations
+
+| Mitigation | When |
+|-----------|------|
+| Phase 1 is knowledge extraction — nothing starts until it's complete | Phase 1 |
+| Reference separates automatable rules from judgment calls | Phase 1 |
+| Pair work with colleague during Phase 1 grows second reviewer | Phase 1 |
+| Reference doubles as review rubric for non-creator review | Phase 1 design |
+
+### Phase 2 Two-Track Structure
+
+**Track A (conversation, no infra deps):** Steps 0-4 workflow. Can start immediately after Phase 1. Use idle time for Gyre decision flow testing with mock generation.
+
+**Track B (infrastructure):** Modular registration → pattern-aware validator → template integration → Step 5 → Step 6.
+
+Tracks converge at Step 5 (Generate).
+
+---
+
+## 11. Timeline & Milestones
+
+### Phase 1: Architecture Reference (Knowledge Extraction)
+
+**"Done enough" = M1.2 + M1.3 pass, not perfection.**
+
+| Milestone | Done When |
+|-----------|-----------|
+| M1.1 | Checklist covers every file type in integration surface (8 items). Per item: required/optional per pattern, naming rule, content template, validation rule. Verified against Vortex's actual file set — zero uncovered. |
+| M1.2 | Person holding only the reference produces written Gyre spec matching actual structure: pattern, agent count, contract count, directory layout, file set. |
+| M1.3 | Colleague presented with novel scenario identifies composition pattern with reasoning. 4/4 rubric. |
+| M1.4 | Colleague finds factory entry point without being told. |
+
+### Prerequisites (Sequential: P6/P1 → P5)
+
+| Milestone | Done When |
+|-----------|-----------|
+| P6/P1 | One agent template generates output passing validator.js + matching spec. BMB and factory share the template. |
+| P5 | One-agent Independent team: registered, manifest-visible, validator-passing, config + help CSV added. Zero manual edits. |
+
+### Phase 2: Add Team Factory (Two Tracks → Convergence)
+
+| Milestone | Track | Done When |
+|-----------|-------|-----------|
+| M2.1 | A | Steps 0-4 complete. User completes decision flow, spec file produced. |
+| M2.2 | A | Express mode: spec file accepted, validated, skips to Review. |
+| M2.3 | B | Modular registration: factory writes to team fragment, merge produces valid shared files. |
+| M2.4 | B | Pattern-aware validator.js: different rules per composition pattern. |
+| M2.5 | B | Template integration: factory loads shared templates, generates sequentially. |
+| M2.6 | Conv. | Step 5: per-agent loop (generate → review → wire → validate). |
+| M2.7 | Conv. | Step 6: end-to-end validation, file manifest, metrics. |
+| M2.7a | Gate | Smoke test: 2-agent Independent team, full flow. Validates plumbing only. |
+| M2.8 | Gate | **Gyre test:** 4 agents, 3 contracts, all wiring. Passes validator. Deployable without edits. Colleague A observes. |
+
+**Hard gate: M2.8 passes before Phase 3 or colleague self-serve test.**
+
+### Phase 3: Extension + Validation
+
+| Milestone | Done When |
+|-----------|-----------|
+| M3.3 | **Colleague A self-serve:** creates team end-to-end, zero assistance. (Moved up — before extension workflows.) |
+| M3.3b | **Colleague B cold start:** finds factory, creates team with no prior exposure. |
+| M3.1 | Add Agent workflow operational. |
+| M3.2 | Add Skill workflow operational. |
+| M3.4 | Seven teams milestone — all factory-built, structurally consistent. |
+
+### Parallel Workstream
+
+| Milestone | Done When |
+|-----------|-----------|
+| MW.1 | BMad Master "what's available?" responds with dynamic capability list from manifests. |
+
+### Safeguards
+
+| # | Safeguard | Prevents |
+|---|-----------|----------|
+| T1 | Phase 1 "done enough" = M1.2 + M1.3, not perfection | Scope creep |
+| T2 | Track A starts immediately after Phase 1 | Unnecessary serialization |
+| T3 | Gyre decision flow tested on Track A with mock generation | Big-bang validation |
+| T4 | Colleague availability scheduled during Phase 1 | Late-stage blocker |
+| T5 | M2.8 is hard gate before Phase 3 | Building on broken foundation |
+| T6 | Template externalization incremental — one type first | Front-loading risk |
+
+---
+
+## 12. Stakeholders
+
+### Real Stakeholders
+
+| Stakeholder | Role | Status |
+|-------------|------|--------|
+| **Amalik** | Product owner, builder, sole framework expert | Fully aligned |
+| **Colleague A** (TBD) | Learning partner: pair review → flow test → self-serve | Not yet identified |
+| **Colleague B** (TBD) | Reality check: cold-start self-serve test only | Not yet identified |
+
+**Persona requirement:** Both colleagues must match target persona — uses BMAD agents, cannot wire new components. Too junior (never used BMAD) or too senior (knows the wiring) invalidates the test.
+
+### Three-Stage Colleague Engagement
+
+| Stage | When | What | Rule |
+|-------|------|------|------|
+| 1. Pair review | M1.3 | Colleague A reads reference, writes summary, identifies patterns in novel scenario | No coaching after — fix the reference, don't explain it |
+| 2. Flow observation | M2.8 | Colleague A observes Gyre test, asks questions | Exposure, not formal test |
+| 3. Self-serve | M3.3 / M3.3b | Colleague A creates team (prepared). Colleague B creates team (cold start). | Zero assistance. Your confusion is the most valuable data. |
+
+### Decision Authority
+
+All decisions: Amalik. Colleagues validate user experience. Pivot decision (AC25) requires written decision document.
+
+### Action Items
+
+| Item | Owner | When |
+|------|-------|------|
+| Identify and name Colleague A + B | Amalik | Before Phase 1 starts |
+| Verify colleagues match target persona | Amalik | Before scheduling |
+| Schedule 45-minute blocks for M1.3, M2.8 observation, M3.3 | Amalik | During Phase 1 |
+
+### Fallbacks (No Valid Colleague Available)
+
+1. Self-test with amnesia protocol (reference only, no codebase access)
+2. LLM proxy test (fresh conversation with reference only — gaps surface as clarifying questions)
+3. Defer colleague test, accept higher risk, fix when available
+
+---
+
+## 13. Acceptance Criteria
+
+### Validation Layers (Progressive Gates)
+
+Each layer is a gate — if it fails, don't proceed to the next.
+
+#### Layer 1: Foundation (Phase 1)
+
+| # | Criterion | Pass When |
+|---|-----------|-----------|
+| AC1 | Structural completeness | Zero uncovered files when compared against Vortex's actual file set across all 8 integration surface items |
+| AC2 | Pattern coverage | Every existing team (BMM, CIS, TEA, WDS, Vortex, Gyre, Enhance) maps cleanly to Independent, Sequential, or Extension |
+| AC3 | Bidirectional Gyre validation | Reference-only spec matches Gyre's actual structure |
+| AC4 | Machine-readability | Factory prototype parses reference — deterministic rules extracted without LLM interpretation |
+| AC5 | Colleague comprehension | Novel scenario: colleague identifies composition pattern with reasoning (comprehension, not recall) |
+| AC6 | Discoverability | Colleague locates entry point without being told |
+
+#### Layer 2: Core Mechanism (Prerequisites)
+
+| # | Criterion | Pass When |
+|---|-----------|-----------|
+| AC7 | Template externalization | Output passes validator.js AND matches provided spec |
+| AC8 | Factory prototype | One-agent Independent team, all wiring, zero manual edits |
+
+#### Layer 3: Decision Flow (Track A)
+
+| # | Criterion | Pass When |
+|---|-----------|-----------|
+| AC9 | Decision flow with Gyre profile | Spec file matches Gyre's actual composition, agents, contracts, config |
+| AC10 | Express mode | Spec file accepted as input, validated, skips to Review |
+| AC11 | Cascade elimination | Independent team skips contract and orchestration steps automatically |
+| AC12 | Overlap detection | Potential overlap surfaced with evidence. Override accepted. |
+
+#### Layer 4: Generation Pipeline (Convergence)
+
+| # | Criterion | Pass When | Notes |
+|---|-----------|-----------|-------|
+| AC13 | Smoke test (2-agent Independent) | End-to-end, all files, registered, validated | Validates plumbing only — not cascading, contracts, or pattern logic |
+| AC14 | **Gyre test** (4-agent Sequential) | Passes validator. Deployable without edits. | Proves tool correctness, not user outcome. AC19/AC20 are outcome tests. |
+| AC15 | Shared file safety | All entries additive. Diffs previewed. No existing entries modified. |
+| AC16 | Sequential per-agent processing | Each agent: generate → review → wire → validate. Context within limits. |
+| AC17 | Abort/recovery | Creation manifest lists files. Cleanly removable. No orphaned shared entries. |
+| AC18 | Metrics capture | Spec file contains metrics section |
+| AC18b | Metrics review | Metrics reviewed after each run, logged in central tracker |
+| AC26 | **Functional test** | Invoke factory-built agent, run one workflow, output matches contract spec |
+| AC27 | **Regression check** | validator.js against all existing teams after factory run — zero new failures |
+
+#### Layer 5: User Validation (Phase 3)
+
+| # | Criterion | Pass When |
+|---|-----------|-----------|
+| AC19 | Colleague A self-serve | End-to-end completion, zero assistance. Friction points documented. |
+| AC29 | Colleague output comprehension | Colleague explains: composition pattern, where agents registered, what contracts enforce — without spec file |
+| AC20 | Colleague B cold start | Finds factory, completes or identifies clear blocking point |
+| AC21 | Add Agent | Agent added to existing team with scope check, registration, contracts |
+| AC22 | Add Skill | Skill added with manifest, template, menu wiring |
+
+#### Layer 6: Ongoing
+
+| # | Criterion | Pass When |
+|---|-----------|-----------|
+| AC23 | Adoption detection | Any team without spec file triggers investigation |
+| AC24 | Monthly validator | 100% pass rate on all factory-built teams |
+| AC25 | Pivot trigger | Two consecutive failures on same step → written decision document |
+| AC28 | Scale monitoring | After 3+ factory teams: refresh-installation and convoke-doctor complete without errors |
+
+### Test Ownership
+
+| Layer | Owner | Trigger |
+|-------|-------|---------|
+| 1 (Foundation) | Amalik | Phase 1 complete |
+| 2 (Core Mechanism) | Amalik | Prerequisites complete |
+| 3 (Decision Flow) | Amalik | Track A built |
+| 4 (Generation) | Amalik + Colleague A observes | Tracks converge |
+| 5 (User Validation) | Colleague A + Colleague B | Scheduled after M2.8 |
+| 6 (Ongoing) | Amalik | Monthly / after each factory run |
+
+---
+
+## 14. Appendix
+
+### Upstream Artifacts
+
+| Document | Type | Location |
+|----------|------|----------|
+| Product Vision: Team Factory | Vortex artifact | `_bmad-output/vortex-artifacts/product-vision-team-factory-2026-03-21.md` |
+| Scope Decision: Team Factory | Vortex artifact | `_bmad-output/vortex-artifacts/scope-decision-team-factory-2026-03-21.md` |
+| Assumption Risk Map: Team Factory | Vortex artifact | `_bmad-output/vortex-artifacts/assumption-map-team-factory-2026-03-22.md` |
+| Product Brief: Gyre | Planning artifact | `_bmad-output/planning-artifacts/product-brief-gyre-2026-03-19.md` |
+
+### Assumption Traceability
+
+| Assumption | Validated By | PRD Section |
+|-----------|-------------|-------------|
+| A4 (Gyre follows same model) | P2, AC3 | Prerequisites, Acceptance |
+| A5' (Four quality properties) | FR3, M1.1 | Functional Requirements, Timeline |
+| A6' (Composition patterns) | FR4, AC2 | Functional Requirements, Acceptance |
+| A12/A13 (BMB delegation) | P6/P1, AC7 | Prerequisites, Acceptance |
+| A19 (Surface user follows reference) | P3, AC5 | Prerequisites, Acceptance |
+| A22 (Discoverability) | P4, AC6 | Prerequisites, Acceptance |
+
+### Elicitation Record
+
+This PRD was developed through 13 steps of structured discovery including:
+- 6 Advanced Elicitation rounds (First Principles Analysis ×2, Thesis Defense ×2, Stakeholder Round Table ×2, Reverse Brainstorming ×2, Five Whys ×2)
+- 8 Party Mode sessions (classification, problem statement, functional requirements, NFRs, interaction design, architecture, risks/metrics, dependencies/timeline, stakeholders, acceptance criteria)
+- Agents consulted: Emma, Liam, Bond, Morgan, Winston, Isla, John, Wendy, Barry, Murat, Noah, Wade, Max, Bob, Amelia, BMad Master
+
+### Key Decisions Made During PRD
+
+| Decision | Rationale | Source |
+|----------|-----------|--------|
+| "Internal Tooling" not "Framework Extension" | Factory doesn't extend the framework, it produces things for it | Party Mode 1 |
+| "Decision forcing" not "teaching" | Factory makes decisions unavoidable, reference provides understanding | Party Mode 2 |
+| Template embedding (Option C) over BMB API | No BMB refactor needed, factory loads templates directly | Party Mode 4 |
+| Two-track Phase 2 | Conversation flow has no infra deps, can start immediately | Party Mode 5 |
+| Colleague test before extension workflows | Highest-value validation should happen earliest | Party Mode 6 |
+| Spec file as triple-duty artifact | Audit trail + resume + express input — one format, three uses | Multiple sessions |
+| Modular registration in Phase 2 | Defensive measures on shared files become debt after multiple teams | Party Mode 4 |
+
+---
+
+**Created with:** Convoke v2.3.1 — Vortex Pattern + BMM PRD Workflow
+**PM Agent:** John (Product Manager)
+**Workflow:** create-prd (13 steps)
+**Elicitation:** Advanced Elicitation (6 rounds) + Party Mode (8 sessions)
