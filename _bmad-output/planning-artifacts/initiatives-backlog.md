@@ -2,7 +2,7 @@
 
 **Created:** 2026-03-08
 **Method:** RICE (Reach, Impact, Confidence, Effort)
-**Last Updated:** 2026-03-21
+**Last Updated:** 2026-03-22
 
 ---
 
@@ -55,6 +55,7 @@
 | S1 | **Interactive installer with project-type questions** — Ask user questions during install to customize initial config (e.g., B2B/B2C, team size). Note: must account for Skills installation alongside Teams (v2.4.0). v6.2.0 skill packages add discovery via `bmad-skill-manifest.yaml` — installer question flow should include skill activation. | Multi-agent review (Sally) | 5 | 2 | 50% | 5 | 1.0 | Move the needle | Backlog |
 | S2 | **Simplified entry point** — Single "Start Discovery" command that activates Emma with a guided first-run experience. Note: Enhance skill activation UX (keyword in chat) provides a reference pattern for low-friction entry points. | Multi-agent review (Sally) | 7 | 1 | 40% | 4 | 0.7 | Move the needle | Backlog |
 | I3 | **CSV parser library for manifest** — Replace regex-based CSV parsing in `refresh-installation.js` with proper parser | Murat review | 2 | 0.25 | 70% | 1 | 0.4 | Keep the lights on | Backlog |
+| I5 | **Workflow output naming enforcement** — Update artifact-producing workflows (PRD, architecture, epics, UX, readiness, Vortex, quick-spec, sprint) to follow `{category}-{descriptor}[-{context}][-{date}].md` convention at creation time. Incremental: apply when a workflow is touched for any reason. Archive script (`npm run archive --rename`) catches drift in the meantime. ADR Phase C. | ADR `adr-repo-organization-conventions-2026-03-22.md` | 8 | 0.5 | 90% | 3 | 1.2 | Keep the lights on | Backlog |
 | I4 | **BMAD v6.2.0 convention alignment** — Adopt native skill package markers (`bmad-skill-manifest.yaml`) in Enhance workflows, verify installer handles renamed `bmad-`-prefixed directories, study upstream step-file patterns. Stretch: evaluate inference-based skill validator for Enhance skills. Added from party-mode v6.2.0 review, 2026-03-16 | Party-mode review (John, Winston, Amelia, Murat, Liam) | 4 | 1 | 90% | 2 | 1.8 | Keep the lights on | Backlog |
 
 ### Agent Quality & Consistency
@@ -148,22 +149,23 @@ Remaining update system items not in Hardening: load-time validation, version de
 | 13 | D6 | Reduce narrative overlap in journey example | 1.6 | Keep the lights on | Documentation |
 | 14 | U4 | Test upgrade-path step file cleanup | 1.4 | Keep the lights on | Update System |
 | 15 | P3 | Team installer architecture | 1.2 | Move the needle | Platform |
-| 16 | P7 | ML/AI Engineering team exploration | 1.2 | Move the needle | Platform |
-| 17 | S1 | Interactive installer | 1.0 | Move the needle | Infrastructure |
-| 18 | D3 | BMAD Core return arrow in diagram | 0.9 | Keep the lights on | Documentation |
-| 19 | A1 | Add validate menu items to Wave 3 agents | 0.8 | Keep the lights on | Agent Quality |
-| 20 | A3 | Add npm keywords (`agentic`, `team-of-teams`) | 0.8 | Keep the lights on | Agent Quality |
-| 21 | T1 | `convoke-update.js` coverage to 80%+ | 0.8 | Keep the lights on | Testing |
-| 22 | U2 | Validate migration modules at load time | 0.8 | Keep the lights on | Update System |
-| 23 | S2 | Simplified entry point | 0.7 | Move the needle | Infrastructure |
-| 24 | P8 | Governance & Support skill set | 0.5 | Move the needle | Platform |
-| 25 | U3 | Robust version detection fallback | 0.5 | Keep the lights on | Update System |
-| 26 | P2 | Multi-module collaboration workflows | 0.4 | Move the needle | Platform |
-| 27 | T2 | `convoke-version.js` coverage to 80%+ | 0.4 | Keep the lights on | Testing |
-| 28 | I3 | CSV parser library for manifest | 0.4 | Keep the lights on | Infrastructure |
-| 29 | T5 | Expand docs audit — remaining gaps | 0.3 | Keep the lights on | Testing |
-| 30 | A4 | Fix temp dir prefix inconsistency | 0.3 | Keep the lights on | Agent Quality |
-| 31 | A2 | Create `.agent.yaml` source files | 0.2 | Keep the lights on | Agent Quality |
+| 16 | I5 | Workflow output naming enforcement | 1.2 | Keep the lights on | Infrastructure |
+| 17 | P7 | ML/AI Engineering team exploration | 1.2 | Move the needle | Platform |
+| 18 | S1 | Interactive installer | 1.0 | Move the needle | Infrastructure |
+| 19 | D3 | BMAD Core return arrow in diagram | 0.9 | Keep the lights on | Documentation |
+| 20 | A1 | Add validate menu items to Wave 3 agents | 0.8 | Keep the lights on | Agent Quality |
+| 21 | A3 | Add npm keywords (`agentic`, `team-of-teams`) | 0.8 | Keep the lights on | Agent Quality |
+| 22 | T1 | `convoke-update.js` coverage to 80%+ | 0.8 | Keep the lights on | Testing |
+| 23 | U2 | Validate migration modules at load time | 0.8 | Keep the lights on | Update System |
+| 24 | S2 | Simplified entry point | 0.7 | Move the needle | Infrastructure |
+| 25 | P8 | Governance & Support skill set | 0.5 | Move the needle | Platform |
+| 26 | U3 | Robust version detection fallback | 0.5 | Keep the lights on | Update System |
+| 27 | P2 | Multi-module collaboration workflows | 0.4 | Move the needle | Platform |
+| 28 | T2 | `convoke-version.js` coverage to 80%+ | 0.4 | Keep the lights on | Testing |
+| 29 | I3 | CSV parser library for manifest | 0.4 | Keep the lights on | Infrastructure |
+| 30 | T5 | Expand docs audit — remaining gaps | 0.3 | Keep the lights on | Testing |
+| 31 | A4 | Fix temp dir prefix inconsistency | 0.3 | Keep the lights on | Agent Quality |
+| 32 | A2 | Create `.agent.yaml` source files | 0.2 | Keep the lights on | Agent Quality |
 
 ---
 
@@ -212,6 +214,7 @@ Remaining update system items not in Hardening: load-time validation, version de
 
 | Date | Change |
 |------|--------|
+| 2026-03-22 | Added I5 (Workflow output naming enforcement, score 1.2). Phase C from ADR `adr-repo-organization-conventions-2026-03-22.md` — incremental updates to 8 artifact-producing workflows to follow naming convention at creation time. Ranked #16. 32 active items. |
 | 2026-03-21 | **Gyre Vortex discovery complete.** P1-disc marked COMPLETE — all 7 streams executed, 8 artifacts produced (scope decision, 3 lean personas, HC2-HC6 chain). P1 updated with discovery findings: 3 hypotheses (contextual discovery, actionable prioritization, compound risk), 3-phase pilot experiment designed (interviews → model accuracy kill switch → sprint integration), 14 production signals cataloged, 4 decision gates pre-registered. P1 status updated: discovery complete, ready for pilot. Next milestone: Phase 1 interviews (5 teams, 1 week). Key speed advantage: riskiest assumption (model accuracy) testable in 2 weeks vs. Forge's 6-week shadow engagement. Discovery runs in parallel with E1 build. |
 | 2026-03-21 | **Forge Vortex discovery complete.** P9-disc marked COMPLETE — all 7 streams executed, 9 artifacts produced (scope decision, 2 lean personas, HC2-HC6 chain). P9 updated with discovery findings: 3 hypotheses validated for testing, shadow engagement designed and pre-registered, 4-gate decision lifecycle defined, 15 production signals cataloged. P9 status updated: discovery complete, ready for shadow engagement. Next milestone: identify shadow engagement candidate (mid-level consultant, brownfield engagement within 4 weeks). Shadow engagement is independent of ADR-001 build sequence — can run in parallel with Gyre E1. |
 | 2026-03-21 | **Kickoff.** P1 (Gyre) status → Active — Phase 1 (E1). P12 (Enhance) status → Queued — Phase 2 (after Gyre E1). P12 updated with Structural tier MVP definition, deferred sophistication items (auto-compass-routing, smart validation, generative content), dry-run dummy module, dogfood exercise. P13 dependency clarified (Phase 4 template lock). P9 dependency clarified (Phase 6 Enhance MVP + Vortex redesign). ADR-001 6-phase sequence is now the active execution plan. Team confidence vote: unanimous. |
