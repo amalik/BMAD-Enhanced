@@ -33,7 +33,8 @@
 # - SM typically creates next story after previous one is 'done' to incorporate learnings
 # - Dev moves story to 'review', then runs code-review (fresh context, different LLM recommended)
 
-generated: 2026-03-06
+generated: 2026-03-23
+last_updated: 2026-03-23
 project: BMAD-Enhanced
 project_key: NOKEY
 tracking_system: file-system
@@ -196,3 +197,79 @@ development_status:
   enh-3-1-create-mode-bootstrap-new-rice-backlog: done
   enh-3-2-enhance-guide-pattern-documentation: done
   enh-epic-2-3-retrospective: done
+
+  # ============================================================
+  # GYRE INITIATIVE: Production Readiness Discovery Module
+  # ============================================================
+
+  # Epic 1: Scout — Stack Detection & Module Foundation
+  gyre-epic-1: in-progress
+  gyre-1-1-module-scaffolding-config: ready-for-dev
+  gyre-1-2-scout-agent-definition: backlog
+  gyre-1-3-stack-detection-workflow: backlog
+  gyre-1-4-gc1-stack-profile-contract: backlog
+  gyre-1-5-monorepo-service-boundary-detection: backlog
+  gyre-1-6-ecosystem-integration-installer-registry-config-driven-doctor: backlog
+  gyre-1-7-compass-routing-reference-full-analysis-skeleton: backlog
+  gyre-epic-1-retrospective: optional
+
+  # Epic 2: Atlas — Capabilities Model Generation
+  gyre-epic-2: backlog
+  gyre-2-1-model-accuracy-spike-nfr19-gate: backlog
+  gyre-2-2-atlas-agent-definition: backlog
+  gyre-2-3-model-generation-workflow: backlog
+  gyre-2-4-gc2-capabilities-manifest-contract: backlog
+  gyre-2-5-full-analysis-steps-2-3-integration: backlog
+  gyre-epic-2-retrospective: optional
+
+  # Epic 3: Lens — Readiness Analysis & Findings
+  gyre-epic-3: backlog
+  gyre-3-1-lens-agent-definition: backlog
+  gyre-3-2-observability-readiness-analysis: backlog
+  gyre-3-3-deployment-readiness-analysis: backlog
+  gyre-3-4-cross-domain-correlation: backlog
+  gyre-3-5-gc3-findings-report-contract-presentation: backlog
+  gyre-3-6-full-analysis-steps-4-5-integration: backlog
+  gyre-epic-3-retrospective: optional
+
+  # Epic 4: Coach — Review, Feedback & Completion
+  gyre-epic-4: backlog
+  gyre-4-1-coach-agent-definition: backlog
+  gyre-4-2-conversational-model-review-amendment: backlog
+  gyre-4-3-gc4-feedback-loop-contract: backlog
+  gyre-4-4-feedback-capture-display: backlog
+  gyre-4-5-mode-detection-review-prompt-integration: backlog
+  gyre-4-6-delta-report-workflow: backlog
+  gyre-4-7-full-analysis-completion-compass: backlog
+  gyre-epic-4-retrospective: optional
+
+  # ============================================================
+  # TEAM FACTORY INITIATIVE: Guided Team Creation Workflow
+  # ============================================================
+
+  # Epic 1: Architecture Reference — Quality Properties & Validation
+  tf-epic-1: backlog
+  tf-1-1-quality-properties-composition-patterns: backlog
+  tf-1-2-machine-consumable-team-validity-checklists: backlog
+  tf-1-3-human-readable-context-extension-mechanism: backlog
+  tf-1-4-bidirectional-gyre-validation: backlog
+  tf-epic-1-retrospective: optional
+
+  # Epic 2: Guided Workflow — Factory Discovery & Generation
+  tf-epic-2: backlog
+  tf-2-1-factory-discoverability-entry-points: backlog
+  tf-2-2-composition-pattern-selection-decision-cascade: backlog
+  tf-2-3-agent-scope-definition-overlap-detection: backlog
+  tf-2-4-contract-design-step-validation: backlog
+  tf-2-5-decision-summary-spec-file-persistence: backlog
+  tf-2-6-bmb-delegation-artifact-generation: backlog
+  tf-2-7-integration-wiring-config-csv-activation: backlog
+  tf-2-8-registry-wiring-write-safety: backlog
+  tf-2-9-end-to-end-validation-error-recovery: backlog
+  tf-epic-2-retrospective: optional
+
+  # Epic 3: Extensions — Add Agent & Add Skill
+  tf-epic-3: backlog
+  tf-3-1-add-agent-to-existing-team: backlog
+  tf-3-2-add-skill-workflow-to-existing-agent: backlog
+  tf-epic-3-retrospective: optional
