@@ -1,6 +1,6 @@
 # Story 1.4: GC1 Stack Profile Contract
 
-Status: ready-for-dev
+Status: review
 
 ## Story
 
@@ -36,36 +36,36 @@ So that I can generate a contextually relevant capabilities manifest.
 
 ## Tasks / Subtasks
 
-- [ ] Task 1: Validate contract frontmatter (AC: #1)
-  - [ ] 1.1 Verify frontmatter schema block: `contract: GC1`, `type: artifact`, `source_agent: scout`, `source_workflow: stack-detection`, `target_agents: [atlas, lens]`, `input_artifacts: []`, `created: YYYY-MM-DD`
-  - [ ] 1.2 Verify Frontmatter Field Reference table has all 7 fields (contract, type, source_agent, source_workflow, target_agents, input_artifacts, created) with Required/Type/Description columns
+- [x] Task 1: Validate contract frontmatter (AC: #1)
+  - [x] 1.1 Verify frontmatter schema block: `contract: GC1`, `type: artifact`, `source_agent: scout`, `source_workflow: stack-detection`, `target_agents: [atlas, lens]`, `input_artifacts: []`, `created: YYYY-MM-DD`
+  - [x] 1.2 Verify Frontmatter Field Reference table has all 7 fields (contract, type, source_agent, source_workflow, target_agents, input_artifacts, created) with Required/Type/Description columns
 
-- [ ] Task 2: Validate body schema (AC: #2)
-  - [ ] 2.1 Verify body schema has all 11 fields: primary_language, primary_framework, secondary_stacks, container_orchestration, ci_cd_platform, observability_tooling, cloud_provider, communication_protocol, guard_answers (with deployment_model, protocol, custom sub-fields), detection_confidence, detection_summary
-  - [ ] 2.2 Verify Field Reference table has all fields with Required/Type/Description columns
-  - [ ] 2.3 Verify field types match architecture spec: secondary_stacks (string[]), observability_tooling (string[]), guard_answers (optional object), detection_confidence (enum: high/medium/low)
-  - [ ] 2.4 Verify guard_answers is marked as optional (only present if guard questions were asked)
+- [x] Task 2: Validate body schema (AC: #2)
+  - [x] 2.1 Verify body schema has all 11 fields: primary_language, primary_framework, secondary_stacks, container_orchestration, ci_cd_platform, observability_tooling, cloud_provider, communication_protocol, guard_answers (with deployment_model, protocol, custom sub-fields), detection_confidence, detection_summary
+  - [x] 2.2 Verify Field Reference table has all fields with Required/Type/Description columns
+  - [x] 2.3 Verify field types match architecture spec: secondary_stacks (string[]), observability_tooling (string[]), guard_answers (optional object), detection_confidence (enum: high/medium/low)
+  - [x] 2.4 Verify guard_answers is marked as optional (only present if guard questions were asked)
 
-- [ ] Task 3: Validate privacy rule (AC: #3)
-  - [ ] 3.1 Verify explicit Privacy Rule section exists
-  - [ ] 3.2 Verify privacy rule lists all 6 prohibited items: file contents, file paths, version numbers, dependency counts, dependency names, secrets/tokens/credentials
-  - [ ] 3.3 Verify privacy boundary statement: "Everything downstream of GC1 works with category-level metadata"
+- [x] Task 3: Validate privacy rule (AC: #3)
+  - [x] 3.1 Verify explicit Privacy Rule section exists
+  - [x] 3.2 Verify privacy rule lists all 6 prohibited items: file contents, file paths, version numbers, dependency counts, dependency names, secrets/tokens/credentials
+  - [x] 3.3 Verify privacy boundary statement: "Everything downstream of GC1 works with category-level metadata"
 
-- [ ] Task 4: Validate artifact location and operational rules (AC: #4)
-  - [ ] 4.1 Verify Artifact Location section specifies path: `.gyre/stack-profile.yaml`
-  - [ ] 4.2 Verify directory creation rule: `.gyre/` created on first run if missing (FR42)
-  - [ ] 4.3 Verify concurrency rule: `.gyre/.lock` prevents concurrent analysis (NFR13)
-  - [ ] 4.4 Verify atomicity rule: write to temp file, then rename
+- [x] Task 4: Validate artifact location and operational rules (AC: #4)
+  - [x] 4.1 Verify Artifact Location section specifies path: `.gyre/stack-profile.yaml`
+  - [x] 4.2 Verify directory creation rule: `.gyre/` created on first run if missing (FR42)
+  - [x] 4.3 Verify concurrency rule: `.gyre/.lock` prevents concurrent analysis (NFR13)
+  - [x] 4.4 Verify atomicity rule: write to temp file, then rename
 
-- [ ] Task 5: Validate contract structure against Vortex HC pattern (AC: #5)
-  - [ ] 5.1 Verify title line format: `# GC1: Stack Profile — Schema Definition`
-  - [ ] 5.2 Verify blockquote header with Contract, Type, Flow fields
-  - [ ] 5.3 Verify all major sections present: Frontmatter Schema, Privacy Rule, Body Schema, Artifact Location, Downstream Consumption, Example, Validation Rules
-  - [ ] 5.4 Verify Downstream Consumption table lists Atlas (model-curator) and Lens (readiness-analyst) with their purposes
-  - [ ] 5.5 Verify Example section has a complete valid GC1 artifact (frontmatter + body)
-  - [ ] 5.6 Verify Validation Rules section lists all rules for a valid GC1 artifact
+- [x] Task 5: Validate contract structure against Vortex HC pattern (AC: #5)
+  - [x] 5.1 Verify title line format: `# GC1: Stack Profile — Schema Definition`
+  - [x] 5.2 Verify blockquote header with Contract, Type, Flow fields
+  - [x] 5.3 Verify all major sections present: Frontmatter Schema, Privacy Rule, Body Schema, Artifact Location, Downstream Consumption, Example, Validation Rules
+  - [x] 5.4 Verify Downstream Consumption table lists Atlas (model-curator) and Lens (readiness-analyst) with their purposes
+  - [x] 5.5 Verify Example section has a complete valid GC1 artifact (frontmatter + body)
+  - [x] 5.6 Verify Validation Rules section lists all rules for a valid GC1 artifact
 
-- [ ] Task 6: Fix any discrepancies found in Tasks 1-5
+- [x] Task 6: Fix any discrepancies found in Tasks 1-5 — No discrepancies found
 
 ## Dev Notes
 
