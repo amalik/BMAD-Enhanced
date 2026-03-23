@@ -1,6 +1,6 @@
 # Story 3.5: GC3 Findings Report Contract & Presentation
 
-Status: review
+Status: done
 
 ## Story
 
@@ -34,39 +34,39 @@ So that I can understand what's missing and decide what to act on.
 
 ## Tasks / Subtasks
 
-- [ ] Task 1: Validate GC3 contract file (AC: #1)
-  - [ ] 1.1 Verify contract header: GC3, Artifact, Lens → Coach
-  - [ ] 1.2 Verify frontmatter schema: contract=GC3, type=artifact, source_agent=lens, source_workflow=gap-analysis, target_agents=[coach], input_artifacts=[GC2], created
-  - [ ] 1.3 Verify frontmatter field reference table: 7 fields, all required
-  - [ ] 1.4 Verify body schema: gyre_findings with version, analyzed_at, mode, stack_summary, summary, findings array, compound_findings array, sanity_check
-  - [ ] 1.5 Verify findings field reference table: 9 required fields (id, domain, severity, source, confidence, capability_ref, description, evidence_summary, severity_rationale)
-  - [ ] 1.6 Verify compound findings field reference table: 8 required fields (id, domain, severity, source, confidence, capability_ref array, related_findings array, combined_impact)
-  - [ ] 1.7 Verify artifact location: `.gyre/findings.yaml`, overwritten each run, previous backed up to `.gyre/findings.previous.yaml`
-  - [ ] 1.8 Verify downstream consumption: Coach (review-coach) for findings review and feedback
-  - [ ] 1.9 Verify example YAML: complete GC3 artifact with frontmatter, findings, compound_findings, sanity_check
-  - [ ] 1.10 Verify 11 validation rules: frontmatter, body fields, capability_ref from GC2, compound references (2 from different domains), compound confidence (lower), no low-confidence compounds, unique IDs, severity/source/confidence enums, summary count matching
+- [x] Task 1: Validate GC3 contract file (AC: #1)
+  - [x] 1.1 Verify contract header: GC3, Artifact, Lens → Coach — confirmed line 3
+  - [x] 1.2 Verify frontmatter schema: contract=GC3, type=artifact, source_agent=lens, source_workflow=gap-analysis, target_agents=[coach], input_artifacts=[GC2], created — confirmed lines 10-18
+  - [x] 1.3 Verify frontmatter field reference table: 7 fields, all required — confirmed lines 23-31
+  - [x] 1.4 Verify body schema: gyre_findings with version, analyzed_at, mode, stack_summary, summary, findings array, compound_findings array, sanity_check — confirmed lines 40-74
+  - [x] 1.5 Verify findings field reference table: 9 required fields (id, domain, severity, source, confidence, capability_ref, description, evidence_summary, severity_rationale) — confirmed lines 79-89
+  - [x] 1.6 Verify compound findings field reference table: 8 required fields (id, domain, severity, source, confidence, capability_ref array, related_findings array, combined_impact) — confirmed lines 93-102
+  - [x] 1.7 Verify artifact location: `.gyre/findings.yaml`, overwritten each run, previous backed up to `.gyre/findings.previous.yaml` — confirmed lines 108-110
+  - [x] 1.8 Verify downstream consumption: Coach (review-coach) for findings review and feedback — confirmed lines 117-118
+  - [x] 1.9 Verify example YAML: complete GC3 artifact with frontmatter, findings, compound_findings, sanity_check — confirmed lines 124-179
+  - [x] 1.10 Verify 11 validation rules: frontmatter (rule 1), body fields (rule 2), capability_ref from GC2 (rule 3), compound references 2 different domains (rule 4), compound confidence lower (rule 5), no low-confidence compounds (rule 6), unique IDs (rule 7), severity enum (rule 8), source enum (rule 9), confidence enum (rule 10), summary counts match (rule 11) — confirmed lines 186-197
 
-- [ ] Task 2: Validate step-05-present-findings.md structure (AC: #2)
-  - [ ] 2.1 Verify frontmatter: step=5, workflow=gap-analysis, title=Present Findings
-  - [ ] 2.2 Verify mandatory execution rules: write GC3 first, severity-first (FR33), novelty ratio (FR34), compounds (FR35), copy-pasteable (FR49), error recovery (NFR11)
-  - [ ] 2.3 Verify GC3 artifact write section: YAML template with frontmatter + gyre_findings structure
+- [x] Task 2: Validate step-05-present-findings.md structure (AC: #2)
+  - [x] 2.1 Verify frontmatter: step=5, workflow=gap-analysis, title=Present Findings — confirmed lines 2-4
+  - [x] 2.2 Verify mandatory execution rules: write GC3 first (line 13), severity-first FR33 (line 14), novelty ratio FR34 (line 15), compounds FR35 (line 16), copy-pasteable FR49 (line 17), error recovery NFR11 (line 18) — all 6 confirmed
+  - [x] 2.3 Verify GC3 artifact write section: YAML template with frontmatter + gyre_findings structure — confirmed lines 22-53
 
-- [ ] Task 3: Validate conversational presentation format (AC: #2)
-  - [ ] 3.1 Verify mode indicator section (FR37): crisis/anticipation mode
-  - [ ] 3.2 Verify severity-first summary (FR33): table with blockers/recommended/nice-to-have counts + novelty ratio
-  - [ ] 3.3 Verify blocker findings presentation: finding ID, capability name, description, evidence, confidence, severity_rationale
-  - [ ] 3.4 Verify compound findings presentation (FR35): COMPOUND-NNN, combines OBS+DEP, impact reasoning chain, compound confidence
-  - [ ] 3.5 Verify recommended findings presentation: table format with finding/capability/confidence
-  - [ ] 3.6 Verify nice-to-have findings presentation: table format
-  - [ ] 3.7 Verify sanity check warnings section
-  - [ ] 3.8 Verify summary footer: "Written to .gyre/findings.yaml"
+- [x] Task 3: Validate conversational presentation format (AC: #2)
+  - [x] 3.1 Verify mode indicator section (FR37): crisis/anticipation mode — confirmed lines 59-63
+  - [x] 3.2 Verify severity-first summary (FR33): table with blockers/recommended/nice-to-have counts + novelty ratio — confirmed lines 65-78
+  - [x] 3.3 Verify blocker findings presentation: finding ID, capability name, description, evidence, confidence, "Why blocker" severity_rationale — confirmed lines 80-90
+  - [x] 3.4 Verify compound findings presentation (FR35): COMPOUND-NNN, combines OBS+DEP, impact reasoning chain, compound confidence — confirmed lines 92-101
+  - [x] 3.5 Verify recommended findings presentation: table format with #/Finding/Capability/Confidence — confirmed lines 103-111
+  - [x] 3.6 Verify nice-to-have findings presentation: table format — confirmed lines 113-121
+  - [x] 3.7 Verify sanity check warnings section — confirmed lines 123-129
+  - [x] 3.8 Verify summary footer: "Written to `.gyre/findings.yaml`" — confirmed lines 131-137
 
-- [ ] Task 4: Validate error recovery and compass (AC: #3)
-  - [ ] 4.1 Verify error recovery section: NFR11 (retry), FR56 (capabilities.yaml safe)
-  - [ ] 4.2 Verify partial completion presentation: completed domain + failed domain + options (view/retry/exit)
-  - [ ] 4.3 Verify Gyre Compass: next-step recommendations (model-review/delta-report/model-generation)
+- [x] Task 4: Validate error recovery and compass (AC: #3)
+  - [x] 4.1 Verify error recovery section: NFR11 (retry), FR56 (capabilities.yaml safe) — confirmed lines 139-158
+  - [x] 4.2 Verify partial completion presentation: completed domain (checkmark) + failed domain (X) + 3 options (view/retry/exit) — confirmed lines 148-157
+  - [x] 4.3 Verify Gyre Compass: 3 next-step recommendations — model-review/Coach, delta-report/Lens, model-generation/Atlas — confirmed lines 162-172
 
-- [ ] Task 5: Fix any discrepancies found in Tasks 1-4
+- [x] Task 5: Fix any discrepancies found in Tasks 1-4 — No discrepancies found
 
 ## Dev Notes
 
@@ -135,12 +135,27 @@ From Story 3.2 completion notes:
 
 ### Agent Model Used
 
-{{agent_model_name_version}}
+Claude Opus 4.6
 
 ### Debug Log References
 
+None — no errors encountered.
+
 ### Completion Notes List
+
+- All 24 validation subtasks passed across 5 tasks and 2 files — zero discrepancies found
+- Task 1 (GC3 contract, 198 lines): Contract header (Lens → Coach), frontmatter schema (7 fields), body schema (gyre_findings with 8 top-level sections), findings field reference (9 required), compound field reference (8 required), artifact location (.gyre/findings.yaml with backup), downstream consumption (Coach), example YAML (complete), 11 validation rules — all correct
+- Task 2 (step-05 structure): Frontmatter, 6 mandatory execution rules (FR33/FR34/FR35/FR49/NFR11 + write-first), GC3 YAML template — all correct
+- Task 3 (presentation format): Mode indicator (FR37), severity-first summary table (FR33), blocker detail format, compound format with reasoning chains (FR35), recommended/nice-to-have tables, sanity warnings, summary footer — all 8 sections correct
+- Task 4 (error recovery/compass): NFR11 retry + FR56 capabilities safe, partial completion with 3 options, Gyre Compass with 3 next-step recommendations — all correct
+- Task 5 (fix): No discrepancies found — fifth consecutive clean validation in Epic 3
+- This is a validation-only story — no files were created or modified
 
 ### Change Log
 
+- 2026-03-23: Full validation of gc3-findings-report.md (198 lines) and step-05-present-findings.md (173 lines) — all checks passed, no changes needed
+
 ### File List
+
+- `_bmad/bme/_gyre/contracts/gc3-findings-report.md` (validated, no changes)
+- `_bmad/bme/_gyre/workflows/gap-analysis/steps/step-05-present-findings.md` (validated, no changes)
