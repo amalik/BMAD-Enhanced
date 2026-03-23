@@ -210,7 +210,7 @@ development_status:
   gyre-1-4-gc1-stack-profile-contract: done
   gyre-1-5-monorepo-service-boundary-detection: done
   gyre-1-6-ecosystem-integration-installer-registry-config-driven-doctor: done
-  gyre-1-7-compass-routing-reference-full-analysis-skeleton: backlog
+  gyre-1-7-compass-routing-reference-full-analysis-skeleton: review
   gyre-epic-1-retrospective: optional
 
   # Epic 2: Atlas — Capabilities Model Generation
