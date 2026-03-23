@@ -214,12 +214,12 @@ development_status:
   gyre-epic-1-retrospective: done
 
   # Epic 2: Atlas — Capabilities Model Generation
-  gyre-epic-2: in-progress
+  gyre-epic-2: done
   gyre-2-1-model-accuracy-spike-nfr19-gate: done
   gyre-2-2-atlas-agent-definition: done
   gyre-2-3-model-generation-workflow: done
   gyre-2-4-gc2-capabilities-manifest-contract: done
-  gyre-2-5-full-analysis-steps-2-3-integration: review
+  gyre-2-5-full-analysis-steps-2-3-integration: done
   gyre-epic-2-retrospective: optional
 
   # Epic 3: Lens — Readiness Analysis & Findings
