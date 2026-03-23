@@ -223,18 +223,18 @@ development_status:
   gyre-epic-2-retrospective: done
 
   # Epic 3: Lens — Readiness Analysis & Findings
-  gyre-epic-3: in-progress
+  gyre-epic-3: done
   gyre-3-1-lens-agent-definition: done
   gyre-3-2-observability-readiness-analysis: done
   gyre-3-3-deployment-readiness-analysis: done
   gyre-3-4-cross-domain-correlation: done
   gyre-3-5-gc3-findings-report-contract-presentation: done
-  gyre-3-6-full-analysis-steps-4-5-integration: ready-for-dev
-  gyre-epic-3-retrospective: optional
+  gyre-3-6-full-analysis-steps-4-5-integration: done
+  gyre-epic-3-retrospective: done
 
   # Epic 4: Coach — Review, Feedback & Completion
-  gyre-epic-4: backlog
-  gyre-4-1-coach-agent-definition: backlog
+  gyre-epic-4: in-progress
+  gyre-4-1-coach-agent-definition: done
   gyre-4-2-conversational-model-review-amendment: backlog
   gyre-4-3-gc4-feedback-loop-contract: backlog
   gyre-4-4-feedback-capture-display: backlog
