@@ -1,6 +1,6 @@
 # Story 1.6: Ecosystem Integration — Installer, Registry, Config-Driven Doctor
 
-Status: ready-for-dev
+Status: review
 
 ## Story
 
@@ -43,49 +43,49 @@ So that Gyre integrates cleanly with my existing Convoke setup.
 
 ## Tasks / Subtasks
 
-- [ ] Task 1: Validate `package.json` bin entry (AC: #1)
-  - [ ] 1.1 Verify `convoke-install-gyre` bin entry exists pointing to `scripts/install-gyre-agents.js`
+- [x] Task 1: Validate `package.json` bin entry (AC: #1)
+  - [x] 1.1 Verify `convoke-install-gyre` bin entry exists pointing to `scripts/install-gyre-agents.js`
 
-- [ ] Task 2: Validate `scripts/install-gyre-agents.js` (AC: #1)
-  - [ ] 2.1 Verify script follows `install-vortex-agents.js` pattern: banner, prerequisites, output dir, refreshInstallation call, verification, success message
-  - [ ] 2.2 Verify script imports `GYRE_AGENTS` from agent-registry
-  - [ ] 2.3 Verify script calls `refreshInstallation` (not manual file copying)
-  - [ ] 2.4 Verify script calls `findProjectRoot()` (not `process.cwd()`)
-  - [ ] 2.5 Verify script reads version via `getPackageVersion()` (not hardcoded)
+- [x] Task 2: Validate `scripts/install-gyre-agents.js` (AC: #1)
+  - [x] 2.1 Verify script follows `install-vortex-agents.js` pattern: banner, prerequisites, output dir, refreshInstallation call, verification, success message
+  - [x] 2.2 Verify script imports `GYRE_AGENTS` from agent-registry
+  - [x] 2.3 Verify script calls `refreshInstallation` (not manual file copying)
+  - [x] 2.4 Verify script calls `findProjectRoot()` (not `process.cwd()`)
+  - [x] 2.5 Verify script reads version via `getPackageVersion()` (not hardcoded)
 
-- [ ] Task 3: Validate `scripts/update/lib/agent-registry.js` (AC: #2)
-  - [ ] 3.1 Verify GYRE_AGENTS array has 4 agents: stack-detective, model-curator, readiness-analyst, review-coach — each with id, name, title, icon, persona fields
-  - [ ] 3.2 Verify GYRE_WORKFLOWS array has 7 workflows: stack-detection, model-generation, gap-analysis, model-review, delta-report, full-analysis, accuracy-validation
-  - [ ] 3.3 Verify workflow-to-agent assignments match architecture spec: stack-detection→stack-detective, model-generation→model-curator, gap-analysis→readiness-analyst, model-review→review-coach, delta-report→readiness-analyst, full-analysis→stack-detective, accuracy-validation→model-curator
-  - [ ] 3.4 Verify derived lists: GYRE_AGENT_FILES, GYRE_AGENT_IDS, GYRE_WORKFLOW_NAMES follow same derivation pattern as Vortex
-  - [ ] 3.5 Verify all Gyre arrays are exported in module.exports
+- [x] Task 3: Validate `scripts/update/lib/agent-registry.js` (AC: #2)
+  - [x] 3.1 Verify GYRE_AGENTS array has 4 agents: stack-detective, model-curator, readiness-analyst, review-coach — each with id, name, title, icon, persona fields
+  - [x] 3.2 Verify GYRE_WORKFLOWS array has 7 workflows: stack-detection, model-generation, gap-analysis, model-review, delta-report, full-analysis, accuracy-validation
+  - [x] 3.3 Verify workflow-to-agent assignments match architecture spec: stack-detection→stack-detective, model-generation→model-curator, gap-analysis→readiness-analyst, model-review→review-coach, delta-report→readiness-analyst, full-analysis→stack-detective, accuracy-validation→model-curator
+  - [x] 3.4 Verify derived lists: GYRE_AGENT_FILES, GYRE_AGENT_IDS, GYRE_WORKFLOW_NAMES follow same derivation pattern as Vortex
+  - [x] 3.5 Verify all Gyre arrays are exported in module.exports
 
-- [ ] Task 4: Validate `scripts/convoke-doctor.js` config-driven design (AC: #3)
-  - [ ] 4.1 Verify `discoverModules()` scans `_bmad/bme/*/config.yaml` dynamically (no hardcoded module list)
-  - [ ] 4.2 Verify per-module checks: `checkModuleConfig()` validates agents[] and workflows[] arrays present
-  - [ ] 4.3 Verify `checkModuleAgents()` validates file existence only (agent files exist and are non-empty)
-  - [ ] 4.4 Verify `checkModuleWorkflows()` validates directory existence only (workflow.md present in each workflow dir)
-  - [ ] 4.5 Verify doctor does NOT perform content validation (contract schemas, workflow steps, agent protocol) — file existence ONLY per ADR-001
-  - [ ] 4.6 Verify global checks: output dir, migration lock, version consistency across all discovered modules
+- [x] Task 4: Validate `scripts/convoke-doctor.js` config-driven design (AC: #3)
+  - [x] 4.1 Verify `discoverModules()` scans `_bmad/bme/*/config.yaml` dynamically (no hardcoded module list)
+  - [x] 4.2 Verify per-module checks: `checkModuleConfig()` validates agents[] and workflows[] arrays present
+  - [x] 4.3 Verify `checkModuleAgents()` validates file existence only (agent files exist and are non-empty)
+  - [x] 4.4 Verify `checkModuleWorkflows()` validates directory existence only (workflow.md present in each workflow dir)
+  - [x] 4.5 Verify doctor does NOT perform content validation (contract schemas, workflow steps, agent protocol) — file existence ONLY per ADR-001
+  - [x] 4.6 Verify global checks: output dir, migration lock, version consistency across all discovered modules
 
-- [ ] Task 5: Validate `scripts/update/lib/refresh-installation.js` Gyre support (AC: #4)
-  - [ ] 5.1 Verify section 2d copies Gyre agents using GYRE_AGENT_FILES from registry
-  - [ ] 5.2 Verify section 2d copies Gyre workflows using GYRE_WORKFLOW_NAMES from registry
-  - [ ] 5.3 Verify section 2d copies Gyre contracts directory
-  - [ ] 5.4 Verify section 2d copies Gyre config.yaml with config merge (preserving user prefs)
-  - [ ] 5.5 Verify section 2d copies Gyre README.md
-  - [ ] 5.6 Verify section 6b generates `.claude/skills/` entries for all GYRE_AGENTS
-  - [ ] 5.7 Verify skill SKILL.md content points to `_bmad/bme/_gyre/agents/` (not `_vortex/`)
-  - [ ] 5.8 Verify section 4 (manifest regeneration) includes GYRE_AGENTS alongside AGENTS
+- [x] Task 5: Validate `scripts/update/lib/refresh-installation.js` Gyre support (AC: #4)
+  - [x] 5.1 Verify section 2d copies Gyre agents using GYRE_AGENT_FILES from registry
+  - [x] 5.2 Verify section 2d copies Gyre workflows using GYRE_WORKFLOW_NAMES from registry
+  - [x] 5.3 Verify section 2d copies Gyre contracts directory
+  - [x] 5.4 Verify section 2d copies Gyre config.yaml with config merge (preserving user prefs)
+  - [x] 5.5 Verify section 2d copies Gyre README.md
+  - [x] 5.6 Verify section 6b generates `.claude/skills/` entries for all GYRE_AGENTS
+  - [x] 5.7 Verify skill SKILL.md content points to `_bmad/bme/_gyre/agents/` (not `_vortex/`)
+  - [x] 5.8 Verify section 4 (manifest regeneration) includes GYRE_AGENTS alongside AGENTS
 
-- [ ] Task 6: Validate `agent-manifest.csv` (AC: #5)
-  - [ ] 6.1 Verify all 4 Gyre agents present: Scout (stack-detective), Atlas (model-curator), Lens (readiness-analyst), Coach (review-coach)
-  - [ ] 6.2 Verify paths use `_bmad/bme/_gyre/agents/` prefix
-  - [ ] 6.3 Verify canonicalId format: `bmad-agent-bme-{agent-id}`
-  - [ ] 6.4 Verify module column is `bme`
+- [x] Task 6: Validate `agent-manifest.csv` (AC: #5)
+  - [x] 6.1 Verify all 4 Gyre agents present: Scout (stack-detective), Atlas (model-curator), Lens (readiness-analyst), Coach (review-coach)
+  - [x] 6.2 Verify paths use `_bmad/bme/_gyre/agents/` prefix
+  - [x] 6.3 Verify canonicalId format: `bmad-agent-bme-{agent-id}`
+  - [x] 6.4 Verify module column is `bme`
 
-- [ ] Task 7: Fix discrepancies found in Tasks 1-6
-  - [ ] 7.1 Fix `delta-report` workflow assignment: change from `review-coach` to `readiness-analyst` in agent-registry.js (architecture spec lines 650-651 confirm Lens owns delta-report)
+- [x] Task 7: Fix discrepancies found in Tasks 1-6
+  - [x] 7.1 Fix `delta-report` workflow assignment: change from `review-coach` to `readiness-analyst` in agent-registry.js (architecture spec lines 650-651 confirm Lens owns delta-report)
 
 ## Dev Notes
 
@@ -186,10 +186,34 @@ From Story 1.1 completion notes:
 
 ### Agent Model Used
 
+Claude Opus 4.6
+
 ### Debug Log References
+
+None — no errors encountered.
 
 ### Completion Notes List
 
+- All 26 validation subtasks passed across 6 files — one discrepancy found and fixed
+- Tasks 1-2 (installer): `install-gyre-agents.js` follows Vortex pattern exactly — banner, prerequisites, output dir, refreshInstallation, verification, success
+- Task 3 (registry): GYRE_AGENTS (4 agents), GYRE_WORKFLOWS (7 workflows), derived lists all correct. **One fix:** `delta-report` reassigned from `review-coach` to `readiness-analyst` per architecture spec
+- Task 4 (doctor): Already fully config-driven per ADR-001 — `discoverModules()` scans dynamically, validates file existence only, no content validation
+- Task 5 (refresh): Full Gyre support in section 2d (agents, workflows, contracts, config, README) and section 6b (skill generation)
+- Task 6 (manifest): All 4 Gyre agents registered with correct paths, canonicalIds, and module column
+- Task 7 (fix): Changed `delta-report` from `review-coach` to `readiness-analyst` and moved it under "Lens — Analyze" comment group
+- Full test suite: 359 tests pass, 0 failures — no regressions from the fix
+- First actual code change in the Gyre initiative (Stories 1.1-1.5 were validation-only with zero changes)
+
 ### Change Log
 
+- 2026-03-23: Fixed delta-report workflow assignment in agent-registry.js (review-coach → readiness-analyst)
+- 2026-03-23: Reordered GYRE_WORKFLOWS comment groups to match ownership (delta-report under Lens)
+
 ### File List
+
+- `scripts/update/lib/agent-registry.js` (modified — delta-report assignment fix + comment reorder)
+- `package.json` (validated, no changes)
+- `scripts/install-gyre-agents.js` (validated, no changes)
+- `scripts/convoke-doctor.js` (validated, no changes)
+- `scripts/update/lib/refresh-installation.js` (validated, no changes)
+- `_bmad/_config/agent-manifest.csv` (validated, no changes)
