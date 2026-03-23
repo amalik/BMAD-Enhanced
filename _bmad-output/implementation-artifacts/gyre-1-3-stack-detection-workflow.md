@@ -1,6 +1,6 @@
 # Story 1.3: Stack Detection Workflow
 
-Status: review
+Status: done
 
 ## Story
 
