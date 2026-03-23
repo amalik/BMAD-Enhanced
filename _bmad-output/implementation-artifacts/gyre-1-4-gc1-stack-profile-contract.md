@@ -1,6 +1,6 @@
 # Story 1.4: GC1 Stack Profile Contract
 
-Status: review
+Status: done
 
 ## Story
 
