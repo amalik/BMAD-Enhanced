@@ -237,7 +237,7 @@ development_status:
   gyre-4-1-coach-agent-definition: done
   gyre-4-2-conversational-model-review-amendment: done
   gyre-4-3-gc4-feedback-loop-contract: done
-  gyre-4-4-feedback-capture-display: backlog
+  gyre-4-4-feedback-capture-display: done
   gyre-4-5-mode-detection-review-prompt-integration: backlog
   gyre-4-6-delta-report-workflow: backlog
   gyre-4-7-full-analysis-completion-compass: backlog
