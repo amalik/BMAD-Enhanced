@@ -118,6 +118,7 @@ Follow the Vortex README structure at `_bmad/bme/_vortex/README.md`. Include:
 - **Do NOT modify `agent-registry.js`** — Story 1.6 handles ecosystem integration
 - **Do NOT modify `agent-manifest.csv`** — Story 1.6 handles registration
 - **Do NOT modify `package.json`** — Story 1.6 adds the `convoke-install-gyre` bin entry
+- **Do NOT create `_bmad-output/gyre-artifacts/`** — Output directory is created at runtime when agents write artifacts
 
 This story creates ONLY the directory skeleton + config.yaml + README.md. All other files are explicitly assigned to subsequent stories to maintain clean story boundaries.
 
