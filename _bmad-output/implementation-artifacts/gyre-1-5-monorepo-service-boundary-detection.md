@@ -1,6 +1,6 @@
 # Story 1.5: Monorepo Service Boundary Detection
 
-Status: review
+Status: done
 
 ## Story
 
