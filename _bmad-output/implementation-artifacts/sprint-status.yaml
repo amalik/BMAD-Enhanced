@@ -223,8 +223,8 @@ development_status:
   gyre-epic-2-retrospective: done
 
   # Epic 3: Lens — Readiness Analysis & Findings
-  gyre-epic-3: backlog
-  gyre-3-1-lens-agent-definition: backlog
+  gyre-epic-3: in-progress
+  gyre-3-1-lens-agent-definition: in-progress
   gyre-3-2-observability-readiness-analysis: backlog
   gyre-3-3-deployment-readiness-analysis: backlog
   gyre-3-4-cross-domain-correlation: backlog
