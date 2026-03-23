@@ -184,9 +184,9 @@ const GYRE_WORKFLOWS = [
   { name: 'model-generation', agent: 'model-curator' },
   // Lens — Analyze
   { name: 'gap-analysis', agent: 'readiness-analyst' },
+  { name: 'delta-report', agent: 'readiness-analyst' },
   // Coach — Review
   { name: 'model-review', agent: 'review-coach' },
-  { name: 'delta-report', agent: 'review-coach' },
   // Orchestration
   { name: 'full-analysis', agent: 'stack-detective' },
   // Validation
