@@ -1,6 +1,6 @@
 # Story 1.5: Vortex Cross-Validation
 
-Status: review
+Status: done
 
 ## Story
 
@@ -183,18 +183,19 @@ None — no errors encountered.
 
 ### Completion Notes List
 
-- All 14 subtasks passed across 5 tasks — forward validation, complexity scaling analysis, report creation, gap assessment, final validation
+- All 17 subtasks passed across 5 tasks — forward validation, complexity scaling analysis, report creation, gap assessment, final validation
 - Task 1 (Forward Validation): Evaluated all 29 Sequential checks against Vortex. Results: 27 PASS, 2 FAIL. DISC-S-05 (module-help.csv doesn't exist — same known gap as Gyre), COMP-S-04 (Vortex compass has zero inter-module routing — new failure, asymmetric with Gyre which PASSES)
 - Task 2 (Complexity Scaling): Identified 7 findings. Key differences from Gyre: (1) COMP-S-04 FAIL — no inter-module routing (Gyre→Vortex exists but not reverse), (2) unprefixed registry names (AGENTS vs GYRE_AGENTS), (3) HC6-HC10 inline contracts (no standalone files), (4) Emma→Isla entry agent gap (no formal contract), (5) _deprecated/ workflow directory, (6) INST-S-04 asymmetry confirmed (Vortex validates, Gyre doesn't), (7) compass complexity scaling (312 vs 169 lines). All classified as design notes — no reference updates needed.
-- Task 3 (Validation Report): Created vortex-validation-report.md (~167 lines) with 2 sections per spec. Section 1: 4 check result tables with Gyre Comparison column. Section 2: 7 complexity scaling findings with severity/type/classification.
+- Task 3 (Validation Report): Created `_bmad-output/planning-artifacts/vortex-validation-report.md` (~166 lines) with 2 sections per spec. Section 1: 4 check result tables with Gyre Comparison column. Section 2: 7 complexity scaling findings with severity/type/classification.
 - Task 4 (Reference Gaps): No reference updates needed — all 7 findings classified as (b) design notes or confirmations of existing findings. No YAML blocks modified. No prose changes required.
 - Task 5 (Final Validation): All 4 criteria passed — 2 sections present, 29 check IDs in tables, Gyre Comparison column filled for all 29 checks, no YAML modifications made.
-- Cross-validation conclusion: Architecture Reference's 29 Sequential checks scale correctly from 4-agent to 7-agent complexity. 25/29 checks produce identical results. 2 produce different results due to implementation state (not check design). 2 produce same FAIL.
+- Cross-validation conclusion: Architecture Reference's 29 Sequential checks scale correctly from 4-agent to 7-agent complexity. 27/29 checks produce identical results (including 2 shared FAILs: DISC-S-05 in both). 2/29 produce different results due to implementation state (INST-S-04: Vortex PASS/Gyre FAIL, COMP-S-04: Vortex FAIL/Gyre PASS).
 
 ### Change Log
 
-- 2026-03-24: Created `_bmad-output/planning-artifacts/vortex-validation-report.md` (~167 lines) — Vortex Cross-Validation Report with check results and complexity scaling findings
+- 2026-03-24: Created `_bmad-output/planning-artifacts/vortex-validation-report.md` (~166 lines) — Vortex Cross-Validation Report with check results and complexity scaling findings
+- 2026-03-24: Code review patches applied — subtask count (14→17), completion notes partition phrasing, full paths in file list/change log
 
 ### File List
 
-- `_bmad-output/planning-artifacts/vortex-validation-report.md` (created, ~167 lines)
+- `_bmad-output/planning-artifacts/vortex-validation-report.md` (created, ~166 lines)
