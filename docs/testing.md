@@ -119,6 +119,19 @@ Same infrastructure validation as Isla. Content correctness validated by P0 cont
 
 ---
 
+## Gyre Test Coverage
+
+Gyre agents are markdown-only (no JS code beyond installation scripts). Test coverage focuses on:
+
+- **Installation validation** — `convoke-install-gyre` creates correct directory structure, all 4 agents and 7 workflows present
+- **Doctor validation** — `convoke-doctor` checks Gyre agents, workflows, config, and contracts
+- **Refresh validation** — `refreshInstallation` handles Gyre module alongside Vortex
+- **Agent activation** — P0 content tests for voice consistency, persona accuracy, workflow activation
+
+Infrastructure tests (registry, config-merger, validator) cover Gyre through the same shared update pipeline as Vortex.
+
+---
+
 ## Known Coverage Gaps
 
 | Module | Coverage | Notes |
