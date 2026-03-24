@@ -156,9 +156,9 @@ Most teams ship to production without knowing if they're actually ready — miss
                     4 Agents · 4 Contracts
 
   ┌─────────────┐   ┌─────────────┐   ┌─────────────┐   ┌─────────────┐
-  │    Scout    │──▶│    Atlas    │──▶│    Lens     │──▶│    Coach   │
-  │   Detect    │   │   Model     │   │   Analyze   │   │   Review   │
-  │   Stack     │   │   Capabil.  │   │   Gaps      │   │   Refine   │
+  │    Scout    │──▶│    Atlas    │──▶│    Lens     │──▶│    Coach    │
+  │   Detect    │   │   Model     │   │   Analyze   │   │   Review    │
+  │   Stack     │   │   Capabil.  │   │   Gaps      │   │   Refine    │
   └─────────────┘   └──────▲──────┘   └─────────────┘   └──────┬──────┘
                            │                                    │
                            └────────────── GC4 ─────────────────┘
@@ -236,7 +236,7 @@ Skills give existing agents new workflows — installed via menu patching, not a
          │                 │                 │
          ▼                 ▼                 ▼
   ┌──────────────────────────────────────────────────┐
-  │          initiatives-backlog.md                   │
+  │          initiatives-backlog.md                  │
   │   RICE-scored · Categorized · Change-tracked     │
   └──────────────────────────────────────────────────┘
 ```
