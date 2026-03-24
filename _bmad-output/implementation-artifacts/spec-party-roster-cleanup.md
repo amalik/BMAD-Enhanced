@@ -2,7 +2,7 @@
 title: 'Party roster cleanup and team bundle resolution'
 slug: 'spec-party-roster-cleanup'
 created: '2026-03-24'
-status: 'draft'
+status: 'done'
 stepsCompleted: []
 tech_stack: [markdown, csv, yaml]
 files_to_modify:
