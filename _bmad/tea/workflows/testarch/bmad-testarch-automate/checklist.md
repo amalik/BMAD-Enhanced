@@ -30,7 +30,7 @@ Before starting this workflow, verify:
 
 - [ ] Story markdown loaded (if `{story_file}` provided)
 - [ ] Acceptance criteria extracted from story (if available)
-- [ ] Spec.md loaded (if `{use_tech_spec}` true and file exists)
+- [ ] Spec.md loaded (if `{use_spec}` true and file exists)
 - [ ] Test-design.md loaded (if `{use_test_design}` true and file exists)
 - [ ] PRD.md loaded (if `{use_prd}` true and file exists)
 - [ ] **Note**: Absence of BMad artifacts does NOT halt workflow
