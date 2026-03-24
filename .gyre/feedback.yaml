@@ -1,0 +1,15 @@
+---
+contract: GC4
+type: artifact
+source_agent: coach
+target_agents: [atlas]
+created: 2026-03-24
+updated: 2026-03-24
+---
+
+feedback:
+  - timestamp: "2026-03-24T00:00:00Z"
+    reporter: "user"
+    type: "other"
+    description: "The 'Keep / Remove / Edit?' prompt during capability walkthrough is confusing when the user agrees with Gyre's findings and wants to accept all suggestions. 'Keep' is the correct answer but feels passive — users want an option that says 'yes, I agree, apply this.' Consider adding an 'Accept all' option at the start, or reframing the prompt to clarify that 'keep' means 'I approve this capability in my model.'"
+    domain: "general"
