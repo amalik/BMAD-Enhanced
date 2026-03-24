@@ -21,33 +21,33 @@ So that I don't need to know the factory exists in advance — I discover it whe
 
 ## Tasks / Subtasks
 
-- [ ] Task 1: Create Team Factory Skill Entry Point (AC: #1)
-  - [ ] 1.1 Create `.claude/skills/bmad-team-factory/SKILL.md` with frontmatter (`name`, `description`) and instructions that load the factory workflow. Follow the pattern from `.claude/skills/bmad-agent-builder/SKILL.md` — thin launcher with intent routing table.
-  - [ ] 1.2 Add the Team Factory skill to `_bmad/_config/skill-manifest.csv` — new row with canonicalId, name, description, module=bmb, path, install_to_bmad fields. Follow existing row patterns (62 entries currently).
-  - [ ] 1.3 Create `.claude/skills/bmad-team-factory/workflow.md` as a placeholder step-file architecture stub. Content: frontmatter + title + "This workflow will be implemented in Stories 2.2–2.9" + step-00-route.md reference. This gives the SKILL.md a valid target to load.
+- [x] Task 1: Create Team Factory Skill Entry Point (AC: #1)
+  - [x] 1.1 Create `.claude/skills/bmad-team-factory/SKILL.md` with frontmatter (`name`, `description`) and instructions that load the factory workflow. Follow the pattern from `.claude/skills/bmad-agent-builder/SKILL.md` — thin launcher with intent routing table.
+  - [x] 1.2 Add the Team Factory skill to `_bmad/_config/skill-manifest.csv` — new row with canonicalId, name, description, module=bmb, path, install_to_bmad fields. Follow existing row patterns (62 entries currently).
+  - [x] 1.3 Create `.claude/skills/bmad-team-factory/workflow.md` as a placeholder step-file architecture stub. Content: frontmatter + title + "This workflow will be implemented in Stories 2.2–2.9" + step-00-route.md reference. This gives the SKILL.md a valid target to load.
 
-- [ ] Task 2: Wire Agent Menu Entry Point (AC: #1)
-  - [ ] 2.1 Add a Team Factory menu item to `_bmad/core/agents/bmad-master.md` inside the existing `<menu>` block. Pattern: `<item cmd="TF or fuzzy match on team-factory or create-team" exec="skill:bmad-team-factory">[TF] Team Factory</item>`. Insert before the [DA] dismiss item.
-  - [ ] 2.2 Verify BMad Master menu still renders correctly — confirm XML is well-formed after insertion.
+- [x] Task 2: Wire Agent Menu Entry Point (AC: #1)
+  - [x] 2.1 Add a Team Factory menu item to `_bmad/core/agents/bmad-master.md` inside the existing `<menu>` block. Pattern: `<item cmd="TF or fuzzy match on team-factory or create-team" exec="skill:bmad-team-factory">[TF] Team Factory</item>`. Insert before the [DA] dismiss item.
+  - [x] 2.2 Verify BMad Master menu still renders correctly — confirm XML is well-formed after insertion.
 
-- [ ] Task 3: Wire module-help.csv Entry Point (AC: #1)
-  - [ ] 3.1 Add a Team Factory row to `_bmad/bmb/module-help.csv`. Columns: module=bmb, phase=build, name=Team Factory, code=TF, sequence after existing builder entries, workflow-file pointing to the skill, command=team-factory, required=no, agent=bmad-master, description="Create a fully-wired BMAD-compliant team through guided factory workflow". Follow existing row format (13 columns).
-  - [ ] 3.2 Add corresponding row to `_bmad/_config/bmad-help.csv` (the consolidated help catalog loaded by `bmad-help` skill). Same column structure, ensures the factory appears in help queries.
+- [x] Task 3: Wire module-help.csv Entry Point (AC: #1)
+  - [x] 3.1 Add a Team Factory row to `_bmad/bmb/module-help.csv`. Columns: module=bmb, phase=build, name=Team Factory, code=TF, sequence after existing builder entries, workflow-file pointing to the skill, command=team-factory, required=no, agent=bmad-master, description="Create a fully-wired BMAD-compliant team through guided factory workflow". Follow existing row format (13 columns).
+  - [x] 3.2 Add corresponding row to `_bmad/_config/bmad-help.csv` (the consolidated help catalog loaded by `bmad-help` skill). Same column structure, ensures the factory appears in help queries.
 
-- [ ] Task 4: Wire README Entry Point (AC: #1)
-  - [ ] 4.1 Add a "Creating Your Own Team" section or bullet in `README.md`. Location: Contributing section (around line 376) or after "Building Your Own Skills" (line 322). Content: brief description + pointer to Team Factory skill. Keep it concise — 2-3 lines.
+- [x] Task 4: Wire README Entry Point (AC: #1)
+  - [x] 4.1 Add a "Creating Your Own Team" section or bullet in `README.md`. Location: Contributing section (around line 376) or after "Building Your Own Skills" (line 322). Content: brief description + pointer to Team Factory skill. Keep it concise — 2-3 lines.
 
-- [ ] Task 5: Implement Intent-Based Routing (AC: #2)
-  - [ ] 5.1 Create `step-00-route.md` inside `.claude/skills/bmad-team-factory/`. This is the module-level intent routing step (FR8, architecture concern #7). Content: LLM routing instructions that classify user intent into one of three routes: `add-team` (proceed to Step 1), `add-agent` (graceful fallback — "Phase 3, not yet available"), `add-skill` (graceful fallback — "Phase 3, not yet available").
-  - [ ] 5.2 Include a Quick Reference intent table in `step-00-route.md` (pattern from `bmad-agent-builder/SKILL.md`): map trigger phrases to routes. E.g., "create/build/design a team" → add-team, "add an agent to existing team" → add-agent (fallback), "add a skill/workflow" → add-skill (fallback).
-  - [ ] 5.3 For non-factory intents (user describes a need that doesn't match team/agent/skill creation), provide graceful redirect to Architecture Reference checklist at `_bmad-output/planning-artifacts/architecture-reference-teams.md`.
-  - [ ] 5.4 Add discovery instrumentation: include "How did you find the factory?" as a first-interaction question before routing (architecture concern #9, self-instrumentation). Store response in conversation context for future spec file inclusion.
+- [x] Task 5: Implement Intent-Based Routing (AC: #2)
+  - [x] 5.1 Create `step-00-route.md` inside `.claude/skills/bmad-team-factory/`. This is the module-level intent routing step (FR8, architecture concern #7). Content: LLM routing instructions that classify user intent into one of three routes: `add-team` (proceed to Step 1), `add-agent` (graceful fallback — "Phase 3, not yet available"), `add-skill` (graceful fallback — "Phase 3, not yet available").
+  - [x] 5.2 Include a Quick Reference intent table in `step-00-route.md` (pattern from `bmad-agent-builder/SKILL.md`): map trigger phrases to routes. E.g., "create/build/design a team" → add-team, "add an agent to existing team" → add-agent (fallback), "add a skill/workflow" → add-skill (fallback).
+  - [x] 5.3 For non-factory intents (user describes a need that doesn't match team/agent/skill creation), provide graceful redirect to Architecture Reference checklist at `_bmad-output/planning-artifacts/architecture-reference-teams.md`.
+  - [x] 5.4 Add discovery instrumentation: include "How did you find the factory?" as a first-interaction question before routing (architecture concern #9, self-instrumentation). Store response in conversation context for future spec file inclusion.
 
-- [ ] Task 6: Verification (AC: #1, #2)
-  - [ ] 6.1 Verify all 4 surfaces are wired: (1) BMad Master menu has [TF] item, (2) module-help.csv has factory row, (3) bmad-help.csv has factory row, (4) README has factory reference
-  - [ ] 6.2 Verify SKILL.md loads correctly — frontmatter parses, workflow.md reference is valid
-  - [ ] 6.3 Verify step-00-route.md has all 3 intent routes (add-team, add-agent, add-skill) plus fallback
-  - [ ] 6.4 Verify skill-manifest.csv row follows existing format (62 → 63 entries)
+- [x] Task 6: Verification (AC: #1, #2)
+  - [x] 6.1 Verify all 4 surfaces are wired: (1) BMad Master menu has [TF] item, (2) module-help.csv has factory row, (3) bmad-help.csv has factory row, (4) README has factory reference
+  - [x] 6.2 Verify SKILL.md loads correctly — frontmatter parses, workflow.md reference is valid
+  - [x] 6.3 Verify step-00-route.md has all 3 intent routes (add-team, add-agent, add-skill) plus fallback
+  - [x] 6.4 Verify skill-manifest.csv row follows existing format (62 → 63 entries)
 
 ## Dev Notes
 
@@ -152,12 +152,36 @@ From Story 1.5 (Vortex Cross-Validation):
 
 ### Agent Model Used
 
-{{agent_model_name_version}}
+Claude Opus 4.6
 
 ### Debug Log References
 
+N/A
+
 ### Completion Notes List
+
+All 16 subtasks across 6 tasks completed. Story implements the 4 enumerated discoverability surfaces (TF-FR14, TF-NFR10) plus intent-based routing with discovery instrumentation. Step-00-route.md expands the 3-route spec to 5 routes: Create Team (available), Add Agent (Phase 3 fallback), Add Skill (Phase 3 fallback), Learn/Explore (informational), and Non-Factory Intent (redirect). Discovery instrumentation ("How did you find the factory?") included per architecture concern #9. All files are additive — no existing files were destructively modified.
 
 ### Change Log
 
+| Change | File | Description |
+|--------|------|-------------|
+| CREATE | `.claude/skills/bmad-team-factory/SKILL.md` | Thin launcher with frontmatter and Quick Reference intent routing table |
+| CREATE | `.claude/skills/bmad-team-factory/workflow.md` | Placeholder step-file architecture stub referencing step-00-route.md |
+| CREATE | `.claude/skills/bmad-team-factory/step-00-route.md` | Module-level intent routing with 5 routes + discovery instrumentation |
+| MODIFY | `_bmad/core/agents/bmad-master.md` | Added [TF] Team Factory menu item before [DA] dismiss |
+| MODIFY | `_bmad/bmb/module-help.csv` | Appended Team Factory row (sequence=75) |
+| MODIFY | `_bmad/_config/bmad-help.csv` | Appended Team Factory row in bmb section |
+| MODIFY | `_bmad/_config/skill-manifest.csv` | Appended bmad-team-factory row |
+| MODIFY | `README.md` | Added "Creating Your Own Team" subsection after "Building Your Own Skills" |
+
 ### File List
+
+- `.claude/skills/bmad-team-factory/SKILL.md` (created)
+- `.claude/skills/bmad-team-factory/workflow.md` (created)
+- `.claude/skills/bmad-team-factory/step-00-route.md` (created)
+- `_bmad/core/agents/bmad-master.md` (modified)
+- `_bmad/bmb/module-help.csv` (modified)
+- `_bmad/_config/bmad-help.csv` (modified)
+- `_bmad/_config/skill-manifest.csv` (modified)
+- `README.md` (modified)
