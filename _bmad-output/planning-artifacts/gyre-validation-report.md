@@ -89,16 +89,16 @@ The file `_bmad/_config/module-help.csv` does not exist at all — not just miss
 
 **Classification:** Known gap, already documented in check validation text.
 
-### Finding 3: Contract `created` field uses YYYY-MM-DD placeholder (COMP-S-03 — near-miss)
+### Finding 3: Contract `created` field uses YYYY-MM-DD placeholder (COMP-S-03 — resolved)
 
 **Severity:** Low
 **Type:** Schema design pattern
 
-All 4 Gyre contracts use `created: YYYY-MM-DD` in their frontmatter. The COMP-S-03 check requires `created (ISO date)`. These are schema definition files (contract templates), not instantiated contracts — the YYYY-MM-DD is a format indicator showing what populated contracts should contain. The check technically passes because the field exists and documents the expected format, but a strict "ISO date" interpretation would fail.
+All 4 Gyre contracts use `created: YYYY-MM-DD` in their frontmatter. The COMP-S-03 check requires `created (ISO date)`. These are schema definition files (contract templates), not instantiated contracts — the YYYY-MM-DD is a format indicator showing what populated contracts should contain.
 
-**Impact on reference accuracy:** The check's validation text should clarify whether schema definition files (with format placeholders) or instantiated contracts (with actual dates) are being validated. For Gyre, the contracts are schema definitions.
+**Resolution:** A clarifying note was added to the COMP-S-03 prose paragraph in `architecture-reference-teams.md`: "contract files that serve as schema definitions may use format placeholders (e.g., `YYYY-MM-DD`) for the `created` field — the check validates field presence and structure, not that instantiated dates exist in templates." With this clarification, the check is a clean PASS — the field exists and its format placeholder is explicitly permitted by the reference.
 
-**Classification:** (a) Reference should be updated — add clarifying note in COMP-S-03 validation text.
+**Classification:** (a) Reference updated — prose clarification applied.
 
 ### Finding 4: GC4 feedback loop extends beyond "adjacent pair" model (COMP-S-06 — near-miss)
 
