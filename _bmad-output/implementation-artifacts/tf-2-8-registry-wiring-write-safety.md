@@ -1,6 +1,6 @@
 # Story 2.8: Registry Wiring & Write Safety
 
-Status: review
+Status: done
 
 ## Story
 
