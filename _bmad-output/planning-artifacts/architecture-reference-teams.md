@@ -13,7 +13,7 @@ This document defines what makes a valid BMAD team. It serves three audiences:
 - **Prose sections** explain "why" — the reasoning behind each quality property and composition pattern
 - **YAML data blocks** (fenced) contain machine-extractable checklists with structured check IDs
 - YAML blocks are identified by the presence of `quality_property`, `composition_pattern`, and `checks` top-level keys — non-checklist YAML blocks (code examples, etc.) lack these keys and are ignored
-- Prose references check IDs inline (e.g., "**DISC-01** — module-help.csv is the primary...") for traceability
+- Prose references check IDs inline (e.g., "**DISC-I-01** — agent-manifest.csv is the canonical...") for traceability
 - Each section is independently addressable for JIT loading — no shared content between sections
 
 ### Document Layout
@@ -153,7 +153,7 @@ When a contributor runs `convoke-install` or `convoke-update`, the following pip
 
 5. **Post-install validation** — `validator.js` runs structural integrity checks: config.yaml parses correctly, every agent file declared in config exists, every workflow has a workflow.md entry point, and manifest entries are present. Validation failures are surfaced to the user immediately.
 
-6. **Discovery registration** — `module-help.csv` maps modules to their capabilities for CLI discovery via `convoke-help`. Note: existing bme submodules (Vortex, Gyre) do not yet have entries in this file; new teams should create them to complete the discovery surface.
+6. **Discovery registration** — `module-help.csv` maps modules to their capabilities for CLI discovery. Note: existing bme submodules (Vortex, Gyre) do not yet have entries in this file; new teams should create them to complete the discovery surface.
 
 For specific validation rules applied at each stage, see the checklist sections below organized by quality property and composition pattern.
 
@@ -163,7 +163,7 @@ For specific validation rules applied at each stage, see the checklist sections 
 
 A team's agents must be findable through every standard framework surface. **DISC-I-01** — the agent-manifest.csv is the canonical registry that the BMad Master, overlap detection, and cross-module routing all consult; an agent missing from this manifest is invisible to the broader ecosystem. **DISC-I-02** — a README provides human-readable orientation for contributors browsing the module directory, explaining what the team does and when each agent is useful. Without it, a contributor must read individual agent files to understand the team's purpose.
 
-Beyond passive discovery, agents must be actively reachable through interactive and programmatic surfaces. **DISC-I-03** — activation XML menus are the primary interactive surface; they expose workflows as menu items so contributors can invoke capabilities without knowing file paths. **DISC-I-04** — canonical skill IDs enable intent-based routing, allowing the BMad Master and other modules to dispatch requests to agents by capability rather than by file location. **DISC-I-05** — module-help.csv powers the CLI `convoke-help` discovery experience; without an entry, contributors using the CLI will not see the team listed among available modules (note: existing bme submodules lack this file, but new teams should create an entry).
+Beyond passive discovery, agents must be actively reachable through interactive and programmatic surfaces. **DISC-I-03** — activation XML menus are the primary interactive surface; they expose workflows as menu items so contributors can invoke capabilities without knowing file paths. **DISC-I-04** — canonical skill IDs enable intent-based routing, allowing the BMad Master and other modules to dispatch requests to agents by capability rather than by file location. **DISC-I-05** — module-help.csv powers CLI module discovery; without an entry, contributors browsing available modules will not see the team listed (note: existing bme submodules lack this file, but new teams should create an entry).
 
 ```yaml
 quality_property: discoverable
@@ -188,14 +188,14 @@ checks:
   - id: DISC-I-05
     rule: "Module has an entry in module-help.csv for CLI discovery"
     target_file: "_bmad/_config/module-help.csv"
-    validation: "row exists with module name matching submodule_name from config.yaml — NOTE: existing bme submodules (Vortex, Gyre) lack this file; new teams SHOULD create an entry to enable convoke-help discovery"
+    validation: "row exists with module name matching submodule_name from config.yaml — NOTE: existing bme submodules (Vortex, Gyre) lack this file; new teams SHOULD create an entry to enable CLI module discovery"
 ```
 
 ---
 
 ## Discoverable — Sequential
 
-A Sequential team's agents must be findable through every standard framework surface, just as with Independent teams. **DISC-S-01** — the agent-manifest.csv is the canonical registry consulted by the BMad Master, overlap detection, and cross-module routing; agents missing from this manifest are invisible to the ecosystem. **DISC-S-02** — a README orients contributors to the team's purpose and pipeline structure without requiring them to read individual agent files. **DISC-S-03** — activation XML menus expose workflows as interactive menu items, letting contributors invoke pipeline stages without knowing file paths. **DISC-S-04** — canonical skill IDs enable intent-based routing so the BMad Master and other modules can dispatch requests by capability. **DISC-S-05** — module-help.csv powers CLI discovery via `convoke-help`; without an entry, CLI users will not see the team listed (note: existing bme submodules lack this file, but new teams should create an entry).
+A Sequential team's agents must be findable through every standard framework surface, just as with Independent teams. **DISC-S-01** — the agent-manifest.csv is the canonical registry consulted by the BMad Master, overlap detection, and cross-module routing; agents missing from this manifest are invisible to the ecosystem. **DISC-S-02** — a README orients contributors to the team's purpose and pipeline structure without requiring them to read individual agent files. **DISC-S-03** — activation XML menus expose workflows as interactive menu items, letting contributors invoke pipeline stages without knowing file paths. **DISC-S-04** — canonical skill IDs enable intent-based routing so the BMad Master and other modules can dispatch requests by capability. **DISC-S-05** — module-help.csv powers CLI module discovery; without an entry, the team will not appear when contributors browse available modules (note: existing bme submodules lack this file, but new teams should create an entry).
 
 Sequential teams have additional discovery requirements driven by their multi-agent pipeline structure. **DISC-S-06** — the compass routing reference is the central navigation map for a Sequential team; it documents every workflow and cross-module route so that contributors (and the factory) can trace the full pipeline and know where each workflow leads next. Without it, a contributor finishing one stage has no guidance on what comes after. **DISC-S-07** — each agent's menu must reference all workflows assigned to that agent in the registry; a missing menu item means a workflow exists but is unreachable through the agent's interactive interface, creating a silent discovery gap.
 
@@ -222,7 +222,7 @@ checks:
   - id: DISC-S-05
     rule: "Module has an entry in module-help.csv for CLI discovery"
     target_file: "_bmad/_config/module-help.csv"
-    validation: "row exists with module name matching submodule_name from config.yaml — NOTE: existing bme submodules (Vortex, Gyre) lack this file; new teams SHOULD create an entry to enable convoke-help discovery"
+    validation: "row exists with module name matching submodule_name from config.yaml — NOTE: existing bme submodules (Vortex, Gyre) lack this file; new teams SHOULD create an entry to enable CLI module discovery"
   - id: DISC-S-06
     rule: "Compass routing reference documents all workflows and inter-module routes"
     target_file: "_bmad/bme/{submodule}/compass-routing-reference.md"
