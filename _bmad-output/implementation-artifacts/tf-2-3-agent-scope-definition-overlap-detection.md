@@ -1,6 +1,6 @@
 # Story 2.3: Agent Scope Definition & Overlap Detection
 
-Status: review
+Status: done
 
 ## Story
 
