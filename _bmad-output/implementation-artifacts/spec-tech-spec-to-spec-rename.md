@@ -6,12 +6,17 @@ status: 'draft'
 stepsCompleted: []
 tech_stack: [markdown]
 files_to_modify:
-  - _bmad/bmm/workflows/bmad-quick-flow/bmad-quick-spec/ (6 files)
-  - _bmad/bmm/workflows/bmad-quick-flow/bmad-quick-dev/ (6 files)
-  - _bmad/bmm/workflows/bmad-quick-flow/bmad-quick-dev-new-preview/ (2 files)
+  - _bmad/bmm/workflows/bmad-quick-flow/bmad-quick-spec/ (7 files incl. SKILL.md)
+  - _bmad/bmm/workflows/bmad-quick-flow/bmad-quick-dev/ (9 files incl. SKILL.md)
+  - _bmad/bmm/workflows/bmad-quick-flow/bmad-quick-dev-new-preview/ (4 files)
   - _bmad/bmm/workflows/4-implementation/bmad-correct-course/workflow.md
+  - _bmad/bmm/agents/quick-flow-solo-dev.md
   - _bmad/tea/workflows/testarch/ (8 files across 5 workflows)
   - _bmad/_config/files-manifest.csv
+  - _bmad/_config/skill-manifest.csv
+  - _bmad/_config/agent-manifest.csv
+  - _bmad/_config/bmad-help.csv
+  - _bmad/bmm/module-help.csv
   - docs/WARP.md
 code_patterns: [search-and-replace across markdown]
 test_patterns: [grep verification — zero remaining tech-spec references post-rename]
@@ -27,7 +32,7 @@ test_patterns: [grep verification — zero remaining tech-spec references post-r
 
 ### Problem Statement
 
-BMAD Method v6.2.1 renamed the `tech-spec` prefix to `spec` across Quick Dev workflows. Our project still uses `tech-spec` in 28 files across BMM and TEA modules. This creates naming divergence: upstream-generated specs will use `spec-*` while our workflows produce `tech-spec-*` files. Users working with both upstream and Convoke-specific workflows will encounter inconsistent naming.
+BMAD Method v6.2.1 renamed the `tech-spec` prefix to `spec` across Quick Dev workflows. Our project still uses `tech-spec` in 35 files (87 occurrences) across BMM and TEA modules, plus config CSVs. This creates naming divergence: upstream-generated specs will use `spec-*` while our workflows produce `tech-spec-*` files. Users working with both upstream and Convoke-specific workflows will encounter inconsistent naming.
 
 ### Solution
 
@@ -39,11 +44,14 @@ Mechanical rename of `tech-spec` → `spec` across all affected files. No functi
 - Template file renames: `tech-spec-template.md` → `spec-template.md` (2 files)
 - WIP file path references: `tech-spec-wip.md` → `spec-wip.md`
 - Archive naming pattern: `tech-spec-{slug}-*` → `spec-{slug}-*`
-- Discovery globs: `*tech-spec*.md` → `*spec*.md`
+- Discovery globs: `*tech-spec*.md` → `spec-*.md` (use prefix glob, not infix — avoids false positives on unrelated spec files)
 - Variable names: `{tech_spec_path}` → `{spec_path}`
 - User-facing text: "tech-spec" → "spec" in prompts and messages
 - TEA workflow references to loading `tech-spec.md`
 - `files-manifest.csv` entries
+- `skill-manifest.csv`, `agent-manifest.csv`, `bmad-help.csv`, `module-help.csv` entries
+- SKILL.md descriptions for quick-dev and quick-spec
+- `quick-flow-solo-dev.md` agent file references
 - WARP.md documentation
 
 **Out of Scope:**
