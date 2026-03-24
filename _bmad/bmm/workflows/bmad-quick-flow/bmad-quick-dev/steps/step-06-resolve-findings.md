@@ -3,7 +3,7 @@
 
 # Step 6: Resolve Findings
 
-**Goal:** Handle adversarial review findings interactively, apply fixes, finalize tech-spec.
+**Goal:** Handle adversarial review findings interactively, apply fixes, finalize spec.
 
 ---
 
@@ -12,8 +12,8 @@
 From previous steps:
 
 - `{baseline_commit}` - Git HEAD at workflow start
-- `{execution_mode}` - "tech-spec" or "direct"
-- `{tech_spec_path}` - Tech-spec file (if Mode A)
+- `{execution_mode}` - "spec" or "direct"
+- `{spec_path}` - Tech-spec file (if Mode A)
 - Findings table from step-05
 
 ---
@@ -83,9 +83,9 @@ Skipped (noise/uncertain): F2, F4
 
 ## UPDATE TECH-SPEC (Mode A only)
 
-If `{execution_mode}` is "tech-spec":
+If `{execution_mode}` is "spec":
 
-1. Load `{tech_spec_path}`
+1. Load `{spec_path}`
 2. Update status to "Completed"
 3. Add review notes:
    ```
@@ -139,6 +139,6 @@ User can:
 
 - Not presenting resolution options
 - Auto-fixing "noise" or "uncertain" findings
-- Not updating tech-spec after resolution (Mode A)
+- Not updating spec after resolution (Mode A)
 - No completion summary
 - Leaving user unclear on next steps
