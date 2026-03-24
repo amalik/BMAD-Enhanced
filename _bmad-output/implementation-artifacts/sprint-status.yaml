@@ -233,15 +233,15 @@ development_status:
   gyre-epic-3-retrospective: done
 
   # Epic 4: Coach — Review, Feedback & Completion
-  gyre-epic-4: in-progress
+  gyre-epic-4: done
   gyre-4-1-coach-agent-definition: done
   gyre-4-2-conversational-model-review-amendment: done
   gyre-4-3-gc4-feedback-loop-contract: done
   gyre-4-4-feedback-capture-display: done
   gyre-4-5-mode-detection-review-prompt-integration: done
   gyre-4-6-delta-report-workflow: done
-  gyre-4-7-full-analysis-completion-compass: review
-  gyre-epic-4-retrospective: optional
+  gyre-4-7-full-analysis-completion-compass: done
+  gyre-epic-4-retrospective: done
 
   # ============================================================
   # TEAM FACTORY INITIATIVE: Guided Team Creation Workflow
