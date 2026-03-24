@@ -26,9 +26,9 @@ So that my team's agents and workflows are available system-wide without risking
 
 ## Tasks / Subtasks
 
-- [ ] Task 1: Analyze agent-registry.js Structure (AC: #1)
-  - [ ] 1.1 Read `scripts/update/lib/agent-registry.js` and verify the structure matches the Dev Notes reference. The Gyre module block (lines 136-199) is the reference pattern. `module.exports` (lines 201-214) is a separate shared section — not part of any module block. Note any discrepancies.
-  - [ ] 1.2 Identify the insertion point: new module blocks go BEFORE `module.exports`. Derived lists go after the module's WORKFLOWS array. Exports are added to the existing `module.exports` object.
+- [x] Task 1: Analyze agent-registry.js Structure (AC: #1)
+  - [x] 1.1 Read `scripts/update/lib/agent-registry.js` and verify the structure matches the Dev Notes reference. The Gyre module block (lines 136-199) is the reference pattern. `module.exports` (lines 201-214) is a separate shared section — not part of any module block. Note any discrepancies.
+  - [x] 1.2 Identify the insertion point: new module blocks go BEFORE `module.exports`. Derived lists go after the module's WORKFLOWS array. Exports are added to the existing `module.exports` object.
 
 - [ ] Task 2: Create registry-writer.js with Full Write Safety Protocol (AC: #1, #2, #3)
   - [ ] 2.1 Create `_bmad/bme/_team-factory/lib/writers/registry-writer.js`. Module exports: `writeRegistryBlock(specData, registryPath, options)` → returns `{ success, written[], skipped[], errors[], rollbackApplied }`.
