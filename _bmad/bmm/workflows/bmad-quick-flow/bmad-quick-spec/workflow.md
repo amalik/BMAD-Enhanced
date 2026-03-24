@@ -33,7 +33,7 @@ This uses **step-file architecture** for disciplined execution:
 - **Just-In-Time Loading**: Only the current step file is in memory - never load future step files until directed
 - **Sequential Enforcement**: Sequence within step files must be completed in order, no skipping or optimization
 - **State Tracking**: Document progress in output file frontmatter using `stepsCompleted` array
-- **Append-Only Building**: Build the tech-spec by updating content as directed
+- **Append-Only Building**: Build the spec by updating content as directed
 
 ### Step Processing Rules
 
