@@ -1,6 +1,6 @@
 # Story 2.7: Integration Wiring — Config, CSV & Activation
 
-Status: in-progress
+Status: review
 
 ## Story
 
@@ -37,22 +37,22 @@ So that my team is properly configured, discoverable, and has correct activation
 
 ## Tasks / Subtasks
 
-- [ ] Task 1: Create Directory Structure and Shared Types (AC: #1, #2, #3)
-  - [ ] 1.1 Create `_bmad/bme/_team-factory/lib/writers/` directory. Verify parent `_bmad/bme/_team-factory/lib/` exists (create `lib/` and `lib/types/` if needed).
-  - [ ] 1.2 Create `_bmad/bme/_team-factory/lib/types/factory-types.js` with JSDoc type definitions: `TeamSpec` (parsed spec file shape), `ConfigData` (config.yaml fields), `CsvRow` (module-help.csv row), `ActivationResult` (validation result per agent). Use JSDoc `@typedef` — no TypeScript, no runtime dependencies.
+- [x] Task 1: Create Directory Structure and Shared Types (AC: #1, #2, #3)
+  - [x] 1.1 Create `_bmad/bme/_team-factory/lib/writers/` directory. Verify parent `_bmad/bme/_team-factory/lib/` exists (create `lib/` and `lib/types/` if needed).
+  - [x] 1.2 Create `_bmad/bme/_team-factory/lib/types/factory-types.js` with JSDoc type definitions: `TeamSpec` (parsed spec file shape), `ConfigData` (config.yaml fields), `CsvRow` (module-help.csv row), `ActivationResult` (validation result per agent). Use JSDoc `@typedef` — no TypeScript, no runtime dependencies.
 
-- [ ] Task 2: Create config-creator.js (AC: #1, #4, #5)
-  - [ ] 2.1 Create `_bmad/bme/_team-factory/lib/writers/config-creator.js`. Module exports: `createConfig(specData, outputPath)` → returns `{ success, filePath, errors[] }`.
-  - [ ] 2.2 Implement config.yaml content builder: populate all fields from spec data — `submodule_name` from `team_name_kebab` (prefixed with `_`), `description` from team description, `module: bme`, `output_folder` from `integration.output_directory`, `agents[]` from spec agents (IDs only), `workflows[]` from spec agents' workflow names, `version: 1.0.0`, `user_name: '{user}'`, `communication_language: en`, `party_mode_enabled: true`, `core_module: bme`.
-  - [ ] 2.3 Implement collision detection (NFR15): before writing, scan all existing `_bmad/bme/*/config.yaml` files. Parse each. Check new team's `submodule_name`, each agent ID, and each workflow name against existing modules' values. Return collision list `[{ field, value, existingModule }]`. If collisions found, return error (do NOT write).
-  - [ ] 2.4 Implement additive-only check (NFR17): if `config.yaml` already exists at target path, return error with `{ exists: true, path }`. Never overwrite.
-  - [ ] 2.5 Write config.yaml using `fs.writeFileSync`. Immediately read back and parse with `js-yaml` (v4.1.0, already in package.json). Use project pattern: `yaml.dump(data, { indent: 2, lineWidth: -1, noRefs: true })` for writing, `yaml.load(content)` for reading.
-  - [ ] 2.6 CLI entry point: accept `--spec-file <path>` argument. Parse spec file, call `createConfig()`, print JSON result to stdout. Exit code 0 on success, 1 on error.
+- [x] Task 2: Create config-creator.js (AC: #1, #4, #5)
+  - [x] 2.1 Create `_bmad/bme/_team-factory/lib/writers/config-creator.js`. Module exports: `createConfig(specData, outputPath)` → returns `{ success, filePath, errors[] }`.
+  - [x] 2.2 Implement config.yaml content builder: populate all fields from spec data — `submodule_name` from `team_name_kebab` (prefixed with `_`), `description` from team description, `module: bme`, `output_folder` from `integration.output_directory`, `agents[]` from spec agents (IDs only), `workflows[]` from spec agents' workflow names, `version: 1.0.0`, `user_name: '{user}'`, `communication_language: en`, `party_mode_enabled: true`, `core_module: bme`.
+  - [x] 2.3 Implement collision detection (NFR15): before writing, scan all existing `_bmad/bme/*/config.yaml` files. Parse each. Check new team's `submodule_name`, each agent ID, and each workflow name against existing modules' values. Return collision list `[{ field, value, existingModule }]`. If collisions found, return error (do NOT write).
+  - [x] 2.4 Implement additive-only check (NFR17): if `config.yaml` already exists at target path, return error with `{ exists: true, path }`. Never overwrite.
+  - [x] 2.5 Write config.yaml using `fs.writeFileSync`. Immediately read back and parse with `js-yaml` (v4.1.0, already in package.json). Use project pattern: `yaml.dump(data, { indent: 2, lineWidth: -1, noRefs: true })` for writing, `yaml.load(content)` for reading.
+  - [x] 2.6 CLI entry point: accept `--spec-file <path>` argument. Parse spec file, call `createConfig()`, print JSON result to stdout. Exit code 0 on success, 1 on error.
 
-- [ ] Task 3: Create csv-creator.js (AC: #2, #5)
-  - [ ] 3.1 Create `_bmad/bme/_team-factory/lib/writers/csv-creator.js`. Module exports: `createCsv(specData, outputPath)` → returns `{ success, filePath, rowCount, errors[] }`.
-  - [ ] 3.2 Implement header row: must match exactly `module,phase,name,code,sequence,workflow-file,command,required,agent,options,description,output-location,outputs,` (trailing comma included — matches existing BMB/BMM pattern).
-  - [ ] 3.3 Implement row generation: one row per workflow in the team. Map spec data to CSV columns:
+- [x] Task 3: Create csv-creator.js (AC: #2, #5)
+  - [x] 3.1 Create `_bmad/bme/_team-factory/lib/writers/csv-creator.js`. Module exports: `createCsv(specData, outputPath)` → returns `{ success, filePath, rowCount, errors[] }`.
+  - [x] 3.2 Implement header row: must match exactly `module,phase,name,code,sequence,workflow-file,command,required,agent,options,description,output-location,outputs,` (trailing comma included — matches existing BMB/BMM pattern).
+  - [x] 3.3 Implement row generation: one row per workflow in the team. Map spec data to CSV columns:
      - `module`: `bme/_{team_name_kebab}` (module path within bme)
      - `phase`: `anytime` (default for team module workflows)
      - `name`: workflow display name (derived from workflow ID, title-case)
@@ -66,53 +66,53 @@ So that my team is properly configured, discoverable, and has correct activation
      - `description`: from workflow description or agent role
      - `output-location`: `output_folder` from spec
      - `outputs`: artifact type from workflow
-  - [ ] 3.4 Implement additive-only check (NFR17): if `module-help.csv` already exists at target path, return error with `{ exists: true, path }`. Never overwrite.
-  - [ ] 3.5 Write module-help.csv using `fs.writeFileSync`. Immediately read back and verify first line matches expected header string.
-  - [ ] 3.6 CLI entry point: accept `--spec-file <path>` argument. Parse spec file, call `createCsv()`, print JSON result to stdout.
+  - [x] 3.4 Implement additive-only check (NFR17): if `module-help.csv` already exists at target path, return error with `{ exists: true, path }`. Never overwrite.
+  - [x] 3.5 Write module-help.csv using `fs.writeFileSync`. Immediately read back and verify first line matches expected header string.
+  - [x] 3.6 CLI entry point: accept `--spec-file <path>` argument. Parse spec file, call `createCsv()`, print JSON result to stdout.
 
-- [ ] Task 4: Create activation-validator.js (AC: #3)
-  - [ ] 4.1 Create `_bmad/bme/_team-factory/lib/writers/activation-validator.js`. Module exports: `validateActivation(agentFiles, moduleConfig)` → returns `{ valid, results[] }` where each result is `{ agentFile, checks[], errors[] }`.
-  - [ ] 4.2 Implement activation XML parser: read each agent `.md` file. Extract `<activation>` block using regex (pattern: `<activation[^>]*>[\s\S]*?</activation>`). If no activation block found, report as error.
-  - [ ] 4.3 Implement config path validation: activation block should reference the team's config.yaml path (`_bmad/bme/_{team_name_kebab}/config.yaml`). Verify the referenced path exists (config.yaml must be created before validation runs).
-  - [ ] 4.4 Implement module path validation: activation block should reference correct module path (`bme/_{team_name_kebab}`). Verify the module directory exists.
-  - [ ] 4.5 Read-only enforcement: this module NEVER writes to any file. It only reads agent files and checks paths. Assert no `fs.writeFileSync` or `fs.mkdirSync` calls in this module.
-  - [ ] 4.6 CLI entry point: accept `--agent-files <glob>` and `--config-path <path>` arguments. Call `validateActivation()`, print JSON result to stdout.
+- [x] Task 4: Create activation-validator.js (AC: #3)
+  - [x] 4.1 Create `_bmad/bme/_team-factory/lib/writers/activation-validator.js`. Module exports: `validateActivation(agentFiles, moduleConfig)` → returns `{ valid, results[] }` where each result is `{ agentFile, checks[], errors[] }`.
+  - [x] 4.2 Implement activation XML parser: read each agent `.md` file. Extract `<activation>` block using regex (pattern: `<activation[^>]*>[\s\S]*?</activation>`). If no activation block found, report as error.
+  - [x] 4.3 Implement config path validation: activation block should reference the team's config.yaml path (`_bmad/bme/_{team_name_kebab}/config.yaml`). Verify the referenced path exists (config.yaml must be created before validation runs).
+  - [x] 4.4 Implement module path validation: activation block should reference correct module path (`bme/_{team_name_kebab}`). Verify the module directory exists.
+  - [x] 4.5 Read-only enforcement: this module NEVER writes to any file. It only reads agent files and checks paths. Assert no `fs.writeFileSync` or `fs.mkdirSync` calls in this module.
+  - [x] 4.6 CLI entry point: accept `--agent-files <glob>` and `--config-path <path>` arguments. Call `validateActivation()`, print JSON result to stdout.
 
-- [ ] Task 5: Update step-04-generate.md with Integration Wiring PARTs (AC: #1, #2, #3, #4)
-  - [ ] 5.1 Replace RULES line 17 (`Do NOT create config.yaml or module-help.csv...`) with: `After artifact generation (PARTs 3–5), invoke JS integration modules to create config.yaml and module-help.csv. These modules are at _bmad/bme/_team-factory/lib/writers/. The factory invokes them via node CLI and reads JSON results from stdout.` Also remove the forward reference annotation at line 162 in the BMB delegation prompt (`(forward reference — config.yaml will be created in Story 2.7 integration wiring)`) and replace with the actual config.yaml path after PART 7 creates it.
-  - [ ] 5.2 Add PART 7: CONFIG.YAML CREATION after PART 5. Content: (a) Run collision detection via `node _bmad/bme/_team-factory/lib/writers/config-creator.js --spec-file {spec_file_path} --dry-run` — present collisions to contributor if any, (b) If no collisions (or contributor confirms), run `node _bmad/bme/_team-factory/lib/writers/config-creator.js --spec-file {spec_file_path}`, (c) Present result to contributor: file path, field count, verification status.
-  - [ ] 5.3 Add PART 8: MODULE-HELP.CSV CREATION. Content: (a) Run `node _bmad/bme/_team-factory/lib/writers/csv-creator.js --spec-file {spec_file_path}`, (b) Present result: file path, row count, header verification status.
-  - [ ] 5.4 Add PART 9: ACTIVATION VALIDATION. Content: (a) Run `node _bmad/bme/_team-factory/lib/writers/activation-validator.js --agent-files '_bmad/bme/_{team_name_kebab}/agents/*.md' --config-path '_bmad/bme/_{team_name_kebab}/config.yaml'`, (b) Present validation results per agent: agent file, checks passed/failed, specific errors. (c) If any validation fails, warn contributor and ask whether to proceed or fix. Activation issues do NOT block generation (they're informational for manual correction).
-  - [ ] 5.5 Move current PART 6 (GENERATION SUMMARY) after the new PARTs — becomes PART 10. Update any internal cross-references to the summary PART number.
-  - [ ] 5.6 Update STEP VALIDATION table: add checks for `config.yaml created and parses`, `module-help.csv created and header matches`, `Activation validation ran`, `No unresolved collisions`.
-  - [ ] 5.7 Update CHECKPOINT: add integration wiring status section showing config.yaml path, module-help.csv path, activation validation summary.
-  - [ ] 5.8 Update context variables recorded at end: add `config_yaml_path`, `module_help_csv_path`, `activation_validation_results`.
-  - [ ] 5.9 Update NEXT section: remove the manual integration wiring guidance text (contributors no longer need to manually create config.yaml/module-help.csv — PARTs 7–9 now handle this). Keep the note that Step 5 (Story 2.9) is not yet available.
+- [x] Task 5: Update step-04-generate.md with Integration Wiring PARTs (AC: #1, #2, #3, #4)
+  - [x] 5.1 Replace RULES line 17 (`Do NOT create config.yaml or module-help.csv...`) with: `After artifact generation (PARTs 3–5), invoke JS integration modules to create config.yaml and module-help.csv. These modules are at _bmad/bme/_team-factory/lib/writers/. The factory invokes them via node CLI and reads JSON results from stdout.` Also remove the forward reference annotation at line 162 in the BMB delegation prompt (`(forward reference — config.yaml will be created in Story 2.7 integration wiring)`) and replace with the actual config.yaml path after PART 7 creates it.
+  - [x] 5.2 Add PART 7: CONFIG.YAML CREATION after PART 5. Content: (a) Run collision detection via `node _bmad/bme/_team-factory/lib/writers/config-creator.js --spec-file {spec_file_path} --dry-run` — present collisions to contributor if any, (b) If no collisions (or contributor confirms), run `node _bmad/bme/_team-factory/lib/writers/config-creator.js --spec-file {spec_file_path}`, (c) Present result to contributor: file path, field count, verification status.
+  - [x] 5.3 Add PART 8: MODULE-HELP.CSV CREATION. Content: (a) Run `node _bmad/bme/_team-factory/lib/writers/csv-creator.js --spec-file {spec_file_path}`, (b) Present result: file path, row count, header verification status.
+  - [x] 5.4 Add PART 9: ACTIVATION VALIDATION. Content: (a) Run `node _bmad/bme/_team-factory/lib/writers/activation-validator.js --agent-files '_bmad/bme/_{team_name_kebab}/agents/*.md' --config-path '_bmad/bme/_{team_name_kebab}/config.yaml'`, (b) Present validation results per agent: agent file, checks passed/failed, specific errors. (c) If any validation fails, warn contributor and ask whether to proceed or fix. Activation issues do NOT block generation (they're informational for manual correction).
+  - [x] 5.5 Move current PART 6 (GENERATION SUMMARY) after the new PARTs — becomes PART 10. Update any internal cross-references to the summary PART number.
+  - [x] 5.6 Update STEP VALIDATION table: add checks for `config.yaml created and parses`, `module-help.csv created and header matches`, `Activation validation ran`, `No unresolved collisions`.
+  - [x] 5.7 Update CHECKPOINT: add integration wiring status section showing config.yaml path, module-help.csv path, activation validation summary.
+  - [x] 5.8 Update context variables recorded at end: add `config_yaml_path`, `module_help_csv_path`, `activation_validation_results`.
+  - [x] 5.9 Update NEXT section: remove the manual integration wiring guidance text (contributors no longer need to manually create config.yaml/module-help.csv — PARTs 7–9 now handle this). Keep the note that Step 5 (Story 2.9) is not yet available.
 
-- [ ] Task 6: Create Tests (AC: #1, #2, #3, #4, #5)
-  - [ ] 6.1 Create `tests/team-factory/` directory (if not exists) and `tests/team-factory/golden/` subdirectory.
-  - [ ] 6.2 Create `tests/team-factory/golden/golden-config.yaml` — ≤50 lines, a reference config.yaml for a minimal test team (2 agents, 2 workflows). Must match exact schema from Gyre/Vortex.
-  - [ ] 6.3 Create `tests/team-factory/golden/golden-help-csv.csv` — ≤50 lines, a reference module-help.csv with header + 2 workflow rows matching the standard column format.
-  - [ ] 6.4 Create `tests/team-factory/config-creator.test.js`: (a) happy path: spec → config.yaml matches golden, (b) collision detection: detects duplicate agent ID, (c) collision detection: detects duplicate workflow name, (d) additive-only: refuses to overwrite existing file, (e) verify parse: output is valid YAML.
-  - [ ] 6.5 Create `tests/team-factory/csv-creator.test.js`: (a) happy path: spec → CSV matches golden, (b) header verification: output first line matches expected header, (c) row count: matches workflow count, (d) additive-only: refuses to overwrite existing file.
-  - [ ] 6.6 Create `tests/team-factory/activation-validator.test.js`: (a) valid activation: passes all checks, (b) missing activation block: reports error, (c) wrong config path: reports error, (d) wrong module path: reports error, (e) read-only: no file system writes during validation.
-  - [ ] 6.7 Create `tests/team-factory/fixtures/` with test spec file and test agent files for test input data.
+- [x] Task 6: Create Tests (AC: #1, #2, #3, #4, #5)
+  - [x] 6.1 Create `tests/team-factory/` directory (if not exists) and `tests/team-factory/golden/` subdirectory.
+  - [x] 6.2 Create `tests/team-factory/golden/golden-config.yaml` — ≤50 lines, a reference config.yaml for a minimal test team (2 agents, 2 workflows). Must match exact schema from Gyre/Vortex.
+  - [x] 6.3 Create `tests/team-factory/golden/golden-help-csv.csv` — ≤50 lines, a reference module-help.csv with header + 2 workflow rows matching the standard column format.
+  - [x] 6.4 Create `tests/team-factory/config-creator.test.js`: (a) happy path: spec → config.yaml matches golden, (b) collision detection: detects duplicate agent ID, (c) collision detection: detects duplicate workflow name, (d) additive-only: refuses to overwrite existing file, (e) verify parse: output is valid YAML.
+  - [x] 6.5 Create `tests/team-factory/csv-creator.test.js`: (a) happy path: spec → CSV matches golden, (b) header verification: output first line matches expected header, (c) row count: matches workflow count, (d) additive-only: refuses to overwrite existing file.
+  - [x] 6.6 Create `tests/team-factory/activation-validator.test.js`: (a) valid activation: passes all checks, (b) missing activation block: reports error, (c) wrong config path: reports error, (d) wrong module path: reports error, (e) read-only: no file system writes during validation.
+  - [x] 6.7 Create `tests/team-factory/fixtures/` with test spec file and test agent files for test input data.
 
-- [ ] Task 7: Update workflow.md (AC: #1)
-  - [ ] 7.1 Update status line in workflow.md: change `"Steps 0–4 available"` to include integration wiring context (e.g., `"Steps 0–4 available (Step 4 now includes integration wiring)"`).
-  - [ ] 7.2 Update the Step 4 row in the steps table: change purpose from `"BMB delegation + artifact generation"` to `"BMB delegation + artifact generation + integration wiring"`.
-  - [ ] 7.3 Update the Story column for Step 4 from `2.6` to `2.6, 2.7`.
+- [x] Task 7: Update workflow.md (AC: #1)
+  - [x] 7.1 Update status line in workflow.md: change `"Steps 0–4 available"` to include integration wiring context (e.g., `"Steps 0–4 available (Step 4 now includes integration wiring)"`).
+  - [x] 7.2 Update the Step 4 row in the steps table: change purpose from `"BMB delegation + artifact generation"` to `"BMB delegation + artifact generation + integration wiring"`.
+  - [x] 7.3 Update the Story column for Step 4 from `2.6` to `2.6, 2.7`.
 
-- [ ] Task 8: Verification
-  - [ ] 8.1 Verify all 3 JS modules exist at `_bmad/bme/_team-factory/lib/writers/` and follow Node.js patterns (`require`, `module.exports`, no ES modules).
-  - [ ] 8.2 Verify generated config.yaml schema matches Gyre (`_bmad/bme/_gyre/config.yaml`) and Vortex (`_bmad/bme/_vortex/config.yaml`) — same top-level keys in same order.
-  - [ ] 8.3 Verify module-help.csv header matches BMB (`_bmad/bmb/module-help.csv`) and BMM (`_bmad/bmm/module-help.csv`) — identical column list.
-  - [ ] 8.4 Verify collision detection covers: `submodule_name` uniqueness, agent ID uniqueness across modules, workflow name uniqueness across modules.
-  - [ ] 8.5 Verify additive-only: no `fs.unlinkSync`, no overwrite logic — all three modules check for existing files and refuse to proceed.
-  - [ ] 8.6 Verify golden files are each ≤50 lines.
-  - [ ] 8.7 Verify step-04-generate.md still follows the step-file pattern: PURPOSE → RULES → PARTs → STEP VALIDATION → Visibility Checklist → CHECKPOINT → NEXT.
-  - [ ] 8.8 Run all tests: `node --test tests/team-factory/*.test.js` — all pass.
-  - [ ] 8.9 Verify activation-validator.js is read-only: no `writeFileSync`, `mkdirSync`, or any write operations.
+- [x] Task 8: Verification
+  - [x] 8.1 Verify all 3 JS modules exist at `_bmad/bme/_team-factory/lib/writers/` and follow Node.js patterns (`require`, `module.exports`, no ES modules).
+  - [x] 8.2 Verify generated config.yaml schema matches Gyre (`_bmad/bme/_gyre/config.yaml`) and Vortex (`_bmad/bme/_vortex/config.yaml`) — same top-level keys in same order.
+  - [x] 8.3 Verify module-help.csv header matches BMB (`_bmad/bmb/module-help.csv`) and BMM (`_bmad/bmm/module-help.csv`) — identical column list.
+  - [x] 8.4 Verify collision detection covers: `submodule_name` uniqueness, agent ID uniqueness across modules, workflow name uniqueness across modules.
+  - [x] 8.5 Verify additive-only: no `fs.unlinkSync`, no overwrite logic — all three modules check for existing files and refuse to proceed.
+  - [x] 8.6 Verify golden files are each ≤50 lines.
+  - [x] 8.7 Verify step-04-generate.md still follows the step-file pattern: PURPOSE → RULES → PARTs → STEP VALIDATION → Visibility Checklist → CHECKPOINT → NEXT.
+  - [x] 8.8 Run all tests: `node --test tests/team-factory/*.test.js` — all pass.
+  - [x] 8.9 Verify activation-validator.js is read-only: no `writeFileSync`, `mkdirSync`, or any write operations.
 
 ## Dev Notes
 
@@ -248,10 +248,40 @@ Per-module const blocks: `AGENTS[]`, `WORKFLOWS[]`, derived lists, `module.expor
 
 ### Agent Model Used
 
-{{agent_model_name_version}}
+Claude Opus 4.6
 
 ### Completion Notes List
 
+- All 3 JS modules created as Creators/Validator (NOT Writer — that's Story 2.8)
+- Simple safety protocol implemented: write → verify parse (config-creator), write → verify header (csv-creator)
+- Activation validator is strictly read-only (enforced by test scanning source for write operations)
+- Collision detection scans all `_bmad/bme/*/config.yaml` for submodule_name, agent ID, workflow name collisions
+- Fixed test isolation issue: shared tmpDir caused false collision detection in "valid YAML" test — resolved with isolated bmeRoot
+- Fixed module path false positive: substring matching on activation content matched config path instead of module attribute — resolved with regex-based `module=` attribute extraction
+- Pre-existing failure in docs-audit.test.js (23 findings) — not caused by this story
+- 33 tests, all passing
+
 ### Change Log
 
+- Created factory-types.js with JSDoc type definitions
+- Created config-creator.js with collision detection + additive-only + simple safety
+- Created csv-creator.js with standard header + row generation + additive-only
+- Created activation-validator.js with 5-check read-only validation
+- Updated step-04-generate.md: added PARTs 7-9 (config, CSV, activation), renumbered summary to PART 10, updated STEP VALIDATION/CHECKPOINT/NEXT
+- Updated workflow.md: status line, Step 4 purpose and Story column
+- Created test fixtures, golden files, and 3 test suites
+
 ### File List
+
+- `_bmad/bme/_team-factory/lib/types/factory-types.js` (NEW)
+- `_bmad/bme/_team-factory/lib/writers/config-creator.js` (NEW)
+- `_bmad/bme/_team-factory/lib/writers/csv-creator.js` (NEW)
+- `_bmad/bme/_team-factory/lib/writers/activation-validator.js` (NEW)
+- `.claude/skills/bmad-team-factory/step-04-generate.md` (MODIFIED)
+- `.claude/skills/bmad-team-factory/workflow.md` (MODIFIED)
+- `tests/team-factory/fixtures/test-team-spec.yaml` (NEW)
+- `tests/team-factory/golden/golden-config.yaml` (NEW)
+- `tests/team-factory/golden/golden-help-csv.csv` (NEW)
+- `tests/team-factory/config-creator.test.js` (NEW)
+- `tests/team-factory/csv-creator.test.js` (NEW)
+- `tests/team-factory/activation-validator.test.js` (NEW)
