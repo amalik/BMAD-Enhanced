@@ -1,6 +1,6 @@
 # Story 2.3: Agent Scope Definition & Overlap Detection
 
-Status: ready-for-dev
+Status: in-progress
 
 ## Story
 
