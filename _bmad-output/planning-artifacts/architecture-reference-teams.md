@@ -135,9 +135,35 @@ Four quality properties define what it means for a team to be valid within the B
 
 ---
 
+## Extension Deployment Mechanism
+
+This section documents how a new team module moves from package source to a working project installation. This is the deployment pipeline — the "how" of getting files in place. The checklist sections below define the "what" (specific validation rules) for each quality property.
+
+### Deployment Flow
+
+When a contributor runs `convoke-install` or `convoke-update`, the following pipeline executes:
+
+1. **Registry lookup** — `agent-registry.js` is the central source of truth. Each module has a const block declaring its AGENTS array (agent definitions with id, name, icon, persona), WORKFLOWS array (workflow-to-agent mappings), and derived lists (file paths, IDs, workflow names). The CLI tooling reads these arrays to know which files to copy and validate.
+
+2. **File copying** — `refresh-installation.js` copies the module's directory tree from the npm package (`{packageRoot}/_bmad/bme/{submodule}/`) to the project (`{projectRoot}/_bmad/bme/{submodule}/`). This includes `agents/`, `workflows/`, `config.yaml`, and for Sequential teams, `contracts/` and `guides/`. The copy uses the registry's agent and workflow arrays to iterate files.
+
+3. **Configuration seeding** — `config.yaml` is the per-module configuration file. On first install, the config-merger seeds it with defaults (submodule_name, module, agents, workflows, version, user_name, communication_language, output_folder). On subsequent updates, user overrides are preserved while new defaults are merged in.
+
+4. **Manifest generation** — During refresh, `buildAgentRow610()` generates rows in `agent-manifest.csv` for each agent, populating the v6.1.0 schema columns (name, displayName, title, icon, capabilities, role, identity, communicationStyle, principles, module, path, canonicalId). This manifest powers cross-module discovery and overlap detection.
+
+5. **Post-install validation** — `validator.js` runs structural integrity checks: config.yaml parses correctly, every agent file declared in config exists, every workflow has a workflow.md entry point, and manifest entries are present. Validation failures are surfaced to the user immediately.
+
+6. **Discovery registration** — `module-help.csv` maps modules to their capabilities for CLI discovery via `convoke-help`. Note: existing bme submodules (Vortex, Gyre) do not yet have entries in this file; new teams should create them to complete the discovery surface.
+
+For specific validation rules applied at each stage, see the checklist sections below organized by quality property and composition pattern.
+
+---
+
 ## Discoverable — Independent
 
-<!-- Story 1.3 will add per-check "why" prose with inline check ID references -->
+A team's agents must be findable through every standard framework surface. **DISC-I-01** — the agent-manifest.csv is the canonical registry that the BMad Master, overlap detection, and cross-module routing all consult; an agent missing from this manifest is invisible to the broader ecosystem. **DISC-I-02** — a README provides human-readable orientation for contributors browsing the module directory, explaining what the team does and when each agent is useful. Without it, a contributor must read individual agent files to understand the team's purpose.
+
+Beyond passive discovery, agents must be actively reachable through interactive and programmatic surfaces. **DISC-I-03** — activation XML menus are the primary interactive surface; they expose workflows as menu items so contributors can invoke capabilities without knowing file paths. **DISC-I-04** — canonical skill IDs enable intent-based routing, allowing the BMad Master and other modules to dispatch requests to agents by capability rather than by file location. **DISC-I-05** — module-help.csv powers the CLI `convoke-help` discovery experience; without an entry, contributors using the CLI will not see the team listed among available modules (note: existing bme submodules lack this file, but new teams should create an entry).
 
 ```yaml
 quality_property: discoverable
@@ -169,7 +195,9 @@ checks:
 
 ## Discoverable — Sequential
 
-<!-- Story 1.3 will add per-check "why" prose with inline check ID references -->
+A Sequential team's agents must be findable through every standard framework surface, just as with Independent teams. **DISC-S-01** — the agent-manifest.csv is the canonical registry consulted by the BMad Master, overlap detection, and cross-module routing; agents missing from this manifest are invisible to the ecosystem. **DISC-S-02** — a README orients contributors to the team's purpose and pipeline structure without requiring them to read individual agent files. **DISC-S-03** — activation XML menus expose workflows as interactive menu items, letting contributors invoke pipeline stages without knowing file paths. **DISC-S-04** — canonical skill IDs enable intent-based routing so the BMad Master and other modules can dispatch requests by capability. **DISC-S-05** — module-help.csv powers CLI discovery via `convoke-help`; without an entry, CLI users will not see the team listed (note: existing bme submodules lack this file, but new teams should create an entry).
+
+Sequential teams have additional discovery requirements driven by their multi-agent pipeline structure. **DISC-S-06** — the compass routing reference is the central navigation map for a Sequential team; it documents every workflow and cross-module route so that contributors (and the factory) can trace the full pipeline and know where each workflow leads next. Without it, a contributor finishing one stage has no guidance on what comes after. **DISC-S-07** — each agent's menu must reference all workflows assigned to that agent in the registry; a missing menu item means a workflow exists but is unreachable through the agent's interactive interface, creating a silent discovery gap.
 
 ```yaml
 quality_property: discoverable
@@ -209,7 +237,9 @@ checks:
 
 ## Installable — Independent
 
-<!-- Story 1.3 will add per-check "why" prose with inline check ID references -->
+The installation infrastructure relies on three coordinated files that must each know about the module. **INST-I-01** — the agent-registry.js is the central source of truth for CLI tooling; its AGENTS and WORKFLOWS arrays drive file copying, manifest generation, and validation. A module missing from the registry simply does not exist to the installation pipeline. **INST-I-02** — refresh-installation.js uses the registry arrays to copy module files from the npm package to the project; without a copy block for this module, `convoke-update` will skip it and users will have stale or missing files. **INST-I-04** — validator.js provides post-install structural integrity checks; without validation logic for the module, broken installations go undetected until runtime failures occur.
+
+The module must also provide the files that the infrastructure expects to find. **INST-I-03** — config.yaml must exist and parse as valid YAML because the refresh and validation pipelines both read it; a missing or malformed config will cause installation to fail silently or produce incorrect manifest entries. **INST-I-05** — each agent file declared in config.yaml must actually exist in the agents/ directory; the registry derives file paths from agent IDs, and a missing file means the agent is registered but unresolvable. **INST-I-06** — each workflow must have a workflow.md entry point because this is the file the activation XML's menu items reference; a missing entry point means the workflow appears in menus but fails when invoked.
 
 ```yaml
 quality_property: installable
@@ -245,7 +275,9 @@ checks:
 
 ## Installable — Sequential
 
-<!-- Story 1.3 will add per-check "why" prose with inline check ID references -->
+A Sequential team requires the same installation infrastructure as an Independent team, plus contract-specific handling. **INST-S-01** — the agent-registry.js is the central source of truth for CLI tooling; its AGENTS and WORKFLOWS arrays drive file copying, manifest generation, and validation. A module missing from the registry does not exist to the installation pipeline. **INST-S-02** — refresh-installation.js copies module files from the npm package to the project; for Sequential teams this must include the contracts/ directory alongside agents/, workflows/, and config.yaml. **INST-S-03** — config.yaml must exist and parse as valid YAML because the refresh and validation pipelines both read it. **INST-S-04** — validator.js provides post-install structural integrity checks; for Sequential teams this should include contract file existence validation alongside agent and workflow checks.
+
+The module must provide all files the infrastructure expects. **INST-S-05** — each agent file declared in config.yaml must exist in agents/; the registry derives file paths from agent IDs and a missing file means the agent is registered but unresolvable. **INST-S-06** — each workflow must have a workflow.md entry point because activation XML menu items reference this file; a missing entry point makes the workflow unreachable. Sequential teams additionally require: **INST-S-07** — a contracts/ directory with handoff contract files, because contracts define the formal interfaces between pipeline stages and are consumed by both agents and the factory at runtime. **INST-S-08** — refresh-installation.js must copy the contracts/ directory so that project installations receive the same contract definitions as the package source; without this, installed teams lack their inter-agent interface definitions.
 
 ```yaml
 quality_property: installable
@@ -289,7 +321,9 @@ checks:
 
 ## Configurable — Independent
 
-<!-- Story 1.3 will add per-check "why" prose with inline check ID references -->
+Configuration is what makes a team portable across projects and users. **CONF-I-01** — config.yaml must contain all required fields (submodule_name, module, agents, workflows, version, user_name, communication_language, output_folder) because these fields drive every other configurable behavior: the installation pipeline reads agent and workflow lists, the activation XML reads user-specific values, and the output folder determines where artifacts land. Missing fields cause silent failures downstream. **CONF-I-02** — each agent's activation XML must load config.yaml in step 2 of its activation sequence so that session variables (user name, output paths, language) are available before the agent begins work; an agent that skips this step operates with hardcoded or missing values, breaking portability.
+
+Naming conventions are the glue that connects configuration to the file system. **CONF-I-03** — agent file names must follow kebab-case and match the registry ID because the installation pipeline derives file paths from IDs; a mismatch means the registry points to a non-existent file. **CONF-I-04** — the module directory must use the underscore-prefix convention (e.g., `_vortex`) and match config.yaml's submodule_name so that path templates resolve correctly across all infrastructure files. **CONF-I-05** — workflow directory names must be kebab-case and match config.yaml's workflows list for the same reason: the registry and activation XML construct paths from these names. **CONF-I-06** — config field names must use snake_case to maintain consistency with the config-merger and avoid case-sensitivity bugs when merging user overrides with package defaults.
 
 ```yaml
 quality_property: configurable
@@ -325,7 +359,9 @@ checks:
 
 ## Configurable — Sequential
 
-<!-- Story 1.3 will add per-check "why" prose with inline check ID references -->
+Configuration makes a Sequential team portable across projects and users, just as with Independent teams. **CONF-S-01** — config.yaml must contain all required fields (submodule_name, module, agents, workflows, version, user_name, communication_language, output_folder) because these drive installation, activation, and artifact generation. **CONF-S-02** — each agent's activation XML must load config.yaml in step 2 so that session variables are available before work begins; without this, agents operate with hardcoded or missing values. **CONF-S-03** — agent file names must follow kebab-case and match the registry ID so that path templates resolve correctly. **CONF-S-04** — the module directory must use the underscore-prefix convention and match config.yaml's submodule_name. **CONF-S-05** — workflow directory names must be kebab-case and match config.yaml's workflows list. **CONF-S-06** — config field names must use snake_case for consistency with the config-merger and to avoid case-sensitivity bugs.
+
+Sequential teams have additional configuration constraints for their contracts. **CONF-S-07** — contract frontmatter must reference agent names that are consistent with the module's agent-registry AGENTS array (using first-name short names like `isla`, `mila`); inconsistent names mean the factory cannot trace which agents are connected by which contracts, breaking pipeline validation. **CONF-S-08** — contract file names must follow the `{prefix}{N}-{kebab-case-title}.md` convention (e.g., `hc1-empathy-artifacts.md`) because the installation pipeline and factory use this pattern to discover and order contract files; non-conforming names are invisible to automated processing.
 
 ```yaml
 quality_property: configurable
@@ -369,7 +405,9 @@ checks:
 
 ## Composable — Independent
 
-<!-- Story 1.3 will add per-check "why" prose with inline check ID references -->
+Composability for Independent teams means agents are individually addressable and their capabilities are visible to other modules, even without inter-agent contracts. **COMP-I-01** — each agent must appear in agent-manifest.csv with complete metadata (name, title, role, canonicalId) because this is the surface the factory uses for overlap detection; without manifest entries, a new team could unknowingly duplicate capabilities that already exist elsewhere. **COMP-I-02** — Independent teams must explicitly have no handoff contracts; this is a pattern assertion, not an oversight. Contracts imply sequential data flow, and their presence in an Independent module signals a misclassification that would confuse both contributors and the factory's composition pattern logic.
+
+Cross-module reachability requires two additional surfaces. **COMP-I-03** — each agent must have a canonical skill ID following the `bmad-agent-bme-{agent_id}` pattern because this is the inter-module routing mechanism; other teams' compass routing tables reference these skill IDs to dispatch work across module boundaries. **COMP-I-04** — the README must document each agent's capabilities in enough detail for other teams to determine routing relevance; without this, cross-team collaboration requires reading agent source files, which is fragile and discourages integration.
 
 ```yaml
 quality_property: composable
@@ -397,7 +435,9 @@ checks:
 
 ## Composable — Sequential
 
-<!-- Story 1.3 will add per-check "why" prose with inline check ID references -->
+Composability for Sequential teams means agents are individually addressable, the pipeline interfaces are formally defined, and cross-module routing is possible. **COMP-S-01** — each agent must appear in agent-manifest.csv with complete metadata because the factory uses this for overlap detection; without entries, a new team could duplicate capabilities that exist in another module. **COMP-S-02** — handoff contracts must exist because they are the formal interface definitions between pipeline stages; without them, the data flowing between agents is implicit and unvalidatable, making the pipeline fragile to changes. **COMP-S-03** — each contract must have required frontmatter fields (contract ID, type, source_agent, source_workflow, target_agents, created) because the factory and validator parse these fields to trace the pipeline topology; missing fields break automated pipeline analysis.
+
+Cross-module integration requires routing and coverage guarantees. **COMP-S-04** — the compass routing reference must include at least one inter-module route because Sequential teams do not operate in isolation; Gyre findings route to Vortex agents, and Vortex insights route to Gyre — without inter-module entries, cross-team navigation is broken. **COMP-S-05** — each agent must have a canonical skill ID following the `bmad-agent-bme-{agent_id}` pattern so that other modules' compass tables can reference them for inter-module dispatch. **COMP-S-06** — the contract chain must cover the full agent pipeline, meaning every adjacent pair of agents has a contract defining their interface; a gap in the chain means there is a pipeline transition with no formal specification, creating an undocumented handoff that will break when either agent evolves independently.
 
 ```yaml
 quality_property: composable
