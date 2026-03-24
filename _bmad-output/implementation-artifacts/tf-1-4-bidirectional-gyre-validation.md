@@ -118,6 +118,10 @@ From `architecture-team-factory.md` cross-cutting concern #8:
 
 The Architecture Reference IS the test for A5'. Gyre validation IS the test for A6'. Both are "Test First" priority.
 
+### Reverse Validation Methodology (Task 2)
+
+The dev will have already read Gyre's actual files during Task 1, so "building from scratch" is a thought experiment. The methodology is: for each check's `rule` + `validation` fields, evaluate whether they provide enough specificity to produce the correct file, structure, or content **without looking at an existing example**. The question isn't "can I build Gyre" (the dev already knows the answer) — it's "does the reference tell me **what to create, where to put it, and how to name it**?" Surface any unstated conventions that a contributor would need to discover independently.
+
 ### What NOT to Do (Out of Scope)
 
 - **Do NOT add new YAML checks** — only validate existing ones
