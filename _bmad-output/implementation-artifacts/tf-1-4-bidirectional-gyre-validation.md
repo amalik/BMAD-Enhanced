@@ -1,6 +1,6 @@
 # Story 1.4: Bidirectional Gyre Validation
 
-Status: ready-for-dev
+Status: review
 
 ## Story
 
@@ -26,38 +26,38 @@ So that I have confidence the four quality properties and two composition patter
 
 ## Tasks / Subtasks
 
-- [ ] Task 1: Forward Validation — Reference Predicts Gyre (AC: #1)
-  - [ ] 1.1 Evaluate all 7 Discoverable — Sequential checks (DISC-S-01 through DISC-S-07) against Gyre's actual files, recording pass/fail and evidence for each
-  - [ ] 1.2 Evaluate all 8 Installable — Sequential checks (INST-S-01 through INST-S-08) against Gyre's actual registration, refresh, validator, and file structure
-  - [ ] 1.3 Evaluate all 8 Configurable — Sequential checks (CONF-S-01 through CONF-S-08) against Gyre's config.yaml, agent files, naming conventions, and contract frontmatter
-  - [ ] 1.4 Evaluate all 6 Composable — Sequential checks (COMP-S-01 through COMP-S-06) against Gyre's manifest entries, contracts, compass routing, and skill IDs
+- [x] Task 1: Forward Validation — Reference Predicts Gyre (AC: #1)
+  - [x] 1.1 Evaluate all 7 Discoverable — Sequential checks (DISC-S-01 through DISC-S-07) against Gyre's actual files, recording pass/fail and evidence for each
+  - [x] 1.2 Evaluate all 8 Installable — Sequential checks (INST-S-01 through INST-S-08) against Gyre's actual registration, refresh, validator, and file structure
+  - [x] 1.3 Evaluate all 8 Configurable — Sequential checks (CONF-S-01 through CONF-S-08) against Gyre's config.yaml, agent files, naming conventions, and contract frontmatter
+  - [x] 1.4 Evaluate all 6 Composable — Sequential checks (COMP-S-01 through COMP-S-06) against Gyre's manifest entries, contracts, compass routing, and skill IDs
 
-- [ ] Task 2: Reverse Validation — Reference Guides Building (AC: #2)
-  - [ ] 2.1 Walk through the Architecture Reference as if building Gyre from scratch — for each quality property, determine whether the reference alone (without examining Gyre source code) provides enough information to know WHAT to create
-  - [ ] 2.2 Document any gaps where the reference is insufficient: missing instructions, ambiguous rules, or unstated conventions that a contributor would need to discover independently
-  - [ ] 2.3 For each gap found, classify as: (a) reference should be updated (actionable — fix in this story), (b) intentionally left to team-specific decisions (document as design note), or (c) Epic 2 factory scope (defer)
+- [x] Task 2: Reverse Validation — Reference Guides Building (AC: #2)
+  - [x] 2.1 Walk through the Architecture Reference as if building Gyre from scratch — for each quality property, determine whether the reference alone (without examining Gyre source code) provides enough information to know WHAT to create
+  - [x] 2.2 Document any gaps where the reference is insufficient: missing instructions, ambiguous rules, or unstated conventions that a contributor would need to discover independently
+  - [x] 2.3 For each gap found, classify as: (a) reference should be updated (actionable — fix in this story), (b) intentionally left to team-specific decisions (document as design note), or (c) Epic 2 factory scope (defer)
 
-- [ ] Task 3: Hypothesis Evidence Collection (AC: #3)
-  - [ ] 3.1 Review forward validation results for A5' evidence: do the four properties (Discoverable, Installable, Configurable, Composable) fully cover Gyre's structural requirements, or does Gyre have requirements that don't fit any property?
-  - [ ] 3.2 Review forward validation results for A6' evidence: does the Sequential pattern accurately describe Gyre's composition, or does Gyre exhibit patterns (e.g., partial independence, conditional pipelines) that suggest a third pattern is needed?
-  - [ ] 3.3 Write A5'/A6' evidence conclusions — explicitly state whether hypotheses are supported, partially supported, or falsified, with specific check results as evidence
+- [x] Task 3: Hypothesis Evidence Collection (AC: #3)
+  - [x] 3.1 Review forward validation results for A5' evidence: do the four properties (Discoverable, Installable, Configurable, Composable) fully cover Gyre's structural requirements, or does Gyre have requirements that don't fit any property?
+  - [x] 3.2 Review forward validation results for A6' evidence: does the Sequential pattern accurately describe Gyre's composition, or does Gyre exhibit patterns (e.g., partial independence, conditional pipelines) that suggest a third pattern is needed?
+  - [x] 3.3 Write A5'/A6' evidence conclusions — explicitly state whether hypotheses are supported, partially supported, or falsified, with specific check results as evidence
 
-- [ ] Task 4: Create Gyre Validation Report (AC: #1, #2, #3)
-  - [ ] 4.1 Create `_bmad-output/planning-artifacts/gyre-validation-report.md` with three sections per FR6 spec: (1) Check Results, (2) Surprising Findings, (3) A5'/A6' Evidence Conclusions
-  - [ ] 4.2 Section 1 — Check Results: table with columns [Check ID, Rule (brief), Pass/Fail, Evidence/Notes] covering all 29 Sequential checks
-  - [ ] 4.3 Section 2 — Surprising Findings: document edge cases, near-misses, and structural patterns that were unexpected — whether they passed or failed
-  - [ ] 4.4 Section 3 — A5'/A6' Evidence Conclusions: formal hypothesis assessment with specific check IDs as evidence references
+- [x] Task 4: Create Gyre Validation Report (AC: #1, #2, #3)
+  - [x] 4.1 Create `_bmad-output/planning-artifacts/gyre-validation-report.md` with three sections per FR6 spec: (1) Check Results, (2) Surprising Findings, (3) A5'/A6' Evidence Conclusions
+  - [x] 4.2 Section 1 — Check Results: table with columns [Check ID, Rule (brief), Pass/Fail, Evidence/Notes] covering all 29 Sequential checks
+  - [x] 4.3 Section 2 — Surprising Findings: document edge cases, near-misses, and structural patterns that were unexpected — whether they passed or failed
+  - [x] 4.4 Section 3 — A5'/A6' Evidence Conclusions: formal hypothesis assessment with specific check IDs as evidence references
 
-- [ ] Task 5: Address Reference Gaps (AC: #2)
-  - [ ] 5.1 For any gaps classified as "reference should be updated" in Task 2.3, apply fixes to `_bmad-output/planning-artifacts/architecture-reference-teams.md`
-  - [ ] 5.2 Do NOT add new YAML checks — only update prose, fix validation descriptions, or clarify ambiguous rules
-  - [ ] 5.3 Document all changes in the validation report's Surprising Findings section
+- [x] Task 5: Address Reference Gaps (AC: #2)
+  - [x] 5.1 For any gaps classified as "reference should be updated" in Task 2.3, apply fixes to `_bmad-output/planning-artifacts/architecture-reference-teams.md`
+  - [x] 5.2 Do NOT add new YAML checks — only update prose, fix validation descriptions, or clarify ambiguous rules
+  - [x] 5.3 Document all changes in the validation report's Surprising Findings section
 
-- [ ] Task 6: Final Validation (AC: #1, #2, #3)
-  - [ ] 6.1 Verify validation report has all 3 required sections per FR6 spec
-  - [ ] 6.2 Verify all 29 Sequential check IDs appear in the Check Results table
-  - [ ] 6.3 Verify A5'/A6' evidence conclusions reference specific check results
-  - [ ] 6.4 Verify any reference updates (Task 5) do not modify YAML data blocks
+- [x] Task 6: Final Validation (AC: #1, #2, #3)
+  - [x] 6.1 Verify validation report has all 3 required sections per FR6 spec
+  - [x] 6.2 Verify all 29 Sequential check IDs appear in the Check Results table
+  - [x] 6.3 Verify A5'/A6' evidence conclusions reference specific check results
+  - [x] 6.4 Verify any reference updates (Task 5) do not modify YAML data blocks
 
 ## Dev Notes
 
@@ -161,3 +161,33 @@ From Story 1.2 completion:
 - [Source: _bmad-output/planning-artifacts/architecture-team-factory.md — FR6 output spec, Phase 1 exit criteria, hypothesis sensitivity #8]
 - [Source: _bmad-output/planning-artifacts/architecture-reference-teams.md — 29 Sequential checks to validate]
 - [Source: _bmad-output/implementation-artifacts/tf-1-3-human-readable-context-extension-mechanism.md — Previous story intelligence]
+
+## Dev Agent Record
+
+### Agent Model Used
+
+Claude Opus 4.6
+
+### Debug Log References
+
+None — no errors encountered.
+
+### Completion Notes List
+
+- All 18 subtasks passed across 6 tasks — forward validation, reverse validation, hypothesis collection, report creation, gap fixes, final validation
+- Task 1 (Forward Validation): Evaluated all 29 Sequential checks against Gyre. Results: 27 PASS, 2 FAIL. DISC-S-05 (module-help.csv doesn't exist — known gap), INST-S-04 (validator.js has no Gyre validation — surprising finding, pre-existing infrastructure gap)
+- Task 2 (Reverse Validation): Identified 4 reverse validation gaps — SKILL.md content not specified (DISC-S-04), compass routing format not specified (DISC-S-06), activation XML template not specified (CONF-S-02), refresh-installation.js code pattern not specified (INST-S-02). All classified as (b) design notes or (c) Epic 2 factory scope except one (a) actionable fix
+- Task 3 (Hypothesis Evidence): A5' SUPPORTED — four properties fully cover Gyre, no uncovered requirements. A6' SUPPORTED — Sequential pattern covers pipeline-with-feedback and conditional workflows, no third pattern signal
+- Task 4 (Validation Report): Created gyre-validation-report.md with 3 sections per FR6 spec (~200 lines). 8 surprising findings documented including 2 failures, 2 near-misses, 4 reverse validation gaps
+- Task 5 (Reference Gaps): Applied 1 prose clarification to COMP-S-03 paragraph (contract schema definition placeholder dates). No YAML blocks modified
+- Task 6 (Final Validation): All 4 criteria passed — 3 sections present, 29 check IDs in tables, hypothesis conclusions reference specific checks, no YAML modifications
+
+### Change Log
+
+- 2026-03-24: Created `_bmad-output/planning-artifacts/gyre-validation-report.md` (~200 lines) — Gyre Validation Report with check results, surprising findings, A5'/A6' evidence
+- 2026-03-24: Updated `_bmad-output/planning-artifacts/architecture-reference-teams.md` — added COMP-S-03 prose clarification for contract schema definition placeholder dates
+
+### File List
+
+- `_bmad-output/planning-artifacts/gyre-validation-report.md` (created, ~200 lines)
+- `_bmad-output/planning-artifacts/architecture-reference-teams.md` (modified — 1 prose sentence added to COMP-S-03 paragraph)
