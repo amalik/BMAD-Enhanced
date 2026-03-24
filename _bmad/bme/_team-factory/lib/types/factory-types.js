@@ -162,4 +162,32 @@
  * @property {string} expertise
  */
 
+/**
+ * File manifest entry tracking a created or modified file.
+ * @typedef {Object} ManifestEntry
+ * @property {string} path - File path (relative to project root)
+ * @property {'created' | 'modified'} operation - Whether the file was created or modified
+ * @property {string} module - Team name kebab identifying the owning module
+ */
+
+/**
+ * End-to-end validation result.
+ * @typedef {Object} E2EValidationResult
+ * @property {boolean} valid - True if all checks passed
+ * @property {E2ECheck[]} checks - Individual check results
+ * @property {string[]} errors - Human-readable error messages for failed checks
+ */
+
+/**
+ * Individual end-to-end validation check.
+ * Name uses {PROP}-{SEMANTIC-NAME} format per architecture (line 590).
+ * @typedef {Object} E2ECheck
+ * @property {string} name - Check ID in {PROP}-{SEMANTIC-NAME} format (e.g., CONFIG-EXISTS)
+ * @property {string} stepName - Step that produced the check (e.g., 'structural', 'regression', 'wiring')
+ * @property {boolean} passed - Whether the check passed
+ * @property {string} [expected] - Expected value (included on failure per TF-NFR11)
+ * @property {string} [actual] - Actual value found (included on failure per TF-NFR11)
+ * @property {string} [detail] - Additional context (e.g., file path)
+ */
+
 module.exports = {};
