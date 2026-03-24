@@ -1,0 +1,214 @@
+---
+contract: GC2
+type: artifact
+source_agent: atlas
+source_workflow: model-generation
+target_agents: [lens, coach]
+input_artifacts: [GC1]
+created: 2026-03-24
+---
+
+gyre_manifest:
+  version: "1.0"
+  generated_at: "2026-03-24T00:00:00Z"
+  stack_summary: "Node.js npm package (convoke-agents) — CLI toolkit with agent definitions, distributed via npm, CI/CD via GitHub Actions"
+  capability_count: 21
+  limited_coverage: false
+  capabilities:
+    # === OBSERVABILITY (5) — reframed for CLI toolkit ===
+    - id: "cli-error-messaging"
+      category: "observability"
+      name: "Structured CLI Error Messages"
+      description: "CLI commands produce actionable error messages with context (what failed, why, what to try). Users of npm CLI tools cannot inspect server logs — the terminal output IS the observability layer."
+      source: "practice"
+      relevance: "convoke-* CLI commands are the user's primary interface. Poor error messages cause support burden and abandonment."
+      amended: false
+      removed: false
+
+    - id: "diagnostic-command"
+      category: "observability"
+      name: "Built-in Diagnostic Command"
+      description: "A doctor/diagnostic command that validates installation health, checks file integrity, and reports environment details. Common in mature CLI tools (npm doctor, brew doctor)."
+      source: "practice"
+      relevance: "convoke-doctor already exists — this capability validates that it covers installation integrity, version reporting, and environment checks."
+      amended: false
+      removed: false
+
+    - id: "version-reporting"
+      category: "observability"
+      name: "Version Reporting for Troubleshooting"
+      description: "CLI reports its own version consistently, enabling users and maintainers to correlate issues to specific releases. Version should be read from package.json, never hardcoded."
+      source: "practice"
+      relevance: "convoke-version exists. Key rule: version must be read from package.json via getPackageVersion(), never hardcoded."
+      amended: false
+      removed: false
+
+    - id: "verbose-debug-mode"
+      category: "observability"
+      name: "Verbose/Debug Output Mode"
+      description: "CLI commands support a verbose or debug flag that reveals internal operations (file copies, config merges, migration steps) for troubleshooting without modifying code."
+      source: "practice"
+      relevance: "Update and migration operations (convoke-update, convoke-migrate) involve multi-step file operations where users need visibility into what changed."
+      amended: false
+      removed: false
+
+    - id: "install-validation-reporting"
+      category: "observability"
+      name: "Post-Install Validation Reporting"
+      description: "After install or update, validate that expected files exist and report results. Catches silent failures where file copy succeeds but content is wrong or incomplete."
+      source: "reasoning"
+      relevance: "convoke-install copies agent definitions into user projects. Silent copy failures leave users with broken installations they discover late."
+      amended: false
+      removed: false
+
+    # === DEPLOYMENT (7) — npm publish pipeline ===
+    - id: "ci-multi-version-testing"
+      category: "deployment"
+      name: "Multi-Version Node.js Test Matrix"
+      description: "CI runs tests against multiple Node.js LTS versions to ensure compatibility. DORA practice: catch version-specific failures before users do."
+      source: "standard"
+      relevance: "CI already tests Node 18/20/22. This capability validates the matrix covers current and upcoming LTS versions."
+      amended: false
+      removed: false
+
+    - id: "ci-lint-gate"
+      category: "deployment"
+      name: "Automated Linting Gate"
+      description: "CI enforces consistent code style via linting before merge. Prevents style drift in a project with many script files and test files."
+      source: "practice"
+      relevance: "ESLint is configured and runs in CI. This capability validates it blocks merges on lint failure."
+      amended: false
+      removed: false
+
+    - id: "ci-coverage-measurement"
+      category: "deployment"
+      name: "Test Coverage Measurement"
+      description: "CI measures and reports test coverage (c8/istanbul). Coverage trends catch undertested areas before they become bug sources."
+      source: "standard"
+      relevance: "c8 coverage is configured. Known debt exists (convoke-update.js at 29%, convoke-version.js at 56%). This capability tracks coverage health."
+      amended: false
+      removed: false
+
+    - id: "npm-provenance"
+      category: "deployment"
+      name: "npm Publish with Provenance"
+      description: "Package is published with npm provenance attestation, linking the published artifact to its source commit and CI run. Supply chain transparency per SLSA framework."
+      source: "standard"
+      relevance: "CI already uses --provenance flag on npm publish. This capability validates the full provenance chain (GitHub Actions OIDC → npm)."
+      amended: false
+      removed: false
+
+    - id: "package-content-verification"
+      category: "deployment"
+      name: "Package Content Verification"
+      description: "CI runs npm pack --dry-run to verify published package contents match expectations. Catches accidental inclusion of test files, secrets, or oversized artifacts."
+      source: "practice"
+      relevance: "CI already runs pack dry-run. The files field in package.json controls inclusion — this capability validates alignment."
+      amended: false
+      removed: false
+
+    - id: "semantic-versioning"
+      category: "deployment"
+      name: "Semantic Versioning Discipline"
+      description: "Version bumps follow semver conventions: breaking changes = major, new features = minor, fixes = patch. Enables users to trust update safety."
+      source: "standard"
+      relevance: "Package is at v2.4.0. Migration system and update system depend on version comparison (compareVersions). Semver violations break update detection."
+      amended: false
+      removed: false
+
+    - id: "tag-triggered-publish"
+      category: "deployment"
+      name: "Git Tag-Triggered Publish Pipeline"
+      description: "Publishing is triggered by git tags (v*), not manual npm publish. Ensures every published version has a corresponding git tag and passes all CI gates."
+      source: "practice"
+      relevance: "CI publishes on refs/tags/v* with all jobs as prerequisites. This capability validates the tag → publish → registry chain."
+      amended: false
+      removed: false
+
+    # === RELIABILITY (5) — CLI robustness ===
+    - id: "idempotent-operations"
+      category: "reliability"
+      name: "Idempotent Install and Update Operations"
+      description: "Running install or update multiple times produces the same result without corruption or duplication. Users re-run commands when unsure if they succeeded."
+      source: "practice"
+      relevance: "convoke-install and convoke-update copy files into user projects. Re-runs must not create duplicates or corrupt existing customizations."
+      amended: false
+      removed: false
+
+    - id: "cross-platform-paths"
+      category: "reliability"
+      name: "Cross-Platform Path Handling"
+      description: "File operations use path.join/path.resolve instead of string concatenation with slashes. Ensures Windows, macOS, and Linux compatibility."
+      source: "practice"
+      relevance: "CLI scripts manipulate file paths extensively (findProjectRoot, file copying). Path separator bugs are the #1 cross-platform failure mode."
+      amended: false
+      removed: false
+
+    - id: "node-lts-compatibility"
+      category: "reliability"
+      name: "Node.js LTS Version Compatibility"
+      description: "Package works on all active Node.js LTS versions without polyfills or version-specific branches. Uses only stable APIs."
+      source: "practice"
+      relevance: "Test matrix covers 18/20/22. This capability validates no use of experimental APIs or version-gated syntax (e.g., using node:test requires Node 18+)."
+      amended: false
+      removed: false
+
+    - id: "graceful-degradation"
+      category: "reliability"
+      name: "Graceful Degradation on Missing Context"
+      description: "CLI commands degrade gracefully when run outside a valid project context (no package.json, no _bmad/ directory) with clear error messages instead of stack traces."
+      source: "reasoning"
+      relevance: "Users may run convoke-* commands from wrong directories. findProjectRoot() must handle this without cryptic errors."
+      amended: false
+      removed: false
+
+    - id: "migration-safety"
+      category: "reliability"
+      name: "Safe Migration with Append-Only Registry"
+      description: "Migrations are append-only (never modified after release) and run in order. Failed migrations leave clear state for retry. No data loss on partial failure."
+      source: "reasoning"
+      relevance: "migration-runner.js orchestrates version upgrades. The append-only registry pattern prevents migration ordering bugs that corrupt user installations."
+      amended: false
+      removed: false
+
+    # === SECURITY (4) — supply chain ===
+    - id: "dependency-audit"
+      category: "security"
+      name: "Automated Dependency Vulnerability Scanning"
+      description: "CI runs npm audit to detect known vulnerabilities in dependencies before publish. Blocks release on critical/high findings."
+      source: "standard"
+      relevance: "CI runs npm audit --omit=dev. This capability validates audit scope (prod deps only is correct for an npm package) and failure thresholds."
+      amended: false
+      removed: false
+
+    - id: "no-bundled-secrets"
+      category: "security"
+      name: "No Secrets in Published Package"
+      description: "The files field in package.json and .npmignore ensure no .env files, credentials, tokens, or internal configs are included in the published tarball."
+      source: "practice"
+      relevance: "Package publishes scripts/, _bmad/, src/, and docs. This capability validates that .env, .claude/, test fixtures with credentials, etc. are excluded."
+      amended: false
+      removed: false
+
+    - id: "lockfile-integrity"
+      category: "security"
+      name: "Lockfile Integrity for Reproducible Builds"
+      description: "CI uses npm ci (not npm install) to enforce lockfile integrity. Prevents supply chain attacks via dependency confusion or lockfile manipulation."
+      source: "standard"
+      relevance: "CI correctly uses npm ci. This capability validates lockfile is committed and CI fails if lockfile is out of sync with package.json."
+      amended: false
+      removed: false
+
+    - id: "postinstall-safety"
+      category: "security"
+      name: "Postinstall Script Safety"
+      description: "Postinstall scripts are minimal, local-only (no network calls, no elevated permissions), and fail gracefully. Users trust packages that don't do surprising things on install."
+      source: "practice"
+      relevance: "package.json has a postinstall script (node scripts/postinstall.js). This capability validates it's safe, fast, and transparent."
+      amended: false
+      removed: false
+
+  provenance:
+    standards_referenced: ["DORA", "SLSA", "Google PRR", "npm best practices"]
+    web_search_performed: false
+    web_search_date: null
