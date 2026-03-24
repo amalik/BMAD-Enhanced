@@ -1,6 +1,6 @@
 # Story 2.6: BMB Delegation & Artifact Generation
 
-Status: review
+Status: done
 
 ## Story
 
@@ -196,6 +196,18 @@ Claude Opus 4.6
 - Idempotency enforced: spec file `created` date used for all generated artifact dates, no session-specific data
 - Updated workflow.md: status to "Steps 0–4 available", added Step 4 routing entry, updated fallback note
 - Cleaned step-03-review.md NEXT section: removed Story 2.6 fallback note
+
+#### Code Review Patches Applied (9 fixes)
+
+- P1: Workflow name derivation — explicit rule: use first capability kebab-case, record in `workflow_names[]` context
+- P2: Resume detection — verify module directory exists before skipping to PART 3
+- P3: RULES line 17 — "Step 4's integration wiring" → "Story 2.7's integration wiring"
+- P4: SKILL.md generation — added to 3C workflow generation, 3D verification (2 new checks), 3F confirmation table
+- P5: PART 6 progress — added comment documenting type-shift from per-agent object to "complete" string
+- P6: config.yaml forward reference — annotated in BMB delegation prompt as Story 2.7 dependency
+- P9: `source_workflow` variable — annotated to resolve from `workflow_names[source_agent]` recorded in PART 3C
+- F7: Independent teams with optional contracts — PART 4 now conditional on `contracts[]` non-empty instead of Sequential-only
+- F8: Independent teams with shared-reference routing — PART 5 now conditional on `compass_routing = "shared-reference"` for Independent
 
 ### Change Log
 
