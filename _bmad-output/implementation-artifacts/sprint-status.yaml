@@ -34,7 +34,7 @@
 # - Dev moves story to 'review', then runs code-review (fresh context, different LLM recommended)
 
 generated: 2026-03-23
-last_updated: 2026-03-24
+last_updated: 2026-03-24T2
 project: BMAD-Enhanced
 project_key: NOKEY
 tracking_system: file-system
@@ -266,7 +266,7 @@ development_status:
   tf-2-6-bmb-delegation-artifact-generation: done
   tf-2-7-integration-wiring-config-csv-activation: done
   tf-2-8-registry-wiring-write-safety: done
-  tf-2-9-end-to-end-validation-error-recovery: ready-for-dev
+  tf-2-9-end-to-end-validation-error-recovery: in-progress
   tf-epic-2-retrospective: optional
 
   # Epic 3: Extensions — Add Agent & Add Skill
