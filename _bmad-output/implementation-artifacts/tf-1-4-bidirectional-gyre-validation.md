@@ -107,7 +107,7 @@ Gyre is a **Sequential** team (4-agent pipeline with handoff contracts). Only th
 ### Known Issues to Expect
 
 - **DISC-S-05 (module-help.csv):** Known gap — existing bme submodules lack module-help.csv entries. Check has a NOTE in its validation field. Expected: FAIL with documented exception.
-- **COMP-S-06 (contract chain coverage):** Gyre has 4 agents and 4 contracts (GC1-GC4). The pipeline is Scout→Atlas→Lens→Coach, but contracts may not cover every adjacent pair in the same way Vortex does. Verify carefully.
+- **COMP-S-06 (contract chain coverage):** Gyre has 4 contracts covering the full pipeline — GC1 (Scout→Atlas,Lens), GC2 (Atlas→Lens,Coach), GC3 (Lens→Coach), GC4 (Coach→Atlas feedback). All adjacent pairs are covered. Note GC4 is a feedback loop, not a forward pipeline step — verify the check's "adjacent pair" rule accounts for non-linear flows.
 
 ### Hypothesis Context
 
