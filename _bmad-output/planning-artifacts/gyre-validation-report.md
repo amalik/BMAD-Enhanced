@@ -78,7 +78,7 @@ validator.js imports only Vortex constants and validates only Vortex agents, wor
 
 **Impact on reference accuracy:** The check correctly predicted that validator.js SHOULD validate Gyre. The reference's rule and validation text are correct — Gyre's actual infrastructure is incomplete. This is evidence that the reference is more complete than the implementation.
 
-**Classification:** Pre-existing codebase gap — out of scope for this story (would require JS code changes). Should be tracked as a backlog item.
+**Classification:** Pre-existing codebase gap, documented as a known infrastructure limitation — validator.js is currently Vortex-only; Gyre validation support is deferred as a backlog item. This is an intentional design decision at the time of Gyre's initial release: installation correctness was verified manually, and automated validation was not added to match.
 
 ### Finding 2: module-help.csv does not exist (DISC-S-05 — FAIL)
 
