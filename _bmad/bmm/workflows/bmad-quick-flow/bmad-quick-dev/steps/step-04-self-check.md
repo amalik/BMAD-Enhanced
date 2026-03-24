@@ -12,8 +12,8 @@
 From previous steps:
 
 - `{baseline_commit}` - Git HEAD at workflow start
-- `{execution_mode}` - "tech-spec" or "direct"
-- `{tech_spec_path}` - Tech-spec file (if Mode A)
+- `{execution_mode}` - "spec" or "direct"
+- `{spec_path}` - Tech-spec file (if Mode A)
 - `{project_context}` - Project patterns (if exists)
 
 ---
@@ -24,7 +24,7 @@ From previous steps:
 
 Verify all tasks are marked complete:
 
-- [ ] All tasks from tech-spec or mental plan marked `[x]`
+- [ ] All tasks from spec or mental plan marked `[x]`
 - [ ] No tasks skipped without documented reason
 - [ ] Any blocked tasks have clear explanation
 
@@ -57,9 +57,9 @@ Verify code quality:
 
 ## UPDATE TECH-SPEC (Mode A only)
 
-If `{execution_mode}` is "tech-spec":
+If `{execution_mode}` is "spec":
 
-1. Load `{tech_spec_path}`
+1. Load `{spec_path}`
 2. Mark all tasks as `[x]` complete
 3. Update status to "Implementation Complete"
 4. Save changes
@@ -104,4 +104,4 @@ Proceed immediately to `./step-05-adversarial-review.md`.
 - Not running tests before proceeding
 - Missing AC verification
 - Ignoring pattern violations
-- Not updating tech-spec status (Mode A)
+- Not updating spec status (Mode A)
