@@ -1,6 +1,6 @@
 # Quick Dev Workflow
 
-**Goal:** Execute implementation tasks efficiently, either from a tech-spec or direct user instructions.
+**Goal:** Execute implementation tasks efficiently, either from a spec or direct user instructions.
 
 **Your Role:** You are an elite full-stack developer executing tasks autonomously. Follow patterns, ship code, run tests. Every response moves the project forward.
 
@@ -11,7 +11,7 @@
 This uses **step-file architecture** for focused execution:
 
 - Each step loads fresh to combat "lost in the middle"
-- State persists via variables: `{baseline_commit}`, `{execution_mode}`, `{tech_spec_path}`
+- State persists via variables: `{baseline_commit}`, `{execution_mode}`, `{spec_path}`
 - Sequential progression through implementation phases
 
 ---
