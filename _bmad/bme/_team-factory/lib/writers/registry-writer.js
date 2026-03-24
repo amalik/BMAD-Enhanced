@@ -22,6 +22,10 @@ const { execSync } = require('child_process');
  * @returns {Promise<import('../types/factory-types').RegistryResult>}
  */
 async function writeRegistryBlock(specData, registryPath, options = {}) {
+  if (!specData.team_name_kebab || !specData.team_name_kebab.trim()) {
+    return { success: false, written: [], skipped: [], errors: ['team_name_kebab is required and must not be empty'], rollbackApplied: false };
+  }
+
   const prefix = derivePrefix(specData.team_name_kebab);
   const teamName = specData.team_name || specData.team_name_kebab;
 
@@ -70,7 +74,14 @@ async function writeRegistryBlock(specData, registryPath, options = {}) {
     return { success: false, written: [], skipped: [], errors: [`Failed to create backup: ${err.message}`], rollbackApplied: false };
   }
 
-  const modified = applyInsertions(currentContent, moduleBlock, exportNames);
+  let modified;
+  try {
+    modified = applyInsertions(currentContent, moduleBlock, exportNames);
+  } catch (err) {
+    await fs.remove(bakPath);
+    return { success: false, written: [], skipped: [], errors: [`Insertion failed: ${err.message}`], rollbackApplied: false };
+  }
+
   try {
     await fs.writeFile(registryPath, modified, 'utf8');
   } catch (err) {
@@ -154,7 +165,7 @@ function toKebab(str) {
  */
 function escapeSingleQuotes(str) {
   if (!str) return '';
-  return str.replace(/\\/g, '\\\\').replace(/'/g, "\\'");
+  return str.replace(/\\/g, '\\\\').replace(/'/g, "\\'").replace(/\n/g, '\\n').replace(/\r/g, '\\r');
 }
 
 /**
@@ -275,13 +286,6 @@ function validateStaged(moduleBlock, prefix, currentContent) {
     if (existingConsts.includes(nc)) {
       errors.push(`Additive-only violation: ${nc} already exists`);
     }
-  }
-
-  // Check balanced braces
-  const opens = (moduleBlock.match(/\{/g) || []).length;
-  const closes = (moduleBlock.match(/\}/g) || []).length;
-  if (opens !== closes) {
-    errors.push(`Unbalanced braces: ${opens} opens, ${closes} closes`);
   }
 
   return errors;
