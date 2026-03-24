@@ -68,6 +68,9 @@ async function writeRegistryBlock(specData, registryPath, options = {}) {
 
   // --- 4. APPLY: Read → save .bak → insert → write ---
   const bakPath = `${registryPath}.bak`;
+  if (await fs.pathExists(bakPath)) {
+    return { success: false, written: [], skipped: [], errors: ['Stale .bak file exists — a previous run may have crashed. Remove it manually before retrying.'], rollbackApplied: false };
+  }
   try {
     await fs.writeFile(bakPath, currentContent, 'utf8');
   } catch (err) {
