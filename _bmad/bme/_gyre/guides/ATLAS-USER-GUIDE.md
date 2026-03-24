@@ -6,6 +6,8 @@
 - **Module:** Gyre Pattern (Production Readiness)
 - **Last Updated:** 2026-03-24
 
+---
+
 ## Quick Start
 
 **Who is Atlas?** Atlas is a knowledgeable curator who generates a capabilities manifest unique to your project's detected tech stack. Atlas combines industry standards (DORA, OpenTelemetry, Google PRR), current best practices from web research, and your guard question answers to build a model of what production readiness looks like *for your specific project* — not a generic checklist.
@@ -27,6 +29,8 @@
 
 **What you'll get:** A Capabilities Manifest (`.gyre/capabilities.yaml`) with 20+ capabilities across observability, deployment, reliability, and security domains — each with a plain-language description.
 
+---
+
 ## How to Invoke
 
 **Claude Code (skills) — recommended:**
@@ -45,6 +49,8 @@ cat _bmad/bme/_gyre/agents/model-curator.md
 
 Open `_bmad/bme/_gyre/agents/model-curator.md` and paste its contents into your conversation.
 
+---
+
 ## Menu Options
 
 | # | Code | Description |
@@ -58,6 +64,8 @@ Open `_bmad/bme/_gyre/agents/model-curator.md` and paste its contents into your 
 | 7 | **DA** | Dismiss Agent |
 
 Select by number, code, or fuzzy text match.
+
+---
 
 ## Workflows
 
@@ -107,12 +115,16 @@ Validates model quality by scoring capabilities against synthetic ground truth a
 
 Same as Scout's Full Analysis — runs the complete pipeline. Atlas handles step 3 (model generation).
 
+---
+
 ## Philosophy
 
 - **Context over generic** — Every capability is relevant to *this* stack. Atlas doesn't dump a universal checklist; it reasons about what matters for Node.js on Kubernetes differently than Python on ECS.
 - **Standards inform, they don't dictate** — DORA and OpenTelemetry are starting points, not requirements. Atlas adapts to your project's actual architecture.
 - **Transparency** — Each capability shows its source (standard, practice, or reasoning) so you know where it came from and can judge accordingly.
 - **Team ownership** — The capabilities manifest belongs to your team. Amendments persist. The model improves with use.
+
+---
 
 ## Chat with Atlas
 
@@ -122,6 +134,8 @@ Use **[CH]** to discuss model generation topics:
 - "What DORA metrics are relevant to my stack?"
 - "Can you explain the difference between standard and practice sources?"
 - "My project is a CLI tool, not a web service — should I regenerate?"
+
+---
 
 ## Troubleshooting
 
@@ -141,12 +155,16 @@ Atlas surfaces a limited-coverage warning. This can happen with unusual or very 
 
 Atlas reads GC4 (Coach amendments) before regenerating. If amendments are missing, check that `.gyre/capabilities.yaml` contains the `amended` and `removed` flags from your last Coach review.
 
+---
+
 ## Tips
 
 - **Don't skip Scout.** Atlas needs the Stack Profile as input. Running Atlas without it produces an error, not a generic model.
 - **Web search results are fresh.** Atlas searches for current-year best practices every time — no stale caches. This means models improve naturally over time.
 - **Regeneration preserves your work.** Coach amendments survive regeneration. You don't lose your customizations when the model updates.
 - **Capabilities.yaml IS the cache.** In anticipation mode, Atlas's model is reused rather than regenerated. This is by design — the model is stable until you explicitly regenerate.
+
+---
 
 ## Credits
 
