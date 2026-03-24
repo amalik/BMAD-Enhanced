@@ -13,7 +13,7 @@ From previous steps:
 
 - `{baseline_commit}` - Git HEAD at workflow start
 - `{execution_mode}` - "spec" or "direct"
-- `{spec_path}` - Tech-spec file (if Mode A)
+- `{spec_path}` - Spec file (if Mode A)
 - `{project_context}` - Project patterns (if exists)
 
 ---
@@ -95,7 +95,7 @@ Proceed immediately to `./step-05-adversarial-review.md`.
 - All tests passing
 - All AC satisfied
 - Patterns followed
-- Tech-spec updated (if Mode A)
+- Spec updated (if Mode A)
 - Summary presented
 
 ## FAILURE MODES
