@@ -1,6 +1,6 @@
 # Story 2.5: Decision Summary & Spec File Persistence
 
-Status: review
+Status: done
 
 ## Story
 
