@@ -1,0 +1,36 @@
+---
+contract: GC3
+type: artifact
+source_agent: lens
+source_workflow: gap-analysis
+target_agents: [coach]
+input_artifacts: [GC2]
+created: 2026-03-24
+---
+
+gyre_findings:
+  version: "1.0"
+  analyzed_at: "2026-03-24T00:00:00Z"
+  mode: "crisis"
+  stack_summary: "Node.js npm package (convoke-agents) — CLI toolkit with agent definitions, distributed via npm, CI/CD via GitHub Actions"
+  summary:
+    blockers: 0
+    recommended: 1
+    nice_to_have: 0
+    total: 1
+    novelty_ratio: "1 of 1 contextual"
+  findings:
+    - id: "OBS-001"
+      domain: "observability"
+      severity: "recommended"
+      source: "static-analysis"
+      confidence: "high"
+      capability_ref: "verbose-debug-mode"
+      description: "Verbose/debug output mode is only available in convoke-update (--verbose / -v flag). Other CLI commands (convoke-install, convoke-doctor, convoke-migrate, convoke-version) do not support verbose output, making it harder to troubleshoot issues in those commands."
+      evidence_summary: "Grep for '--verbose', 'verbose', '-v' across all CLI entry points. Found in convoke-update.js (line 73: args.includes('--verbose')), refresh-installation.js (verbose param with per-action logging). No verbose support found in convoke-doctor.js, install-vortex-agents.js, install-gyre-agents.js, convoke-migrate.js, or convoke-version.js."
+      severity_rationale: "Recommended, not blocker. The most complex operation (update/migration) already supports verbose. Install and doctor commands would benefit from verbose output for troubleshooting file copy operations, but their output is already reasonably informative."
+  compound_findings: []
+  sanity_check:
+    passed: true
+    warnings:
+      - "Only 1 of 21 capabilities flagged — this project has exceptionally high coverage of the generated model. Consider whether the model should include additional capabilities beyond the standard domains."
