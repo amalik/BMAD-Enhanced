@@ -1,6 +1,6 @@
 # Story 2.2: Composition Pattern Selection & Decision Cascade
 
-Status: ready-for-dev
+Status: review
 
 ## Story
 
@@ -27,30 +27,30 @@ So that I make the right architectural decision upfront and only deal with decis
 
 ## Tasks / Subtasks
 
-- [ ] Task 1: Create step-01-scope.md — Composition Pattern Selection (AC: #1, #2)
-  - [ ] 1.1 Create `.claude/skills/bmad-team-factory/step-01-scope.md` following the established step-file structure: PURPOSE, RULES, content sections, CHECKPOINT, NEXT. This is the first half of Step 1 — composition pattern selection and decision cascade. Story 2.3 will add agent scope definition to this same step.
-  - [ ] 1.2 Present composition patterns in plain language. Two patterns only: **Independent** (agents operate standalone, no contracts — like Enhance module) and **Sequential** (agents form a pipeline with handoff contracts — like Vortex and Gyre). Include concrete examples from existing teams.
-  - [ ] 1.3 Implement default suggestion logic: Sequential is the default (2 of 2 existing multi-agent teams use Sequential). Show reasoning: "Most existing BMAD teams use Sequential — agents hand off artifacts through a pipeline. This is recommended unless your agents are truly independent."
-  - [ ] 1.4 Include confirmation checkpoint: contributor confirms or overrides the pattern selection. Record the decision in conversation context (pattern name, whether default was accepted, contributor's rationale if overridden).
+- [x] Task 1: Create step-01-scope.md — Composition Pattern Selection (AC: #1, #2)
+  - [x] 1.1 Create `.claude/skills/bmad-team-factory/step-01-scope.md` following the established step-file structure: PURPOSE, RULES, content sections, CHECKPOINT, NEXT. This is the first half of Step 1 — composition pattern selection and decision cascade. Story 2.3 will add agent scope definition to this same step.
+  - [x] 1.2 Present composition patterns in plain language. Two patterns only: **Independent** (agents operate standalone, no contracts — like Enhance module) and **Sequential** (agents form a pipeline with handoff contracts — like Vortex and Gyre). Include concrete examples from existing teams.
+  - [x] 1.3 Implement default suggestion logic: Sequential is the default (2 of 2 existing multi-agent teams use Sequential). Show reasoning: "Most existing BMAD teams use Sequential — agents hand off artifacts through a pipeline. This is recommended unless your agents are truly independent."
+  - [x] 1.4 Include confirmation checkpoint: contributor confirms or overrides the pattern selection. Record the decision in conversation context (pattern name, whether default was accepted, contributor's rationale if overridden).
 
-- [ ] Task 2: Implement Decision Cascade in step-01-scope.md (AC: #3)
-  - [ ] 2.1 After pattern confirmation, present a cascade summary showing which downstream decisions apply. For **Sequential**: contracts required, compass routing required, orchestration workflow required. For **Independent**: contracts optional (but possible), compass routing optional, no orchestration workflow needed.
-  - [ ] 2.2 Include a clear "What this means for you" section: explain in plain language which factory steps will be full vs. abbreviated based on the selected pattern.
-  - [ ] 2.3 Record cascade decisions in conversation context for downstream steps (Step 2: Connect, Step 3: Review).
+- [x] Task 2: Implement Decision Cascade in step-01-scope.md (AC: #3)
+  - [x] 2.1 After pattern confirmation, present a cascade summary showing which downstream decisions apply. For **Sequential**: contracts required, compass routing required, orchestration workflow required. For **Independent**: contracts optional (but possible), compass routing optional, no orchestration workflow needed.
+  - [x] 2.2 Include a clear "What this means for you" section: explain in plain language which factory steps will be full vs. abbreviated based on the selected pattern.
+  - [x] 2.3 Record cascade decisions in conversation context for downstream steps (Step 2: Connect, Step 3: Review).
 
-- [ ] Task 3: Add Visibility Checklist to step-01-scope.md (AC: #1 — NFR2 concept budget)
-  - [ ] 3.1 Add a Visibility Checklist section per the architecture specification (D-VB). Colleague-visible: (1) composition pattern choice, (2) default recommendation with reasoning, (3) cascade impact summary. Silent: Architecture Reference pattern definitions loaded. Concept count: 3/3. Approval prompt: "Confirm your composition pattern selection."
+- [x] Task 3: Add Visibility Checklist to step-01-scope.md (AC: #1 — NFR2 concept budget)
+  - [x] 3.1 Add a Visibility Checklist section per the architecture specification (D-VB). Colleague-visible: (1) composition pattern choice, (2) default recommendation with reasoning, (3) cascade impact summary. Silent: Architecture Reference pattern definitions loaded. Concept count: 3/3. Approval prompt: "Confirm your composition pattern selection."
 
-- [ ] Task 4: Update workflow.md to wire Step 1 (AC: all)
-  - [ ] 4.1 Update `workflow.md` to indicate Step 1 is now partially available (composition pattern selection from Story 2.2; agent inventory from Story 2.3). Remove or update the "not yet available" fallback message for Step 1.
-  - [ ] 4.2 Ensure the routing from step-00-route.md Route 1 flows correctly to step-01-scope.md via workflow.md.
+- [x] Task 4: Update workflow.md to wire Step 1 (AC: all)
+  - [x] 4.1 Update `workflow.md` to indicate Step 1 is now partially available (composition pattern selection from Story 2.2; agent inventory from Story 2.3). Remove or update the "not yet available" fallback message for Step 1.
+  - [x] 4.2 Ensure the routing from step-00-route.md Route 1 flows correctly to step-01-scope.md via workflow.md.
 
-- [ ] Task 5: Verification (AC: #1, #2, #3)
-  - [ ] 5.1 Verify step-01-scope.md follows the step-file structure established by step-00-route.md (PURPOSE, RULES, sections, CHECKPOINT, NEXT).
-  - [ ] 5.2 Verify only 2 composition patterns are presented (Independent, Sequential) — no Hybrid.
-  - [ ] 5.3 Verify cascade correctly differentiates downstream decisions: contracts required (Sequential) vs optional (Independent).
-  - [ ] 5.4 Verify concept count <= 3 per the visibility checklist.
-  - [ ] 5.5 Verify workflow.md correctly wires to step-01-scope.md.
+- [x] Task 5: Verification (AC: #1, #2, #3)
+  - [x] 5.1 Verify step-01-scope.md follows the step-file structure established by step-00-route.md (PURPOSE, RULES, sections, CHECKPOINT, NEXT).
+  - [x] 5.2 Verify only 2 composition patterns are presented (Independent, Sequential) — no Hybrid.
+  - [x] 5.3 Verify cascade correctly differentiates downstream decisions: contracts required (Sequential) vs optional (Independent).
+  - [x] 5.4 Verify concept count <= 3 per the visibility checklist.
+  - [x] 5.5 Verify workflow.md correctly wires to step-01-scope.md.
 
 ## Dev Notes
 
@@ -167,12 +167,24 @@ From Epic 1 retrospective:
 
 ### Agent Model Used
 
-{{agent_model_name_version}}
+Claude Opus 4.6
 
 ### Debug Log References
 
+N/A
+
 ### Completion Notes List
+
+All 14 subtasks across 5 tasks completed. Created step-01-scope.md implementing composition pattern selection (Independent vs Sequential) with plain-language descriptions, real team examples (Vortex, Gyre, Enhance), default suggestion logic (Sequential recommended), decision cascade showing downstream impact per pattern, and D-VB visibility checklist at 3/3 concept budget. Updated workflow.md to wire Step 1 and remove the "not yet available" fallback for Step 1. Step file structured as "Part 1 of 2" to accommodate Story 2.3's agent scope additions. NEXT section includes temporary fallback for Story 2.3's not-yet-implemented Part 2.
 
 ### Change Log
 
+| Change | File | Description |
+|--------|------|-------------|
+| CREATE | `.claude/skills/bmad-team-factory/step-01-scope.md` | Composition pattern selection, decision cascade, visibility checklist, confirmation checkpoint |
+| MODIFY | `.claude/skills/bmad-team-factory/workflow.md` | Updated status line, wired Step 1 routing, updated "not yet available" message to cover Steps 2-5 only |
+
 ### File List
+
+- `.claude/skills/bmad-team-factory/step-01-scope.md` (created)
+- `.claude/skills/bmad-team-factory/workflow.md` (modified)
