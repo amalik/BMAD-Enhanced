@@ -257,7 +257,7 @@ development_status:
   tf-epic-1-retrospective: done
 
   # Epic 2: Guided Workflow — Factory Discovery & Generation
-  tf-epic-2: in-progress
+  tf-epic-2: done
   tf-2-1-factory-discoverability-entry-points: done
   tf-2-2-composition-pattern-selection-decision-cascade: done
   tf-2-3-agent-scope-definition-overlap-detection: done
@@ -266,7 +266,7 @@ development_status:
   tf-2-6-bmb-delegation-artifact-generation: done
   tf-2-7-integration-wiring-config-csv-activation: done
   tf-2-8-registry-wiring-write-safety: done
-  tf-2-9-end-to-end-validation-error-recovery: review
+  tf-2-9-end-to-end-validation-error-recovery: done
   tf-epic-2-retrospective: optional
 
   # Epic 3: Extensions — Add Agent & Add Skill
