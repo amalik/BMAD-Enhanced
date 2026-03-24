@@ -10,7 +10,7 @@
                 Agent teams for complex systems
 ```
 
-[![Version](https://img.shields.io/badge/version-2.5.0-blue)](https://github.com/amalik/convoke-agents)
+[![Version](https://img.shields.io/badge/version-2.4.0-blue)](https://github.com/amalik/convoke-agents)
 [![License](https://img.shields.io/badge/license-MIT-blue)](LICENSE)
 
 </div>
@@ -26,7 +26,7 @@ Convoke extends AI agents with two types of installable modules: **Teams** bring
 
 - **Gyre team** — 4 agents analyze your project's production readiness: detect your stack, model what "ready" looks like, find what's missing, and help you act on it
 - **Team Factory** — guided workflow for creating new BMAD-compliant teams from scratch (`/bmad-team-factory`)
-- **Skill Validator** — quality gate for factory-generated skills
+- **Skill Validator** — new `validateSkill()` quality gate in the update system for factory-generated skills ([development docs](docs/development.md))
 - See the [CHANGELOG](CHANGELOG.md) for the full release details
 
 ---
@@ -279,7 +279,7 @@ Something not working? Run `npx -p convoke-agents convoke-doctor` or check the [
 
 ### Personalize
 
-Open `_bmad/bme/_vortex/config.yaml` (or `_gyre/config.yaml`) and replace `{user}` with your name. Agents use this to personalize their interactions.
+Open `_bmad/bme/_vortex/config.yaml` (or `_bmad/bme/_gyre/config.yaml`) and replace `{user}` with your name. Agents use this to personalize their interactions.
 
 ### Activate an Agent
 
@@ -337,7 +337,7 @@ your-project/
 │   ├── _vortex/              # Team: Product Discovery
 │   │   ├── agents/           # 7 agent definition files
 │   │   ├── workflows/        # 22 workflows
-│   │   ├── contracts/        # Artifact contract schemas (HC1-HC10)
+│   │   ├── contracts/        # Handoff contracts (HC1-HC5 artifact, HC6-HC10 routing)
 │   │   ├── guides/           # User guides (all 7 agents)
 │   │   └── config.yaml       # Configuration
 │   ├── _gyre/                # Team: Production Readiness
