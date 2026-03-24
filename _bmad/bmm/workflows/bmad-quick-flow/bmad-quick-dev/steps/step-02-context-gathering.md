@@ -5,7 +5,7 @@
 
 **Goal:** Quickly gather context for direct instructions - files, patterns, dependencies.
 
-**Note:** This step only runs for Mode B (direct instructions). If `{execution_mode}` is "tech-spec", this step was skipped.
+**Note:** This step only runs for Mode B (direct instructions). If `{execution_mode}` is "spec", this step was skipped.
 
 ---
 
@@ -108,7 +108,7 @@ Ready to execute? (y/n/adjust)
 
 ## FAILURE MODES
 
-- Executing this step when Mode A (tech-spec)
+- Executing this step when Mode A (spec)
 - Proceeding without identifying files to modify
 - Not presenting plan for user confirmation
 - Missing obvious patterns in existing code
