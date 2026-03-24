@@ -1,6 +1,6 @@
 # Story 2.8: Registry Wiring & Write Safety
 
-Status: ready-for-dev
+Status: review
 
 ## Story
 
@@ -70,22 +70,22 @@ So that my team's agents and workflows are available system-wide without risking
   - [x] 5.9 Test: require() post-write validation — modified file is loadable by Node.
   - [x] 5.10 Test: special characters in persona fields — agent with single quotes and backslashes in persona text produces valid JS string literals.
 
-- [ ] Task 6: Update factory-types.js (AC: #1)
-  - [ ] 6.1 Add `RegistryResult` typedef: `{ success, written[], skipped[], errors[], rollbackApplied }`.
-  - [ ] 6.2 Add `RegistryAgentEntry` typedef matching the agent-registry.js agent object shape.
+- [x] Task 6: Update factory-types.js (AC: #1)
+  - [x] 6.1 Add `RegistryResult` typedef: `{ success, written[], skipped[], errors[], rollbackApplied }`.
+  - [x] 6.2 Add `RegistryAgentEntry` typedef matching the agent-registry.js agent object shape.
 
-- [ ] Task 7: Update workflow.md (AC: #1)
-  - [ ] 7.1 Update Step 4 Story column from `2.6, 2.7` to `2.6, 2.7, 2.8`.
-  - [ ] 7.2 Update Step 4 purpose to include registry wiring.
+- [x] Task 7: Update workflow.md (AC: #1)
+  - [x] 7.1 Update Step 4 Story column from `2.6, 2.7` to `2.6, 2.7, 2.8`.
+  - [x] 7.2 Update Step 4 purpose to include registry wiring.
 
-- [ ] Task 8: Verification
-  - [ ] 8.1 Verify registry-writer.js follows Node.js CommonJS patterns.
-  - [ ] 8.2 Verify generated module block matches Gyre block structure (same field order, same derived list pattern).
-  - [ ] 8.3 Verify full Write Safety Protocol: stage → validate → check → apply → verify → rollback path.
-  - [ ] 8.4 Verify additive-only: no modification or removal of existing blocks.
-  - [ ] 8.5 Verify golden file is ≤50 lines.
-  - [ ] 8.6 Run all tests: `node --test tests/team-factory/*.test.js` — all pass.
-  - [ ] 8.7 Verify step-04 still follows step-file pattern.
+- [x] Task 8: Verification
+  - [x] 8.1 Verify registry-writer.js follows Node.js CommonJS patterns.
+  - [x] 8.2 Verify generated module block matches Gyre block structure (same field order, same derived list pattern).
+  - [x] 8.3 Verify full Write Safety Protocol: stage → validate → check → apply → verify → rollback path.
+  - [x] 8.4 Verify additive-only: no modification or removal of existing blocks.
+  - [x] 8.5 Verify golden file is ≤50 lines.
+  - [x] 8.6 Run all tests: `node --test tests/team-factory/*.test.js` — all pass.
+  - [x] 8.7 Verify step-04 still follows step-file pattern.
 
 ## Dev Notes
 
