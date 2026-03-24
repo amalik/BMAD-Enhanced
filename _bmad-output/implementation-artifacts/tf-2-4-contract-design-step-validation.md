@@ -1,6 +1,6 @@
 # Story 2.4: Contract Design Step & Validation
 
-Status: review
+Status: done
 
 ## Story
 
