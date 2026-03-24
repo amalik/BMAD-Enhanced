@@ -101,12 +101,30 @@ function deriveWorkflowNames(specData) {
     if (specData.workflow_names && specData.workflow_names[agent.id]) {
       names.push(specData.workflow_names[agent.id]);
     } else if (agent.capabilities && agent.capabilities.length > 0) {
-      // First capability, kebab-case
-      names.push(toKebab(agent.capabilities[0]));
+      // First capability, kebab-case — if more than 4 words, use role instead
+      const cap = agent.capabilities[0];
+      const wordCount = cap.trim().split(/\s+/).length;
+      if (wordCount > 4 && agent.role) {
+        names.push(toKebab(agent.role));
+      } else {
+        names.push(toKebab(cap));
+      }
     } else {
-      names.push(toKebab(agent.role));
+      names.push(toKebab(agent.role || agent.id));
     }
   }
+
+  // Check for intra-spec duplicate workflow names
+  const seen = new Set();
+  for (let i = 0; i < names.length; i++) {
+    if (seen.has(names[i])) {
+      const agent = (specData.agents || [])[i];
+      // Disambiguate by appending agent id
+      names[i] = `${names[i]}-${(agent && agent.id) || i}`;
+    }
+    seen.add(names[i]);
+  }
+
   return names;
 }
 
@@ -132,6 +150,8 @@ async function detectCollisions(specData, bmeRoot) {
   }
 
   for (const entry of entries) {
+    // Skip the new team's own directory to avoid self-collision on re-run
+    if (entry === newSubmodule) continue;
     const configPath = path.join(bmeRoot, entry, 'config.yaml');
     if (!await fs.pathExists(configPath)) continue;
 
@@ -176,6 +196,7 @@ async function detectCollisions(specData, bmeRoot) {
  * @returns {string}
  */
 function toKebab(str) {
+  if (!str) return '';
   return str
     .toLowerCase()
     .replace(/[^a-z0-9]+/g, '-')
@@ -200,7 +221,7 @@ if (require.main === module) {
     try {
       const specContent = await fs.readFile(specFilePath, 'utf8');
       const specData = yaml.load(specContent);
-      const bmeRoot = path.resolve(__dirname, '../../../');
+      const bmeRoot = path.resolve(__dirname, '../../../../');
       const outputPath = path.join(bmeRoot, `_${specData.team_name_kebab}`, 'config.yaml');
 
       if (dryRun) {
