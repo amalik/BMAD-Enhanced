@@ -1,7 +1,7 @@
-// ── Test Team Module ────────────────────────────────────────────────
+// ── Test Team Module ─────────────────────────────────────────────────
 const TEST_TEAM_AGENTS = [
   {
-    id: 'alpha-analyzer', name: 'Alpha', icon: '\u{2699}',
+    id: 'alpha-analyzer', name: 'Alpha', icon: '⚙',
     title: 'Analyzes data patterns', stream: 'test-team',
     persona: {
       role: 'Analyzes data patterns',
@@ -11,7 +11,7 @@ const TEST_TEAM_AGENTS = [
     },
   },
   {
-    id: 'beta-builder', name: 'Beta', icon: '\u{2699}',
+    id: 'beta-builder', name: 'Beta', icon: '⚙',
     title: 'Builds software components', stream: 'test-team',
     persona: {
       role: 'Builds software components',
