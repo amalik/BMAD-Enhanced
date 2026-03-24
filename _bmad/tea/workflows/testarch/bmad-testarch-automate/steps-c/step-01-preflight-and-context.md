@@ -80,7 +80,7 @@ If missing: **HALT** with message "Run `framework` workflow first."
 ### BMad-Integrated (if available)
 
 - Story with acceptance criteria
-- PRD and/or tech spec
+- PRD and/or spec
 - Test-design document (if exists)
 
 ### Standalone
