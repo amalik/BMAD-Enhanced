@@ -325,6 +325,10 @@ The [Enhance Guide](_bmad/bme/_enhance/guides/ENHANCE-GUIDE.md) documents the co
 
 Max 2-3 skills per agent to prevent menu bloat and maintain agent focus.
 
+### Creating Your Own Team
+
+Use the **Team Factory** (`/bmad-team-factory`) to create fully-wired, BMAD-compliant teams through a guided workflow. The factory handles composition pattern selection, agent scope definition, contract design, artifact generation, and integration wiring.
+
 ---
 
 ## How It Fits with BMAD Core
