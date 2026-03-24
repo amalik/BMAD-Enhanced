@@ -611,3 +611,259 @@ describe('validateEnhanceModule', () => {
     await fs.remove(dir);
   });
 });
+
+// === validateSkillMd ===
+
+describe('validateSkillMd', () => {
+  let tmpDir;
+
+  before(async () => {
+    tmpDir = await fs.mkdtemp(path.join(os.tmpdir(), 'bmad-skill-'));
+  });
+
+  after(async () => {
+    await fs.remove(tmpDir);
+  });
+
+  it('fails when SKILL.md does not exist', async () => {
+    const result = await validateSkillMd(path.join(tmpDir, 'nonexistent', 'SKILL.md'));
+    assert.equal(result.valid, false);
+    assert.ok(result.errors[0].includes('not found'));
+  });
+
+  it('fails when SKILL.md has no frontmatter', async () => {
+    const skillPath = path.join(tmpDir, 'no-fm', 'SKILL.md');
+    await fs.ensureDir(path.dirname(skillPath));
+    await fs.writeFile(skillPath, '# Just a heading\nSome content\n', 'utf8');
+    const result = await validateSkillMd(skillPath);
+    assert.equal(result.valid, false);
+    assert.ok(result.errors[0].includes('frontmatter'));
+  });
+
+  it('fails when frontmatter has invalid YAML', async () => {
+    const skillPath = path.join(tmpDir, 'bad-yaml', 'SKILL.md');
+    await fs.ensureDir(path.dirname(skillPath));
+    await fs.writeFile(skillPath, '---\n{{{invalid\n---\nContent\n', 'utf8');
+    const result = await validateSkillMd(skillPath);
+    assert.equal(result.valid, false);
+    assert.ok(result.errors[0].includes('parse error'));
+  });
+
+  it('fails when name field is missing', async () => {
+    const skillPath = path.join(tmpDir, 'no-name', 'SKILL.md');
+    await fs.ensureDir(path.dirname(skillPath));
+    await fs.writeFile(skillPath, '---\ndescription: test skill\n---\nContent\n', 'utf8');
+    const result = await validateSkillMd(skillPath);
+    assert.equal(result.valid, false);
+    assert.ok(result.errors.some(e => e.includes('name')));
+  });
+
+  it('fails when description field is missing', async () => {
+    const skillPath = path.join(tmpDir, 'no-desc', 'SKILL.md');
+    await fs.ensureDir(path.dirname(skillPath));
+    await fs.writeFile(skillPath, '---\nname: test-skill\n---\nContent\n', 'utf8');
+    const result = await validateSkillMd(skillPath);
+    assert.equal(result.valid, false);
+    assert.ok(result.errors.some(e => e.includes('description')));
+  });
+
+  it('passes with valid frontmatter (agent-activation type)', async () => {
+    const skillPath = path.join(tmpDir, 'valid-agent', 'SKILL.md');
+    await fs.ensureDir(path.dirname(skillPath));
+    await fs.writeFile(skillPath, '---\nname: bmad-agent-bme-test\ndescription: test agent\n---\nActivation instructions\n', 'utf8');
+    const result = await validateSkillMd(skillPath);
+    assert.equal(result.valid, true);
+    assert.equal(result.errors.length, 0);
+  });
+
+  it('passes with valid frontmatter (workflow type)', async () => {
+    const skillPath = path.join(tmpDir, 'valid-workflow', 'SKILL.md');
+    await fs.ensureDir(path.dirname(skillPath));
+    await fs.writeFile(skillPath, '---\nname: bmad-quick-dev\ndescription: Implement a Quick Spec\n---\nFollow workflow.md\n', 'utf8');
+    const result = await validateSkillMd(skillPath);
+    assert.equal(result.valid, true);
+    assert.equal(result.errors.length, 0);
+  });
+});
+
+// === validateStepFiles ===
+
+describe('validateStepFiles', () => {
+  let tmpDir;
+
+  before(async () => {
+    tmpDir = await fs.mkdtemp(path.join(os.tmpdir(), 'bmad-steps-'));
+  });
+
+  after(async () => {
+    await fs.remove(tmpDir);
+  });
+
+  it('fails when skill directory does not exist', async () => {
+    const result = await validateStepFiles(path.join(tmpDir, 'nonexistent'));
+    assert.equal(result.valid, false);
+    assert.ok(result.errors[0].includes('not found'));
+  });
+
+  it('passes when no step files exist (agent-activation type)', async () => {
+    const dir = path.join(tmpDir, 'no-steps');
+    await fs.ensureDir(dir);
+    await fs.writeFile(path.join(dir, 'SKILL.md'), '---\nname: test\ndescription: test\n---\n', 'utf8');
+    const result = await validateStepFiles(dir);
+    assert.equal(result.valid, true);
+  });
+
+  it('passes with sequential step numbering', async () => {
+    const dir = path.join(tmpDir, 'sequential');
+    await fs.ensureDir(dir);
+    await fs.writeFile(path.join(dir, 'step-00-route.md'), 'Step 0', 'utf8');
+    await fs.writeFile(path.join(dir, 'step-01-scope.md'), 'Step 1', 'utf8');
+    await fs.writeFile(path.join(dir, 'step-02-connect.md'), 'Step 2', 'utf8');
+    const result = await validateStepFiles(dir);
+    assert.equal(result.valid, true);
+  });
+
+  it('fails with step numbering gaps', async () => {
+    const dir = path.join(tmpDir, 'gaps');
+    await fs.ensureDir(dir);
+    await fs.writeFile(path.join(dir, 'step-01-scope.md'), 'Step 1', 'utf8');
+    await fs.writeFile(path.join(dir, 'step-03-connect.md'), 'Step 3', 'utf8');
+    const result = await validateStepFiles(dir);
+    assert.equal(result.valid, false);
+    assert.ok(result.errors[0].includes('gap'));
+    assert.ok(result.errors[0].includes('step-02'));
+  });
+
+  it('passes with step files in steps/ subdirectory', async () => {
+    const dir = path.join(tmpDir, 'subdir');
+    const stepsDir = path.join(dir, 'steps');
+    await fs.ensureDir(stepsDir);
+    await fs.writeFile(path.join(stepsDir, 'step-01-understand.md'), 'Step 1', 'utf8');
+    await fs.writeFile(path.join(stepsDir, 'step-02-investigate.md'), 'Step 2', 'utf8');
+    await fs.writeFile(path.join(stepsDir, 'step-03-generate.md'), 'Step 3', 'utf8');
+    const result = await validateStepFiles(dir);
+    assert.equal(result.valid, true);
+  });
+});
+
+// === validateSkillCohesion ===
+
+describe('validateSkillCohesion', () => {
+  let tmpDir;
+
+  before(async () => {
+    tmpDir = await fs.mkdtemp(path.join(os.tmpdir(), 'bmad-cohesion-'));
+  });
+
+  after(async () => {
+    await fs.remove(tmpDir);
+  });
+
+  it('fails when skill directory does not exist', async () => {
+    const result = await validateSkillCohesion(path.join(tmpDir, 'nonexistent'));
+    assert.equal(result.valid, false);
+  });
+
+  it('fails when step files exist but workflow.md is missing', async () => {
+    const dir = path.join(tmpDir, 'no-workflow');
+    await fs.ensureDir(dir);
+    await fs.writeFile(path.join(dir, 'step-00-route.md'), 'Step 0', 'utf8');
+    const result = await validateSkillCohesion(dir);
+    assert.equal(result.valid, false);
+    assert.ok(result.errors[0].includes('no workflow.md'));
+  });
+
+  it('fails when steps/ subdirectory exists but workflow.md is missing', async () => {
+    const dir = path.join(tmpDir, 'subdir-no-workflow');
+    await fs.ensureDir(path.join(dir, 'steps'));
+    await fs.writeFile(path.join(dir, 'steps', 'step-01-test.md'), 'Step 1', 'utf8');
+    const result = await validateSkillCohesion(dir);
+    assert.equal(result.valid, false);
+    assert.ok(result.errors[0].includes('no workflow.md'));
+  });
+
+  it('passes when step files and workflow.md both exist', async () => {
+    const dir = path.join(tmpDir, 'with-workflow');
+    await fs.ensureDir(dir);
+    await fs.writeFile(path.join(dir, 'workflow.md'), '# Workflow', 'utf8');
+    await fs.writeFile(path.join(dir, 'step-00-route.md'), 'Step 0', 'utf8');
+    const result = await validateSkillCohesion(dir);
+    assert.equal(result.valid, true);
+  });
+
+  it('passes when only SKILL.md exists (agent-activation type)', async () => {
+    const dir = path.join(tmpDir, 'agent-only');
+    await fs.ensureDir(dir);
+    await fs.writeFile(path.join(dir, 'SKILL.md'), '---\nname: test\ndescription: test\n---\n', 'utf8');
+    const result = await validateSkillCohesion(dir);
+    assert.equal(result.valid, true);
+  });
+});
+
+// === validateSkill (composed) ===
+
+describe('validateSkill', () => {
+  let tmpDir;
+
+  before(async () => {
+    tmpDir = await fs.mkdtemp(path.join(os.tmpdir(), 'bmad-vskill-'));
+  });
+
+  after(async () => {
+    await fs.remove(tmpDir);
+  });
+
+  it('passes for a valid agent-activation skill', async () => {
+    const dir = path.join(tmpDir, 'valid-agent');
+    await fs.ensureDir(dir);
+    await fs.writeFile(path.join(dir, 'SKILL.md'), '---\nname: bmad-agent-bme-test\ndescription: test agent\n---\nActivation\n', 'utf8');
+    const result = await validateSkill(dir);
+    assert.equal(result.valid, true);
+    assert.equal(result.errors.length, 0);
+  });
+
+  it('passes for a valid workflow skill with steps', async () => {
+    const dir = path.join(tmpDir, 'valid-workflow');
+    await fs.ensureDir(dir);
+    await fs.writeFile(path.join(dir, 'SKILL.md'), '---\nname: bmad-test-workflow\ndescription: test workflow\n---\nFollow workflow.md\n', 'utf8');
+    await fs.writeFile(path.join(dir, 'workflow.md'), '# Workflow\n', 'utf8');
+    await fs.writeFile(path.join(dir, 'step-00-route.md'), 'Step 0\n', 'utf8');
+    await fs.writeFile(path.join(dir, 'step-01-scope.md'), 'Step 1\n', 'utf8');
+    const result = await validateSkill(dir);
+    assert.equal(result.valid, true);
+    assert.equal(result.errors.length, 0);
+  });
+
+  it('aggregates errors from all sub-validators', async () => {
+    const dir = path.join(tmpDir, 'multi-fail');
+    await fs.ensureDir(dir);
+    // Missing name in SKILL.md + step gap + missing workflow.md
+    await fs.writeFile(path.join(dir, 'SKILL.md'), '---\ndescription: test\n---\n', 'utf8');
+    await fs.writeFile(path.join(dir, 'step-01-a.md'), 'Step 1\n', 'utf8');
+    await fs.writeFile(path.join(dir, 'step-03-c.md'), 'Step 3\n', 'utf8');
+    const result = await validateSkill(dir);
+    assert.equal(result.valid, false);
+    // Should have errors from: missing name, step gap, missing workflow.md
+    assert.ok(result.errors.length >= 3, `Expected >=3 errors, got ${result.errors.length}: ${result.errors.join('; ')}`);
+  });
+
+  it('passes for existing agent-activation skill on disk', async () => {
+    const projectRoot = path.resolve(__dirname, '../..');
+    const agentSkillDir = path.join(projectRoot, '.claude/skills/bmad-agent-bme-contextualization-expert');
+    // Only run if the skill exists on disk
+    if (fs.existsSync(agentSkillDir)) {
+      const result = await validateSkill(agentSkillDir);
+      assert.equal(result.valid, true, `Existing skill failed: ${result.errors.join('; ')}`);
+    }
+  });
+
+  it('passes for existing workflow skill on disk', async () => {
+    const projectRoot = path.resolve(__dirname, '../..');
+    const workflowSkillDir = path.join(projectRoot, '.claude/skills/bmad-team-factory');
+    // Only run if the skill exists on disk
+    if (fs.existsSync(workflowSkillDir)) {
+      const result = await validateSkill(workflowSkillDir);
+      assert.equal(result.valid, true, `Existing skill failed: ${result.errors.join('; ')}`);
+    }
+  });
+});
