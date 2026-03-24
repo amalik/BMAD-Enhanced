@@ -1,6 +1,6 @@
 # Story 2.4: Contract Design Step & Validation
 
-Status: ready-for-dev
+Status: review
 
 ## Story
 
@@ -22,44 +22,44 @@ So that my agents have well-defined interfaces and each step is confirmed correc
 
 ## Tasks / Subtasks
 
-- [ ] Task 1: Create step-02-connect.md — Contract Design for Sequential Teams (AC: #1)
-  - [ ] 1.1 Create `.claude/skills/bmad-team-factory/step-02-connect.md` following the established step-file structure: PURPOSE, RULES, content sections, CHECKPOINT, NEXT. This is Step 2 (Connect) — contract design and integration decisions.
-  - [ ] 1.2 In PURPOSE section: explain that Step 2 guides the contributor through designing handoff contracts (Sequential) or confirming no contracts are needed (Independent). Reference the composition pattern and agent inventory from Step 1 context.
-  - [ ] 1.3 In RULES section: include communication language rule (`{communication_language}`), concept budget (≤3 per visibility checklist per TF-NFR2), pattern-aware branching (Sequential vs Independent paths), and Architecture Reference as source of truth for contract conventions (TF-NFR5).
-  - [ ] 1.4 Implement **Independent path (abbreviated)**: If `composition_pattern` = "Independent" from Step 1 context, present a brief confirmation that no contracts are required. Offer optional contract creation ("Would you like to define any optional contracts between your agents?"). If declined, skip to CHECKPOINT. If accepted, follow the Sequential contract flow but mark all contracts as optional.
-  - [ ] 1.5 Implement **Sequential contract flow**: For each adjacent pair in the `pipeline_sequence` from Step 1, guide the contributor through defining a handoff contract. For each contract, collect: (a) contract ID — auto-suggest format `{team_prefix}{N}` based on pipeline position (e.g., first pair = prefix + "1"), (b) artifact description — what the source agent passes to the target, (c) key sections — what data fields the artifact contains (2-5 sections). Present existing contract examples from Vortex (HC1-HC5) and Gyre (GC1-GC4) for reference (TF-FR13).
+- [x] Task 1: Create step-02-connect.md — Contract Design for Sequential Teams (AC: #1)
+  - [x] 1.1 Create `.claude/skills/bmad-team-factory/step-02-connect.md` following the established step-file structure: PURPOSE, RULES, content sections, CHECKPOINT, NEXT. This is Step 2 (Connect) — contract design and integration decisions.
+  - [x] 1.2 In PURPOSE section: explain that Step 2 guides the contributor through designing handoff contracts (Sequential) or confirming no contracts are needed (Independent). Reference the composition pattern and agent inventory from Step 1 context.
+  - [x] 1.3 In RULES section: include communication language rule (`{communication_language}`), concept budget (≤3 per visibility checklist per TF-NFR2), pattern-aware branching (Sequential vs Independent paths), and Architecture Reference as source of truth for contract conventions (TF-NFR5).
+  - [x] 1.4 Implement **Independent path (abbreviated)**: If `composition_pattern` = "Independent" from Step 1 context, present a brief confirmation that no contracts are required. Offer optional contract creation ("Would you like to define any optional contracts between your agents?"). If declined, skip to CHECKPOINT. If accepted, follow the Sequential contract flow but mark all contracts as optional.
+  - [x] 1.5 Implement **Sequential contract flow**: For each adjacent pair in the `pipeline_sequence` from Step 1, guide the contributor through defining a handoff contract. For each contract, collect: (a) contract ID — auto-suggest format `{team_prefix}{N}` based on pipeline position (e.g., first pair = prefix + "1"), (b) artifact description — what the source agent passes to the target, (c) key sections — what data fields the artifact contains (2-5 sections). Present existing contract examples from Vortex (HC1-HC5) and Gyre (GC1-GC4) for reference (TF-FR13).
 
-- [ ] Task 2: Contract Template Presentation & Validation (AC: #1, #2)
-  - [ ] 2.1 Present the contract frontmatter template based on existing HC/GC patterns. Show the required fields: `contract` (ID string), `type` (always "artifact"), `source_agent` (agent ID from pipeline), `source_workflow` (to be defined later — use placeholder), `target_agents` (array of downstream agent IDs), `input_artifacts` (upstream contract references or empty array for first-in-chain), `created` (ISO date). Reference COMP-S-03 for validation rules.
-  - [ ] 2.2 Auto-derive contract chain from pipeline: for each adjacent pair (agent[i] → agent[i+1]), pre-populate `source_agent` and `target_agents` from the `pipeline_sequence`. Show the contributor what's auto-derived and ask them to confirm or adjust. Allow multi-consumer contracts (one source → multiple targets) if the contributor specifies.
-  - [ ] 2.3 Validate contract naming convention: contract file names must follow `{prefix}{N}-{kebab-case-title}.md` pattern (per CONF-S-08). Validate the prefix is a short lowercase string and N is sequential. Show examples: `hc1-empathy-artifacts.md` (Vortex), `gc1-stack-profile.md` (Gyre).
-  - [ ] 2.4 Validate contract chain coverage: for Sequential teams, verify that every adjacent agent pair in the pipeline has a contract (per COMP-S-06). If a gap is found, flag it: "No contract defined between agent-X and agent-Y. Would you like to add one?"
+- [x] Task 2: Contract Template Presentation & Validation (AC: #1, #2)
+  - [x] 2.1 Present the contract frontmatter template based on existing HC/GC patterns. Show the required fields: `contract` (ID string), `type` (always "artifact"), `source_agent` (agent ID from pipeline), `source_workflow` (to be defined later — use placeholder), `target_agents` (array of downstream agent IDs), `input_artifacts` (upstream contract references or empty array for first-in-chain), `created` (ISO date). Reference COMP-S-03 for validation rules.
+  - [x] 2.2 Auto-derive contract chain from pipeline: for each adjacent pair (agent[i] → agent[i+1]), pre-populate `source_agent` and `target_agents` from the `pipeline_sequence`. Show the contributor what's auto-derived and ask them to confirm or adjust. Allow multi-consumer contracts (one source → multiple targets) if the contributor specifies.
+  - [x] 2.3 Validate contract naming convention: contract file names must follow `{prefix}{N}-{kebab-case-title}.md` pattern (per CONF-S-08). Validate the prefix is a short lowercase string and N is sequential. Show examples: `hc1-empathy-artifacts.md` (Vortex), `gc1-stack-profile.md` (Gyre).
+  - [x] 2.4 Validate contract chain coverage: for Sequential teams, verify that every adjacent agent pair in the pipeline has a contract (per COMP-S-06). If a gap is found, flag it: "No contract defined between agent-X and agent-Y. Would you like to add one?"
 
-- [ ] Task 3: Integration Decisions (AC: #1)
-  - [ ] 3.1 After contracts are defined, present compass routing decisions. For Sequential teams: compass routing is required (per cascade from Step 1). Explain that the compass routing reference will be generated in a later step — for now, record that it's needed and confirm the pipeline flow is correct.
-  - [ ] 3.2 Present artifact output location decision: suggest the default output directory pattern `_bmad-output/{team-name}-artifacts/` (following Vortex pattern: `_bmad-output/vortex-artifacts/`). Ask contributor to confirm or customize the output path.
-  - [ ] 3.3 For Independent teams: confirm compass routing is optional (per cascade). Ask if the contributor wants per-agent entry points or a shared routing reference. Record the decision.
+- [x] Task 3: Integration Decisions (AC: #1)
+  - [x] 3.1 After contracts are defined, present compass routing decisions. For Sequential teams: compass routing is required (per cascade from Step 1). Explain that the compass routing reference will be generated in a later step — for now, record that it's needed and confirm the pipeline flow is correct.
+  - [x] 3.2 Present artifact output location decision: suggest the default output directory pattern `_bmad-output/{team-name}-artifacts/` (following Vortex pattern: `_bmad-output/vortex-artifacts/`). Ask contributor to confirm or customize the output path.
+  - [x] 3.3 For Independent teams: confirm compass routing is optional (per cascade). Ask if the contributor wants per-agent entry points or a shared routing reference. Record the decision.
 
-- [ ] Task 4: Per-Step Validation & Visibility Checklist (AC: #2)
-  - [ ] 4.1 Add per-step validation logic: before proceeding to CHECKPOINT, validate all Step 2 decisions. For Sequential: verify all pipeline pairs have contracts defined, contract IDs follow naming convention, contract chain has no gaps. For Independent: verify contract decisions recorded (even if "none"). Present validation results to the contributor.
-  - [ ] 4.2 Add Visibility Checklist section for Step 2 per D-VB. Colleague-visible: (1) contract inventory with source/target agents and artifact descriptions, (2) contract naming validation results, (3) integration decisions (routing, output location). Silent: existing contract files loaded for reference examples. Concept count: 3/3. Approval prompt: "Confirm your contract design and integration decisions."
-  - [ ] 4.3 Implement CHECKPOINT: combined summary showing composition pattern (from Step 1), agent inventory (from Step 1), contract inventory (new), integration decisions (new). Include validation status for each contract. Ask for confirmation before proceeding.
-  - [ ] 4.4 Record contract design decisions in conversation context for downstream steps: `contracts` array with each contract's `id`, `source_agent`, `target_agents`, `artifact_description`, `key_sections`, `file_name`; `contract_count`; `output_directory`; `compass_routing_decision`.
+- [x] Task 4: Per-Step Validation & Visibility Checklist (AC: #2)
+  - [x] 4.1 Add per-step validation logic: before proceeding to CHECKPOINT, validate all Step 2 decisions. For Sequential: verify all pipeline pairs have contracts defined, contract IDs follow naming convention, contract chain has no gaps. For Independent: verify contract decisions recorded (even if "none"). Present validation results to the contributor.
+  - [x] 4.2 Add Visibility Checklist section for Step 2 per D-VB. Colleague-visible: (1) contract inventory with source/target agents and artifact descriptions, (2) contract naming validation results, (3) integration decisions (routing, output location). Silent: existing contract files loaded for reference examples. Concept count: 3/3. Approval prompt: "Confirm your contract design and integration decisions."
+  - [x] 4.3 Implement CHECKPOINT: combined summary showing composition pattern (from Step 1), agent inventory (from Step 1), contract inventory (new), integration decisions (new). Include validation status for each contract. Ask for confirmation before proceeding.
+  - [x] 4.4 Record contract design decisions in conversation context for downstream steps: `contracts` array with each contract's `id`, `source_agent`, `target_agents`, `artifact_description`, `key_sections`, `file_name`; `contract_count`; `output_directory`; `compass_routing_decision`.
 
-- [ ] Task 5: Update NEXT Section and workflow.md (AC: #1, #2)
-  - [ ] 5.1 Set NEXT to point to Step 3 (Review) with fallback note: "Step 3 is being implemented in Story 2.5 and is not yet available. Your contract design and integration decisions have been recorded. Point to the Architecture Reference for manual guidance on remaining steps."
-  - [ ] 5.2 Update workflow.md status line from "Steps 0–1 available" to "Steps 0–2 available" and update "Stories 2.4–2.9" to "Stories 2.5–2.9" in the remaining steps note.
+- [x] Task 5: Update NEXT Section and workflow.md (AC: #1, #2)
+  - [x] 5.1 Set NEXT to point to Step 3 (Review) with fallback note: "Step 3 is being implemented in Story 2.5 and is not yet available. Your contract design and integration decisions have been recorded. Point to the Architecture Reference for manual guidance on remaining steps."
+  - [x] 5.2 Update workflow.md status line from "Steps 0–1 available" to "Steps 0–2 available" and update "Stories 2.4–2.9" to "Stories 2.5–2.9" in the remaining steps note.
 
-- [ ] Task 6: Verification (AC: #1, #2)
-  - [ ] 6.1 Verify step-02-connect.md follows the step-file structure: PURPOSE, RULES, content sections, Visibility Checklist, CHECKPOINT, NEXT.
-  - [ ] 6.2 Verify contract frontmatter template matches COMP-S-03: `contract`, `type`, `source_agent`, `source_workflow`, `target_agents`, `created` fields present.
-  - [ ] 6.3 Verify contract file naming follows CONF-S-08: `{prefix}{N}-{kebab-case-title}.md`.
-  - [ ] 6.4 Verify contract chain coverage validation references COMP-S-06.
-  - [ ] 6.5 Verify concept count ≤ 3 in visibility checklist.
-  - [ ] 6.6 Verify contextual examples reference Vortex HC contracts AND Gyre GC contracts (FR13).
-  - [ ] 6.7 Verify Independent path is abbreviated — brief confirmation, optional contract offer, then skip to CHECKPOINT.
-  - [ ] 6.8 Verify NEXT section points to Step 3 with fallback.
-  - [ ] 6.9 Verify workflow.md status line is updated.
+- [x] Task 6: Verification (AC: #1, #2)
+  - [x] 6.1 Verify step-02-connect.md follows the step-file structure: PURPOSE, RULES, content sections, Visibility Checklist, CHECKPOINT, NEXT.
+  - [x] 6.2 Verify contract frontmatter template matches COMP-S-03: `contract`, `type`, `source_agent`, `source_workflow`, `target_agents`, `created` fields present.
+  - [x] 6.3 Verify contract file naming follows CONF-S-08: `{prefix}{N}-{kebab-case-title}.md`.
+  - [x] 6.4 Verify contract chain coverage validation references COMP-S-06.
+  - [x] 6.5 Verify concept count ≤ 3 in visibility checklist.
+  - [x] 6.6 Verify contextual examples reference Vortex HC contracts AND Gyre GC contracts (FR13).
+  - [x] 6.7 Verify Independent path is abbreviated — brief confirmation, optional contract offer, then skip to CHECKPOINT.
+  - [x] 6.8 Verify NEXT section points to Step 3 with fallback.
+  - [x] 6.9 Verify workflow.md status line is updated.
 
 ## Dev Notes
 
@@ -194,7 +194,7 @@ From architecture-reference-teams.md:
 
 ### Agent Model Used
 
-{{agent_model_name_version}}
+Claude Opus 4.6
 
 ### Debug Log References
 
@@ -202,6 +202,16 @@ N/A
 
 ### Completion Notes List
 
+All 25 subtasks across 6 tasks completed. Created step-02-connect.md implementing the full Step 2 (Connect) workflow with pattern-aware branching: Sequential teams get full contract design flow (prefix selection, per-pair contract iteration with auto-derived frontmatter, contract file naming validation, multi-consumer support, optional feedback contracts, chain coverage validation per COMP-S-06), while Independent teams get abbreviated path (brief confirmation, optional contract offer). Includes integration decisions (artifact output location with default pattern, compass routing per composition pattern), STEP VALIDATION section with table format for both patterns, D-VB visibility checklist at 3/3 concept budget, combined CHECKPOINT summary, and context variable recording for downstream steps. Updated workflow.md status line and routing to wire Step 2.
+
 ### Change Log
 
+| Change | File | Description |
+|--------|------|-------------|
+| CREATE | `.claude/skills/bmad-team-factory/step-02-connect.md` | Step 2 (Connect) — contract design, integration decisions, per-step validation, visibility checklist |
+| MODIFY | `.claude/skills/bmad-team-factory/workflow.md` | Updated status line to "Steps 0–2 available", added Step 2 routing, updated fallback note |
+
 ### File List
+
+- `.claude/skills/bmad-team-factory/step-02-connect.md` (created)
+- `.claude/skills/bmad-team-factory/workflow.md` (modified)
