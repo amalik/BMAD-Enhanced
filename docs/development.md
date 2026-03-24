@@ -28,7 +28,7 @@ Key modules in `scripts/update/lib/`:
 | `refresh-installation.js` | Shared refresh (agents, workflows, config, guides) |
 | `migration-runner.js` | Orchestration (deltas → refresh → validate) |
 | `config-merger.js` | `mergeConfig()` with structural defaults for fresh installs |
-| `validator.js` | Validates all 7 agents, 22 workflows, config, manifest |
+| `validator.js` | Validates all agents (7 Vortex + 4 Gyre), workflows, config, manifest, skills |
 
 Migrations live in `scripts/update/migrations/registry.js` (append-only).
 
