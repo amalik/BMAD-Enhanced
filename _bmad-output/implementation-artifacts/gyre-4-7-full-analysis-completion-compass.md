@@ -1,6 +1,6 @@
 # Story 4.7: Full-Analysis Completion & Compass
 
-Status: ready-for-dev
+Status: review
 
 ## Story
 
@@ -18,41 +18,41 @@ So that I can continue with review, re-run, or move to Vortex.
 
 ## Tasks / Subtasks
 
-- [ ] Task 1: Validate step-05-review-findings.md compass section (AC: #1)
-  - [ ] 1.1 Verify frontmatter implements: Epic 4 (Stories 4.5, 4.7) — must reference Story 4.7
-  - [ ] 1.2 Verify section 6 "Full-Analysis Complete — Gyre Compass" exists after review/feedback
-  - [ ] 1.3 Verify completion banner: "Full Analysis Complete" with all 5 steps finished
-  - [ ] 1.4 Verify artifact list: GC1 (stack-profile.yaml), GC2 (capabilities.yaml), GC3 (findings.yaml), GC4 (feedback.yaml conditional)
-  - [ ] 1.5 Verify commit tip: "Commit the .gyre/ directory to share with your team"
+- [x] Task 1: Validate step-05-review-findings.md compass section (AC: #1)
+  - [x] 1.1 Verify frontmatter implements: Epic 4 (Stories 4.5, 4.7) — confirmed line 5
+  - [x] 1.2 Verify section 6 "Full-Analysis Complete — Gyre Compass" exists after review/feedback — confirmed line 95
+  - [x] 1.3 Verify completion banner: "Full Analysis Complete 🎯" with "All 5 steps finished" — confirmed lines 102, 104
+  - [x] 1.4 Verify artifact list: GC1 (stack-profile.yaml line 105), GC2 (capabilities.yaml line 106), GC3 (findings.yaml line 107), GC4 (feedback.yaml conditional "[if feedback was captured]" line 108) — confirmed
+  - [x] 1.5 Verify commit tip: "Commit the .gyre/ directory to share these artifacts with your team" — confirmed line 110
 
-- [ ] Task 2: Validate Gyre Compass routing table (AC: #1 — NFR18)
-  - [ ] 2.1 Verify compass table has 8 rows covering all navigation options
-  - [ ] 2.2 Verify row: stack-detection → Scout 🔎
-  - [ ] 2.3 Verify row: model-generation → Atlas 📐
-  - [ ] 2.4 Verify row: model-review → Coach 🏋️
-  - [ ] 2.5 Verify row: gap-analysis → Lens 🔬
-  - [ ] 2.6 Verify row: delta-report → Lens 🔬
-  - [ ] 2.7 Verify row: full-analysis → Scout 🔎
-  - [ ] 2.8 Verify row: accuracy-validation → Atlas 📐
-  - [ ] 2.9 Verify all 7 Gyre workflows represented (NFR18 — independently runnable)
-  - [ ] 2.10 Verify "Note" footer: recommendations, any workflow at any time
+- [x] Task 2: Validate Gyre Compass routing table (AC: #1 — NFR18)
+  - [x] 2.1 Verify compass table has 8 rows covering all navigation options — confirmed lines 118-125
+  - [x] 2.2 Verify row: stack-detection → Scout 🔎 — confirmed line 118
+  - [x] 2.3 Verify row: model-generation → Atlas 📐 — confirmed line 119
+  - [x] 2.4 Verify row: model-review → Coach 🏋️ — confirmed line 120
+  - [x] 2.5 Verify row: gap-analysis → Lens 🔬 — confirmed line 121
+  - [x] 2.6 Verify row: delta-report → Lens 🔬 — confirmed line 122
+  - [x] 2.7 Verify row: full-analysis → Scout 🔎 — confirmed line 123
+  - [x] 2.8 Verify row: accuracy-validation → Atlas 📐 — confirmed line 124
+  - [x] 2.9 Verify all 7 Gyre workflows represented (NFR18 — independently runnable) — confirmed all 7 present
+  - [x] 2.10 Verify "Note" footer: "These are recommendations. You can run any Gyre workflow at any time." — confirmed line 127
 
-- [ ] Task 3: Validate inter-module routing to Vortex (AC: #1)
-  - [ ] 3.1 Verify Vortex routing row exists in compass table
-  - [ ] 3.2 Verify Vortex row references appropriate Vortex agents (Emma 🎯 / Isla 🔍)
-  - [ ] 3.3 Verify Vortex row describes: findings impact product discovery / production readiness gaps inform discovery
+- [x] Task 3: Validate inter-module routing to Vortex (AC: #1)
+  - [x] 3.1 Verify Vortex routing row exists in compass table — confirmed line 125
+  - [x] 3.2 Verify Vortex row references appropriate Vortex agents (Emma 🎯 / Isla 🔍) — confirmed line 125
+  - [x] 3.3 Verify Vortex row describes: "Production readiness gaps may inform discovery" — confirmed line 125
 
-- [ ] Task 4: Cross-reference compass with architecture-gyre.md
-  - [ ] 4.1 Verify compass table rows match architecture Gyre Compass Table (7 workflows + Vortex)
-  - [ ] 4.2 Verify agent assignments match architecture: Scout, Atlas, Coach, Lens
-  - [ ] 4.3 Verify workflow names match GYRE_WORKFLOWS array: full-analysis, stack-detection, model-generation, model-review, gap-analysis, delta-report, accuracy-validation
+- [x] Task 4: Cross-reference compass with architecture-gyre.md
+  - [x] 4.1 Verify compass table rows match architecture Gyre Compass Table (7 workflows + Vortex inter-module) — confirmed
+  - [x] 4.2 Verify agent assignments match architecture: Scout (stack-detection, full-analysis), Atlas (model-generation, accuracy-validation), Coach (model-review), Lens (gap-analysis, delta-report) — confirmed
+  - [x] 4.3 Verify workflow names match GYRE_WORKFLOWS array: full-analysis, stack-detection, model-generation, model-review, gap-analysis, delta-report, accuracy-validation — all 7 confirmed
 
-- [ ] Task 5: Validate full-analysis pipeline completeness
-  - [ ] 5.1 Verify workflow.md pipeline table lists step-05 as final step (step 5 of 5)
-  - [ ] 5.2 Verify step-05 agent is Coach 🏋️ in pipeline table
-  - [ ] 5.3 Verify step-05 is the terminal step — no Load directive to another step after compass
+- [x] Task 5: Validate full-analysis pipeline completeness
+  - [x] 5.1 Verify workflow.md pipeline table lists step-05 as final step (step 5 of 5) — confirmed workflow.md line 21
+  - [x] 5.2 Verify step-05 agent is Coach 🏋️ in pipeline table — confirmed workflow.md line 21
+  - [x] 5.3 Verify step-05 is the terminal step — no Load directive after compass, file ends at line 129 — confirmed
 
-- [ ] Task 6: Fix any discrepancies found in Tasks 1-5
+- [x] Task 6: Fix any discrepancies found in Tasks 1-5 — No discrepancies found
 
 ## Dev Notes
 
@@ -116,12 +116,28 @@ From Story 4.5 (mode detection) completion notes:
 
 ### Agent Model Used
 
-{{agent_model_name_version}}
+Claude Opus 4.6
 
 ### Debug Log References
 
+None — no errors encountered.
+
 ### Completion Notes List
+
+- All 24 validation subtasks passed across 6 tasks and 2 files — zero discrepancies found
+- Task 1 (compass section, step-05 lines 95-128): Frontmatter references Story 4.7, section 6 with completion banner, 4-artifact list (GC1-GC4 with conditional), commit tip — all correct
+- Task 2 (compass routing table, 8 rows): All 7 Gyre workflows represented with correct agent assignments + Vortex inter-module row, "Note" footer — NFR18 satisfied, all correct
+- Task 3 (Vortex inter-module routing): Row exists at line 125, references Emma 🎯 / Isla 🔍, describes production readiness gaps informing discovery — all correct
+- Task 4 (architecture cross-reference): Compass rows match architecture Gyre Compass Table, agent assignments match, all 7 GYRE_WORKFLOWS array entries present — all correct
+- Task 5 (pipeline completeness): step-05 is final step (5 of 5) with Coach 🏋️, no Load directive after compass — terminal step confirmed
+- Task 6 (fix): No discrepancies found — seventh consecutive clean validation in Epic 4
+- This is a validation-only story — no files were created or modified
 
 ### Change Log
 
+- 2026-03-24: Full validation of step-05-review-findings.md compass section (lines 95-129) and workflow.md pipeline completeness — all checks passed, no changes needed
+
 ### File List
+
+- `_bmad/bme/_gyre/workflows/full-analysis/steps/step-05-review-findings.md` (validated, no changes)
+- `_bmad/bme/_gyre/workflows/full-analysis/workflow.md` (validated, no changes)
