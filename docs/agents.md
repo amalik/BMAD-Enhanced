@@ -1,6 +1,17 @@
-# Vortex Pattern - Agent Guide
+# Agent Guide
 
-Detailed reference for all seven Vortex agents, their workflows, positioning, and how they work together in the complete 7-stream product discovery pattern. The [Innovation Vortex](https://unfix.com/innovation-vortex) is a pattern from the [unFIX model](https://unfix.com/) by [Jurgen Appelo](https://jurgenappelo.com/).
+Detailed reference for all Convoke team agents — their workflows, positioning, and how they work together.
+
+## Teams at a Glance
+
+| Team | Agents | Domain | Pattern |
+|------|--------|--------|---------|
+| **Vortex** | 7 | Product discovery — insight to evidence loop | [Innovation Vortex](https://unfix.com/innovation-vortex) by [Jurgen Appelo](https://jurgenappelo.com/) |
+| **Gyre** | 4 | Production readiness — stack analysis to gap remediation | Linear pipeline with feedback loop |
+
+---
+
+# Vortex — Product Discovery (7 Agents)
 
 ---
 
