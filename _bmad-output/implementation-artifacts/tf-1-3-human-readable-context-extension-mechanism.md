@@ -1,6 +1,6 @@
 # Story 1.3: Human-Readable Context & Extension Mechanism
 
-Status: ready-for-dev
+Status: review
 
 ## Story
 
@@ -23,55 +23,55 @@ So that I can make informed decisions and understand the reasoning behind the ru
 
 ## Tasks / Subtasks
 
-- [ ] Task 1: Author per-check "why" prose for Discoverable — Independent (AC: #1)
-  - [ ] 1.1 Replace the HTML comment `<!-- Story 1.3 will add per-check "why" prose with inline check ID references -->` in the "## Discoverable — Independent" section with prose paragraphs
-  - [ ] 1.2 Write prose for each check (DISC-I-01 through DISC-I-05) referencing check IDs inline in bold (e.g., "**DISC-I-01** — ...") — explain WHY each check matters, not just what it checks
-  - [ ] 1.3 Ensure prose stands alone — a reader should understand the reasoning without parsing the YAML block
+- [x] Task 1: Author per-check "why" prose for Discoverable — Independent (AC: #1)
+  - [x] 1.1 Replace the HTML comment `<!-- Story 1.3 will add per-check "why" prose with inline check ID references -->` in the "## Discoverable — Independent" section with prose paragraphs
+  - [x] 1.2 Write prose for each check (DISC-I-01 through DISC-I-05) referencing check IDs inline in bold (e.g., "**DISC-I-01** — ...") — explain WHY each check matters, not just what it checks
+  - [x] 1.3 Ensure prose stands alone — a reader should understand the reasoning without parsing the YAML block
 
-- [ ] Task 2: Author per-check "why" prose for Discoverable — Sequential (AC: #1)
-  - [ ] 2.1 Replace the HTML comment with prose paragraphs covering DISC-S-01 through DISC-S-07
-  - [ ] 2.2 For checks shared with Independent (DISC-S-01 through DISC-S-05), reuse the same reasoning but phrased for Sequential context — each section must stand alone (JIT rule)
-  - [ ] 2.3 Add Sequential-specific reasoning for DISC-S-06 (compass routing) and DISC-S-07 (agent menu coverage)
+- [x] Task 2: Author per-check "why" prose for Discoverable — Sequential (AC: #1)
+  - [x] 2.1 Replace the HTML comment with prose paragraphs covering DISC-S-01 through DISC-S-07
+  - [x] 2.2 For checks shared with Independent (DISC-S-01 through DISC-S-05), reuse the same reasoning but phrased for Sequential context — each section must stand alone (JIT rule)
+  - [x] 2.3 Add Sequential-specific reasoning for DISC-S-06 (compass routing) and DISC-S-07 (agent menu coverage)
 
-- [ ] Task 3: Author per-check "why" prose for Installable — Independent (AC: #1)
-  - [ ] 3.1 Replace the HTML comment with prose paragraphs covering INST-I-01 through INST-I-06
-  - [ ] 3.2 Explain why each installation surface matters: registry enables CLI tooling, refresh ensures consistency, config enables parsing, validator catches drift, agent files are the runtime artifacts, workflow.md is the entry point
+- [x] Task 3: Author per-check "why" prose for Installable — Independent (AC: #1)
+  - [x] 3.1 Replace the HTML comment with prose paragraphs covering INST-I-01 through INST-I-06
+  - [x] 3.2 Explain why each installation surface matters: registry enables CLI tooling, refresh ensures consistency, config enables parsing, validator catches drift, agent files are the runtime artifacts, workflow.md is the entry point
 
-- [ ] Task 4: Author per-check "why" prose for Installable — Sequential (AC: #1)
-  - [ ] 4.1 Replace the HTML comment with prose for INST-S-01 through INST-S-08
-  - [ ] 4.2 For shared checks (INST-S-01 through INST-S-06), reuse reasoning in Sequential context — section must stand alone
-  - [ ] 4.3 Add Sequential-specific reasoning for INST-S-07 (contracts directory) and INST-S-08 (contracts copy)
+- [x] Task 4: Author per-check "why" prose for Installable — Sequential (AC: #1)
+  - [x] 4.1 Replace the HTML comment with prose for INST-S-01 through INST-S-08
+  - [x] 4.2 For shared checks (INST-S-01 through INST-S-06), reuse reasoning in Sequential context — section must stand alone
+  - [x] 4.3 Add Sequential-specific reasoning for INST-S-07 (contracts directory) and INST-S-08 (contracts copy)
 
-- [ ] Task 5: Author per-check "why" prose for Configurable — Independent (AC: #1)
-  - [ ] 5.1 Replace the HTML comment with prose for CONF-I-01 through CONF-I-06
-  - [ ] 5.2 Explain why config matters for portability, why activation XML must load config dynamically, and why naming conventions enable config-driven wiring
+- [x] Task 5: Author per-check "why" prose for Configurable — Independent (AC: #1)
+  - [x] 5.1 Replace the HTML comment with prose for CONF-I-01 through CONF-I-06
+  - [x] 5.2 Explain why config matters for portability, why activation XML must load config dynamically, and why naming conventions enable config-driven wiring
 
-- [ ] Task 6: Author per-check "why" prose for Configurable — Sequential (AC: #1)
-  - [ ] 6.1 Replace the HTML comment with prose for CONF-S-01 through CONF-S-08
-  - [ ] 6.2 For shared checks (CONF-S-01 through CONF-S-06), reuse reasoning — section stands alone
-  - [ ] 6.3 Add Sequential-specific reasoning for CONF-S-07 (contract frontmatter agent names) and CONF-S-08 (contract file naming)
+- [x] Task 6: Author per-check "why" prose for Configurable — Sequential (AC: #1)
+  - [x] 6.1 Replace the HTML comment with prose for CONF-S-01 through CONF-S-08
+  - [x] 6.2 For shared checks (CONF-S-01 through CONF-S-06), reuse reasoning — section stands alone
+  - [x] 6.3 Add Sequential-specific reasoning for CONF-S-07 (contract frontmatter agent names) and CONF-S-08 (contract file naming)
 
-- [ ] Task 7: Author per-check "why" prose for Composable — Independent (AC: #1)
-  - [ ] 7.1 Replace the HTML comment with prose for COMP-I-01 through COMP-I-04
-  - [ ] 7.2 Explain composability for Independent: agents are individually addressable (manifest, skill IDs), explicitly no contracts (pattern assertion), README enables cross-team awareness without coupling
+- [x] Task 7: Author per-check "why" prose for Composable — Independent (AC: #1)
+  - [x] 7.1 Replace the HTML comment with prose for COMP-I-01 through COMP-I-04
+  - [x] 7.2 Explain composability for Independent: agents are individually addressable (manifest, skill IDs), explicitly no contracts (pattern assertion), README enables cross-team awareness without coupling
 
-- [ ] Task 8: Author per-check "why" prose for Composable — Sequential (AC: #1)
-  - [ ] 8.1 Replace the HTML comment with prose for COMP-S-01 through COMP-S-06
-  - [ ] 8.2 Explain composability for Sequential: contracts define formal interfaces, compass enables cross-module navigation, pipeline coverage ensures no gaps
+- [x] Task 8: Author per-check "why" prose for Composable — Sequential (AC: #1)
+  - [x] 8.1 Replace the HTML comment with prose for COMP-S-01 through COMP-S-06
+  - [x] 8.2 Explain composability for Sequential: contracts define formal interfaces, compass enables cross-module navigation, pipeline coverage ensures no gaps
 
-- [ ] Task 9: Author Extension Deployment Mechanism section (AC: #2)
-  - [ ] 9.1 Add a new `## Extension Deployment Mechanism` section AFTER the Quality Properties section and BEFORE the first checklist section — this is a separate concept from composition patterns per TF-FR5
-  - [ ] 9.2 Document the deployment flow: how new modules are copied (refresh-installation.js), registered (agent-registry.js), configured (config.yaml), validated (validator.js), and made discoverable (agent-manifest.csv, module-help.csv)
-  - [ ] 9.3 Reference the integration surfaces by name but do NOT duplicate the YAML checks — point to the checklist sections for specific rules
-  - [ ] 9.4 Keep this section concise (target ~30-50 lines) — it is an overview of HOW deployment works, not a repeat of WHAT is validated
+- [x] Task 9: Author Extension Deployment Mechanism section (AC: #2)
+  - [x] 9.1 Add a new `## Extension Deployment Mechanism` section between the last `---` after the Quality Properties section and the `## Discoverable — Independent` heading — this is a separate concept from composition patterns per TF-FR5. Add a `---` separator after the new section to maintain the document's separator convention.
+  - [x] 9.2 Document the deployment flow: how new modules are copied (refresh-installation.js), registered (agent-registry.js), configured (config.yaml), validated (validator.js), and made discoverable (agent-manifest.csv, module-help.csv)
+  - [x] 9.3 Reference the integration surfaces by name but do NOT duplicate the YAML checks — point to the checklist sections for specific rules
+  - [x] 9.4 Keep this section concise (target ~30-50 lines) — it is an overview of HOW deployment works, not a repeat of WHAT is validated
 
-- [ ] Task 10: Validate all prose and extension mechanism (AC: #1, #2)
-  - [ ] 10.1 Verify every check ID across all 8 sections is referenced in prose with bold formatting
-  - [ ] 10.2 Verify prose explains "why" not just restates "what" from the YAML rule field
-  - [ ] 10.3 Verify each section's prose stands alone without needing to read other sections
-  - [ ] 10.4 Verify extension deployment section is positioned separately from composition patterns
-  - [ ] 10.5 Verify no new YAML checks were added (out of scope — this story adds prose only)
-  - [ ] 10.6 Verify no existing YAML blocks were modified (out of scope)
+- [x] Task 10: Validate all prose and extension mechanism (AC: #1, #2)
+  - [x] 10.1 Verify every check ID across all 8 sections is referenced in prose with bold formatting
+  - [x] 10.2 Verify prose explains "why" not just restates "what" from the YAML rule field
+  - [x] 10.3 Verify each section's prose stands alone without needing to read other sections
+  - [x] 10.4 Verify extension deployment section is positioned separately from composition patterns
+  - [x] 10.5 Verify no new YAML checks were added (out of scope — this story adds prose only)
+  - [x] 10.6 Verify no existing YAML blocks were modified (out of scope)
 
 ## Dev Notes
 
@@ -86,14 +86,16 @@ Each checklist section currently has an HTML comment placeholder:
 <!-- Story 1.3 will add per-check "why" prose with inline check ID references -->
 ```
 
-Replace each comment with prose paragraphs. Format:
+Replace each comment with prose paragraphs BEFORE the YAML block (prose first, then data). Format:
 - Reference check IDs inline in bold: `**DISC-I-01**`
 - Explain WHY the check matters, not just what it does
-- Group related checks into natural paragraphs rather than one paragraph per check
+- Group 2-3 related checks into natural paragraphs — do NOT write one paragraph per check (that produces 50 disjointed paragraphs). Target 2-4 paragraphs per section.
 - Prose should make sense without reading the YAML — a contributor should understand the reasoning from prose alone
 
-Example from architecture (D-Q1):
-> **DISC-01** — module-help.csv is the primary discovery surface because...
+Example grouping (Discoverable — Independent, ~2 paragraphs):
+> The team's agents must be findable through standard framework surfaces. **DISC-I-01** — the agent-manifest.csv is the canonical registry that other modules and the BMad Master consult when routing intent-based requests; an agent missing from this manifest is invisible to cross-module discovery. **DISC-I-02** — a README provides human-readable orientation for contributors browsing the module directory, explaining what the team does and when to use it.
+>
+> Beyond passive discovery, agents must be actively reachable. **DISC-I-03** — activation XML menus are the primary interactive surface...
 
 ### JIT Self-Containment Rule (from Story 1.2)
 
@@ -158,12 +160,25 @@ From Story 1.2 completion:
 
 ### Agent Model Used
 
-{{agent_model_name_version}}
+Claude Opus 4.6
 
 ### Debug Log References
 
+None — no errors encountered.
+
 ### Completion Notes List
+
+- All 28 subtasks passed across 10 tasks — 8 prose sections + extension deployment + validation
+- Tasks 1-8: Added per-check "why" prose to all 8 checklist sections, covering all 50 check IDs with bold inline references. Each section has 2 paragraphs grouping related checks. Sequential sections stand alone per JIT rule — no cross-references to Independent sections.
+- Task 9: Added Extension Deployment Mechanism section (~23 lines) between Quality Properties and first checklist section. Documents 6-step deployment flow: registry lookup, file copying, config seeding, manifest generation, post-install validation, discovery registration. References integration surfaces without duplicating YAML checks.
+- Task 10: All 6 validation criteria passed — every check ID bold-referenced, prose explains "why" not "what", sections stand alone, extension deployment positioned correctly, no YAML blocks added or modified.
+- Prose style: consequence-driven ("without X, Y breaks") rather than descriptive ("X checks for Y")
+- Architecture reference expanded from ~430 lines to ~470 lines
 
 ### Change Log
 
+- 2026-03-24: Added per-check "why" prose to all 8 checklist sections and Extension Deployment Mechanism section in `architecture-reference-teams.md`
+
 ### File List
+
+- `_bmad-output/planning-artifacts/architecture-reference-teams.md` (modified — 8 HTML comment placeholders replaced with prose, 1 new section added)
