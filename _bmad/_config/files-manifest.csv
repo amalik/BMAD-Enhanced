@@ -344,7 +344,6 @@ type,name,module,path,hash
 "yaml","bmad-skill-manifest","cis","cis/workflows/bmad-cis-problem-solving/bmad-skill-manifest.yaml","ea1b058a23cd4fb442f2e7bc7a3a871b73391c0d18c32ddad020dd56b20425ee"
 "yaml","bmad-skill-manifest","cis","cis/workflows/bmad-cis-storytelling/bmad-skill-manifest.yaml","ea1b058a23cd4fb442f2e7bc7a3a871b73391c0d18c32ddad020dd56b20425ee"
 "yaml","config","cis","cis/config.yaml","61dfea528b197a21ca4ecd2a358ac567e5e241120aa807ddc6eca55e08949336"
-"yaml","creative-squad","cis","cis/teams/creative-squad.yaml","25407cf0ebdf5b10884cd03c86068e04715ef270ada93a3b64cb9907b62c71cf"
 "csv","brain-methods","core","core/skills/bmad-brainstorming/brain-methods.csv","0ab5878b1dbc9e3fa98cb72abfc3920a586b9e2b42609211bb0516eefd542039"
 "csv","domain-complexity","core","core/tasks/bmad-create-prd/data/domain-complexity.csv","f775f09fb4dc1b9214ca22db4a3994ce53343d976d7f6e5384949835db6d2770"
 "csv","methods","core","core/skills/bmad-advanced-elicitation/methods.csv","e08b2e22fec700274982e37be608d6c3d1d4d0c04fa0bae05aa9dba2454e6141"
