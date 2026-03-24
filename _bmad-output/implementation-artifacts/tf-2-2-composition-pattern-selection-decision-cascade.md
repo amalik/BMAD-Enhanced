@@ -1,6 +1,6 @@
 # Story 2.2: Composition Pattern Selection & Decision Cascade
 
-Status: review
+Status: done
 
 ## Story
 
