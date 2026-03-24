@@ -14,7 +14,11 @@ const {
   validateUserDataIntegrity,
   validateDeprecatedWorkflows,
   validateWorkflowStepStructure,
-  validateEnhanceModule
+  validateEnhanceModule,
+  validateSkillMd,
+  validateStepFiles,
+  validateSkillCohesion,
+  validateSkill
 } = require('../../scripts/update/lib/validator');
 const { fullConfig, createValidInstallation } = require('../helpers');
 
