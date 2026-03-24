@@ -81,7 +81,7 @@ Skipped (noise/uncertain): F2, F4
 
 ---
 
-## UPDATE TECH-SPEC (Mode A only)
+## UPDATE SPEC (Mode A only)
 
 If `{execution_mode}` is "spec":
 
