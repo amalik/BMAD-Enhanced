@@ -6,6 +6,8 @@
 - **Module:** Gyre Pattern (Production Readiness)
 - **Last Updated:** 2026-03-24
 
+---
+
 ## Quick Start
 
 **Who is Scout?** Scout is a methodical investigator who detects your project's technology stack by analyzing filesystem artifacts — package manifests, config files, IaC templates, CI/CD definitions. Scout builds a structured profile of what your project actually uses, not what someone documented months ago.
@@ -27,6 +29,8 @@
 
 **What you'll get:** A Stack Profile (`.gyre/stack-profile.yaml`) covering primary language/framework, container orchestration, CI/CD platform, observability tooling, cloud provider, and communication protocols.
 
+---
+
 ## How to Invoke
 
 **Claude Code (skills) — recommended:**
@@ -45,6 +49,8 @@ cat _bmad/bme/_gyre/agents/stack-detective.md
 
 Open `_bmad/bme/_gyre/agents/stack-detective.md` and paste its contents into your conversation.
 
+---
+
 ## Menu Options
 
 | # | Code | Description |
@@ -57,6 +63,8 @@ Open `_bmad/bme/_gyre/agents/stack-detective.md` and paste its contents into you
 | 6 | **DA** | Dismiss Agent |
 
 Select by number, code, or fuzzy text match (e.g., "detect" matches DS).
+
+---
 
 ## Workflows
 
@@ -93,11 +101,15 @@ Orchestrates the complete Gyre pipeline across all 4 agents. Scout handles initi
 - **Anticipation** — Previous analysis exists. Model generation is skipped (capabilities.yaml serves as cache). Only gap analysis and review run.
 - **Regeneration** — You explicitly ask to regenerate. Fresh model generation replaces the cached manifest.
 
+---
+
 ## Philosophy
 
 - **Evidence over assumption** — Scout reports what it finds in the filesystem, not what it expects to find. Every classification is backed by a file reference.
 - **Categories, not contents** — The Stack Profile records technology categories only. No file contents, paths, version numbers, or secrets ever enter `.gyre/` artifacts.
 - **Minimal questions** — Guard questions are derived from detection gaps, not a generic questionnaire. If detection is clean, Scout doesn't waste your time.
+
+---
 
 ## Chat with Scout
 
@@ -107,6 +119,8 @@ Use **[CH]** to discuss stack detection topics:
 - "My project uses both Python and Go — how do you handle that?"
 - "Why did you classify my project as AWS when we also use some GCP?"
 - "What's the difference between crisis and anticipation mode?"
+
+---
 
 ## Troubleshooting
 
@@ -122,12 +136,16 @@ Delete the `.gyre/` directory and run **[DS]** or **[FA]** again. Scout will det
 
 Scout surfaces secondary stacks as a warning and lets you confirm or override via guard questions. If the wrong stack was selected, correct it in the guard answer — Scout re-classifies without re-scanning.
 
+---
+
 ## Tips
 
 - **Start with Full Analysis [FA] your first time.** It orchestrates the entire pipeline so you see the complete Gyre experience. Use individual workflows once you're familiar.
 - **Guard answers matter downstream.** Atlas uses your guard answers to tune the capabilities model. Accurate answers here mean more relevant findings later.
 - **Re-detect after major changes.** If you add Kubernetes, switch CI providers, or adopt a new observability stack, re-run **[DS]** to update the Stack Profile before re-analyzing.
 - **Privacy is built in.** Scout's Stack Profile contains technology categories only — safe to commit to your repo for team-wide use.
+
+---
 
 ## Credits
 
