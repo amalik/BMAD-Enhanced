@@ -3,7 +3,7 @@
 const fs = require('fs-extra');
 const path = require('path');
 const yaml = require('js-yaml');
-const { verifyRequire } = require('../writers/registry-writer');
+const { verifyRequire, buildExportNames } = require('../writers/registry-writer');
 
 /** @typedef {import('../types/factory-types').E2EValidationResult} E2EValidationResult */
 /** @typedef {import('../types/factory-types').E2ECheck} E2ECheck */
@@ -236,12 +236,13 @@ function checkContractFiles(ctx) {
  */
 function checkRegistryWiring(ctx) {
   const result = ctx.registry_wiring_result || {};
-  const passed = result.success === true && Array.isArray(result.written) && result.written.length === 5;
+  const expectedCount = buildExportNames('X').length; // derive from canonical source
+  const passed = result.success === true && Array.isArray(result.written) && result.written.length === expectedCount;
   return {
     name: 'REGISTRY-WIRING',
     stepName: 'wiring',
     passed,
-    expected: 'success with 5 exports',
+    expected: `success with ${expectedCount} exports`,
     actual: result.success ? `success with ${(result.written || []).length} exports` : `failed: ${(result.errors || []).join(', ')}`,
     detail: result.skipped && result.skipped.length > 0 ? `skipped: ${result.skipped.join(', ')}` : undefined,
   };
