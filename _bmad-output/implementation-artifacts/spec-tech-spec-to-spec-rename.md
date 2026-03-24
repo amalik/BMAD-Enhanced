@@ -2,7 +2,7 @@
 title: 'Rename tech-spec prefix to spec (v6.2.1 alignment)'
 slug: 'spec-tech-spec-to-spec-rename'
 created: '2026-03-24'
-status: 'draft'
+status: 'done'
 stepsCompleted: []
 tech_stack: [markdown]
 files_to_modify:
