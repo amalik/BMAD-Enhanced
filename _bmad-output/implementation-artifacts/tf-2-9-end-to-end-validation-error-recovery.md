@@ -56,24 +56,24 @@ So that I can trust the team is correctly wired and immediately usable without m
 - [ ] Task 2: Create manifest-tracker.js (AC: #1, #3)
   - [ ] 2.1 Create `_bmad/bme/_team-factory/lib/manifest-tracker.js`. Exports: `buildManifest(specData, generationContext)` → returns `ManifestEntry[]`.
   - [ ] 2.2 `ManifestEntry` shape: `{ path: string, operation: 'created' | 'modified', module: string }`.
-  - [ ] 2.3 Build manifest from generation context variables: iterate `generated_files`, `config_yaml_path`, `module_help_csv_path`, spec file path. Mark `agent-registry.js` as `modified`. All others as `created`.
+  - [ ] 2.3 Build manifest from generation context variables: iterate `generated_files` (which includes agent files, workflow dirs, contract files, compass-routing-reference.md, SKILL.md), `config_yaml_path`, `module_help_csv_path`, spec file path. Mark `agent-registry.js` as `modified`, spec file as `modified`. All others as `created`.
   - [ ] 2.4 Export a `formatManifest(entries)` helper that returns a human-readable markdown table string.
   - [ ] 2.5 Export a `formatAbortInstructions(entries)` helper that returns removal commands: `rm <path>` for created files, `git checkout -- <path>` for modified files.
 
 - [ ] Task 3: Create end-to-end-validator.js (AC: #1, #2, #4)
   - [ ] 3.1 Create `_bmad/bme/_team-factory/lib/validators/end-to-end-validator.js`. Exports: `validateTeam(specData, generationContext, projectRoot)` → returns `E2EValidationResult`.
   - [ ] 3.2 `E2EValidationResult` shape: `{ valid: boolean, checks: E2ECheck[], errors: string[] }`.
-  - [ ] 3.3 `E2ECheck` shape: `{ name: string, passed: boolean, expected?: string, actual?: string, detail?: string }`.
+  - [ ] 3.3 `E2ECheck` shape: `{ name: string, passed: boolean, expected?: string, actual?: string, detail?: string }`. Check `name` values must use `{PROP}-{SEMANTIC-NAME}` format per architecture (line 590): `CONFIG-EXISTS`, `CONFIG-PARSEABLE`, `CONFIG-REQUIRED-FIELDS`, `CSV-EXISTS`, `CSV-HEADER`, `CSV-ROW-COUNT`, `AGENT-FILE-EXISTS`, `WORKFLOW-DIR-EXISTS`, `CONTRACT-FILE-EXISTS`, `REGISTRY-WIRING`, `ACTIVATION-VALID`, `REGISTRY-REGRESSION`, `VORTEX-REGRESSION`.
   - [ ] 3.4 Implement structural checks: config.yaml exists + parseable + required fields, module-help.csv exists + correct header + correct row count, agent files exist, workflow dirs exist, contract files exist.
   - [ ] 3.5 Implement registry check: verify `registry_wiring_result.success` and `written` array length.
   - [ ] 3.6 Implement activation check: verify `activation_validation_results.valid`.
-  - [ ] 3.7 Implement regression check: `node -e "require('{registryPath}')"` via `execSync` — same pattern as registry-writer's `verifyRequire`. Verify existing exports are still accessible by checking the returned module's keys.
+  - [ ] 3.7 Implement regression check with two parts: (a) Registry require — `node -e "require('{registryPath}')"` via `execSync` (same pattern as registry-writer's `verifyRequire`), verify existing exports still accessible. (b) Vortex validation — call `validateInstallation()` from `scripts/update/lib/validator.js` with `projectRoot`, verify `result.valid === true`. Both must pass for the regression check to succeed.
   - [ ] 3.8 Each failed check must include `expected` and `actual` values per TF-NFR11.
 
 - [ ] Task 4: Update factory-types.js (AC: #1, #3)
   - [ ] 4.1 Add `ManifestEntry` typedef: `{ path: string, operation: 'created' | 'modified', module: string }`.
   - [ ] 4.2 Add `E2EValidationResult` typedef: `{ valid: boolean, checks: E2ECheck[], errors: string[] }`.
-  - [ ] 4.3 Add `E2ECheck` typedef: `{ name: string, passed: boolean, expected?: string, actual?: string, detail?: string }`.
+  - [ ] 4.3 Add `E2ECheck` typedef: `{ name: string, stepName: string, passed: boolean, expected?: string, actual?: string, detail?: string }`. The `name` field uses `{PROP}-{SEMANTIC-NAME}` format. The `stepName` field is the step that produced the check (e.g., `'structural'`, `'regression'`, `'activation'`).
 
 - [ ] Task 5: Update workflow.md (AC: #1)
   - [ ] 5.1 Update status line: "Steps 0–5 available" (remove the "Step 5 under development" note).
@@ -86,12 +86,13 @@ So that I can trust the team is correctly wired and immediately usable without m
   - [ ] 6.2 Test: `buildManifest` returns correct entry count with correct operations.
   - [ ] 6.3 Test: `formatManifest` produces valid markdown table.
   - [ ] 6.4 Test: `formatAbortInstructions` produces `rm` for created, `git checkout --` for modified.
-  - [ ] 6.5 Create `tests/team-factory/end-to-end-validator.test.js`.
-  - [ ] 6.6 Test: happy path — all checks pass when all files exist and results are valid.
-  - [ ] 6.7 Test: missing agent file — check fails with expected file path in `expected` field.
-  - [ ] 6.8 Test: missing config.yaml — check fails with path detail.
-  - [ ] 6.9 Test: registry regression — `verifyRequire` integration test (same pattern as registry-writer tests).
-  - [ ] 6.10 Test: failed activation results — propagated correctly.
+  - [ ] 6.5 Create `tests/team-factory/golden/golden-manifest.json` — reference manifest for a minimal 2-agent team (matching test-team-spec.yaml fixture). Verify `buildManifest` output matches golden file structure.
+  - [ ] 6.6 Create `tests/team-factory/end-to-end-validator.test.js`.
+  - [ ] 6.7 Test: happy path — all checks pass when all files exist and results are valid.
+  - [ ] 6.8 Test: missing agent file — check fails with `AGENT-FILE-EXISTS` name and expected file path.
+  - [ ] 6.9 Test: missing config.yaml — check fails with `CONFIG-EXISTS` name and path detail.
+  - [ ] 6.10 Test: registry regression — `verifyRequire` integration test (same pattern as registry-writer tests).
+  - [ ] 6.11 Test: failed activation results — propagated correctly.
 
 - [ ] Task 7: Verification
   - [ ] 7.1 Run all tests: `node --test tests/team-factory/*.test.js` — all pass (existing + new).
@@ -112,7 +113,7 @@ So that I can trust the team is correctly wired and immediately usable without m
 
 4. **Abort does NOT auto-delete.** Per TF-FR15, the abort path *lists* files with removal instructions. The contributor decides what to remove. The factory never deletes files. For agent-registry.js (modified, not created), the instruction is `git checkout -- <path>` not `rm`.
 
-5. **Regression check is lightweight.** Do NOT run the full `validateInstallation()` function from validator.js — it's hardcoded to Vortex. Instead, verify the registry loads via `node require()` (same pattern as registry-writer's `verifyRequire`), and spot-check that existing team exports are still present in the module.
+5. **Regression check has two parts.** (a) Registry require — verify the registry loads and existing exports are present. (b) Vortex validation — run the existing `validateInstallation()` from validator.js, which is hardcoded to Vortex. This is exactly what we want: it confirms the native team still passes all checks after the factory modified agent-registry.js. The new team gets its own checks via `end-to-end-validator.js`.
 
 6. **PART numbering continues from step-04.** Step-05 uses its own PART numbering starting at 1. There is no relationship to step-04's PART numbers.
 
@@ -134,7 +135,8 @@ So that I can trust the team is correctly wired and immediately usable without m
 - Do NOT scan the filesystem to build the manifest — use generation context variables
 - Do NOT use ES modules — use CommonJS (`require`/`module.exports`)
 - Do NOT add npm dependencies — `fs-extra`, `child_process`, `path` are all already available
-- Do NOT create golden files for the validator output — the checks return structured objects, not formatted strings
+- Do NOT create golden files for the validator result objects — test structured results directly
+- Do NOT extract `verifyRequire` to a shared utility — import it directly from `registry-writer.js` which already exports it. Reuse, don't duplicate.
 
 ### Existing validator.js Structure (Reference — do NOT modify)
 
@@ -171,7 +173,8 @@ spec_file_path      — path to team spec file
 - Node.js built-in `node:test` framework (NOT Jest). Imports: `const { describe, it, before, after } = require('node:test')` and `const assert = require('node:assert/strict')`.
 - File system utilities: `fs-extra` for temp dir cleanup, `fs.mkdtemp(path.join(os.tmpdir(), 'bmad-tf-'))` for test isolation.
 - Run tests: `node --test tests/team-factory/*.test.js`
-- No golden files for validator output — test the structured result objects directly
+- No golden files for validator result objects — test structured results directly. Use `golden-manifest.json` for manifest-tracker output.
+- Test files go in `tests/team-factory/` (flat, consistent with existing tests). The architecture mentions `tests/team-factory/end-to-end/` but existing stories (2.7, 2.8) established the flat pattern — follow the established convention.
 - For registry regression tests: write test registry to tmpDir, same pattern as registry-writer tests
 
 ### Previous Story Intelligence (from tf-2-8)
