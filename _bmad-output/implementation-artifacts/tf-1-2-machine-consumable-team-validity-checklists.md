@@ -1,6 +1,6 @@
 # Story 1.2: Machine-Consumable Team Validity Checklists
 
-Status: review
+Status: done
 
 ## Story
 
