@@ -110,7 +110,8 @@ Convoke/
 │       └── migrations/      # Migration registry + delta files
 ├── tests/
 │   ├── unit/                # Unit tests
-│   └── integration/         # Integration tests
+│   ├── integration/         # Integration tests
+│   └── p0/                  # P0 gate tests (release quality)
 ├── docs/                    # Documentation (you're here)
 ├── package.json             # convoke-agents
 ├── CHANGELOG.md             # Version history
@@ -124,7 +125,7 @@ Convoke/
 ### Areas of Contribution
 
 **Agents and Workflows:**
-- Workflow improvements and template enhancements for all 7 agents
+- Workflow improvements and template enhancements for all 11 agents (7 Vortex + 4 Gyre)
 - New workflow variants and specialized templates
 
 **Testing:**
