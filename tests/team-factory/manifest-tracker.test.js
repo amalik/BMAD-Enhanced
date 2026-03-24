@@ -144,13 +144,13 @@ describe('formatAbortInstructions', () => {
   it('produces rm for created files', () => {
     const manifest = buildManifest(buildTestSpec(), buildTestContext());
     const instructions = formatAbortInstructions(manifest);
-    assert.ok(instructions.includes('rm _bmad/bme/_test-team/agents/alpha-analyzer.md'));
+    assert.ok(instructions.includes('rm "_bmad/bme/_test-team/agents/alpha-analyzer.md"'));
   });
 
   it('produces git checkout for modified files', () => {
     const manifest = buildManifest(buildTestSpec(), buildTestContext());
     const instructions = formatAbortInstructions(manifest);
-    assert.ok(instructions.includes('git checkout -- scripts/update/lib/agent-registry.js'));
+    assert.ok(instructions.includes('git checkout -- "scripts/update/lib/agent-registry.js"'));
   });
 
   it('separates created and modified sections', () => {
