@@ -2,7 +2,7 @@
 title: 'Skill Validator for Team Factory Pipeline'
 slug: 'spec-skill-validator-team-factory'
 created: '2026-03-24'
-status: 'draft'
+status: 'done'
 stepsCompleted: []
 tech_stack: [node, javascript]
 files_to_modify:
