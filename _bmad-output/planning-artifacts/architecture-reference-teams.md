@@ -137,70 +137,294 @@ Four quality properties define what it means for a team to be valid within the B
 
 ## Discoverable — Independent
 
-<!-- Story 1.2 will populate this section with YAML checklist data blocks -->
 <!-- Story 1.3 will add per-check "why" prose with inline check ID references -->
 
-_Checklist pending — see Stories 1.2 and 1.3._
+```yaml
+quality_property: discoverable
+composition_pattern: independent
+checks:
+  - id: DISC-I-01
+    rule: "Each agent appears in agent-manifest.csv"
+    target_file: "_bmad/_config/agent-manifest.csv"
+    validation: "row exists with module=bme, path=_bmad/bme/{submodule}/agents/{agent_id}.md for each agent in config.yaml agents list"
+  - id: DISC-I-02
+    rule: "Module has a README describing team purpose and agent capabilities"
+    target_file: "_bmad/bme/{submodule}/README.md"
+    validation: "file exists and is non-empty"
+  - id: DISC-I-03
+    rule: "Each agent has activation XML with menu items exposing workflows"
+    target_file: "_bmad/bme/{submodule}/agents/{agent_id}.md"
+    validation: "file contains <menu> element with at least one <item> element"
+  - id: DISC-I-04
+    rule: "Each agent has a canonical skill ID registered for intent-based routing"
+    target_file: ".claude/skills/bmad-agent-bme-{agent_id}/SKILL.md"
+    validation: "skill directory and SKILL.md file exist for each agent"
+  - id: DISC-I-05
+    rule: "Module has an entry in module-help.csv for CLI discovery"
+    target_file: "_bmad/_config/module-help.csv"
+    validation: "row exists with module name matching submodule_name from config.yaml — NOTE: existing bme submodules (Vortex, Gyre) lack this file; new teams SHOULD create an entry to enable convoke-help discovery"
+```
 
 ---
 
 ## Discoverable — Sequential
 
-<!-- Story 1.2 will populate this section with YAML checklist data blocks -->
 <!-- Story 1.3 will add per-check "why" prose with inline check ID references -->
 
-_Checklist pending — see Stories 1.2 and 1.3._
+```yaml
+quality_property: discoverable
+composition_pattern: sequential
+checks:
+  - id: DISC-S-01
+    rule: "Each agent appears in agent-manifest.csv"
+    target_file: "_bmad/_config/agent-manifest.csv"
+    validation: "row exists with module=bme, path=_bmad/bme/{submodule}/agents/{agent_id}.md for each agent in config.yaml agents list"
+  - id: DISC-S-02
+    rule: "Module has a README describing team purpose and agent capabilities"
+    target_file: "_bmad/bme/{submodule}/README.md"
+    validation: "file exists and is non-empty"
+  - id: DISC-S-03
+    rule: "Each agent has activation XML with menu items exposing workflows"
+    target_file: "_bmad/bme/{submodule}/agents/{agent_id}.md"
+    validation: "file contains <menu> element with at least one <item> element"
+  - id: DISC-S-04
+    rule: "Each agent has a canonical skill ID registered for intent-based routing"
+    target_file: ".claude/skills/bmad-agent-bme-{agent_id}/SKILL.md"
+    validation: "skill directory and SKILL.md file exist for each agent"
+  - id: DISC-S-05
+    rule: "Module has an entry in module-help.csv for CLI discovery"
+    target_file: "_bmad/_config/module-help.csv"
+    validation: "row exists with module name matching submodule_name from config.yaml — NOTE: existing bme submodules (Vortex, Gyre) lack this file; new teams SHOULD create an entry to enable convoke-help discovery"
+  - id: DISC-S-06
+    rule: "Compass routing reference documents all workflows and inter-module routes"
+    target_file: "_bmad/bme/{submodule}/compass-routing-reference.md"
+    validation: "file exists and contains a routing table with one row per workflow in config.yaml workflows list"
+  - id: DISC-S-07
+    rule: "Each agent menu references all workflows assigned to that agent"
+    target_file: "_bmad/bme/{submodule}/agents/{agent_id}.md"
+    validation: "for each workflow where agent={agent_id} in agent-registry, a corresponding <item> with exec path exists in the agent's <menu>"
+```
 
 ---
 
 ## Installable — Independent
 
-<!-- Story 1.2 will populate this section with YAML checklist data blocks -->
 <!-- Story 1.3 will add per-check "why" prose with inline check ID references -->
 
-_Checklist pending — see Stories 1.2 and 1.3._
+```yaml
+quality_property: installable
+composition_pattern: independent
+checks:
+  - id: INST-I-01
+    rule: "Module block exists in agent-registry.js with AGENTS and WORKFLOWS arrays"
+    target_file: "scripts/update/lib/agent-registry.js"
+    validation: "const block exists with {PREFIX}_AGENTS array (each entry has id, name, icon, title, stream, persona) and {PREFIX}_WORKFLOWS array (each entry has name, agent), plus derived lists ({PREFIX}_AGENT_FILES, {PREFIX}_AGENT_IDS, {PREFIX}_WORKFLOW_NAMES) and module.exports entries"
+  - id: INST-I-02
+    rule: "refresh-installation.js copies module agents, workflows, and config"
+    target_file: "scripts/update/lib/refresh-installation.js"
+    validation: "code block exists that copies from {packageRoot}/_bmad/bme/{submodule}/ to {projectRoot}/_bmad/bme/{submodule}/ for agents/, workflows/, and config.yaml"
+  - id: INST-I-03
+    rule: "config.yaml exists and parses as valid YAML"
+    target_file: "_bmad/bme/{submodule}/config.yaml"
+    validation: "file exists and yaml.load() succeeds without error"
+  - id: INST-I-04
+    rule: "validator.js includes validation checks for the module"
+    target_file: "scripts/update/lib/validator.js"
+    validation: "validation function checks agent files exist, workflow.md files exist, and config.yaml is valid for this module"
+  - id: INST-I-05
+    rule: "Each agent file exists in the agents directory"
+    target_file: "_bmad/bme/{submodule}/agents/{agent_id}.md"
+    validation: "for each agent ID in config.yaml agents list, file {agent_id}.md exists in agents/"
+  - id: INST-I-06
+    rule: "Each workflow has a workflow.md entry point"
+    target_file: "_bmad/bme/{submodule}/workflows/{workflow_name}/workflow.md"
+    validation: "for each workflow in config.yaml workflows list, directory {workflow_name}/ exists with workflow.md inside"
+```
 
 ---
 
 ## Installable — Sequential
 
-<!-- Story 1.2 will populate this section with YAML checklist data blocks -->
 <!-- Story 1.3 will add per-check "why" prose with inline check ID references -->
 
-_Checklist pending — see Stories 1.2 and 1.3._
+```yaml
+quality_property: installable
+composition_pattern: sequential
+checks:
+  - id: INST-S-01
+    rule: "Module block exists in agent-registry.js with AGENTS and WORKFLOWS arrays"
+    target_file: "scripts/update/lib/agent-registry.js"
+    validation: "const block exists with {PREFIX}_AGENTS array (each entry has id, name, icon, title, stream, persona) and {PREFIX}_WORKFLOWS array (each entry has name, agent), plus derived lists ({PREFIX}_AGENT_FILES, {PREFIX}_AGENT_IDS, {PREFIX}_WORKFLOW_NAMES) and module.exports entries"
+  - id: INST-S-02
+    rule: "refresh-installation.js copies module agents, workflows, contracts, and config"
+    target_file: "scripts/update/lib/refresh-installation.js"
+    validation: "code block exists that copies from {packageRoot}/_bmad/bme/{submodule}/ to {projectRoot}/_bmad/bme/{submodule}/ for agents/, workflows/, contracts/, and config.yaml"
+  - id: INST-S-03
+    rule: "config.yaml exists and parses as valid YAML"
+    target_file: "_bmad/bme/{submodule}/config.yaml"
+    validation: "file exists and yaml.load() succeeds without error"
+  - id: INST-S-04
+    rule: "validator.js includes validation checks for the module"
+    target_file: "scripts/update/lib/validator.js"
+    validation: "validation function checks agent files exist, workflow.md files exist, config.yaml is valid, and contract files exist for this module"
+  - id: INST-S-05
+    rule: "Each agent file exists in the agents directory"
+    target_file: "_bmad/bme/{submodule}/agents/{agent_id}.md"
+    validation: "for each agent ID in config.yaml agents list, file {agent_id}.md exists in agents/"
+  - id: INST-S-06
+    rule: "Each workflow has a workflow.md entry point"
+    target_file: "_bmad/bme/{submodule}/workflows/{workflow_name}/workflow.md"
+    validation: "for each workflow in config.yaml workflows list, directory {workflow_name}/ exists with workflow.md inside"
+  - id: INST-S-07
+    rule: "Contracts directory exists and contains handoff contract files"
+    target_file: "_bmad/bme/{submodule}/contracts/"
+    validation: "contracts/ directory exists with at least one .md file matching pattern {prefix}{N}-{kebab-case-title}.md"
+  - id: INST-S-08
+    rule: "refresh-installation.js copies contracts directory"
+    target_file: "scripts/update/lib/refresh-installation.js"
+    validation: "code copies contracts/ from package source to project target for this module"
+```
 
 ---
 
 ## Configurable — Independent
 
-<!-- Story 1.2 will populate this section with YAML checklist data blocks -->
 <!-- Story 1.3 will add per-check "why" prose with inline check ID references -->
 
-_Checklist pending — see Stories 1.2 and 1.3._
+```yaml
+quality_property: configurable
+composition_pattern: independent
+checks:
+  - id: CONF-I-01
+    rule: "config.yaml contains all required fields"
+    target_file: "_bmad/bme/{submodule}/config.yaml"
+    validation: "file contains: submodule_name (string, underscore-prefixed), module (string), agents (array of kebab-case IDs), workflows (array of kebab-case names), version (semver), user_name (string), communication_language (string), output_folder (string with {project-root} prefix)"
+  - id: CONF-I-02
+    rule: "Each agent activation XML loads module config.yaml in step 2"
+    target_file: "_bmad/bme/{submodule}/agents/{agent_id}.md"
+    validation: "activation <step n=\"2\"> contains instruction to load {project-root}/_bmad/bme/{submodule}/config.yaml and store session variables"
+  - id: CONF-I-03
+    rule: "Agent file names follow kebab-case naming convention matching registry ID"
+    target_file: "_bmad/bme/{submodule}/agents/"
+    validation: "each file in agents/ is named {agent_id}.md where agent_id matches the id field in agent-registry.js and the agents list in config.yaml"
+  - id: CONF-I-04
+    rule: "Module directory follows underscore-prefix naming convention"
+    target_file: "_bmad/bme/{submodule}/"
+    validation: "submodule directory name starts with underscore (e.g., _vortex, _gyre) and matches submodule_name in config.yaml"
+  - id: CONF-I-05
+    rule: "Workflow directories follow kebab-case naming convention"
+    target_file: "_bmad/bme/{submodule}/workflows/"
+    validation: "each workflow directory name is kebab-case and matches an entry in config.yaml workflows list"
+  - id: CONF-I-06
+    rule: "Config field names follow snake_case convention"
+    target_file: "_bmad/bme/{submodule}/config.yaml"
+    validation: "all top-level field names use snake_case (e.g., submodule_name, output_folder, user_name, communication_language, party_mode_enabled)"
+```
 
 ---
 
 ## Configurable — Sequential
 
-<!-- Story 1.2 will populate this section with YAML checklist data blocks -->
 <!-- Story 1.3 will add per-check "why" prose with inline check ID references -->
 
-_Checklist pending — see Stories 1.2 and 1.3._
+```yaml
+quality_property: configurable
+composition_pattern: sequential
+checks:
+  - id: CONF-S-01
+    rule: "config.yaml contains all required fields"
+    target_file: "_bmad/bme/{submodule}/config.yaml"
+    validation: "file contains: submodule_name (string, underscore-prefixed), module (string), agents (array of kebab-case IDs), workflows (array of kebab-case names), version (semver), user_name (string), communication_language (string), output_folder (string with {project-root} prefix)"
+  - id: CONF-S-02
+    rule: "Each agent activation XML loads module config.yaml in step 2"
+    target_file: "_bmad/bme/{submodule}/agents/{agent_id}.md"
+    validation: "activation <step n=\"2\"> contains instruction to load {project-root}/_bmad/bme/{submodule}/config.yaml and store session variables"
+  - id: CONF-S-03
+    rule: "Agent file names follow kebab-case naming convention matching registry ID"
+    target_file: "_bmad/bme/{submodule}/agents/"
+    validation: "each file in agents/ is named {agent_id}.md where agent_id matches the id field in agent-registry.js and the agents list in config.yaml"
+  - id: CONF-S-04
+    rule: "Module directory follows underscore-prefix naming convention"
+    target_file: "_bmad/bme/{submodule}/"
+    validation: "submodule directory name starts with underscore (e.g., _vortex, _gyre) and matches submodule_name in config.yaml"
+  - id: CONF-S-05
+    rule: "Workflow directories follow kebab-case naming convention"
+    target_file: "_bmad/bme/{submodule}/workflows/"
+    validation: "each workflow directory name is kebab-case and matches an entry in config.yaml workflows list"
+  - id: CONF-S-06
+    rule: "Config field names follow snake_case convention"
+    target_file: "_bmad/bme/{submodule}/config.yaml"
+    validation: "all top-level field names use snake_case (e.g., submodule_name, output_folder, user_name, communication_language, party_mode_enabled)"
+  - id: CONF-S-07
+    rule: "Contract frontmatter references agent IDs consistent with config.yaml"
+    target_file: "_bmad/bme/{submodule}/contracts/{contract_file}.md"
+    validation: "source_agent and target_agents fields in contract frontmatter reference agent IDs that exist in config.yaml agents list"
+  - id: CONF-S-08
+    rule: "Contract file names follow {prefix}{N}-{kebab-case-title}.md convention"
+    target_file: "_bmad/bme/{submodule}/contracts/"
+    validation: "each contract file matches pattern {prefix}{N}-{kebab-case-title}.md where prefix is a short lowercase string and N is a sequential number"
+```
 
 ---
 
 ## Composable — Independent
 
-<!-- Story 1.2 will populate this section with YAML checklist data blocks -->
 <!-- Story 1.3 will add per-check "why" prose with inline check ID references -->
 
-_Checklist pending — see Stories 1.2 and 1.3._
+```yaml
+quality_property: composable
+composition_pattern: independent
+checks:
+  - id: COMP-I-01
+    rule: "Each agent has an entry in agent-manifest.csv for cross-module visibility"
+    target_file: "_bmad/_config/agent-manifest.csv"
+    validation: "for each agent, a row exists with correct name, title, role, module=bme, path, and canonicalId=bmad-agent-bme-{agent_id}"
+  - id: COMP-I-02
+    rule: "No handoff contracts exist — Independent agents do not require inter-agent contracts"
+    target_file: "_bmad/bme/{submodule}/"
+    validation: "no contracts/ directory exists, or if it exists it contains no handoff contract files"
+  - id: COMP-I-03
+    rule: "Each agent has a canonical skill ID following the inter-module routing pattern"
+    target_file: ".claude/skills/bmad-agent-bme-{agent_id}/SKILL.md"
+    validation: "skill registration exists with canonical ID bmad-agent-bme-{agent_id} enabling other modules to route to this agent"
+  - id: COMP-I-04
+    rule: "README documents agent capabilities for cross-team awareness"
+    target_file: "_bmad/bme/{submodule}/README.md"
+    validation: "README contains a description of each agent's capabilities sufficient for other teams to determine routing relevance"
+```
 
 ---
 
 ## Composable — Sequential
 
-<!-- Story 1.2 will populate this section with YAML checklist data blocks -->
 <!-- Story 1.3 will add per-check "why" prose with inline check ID references -->
 
-_Checklist pending — see Stories 1.2 and 1.3._
+```yaml
+quality_property: composable
+composition_pattern: sequential
+checks:
+  - id: COMP-S-01
+    rule: "Each agent has an entry in agent-manifest.csv for cross-module visibility"
+    target_file: "_bmad/_config/agent-manifest.csv"
+    validation: "for each agent, a row exists with correct name, title, role, module=bme, path, and canonicalId=bmad-agent-bme-{agent_id}"
+  - id: COMP-S-02
+    rule: "Handoff contracts exist defining inter-agent artifact schemas"
+    target_file: "_bmad/bme/{submodule}/contracts/"
+    validation: "contracts/ directory contains at least (agent_count - 1) handoff contract files"
+  - id: COMP-S-03
+    rule: "Each contract has required frontmatter fields"
+    target_file: "_bmad/bme/{submodule}/contracts/{contract_file}.md"
+    validation: "frontmatter contains: contract (ID string), type, source_agent (valid agent ID), source_workflow (valid workflow name), target_agents (array of valid agent IDs), created (ISO date)"
+  - id: COMP-S-04
+    rule: "Compass routing reference includes inter-module routing"
+    target_file: "_bmad/bme/{submodule}/compass-routing-reference.md"
+    validation: "routing table includes at least one row referencing an agent from another module (e.g., Vortex agents from Gyre compass)"
+  - id: COMP-S-05
+    rule: "Each agent has a canonical skill ID following the inter-module routing pattern"
+    target_file: ".claude/skills/bmad-agent-bme-{agent_id}/SKILL.md"
+    validation: "skill registration exists with canonical ID bmad-agent-bme-{agent_id} enabling other modules to route to this agent"
+  - id: COMP-S-06
+    rule: "Contract chain covers the full agent pipeline"
+    target_file: "_bmad/bme/{submodule}/contracts/"
+    validation: "for each adjacent pair of agents in the pipeline, a contract exists where source_agent is the upstream agent and target_agents includes the downstream agent"
+```
