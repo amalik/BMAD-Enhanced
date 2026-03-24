@@ -1,6 +1,6 @@
 # Story 2.1: Factory Discoverability & Entry Points
 
-Status: ready-for-dev
+Status: review
 
 ## Story
 
