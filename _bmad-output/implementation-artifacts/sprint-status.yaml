@@ -34,7 +34,7 @@
 # - Dev moves story to 'review', then runs code-review (fresh context, different LLM recommended)
 
 generated: 2026-03-23
-last_updated: 2026-03-25
+last_updated: 2026-03-25T02
 project: BMAD-Enhanced
 project_key: NOKEY
 tracking_system: file-system
@@ -272,5 +272,5 @@ development_status:
   # Epic 3: Extensions — Add Agent & Add Skill
   tf-epic-3: in-progress
   tf-3-1-add-agent-to-existing-team: done
-  tf-3-2-add-skill-workflow-to-existing-agent: backlog
+  tf-3-2-add-skill-workflow-to-existing-agent: ready-for-dev
   tf-epic-3-retrospective: optional
