@@ -248,6 +248,11 @@ async function appendWorkflowToBlock(teamNameKebab, workflowName, agentId, regis
     return fail(['agentId is required and must not be empty']);
   }
 
+  // Normalize inputs — trim whitespace to prevent phantom entries
+  teamNameKebab = teamNameKebab.trim();
+  workflowName = workflowName.trim();
+  agentId = agentId.trim();
+
   const prefix = derivePrefix(teamNameKebab);
 
   // --- Read current content ---
@@ -264,12 +269,6 @@ async function appendWorkflowToBlock(teamNameKebab, workflowName, agentId, regis
     return fail([`Team block not found: const ${workflowsVarName} does not exist in registry`]);
   }
 
-  // Check duplicate workflow entry
-  const nameLiteral = `name: '${escapeSingleQuotes(workflowName)}'`;
-  if (currentContent.includes(nameLiteral)) {
-    return { success: true, written: [], skipped: ['workflow already exists in block'], errors: [], rollbackApplied: false };
-  }
-
   // --- 2. VALIDATE: Structural checks ---
   const arrayStart = currentContent.indexOf(`const ${workflowsVarName} = [`);
   if (arrayStart === -1) {
@@ -279,6 +278,13 @@ async function appendWorkflowToBlock(teamNameKebab, workflowName, agentId, regis
   const closingBracket = findArrayClose(currentContent, arrayStart);
   if (closingBracket === -1) {
     return fail([`Cannot find closing ]; for ${workflowsVarName}`]);
+  }
+
+  // Check duplicate workflow entry — scoped to THIS team's WORKFLOWS block only
+  const nameLiteral = `name: '${escapeSingleQuotes(workflowName)}'`;
+  const blockContent = currentContent.slice(arrayStart, closingBracket + 1);
+  if (blockContent.includes(nameLiteral)) {
+    return { success: true, written: [], skipped: ['workflow already exists in block'], errors: [], rollbackApplied: false };
   }
 
   // --- 3. CHECK: Dirty-tree detection ---
@@ -311,24 +317,38 @@ async function appendWorkflowToBlock(teamNameKebab, workflowName, agentId, regis
   try {
     await fs.writeFile(registryPath, modified, 'utf8');
   } catch (err) {
-    await fs.writeFile(registryPath, currentContent, 'utf8');
-    await fs.remove(bakPath);
-    return { success: false, written: [], skipped: [], errors: [`Write failed: ${err.message}`], rollbackApplied: true };
+    let rollbackApplied = false;
+    try {
+      await fs.writeFile(registryPath, currentContent, 'utf8');
+      rollbackApplied = true;
+    } catch (rollbackErr) {
+      return { success: false, written: [], skipped: [], errors: [`Write failed: ${err.message}`, `Rollback also failed: ${rollbackErr.message}`], rollbackApplied: false };
+    }
+    await fs.remove(bakPath).catch(() => {});
+    return { success: false, written: [], skipped: [], errors: [`Write failed: ${err.message}`], rollbackApplied };
   }
 
   // --- 5. VERIFY: Re-read + node require() ---
   const verifyError = verifyRequire(registryPath);
   if (verifyError) {
-    await fs.writeFile(registryPath, currentContent, 'utf8');
-    await fs.remove(bakPath);
+    try {
+      await fs.writeFile(registryPath, currentContent, 'utf8');
+      await fs.remove(bakPath);
+    } catch (rollbackErr) {
+      return { success: false, written: [], skipped: [], errors: [verifyError, `Rollback failed: ${rollbackErr.message}`], rollbackApplied: false };
+    }
     return { success: false, written: [], skipped: [], errors: [verifyError], rollbackApplied: true };
   }
 
   // Verify new workflow appears in the file
   const verifyContent = await fs.readFile(registryPath, 'utf8');
   if (!verifyContent.includes(nameLiteral)) {
-    await fs.writeFile(registryPath, currentContent, 'utf8');
-    await fs.remove(bakPath);
+    try {
+      await fs.writeFile(registryPath, currentContent, 'utf8');
+      await fs.remove(bakPath);
+    } catch (rollbackErr) {
+      return { success: false, written: [], skipped: [], errors: ['Post-write verification: new workflow entry not found', `Rollback failed: ${rollbackErr.message}`], rollbackApplied: false };
+    }
     return { success: false, written: [], skipped: [], errors: ['Post-write verification: new workflow entry not found'], rollbackApplied: true };
   }
 
