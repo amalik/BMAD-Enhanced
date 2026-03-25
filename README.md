@@ -382,18 +382,16 @@ Teams and Skills are peer module types — both installable, both independent. C
 ## Updating
 
 ```bash
-npx -p convoke-agents convoke-version          # Check current version
-npx -p convoke-agents convoke-update --dry-run  # Preview changes
-npx -p convoke-agents convoke-update            # Apply update (auto-backup)
-npx -p convoke-agents convoke-doctor            # Diagnose issues
+npm install convoke-agents@latest                       # Get the latest package
+npx -p convoke-agents convoke-version                   # Check current version
+npx -p convoke-agents convoke-update --dry-run          # Preview changes
+npx -p convoke-agents convoke-update                    # Apply update (auto-backup)
+npx -p convoke-agents convoke-doctor                    # Diagnose issues
 ```
 
 Your data in `_bmad-output/` and `.gyre/` is never touched. Automatic backups are created before every update.
 
-> **Tip:** If `npx convoke-update` reports "Already up to date" but you know a newer version exists, npx may be serving a cached copy. Force the latest with:
-> ```bash
-> npx -p convoke-agents@latest convoke-update --yes
-> ```
+> **Important:** `npm install convoke-agents` (without `@latest`) won't cross major version boundaries. If you're on v2.x, you must use `npm install convoke-agents@latest` to get v3.x.
 
 See [UPDATE-GUIDE.md](UPDATE-GUIDE.md) for migration paths and troubleshooting.
 
