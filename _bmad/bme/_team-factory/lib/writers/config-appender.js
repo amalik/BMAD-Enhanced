@@ -3,6 +3,7 @@
 const fs = require('fs-extra');
 const path = require('path');
 const yaml = require('js-yaml');
+const { checkDirtyTree } = require('./registry-writer');
 
 /** @typedef {import('../types/factory-types').CreatorResult} CreatorResult */
 
@@ -12,9 +13,11 @@ const yaml = require('js-yaml');
  *
  * @param {string} newAgentId - Agent ID to add (e.g., "gamma-guardian")
  * @param {string} configPath - Absolute path to existing config.yaml
+ * @param {Object} [options]
+ * @param {boolean} [options.skipDirtyCheck] - Skip git dirty-tree detection (for tests)
  * @returns {Promise<CreatorResult>}
  */
-async function appendConfigAgent(newAgentId, configPath) {
+async function appendConfigAgent(newAgentId, configPath, options = {}) {
   if (!newAgentId || !newAgentId.trim()) {
     return { success: false, filePath: configPath, errors: ['newAgentId is required'] };
   }
@@ -22,6 +25,14 @@ async function appendConfigAgent(newAgentId, configPath) {
   // --- Read existing config ---
   if (!await fs.pathExists(configPath)) {
     return { success: false, filePath: configPath, errors: ['config.yaml does not exist at target path'] };
+  }
+
+  // --- Dirty-tree detection (per-write) ---
+  if (!options.skipDirtyCheck) {
+    const dirtyResult = checkDirtyTree(configPath);
+    if (dirtyResult.dirty) {
+      return { success: false, filePath: configPath, errors: [], dirty: true, diff: dirtyResult.diff };
+    }
   }
 
   let content;
