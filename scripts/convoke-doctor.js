@@ -57,8 +57,12 @@ async function main() {
     const configCheck = checkModuleConfig(mod);
     checks.push(configCheck);
     if (configCheck.passed) {
-      checks.push(checkModuleAgents(mod));
-      checks.push(checkModuleWorkflows(mod));
+      if (Array.isArray(mod.config.agents) && mod.config.agents.length > 0) {
+        checks.push(checkModuleAgents(mod));
+      }
+      if (Array.isArray(mod.config.workflows) && mod.config.workflows.length > 0) {
+        checks.push(checkModuleWorkflows(mod));
+      }
     }
   }
 
