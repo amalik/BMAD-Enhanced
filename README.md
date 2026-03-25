@@ -260,22 +260,25 @@ The [Enhance Guide](_bmad/bme/_enhance/guides/ENHANCE-GUIDE.md) documents the co
 **Everything (Vortex + Gyre):**
 
 ```bash
-npm install convoke-agents@latest && npx -p convoke-agents convoke-install
+npm install convoke-agents@latest
+npx convoke-install
 ```
 
 **Vortex only:**
 
 ```bash
-npm install convoke-agents@latest && npx -p convoke-agents convoke-install-vortex
+npm install convoke-agents@latest
+npx convoke-install-vortex
 ```
 
 **Gyre only:**
 
 ```bash
-npm install convoke-agents@latest && npx -p convoke-agents convoke-install-gyre
+npm install convoke-agents@latest
+npx convoke-install-gyre
 ```
 
-Something not working? Run `npx -p convoke-agents convoke-doctor` or check the [FAQ](docs/faq.md).
+Something not working? Run `npx convoke-doctor` or check the [FAQ](docs/faq.md).
 
 ### Personalize
 
@@ -382,11 +385,11 @@ Teams and Skills are peer module types — both installable, both independent. C
 ## Updating
 
 ```bash
-npm install convoke-agents@latest                       # Get the latest package
-npx -p convoke-agents convoke-version                   # Check current version
-npx -p convoke-agents convoke-update --dry-run          # Preview changes
-npx -p convoke-agents convoke-update                    # Apply update (auto-backup)
-npx -p convoke-agents convoke-doctor                    # Diagnose issues
+npm install convoke-agents@latest         # Get the latest package
+npx convoke-version                       # Check current version
+npx convoke-update --dry-run              # Preview changes
+npx convoke-update                        # Apply update (auto-backup)
+npx convoke-doctor                        # Diagnose issues
 ```
 
 Your data in `_bmad-output/` and `.gyre/` is never touched. Automatic backups are created before every update.
