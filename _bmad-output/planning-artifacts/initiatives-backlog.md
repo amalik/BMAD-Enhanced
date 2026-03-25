@@ -2,7 +2,7 @@
 
 **Created:** 2026-03-08
 **Method:** RICE (Reach, Impact, Confidence, Effort)
-**Last Updated:** 2026-03-24
+**Last Updated:** 2026-03-25
 
 ---
 
@@ -129,7 +129,7 @@ Automate the publish and release flow. I1 (NPM_TOKEN) is the prerequisite; I2 (g
 Batch low-priority coverage gaps in existing CLI scripts. All low-score housekeeping that benefits from a single focused pass.
 
 ### Epic: "Platform Foundation" — ADR-001 Sequence (P1 → P14 → P12 → P13 → P9 → P2)
-The multi-module future follows the ADR-001 build sequence. **P1 (Gyre) is DONE** — all 4 epics complete (2026-03-24), full pipeline validated. P14 (Team Factory) is **active** — Epic 1 nearly done (4/5 stories, tf-1-5 in review), codifying what a valid team is before the factory can generate one. P12 (Enhance framework) is **unblocked** — extracts templates from Vortex + Gyre (two proven reference modules). P13 (Vortex redesign) retroactively aligns Vortex to Enhance-codified patterns. P9 (Forge) is scaffolded by Enhance as the third team — Vortex discovery complete, shadow engagement next. P2 (cross-module workflows) is now **unblocked** by P1 completion. Gyre and Forge share handoff contracts (FG-HC1/HC2/GF-HC1).
+The multi-module future follows the ADR-001 build sequence. **P1 (Gyre) is DONE** — all 4 epics complete (2026-03-24), full pipeline validated. **P14 (Team Factory) is DONE** — all 3 epics complete (2026-03-25), 16 stories, 136 tests, guided creation + extension workflows shipped. P12 (Enhance framework) is **unblocked** — extracts templates from Vortex + Gyre (two proven reference modules). P13 (Vortex redesign) retroactively aligns Vortex to Enhance-codified patterns. P9 (Forge) is scaffolded by Enhance as the third team — Vortex discovery complete, shadow engagement next. P2 (cross-module workflows) is now **unblocked** by P1 completion. Gyre and Forge share handoff contracts (FG-HC1/HC2/GF-HC1).
 
 ### Epic: "Ecosystem Governance" (P10 + P11)
 Decision framework for ecosystem growth. P10 (Capability Evaluation Framework) defines how new capabilities enter the ecosystem (skill→agent→team). P11 (Friction logs) provides the demand signal input. Together they prevent speculative building. Both artifacts complete — need operationalization and team distribution.
@@ -188,6 +188,12 @@ Remaining update system items not in Hardening: load-time validation, version de
 
 ## Completed
 
+### 2026-03-25
+
+| # | Initiative | Score | Category |
+|---|-----------|-------|----------|
+| P14 | **Team Factory — Guided Team Creation Workflow** — 3 epics, 16 stories, 136 tests. Create teams, add agents, add skills — all fully wired with validation. | 3.6 | Platform |
+
 ### 2026-03-16
 
 | # | Initiative | Score | Category |
@@ -231,6 +237,7 @@ Remaining update system items not in Hardening: load-time validation, version de
 
 | Date | Change |
 |------|--------|
+| 2026-03-25 | tf-epic-3 retrospective: P14 (Team Factory) marked Done — all 3 epics complete (16 stories, 136 tests). Added I11 (Registry Fragment Architecture D-Q6, score 0.5), I12 (Validator.js Vortex hardcoding, score 0.4), I13 (Team Factory Express Mode, score 0.5) — all carried forward from tf-epic-1/2/3 retros. Prioritized view updated (37 items). Platform Foundation epic grouping updated. |
 | 2026-03-24 | I4 expanded from v6.2.0 to v6.2.1 scope (Winston analysis). Three specs drafted: (a) `spec-skill-validator-team-factory.md` — new `validateSkill()` quality gate for Team Factory, 7 tasks; (b) `spec-tech-spec-to-spec-rename.md` — rename tech-spec prefix to spec across 28 files in BMM/TEA, 9 tasks; (c) `spec-party-roster-cleanup.md` — remove 3 dead `default-party.csv` files, 5 tasks. RICE re-scored: R 4→6, I 1→1.5, E 2→4, score 1.8→2.0. Status: Backlog→Specced. |
 | 2026-03-22 | ArcKit competitive analysis (Winston). Added 2 exploration candidates: W1 (Wardley Mapping as shared capability — cross-team strategic lens, evaluate via P10 Capability Evaluation Framework), W2 (Pre-write artifact validation hooks — infrastructure-level quality enforcement via Claude Code hooks). Added reference notes: P1 updated with ArcKit compliance template exemplars for Gyre v2 Compliance & Security domain, P9 updated with vendor/platform decision excavation as Rune template category. Source: `tractorjuice/arc-kit` (Enterprise Architecture Governance toolkit, MIT, 64 commands, 58 templates, 21 hooks). 32 scored items + 9 exploration candidates. |
 | 2026-03-22 | Added P9-wka exploration candidate (Forge Written Knowledge Analysis agent). Potential third Forge agent for deep doc/code analysis between Silo (survey) and Rune (extract). Needs shadow engagement validation before RICE scoring. Scope note saved. Source: Emma contextualization session analyzing `bmad-federated-knowledge` external repo. |
