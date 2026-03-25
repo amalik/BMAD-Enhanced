@@ -588,7 +588,9 @@ function checkExistingAgentsCsv(ctx) {
 
   const content = fs.readFileSync(csvPath, 'utf8');
   const lines = content.trim().split('\n').slice(1); // skip header
-  // Extract agent column (index 8) from each row
+  // Extract agent column (index 8) from each row.
+  // Safe to split on comma: columns 0-9 are kebab-case/simple values (never contain commas).
+  // Only columns 10 (description) and 12 (outputs) use csvQuote and may contain commas.
   const agentIds = lines.map(line => {
     const cols = line.split(',');
     return cols[8] || '';
@@ -635,6 +637,9 @@ async function validateSkillExtension(skillContext, projectRoot) {
 
   // --- Structural checks for new files ---
   checks.push(...checkNewWorkflowFiles(skillContext));
+
+  // --- Activation menu check ---
+  checks.push(checkActivationMenuUpdated(skillContext));
 
   // --- Extension regression: existing workflows unchanged ---
   checks.push(checkExistingWorkflowsRegistry(skillContext, projectRoot));
@@ -724,6 +729,35 @@ function checkNewWorkflowFiles(ctx) {
     });
   }
   return checks;
+}
+
+/**
+ * Check that the agent's activation menu contains a new <item> for the workflow.
+ * @param {Object} ctx
+ * @returns {E2ECheck}
+ */
+function checkActivationMenuUpdated(ctx) {
+  const agentPath = ctx.agent_file_path;
+  if (!agentPath || !fs.existsSync(agentPath)) {
+    return {
+      name: 'ACTIVATION-MENU-UPDATED',
+      stepName: 'skill-extension',
+      passed: false,
+      expected: 'agent .md contains new <item> in <menu>',
+      actual: 'agent file not found',
+    };
+  }
+
+  const content = fs.readFileSync(agentPath, 'utf8');
+  const workflowName = ctx.new_workflow_name || '';
+  const hasItem = content.includes(`workflows/${workflowName}/`) && content.includes('<item');
+  return {
+    name: 'ACTIVATION-MENU-UPDATED',
+    stepName: 'skill-extension',
+    passed: hasItem,
+    expected: `<item> with workflows/${workflowName}/ in agent menu`,
+    actual: hasItem ? 'found' : 'new workflow item not found in activation menu',
+  };
 }
 
 /**
@@ -829,7 +863,9 @@ function checkExistingWorkflowsCsv(ctx) {
 
   const content = fs.readFileSync(csvPath, 'utf8');
   const lines = content.trim().split('\n').slice(1); // skip header
-  // Extract workflow name column (index 2) from each row
+  // Extract workflow name column (index 2) from each row.
+  // Safe to split on comma: columns 0-9 are kebab-case/simple values (never contain commas).
+  // Only columns 10 (description) and 12 (outputs) use csvQuote and may contain commas.
   const workflowNames = lines.map(line => {
     const cols = line.split(',');
     return (cols[2] || '').trim();
