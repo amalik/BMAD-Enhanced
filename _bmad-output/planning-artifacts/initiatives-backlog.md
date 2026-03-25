@@ -45,6 +45,9 @@
 | T1 | **`convoke-update.js` coverage to 80%+** — Currently at 29%, CLI orchestration paths untested | Test debt | 3 | 1 | 80% | 3 | 0.8 | Keep the lights on | Backlog |
 | T2 | **`convoke-version.js` coverage to 80%+** — Currently at 56%, CLI branch paths untested | Test debt | 2 | 0.5 | 80% | 2 | 0.4 | Keep the lights on | Backlog |
 | T5 | **Expand docs audit — remaining gaps** — Stale counts, broken links, naming leaks, and incomplete tables already implemented. Remaining: tense consistency checks and prose quality patterns | Scope-adjacent backlog (P2 E1) | 2 | 0.5 | 60% | 2 | 0.3 | Keep the lights on | Backlog |
+| T6 | **Add Python test execution to CI pipeline** — 46 Python files with local tests (pytest/unittest) across BMB and Core modules have zero CI coverage. Add `python-test` job to ci.yml with setup-python, pip install pyyaml, and pytest. Add to publish.needs gate. Tests already exist and pass locally. Resolves Gyre finding DL-001 (blocker) and COMPOUND-001. | Gyre delta analysis DL-001 (blocker), 2026-03-25 | 8 | 2 | 90% | 1 | 14.4 | Keep the lights on | Backlog |
+| T7 | **Add Python linting to CI pipeline** — No ruff/flake8/pylint configured for 46 Python files. JS has ESLint in CI, Python has nothing. Add ruff to the Python CI job (piggyback on T6). May require one-time cleanup pass on existing files. Resolves Gyre finding DL-002. | Gyre delta analysis DL-002, 2026-03-25 | 6 | 1 | 80% | 2 | 2.4 | Keep the lights on | Backlog |
+| T8 | **Standardize Python PEP 723 dependency declarations** — Scripts use PEP 723 inline metadata (good), but version pinning is inconsistent: some say `pyyaml`, others `pyyaml>=6.0`. Standardize to consistent pinning. CI Python job should install declared deps. Resolves Gyre finding DL-003. | Gyre delta analysis DL-003, 2026-03-25 | 4 | 0.5 | 80% | 1 | 1.6 | Keep the lights on | Backlog |
 
 ### Infrastructure
 
@@ -125,6 +128,9 @@ Harden the migration and update system with idempotency checks and integration t
 ### Epic: "CI/CD Pipeline" (I1 + I2)
 Automate the publish and release flow. I1 (NPM_TOKEN) is the prerequisite; I2 (gh auth releases) builds on it.
 
+### Epic: "Python CI Parity" (T6 + T7 + T8)
+Close the dual-language CI gap. T6 (Python tests in CI) is the anchor and blocker resolution — scores 14.4, highest in the backlog. T7 (linting) and T8 (dep pinning) piggyback on the same CI job. All three can ship in a single PR. Source: Gyre delta analysis 2026-03-25.
+
 ### Epic: "Test Debt Cleanup" (T1 + T2 + T5)
 Batch low-priority coverage gaps in existing CLI scripts. All low-score housekeeping that benefits from a single focused pass.
 
@@ -146,23 +152,26 @@ Remaining update system items not in Hardening: load-time validation, version de
 
 | Rank | # | Initiative | Score | Track | Category |
 |------|---|-----------|-------|-------|----------|
-| 1 | P10 | Capability Evaluation Framework | 5.6 | Move the needle | Platform |
-| 2 | P11 | Friction log capture for consulting teams | 5.6 | Move the needle | Platform |
-| 3 | **P1** | **Gyre team — Operational Readiness (Convoke team module)** | **3.6** | **Move the needle** | **Done** |
-| 4 | **P14** | **Team Factory — Guided Team Creation Workflow** | **3.6** | **Move the needle** | **Done** |
-| 5 | P12 | Enhance framework — Team Module Generator (BMB) | 3.2 | Move the needle | Unblocked |
-| 6 | P9 | Forge team — Domain Knowledge Extraction (KORE) | 3.0 | Move the needle | Blocked |
-| 7 | T3 | End-to-end update test on real project | 2.7 | Keep the lights on | Testing |
-| 8 | P13 | Vortex redesign (align to Enhance patterns) | 2.5 | Move the needle | Platform |
-| 9 | T4 | Migration idempotency CLI test | 2.4 | Keep the lights on | Testing |
-| 10 | I2 | `gh auth` for CI release creation | 2.4 | Keep the lights on | Infrastructure |
-| 11 | D2 | Add output examples for more agents | 2.1 | Move the needle | Documentation |
-| 12 | I4 | BMAD v6.2.1 convention alignment (3 specs) | 2.0 | Keep the lights on | **Done** |
-| 13 | I1 | NPM_TOKEN secret for CI publish | 1.8 | Keep the lights on | Infrastructure |
-| 14 | D6 | Reduce narrative overlap in journey example | 1.6 | Keep the lights on | Documentation |
-| 15 | U4 | Test upgrade-path step file cleanup | 1.4 | Keep the lights on | Update System |
-| 16 | P3 | Team installer architecture | 1.2 | Move the needle | Platform |
-| 17 | I5 | Workflow output naming enforcement | 1.2 | Keep the lights on | Infrastructure |
+| 1 | **T6** | **Add Python test execution to CI pipeline** | **14.4** | **Keep the lights on** | **Testing** |
+| 2 | P10 | Capability Evaluation Framework | 5.6 | Move the needle | Platform |
+| 3 | P11 | Friction log capture for consulting teams | 5.6 | Move the needle | Platform |
+| 4 | **P1** | **Gyre team — Operational Readiness (Convoke team module)** | **3.6** | **Move the needle** | **Done** |
+| 5 | **P14** | **Team Factory — Guided Team Creation Workflow** | **3.6** | **Move the needle** | **Done** |
+| 6 | P12 | Enhance framework — Team Module Generator (BMB) | 3.2 | Move the needle | Unblocked |
+| 7 | P9 | Forge team — Domain Knowledge Extraction (KORE) | 3.0 | Move the needle | Blocked |
+| 8 | T3 | End-to-end update test on real project | 2.7 | Keep the lights on | Testing |
+| 9 | P13 | Vortex redesign (align to Enhance patterns) | 2.5 | Move the needle | Platform |
+| 10 | T4 | Migration idempotency CLI test | 2.4 | Keep the lights on | Testing |
+| 11 | T7 | Add Python linting to CI pipeline | 2.4 | Keep the lights on | Testing |
+| 12 | I2 | `gh auth` for CI release creation | 2.4 | Keep the lights on | Infrastructure |
+| 13 | D2 | Add output examples for more agents | 2.1 | Move the needle | Documentation |
+| 14 | I4 | BMAD v6.2.1 convention alignment (3 specs) | 2.0 | Keep the lights on | **Done** |
+| 15 | I1 | NPM_TOKEN secret for CI publish | 1.8 | Keep the lights on | Infrastructure |
+| 16 | T8 | Standardize Python PEP 723 dependency declarations | 1.6 | Keep the lights on | Testing |
+| 17 | D6 | Reduce narrative overlap in journey example | 1.6 | Keep the lights on | Documentation |
+| 18 | U4 | Test upgrade-path step file cleanup | 1.4 | Keep the lights on | Update System |
+| 19 | P3 | Team installer architecture | 1.2 | Move the needle | Platform |
+| 20 | I5 | Workflow output naming enforcement | 1.2 | Keep the lights on | Infrastructure |
 | 18 | P7 | ML/AI Engineering team exploration | 1.2 | Move the needle | Platform |
 | 19 | S1 | Interactive installer | 1.0 | Move the needle | Infrastructure |
 | 20 | D3 | BMAD Core return arrow in diagram | 0.9 | Keep the lights on | Documentation |
