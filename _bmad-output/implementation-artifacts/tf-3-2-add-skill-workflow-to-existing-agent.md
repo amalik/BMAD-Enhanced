@@ -20,6 +20,7 @@ So that I can extend an agent's capabilities without manually editing multiple f
    **Then** the agent's config.yaml `workflows` array is updated with the new workflow name
    **And** a new row is appended to the team's module-help.csv for the workflow
    **And** a new entry is appended to the team's WORKFLOWS array in agent-registry.js
+   **And** the agent's activation `<menu>` section is updated with a new `<item>` for the workflow
    **And** if the skill has dependencies on other agents, contract wiring is validated
    **And** all modifications follow the Write Safety Protocol and additive-only rules (TF-NFR17)
    **And** end-to-end validation confirms the agent and its team still pass all checks
@@ -32,9 +33,10 @@ So that I can extend an agent's capabilities without manually editing multiple f
   - [ ] 1.3 PART 2: Skill/Workflow Definition — collect workflow name (kebab-case), description, output location, template needs
   - [ ] 1.4 PART 3: BMB Delegation — generate workflow directory structure (workflow.md, template, optional steps/)
   - [ ] 1.5 PART 4: Integration Wiring — call JS modules for config workflow append, CSV row append, registry workflow append
-  - [ ] 1.6 PART 5: Validation — call end-to-end validator, present results
-  - [ ] 1.7 PART 6: Manifest and abort path
-  - [ ] 1.8 Add STEP VALIDATION table, Visibility Checklist, CHECKPOINT, NEXT pointer
+  - [ ] 1.6 PART 5: Activation Menu Patching — read agent .md file, locate `<menu>` section, insert new `<item>` before `</menu>` with workflow exec path and display name
+  - [ ] 1.7 PART 6: Validation — call end-to-end validator, present results
+  - [ ] 1.8 PART 7: Manifest and abort path
+  - [ ] 1.9 Add STEP VALIDATION table, Visibility Checklist, CHECKPOINT, NEXT pointer
 
 - [ ] Task 2: Create `config-workflow-appender.js` — append workflow to existing config.yaml (AC: #2)
   - [ ] 2.1 Add `appendConfigWorkflow(newWorkflowName, configPath, options)` to `config-appender.js` (extend existing module)
@@ -55,9 +57,10 @@ So that I can extend an agent's capabilities without manually editing multiple f
 
 - [ ] Task 4: Extend end-to-end validator for skill extension (AC: #2)
   - [ ] 4.1 Add `validateSkillExtension(specData, skillContext, projectRoot)` to `end-to-end-validator.js`
-  - [ ] 4.2 New checks: WORKFLOW-REGISTRY-APPEND, CONFIG-WORKFLOW-APPEND, CSV-WORKFLOW-APPEND
-  - [ ] 4.3 Regression checks: EXISTING-WORKFLOWS-UNCHANGED (registry, config, CSV)
-  - [ ] 4.4 Maintain `{PROP}-{SEMANTIC-NAME}` check format and E2ECheck shape
+  - [ ] 4.2 New checks: WORKFLOW-REGISTRY-APPEND, CONFIG-WORKFLOW-APPEND, CSV-WORKFLOW-APPEND, WORKFLOW-FILE-EXISTS
+  - [ ] 4.3 WORKFLOW-FILE-EXISTS check: verify generated workflow directory and workflow.md exist on disk after BMB delegation
+  - [ ] 4.4 Regression checks: EXISTING-WORKFLOWS-UNCHANGED (registry, config, CSV)
+  - [ ] 4.5 Maintain `{PROP}-{SEMANTIC-NAME}` check format and E2ECheck shape
 
 - [ ] Task 5: Update manifest-tracker for skill extension (AC: #2)
   - [ ] 5.1 Add `buildSkillExtensionManifest(skillContext)` to `manifest-tracker.js`
@@ -139,6 +142,30 @@ _bmad/bme/_{team}/workflows/{workflow-name}/
 
 The step file (step-add-skill.md) instructs BMB to generate these files using the same delegation pattern as step-04-generate.md PART 3.
 
+### Activation Menu Patching — LLM Task (Not JS Module)
+
+Agent `.md` files contain `<activation>` XML blocks with a `<menu>` section listing available workflows:
+```xml
+<item cmd="LP or fuzzy match on lean-persona" exec="{project-root}/_bmad/bme/_vortex/workflows/lean-persona/workflow.md">
+  [LP] Create Lean Persona: Rapid user persona in 6 steps
+</item>
+```
+
+Adding a workflow requires inserting a new `<item>` before the `</menu>` closing tag. This is an **LLM task in the step file** (not a JS module) because:
+- The XML is embedded in markdown (not standalone XML)
+- Parsing requires markdown-aware context (find activation block first)
+- The `cmd` value uses `deriveCode()` convention (2-letter code from workflow name)
+- The `exec` path follows pattern: `{project-root}/_bmad/bme/_{team}/workflows/{workflow-name}/workflow.md`
+
+The step file (PART 5) instructs the LLM to:
+1. Read the agent's `.md` file
+2. Locate the `<menu>` section within `<activation>`
+3. Generate the new `<item>` tag with correct `cmd`, `exec`, and display text
+4. Insert before `</menu>`
+5. Write back the modified file
+
+**This file is also tracked in the manifest** as "modified" (alongside config, CSV, registry).
+
 ### Write Safety Protocol — Same Tiers as Story 3.1
 
 | Module | Protocol | Stages |
@@ -180,8 +207,9 @@ Simpler than Add Agent — no scope/overlap detection needed, no contract design
 2. Skill/Workflow Definition (name, description, output)
 3. BMB Delegation (generate workflow dir + files)
 4. Integration Wiring (config + CSV + registry appends)
-5. Validation (end-to-end validator)
-6. Manifest and abort path
+5. Activation Menu Patching (insert `<item>` into agent .md `<menu>`)
+6. Validation (end-to-end validator)
+7. Manifest and abort path
 
 ### Validation Checks for Skill Extension
 
@@ -192,6 +220,8 @@ New checks in `validateSkillExtension`:
 | WORKFLOW-REGISTRY-APPEND | New workflow entry exists in `{PREFIX}_WORKFLOWS` array |
 | CONFIG-WORKFLOW-APPEND | New workflow name exists in config.yaml `workflows` array |
 | CSV-WORKFLOW-APPEND | New row exists in module-help.csv with correct workflow name |
+| WORKFLOW-FILE-EXISTS | Generated workflow directory and `workflow.md` exist on disk |
+| ACTIVATION-MENU-UPDATED | Agent .md file `<menu>` section contains new `<item>` with correct `exec` path |
 | EXISTING-WORKFLOWS-REGISTRY | Pre-existing workflow entries unchanged in registry |
 | EXISTING-WORKFLOWS-CONFIG | Pre-existing workflows unchanged in config.yaml |
 | EXISTING-WORKFLOWS-CSV | Pre-existing CSV rows unchanged (row count >= original + 1) |
@@ -210,6 +240,7 @@ Plus standard regression: REGISTRY-REGRESSION, VORTEX-REGRESSION (reuse from exi
   files: [
     { path: '_bmad/bme/_gyre/workflows/new-workflow/workflow.md', operation: 'created' },
     { path: '_bmad/bme/_gyre/workflows/new-workflow/new-workflow.template.md', operation: 'created' },
+    { path: '_bmad/bme/_gyre/agents/stack-detective.md', operation: 'modified' },
     { path: '_bmad/bme/_gyre/config.yaml', operation: 'modified' },
     { path: '_bmad/bme/_gyre/module-help.csv', operation: 'modified' },
     { path: 'scripts/update/lib/agent-registry.js', operation: 'modified' },
