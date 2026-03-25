@@ -4,7 +4,7 @@ const path = require('path');
 const fs = require('fs-extra');
 const os = require('os');
 
-const { appendAgentToBlock, findArrayClose } = require('../../_bmad/bme/_team-factory/lib/writers/registry-appender');
+const { appendAgentToBlock, appendWorkflowToBlock, findArrayClose } = require('../../_bmad/bme/_team-factory/lib/writers/registry-appender');
 
 /**
  * Build a minimal registry file with one team block.
@@ -236,5 +236,100 @@ describe('findArrayClose', () => {
     const idx = findArrayClose(content, 0);
     assert.equal(content[idx], ']');
     assert.equal(content[idx + 1], ';');
+  });
+});
+
+// ══════════════════════════════════════════════════════════════════════
+// appendWorkflowToBlock tests
+// ══════════════════════════════════════════════════════════════════════
+
+describe('appendWorkflowToBlock — happy path', () => {
+  let tmpDir, registryPath;
+
+  before(async () => {
+    tmpDir = await fs.mkdtemp(path.join(os.tmpdir(), 'bmad-tf-regwf-'));
+    registryPath = path.join(tmpDir, 'agent-registry.js');
+    await fs.writeFile(registryPath, buildRegistryContent(), 'utf8');
+  });
+
+  after(async () => { await fs.remove(tmpDir); });
+
+  it('appends new workflow to existing WORKFLOWS block', async () => {
+    const result = await appendWorkflowToBlock('test-team', 'new-analysis', 'alpha-analyzer', registryPath, { skipDirtyCheck: true });
+
+    assert.equal(result.success, true);
+    assert.deepEqual(result.written, ['new-analysis']);
+    assert.equal(result.rollbackApplied, false);
+
+    // Verify file contains new workflow
+    const content = await fs.readFile(registryPath, 'utf8');
+    assert.ok(content.includes("name: 'new-analysis'"));
+    assert.ok(content.includes("name: 'data-analysis'"), 'existing workflow preserved');
+
+    // Verify require() works
+    delete require.cache[registryPath];
+    const mod = require(registryPath);
+    assert.equal(mod.TEST_TEAM_WORKFLOWS.length, 2);
+    assert.equal(mod.TEST_TEAM_WORKFLOWS[1].name, 'new-analysis');
+    assert.equal(mod.TEST_TEAM_WORKFLOWS[1].agent, 'alpha-analyzer');
+  });
+});
+
+describe('appendWorkflowToBlock — idempotency', () => {
+  let tmpDir, registryPath;
+
+  before(async () => {
+    tmpDir = await fs.mkdtemp(path.join(os.tmpdir(), 'bmad-tf-regwf-'));
+    registryPath = path.join(tmpDir, 'agent-registry.js');
+    await fs.writeFile(registryPath, buildRegistryContent(), 'utf8');
+  });
+
+  after(async () => { await fs.remove(tmpDir); });
+
+  it('skips when workflow already exists in block', async () => {
+    const result = await appendWorkflowToBlock('test-team', 'data-analysis', 'alpha-analyzer', registryPath, { skipDirtyCheck: true });
+
+    assert.equal(result.success, true);
+    assert.deepEqual(result.skipped, ['workflow already exists in block']);
+    assert.deepEqual(result.written, []);
+  });
+});
+
+describe('appendWorkflowToBlock — team not found', () => {
+  let tmpDir, registryPath;
+
+  before(async () => {
+    tmpDir = await fs.mkdtemp(path.join(os.tmpdir(), 'bmad-tf-regwf-'));
+    registryPath = path.join(tmpDir, 'agent-registry.js');
+    await fs.writeFile(registryPath, buildRegistryContent(), 'utf8');
+  });
+
+  after(async () => { await fs.remove(tmpDir); });
+
+  it('fails when team WORKFLOWS block does not exist', async () => {
+    const result = await appendWorkflowToBlock('nonexistent-team', 'new-analysis', 'alpha-analyzer', registryPath, { skipDirtyCheck: true });
+
+    assert.equal(result.success, false);
+    assert.ok(result.errors[0].includes('Team block not found'));
+  });
+});
+
+describe('appendWorkflowToBlock — input validation', () => {
+  it('fails with empty teamNameKebab', async () => {
+    const result = await appendWorkflowToBlock('', 'new-analysis', 'alpha-analyzer', '/fake/path');
+    assert.equal(result.success, false);
+    assert.ok(result.errors[0].includes('teamNameKebab is required'));
+  });
+
+  it('fails with empty workflowName', async () => {
+    const result = await appendWorkflowToBlock('test-team', '', 'alpha-analyzer', '/fake/path');
+    assert.equal(result.success, false);
+    assert.ok(result.errors[0].includes('workflowName is required'));
+  });
+
+  it('fails with empty agentId', async () => {
+    const result = await appendWorkflowToBlock('test-team', 'new-analysis', '', '/fake/path');
+    assert.equal(result.success, false);
+    assert.ok(result.errors[0].includes('agentId is required'));
   });
 });
