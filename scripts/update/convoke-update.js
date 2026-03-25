@@ -54,7 +54,7 @@ function assessUpdate(projectRoot) {
   const breakingChanges = registry.getBreakingChanges(currentVersion);
 
   if (migrations.length === 0) {
-    return { action: 'no-migrations', currentVersion, targetVersion };
+    return { action: 'refresh-only', currentVersion, targetVersion };
   }
 
   return {
@@ -144,14 +144,59 @@ async function main() {
       process.exit(1);
       break;
 
-    case 'no-migrations':
-      console.log(chalk.yellow('No migrations needed (versions compatible)'));
-      console.log('');
-      process.exit(0);
-      break;
-
+    case 'refresh-only':
     case 'upgrade':
       break; // Continue below
+  }
+
+  // Refresh-only: no migration deltas, just update files to latest version
+  if (assessment.action === 'refresh-only') {
+    console.log(chalk.cyan('Update Plan:'));
+    console.log(`  From: ${chalk.red(assessment.currentVersion)}`);
+    console.log(`  To:   ${chalk.green(assessment.targetVersion)}`);
+    console.log('');
+    console.log(chalk.cyan('No migration deltas needed — refreshing installation files.'));
+    console.log('');
+
+    if (dryRun) {
+      console.log(chalk.yellow.bold('DRY RUN — no changes will be made'));
+      console.log('');
+      process.exit(0);
+    }
+
+    if (!yes) {
+      console.log(chalk.cyan('Your data will be backed up automatically.'));
+      console.log('');
+      const confirmed = await confirm('Proceed with update?');
+      if (!confirmed) {
+        console.log('');
+        console.log(chalk.yellow('Update cancelled.'));
+        console.log('');
+        process.exit(0);
+      }
+    }
+
+    console.log('');
+    console.log(chalk.cyan.bold('Starting update...'));
+
+    try {
+      const result = await migrationRunner.runRefreshOnly(assessment.currentVersion, { verbose });
+
+      console.log('');
+      console.log(chalk.green.bold('✓ Update completed successfully!'));
+      console.log('');
+      console.log(chalk.cyan('Changes applied:'));
+      result.changes.forEach(change => {
+        console.log(chalk.green(`  ✓ ${change}`));
+      });
+      console.log('');
+      console.log(chalk.gray(`Backup location: ${result.backupMetadata.backup_dir}`));
+      console.log('');
+    } catch (_error) {
+      process.exit(1);
+    }
+
+    process.exit(0);
   }
 
   // Show migration plan
