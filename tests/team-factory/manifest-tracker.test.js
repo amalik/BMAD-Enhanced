@@ -222,3 +222,67 @@ describe('buildExtensionManifest', () => {
     assert.ok(instructions.includes('git checkout -- "scripts/update/lib/agent-registry.js"'));
   });
 });
+
+// ══════════════════════════════════════════════════════════════════════
+// buildSkillExtensionManifest tests
+// ══════════════════════════════════════════════════════════════════════
+
+function buildSkillContext() {
+  return {
+    new_workflow_name: 'new-analysis',
+    agent_id: 'alpha-analyzer',
+    new_workflow_files: [
+      '_bmad/bme/_test-team/workflows/new-analysis/workflow.md',
+      '_bmad/bme/_test-team/workflows/new-analysis/new-analysis.template.md',
+    ],
+    agent_file_path: '_bmad/bme/_test-team/agents/alpha-analyzer.md',
+    config_yaml_path: '_bmad/bme/_test-team/config.yaml',
+    module_help_csv_path: '_bmad/bme/_test-team/module-help.csv',
+  };
+}
+
+describe('buildSkillExtensionManifest', () => {
+  it('produces correct entry count', () => {
+    const manifest = buildSkillExtensionManifest(buildSkillContext());
+    // 2 workflow files (created) + 1 agent .md (modified) + 1 config (modified) + 1 csv (modified) + 1 registry (modified) = 6
+    assert.equal(manifest.length, 6);
+  });
+
+  it('marks workflow files as created and shared files as modified', () => {
+    const manifest = buildSkillExtensionManifest(buildSkillContext());
+
+    const wfFiles = manifest.filter(e => e.path.includes('workflows/new-analysis'));
+    assert.equal(wfFiles.length, 2);
+    assert.ok(wfFiles.every(e => e.operation === 'created'));
+
+    const agentFile = manifest.find(e => e.path.includes('agents/alpha-analyzer.md'));
+    assert.ok(agentFile);
+    assert.equal(agentFile.operation, 'modified');
+
+    const config = manifest.find(e => e.path.includes('config.yaml'));
+    assert.ok(config);
+    assert.equal(config.operation, 'modified');
+
+    const registry = manifest.find(e => e.path === 'scripts/update/lib/agent-registry.js');
+    assert.ok(registry);
+    assert.equal(registry.operation, 'modified');
+  });
+
+  it('uses new_workflow_name as module name', () => {
+    const manifest = buildSkillExtensionManifest(buildSkillContext());
+    assert.ok(manifest.every(e => e.module === 'new-analysis'));
+  });
+
+  it('produces correct abort instructions for skill extension', () => {
+    const manifest = buildSkillExtensionManifest(buildSkillContext());
+    const instructions = formatAbortInstructions(manifest);
+
+    // New workflow files get rm
+    assert.ok(instructions.includes('rm "_bmad/bme/_test-team/workflows/new-analysis/workflow.md"'));
+
+    // Modified files get git checkout
+    assert.ok(instructions.includes('git checkout -- "_bmad/bme/_test-team/agents/alpha-analyzer.md"'));
+    assert.ok(instructions.includes('git checkout -- "_bmad/bme/_test-team/config.yaml"'));
+    assert.ok(instructions.includes('git checkout -- "scripts/update/lib/agent-registry.js"'));
+  });
+});
