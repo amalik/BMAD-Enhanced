@@ -260,19 +260,19 @@ The [Enhance Guide](_bmad/bme/_enhance/guides/ENHANCE-GUIDE.md) documents the co
 **Everything (Vortex + Gyre):**
 
 ```bash
-npm install convoke-agents && npx -p convoke-agents convoke-install
+npm install convoke-agents@latest && npx -p convoke-agents convoke-install
 ```
 
 **Vortex only:**
 
 ```bash
-npm install convoke-agents && npx -p convoke-agents convoke-install-vortex
+npm install convoke-agents@latest && npx -p convoke-agents convoke-install-vortex
 ```
 
 **Gyre only:**
 
 ```bash
-npm install convoke-agents && npx -p convoke-agents convoke-install-gyre
+npm install convoke-agents@latest && npx -p convoke-agents convoke-install-gyre
 ```
 
 Something not working? Run `npx -p convoke-agents convoke-doctor` or check the [FAQ](docs/faq.md).
