@@ -3,6 +3,7 @@
 const fs = require('fs-extra');
 const path = require('path');
 const { CSV_HEADER, formatCsvRow, csvQuote, deriveCode, toTitleCase } = require('./csv-creator');
+const { checkDirtyTree } = require('./registry-writer');
 
 /** @typedef {import('../types/factory-types').CreatorResult} CreatorResult */
 
@@ -19,9 +20,11 @@ const { CSV_HEADER, formatCsvRow, csvQuote, deriveCode, toTitleCase } = require(
  * @param {string} rowData.outputLocation - Output directory
  * @param {number} [rowData.sequence] - Optional sequence number (auto-derived if omitted)
  * @param {string} csvPath - Absolute path to existing module-help.csv
+ * @param {Object} [options]
+ * @param {boolean} [options.skipDirtyCheck] - Skip git dirty-tree detection (for tests)
  * @returns {Promise<CreatorResult>}
  */
-async function appendCsvRow(rowData, csvPath) {
+async function appendCsvRow(rowData, csvPath, options = {}) {
   if (!rowData || !rowData.agentId) {
     return { success: false, filePath: csvPath, rowCount: 0, errors: ['rowData with agentId is required'] };
   }
@@ -29,6 +32,14 @@ async function appendCsvRow(rowData, csvPath) {
   // --- Read existing CSV ---
   if (!await fs.pathExists(csvPath)) {
     return { success: false, filePath: csvPath, rowCount: 0, errors: ['module-help.csv does not exist at target path'] };
+  }
+
+  // --- Dirty-tree detection (per-write) ---
+  if (!options.skipDirtyCheck) {
+    const dirtyResult = checkDirtyTree(csvPath);
+    if (dirtyResult.dirty) {
+      return { success: false, filePath: csvPath, rowCount: 0, errors: [], dirty: true, diff: dirtyResult.diff };
+    }
   }
 
   let content;
