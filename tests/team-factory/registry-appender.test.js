@@ -223,4 +223,18 @@ describe('findArrayClose', () => {
     const idx = findArrayClose(content, 0);
     assert.equal(idx, -1);
   });
+
+  it('skips line comments containing brackets', () => {
+    const content = "const X = [\n  { id: 'a' }, // end ]\n];";
+    const idx = findArrayClose(content, 0);
+    assert.equal(content[idx], ']');
+    assert.equal(content[idx + 1], ';');
+  });
+
+  it('skips block comments containing brackets', () => {
+    const content = "const X = [\n  /* [nested] */\n  { id: 'a' },\n];";
+    const idx = findArrayClose(content, 0);
+    assert.equal(content[idx], ']');
+    assert.equal(content[idx + 1], ';');
+  });
 });
