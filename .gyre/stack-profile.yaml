@@ -6,16 +6,25 @@ source_workflow: stack-detection
 target_agents: [atlas, lens]
 input_artifacts: []
 created: 2026-03-24
+updated: 2026-03-25
 ---
 
 stack_profile:
   primary_language: "Node.js"
   primary_framework: "none"
-  secondary_stacks: []
+  secondary_stacks:
+    - language: "Python"
+      role: "Builder/quality toolchain scripts"
+      scope: "BMB module (agent-builder, workflow-builder, builder-setup), Core module (bmad-init, distillator)"
+      file_count: 46
+      test_framework: "pytest/unittest"
+      has_ci_coverage: false
+      has_linting: false
+      has_dependency_management: false
   container_orchestration: "none"
   ci_cd_platform: "GitHub Actions"
   observability_tooling: []
   cloud_provider: "none"
   communication_protocol: "not applicable"
   detection_confidence: "high"
-  detection_summary: "Node.js npm package (convoke-agents) providing CLI tools and agent definition files. Distributed via npm with GitHub Actions CI/CD (lint, multi-version test matrix, coverage, security audit, npm publish). No container, orchestration, observability, cloud, or communication protocol — this is a developer toolkit, not a deployed service."
+  detection_summary: "Node.js npm package (convoke-agents) providing CLI tools and agent definition files. Distributed via npm with GitHub Actions CI/CD (lint, multi-version test matrix, burn-in, coverage, security audit, npm publish with provenance). Secondary Python stack (46 files, ~33% of codebase) powers builder/quality scripts in BMB and Core modules — prepass analysis, config merging, legacy cleanup, distillation. Python scripts are invoked by LLM agent runtime, not by npm CLI commands. Python has local tests (pytest/unittest) but no CI integration, no linting, and no dependency management file."
