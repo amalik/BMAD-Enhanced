@@ -1,6 +1,6 @@
 # Story 3.1: Add Agent to Existing Team
 
-Status: ready-for-dev
+Status: in-progress
 
 ## Story
 
