@@ -378,8 +378,108 @@ class MigrationError extends Error {
   }
 }
 
+/**
+ * Refresh-only update: no migration deltas, just backup + refresh + validate.
+ * Used when upgrading between versions that have no registered migration deltas.
+ * @param {string} fromVersion - Current installed version
+ * @param {object} options - Options { verbose }
+ * @returns {Promise<object>} Update result
+ */
+async function runRefreshOnly(fromVersion, options = {}) {
+  const { verbose = false } = options;
+  const toVersion = getPackageVersion();
+
+  const projectRoot = findProjectRoot();
+  if (!projectRoot) {
+    throw new Error('Not in a Convoke project. Could not find _bmad/ directory.');
+  }
+
+  // 1. Acquire lock
+  await acquireMigrationLock(projectRoot);
+
+  let backupMetadata = null;
+
+  try {
+    // 2. Create backup
+    console.log(chalk.cyan('[1/3] Creating backup...'));
+    backupMetadata = await backupManager.createBackup(fromVersion, projectRoot);
+    console.log(chalk.green(`✓ Backup created: ${path.basename(backupMetadata.backup_dir)}`));
+    console.log('');
+
+    // 3. Refresh installation
+    console.log(chalk.cyan('[2/3] Refreshing installation files...'));
+    const changes = await refreshInstallation(projectRoot, { verbose });
+    console.log(chalk.green('✓ Installation refreshed'));
+    console.log('');
+
+    // 4. Validate
+    console.log(chalk.cyan('[3/3] Validating installation...'));
+    const validationResult = await validator.validateInstallation(backupMetadata, projectRoot);
+
+    validationResult.checks.forEach(check => {
+      if (check.passed) {
+        console.log(chalk.green(`  ✓ ${check.name}`));
+        if (check.info || check.warning) {
+          console.log(chalk.gray(`    ${check.info || check.warning}`));
+        }
+      } else {
+        console.log(chalk.red(`  ✗ ${check.name}`));
+        if (check.error) {
+          console.log(chalk.red(`    Error: ${check.error}`));
+        }
+      }
+    });
+    console.log('');
+
+    if (!validationResult.valid) {
+      throw new Error('Installation validation failed');
+    }
+
+    console.log(chalk.green('✓ Installation validated'));
+    console.log('');
+
+    // 5. Cleanup old backups
+    const deletedCount = await backupManager.cleanupOldBackups(5, projectRoot);
+    if (deletedCount > 0) {
+      console.log(chalk.green(`✓ Cleaned up ${deletedCount} old backup(s)`));
+    }
+
+    // Release lock
+    await releaseMigrationLock(projectRoot);
+
+    return {
+      success: true,
+      fromVersion,
+      toVersion,
+      changes,
+      backupMetadata
+    };
+
+  } catch (error) {
+    console.error('');
+    console.error(chalk.red.bold('✗ Update failed!'));
+    console.error(chalk.red(error.message));
+    console.error('');
+
+    if (backupMetadata) {
+      console.log(chalk.yellow('Restoring from backup...'));
+      try {
+        await backupManager.restoreBackup(backupMetadata, projectRoot);
+        console.log(chalk.green('✓ Installation restored from backup'));
+      } catch (restoreError) {
+        console.error(chalk.red('✗ Restore failed!'));
+        console.error(chalk.yellow(`Manual restore may be needed from: ${backupMetadata.backup_dir}`));
+      }
+    }
+
+    await releaseMigrationLock(projectRoot);
+    throw error;
+  }
+}
+
 module.exports = {
   runMigrations,
+  runRefreshOnly,
   previewMigrations,
   executeMigration,
   MigrationError
