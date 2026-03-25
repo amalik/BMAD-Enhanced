@@ -26,20 +26,20 @@ describe('checkStaleReferences', () => {
   const workflowCount = WORKFLOWS.length; // 22
 
   it('detects stale digit agent count', () => {
-    const content = 'We support 4 agents in the Vortex.';
+    const content = 'We support 5 agents in the Vortex.';
     const findings = checkStaleReferences(content, 'test.md');
     assert.equal(findings.length, 1);
     assert.equal(findings[0].category, 'stale-reference');
-    assert.equal(findings[0].current, '4 agents');
+    assert.equal(findings[0].current, '5 agents');
     assert.equal(findings[0].expected, `${agentCount} agents`);
     assert.equal(findings[0].line, 1);
   });
 
   it('detects stale written-out agent count', () => {
-    const content = 'The system has four agents.';
+    const content = 'The system has five agents.';
     const findings = checkStaleReferences(content, 'test.md');
     assert.equal(findings.length, 1);
-    assert.equal(findings[0].current, 'four agents');
+    assert.equal(findings[0].current, 'five agents');
   });
 
   it('does not flag correct agent count', () => {
@@ -94,16 +94,16 @@ describe('checkStaleReferences', () => {
   });
 
   it('reports correct file path and line number', () => {
-    const content = 'Line 1\nLine 2\nWe have 4 agents here\nLine 4';
+    const content = 'Line 1\nLine 2\nWe have 5 agents here\nLine 4';
     const findings = checkStaleReferences(content, 'docs/test.md');
     assert.equal(findings[0].file, 'docs/test.md');
     assert.equal(findings[0].line, 3);
   });
 
   it('detects multiple findings in single file', () => {
-    const content = 'We have 4 agents and 13 workflows.\nPlus the original agents.';
+    const content = 'We have 5 agents and 13 workflows.\nPlus the original agents.';
     const findings = checkStaleReferences(content, 'test.md');
-    assert.ok(findings.length >= 3); // 4 agents, 13 workflows, original agents
+    assert.ok(findings.length >= 3); // 5 agents, 13 workflows, original agents
   });
 
   it('returns empty array for clean content', () => {
