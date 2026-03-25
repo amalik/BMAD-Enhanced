@@ -115,6 +115,13 @@ async function refreshInstallation(projectRoot, options = {}) {
 
     if (!isSameRoot) {
       await fs.copy(packageEnhance, targetEnhance, { overwrite: true });
+      // Stamp enhance config version to match package version
+      const targetEnhanceConfig = path.join(targetEnhance, 'config.yaml');
+      if (fs.existsSync(targetEnhanceConfig)) {
+        const ecContent = yaml.load(fs.readFileSync(targetEnhanceConfig, 'utf8'));
+        ecContent.version = version;
+        fs.writeFileSync(targetEnhanceConfig, yaml.dump(ecContent, { lineWidth: -1 }), 'utf8');
+      }
       changes.push('Refreshed Enhance module: _bmad/bme/_enhance/');
       if (verbose) console.log('    Refreshed Enhance module: _bmad/bme/_enhance/');
     } else {
