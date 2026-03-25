@@ -5,7 +5,7 @@ const fs = require('fs-extra');
 const os = require('os');
 const yaml = require('js-yaml');
 
-const { validateExtension } = require('../../_bmad/bme/_team-factory/lib/validators/end-to-end-validator');
+const { validateExtension, validateSkillExtension } = require('../../_bmad/bme/_team-factory/lib/validators/end-to-end-validator');
 const { CSV_HEADER } = require('../../_bmad/bme/_team-factory/lib/writers/csv-creator');
 
 const PROJECT_ROOT = path.resolve(__dirname, '../..');
