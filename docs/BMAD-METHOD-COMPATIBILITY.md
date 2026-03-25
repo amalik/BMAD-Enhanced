@@ -96,12 +96,13 @@ your-project/
 
 ### Current Version
 
-**Convoke v2.4.0**
+**Convoke v3.0.0**
 - Compatible with: BMAD Method v1.x (optional — works standalone)
 - Creates `_bmad/` directory automatically if missing
 - Optional detection: BMAD Method config (bmad.yaml in _bmad/_config/)
 - Teams: Vortex (7 agents), Gyre (4 agents)
 - Skills: Enhance (initiatives-backlog)
+- Team Factory: guided team creation, add-agent, add-skill extensions
 
 ### Detection Logic
 
@@ -158,6 +159,7 @@ Convoke installers check:
 
 | Convoke Version | Compatible BMAD Method Versions | Notes |
 |----------------------|--------------------------------|-------|
+| 3.0.0                | 1.x (optional — works standalone) | Team Factory extensions, multi-team docs-audit, extension validator |
 | 2.4.0                | 1.x (optional — works standalone) | Enhance module, Gyre team (4 agents), Team Factory, skill validator |
 | 2.3.x                | 1.x (optional — works standalone) | Enhance module, skills architecture |
 | 2.0.0                | 1.x (optional — works standalone) | Product renamed to Convoke, CLI commands: `convoke-*` |
@@ -368,6 +370,6 @@ Convoke includes automated test coverage:
 
 ---
 
-**Version:** 2.4.0
-**Last Updated:** 2026-03-24
+**Version:** 3.0.0
+**Last Updated:** 2026-03-25
 **Status:** Living Document (update as needed)
