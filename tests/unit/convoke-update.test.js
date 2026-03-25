@@ -187,7 +187,7 @@ describe('assessUpdate', () => {
     }
   });
 
-  it('returns no-migrations when version has no applicable migrations', async () => {
+  it('returns refresh-only when version has no applicable migrations', async () => {
     const tmpDir = await createTempDir('bmad-assess-');
     try {
       await createValidInstallation(tmpDir);
@@ -198,7 +198,7 @@ describe('assessUpdate', () => {
       fs.writeFileSync(configPath, yaml.dump(config), 'utf8');
 
       const result = assessUpdate(tmpDir);
-      assert.equal(result.action, 'no-migrations');
+      assert.equal(result.action, 'refresh-only');
       assert.equal(result.currentVersion, '0.9.0');
     } finally {
       await fs.remove(tmpDir);
@@ -369,7 +369,7 @@ describe('convoke-update CLI (main)', () => {
     }
   });
 
-  it('exits 0 for no-migrations scenario', async () => {
+  it('shows update plan for refresh-only scenario', async () => {
     const tmpDir = await createTempDir('bmad-cli-');
     try {
       await createValidInstallation(tmpDir);
@@ -379,9 +379,8 @@ describe('convoke-update CLI (main)', () => {
       config.version = '0.9.0';
       fs.writeFileSync(configPath, yaml.dump(config), 'utf8');
 
-      const { exitCode, stdout } = await runScript(SCRIPT_PATH, [], { cwd: tmpDir });
-      assert.equal(exitCode, 0);
-      assert.ok(stdout.includes('No migrations needed'), 'should indicate no migrations');
+      const { stdout } = await runScript(SCRIPT_PATH, ['--dry-run'], { cwd: tmpDir });
+      assert.ok(stdout.includes('No migration deltas needed'), 'should indicate refresh-only');
     } finally {
       await fs.remove(tmpDir);
     }
