@@ -7,6 +7,22 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [3.0.0] - 2026-03-25
+
+### Added
+
+- **Team Factory extension workflows** — Add Agent (`step-add-agent.md`) and Add Skill (`step-add-skill.md`) workflows for extending existing teams and agents
+- **Appender modules** — `registry-appender.js`, `config-appender.js`, `csv-appender.js` for automated wiring when adding agents or skills to existing teams
+- **Extension validator** — `validateSkillExtension()` and `buildSkillExtensionManifest()` for validating factory-generated extensions
+- **Multi-team docs-audit** — `checkStaleReferences()` now validates against all registered teams (Vortex + Gyre) instead of only Vortex, eliminating false positives for Gyre references
+
+### Fixed
+
+- **docs-audit false positives** — 39 false-positive stale reference findings caused by audit only knowing Vortex counts (7 agents, 22 workflows). Now uses registry-driven valid count Sets for all teams.
+- **Brand reference false positives** — Lines documenting the historical rename (`bmad-enhanced → convoke-agents`) no longer flagged as stale brand references
+
+---
+
 ## [2.4.0] - 2026-03-15
 
 ### Added
