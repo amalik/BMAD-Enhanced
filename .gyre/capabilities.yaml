@@ -112,7 +112,7 @@ gyre_manifest:
       name: "Semantic Versioning Discipline"
       description: "Version bumps follow semver conventions: breaking changes = major, new features = minor, fixes = patch. Enables users to trust update safety."
       source: "standard"
-      relevance: "Package is at v2.4.0. Migration system and update system depend on version comparison (compareVersions). Semver violations break update detection."
+      relevance: "Package is at v3.0.0. Migration system and update system depend on version comparison (compareVersions). Semver violations break update detection."
       amended: false
       removed: false
 
