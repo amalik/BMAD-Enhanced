@@ -271,6 +271,6 @@ development_status:
 
   # Epic 3: Extensions — Add Agent & Add Skill
   tf-epic-3: in-progress
-  tf-3-1-add-agent-to-existing-team: review
+  tf-3-1-add-agent-to-existing-team: done
   tf-3-2-add-skill-workflow-to-existing-agent: backlog
   tf-epic-3-retrospective: optional
