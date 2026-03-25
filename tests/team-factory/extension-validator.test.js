@@ -296,3 +296,175 @@ describe('validateExtension — new workflow dir', () => {
     assert.ok(check, 'should have failed WORKFLOW-DIR-EXISTS check');
   });
 });
+
+// ══════════════════════════════════════════════════════════════════════
+// validateSkillExtension tests
+// ══════════════════════════════════════════════════════════════════════
+
+/**
+ * Build a fully-passing skill extension context in a temp directory.
+ * Simulates adding a new-analysis workflow to an existing agent.
+ */
+async function buildSkillContext(tmpDir) {
+  const moduleRoot = path.join(tmpDir, '_bmad/bme/_test-team');
+
+  // Existing workflow dir (already present)
+  const existingWfDir = path.join(moduleRoot, 'workflows/data-analysis');
+  await fs.ensureDir(existingWfDir);
+  await fs.writeFile(path.join(existingWfDir, 'workflow.md'), 'existing', 'utf8');
+
+  // New workflow files (created by skill extension)
+  const newWfDir = path.join(moduleRoot, 'workflows/new-analysis');
+  await fs.ensureDir(newWfDir);
+  const newWfFile = path.join(newWfDir, 'workflow.md');
+  const newTemplateFile = path.join(newWfDir, 'new-analysis.template.md');
+  await fs.writeFile(newWfFile, '---\nname: new-analysis\n---\nnew workflow', 'utf8');
+  await fs.writeFile(newTemplateFile, '# Template', 'utf8');
+
+  // Config.yaml with both workflows (modified)
+  const configPath = path.join(moduleRoot, 'config.yaml');
+  const configData = {
+    submodule_name: '_test-team',
+    module: 'bme',
+    agents: ['alpha-analyzer'],
+    workflows: ['data-analysis', 'new-analysis'],
+  };
+  await fs.writeFile(configPath, yaml.dump(configData), 'utf8');
+
+  // Module-help.csv with both workflows (modified)
+  const csvPath = path.join(moduleRoot, 'module-help.csv');
+  const csvRows = [
+    CSV_HEADER,
+    'bme/_test-team,anytime,Data Analysis,DA,10,workflow.md,bmad-test-team-data-analysis,false,alpha-analyzer,Create Mode,Analyzes data,{project-root}/_bmad-output/test-team-artifacts,data-analysis,',
+    'bme/_test-team,anytime,New Analysis,NA,20,workflow.md,bmad-test-team-new-analysis,false,alpha-analyzer,Create Mode,New analysis,{project-root}/_bmad-output/test-team-artifacts,new-analysis,',
+  ];
+  await fs.writeFile(csvPath, csvRows.join('\n') + '\n', 'utf8');
+
+  return {
+    module_root: moduleRoot,
+    config_yaml_path: configPath,
+    module_help_csv_path: csvPath,
+    new_workflow_name: 'new-analysis',
+    agent_id: 'alpha-analyzer',
+    existing_workflow_names: ['data-analysis'],
+    new_workflow_files: [newWfFile, newTemplateFile],
+    registry_append_result: {
+      success: true,
+      written: ['new-analysis'],
+      skipped: [],
+      errors: [],
+      rollbackApplied: false,
+    },
+    config_append_result: {
+      success: true,
+      errors: [],
+    },
+    csv_append_result: {
+      success: true,
+      rowCount: 2,
+      errors: [],
+    },
+  };
+}
+
+describe('validateSkillExtension — happy path', () => {
+  let tmpDir;
+
+  before(async () => {
+    tmpDir = await fs.mkdtemp(path.join(os.tmpdir(), 'bmad-tf-skillval-'));
+  });
+
+  after(async () => { await fs.remove(tmpDir); });
+
+  it('all checks pass when skill extension is valid', async () => {
+    const ctx = await buildSkillContext(tmpDir);
+
+    const result = await validateSkillExtension(ctx, PROJECT_ROOT);
+
+    // All skill-extension-specific checks should pass
+    const skillChecks = result.checks.filter(c =>
+      c.stepName === 'skill-extension' || c.stepName === 'skill-extension-regression'
+    );
+    assert.ok(skillChecks.length > 0, 'should have skill extension checks');
+    for (const check of skillChecks) {
+      assert.equal(check.passed, true, `${check.name} should pass but got: ${check.actual}`);
+    }
+  });
+});
+
+describe('validateSkillExtension — workflow registry append', () => {
+  let tmpDir;
+
+  before(async () => {
+    tmpDir = await fs.mkdtemp(path.join(os.tmpdir(), 'bmad-tf-skillval-'));
+  });
+
+  after(async () => { await fs.remove(tmpDir); });
+
+  it('fails when registry append result is unsuccessful', async () => {
+    const ctx = await buildSkillContext(tmpDir);
+    ctx.registry_append_result = {
+      success: false,
+      written: [],
+      errors: ['WORKFLOWS block not found'],
+      rollbackApplied: true,
+    };
+
+    const result = await validateSkillExtension(ctx, PROJECT_ROOT);
+
+    assert.equal(result.valid, false);
+    const check = result.checks.find(c => c.name === 'WORKFLOW-REGISTRY-APPEND');
+    assert.ok(check);
+    assert.equal(check.passed, false);
+  });
+});
+
+describe('validateSkillExtension — workflow file exists', () => {
+  let tmpDir;
+
+  before(async () => {
+    tmpDir = await fs.mkdtemp(path.join(os.tmpdir(), 'bmad-tf-skillval-'));
+  });
+
+  after(async () => { await fs.remove(tmpDir); });
+
+  it('fails when new workflow file is missing', async () => {
+    const ctx = await buildSkillContext(tmpDir);
+
+    // Remove one new workflow file
+    await fs.remove(ctx.new_workflow_files[0]);
+
+    const result = await validateSkillExtension(ctx, PROJECT_ROOT);
+
+    assert.equal(result.valid, false);
+    const check = result.checks.find(c => c.name === 'WORKFLOW-FILE-EXISTS' && !c.passed);
+    assert.ok(check, 'should have failed WORKFLOW-FILE-EXISTS check');
+  });
+});
+
+describe('validateSkillExtension — existing workflows unchanged', () => {
+  let tmpDir;
+
+  before(async () => {
+    tmpDir = await fs.mkdtemp(path.join(os.tmpdir(), 'bmad-tf-skillval-'));
+  });
+
+  after(async () => { await fs.remove(tmpDir); });
+
+  it('fails when existing workflow missing from config', async () => {
+    const ctx = await buildSkillContext(tmpDir);
+
+    // Rewrite config without existing workflow
+    const config = yaml.load(await fs.readFile(ctx.config_yaml_path, 'utf8'));
+    config.workflows = ['new-analysis']; // removed data-analysis
+    await fs.writeFile(ctx.config_yaml_path, yaml.dump(config), 'utf8');
+
+    const result = await validateSkillExtension(ctx, PROJECT_ROOT);
+
+    assert.equal(result.valid, false);
+    const check = result.checks.find(c => c.name === 'EXISTING-WORKFLOWS-CONFIG');
+    assert.ok(check);
+    assert.equal(check.passed, false);
+    assert.ok(check.actual.includes('data-analysis'));
+  });
+});
