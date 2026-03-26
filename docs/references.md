@@ -348,7 +348,339 @@
 
 ---
 
-## 11. Prospective Research Directions
+## 11. Strategy & Competitive Analysis
+
+**Project relevance:** Proposed Compass module — strategic positioning upstream of Vortex discovery.
+
+- Porter, M. E. (1980). *Competitive Strategy: Techniques for Analyzing Industries and Competitors*. Free Press. ISBN: 9780029253305
+  — Five Forces framework for industry structure analysis. Foundation for competitive landscape assessment.
+
+- Kim, W. C. & Mauborgne, R. (2005). *Blue Ocean Strategy: How to Create Uncontested Market Space and Make the Competition Irrelevant*. Harvard Business School Press. ISBN: 1591396190
+  — Value innovation framework contrasting competition in existing markets with creation of uncontested market space.
+
+- Lafley, A. G. & Martin, R. L. (2013). *Playing to Win: How Strategy Really Works*. Harvard Business Review Press. ISBN: 9781422187395
+  — Strategy Choice Cascade: winning aspiration, where to play, how to win, capabilities, management systems.
+
+- Rumelt, R. P. (2011). *Good Strategy/Bad Strategy: The Difference and Why It Matters*. Crown Business. ISBN: 9780307886231
+  — Coherent strategy framework: diagnosis + guiding policy + coherent actions.
+
+- Wardley, S. (2018). *Wardley Maps*. Self-published/Creative Commons. https://wardleymaps.com/
+  — Strategic landscape visualization through value chain positioning and component evolution.
+
+- Osterwalder, A. & Pigneur, Y. (2010). *Business Model Generation*. Wiley. ISBN: 9780470876411
+  — Business Model Canvas as shared language for business model description and iteration.
+
+---
+
+## 12. Delivery & Release Management
+
+**Project relevance:** Proposed Launch module — bridging Gyre readiness to production deployment.
+
+- Hodgson, P. & Echagüe, P. (2020). *Feature Flag Best Practices*. O'Reilly. ISBN: 9781492050452
+  — Eight best practices for feature flags enabling decoupling of deployment from release.
+
+- Hodgson, P. (2012–present). "Feature Toggles (aka Feature Flags)." *Martin Fowler's bliki*. https://martinfowler.com/articles/feature-toggles.html
+  — Comprehensive reference on feature toggle patterns and lifecycle management.
+
+---
+
+## 13. Growth, Adoption & Product Analytics
+
+**Project relevance:** Proposed Amplify module — post-launch product growth and user adoption.
+
+- Bush, W. (2019). *Product-Led Growth: How to Build a Product That Sells Itself*. ProductLed Library. ISBN: 9781798434529
+  — Product-driven acquisition and expansion framework.
+
+- McClure, D. (2007). "AARRR! Pirate Metrics for Startups." Lean Analytics.
+  — Five-stage growth funnel: Acquisition, Activation, Retention, Referral, Revenue.
+
+- Ellis, S. (2013). "Finding Your North Star Metric." *Growth Hackers*. https://medium.com/growthhackers/finding-your-north-star-metric-fc1c1f71cbcb
+  — Single metric framework capturing core value delivered.
+
+- Traynor, D., Adams, P. & Keating, G. (2016). *Intercom on Jobs-to-be-Done*. Intercom Books.
+  — JTBD applied to product marketing, onboarding, and feature adoption.
+
+---
+
+## 14. Operations & Resilience
+
+**Project relevance:** Proposed Sentinel module — operational follow-through from Gyre readiness.
+
+- Rosenthal, C. et al. (2020). *Chaos Engineering: System Resiliency in Practice*. O'Reilly.
+  — Proactive resilience testing through controlled failure injection.
+
+- PagerDuty. (2015–ongoing). *Incident Response Documentation*. https://response.pagerduty.com/
+  — Best practices for incident response, runbook automation, escalation patterns.
+
+- Woods, D. D. (2017). "STELLA: Report from the SNAFUcatchers Workshop on Coping With Complexity." Ohio State University.
+  — Complex systems thinking applied to incident analysis. Beyond root cause to systemic understanding.
+
+- Mehta, N., Steinman, D. & Murphy, L. (2016). *Customer Success: How Innovative Companies Are Reducing Churn and Growing Recurring Revenue*. Wiley. ISBN: 9781119167969
+  — Customer Success as post-sale function maximizing lifetime value and retention.
+
+---
+
+## 15. Security & Compliance
+
+**Project relevance:** Proposed Shield module — proactive security across the lifecycle.
+
+- Shostack, A. (2014). *Threat Modeling: Designing for Security*. Wiley. ISBN: 9781118809990
+  — STRIDE framework for systematic threat identification.
+
+- OWASP Foundation. (2021–ongoing). *DevSecOps Guideline & Maturity Model*. https://owasp.org/www-project-devsecops-guideline/
+  — Open framework for embedding security throughout the development pipeline.
+
+- NIST. (2022). *Secure Software Development Framework (SSDF)*. NIST SP 800-218.
+  — Federal standards for secure development practices.
+
+- NTIA. (2021). *Minimum Elements for a Software Bill of Materials (SBOM)*. U.S. Department of Commerce.
+  — Standardized SBOM requirements for supply chain transparency.
+
+---
+
+## 16. Active Knowledge Engineering
+
+**Project relevance:** Proposed Forge module — extract, refine, and expose organizational knowledge as consumable assets.
+
+### Knowledge Foundations
+
+- Polanyi, M. (1966). *The Tacit Dimension*. University of Chicago Press.
+  — "We can know more than we can tell." Foundational concept for tacit knowledge that requires active elicitation.
+
+- Nonaka, I. & Takeuchi, H. (1995). *The Knowledge-Creating Company*. Oxford University Press. ISBN: 9780195092691
+  — SECI model of knowledge conversion: Socialization, Externalization, Combination, Internalization. Forge operationalizes the Externalization phase at scale.
+
+- Cooke, N. J. (1994). "Varieties of Knowledge Elicitation Techniques." *International Journal of Human-Computer Studies*, 41(6), 801–849.
+  — Taxonomy of expert knowledge extraction techniques: interviews, protocol analysis, card sorting, repertory grids.
+
+- Studer, R., Benjamins, V. R. & Fensel, D. (1998). "Knowledge Engineering: Principles and Methods." *Data & Knowledge Engineering*, 25(1-2), 161–197.
+  — Formal methodology for building knowledge-based systems. The knowledge acquisition bottleneck.
+
+### Knowledge in Software Engineering
+
+- Jansen, A. & Bosch, J. (2005). "Software Architecture as a Set of Architectural Design Decisions." *Working IEEE/IFIP Conference on Software Architecture*.
+  — Architecture knowledge is the decisions and their rationale, not diagrams.
+
+- Kagdi, H., Collard, M. L. & Maletic, J. I. (2007). "A Survey and Taxonomy of Approaches for Mining Software Repositories." *Journal of Software Maintenance and Evolution*, 19(2).
+  — Systematic knowledge extraction from version control, bug trackers, and code artifacts.
+
+- Ko, A. J. et al. (2006). "An Exploratory Study of How Developers Seek, Relate, and Collect Relevant Information during Software Maintenance Tasks." *IEEE Transactions on Software Engineering*.
+  — Developer cognition during codebase navigation. Informs agent-based knowledge extraction design.
+
+- Storey, M. (2026). "How Generative and Agentic AI Shift Concern from Technical Debt to Cognitive Debt." https://margaretstorey.com/blog/2026/02/09/cognitive-debt/
+  — As AI generates more code, human understanding erodes. Knowledge extraction becomes essential to maintain organizational capability.
+
+### Knowledge Assets
+
+- Boisot, M. H. (1998). *Knowledge Assets: Securing Competitive Advantage in the Information Economy*. Oxford University Press.
+  — I-Space model: knowledge moves through codification and abstraction before diffusion. Knowledge as managed asset.
+
+- Davenport, T. H. & Prusak, L. (1998). *Working Knowledge: How Organizations Manage What They Know*. Harvard Business School Press.
+  — Knowledge market metaphors: buyers, sellers, brokers, and a price for organizational knowledge.
+
+### AI-Augmented Knowledge Extraction
+
+- Microsoft Research. (2024–ongoing). *GraphRAG: Graph-based Retrieval-Augmented Generation*. https://microsoft.github.io/graphrag/
+  — Hierarchical knowledge graph construction from unstructured text, enabling multi-hop reasoning over organizational knowledge.
+
+---
+
+## 17. Domain Mesh Architecture & Composable Patterns
+
+**Project relevance:** Domain Mesh infrastructure — how specialized disciplines (DataOps, MLOps, AgentOps) interconnect as decentralized, composable modules.
+
+### Mesh Patterns
+
+- Dehghani, Z. (2022). *Data Mesh: Delivering Data-Driven Value at Scale*. O'Reilly. ISBN: 9781492092391
+  — Four principles: domain-oriented ownership, data as a product, self-serve infrastructure, federated governance. **Primary analogy for Convoke's domain mesh.**
+
+- Istio Project / Linkerd. (2017–ongoing). *Service Mesh Architecture*. https://istio.io/ / https://linkerd.io/
+  — Sidecar proxy pattern separating infrastructure concerns from business logic. Observability, traffic management, security.
+
+- Broda, B. (2025). "Agentic Mesh: The Future of Generative AI-Enabled Autonomous Agent Ecosystems." *Medium / Data Science*. https://medium.com/data-science/agentic-mesh-the-future-of-generative-ai-enabled-autonomous-agent-ecosystems-d6a11381c979
+  — Mesh topology for AI agent ecosystems: decentralized discovery, capability advertisement, dynamic routing, federated governance.
+
+- Solace. (2017–ongoing). *Event Mesh Architecture*. https://solace.com/
+  — Event-driven asynchronous communication patterns extending mesh thinking.
+
+### Hexagonal & Clean Architecture
+
+- Cockburn, A. (2005, updated 2024). *Hexagonal Architecture Explained*. https://alistair.cockburn.us/hexagonal-architecture/
+  — Ports & Adapters pattern: application core isolated from external concerns. Standard interface contracts.
+
+- Martin, R. C. (2017). *Clean Architecture: A Craftsman's Guide to Software Structure and Design*. Prentice Hall.
+  — Dependency rule: dependencies always point inward. Informs domain module dependency structure.
+
+- Evans, E. (2003). *Domain-Driven Design: Tackling Complexity in the Heart of Software*. Addison-Wesley. ISBN: 9780321125217
+  — Bounded Contexts and Context Mapping. Each specialized discipline as a Bounded Context with explicit interfaces.
+
+- Vernon, V. (2013). *Implementing Domain-Driven Design*. Addison-Wesley. ISBN: 9780321834577
+  — Practical patterns for bounded context integration: shared kernel, customer-supplier, conformist, anticorruption layer.
+
+### Domain-Specific Engineering
+
+- Huyen, C. (2022). *Designing Machine Learning Systems*. O'Reilly. ISBN: 9781098107963
+  — End-to-end ML system design: data engineering, feature engineering, model development, deployment, monitoring.
+
+- Huyen, C. (2025). *AI Engineering*. O'Reilly. ISBN: 9781098166298
+  — Emerging discipline bridging ML research and production engineering.
+
+- Google Cloud. (2021–ongoing). *MLOps: Continuous delivery and automation pipelines in machine learning*. https://cloud.google.com/architecture/mlops-continuous-delivery-and-automation-pipelines-in-machine-learning
+  — MLOps maturity model (Levels 0–2).
+
+- Sculley, D. et al. (2015). "Hidden Technical Debt in Machine Learning Systems." *NeurIPS 2015*.
+  — ML-specific technical debt: data dependencies, configuration, feature extraction, monitoring.
+
+- Linux Foundation. (2025). *Agentic AI Foundation*. https://www.linuxfoundation.org/press/linux-foundation-announces-the-formation-of-the-agentic-ai-foundation
+  — Open infrastructure for agentic AI in production: governance, interoperability, standards.
+
+### Composable & Federated Architectures
+
+- Gartner. (2024). "Composable Business and Technology."
+  — Modular, interchangeable components assembled to meet specific needs.
+
+- WSO2. (2024). "Cell-Based Architecture."
+  — Self-contained, independently deployable units of business functionality encapsulating compute, data, and governance.
+
+---
+
+## 18. Systematic Documentation
+
+**Project relevance:** Proposed Archive module — systematic knowledge capture across the lifecycle.
+
+- Procida, D. (2017–ongoing). *Diátaxis: A Systematic Framework for Technical Documentation*. https://diataxis.fr/
+  — Four documentation types: Tutorials, How-to Guides, Reference, Explanation.
+
+- Gentle, A. (2017, 3rd ed. 2022). *Docs Like Code*. Just Write Click. ISBN: 9781387531493
+  — Docs-as-code workflows using version control, CI/CD, and automated publishing.
+
+- Nygard, M. (2011). "Documenting Architecture Decisions." *Cognitect Blog*. https://www.cognitect.com/blog/2011/11/15/documenting-architecture-decisions
+  — ADR template for lightweight architecture decision documentation.
+
+---
+
+## 17. Sunset & Technical Debt
+
+**Project relevance:** Proposed Horizon module — lifecycle end management.
+
+- Cunningham, W. (1992). "The WyCash Portfolio Management System." *OOPSLA 1992*.
+  — Origin of the technical debt metaphor.
+
+- Tornhill, A. (2018). *Software Design X-Rays: Fix Technical Debt with Behavioral Code Analysis*. Pragmatic Programmers. ISBN: 9781680502725
+  — Behavioral code analysis for complexity hotspot identification and debt prioritization.
+
+- Fowler, M. (2004). "Strangler Fig Application." *martinfowler.com*. https://martinfowler.com/bliki/StranglerFigApplication.html
+  — Architectural pattern for incremental legacy modernization.
+
+- Fowler, M. (2018). *Refactoring: Improving the Design of Existing Code* (2nd ed.). Addison-Wesley. ISBN: 9780134757599
+  — Systematic techniques for improving code design while preserving behavior.
+
+---
+
+## 19. Change Management & Organizational Transformation
+
+**Project relevance:** Proposed Catalyst module — governing and facilitating the transformation that Convoke's expansion creates.
+
+### Classical Change Management
+
+- Kotter, J. (1996, updated 2014). *Leading Change* / *Accelerate: The Power of Transformational Leadership*. Harvard Business School Press. https://www.kotterinc.com/methodology/8-steps/
+  — Eight-step change model: create urgency → build coalition → form vision → enlist → enable → short-term wins → sustain → institute.
+
+- Hiatt, J. (2000s–ongoing). *ADKAR: A Model for Change in Business, Government and Our Community*. Prosci. https://www.prosci.com/methodology/adkar
+  — Individual-centered adoption: Awareness → Desire → Knowledge → Ability → Reinforcement.
+
+- Lewin, K. (1947). Three-stage change model: Unfreeze → Change → Refreeze.
+  — Classic framework for understanding resistance and designing interventions.
+
+- Bridges, W. & Bridges, S. (1991). *Managing Transitions: Making Sense of Life's Changes*. Hachette.
+  — Distinguishes external change from internal psychological transition: Ending → Neutral Zone → New Beginning.
+
+- Peters, T. & Waterman, R. (1982). *In Search of Excellence*. Harper & Row.
+  — McKinsey 7-S Framework: Structure, Strategy, Systems, Skills, Staff, Style, Shared Values.
+
+### Organizational Design
+
+- Skelton, M. & Pais, M. (2019, 2nd ed. 2024). *Team Topologies: Organizing Business and Technology Teams for Fast Flow*. IT Revolution Press. https://teamtopologies.com/
+  — Four team types (Stream-aligned, Enabling, Complicated-subsystem, Platform) and three interaction modes.
+
+- Kniberg, H. & Ivarsson, A. (2012). *Scaling Agile @ Spotify with Tribes, Squads, Chapters, and Guilds*. Crisp. https://www.atlassian.com/agile/agile-at-scale/spotify
+  — Autonomous squad model with tribal alignment.
+
+- Conway, M. (1967). Communication structures in systems design. LeRoy, J. & Simons, M. (2010). Inverse Conway Maneuver. https://martinfowler.com/bliki/ConwaysLaw.html
+  — System architecture mirrors organizational structure; deliberately restructure teams to produce desired architecture.
+
+- Trist, E. & Bamforth, K. (1951). Sociotechnical Systems Theory. Tavistock Institute.
+  — Organizations as open systems with interdependent social and technical subsystems. Principle of joint optimization.
+
+- Teece, D., Pisano, G. & Shuen, A. (1997). "Dynamic Capabilities and Strategic Management." *Strategic Management Journal*.
+  — A firm's ability to adapt, integrate, and reconfigure resources for changing environments.
+
+### Agentic Transformation (2024–2026)
+
+- Randazzo, S., Lifshitz-Assaf, H., Kellogg, K., Dell'Acqua, F., Mollick, E. et al. (2024). "Cyborgs, Centaurs and Self-Automators." Harvard Business School / SSRN. https://papers.ssrn.com/sol3/papers.cfm?abstract_id=4921696
+  — Three human-AI collaboration models with different learning and career outcomes.
+
+- Anthropic. (2025–2026). "How AI Is Transforming Work at Anthropic." https://www.anthropic.com/research/how-ai-is-transforming-work-at-anthropic
+  — Organizational case study: engineers as "managers of AI agents," 70%+ code review vs. net-new code.
+
+- Brynjolfsson, E. & Li, D. (2023–2024). "Generative AI at Work." *NBER Working Paper*. https://www.nber.org/papers/w31161
+  — 15% average productivity gain; less experienced workers benefit most.
+
+- McKinsey & Company. (2025–2026). "The Agentic Organization." https://www.mckinsey.com/capabilities/people-and-organizational-performance/our-insights/the-agentic-organization-contours-of-the-next-paradigm-for-the-ai-era
+  — Organizational redesign for AI: flatter structures, higher context sharing, rapid decision-making.
+
+- Google Cloud. (2026). *AI Agent Trends 2026: Five Shifts That Will Redefine Roles, Workflows, and Organizations*. https://services.google.com/fh/files/misc/google_cloud_ai_agent_trends_2026_report.pdf
+  — Five shifts: Task-to-Role-Based AI, Multi-Agent Orchestration, Governance, Team Empowerment, Measurable Results.
+
+- Mollick, E. (2024). *Co-Intelligence: Living and Working with AI*. Penguin Random House. ISBN: 9780593716717
+  — Three structural pillars: AI in leadership, AI labs, democratize AI to the crowd.
+
+### Governance & Decision-Making
+
+- The Open Group. *TOGAF Standard, Version 9.2*. https://pubs.opengroup.org/architecture/togaf9-doc/arch/chap44.html
+  — Architecture Development Method with governance processes. 80% Fortune 500 adoption.
+
+- Snowden, D. (1999–ongoing). "A Leader's Framework for Decision Making." *Harvard Business Review* (2007). https://thecynefin.co/about-us/about-cynefin-framework/
+  — Cynefin Framework: Clear, Complicated, Complex, Chaotic, Disorder. Matches decision approach to context.
+
+- IEEE Global Initiative. (2019–present). *IEEE 7000 Series: Design of Autonomous and Intelligent Systems*. https://standards.ieee.org/industry-connections/activities/ieee-global-initiative/
+  — Five core principles: Human Rights, Well-being, Accountability, Transparency, Minimizing Misuse.
+
+- European Union. (2024). *Regulation (EU) 2024/1689 on Artificial Intelligence (EU AI Act)*. https://digital-strategy.ec.europa.eu/en/policies/regulatory-framework-ai
+  — Risk-based regulatory framework for AI systems.
+
+- NIST. (2023). *AI Risk Management Framework*. https://www.nist.gov/documents/2023/01/30/artificial-intelligence-risk-management-framework-1
+  — Voluntary framework for responsible AI development across the system lifecycle.
+
+- ISO/IEC. (2023). *ISO/IEC 42001:2023 — AI Management System Standard*. https://www.iso.org/standard/81399.html
+  — First international standard for organizational AI governance.
+
+### Adoption & Diffusion
+
+- Rogers, E. (1962, 5th ed. 2003). *Diffusion of Innovations*. Free Press.
+  — Adoption curve: Innovators → Early Adopters → Early Majority → Late Majority → Laggards.
+
+- Moore, G. (1991, 3rd ed. 2014). *Crossing the Chasm*. HarperCollins.
+  — The gap between early adopters and early majority; whole-product strategies.
+
+- Fogg, B. J. (2019). *Tiny Habits: The Small Changes That Change Everything*. Houghton Mifflin Harcourt.
+  — Behavior = Motivation + Ability + Prompt. Designing micro-behaviors for frictionless adoption.
+
+- Eyal, N. (2014). *Hooked: How to Build Habit-Forming Products*. Penguin.
+  — Trigger → Action → Variable Reward → Investment. Engagement loop design.
+
+- Thaler, R. & Sunstein, C. (2008). *Nudge: Improving Decisions About Health, Wealth, and Happiness*. Yale University Press.
+  — Choice architecture that alters behavior predictably without restricting options.
+
+- Edmondson, A. (1999–ongoing). "Psychological Safety and Learning Behavior in Work Teams." *Administrative Science Quarterly*. https://psychsafety.com/about-psychological-safety/
+  — Psychological safety as foundational enabler of team experimentation and learning. Strongest predictor of successful AI adoption across reviewed literature.
+
+- Agrawal, A., Gans, J. & Goldfarb, A. (2018 / 2023). *Prediction Machines* / *Power and Prediction*. Basic Books.
+  — AI as a drop in prediction cost; economic framework for understanding organizational AI adoption.
+
+---
+
+## 20. Prospective Research Directions
 
 The following areas represent theoretical domains where Convoke could be further enriched. These are flagged for future exploration.
 
@@ -361,19 +693,14 @@ The following areas represent theoretical domains where Convoke could be further
 ### Discovery Theory
 
 - **Opportunity Solution Trees (OST)** — Teresa Torres's framework for connecting outcomes to opportunities to solutions. Not yet integrated; high synergy with Mila → Liam handoff.
-- **Wardley Mapping** — Simon Wardley's value chain mapping for strategic context. Complementary to Emma's contextualization stream.
-- **Cynefin Framework** — Dave Snowden's sense-making framework for complexity domains. Could inform compass routing decisions (which stream fits the current problem domain).
 
-### Production Readiness
+### Extended Lifecycle
 
 - **Platform Engineering** — Emerging discipline bridging SRE and developer experience. Relevant to Gyre's evolving scope.
-- **Chaos Engineering** — Rosenthal et al. (2020) *Chaos Engineering: System Resiliency in Practice*. Gap in Gyre's current assessment framework.
 - **FinOps** — Cloud cost optimization as a readiness dimension. Potential expansion for Atlas's capabilities model.
-
-### Cross-Cutting
-
-- **Sociotechnical Systems Theory** — Trist & Bamforth (1951), organizational design as interplay of social and technical systems. Theoretical frame for why agent teams mirror human team structures.
-- **Conway's Law & Inverse Conway Maneuver** — How communication structures shape system architecture. Relevant to Team Factory's composition patterns.
+- **Customer Support & Success** — Dedicated workflows for support-driven development, customer health scoring, and satisfaction monitoring.
+- **Accessibility & Inclusive Design** — WCAG compliance and universal design principles as a cross-cutting concern.
+- **Localization & Internationalization** — i18n/L10n as a growth enabler for global markets.
 
 ---
 
@@ -395,3 +722,21 @@ The following areas represent theoretical domains where Convoke could be further
 | **Enhance (RICE Backlog)** | McBride — "RICE: Simple prioritization for product managers" (2016), Osterwalder et al. — *Value Proposition Design* (2014) |
 | **Team Factory** | Cagan — *Empowered* (2020), Weiss — *Multiagent Systems* (2013), CrewAI — "Framework for orchestrating role-playing AI agents" (2024) |
 | **BMAD Core Architecture** | Hong et al. — "MetaGPT" (2023), Wang et al. — "ChatDev" (2023), Wu et al. — "AutoGen" (2023) |
+| | |
+| **— PROPOSED MODULES —** | |
+| **Compass (Strategy)** | Porter — *Competitive Strategy* (1980), Lafley & Martin — *Playing to Win* (2013), Wardley — *Wardley Maps* (2018), Osterwalder — *Business Model Generation* (2010) |
+| **Launch (Delivery)** | Humble & Farley — *Continuous Delivery* (2010), Hodgson — *Feature Flag Best Practices* (2020), Forsgren et al. — *Accelerate* (2018) |
+| **Amplify (Growth)** | Bush — *Product-Led Growth* (2019), McClure — "Pirate Metrics AARRR" (2007), Ellis — "North Star Metric" (2013), Kohavi et al. — *Trustworthy Online Controlled Experiments* (2020) |
+| **Sentinel (Operations)** | Beyer et al. — *Site Reliability Engineering* (2016), Rosenthal et al. — *Chaos Engineering* (2020), PagerDuty — *Incident Response* (2015+) |
+| **Shield (Security)** | Shostack — *Threat Modeling* (2014), OWASP — *DevSecOps Guideline* (2021+), NIST — *SSDF SP 800-218* (2022), EU — *AI Act* (2024) |
+| **Archive (Documentation)** | Procida — *Diátaxis* (2017+), Gentle — *Docs Like Code* (2017), Nygard — "Architecture Decision Records" (2011) |
+| **Horizon (Sunset/Debt)** | Cunningham — "Technical Debt" (1992), Tornhill — *Software Design X-Rays* (2018), Fowler — "Strangler Fig Pattern" (2004) |
+| **Forge (Knowledge Engineering)** | Polanyi — *The Tacit Dimension* (1966), Nonaka & Takeuchi — *The Knowledge-Creating Company* (1995), Kagdi et al. — "Mining Software Repositories" (2007), Microsoft — *GraphRAG* (2024+), Storey — "Cognitive Debt" (2026) |
+| **Catalyst (Change/Governance)** | Kotter — *Leading Change* (1996), Skelton & Pais — *Team Topologies* (2019), Mollick — *Co-Intelligence* (2024), Snowden — "Cynefin Framework" (2007), Edmondson — "Psychological Safety" (1999+) |
+| | |
+| **— DOMAIN MESH MODULES —** | |
+| **Mesh Infrastructure** | Dehghani — *Data Mesh* (2022), Cockburn — *Hexagonal Architecture* (2005), Evans — *Domain-Driven Design* (2003), Broda — "Agentic Mesh" (2025) |
+| **Flux (DataOps)** | Dehghani — *Data Mesh* (2022), Huyen — *Designing Machine Learning Systems* (2022), DataKitchen — *DataOps Cookbook* (2020+) |
+| **Neuron (MLOps)** | Google Cloud — *MLOps Maturity Model* (2021+), Huyen — *AI Engineering* (2025), Sculley et al. — "Hidden Technical Debt in ML Systems" (2015) |
+| **Synapse (AgentOps)** | Anthropic — *MCP* (2024), Google — *A2A Protocol* (2024), Linux Foundation — *Agentic AI Foundation* (2025) |
+| **Base (PlatformOps)** | Skelton & Pais — *Team Topologies* (2019), Gartner — "Composable Architecture" (2024) |
