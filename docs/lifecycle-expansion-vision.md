@@ -57,29 +57,59 @@ CIS provides creative and innovation agents (brainstorming, design thinking, sto
 
 ## 2. Lifecycle Model & Gap Analysis
 
-Mapping Convoke's current coverage against a full product/software lifecycle reveals six major uncovered perimeters and two cross-cutting dimensions.
+### 2.1 Why Not a Linear Pipeline
+
+The diagram below maps Convoke's current coverage against lifecycle phases. It is tempting to read these phases left-to-right as a pipeline. But Vortex already proved that discovery is non-linear — its compass routing system moves between streams based on evidence, not sequence. If discovery isn't a pipeline, why would the macro lifecycle be one?
+
+A production incident doesn't "flow forward" from operations to sunset — it pulls gravity back toward readiness, or even toward discovery if the incident reveals a fundamental misunderstanding of user needs. A market shift doesn't wait for the current build to finish — it pulls gravity toward strategy. The lifecycle is better understood as a **gravity model**: all perimeters exist simultaneously, and evidence determines which has the strongest pull at any given moment.
+
+> **Gravity model principle:** Perimeters don't have a fixed sequence — they have gravitational pull based on the current state of evidence and risk. Early in a product's life, strategy and discovery have the strongest pull. As you approach production, readiness and delivery dominate. Post-launch, growth and operations take over. But at any point, new evidence can shift gravity back. This is conceptually what Vortex's compass routing already does within discovery. The adjustment is applying the same principle across the entire lifecycle.
+
+**Theoretical grounding:** This mirrors the adaptive cycle in Holling's Panarchy model (Holling, C. S. (2001). "Understanding the Complexity of Economic, Ecological, and Social Systems." *Ecosystems*, 4(5), 390–405) — systems cycle through exploitation, conservation, release, and reorganization phases, and the current phase determines which forces dominate. It also draws on the non-linear dynamics in Snowden's Cynefin framework (already referenced in Section 6.4) — complex systems don't follow predetermined paths; they respond to probes and emerging patterns.
+
+**Practical implication for sequencing:** Instead of "Wave 1 comes after Wave 0," the sequencing becomes: "build perimeters where gravity is strongest for your current adopters." The wave model (Section 7.6) is retained as a *default gradient* — the typical order in which gravity pulls for most organizations — not as a prescribed sequence.
+
+### 2.2 Current Coverage Map
+
+Mapping Convoke's current coverage against the full set of lifecycle perimeters reveals six major uncovered perimeters and three cross-cutting dimensions.
 
 ```
-                        CURRENT COVERAGE
-                        ════════════════
-  Strategy    Discovery    Design    Build    Readiness    Delivery    Growth    Operations    Sunset
-  ┌───────┐  ┌─────────┐ ┌──────┐ ┌───────┐ ┌─────────┐ ┌────────┐ ┌───────┐ ┌──────────┐ ┌───────┐
-  │       │  │ VORTEX  │ │ WDS  │ │ BMM   │ │  GYRE   │ │        │ │       │ │          │ │       │
-  │  GAP  │  │ 7 agents│ │ BMM  │ │ TEA   │ │ 4 agents│ │  GAP   │ │  GAP  │ │   GAP    │ │  GAP  │
-  │       │  │ CIS     │ │      │ │       │ │         │ │        │ │       │ │          │ │       │
-  └───────┘  └─────────┘ └──────┘ └───────┘ └─────────┘ └────────┘ └───────┘ └──────────┘ └───────┘
+                        CURRENT COVERAGE (gravity model — not a pipeline)
+                        ═══════════════════════════════════════════════════
 
-  CROSS-CUTTING GAPS:
-  ┌─────────────────────────────────────────────────────────────────────────────────────────────────┐
-  │ SECURITY & COMPLIANCE (assessed by Gyre, not remediated)                                       │
-  ├─────────────────────────────────────────────────────────────────────────────────────────────────┤
-  │ DOCUMENTATION & KNOWLEDGE MANAGEMENT (partial in WDS, no systematic approach)                  │
-  ├─────────────────────────────────────────────────────────────────────────────────────────────────┤
-  │ GOVERNANCE, CHANGE MANAGEMENT & ORGANIZATIONAL TRANSFORMATION                                  │
-  └─────────────────────────────────────────────────────────────────────────────────────────────────┘
+                            ┌─────────────────────────────────────┐
+                            │        EVIDENCE & RISK STATE        │
+                            │    (determines gravitational pull)   │
+                            └──────────────┬──────────────────────┘
+                                           │
+             ┌─────────┬──────────┬────────┼────────┬──────────┬─────────┐
+             ▼         ▼          ▼        ▼        ▼          ▼         ▼
+         Strategy   Discovery   Design   Build   Readiness  Delivery  Growth
+         ┌──────┐  ┌────────┐  ┌─────┐  ┌─────┐  ┌───────┐  ┌──────┐  ┌──────┐
+         │ GAP  │  │ VORTEX │  │ WDS │  │ BMM │  │ GYRE  │  │ GAP  │  │ GAP  │
+         │      │  │ 7 agts │  │ BMM │  │ TEA │  │ 4 agts│  │      │  │      │
+         └──────┘  └────────┘  └─────┘  └─────┘  └───────┘  └──────┘  └──────┘
+             ┌─────────┬──────────┐
+             ▼         ▼          ▼
+         Operations  Sunset    Creative/Ext
+         ┌────────┐  ┌──────┐  ┌─────────┐
+         │  GAP   │  │ GAP  │  │CIS · BMB│
+         │        │  │      │  │ Enhance  │
+         └────────┘  └──────┘  └─────────┘
+
+  CROSS-CUTTING:
+  ┌─────────────────────────────────────────────────────────────────────────┐
+  │ SECURITY & COMPLIANCE (assessed by Gyre, not remediated)               │
+  ├─────────────────────────────────────────────────────────────────────────┤
+  │ DOCUMENTATION & KNOWLEDGE MANAGEMENT (partial, no systematic approach) │
+  ├─────────────────────────────────────────────────────────────────────────┤
+  │ GOVERNANCE, CHANGE MANAGEMENT & ORGANIZATIONAL TRANSFORMATION          │
+  ├─────────────────────────────────────────────────────────────────────────┤
+  │ ENTROPY MANAGEMENT (not addressed — see Section 7.5)                   │
+  └─────────────────────────────────────────────────────────────────────────┘
 ```
 
-### Summary of Gaps
+### 2.3 Summary of Gaps
 
 | Gap | Current State | Impact |
 |-----|--------------|--------|
@@ -437,20 +467,50 @@ Specialized in internal developer platform, infrastructure-as-code, and develope
 
 **Ports:** Infrastructure assessment, platform capability exposure, developer experience audit.
 
-### 5.5 The Hexagonal Interface Contract
+### 5.5 The Hexagonal Interface Contract — With Asymmetric Maturity
 
-Inspired by Cockburn's Ports & Adapters, each domain module exposes a standard set of **ports** — abstract capability interfaces that lifecycle modules can consume. The concrete implementation behind each port is domain-specific, but the interface is uniform:
+Inspired by Cockburn's Ports & Adapters, each domain module exposes capabilities through a standard set of **ports** — abstract interfaces that lifecycle perimeters can consume. The port *types* are uniform, but their availability and maturity are not.
 
 ```
-  PORT INTERFACE (standard across all domain modules):
+  PORT INTERFACE (standard types across all domain modules):
 
+  advise(question)  → Domain-specific guidance with references
   assess(context)   → Assessment artifact (gaps, risks, maturity level)
   build(spec)       → Implementation artifact (pipeline, model, agent, infra)
   monitor(target)   → Monitoring configuration + dashboard
-  advise(question)  → Domain-specific guidance with references
 ```
 
-This means Gyre can call `MLOps.assess(codebase)` to get an ML readiness assessment, or Vortex can call `DataOps.advise("what data do we have on user behavior?")` to get data-informed discovery input — without either lifecycle module needing to understand ML or DataOps internals.
+**Asymmetric maturity:** Not every domain module implements all four ports, and not all ports are equally mature. A domain module registers which ports it supports and at what maturity level:
+
+```
+  PORT MATURITY MODEL:
+
+  Level 0: Not available     — port not implemented
+  Level 1: Advise            — expertise available, no automation
+  Level 2: Assess            — can evaluate current state, produce gap analysis
+  Level 3: Build             — can produce implementation artifacts
+  Level 4: Monitor           — can observe outcomes and detect drift
+
+  EXAMPLE — current maturity by domain:
+
+  Domain        advise    assess    build     monitor
+  ─────────────────────────────────────────────────────
+  DataOps       Level 1   Level 0   Level 0   Level 0
+  MLOps         Level 1   Level 1   Level 0   Level 0
+  AgentOps      Level 1   Level 2   Level 1   Level 0
+  PlatformOps   Level 1   Level 1   Level 0   Level 0
+```
+
+This mirrors how real consulting practices mature: you start by giving advice (Level 1), then you systematize assessment (Level 2), then you build tooling (Level 3), then you monitor outcomes (Level 4). Forcing all four ports from day one is architectural over-engineering — the asymmetric model provides a natural evolution path where a domain starts with `advise` and graduates to full capability as demand and expertise grow.
+
+**Practical implications:**
+
+- Lifecycle perimeters discover available ports through the mesh's capability registry — they don't assume all ports exist
+- Port maturity is self-declared and can be queried: `MLOps.maturity("assess")` → `Level 1`
+- The gap between current maturity and desired maturity becomes a visible signal for investment priority
+- Some domains may be inherently stronger on certain ports (security is often better at `assess` than `build` — finding problems is easier than fixing them automatically)
+
+This means Gyre can call `MLOps.assess(codebase)` to get an ML readiness assessment (if that port is mature enough), or Vortex can call `DataOps.advise("what data do we have on user behavior?")` to get data-informed discovery input — without either lifecycle perimeter needing to understand ML or DataOps internals. If a port isn't available at the required maturity level, the mesh routes the request to a human expert or flags it as a capability gap.
 
 ### 5.6 Relationship to Convoke
 
@@ -556,28 +616,53 @@ Rolling out new Convoke modules across an organization follows adoption dynamics
 
 ## 7. Synthesis: Towards a Full-Lifecycle Agentic Platform
 
-### 7.1 Proposed Module Map
+### 7.1 Infrastructure vs. Practice Perimeters
 
-Combining the lifecycle gap analysis, knowledge engineering, and domain mesh architecture, here is the proposed expansion of Convoke organized along three axes:
+Before presenting the module map, a structural distinction must be made explicit. The proposed perimeters are not architecturally equivalent — they fall into two fundamentally different categories:
+
+**Infrastructure perimeters** enable other perimeters to function. They don't prescribe what to do; they make it possible to do it better. They are supportive, foundational, and consumed by practice perimeters:
+
+- **Knowledge engineering** — extracts and exposes knowledge that every other perimeter consumes
+- **Systematic documentation** — captures and organizes artifacts across the lifecycle
+- **Domain mesh infrastructure** — provides discovery, routing, and governance for specialized capabilities
+- **Entropy management** — monitors the continued validity of artifacts across all perimeters (see Section 7.5)
+
+**Practice perimeters** encode a discipline. They are opinionated — they prescribe workflows grounded in specific theoretical foundations:
+
+- **Strategy** encodes strategic analysis (Porter, Wardley, Blue Ocean)
+- **Delivery** encodes release engineering (Continuous Delivery, feature flags)
+- **Growth** encodes product-led growth practices (AARRR, PLG, experimentation)
+- **Operations** encodes SRE (SLOs, incident management, chaos engineering)
+- **Security** encodes threat modeling, DevSecOps, and compliance workflows
+- **Sunset** encodes technical debt management and legacy modernization
+- **Governance & change** encodes organizational transformation practices
+
+This distinction matters for dependencies, sequencing, and communication. "You need knowledge engineering before you need anything else" is easier to justify when it is visibly in a different category. Infrastructure perimeters are prerequisites; practice perimeters are choices driven by where gravitational pull is strongest (see Section 2.1).
+
+### 7.2 Proposed Module Map
+
+Combining the lifecycle gap analysis, knowledge engineering, and domain mesh pattern, here is the proposed expansion of Convoke organized along three axes. Per the gravity model (Section 2.1), the lifecycle axis is not a pipeline — perimeters activate based on evidence and risk, not sequence.
 
 ```
   ═══════════════════════════════════════════════════════════════════════════════
-  AXIS 1: LIFECYCLE (when things happen)
+  AXIS 1: LIFECYCLE (gravity model — evidence determines pull, not sequence)
   ═══════════════════════════════════════════════════════════════════════════════
 
-  STRATEGY        DISCOVERY       DESIGN        BUILD         READINESS      DELIVERY
-  ┌──────────┐   ┌──────────┐   ┌──────────┐  ┌──────────┐  ┌──────────┐  ┌──────────┐
-  │ Strategy │──▶│ VORTEX   │──▶│ WDS      │─▶│ BMM      │─▶│ GYRE     │─▶│ Delivery │
-  │ perimeter│   │ Discovery│   │ Design   │  │ Build    │  │ Readiness│  │ perimeter│
-  │          │   │ 7 agents │   │ BMM 1-3  │  │ TEA      │  │ 4 agents │  │          │
-  └──────────┘   └──────────┘   └──────────┘  └──────────┘  └──────────┘  └──────────┘
-       │                                                                        │
-       │              GROWTH          OPERATIONS       SUNSET                   │
-       │           ┌──────────┐     ┌──────────┐    ┌──────────┐               │
-       └──────────▶│ Growth   │◀───▶│Operations│───▶│ Sunset   │◀──────────────┘
-                   │ perimeter│     │ perimeter│    │ perimeter│
-                   │          │     │          │    │          │
-                   └──────────┘     └──────────┘    └──────────┘
+  PRACTICE PERIMETERS (encode a discipline — opinionated workflows):
+
+         Strategy    Discovery    Design     Build      Readiness    Delivery
+         ┌────────┐  ┌────────┐  ┌────────┐  ┌────────┐  ┌────────┐  ┌────────┐
+         │Strategy│  │ VORTEX │  │  WDS   │  │  BMM   │  │  GYRE  │  │Delivery│
+         │ perim. │  │ 7 agts │  │  BMM   │  │  TEA   │  │ 4 agts │  │ perim. │
+         └────────┘  └────────┘  └────────┘  └────────┘  └────────┘  └────────┘
+
+         Growth       Operations   Security    Sunset
+         ┌────────┐  ┌──────────┐  ┌────────┐  ┌────────┐
+         │ Growth │  │Operations│  │Security│  │ Sunset │
+         │ perim. │  │ perimeter│  │ perim. │  │ perim. │
+         └────────┘  └──────────┘  └────────┘  └────────┘
+
+                     ◀── gravitational pull shifts with evidence ──▶
 
   ═══════════════════════════════════════════════════════════════════════════════
   AXIS 2: DOMAIN MESH (reference pattern — what expertise is needed)
@@ -594,31 +679,40 @@ Combining the lifecycle gap analysis, knowledge engineering, and domain mesh arc
   AXIS 3: CROSS-CUTTING CAPABILITIES
   ═══════════════════════════════════════════════════════════════════════════════
 
+  INFRASTRUCTURE PERIMETERS (enable other perimeters — supportive, foundational):
+
   ┌─────────────────────────────────────────────────────────────────────────────┐
   │ Knowledge Engineering — active extraction, refinement, exposition          │
   ├─────────────────────────────────────────────────────────────────────────────┤
-  │ Security & Compliance — proactive, lifecycle-spanning                      │
-  ├─────────────────────────────────────────────────────────────────────────────┤
   │ Systematic Documentation — Diátaxis-based, docs-as-code                   │
   ├─────────────────────────────────────────────────────────────────────────────┤
-  │ Governance, Change Management & Adoption — meta-perimeter                  │
+  │ Entropy Management — artifact validity monitoring across all perimeters    │
+  └─────────────────────────────────────────────────────────────────────────────┘
+
+  CROSS-CUTTING PRACTICE PERIMETERS (encode a discipline that spans all phases):
+
+  ┌─────────────────────────────────────────────────────────────────────────────┐
+  │ Security & Compliance — proactive, lifecycle-spanning                      │
+  ├─────────────────────────────────────────────────────────────────────────────┤
+  │ Governance, Change Management & Adoption — meta-perimeter (lens from       │
+  │ Wave 0, full perimeter from Wave 2)                                        │
   └─────────────────────────────────────────────────────────────────────────────┘
 
   EXISTING SUPPORT:
   CIS (Creative & Innovation) · BMB (Builder) · Enhance (Skills) · Team Factory
 ```
 
-### 7.2 The Three-Axis Architecture
+### 7.3 The Three-Axis Architecture
 
-This expansion introduces a conceptual shift from a linear pipeline to a **three-axis architecture**:
+This expansion introduces a conceptual shift from a linear pipeline to a **gravity-driven, three-axis architecture**:
 
-The **Lifecycle axis** (horizontal) describes *when* things happen — from strategy through sunset. Modules here are sequential or cyclical, connected by handoff contracts.
+The **Lifecycle axis** describes the *practice perimeters* — the disciplines that activate based on gravitational pull from evidence and risk (Section 2.1). Early in a product's life, strategy and discovery have the strongest pull. As you approach production, readiness and delivery dominate. Post-launch, growth and operations take over. But at any point, new evidence can shift gravity back. Perimeters are connected by handoff contracts, but the flow between them is non-linear.
 
-The **Domain Mesh axis** (vertical) is a *reference pattern* describing *what expertise* is needed — data, ML, agents, platform. This pattern applies to the projects and organizations Convoke supports, and would inform the design of any future domain-specialized Convoke perimeters.
+The **Domain Mesh axis** is a *reference pattern* describing *what expertise* is needed — data, ML, agents, platform. This pattern applies to the projects and organizations Convoke supports, and would inform the design of any future domain-specialized Convoke perimeters.
 
-The **Cross-cutting axis** spans the entire platform. Knowledge engineering feeds understanding into every perimeter. Security ensures compliance across all phases. Documentation captures knowledge everywhere. Governance and change management governs the transformation itself.
+The **Cross-cutting axis** contains both *infrastructure perimeters* (knowledge engineering, documentation, entropy management) that enable everything else, and *cross-cutting practice perimeters* (security, governance & change) that encode disciplines spanning all lifecycle phases.
 
-### 7.3 The Governance & Change Perimeter: A Unique Addition
+### 7.4 The Governance & Change Perimeter: A Unique Addition
 
 Among all proposed perimeters, one stands apart: a **governance, change management, and adoption perimeter** specifically designed to facilitate the organizational transformation that Convoke's own expansion creates. This is a meta-perimeter: it helps organizations adopt the other perimeters.
 
@@ -635,29 +729,57 @@ This perimeter would draw on:
 - Governance (Cynefin, TOGAF, IEEE 7000, EU AI Act)
 - Adoption & diffusion (Rogers, Moore, Fogg, Edmondson)
 
-### 7.4 Priorities and Sequencing
+### 7.5 Entropy as a Cross-Cutting Force
 
-Not all modules need to be built simultaneously. A suggested sequencing based on value, dependency, and the three-axis architecture:
+The document's gap analysis (Section 2) and the sunset perimeter (Section 3.7) treat artifact degradation as a lifecycle endpoint — something that happens at the end. But real systems decay continuously. Knowledge goes stale. Security postures drift. Operational runbooks become outdated. Architecture decisions made during strategy become constraints that the sunset perimeter eventually has to unwind. This is not a phase — it is a force acting on every perimeter at all times.
 
-**Wave 0 — Foundations (enable everything else):**
+> **Entropy principle:** Every artifact, decision, and knowledge asset produced by any perimeter has a half-life. The question is not *whether* it will degrade, but *when* — and whether the degradation will be detected before it causes harm.
+
+**Theoretical grounding:**
+
+- **Second Law of Thermodynamics (metaphorical)** — In information systems as in physics, order naturally tends toward disorder without active energy input. Software entropy was first described by Lehman, M. M. (1980). "Programs, Life Cycles, and Laws of Software Evolution." *Proceedings of the IEEE*, 68(9), 1060–1076. Lehman's laws of software evolution establish that systems must be continually adapted or they become progressively less satisfactory.
+
+- **Cognitive Debt** — Storey, M. (2026). "How Generative and Agentic AI Shift Concern from Technical Debt to Cognitive Debt." As AI generates more code and artifacts, human understanding erodes. Entropy applies not just to the artifacts themselves but to the organization's *comprehension* of those artifacts — an accelerating risk in agentic contexts.
+
+- **Knowledge Decay** — De Holan, P. M. & Phillips, N. (2004). "Remembrance of Things Past? The Dynamics of Organizational Forgetting." *Management Science*, 50(11), 1603–1613. Organizations don't just fail to learn — they actively forget. Knowledge assets degrade through staff turnover, context loss, and environmental change.
+
+**Practical manifestation:** Rather than treating entropy management as a separate perimeter, it should manifest as a **lightweight validation protocol** that any perimeter can invoke on its own artifacts. Every perimeter would have a "sensitize" function — inspired by Noah's role in Vortex (Sensitize — interpreting signals and detecting changes) — that monitors the continued validity of its outputs.
+
+This could take the form of:
+
+- **Staleness detection** — automated checks for knowledge assets, documentation, security assessments, and operational procedures that haven't been validated against their current context within a defined period
+- **Drift monitoring** — comparison of the assumptions underlying a perimeter's artifacts against the current state of evidence (has the market shifted since the strategy was defined? have dependencies changed since the security assessment?)
+- **Decay scoring** — a quantitative signal indicating how much confidence remains in an artifact, analogous to error budgets in SRE but applied to knowledge and decision artifacts
+
+This connects the entropy concern from open question 6 in Section 7.7 (knowledge asset lifecycle) to a structural principle: entropy is not a phase to be handled at lifecycle end, but a cross-cutting force that every perimeter must account for continuously.
+
+### 7.6 Priorities and Sequencing
+
+Not all perimeters need to be built simultaneously. The sequencing below represents a *default gradient* — the typical order in which gravitational pull is strongest for most organizations (see Section 2.1). It is not a prescribed sequence: organizations should build perimeters where gravity pulls hardest for their current adopters.
+
+> **Key adjustment:** The governance and change management dimension is not deferred to the last wave. The *principles* — adoption lens, change readiness, smallest useful entry point, resistance anticipation — must be embedded from Wave 0. Every perimeter built from Wave 1 onward should be designed with adoption patterns already considered: What's the "tiny habit" version? What resistance patterns should it anticipate? A full governance perimeter with dedicated agents comes in Wave 2, but the *lens* is present from the start.
+
+**Wave 0 — Foundations (infrastructure perimeters + governance lens):**
 - **Knowledge engineering perimeter** — In brownfield contexts, this activates *first*. Extracts the knowledge that every other perimeter needs. In greenfield, it activates as soon as there's a codebase to mine.
+- **Governance & change lens** — Not a full perimeter yet, but the principles are active: every Wave 1+ perimeter is designed with adoption patterns (Fogg's tiny habits, Rogers' diffusion factors, Edmondson's psychological safety). This means defining the smallest useful entry point, the expected resistance patterns, and the behavioral nudges for each perimeter before it ships.
+- **Entropy monitoring baseline** — The staleness detection and drift monitoring protocols (Section 7.5) are established as a shared capability that all subsequent perimeters inherit.
 
-**Wave 1 — Complete the core lifecycle loop:**
+**Wave 1 — Complete the core lifecycle loop (practice perimeters where gravity is typically strongest):**
 - **Delivery perimeter** — Bridges the Gyre-to-production gap
 - **Operations perimeter** — Operationalizes Gyre's readiness findings
 - **Security perimeter** — Elevates Gyre's security assessment to a proactive discipline
 
-**Wave 2 — Extend lifecycle coverage:**
+**Wave 2 — Extend lifecycle coverage + full governance perimeter:**
 - **Strategy perimeter** — Grounds discovery in strategic context
 - **Growth perimeter** — Closes the post-launch feedback loop
 - **Documentation perimeter** — Prevents knowledge loss as perimeters multiply
+- **Governance & change perimeter (full)** — Graduates from lens to full meta-perimeter with dedicated agents for change architecture, governance design, and adoption facilitation. By this point, there are enough perimeters in production to require systematic transformation management.
 
 **Wave 3 — Complete the picture:**
 - **Sunset perimeter** — Full lifecycle closure
-- **Governance & change perimeter** — Meta-perimeter for organizational adoption
-- **Domain-specialized perimeters** (AgentOps, MLOps, DataOps, PlatformOps, etc.) — as demand dictates, informed by the domain mesh reference pattern
+- **Domain-specialized perimeters** (AgentOps, MLOps, DataOps, PlatformOps, etc.) — as demand dictates, informed by the domain mesh reference pattern. These start at port maturity Level 1 (advise) and graduate to higher levels as the domain matures (see Section 5.5).
 
-### 7.5 Open Questions for Further Exploration
+### 7.7 Open Questions for Further Exploration
 
 Several theoretical and architectural questions merit deeper investigation:
 
@@ -671,12 +793,12 @@ Several theoretical and architectural questions merit deeper investigation:
 
 5. **Convoke's own governance:** As Convoke becomes a three-axis platform, how should the project itself be governed? TOGAF's Architecture Development Method, the Team Factory's composition patterns, and the mesh's federated governance offer structures, but the scale may require something new.
 
-6. **Knowledge asset lifecycle:** How do knowledge assets age, decay, and get retired? What metrics indicate knowledge staleness vs. enduring value? Storey's (2026) cognitive debt concept suggests this is increasingly urgent as AI-generated code outpaces human comprehension.
+6. **Knowledge asset lifecycle:** How do knowledge assets age, decay, and get retired? What metrics indicate knowledge staleness vs. enduring value? Storey's (2026) cognitive debt concept suggests this is increasingly urgent as AI-generated code outpaces human comprehension. The entropy management framework (Section 7.5) addresses this structurally, but the specific metrics and thresholds remain open.
 
-7. **Port interface evolution:** As domain modules mature, how do port interfaces evolve without breaking lifecycle module consumers? Versioning strategies from API design (semver, consumer-driven contracts) may apply.
+7. **Port interface evolution:** The asymmetric maturity model (Section 5.5) addresses how domains graduate from `advise` to full capability. But how do port interfaces themselves evolve without breaking lifecycle perimeter consumers? Versioning strategies from API design (semver, consumer-driven contracts) may apply.
 
 8. **Mesh observability:** How do we observe the health of the mesh itself — which domain capabilities are most consumed, where are bottlenecks, where is expertise missing? Service mesh observability patterns (Istio, Linkerd) provide technical precedent.
 
 ---
 
-*This document serves as the theoretical foundation for Convoke's lifecycle expansion. Each proposed perimeter should be specified using the Team Factory workflow when it matures from exploration to commitment, with agent designs grounded in the references cited here. Knowledge engineering deserves early attention (Wave 0) — without accessible knowledge, every subsequent perimeter operates in the dark. The governance and change management dimension should be developed in parallel — not as an afterthought — since the success of every other perimeter depends on adoption.*
+*This document serves as the theoretical foundation for Convoke's lifecycle expansion. Five structural principles shape the architecture: (1) the lifecycle is a gravity model, not a pipeline — evidence shifts priority between perimeters; (2) infrastructure perimeters (knowledge engineering, documentation, entropy management) are categorically different from practice perimeters and must be built first; (3) entropy is a cross-cutting force, not a lifecycle endpoint — every perimeter monitors its own decay; (4) domain mesh ports mature asymmetrically — domains start with advice and graduate to full capability; (5) the governance and change management lens is active from Wave 0, not deferred to the end. Each proposed perimeter should be specified using the Team Factory workflow when it matures from exploration to commitment, with agent designs grounded in the references cited here.*
