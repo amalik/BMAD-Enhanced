@@ -4,6 +4,7 @@ const fs = require('fs-extra');
 const path = require('path');
 const yaml = require('js-yaml');
 const { verifyRequire, buildExportNames } = require('../writers/registry-writer');
+const { parseCsvRow } = require('../utils/csv-utils');
 
 /** @typedef {import('../types/factory-types').E2EValidationResult} E2EValidationResult */
 /** @typedef {import('../types/factory-types').E2ECheck} E2ECheck */
@@ -292,8 +293,18 @@ function checkRegistryRegression(projectRoot) {
  * @returns {Promise<E2ECheck>}
  */
 async function checkVortexRegression(projectRoot) {
+  const validatorPath = path.join(projectRoot, 'scripts/update/lib/validator.js');
+  if (!fs.existsSync(validatorPath)) {
+    return {
+      name: 'VORTEX-REGRESSION',
+      stepName: 'regression',
+      passed: false,
+      expected: 'validator.js exists',
+      actual: `validator.js not found at ${validatorPath}`,
+      detail: validatorPath,
+    };
+  }
   try {
-    const validatorPath = path.join(projectRoot, 'scripts/update/lib/validator.js');
     const { validateInstallation } = require(validatorPath);
     const result = await validateInstallation({}, projectRoot);
     const failedChecks = (result.checks || []).filter(c => !c.passed);
@@ -588,11 +599,9 @@ function checkExistingAgentsCsv(ctx) {
 
   const content = fs.readFileSync(csvPath, 'utf8');
   const lines = content.trim().split('\n').slice(1); // skip header
-  // Extract agent column (index 8) from each row.
-  // Safe to split on comma: columns 0-9 are kebab-case/simple values (never contain commas).
-  // Only columns 10 (description) and 12 (outputs) use csvQuote and may contain commas.
+  // Extract agent column (index 8) from each row using RFC 4180-aware parser.
   const agentIds = lines.map(line => {
-    const cols = line.split(',');
+    const cols = parseCsvRow(line);
     return cols[8] || '';
   });
   const missing = (ctx.existing_agent_ids || []).filter(id => !agentIds.includes(id));
@@ -863,11 +872,9 @@ function checkExistingWorkflowsCsv(ctx) {
 
   const content = fs.readFileSync(csvPath, 'utf8');
   const lines = content.trim().split('\n').slice(1); // skip header
-  // Extract workflow name column (index 2) from each row.
-  // Safe to split on comma: columns 0-9 are kebab-case/simple values (never contain commas).
-  // Only columns 10 (description) and 12 (outputs) use csvQuote and may contain commas.
+  // Extract workflow name column (index 2) from each row using RFC 4180-aware parser.
   const workflowNames = lines.map(line => {
-    const cols = line.split(',');
+    const cols = parseCsvRow(line);
     return (cols[2] || '').trim();
   });
   const missing = (ctx.existing_workflow_names || []).filter(n => {
