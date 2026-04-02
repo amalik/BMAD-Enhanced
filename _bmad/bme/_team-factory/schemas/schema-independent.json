@@ -1,0 +1,138 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Team Spec — Independent Pattern",
+  "description": "Schema for Independent composition pattern team specs. Agents operate standalone with no handoff contracts.",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "team_name",
+    "team_name_kebab",
+    "composition_pattern",
+    "agents",
+    "integration"
+  ],
+  "additionalProperties": true,
+  "properties": {
+    "schema_version": {
+      "type": "string",
+      "pattern": "^\\d+\\.\\d+$",
+      "description": "Schema version (e.g., '1.0')"
+    },
+    "team_name": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Human-readable team name"
+    },
+    "team_name_kebab": {
+      "type": "string",
+      "pattern": "^[a-z][a-z0-9]*(-[a-z0-9]+)*$",
+      "description": "Kebab-case team name for directory naming"
+    },
+    "description": {
+      "type": "string",
+      "description": "What the team does"
+    },
+    "composition_pattern": {
+      "type": "string",
+      "enum": ["Independent"],
+      "description": "Must be 'Independent' for this schema"
+    },
+    "created": {
+      "type": "string",
+      "description": "ISO date string"
+    },
+    "factory_version": {
+      "type": "string",
+      "description": "Factory version that created this spec"
+    },
+    "agents": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": ["id", "role"],
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^[a-z]+(-[a-z]+)*$",
+            "description": "Agent ID in kebab-case"
+          },
+          "name": {
+            "type": "string",
+            "description": "Display name (first name persona)"
+          },
+          "icon": {
+            "type": "string",
+            "description": "Single emoji"
+          },
+          "role": {
+            "type": "string",
+            "minLength": 1,
+            "description": "What this agent does"
+          },
+          "title": {
+            "type": "string",
+            "description": "Formal title"
+          },
+          "capabilities": {
+            "type": "array",
+            "items": { "type": "string" }
+          },
+          "overlap_acknowledgments": {
+            "type": "array",
+            "items": { "type": "string" }
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+    "integration": {
+      "type": "object",
+      "required": ["output_directory"],
+      "properties": {
+        "output_directory": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Where output artifacts are saved"
+        },
+        "compass_routing": {
+          "type": "string",
+          "enum": ["optional", "per-agent"],
+          "description": "Compass routing mode (optional for Independent)"
+        }
+      },
+      "additionalProperties": false
+    },
+    "progress": {
+      "type": "object",
+      "properties": {
+        "orient": { "type": "string" },
+        "scope": { "type": "string" },
+        "connect": { "type": "string" },
+        "review": { "type": "string" },
+        "generate": {},
+        "validate": { "type": "string" }
+      }
+    },
+    "decisions": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "step": { "type": "string" },
+          "decision": { "type": "string" },
+          "default_accepted": { "type": "boolean" },
+          "rationale": { "type": "string" }
+        }
+      }
+    },
+    "metrics": {
+      "type": "object",
+      "properties": {
+        "discovery_path": {},
+        "hardest_step": {},
+        "would_use_again": {}
+      }
+    }
+  }
+}
