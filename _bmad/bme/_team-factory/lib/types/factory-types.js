@@ -50,7 +50,7 @@
  * Integration decisions from spec file.
  * @typedef {Object} IntegrationSpec
  * @property {string} output_directory
- * @property {string} compass_routing - "required", "per-agent", or "shared-reference"
+ * @property {string} compass_routing - "optional", "per-agent", "required", or "shared-reference"
  * @property {string} [contract_prefix]
  */
 
