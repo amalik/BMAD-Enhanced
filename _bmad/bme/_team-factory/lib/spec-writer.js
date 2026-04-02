@@ -55,9 +55,16 @@ async function writeSpec(spec, targetPath) {
       return { success: false, errors: ['Round-trip validation failed: parsed result is empty or not an object'] };
     }
     // Verify key fields survived serialization
-    if (parsed.team_name_kebab !== spec.team_name_kebab) {
-      await fs.remove(tmpPath);
-      return { success: false, errors: [`Round-trip validation failed: team_name_kebab mismatch ("${parsed.team_name_kebab}" vs "${spec.team_name_kebab}")`] };
+    const checks = [
+      ['team_name_kebab', parsed.team_name_kebab, spec.team_name_kebab],
+      ['composition_pattern', parsed.composition_pattern, spec.composition_pattern],
+      ['agents.length', (parsed.agents || []).length, (spec.agents || []).length],
+    ];
+    for (const [field, actual, expected] of checks) {
+      if (actual !== expected) {
+        await fs.remove(tmpPath);
+        return { success: false, errors: [`Round-trip validation failed: ${field} mismatch ("${actual}" vs "${expected}")`] };
+      }
     }
   } catch (err) {
     await fs.remove(tmpPath).catch(() => {});
