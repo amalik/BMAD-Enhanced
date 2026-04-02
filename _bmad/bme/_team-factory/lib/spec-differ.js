@@ -1,7 +1,6 @@
 'use strict';
 
 const fs = require('fs-extra');
-const path = require('path');
 const yaml = require('js-yaml');
 
 /** @typedef {import('./types/factory-types').TeamSpec} TeamSpec */
@@ -20,10 +19,9 @@ const STEP_ORDER = ['orient', 'scope', 'connect', 'review', 'generate', 'validat
  * and returns which agents still need generation.
  *
  * @param {string} specPath - Absolute path to the spec file
- * @param {string} [moduleDir] - Path to the team's module directory for filesystem verification
  * @returns {Promise<ResumeResult>}
  */
-async function findResumePoint(specPath, moduleDir) {
+async function findResumePoint(specPath) {
   let raw;
   try {
     raw = await fs.readFile(specPath, 'utf8');
@@ -119,8 +117,8 @@ function diffSpecs(oldSpec, newSpec) {
 
   // Compare progress
   for (const step of STEP_ORDER) {
-    const oldStatus = typeof oldSpec.progress?.[step] === 'string' ? oldSpec.progress[step] : JSON.stringify(oldSpec.progress?.[step]);
-    const newStatus = typeof newSpec.progress?.[step] === 'string' ? newSpec.progress[step] : JSON.stringify(newSpec.progress?.[step]);
+    const oldStatus = typeof oldSpec.progress?.[step] === 'string' ? oldSpec.progress[step] : stableStringify(oldSpec.progress?.[step]);
+    const newStatus = typeof newSpec.progress?.[step] === 'string' ? newSpec.progress[step] : stableStringify(newSpec.progress?.[step]);
     if (oldStatus !== newStatus) {
       changes.push({ field: `progress.${step}`, oldValue: oldStatus || 'undefined', newValue: newStatus || 'undefined' });
     }
@@ -131,6 +129,21 @@ function diffSpecs(oldSpec, newSpec) {
     changeCount: changes.length,
     changes,
   };
+}
+
+/**
+ * JSON.stringify with sorted keys for order-independent comparison.
+ * @param {*} obj
+ * @returns {string}
+ */
+function stableStringify(obj) {
+  if (obj === null || obj === undefined) return String(obj);
+  if (typeof obj !== 'object') return JSON.stringify(obj);
+  const sorted = Object.keys(obj).sort().reduce((acc, key) => {
+    acc[key] = obj[key];
+    return acc;
+  }, {});
+  return JSON.stringify(sorted);
 }
 
 /**
