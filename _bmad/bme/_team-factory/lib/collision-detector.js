@@ -1,7 +1,6 @@
 'use strict';
 
 const fs = require('fs-extra');
-const path = require('path');
 
 /**
  * Detect collisions between a new team spec and existing framework state.
@@ -17,11 +16,17 @@ async function detectCollisions(specData, manifestPath, bmeDir) {
   const blocks = [];
   const warnings = [];
 
+  const dataWarnings = [];
+
   // Parse existing agent manifest
-  const existingAgents = await parseManifest(manifestPath);
+  const { agents: existingAgents, warning: manifestWarning } = await parseManifest(manifestPath);
+  if (manifestWarning) dataWarnings.push(manifestWarning);
 
   // Parse existing submodule directories
-  const existingModules = bmeDir ? await listSubmodules(bmeDir) : [];
+  const { modules: existingModules, warning: modulesWarning } = bmeDir
+    ? await listSubmodules(bmeDir)
+    : { modules: [], warning: null };
+  if (modulesWarning) dataWarnings.push(modulesWarning);
 
   const proposedTeam = specData.team_name_kebab || '';
   const proposedAgents = (specData.agents || []).map(a => a.id).filter(Boolean);
@@ -77,6 +82,7 @@ async function detectCollisions(specData, manifestPath, bmeDir) {
   return {
     blocks,
     warnings,
+    dataWarnings,
     hasBlocking: blocks.length > 0,
   };
 }
@@ -84,13 +90,13 @@ async function detectCollisions(specData, manifestPath, bmeDir) {
 /**
  * Parse agent-manifest.csv to extract agent IDs and their modules.
  * @param {string} manifestPath
- * @returns {Promise<Array<{id: string, module: string}>>}
+ * @returns {Promise<{agents: Array<{id: string, module: string}>, warning: string|null}>}
  */
 async function parseManifest(manifestPath) {
   try {
     const content = await fs.readFile(manifestPath, 'utf8');
     const lines = content.split('\n').filter(l => l.trim());
-    if (lines.length < 2) return []; // header only or empty
+    if (lines.length < 2) return { agents: [], warning: null };
 
     const results = [];
     // Skip header (line 0), parse data rows
@@ -102,9 +108,9 @@ async function parseManifest(manifestPath) {
         if (id) results.push({ id, module });
       }
     }
-    return results;
-  } catch {
-    return [];
+    return { agents: results, warning: null };
+  } catch (err) {
+    return { agents: [], warning: `Could not read agent manifest at ${manifestPath}: ${err.message}. Collision detection may be incomplete.` };
   }
 }
 
@@ -147,16 +153,17 @@ function parseCSVLine(line) {
 /**
  * List existing submodule directory names under _bmad/bme/.
  * @param {string} bmeDir
- * @returns {Promise<string[]>}
+ * @returns {Promise<{modules: string[], warning: string|null}>}
  */
 async function listSubmodules(bmeDir) {
   try {
     const entries = await fs.readdir(bmeDir, { withFileTypes: true });
-    return entries
+    const modules = entries
       .filter(e => e.isDirectory() && e.name.startsWith('_'))
       .map(e => e.name);
-  } catch {
-    return [];
+    return { modules, warning: null };
+  } catch (err) {
+    return { modules: [], warning: `Could not read bme directory at ${bmeDir}: ${err.message}. Submodule collision detection skipped.` };
   }
 }
 
