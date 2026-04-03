@@ -11,7 +11,7 @@ Guide the contributor through defining their team's composition pattern, agents,
 ### 1. Team Identity
 
 Ask the contributor for:
-- **Team name** (human-readable, e.g., "Forge", "Gyre", "Sentinel")
+- **Team name** (human-readable, e.g., "Loom", "Gyre", "Sentinel")
 - **What does this team do?** (1-2 sentence description)
 - **Who uses it?** (target user persona)
 
