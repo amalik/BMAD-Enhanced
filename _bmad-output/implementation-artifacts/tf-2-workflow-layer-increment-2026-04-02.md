@@ -26,15 +26,15 @@ This document confronts every Acceptance Criterion from the epic file against th
 **When** they look for guidance
 **Then** the factory entry point exists in all 4 enumerated surfaces: agent menu, module-help.csv, BMad Master "what's available?" response, and README (TF-FR14, TF-NFR10)
 
-**Verdict:** ⚠️ **Partially met**
+**Verdict:** ✅ **Met** (fixed 2026-04-03 via Story 2.10)
 
 - Agent menu: Present in `agents/team-factory.md` menu section (CT, RS, EX, VT, AR, PM, DA items).
 - module-help.csv: Present with 2 rows (Create Team, Validate Team).
 - SKILL entry: Present at `.claude/skills/bmad-agent-bme-team-factory/SKILL.md`.
-- README: Present -- README.md mentions Team Factory with `/bmad-team-factory` command.
-- BMad Master: Not verified in this audit. The epic requires BMad Master's "what's available?" response to surface the factory. This depends on BMad Master's agent file referencing the factory, which was not checked as part of this code increment's shipped files.
+- README: Present — README.md mentions Team Factory.
+- BMad Master: TF menu item at `_bmad/core/agents/bmad-master.md:54` with `exec="skill:bmad-agent-bme-team-factory"`. Fixed from broken `skill:bmad-team-factory` reference.
 
-**Gap:** BMad Master wiring was not part of the 28-file delivery manifest and could not be confirmed from the shipped files alone.
+**Original gap closed.** Exec handler naming mismatch fixed. All 4 discovery surfaces verified.
 
 ### AC 2.1.2
 
