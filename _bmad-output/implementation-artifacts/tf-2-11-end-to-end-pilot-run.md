@@ -45,7 +45,7 @@ This is the real validation — the factory agent activates, guides the contribu
 
 6. **Given** the contributor approves
    **When** step-04-generate executes
-   **Then** agent files, workflow files, config.yaml, module-help.csv, README, and registry block are created. Registry write uses Full Write Safety Protocol
+   **Then** agent files, workflow files, user guides, config.yaml, module-help.csv, README, and registry block are created. Registry write uses Full Write Safety Protocol
 
 7. **Given** generation is complete
    **When** step-05-validate executes
@@ -85,8 +85,10 @@ This is the real validation — the factory agent activates, guides the contribu
 - [ ] Task 5: Complete Step 4 — Generate (AC: #6)
   - [ ] Verify agent .md files created with activation XML
   - [ ] Verify workflow files created
+  - [ ] Verify user guides created at `_bmad/bme/_pilot-test/guides/`
+  - [ ] Verify README.md created
   - [ ] Verify config.yaml created with correct fields
-  - [ ] Verify module-help.csv created with correct header
+  - [ ] Verify module-help.csv created with correct header (hyphenated, trailing comma)
   - [ ] Verify registry block added to agent-registry.js
   - [ ] Verify Write Safety Protocol executed (dirty-tree check, backup, verify)
 
@@ -97,9 +99,10 @@ This is the real validation — the factory agent activates, guides the contribu
 
 - [ ] Task 7: Cleanup (AC: #8)
   - [ ] Remove `_bmad/bme/_pilot-test/` directory
-  - [ ] Remove pilot team registry block from `agent-registry.js`
-  - [ ] Remove spec file
-  - [ ] Verify 156 existing tests still pass after cleanup
+  - [ ] Remove pilot team registry block from `agent-registry.js`: delete the PILOT_TEST_AGENTS entries, PILOT_TEST_WORKFLOWS entries, derived lists, and module.exports additions. Run `node -e "require('./scripts/update/lib/agent-registry.js')"` to verify file still parses
+  - [ ] Remove spec file at `_bmad-output/planning-artifacts/team-spec-pilot-test.yaml`
+  - [ ] Remove output directory `_bmad-output/pilot-test-artifacts/` if created
+  - [ ] Verify all existing tests still pass after cleanup
   - [ ] Document any issues discovered during the pilot
 
 ## Dev Notes
@@ -126,10 +129,16 @@ From AC confrontation (`tf-2-workflow-layer-increment-2026-04-02.md`):
 - Code review fixed 11 issues including 2 critical — all fixes are in place
 - M2 validation confirmed JS modules work in isolation — this tests them orchestrated
 
+### Known Issues
+
+- **Validator arity mismatch** — `step-05-validate.md` calls `validateTeam(specData, projectRoot)` with 2 args, but the actual function signature is `validateTeam(specData, generationContext, projectRoot)` requiring 3 args. The `generationContext` object is constructed during Step 4 generation and includes: `module_root`, `generated_files`, `agent_files`, `config_yaml_path`, `module_help_csv_path`, `activation_validation_results`, `registry_wiring_result`. The pilot will expose this — either fix the workflow step or construct the context manually.
+- **Spec file validation** — After each step, the spec file should validate against `schemas/schema-independent.json`. Use `spec-parser.js` to verify.
+
 ### Risk
 
 - **BMB delegation without templates** — Step 4 relies on LLM to generate agent files. Quality depends on prompt quality in step-04-generate.md. If agent files are malformed, activation-validator.js should catch it.
 - **Registry write on real agent-registry.js** — Full Write Safety Protocol protects, but ensure git working tree is clean before starting.
+- **Output directory creation** — The factory should create `_bmad-output/pilot-test-artifacts/` automatically. If it doesn't, downstream workflows referencing it will fail. Verify during Task 3.
 
 ### References
 
