@@ -1,0 +1,1 @@
+# Scope Decision Strategy Perimeter
