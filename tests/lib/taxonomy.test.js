@@ -36,11 +36,14 @@ describe('readTaxonomy — integration with real taxonomy.yaml', () => {
     expect(config.initiatives.user).toEqual([]);
   });
 
-  test('aliases contains 3 entries', () => {
+  test('aliases contains 6 entries', () => {
     const config = readTaxonomy(projectRoot);
-    expect(Object.keys(config.aliases)).toHaveLength(3);
+    expect(Object.keys(config.aliases)).toHaveLength(6);
     expect(config.aliases['strategy-perimeter']).toBe('helm');
     expect(config.aliases['strategy']).toBe('helm');
+    expect(config.aliases['strategic']).toBe('helm');
+    expect(config.aliases['strategic-navigator']).toBe('helm');
+    expect(config.aliases['strategic-practitioner']).toBe('helm');
     expect(config.aliases['team-factory']).toBe('loom');
   });
 
