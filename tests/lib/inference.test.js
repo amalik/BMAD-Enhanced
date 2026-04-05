@@ -1,5 +1,3 @@
-const path = require('path');
-const fs = require('fs-extra');
 const {
   inferArtifactType,
   inferInitiative,
@@ -184,32 +182,30 @@ describe('inferInitiative', () => {
     expect(result.confidence).toBe('low');
   });
 
-  test('prd-validation-gyre → gyre via progressive prefix (segments: prd, validation, gyre)', () => {
-    // After type 'report' is stripped, remainder might be 'prd-validation-gyre'
+  test('prd-validation-gyre → gyre via suffix matching', () => {
     const result = inferInitiative('prd-validation-gyre', taxonomy);
     expect(result.initiative).toBe('gyre');
     expect(result.confidence).toBe('high');
+  });
+
+  test('decision-strategy-perimeter → helm via suffix alias (strategy-perimeter)', () => {
+    const result = inferInitiative('decision-strategy-perimeter', taxonomy);
+    expect(result.initiative).toBe('helm');
+    expect(result.confidence).toBe('high');
+    expect(result.source).toBe('alias');
   });
 });
 
 // --- getGovernanceState tests ---
 
 describe('getGovernanceState', () => {
-  const fixturesDir = path.join(__dirname, '..', 'fixtures', 'artifact-samples');
 
   test('fully-governed: matching convention + matching frontmatter', () => {
-    const content = fs.readFileSync(path.join(fixturesDir, 'governed-gyre-prd.md'), 'utf8');
-    // This file has frontmatter: initiative: gyre — but filename doesn't follow new convention
-    // Let's test with a proper governed filename
-    const result = getGovernanceState('gyre-prd.md', content, taxonomy);
-    // gyre-prd.md: type=prd, initiative=gyre (from remainder after prd-), frontmatter=gyre
-    // Actually: inferArtifactType('gyre-prd.md') — 'gyre' is not an artifact type, so type=null → ungoverned
-    // The NEW convention is {initiative}-{type}.md, but inferArtifactType looks for type prefix
-    // Need a file where type IS the prefix: prd-gyre.md with matching frontmatter
-    const result2 = getGovernanceState('prd-gyre.md', '---\ninitiative: gyre\nartifact_type: prd\n---\n# PRD', taxonomy);
-    expect(result2.state).toBe('fully-governed');
-    expect(result2.fileInitiative).toBe('gyre');
-    expect(result2.frontmatterInitiative).toBe('gyre');
+    const result = getGovernanceState('prd-gyre.md', '---\ninitiative: gyre\nartifact_type: prd\n---\n# PRD', taxonomy);
+    expect(result.state).toBe('fully-governed');
+    expect(result.fileInitiative).toBe('gyre');
+    expect(result.frontmatterInitiative).toBe('gyre');
+    expect(result.candidates).toEqual([]);
   });
 
   test('half-governed: matching convention, no frontmatter', () => {
