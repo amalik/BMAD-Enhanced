@@ -342,6 +342,9 @@ const ARTIFACT_TYPE_ALIASES = {
  * @returns {{type: string|null, hcPrefix: string|null, remainder: string}} Inferred type, HC prefix if any, and remaining segments
  */
 function inferArtifactType(filename, taxonomy) {
+  if (!filename || typeof filename !== 'string') {
+    return { type: null, hcPrefix: null, remainder: '', date: null };
+  }
   const lower = filename.toLowerCase();
   // Strip extension
   const withoutExt = lower.replace(/\.(md|yaml)$/, '');
@@ -384,7 +387,7 @@ function inferArtifactType(filename, taxonomy) {
 
 /**
  * Infer which initiative owns an artifact based on the remaining filename segments.
- * Three-step lookup: exact taxonomy match → alias match → ambiguous.
+ * Five-step lookup: (1) exact match → (2) alias match → (3) progressive prefix → (4) progressive suffix → (5) first segment. Falls through to ambiguous if all steps fail.
  *
  * @param {string} remainder - Filename segments after type prefix and date are removed
  * @param {import('./types').TaxonomyConfig} taxonomy - Taxonomy with initiatives and aliases
@@ -458,7 +461,7 @@ function inferInitiative(remainder, taxonomy) {
  * @param {string} filename - The filename to check
  * @param {string} fileContent - Raw file content (for frontmatter parsing)
  * @param {import('./types').TaxonomyConfig} taxonomy - Taxonomy config
- * @returns {{state: 'fully-governed'|'half-governed'|'ungoverned'|'invalid-governed', fileInitiative: string|null, frontmatterInitiative: string|null}}
+ * @returns {{state: 'fully-governed'|'half-governed'|'ungoverned'|'invalid-governed'|'ambiguous', fileInitiative: string|null, frontmatterInitiative: string|null, candidates: string[]}}
  */
 function getGovernanceState(filename, fileContent, taxonomy) {
   const typeResult = inferArtifactType(filename, taxonomy);
@@ -478,21 +481,24 @@ function getGovernanceState(filename, fileContent, taxonomy) {
   }
 
   // Determine state
-  const filenameMatchesConvention = typeResult.type !== null && initiativeResult.confidence === 'high';
+  if (typeResult.type === null) {
+    return { state: 'ungoverned', fileInitiative, frontmatterInitiative, candidates: [] };
+  }
 
-  if (!filenameMatchesConvention) {
-    return { state: 'ungoverned', fileInitiative, frontmatterInitiative };
+  // Type matched but initiative ambiguous — distinct from ungoverned
+  if (initiativeResult.confidence === 'low') {
+    return { state: 'ambiguous', fileInitiative, frontmatterInitiative, candidates: initiativeResult.candidates || [] };
   }
 
   if (!frontmatterInitiative) {
-    return { state: 'half-governed', fileInitiative, frontmatterInitiative };
+    return { state: 'half-governed', fileInitiative, frontmatterInitiative, candidates: [] };
   }
 
   if (frontmatterInitiative !== fileInitiative) {
-    return { state: 'invalid-governed', fileInitiative, frontmatterInitiative };
+    return { state: 'invalid-governed', fileInitiative, frontmatterInitiative, candidates: [] };
   }
 
-  return { state: 'fully-governed', fileInitiative, frontmatterInitiative };
+  return { state: 'fully-governed', fileInitiative, frontmatterInitiative, candidates: [] };
 }
 
 /**
@@ -582,7 +588,10 @@ function generateNewFilename(filename, initiative, artifactType, taxonomy) {
   if (typeResult.date) {
     newName += `-${typeResult.date}`;
   }
-  newName += '.md';
+
+  // Preserve original extension (.md or .yaml)
+  const extMatch = filename.match(/\.(md|yaml)$/i);
+  newName += extMatch ? `.${extMatch[1].toLowerCase()}` : '.md';
 
   return newName;
 }
