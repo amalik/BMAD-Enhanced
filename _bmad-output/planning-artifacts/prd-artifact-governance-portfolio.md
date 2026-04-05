@@ -474,7 +474,7 @@ The portfolio skill produces `unknown` under specific, testable conditions:
 - FR12: Migration renames files using `git mv` to preserve version history
 - FR13: Migration preserves full git history for all renamed files, verifiable via `git log --follow`
 - FR14: Migration injects frontmatter metadata into all renamed files, preserving any existing frontmatter
-- FR15: Migration scans and updates internal markdown links (`[text](filename.md)` patterns and frontmatter `inputDocuments` arrays) in all `.md` files within scope
+- FR15: Migration scans and updates internal markdown links (`[text](filename.md)` patterns and frontmatter `inputDocuments` arrays) in `.md` files within `_bmad-output/` directories only. Files outside `_bmad-output/` and non-markdown files are never modified.
 - FR16: Migration generates an `artifact-rename-map.md` mapping old filenames to new filenames
 - FR17: Migration verifies `git log --follow` works for a sample of renamed files
 - FR18: Migration is idempotent — detects already-governed files (filename match AND valid frontmatter) and skips them. Half-governed files (renamed but lacking frontmatter) trigger frontmatter injection only.
@@ -527,6 +527,7 @@ The portfolio skill produces `unknown` under specific, testable conditions:
 - FR47: Migration follows a single interactive flow: dry-run manifest → operator review → confirmation prompt → apply. `--force` flag bypasses the confirmation prompt for automation. Operator cannot `--apply` without seeing the manifest first (unless `--force`).
 - FR48: Portfolio view sorts initiatives alphabetically by initiative ID by default. Operator can override with `--sort last-activity`.
 - FR49: Migration creates `taxonomy.yaml` with platform defaults if not present before executing. Idempotent — does not overwrite existing taxonomy (whether created by `convoke-update` or manually).
+- FR50: Migration explicitly excludes `_bmad-output/_archive/` directory — archived files are never renamed or modified.
 
 ## Non-Functional Requirements
 
