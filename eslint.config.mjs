@@ -56,6 +56,20 @@ export default [
     }
   },
   {
+    files: ["tests/**/*.js"],
+    languageOptions: {
+      globals: {
+        test: "readonly",
+        expect: "readonly",
+        jest: "readonly",
+        beforeEach: "readonly",
+        afterEach: "readonly",
+        beforeAll: "readonly",
+        afterAll: "readonly"
+      }
+    }
+  },
+  {
     ignores: ["node_modules/", "_bmad/", "_bmad-output/", "_quint/", "coverage/"]
   }
 ];
