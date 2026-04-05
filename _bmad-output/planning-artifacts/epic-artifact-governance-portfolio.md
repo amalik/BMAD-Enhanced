@@ -114,8 +114,71 @@ Not applicable — CLI/chat tooling with no visual UI.
 
 ### FR Coverage Map
 
-{{requirements_coverage_map}}
+| FR | Epic | Description |
+|----|------|-------------|
+| FR1-FR6 | Epic 1 | Taxonomy & schema management |
+| FR7 | Epic 2 | Dry-run migration manifest |
+| FR9-FR11 | Epic 2 | Initiative + type inference, ambiguity surfacing |
+| FR18 | Epic 2 | Idempotency (governance state detection) |
+| FR19-FR20 | Epic 2 | CLI scope flags + --help |
+| FR49-FR50 | Epic 2 | Taxonomy bootstrap + archive exclusion |
+| FR8 | Epic 3 | Migration execution |
+| FR12-FR17 | Epic 3 | git mv, history preservation, frontmatter injection, link updating, rename map, verification |
+| FR21 | Epic 3 | ADR supersession (new ADR + existing ADR update) |
+| FR46-FR47 | Epic 3 | Idempotent recovery + interactive flow |
+| FR22-FR27 | Epic 4 | Portfolio view (output, formats, filtering, sorting, defaults) |
+| FR28-FR34 | Epic 4 | Portfolio inference (phase, status, chain, stale, unknown, context hint) |
+| FR35-FR37 | Epic 4 | WIP management |
+| FR38 | Epic 4 | Degraded mode |
+| FR39 | Epic 4 | Portfolio prerequisite check |
+| FR48 | Epic 4 | Portfolio sort option |
+| FR40-FR42 | Epic 5 | convoke-update taxonomy integration (create, merge, promote) |
+| FR43 | Epic 5 | convoke-doctor taxonomy validation |
+| FR44-FR45 | Epic 5 | Workflow frontmatter adoption (PRD + epics) |
+
+**Coverage: 50/50 FRs mapped. Zero gaps.**
 
 ## Epic List
 
-{{epics_list}}
+### Epic 1: Artifact Governance Foundation
+Operators can name new artifacts consistently and define initiative taxonomies — the naming convention, taxonomy config, frontmatter schema, and shared library that all downstream work builds on.
+
+**FRs covered:** FR1, FR2, FR3, FR4, FR5, FR6
+**Additional:** Shared lib extraction (ADR-1), types.js, gray-matter dependency, archive.js refactor + clean-tree check
+**Standalone value:** Forward-only convention. Every new artifact follows the standard from this point on.
+
+### Epic 2: Migration Inference & Planning
+Operators can preview exactly what the migration would do — see every proposed rename, link update, and ambiguous file — without modifying anything. Validates inference quality before any irreversible operations.
+
+**FRs covered:** FR7, FR9, FR10, FR11, FR18, FR19, FR20, FR49, FR50
+**Additional:** Greedy type matching, alias map, ambiguity detection with context clues, collision detection, four governance states, --include CLI flag
+**Standalone value:** Dry-run manifest is reviewable and actionable. Operator sees problems before they happen.
+**Depends on:** Epic 1 (shared lib + taxonomy)
+
+### Epic 3: Migration Execution & Safety
+Operators can execute the migration with full safety guarantees — transactional two-commit strategy, rollback on failure, idempotent recovery, internal link updating, git history preservation, and rename mapping.
+
+**FRs covered:** FR8, FR12, FR13, FR14, FR15, FR16, FR17, FR21, FR46, FR47
+**Additional:** Transactional pipeline (ADR-2), clean-tree safeguard, gray-matter frontmatter injection, interactive flow (dry-run → prompt → apply), --force flag, ADR generation
+**Standalone value:** All in-scope artifacts migrated. Full git history preserved. Rename map generated.
+**Depends on:** Epic 2 (inference engine + planning)
+
+### Epic 4: Portfolio Intelligence
+Operators can see all initiatives at a glance — phase, status, next action, context re-entry hint — with WIP overload detection, governance health tracking, and explicit/inferred transparency. Zero manual upkeep.
+
+**FRs covered:** FR22, FR23, FR24, FR25, FR26, FR27, FR28, FR29, FR30, FR31, FR32, FR33, FR34, FR35, FR36, FR37, FR38, FR39, FR48
+**Additional:** Rule chain (ADR-3), 4 inference rules, 2 formatters, degraded mode, verbose trace, portfolio engine in scripts/lib/portfolio/, thin skill wrapper
+**Standalone value:** Portfolio view works immediately — degraded mode on ungoverned artifacts, full mode on governed artifacts.
+**Depends on:** Epic 1 (taxonomy). Works better after Epic 3 (governed artifacts), but not required.
+
+### Epic 5: Platform Integration & Adoption
+The governance system integrates with the Convoke ecosystem — update pipeline creates taxonomy for new installs, doctor validates taxonomy health, and two workflows emit frontmatter on artifact creation.
+
+**FRs covered:** FR40, FR41, FR42, FR43, FR44, FR45
+**Additional:** convoke-update migration (create + merge + promote), convoke-doctor check, bmad-create-prd + bmad-create-epics frontmatter emission
+**Standalone value:** Ecosystem stays governed over time. New installs get taxonomy. Drift is detectable.
+**Depends on:** Epic 1 (taxonomy exists to validate/merge)
+
+---
+
+**Delivery order:** Epic 1 → Epic 2 → Epic 3 → Epic 4 → Epic 5
