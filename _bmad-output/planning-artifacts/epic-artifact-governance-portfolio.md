@@ -1,5 +1,7 @@
 ---
-stepsCompleted: [step-01-validate-prerequisites, step-02-design-epics, step-03-create-stories]
+stepsCompleted: [step-01-validate-prerequisites, step-02-design-epics, step-03-create-stories, step-04-final-validation]
+status: 'complete'
+completedAt: '2026-04-05'
 inputDocuments:
   - _bmad-output/planning-artifacts/prd-artifact-governance-portfolio.md
   - _bmad-output/planning-artifacts/arch-artifact-governance-portfolio.md
@@ -182,3 +184,369 @@ The governance system integrates with the Convoke ecosystem — update pipeline 
 ---
 
 **Delivery order:** Epic 1 → Epic 2 → Epic 3 → Epic 4 → Epic 5
+
+---
+
+## Epic 1: Artifact Governance Foundation
+
+Operators can name new artifacts consistently and define initiative taxonomies — the naming convention, taxonomy config, frontmatter schema, and shared library that all downstream work builds on.
+
+### Story 1.1: Shared Library Extraction & gray-matter
+
+As a platform developer,
+I want shared artifact utilities extracted from archive.js into a reusable library,
+So that migration, portfolio, and archive tools share consistent filename parsing and frontmatter handling.
+
+**Acceptance Criteria:**
+
+**Given** archive.js contains parseFilename(), VALID_CATEGORIES, NAMING_PATTERN, and scanning logic
+**When** the shared lib extraction is complete
+**Then** scripts/lib/artifact-utils.js exports: parseFilename(), scanArtifactDirs(), parseFrontmatter(), injectFrontmatter(), ensureCleanTree()
+**And** scripts/lib/types.js exports JSDoc typedefs: InitiativeState, RenameManifestEntry, LinkUpdate, TaxonomyConfig, FrontmatterSchema
+**And** gray-matter is added to package.json dependencies
+**And** archive.js is refactored to import from artifact-utils.js and produces identical dry-run output before and after
+**And** archive.js gains ensureCleanTree() check for tracked diffs + untracked files in scope
+**And** all existing archive.js tests (if any) continue to pass
+**And** new unit tests cover parseFilename() with at least 5 representative filename patterns
+
+### Story 1.2: Taxonomy Configuration
+
+As a Convoke operator,
+I want a taxonomy config file that defines initiative IDs and artifact types,
+So that all governance tools share a single source of truth for naming.
+
+**Acceptance Criteria:**
+
+**Given** no taxonomy.yaml exists
+**When** the operator creates _bmad/_config/taxonomy.yaml
+**Then** the file contains initiatives.platform with 8 IDs (vortex, gyre, bmm, forge, helm, enhance, loom, convoke)
+**And** the file contains initiatives.user as an empty array
+**And** the file contains an aliases section for historical name resolution (strategy-perimeter → helm, strategy → helm, team-factory → loom)
+**And** the file contains artifact_types with ~20 type IDs
+**And** readTaxonomy() in artifact-utils.js successfully loads and parses the file
+**And** taxonomy validation rejects entries with spaces, uppercase, or special characters
+**And** taxonomy validation detects duplicates between platform and user sections
+
+### Story 1.3: Frontmatter Metadata Schema
+
+As a Convoke operator,
+I want a defined frontmatter schema for artifact metadata,
+So that governance tools can read and write consistent structured data in every artifact.
+
+**Acceptance Criteria:**
+
+**Given** the frontmatter schema v1 is defined
+**When** injectFrontmatter() is called with a file and new fields
+**Then** the file receives frontmatter with fields: initiative, artifact_type, created, schema_version (all required) and status (optional)
+**And** schema_version is set to 1
+**And** status accepts only: draft, validated, superseded, active
+**And** existing frontmatter fields are preserved — new fields added, never overwritten (NFR20)
+**And** content below frontmatter is preserved byte-for-byte
+**And** field conflicts (e.g., existing initiative differs from new) are detected and reported, not silently resolved
+**And** files with no existing frontmatter receive a new frontmatter block
+**And** metadata-only files (frontmatter with empty content) are handled safely
+**And** unit tests validate all edge cases including existing frontmatter, no frontmatter, metadata-only, and field conflicts
+
+---
+
+## Epic 2: Migration Inference & Planning
+
+Operators can preview exactly what the migration would do — see every proposed rename, link update, and ambiguous file — without modifying anything. Validates inference quality before any irreversible operations.
+
+### Story 2.1: Initiative Inference Engine
+
+As a Convoke operator,
+I want the migration to correctly infer which initiative owns each artifact,
+So that the dry-run manifest proposes accurate renames.
+
+**Acceptance Criteria:**
+
+**Given** artifacts exist in planning-artifacts/, vortex-artifacts/, and gyre-artifacts/ with heterogeneous naming patterns
+**When** the inference engine processes each file
+**Then** it applies greedy type matching (longest artifact type prefix first, dash boundary: `type + '-'` or exact `type + '.md'`)
+**And** it resolves initiatives via three-step lookup: exact taxonomy match → alias match → ambiguous
+**And** `strategy-perimeter` resolves to `helm` via alias map
+**And** `team-factory` resolves to `loom` via alias map
+**And** files where initiative cannot be confidently inferred are marked `confidence: 'low'` with candidate list
+**And** the four governance states are detected: fully-governed (name + frontmatter match), half-governed (name matches, no frontmatter), ungoverned (no match), invalid-governed (name/frontmatter conflict)
+**And** unit tests cover all known filename patterns from current repository with 100% inference rule coverage (NFR17)
+
+### Story 2.2: Dry-Run Manifest Generation
+
+As a Convoke operator,
+I want to see exactly what the migration would do before any files are touched,
+So that I can review, validate, and resolve ambiguities before committing to irreversible operations.
+
+**Acceptance Criteria:**
+
+**Given** the inference engine has processed all in-scope files
+**When** the operator runs `convoke-migrate-artifacts` (dry-run is default)
+**Then** a manifest is displayed showing: old filename → proposed new filename for every file
+**And** each entry shows initiative (with confidence + source) and artifact type (with confidence + source)
+**And** ambiguous files show context clues: first 3 lines of content, git last author + date
+**And** with `--verbose`, ambiguous files additionally show referencing files (cross-reference scan)
+**And** target filename collisions are detected and flagged before any execution
+**And** invalid-governed files (filename/frontmatter conflict) are flagged as "CONFLICT — resolve before migration"
+**And** already-governed files are listed as "SKIP — already governed"
+**And** half-governed files are listed as "INJECT ONLY — frontmatter needed"
+**And** the manifest is 100% accurate — what it shows must match what execution would do (NFR7)
+**And** dry-run manifest generation completes in under 10 seconds for up to 200 artifacts (NFR2)
+
+### Story 2.3: Migration CLI & Scope Configuration
+
+As a Convoke operator,
+I want to control migration scope and get help on usage,
+So that I can migrate specific directories and understand all available options.
+
+**Acceptance Criteria:**
+
+**Given** the migration script exists at `scripts/migrate-artifacts.js` with CLI entry at `bin/convoke-migrate-artifacts`
+**When** the operator runs `convoke-migrate-artifacts --help`
+**Then** usage documentation is displayed covering: dry-run (default), --force, --include, and all flags
+**And** `--include planning-artifacts,vortex-artifacts,gyre-artifacts` is the default scope
+**And** `--include` accepts comma-separated directory names and replaces defaults
+**And** `_bmad-output/_archive/` is always excluded regardless of --include (FR50)
+**And** the script creates `taxonomy.yaml` with platform defaults if not present before processing (FR49, idempotent — never overwrites existing)
+**And** the script uses `findProjectRoot()` to locate the project root (never `process.cwd()`)
+**And** `parseArgs()` is extracted as a function at the top of the CLI entry point (enforcement guideline)
+
+---
+
+## Epic 3: Migration Execution & Safety
+
+Operators can execute the migration with full safety guarantees — transactional two-commit strategy, rollback on failure, idempotent recovery, internal link updating, git history preservation, and rename mapping.
+
+### Story 3.1: Transactional Rename Execution (Commit 1)
+
+As a Convoke operator,
+I want all artifact renames to execute as a single atomic git commit,
+So that my repository is never left in a partial rename state and git history is fully preserved.
+
+**Acceptance Criteria:**
+
+**Given** the operator has reviewed the dry-run manifest and confirmed via interactive prompt (or --force)
+**When** the migration executes the rename phase
+**Then** ensureCleanTree() verifies no tracked diffs AND no untracked files in scope directories before proceeding
+**And** all renames execute via `git mv` (never `fs.renameSync`)
+**And** if any `git mv` fails, all renames are rolled back via `git reset --hard HEAD` — repository returns to pre-migration state
+**And** on success, a single commit is created: `chore: rename artifacts to governance convention`
+**And** the commit contains only renames — zero content changes (100% git similarity for rename detection)
+**And** `git log --follow` works on a sample of 5 renamed files, verifying history chain (FR17)
+**And** migration execution (rename phase) completes in under 60 seconds for up to 100 files, excluding git commit time (NFR3)
+**And** integration tests validate the full rename → rollback → re-run cycle using a real temp git repo
+
+### Story 3.2: Frontmatter Injection & Link Updating (Commit 2)
+
+As a Convoke operator,
+I want frontmatter metadata injected into all renamed artifacts and internal links updated,
+So that governance tools can read structured metadata and cross-references aren't broken.
+
+**Acceptance Criteria:**
+
+**Given** commit 1 (renames) has completed successfully
+**When** the migration executes the injection phase
+**Then** frontmatter is injected into every renamed file using gray-matter (initiative, artifact_type, created, schema_version: 1)
+**And** existing frontmatter fields are preserved — migration adds, never overwrites (NFR20)
+**And** field conflicts detected in dry-run are skipped with warning (not silently resolved)
+**And** content below frontmatter is preserved byte-for-byte
+**And** internal markdown links are updated for 4 patterns: `[text](filename.md)`, `[text](./filename.md)`, `[text](../dir/filename.md)`, and frontmatter `inputDocuments` arrays
+**And** only `.md` files within `_bmad-output/` are scanned for links (FR15 boundary)
+**And** if any write fails, the phase rolls back via `git reset --hard` to commit 1 state (renames preserved, injections discarded)
+**And** on success, a single commit is created: `chore: inject frontmatter metadata and update links`
+**And** unit tests validate frontmatter injection for: no existing frontmatter, existing frontmatter, metadata-only files, field conflicts
+**And** unit tests validate link updating for all 4 link patterns plus edge case (link with anchor `#section`)
+
+### Story 3.3: Interactive Flow, Recovery & Rename Map
+
+As a Convoke operator,
+I want a safe interactive migration flow with idempotent recovery and a rename map for reference,
+So that I can control the process, recover from failures, and trace old filenames to new ones.
+
+**Acceptance Criteria:**
+
+**Given** the migration script is invoked
+**When** the operator runs the migration
+**Then** it follows the single interactive flow: dry-run manifest → operator review → confirmation prompt ("Apply migration? [y/n]") → execute
+**And** `--force` bypasses the confirmation prompt for automation
+**And** ambiguous files prompt the operator interactively: `Assign initiative for prd.md [convoke/gyre/skip]: `
+**And** skipped files are excluded from migration and noted in summary
+**And** `artifact-rename-map.md` is generated mapping every old filename → new filename, committed with the migration
+**And** idempotent recovery works: re-running after commit 1 success + commit 2 failure detects "renames done, frontmatter pending" and resumes from commit 2 without re-executing commit 1
+**And** re-running after full success detects all files as fully-governed and reports "Nothing to migrate — all files governed"
+**And** summary report shows: X files renamed, Y frontmatter injected, Z links updated, W skipped
+
+### Story 3.4: ADR Supersession
+
+As a Convoke operator,
+I want the migration to produce a new ADR documenting the governance convention and mark the old ADR as superseded,
+So that the naming standard is formally documented and the old convention is clearly replaced.
+
+**Acceptance Criteria:**
+
+**Given** the migration has completed successfully
+**When** the ADR generation step runs
+**Then** a new ADR is created at `_bmad-output/planning-artifacts/adr-artifact-governance-convention-{date}.md`
+**And** the new ADR documents: naming convention, taxonomy structure, frontmatter schema v1, migration scope, and relationship to previous ADR
+**And** the existing ADR (`adr-repo-organization-conventions-2026-03-22.md`) has its status field updated from `ACCEPTED` to `SUPERSEDED`
+**And** the existing ADR's frontmatter or header includes: `Superseded by: adr-artifact-governance-convention-{date}.md`
+
+---
+
+## Epic 4: Portfolio Intelligence
+
+Operators can see all initiatives at a glance — phase, status, next action, context re-entry hint — with WIP overload detection, governance health tracking, and explicit/inferred transparency. Zero manual upkeep.
+
+### Story 4.1: Portfolio Inference Rules
+
+As a Convoke operator,
+I want the portfolio skill to accurately infer each initiative's phase and status from existing artifacts,
+So that I get trustworthy visibility without manually tracking anything.
+
+**Acceptance Criteria:**
+
+**Given** artifacts exist across `_bmad-output/` directories for multiple initiatives
+**When** the inference rule chain executes
+**Then** `frontmatter-rule.js` reads explicit status from frontmatter when present (highest priority)
+**And** `artifact-chain-rule.js` infers phase using priority order: explicit frontmatter phase (overrides all) → epic with stories done = `complete` → epic + sprint = `build` → architecture doc = `planning` → HC artifacts = `discovery` → PRD/brief only = `planning` → no match = `unknown`
+**And** `artifact-chain-rule.js` detects Vortex discovery completeness from HC chain (HC2→HC3→HC4→HC5→HC6) (FR34)
+**And** `git-recency-rule.js` infers `ongoing` when git activity within stale_days, `stale` when beyond threshold (default 30 days, configurable via FR37)
+**And** `conflict-resolver.js` resolves conflicts: explicit wins over inferred, later phases override earlier
+**And** flexible epic status markers are recognized: `done`, `complete`, `✅`, `[x]`, strikethrough
+**And** multiple epics for same initiative → latest modified used
+**And** each rule produces the InitiativeState data structure with `value`, `source`, `confidence` fields
+**And** stale detection checks current branch only (documented known limitation)
+**And** unit tests achieve 100% coverage on all 4 inference rules (NFR18)
+**And** test fixtures in `tests/fixtures/artifact-samples/` cover all known patterns (NFR19)
+
+### Story 4.2: Portfolio Engine & Artifact Registry
+
+As a Convoke operator,
+I want to generate a portfolio view of all my initiatives from a single command,
+So that I can see where everything stands in under 30 seconds.
+
+**Acceptance Criteria:**
+
+**Given** taxonomy.yaml exists and artifacts are present in `_bmad-output/`
+**When** the operator runs `convoke-portfolio`
+**Then** the engine scans all output directories and builds an artifact registry indexed by initiative/type/date/status
+**And** for each initiative in taxonomy (platform + user), the inference rule chain executes and produces an InitiativeState
+**And** the portfolio view displays: initiative name, phase, status, next action, and context re-entry hint (last artifact touched + date)
+**And** each status is marked `(explicit)` or `(inferred)` for transparency (FR23)
+**And** initiatives with `unknown` phase or status show `unknown (inferred)` — never a false-confident guess (NFR6)
+**And** initiatives are sorted alphabetically by initiative ID by default (FR48)
+**And** `--sort last-activity` overrides to sort by most recently modified
+**And** the portfolio checks for taxonomy.yaml prerequisite — clear error if absent, warning if no governed artifacts found (FR39)
+**And** scan completes in under 5 seconds for up to 200 artifacts (NFR1)
+
+### Story 4.3: Degraded Mode & Governance Health
+
+As a Convoke operator,
+I want the portfolio to work on ungoverned artifacts and show me how governed my project is,
+So that I get value immediately and can track my migration progress.
+
+**Acceptance Criteria:**
+
+**Given** a mix of governed (frontmatter) and ungoverned (no frontmatter) artifacts exist
+**When** the portfolio runs
+**Then** degraded mode activates for ungoverned artifacts — infers initiative from filename patterns and git recency
+**And** degraded mode produces lower-fidelity results but still shows initiative, phase (if detectable), and last activity
+**And** degraded results are clearly marked `(inferred)` in the output
+**And** every portfolio output includes a governance health score: `Governance: X/Y artifacts governed (Z%)` (FR24)
+**And** health score counts governed = filename match + valid frontmatter with initiative field
+**And** when governance reaches 100%, the health score line still appears (confirmation, not nag)
+
+### Story 4.4: WIP Radar & Filtering
+
+As a Convoke operator,
+I want to be warned when I have too many active initiatives and filter by initiative prefix,
+So that I can manage overload and focus on specific workstreams.
+
+**Acceptance Criteria:**
+
+**Given** the portfolio view is generated
+**When** the number of active initiatives (status: ongoing, blocked, or stale) exceeds the WIP threshold (default 4, configurable via `_bmad/bmm/config.yaml` portfolio.wip_threshold)
+**Then** a WIP radar line appears below the portfolio table: `WIP: X active (threshold: Y) — sorted by last activity`
+**And** the radar lists all active initiatives sorted by last-activity date (FR36)
+**And** when threshold is not exceeded, no WIP line appears
+**And** `--filter clientb-*` filters the portfolio view to show only initiatives matching the glob pattern (FR25)
+**And** filtering applies before WIP count — filtered view shows WIP only for the filtered set
+**And** operator can configure stale_days in `_bmad/bmm/config.yaml` portfolio.stale_days (FR37)
+
+### Story 4.5: Output Formats & CLI Wrapper
+
+As a Convoke operator,
+I want portfolio output in both terminal and markdown formats with a verbose mode for debugging,
+So that I can use it from CLI daily and embed it in documents from chat.
+
+**Acceptance Criteria:**
+
+**Given** the portfolio engine has produced InitiativeState data for all initiatives
+**When** the operator runs `convoke-portfolio` from CLI
+**Then** terminal format is default — box-drawing table with alignment and colors
+**And** `--markdown` produces a standard markdown table with the same columns
+**And** both formats include the WIP radar (if triggered) and governance health score below the table
+**And** `--verbose` appends an inference trace per initiative showing source and confidence for every field
+**And** the CLI entry point is `bin/convoke-portfolio` requiring `scripts/lib/portfolio/portfolio-engine.js`
+**And** the BMAD skill wrapper at `.claude/skills/bmad-portfolio-status/workflow.md` invokes `convoke-portfolio --markdown` and presents the output
+**And** default is `--terminal` from CLI, `--markdown` from chat (FR27)
+
+---
+
+## Epic 5: Platform Integration & Adoption
+
+The governance system integrates with the Convoke ecosystem — update pipeline creates taxonomy for new installs, doctor validates taxonomy health, and two workflows emit frontmatter on artifact creation.
+
+### Story 5.1: convoke-update Taxonomy Integration
+
+As a Convoke operator upgrading from a pre-I14 installation,
+I want the update pipeline to automatically create and maintain my taxonomy config,
+So that governance tools work without manual setup after updating.
+
+**Acceptance Criteria:**
+
+**Given** a project installed before I14 (no taxonomy.yaml exists)
+**When** the operator runs `convoke-update`
+**Then** a new migration in `scripts/update/migrations/` creates `_bmad/_config/taxonomy.yaml` with platform defaults
+**And** the migration is idempotent — if taxonomy.yaml already exists, it merges platform entries without overwriting user extensions (FR41)
+**And** merge follows the same pattern as existing `config-merger.js` (seed defaults, preserve user additions)
+**And** if a user initiative ID matches a new platform ID (e.g., user added `helm` before it became official), the ID is promoted from user to platform section (FR42)
+**And** promotion leaves a YAML comment: `# promoted from user section on {date}`
+**And** the migration integrates with the existing migration registry (append-only, same pattern as other migrations)
+**And** existing `convoke-update` tests continue to pass
+
+### Story 5.2: convoke-doctor Taxonomy Validation
+
+As a Convoke operator,
+I want `convoke-doctor` to validate my taxonomy configuration,
+So that I catch malformed config, invalid IDs, and collisions before they cause problems.
+
+**Acceptance Criteria:**
+
+**Given** taxonomy.yaml exists at `_bmad/_config/taxonomy.yaml`
+**When** the operator runs `convoke-doctor`
+**Then** a new validation check verifies taxonomy file structure (initiatives.platform, initiatives.user, artifact_types, aliases sections)
+**And** each initiative ID is validated: lowercase alphanumeric with optional dashes, no spaces, no special characters
+**And** each artifact type is validated with the same rules
+**And** duplicates between platform and user sections are detected and reported
+**And** collisions between initiative IDs and artifact type IDs are detected (if any — unlikely but safeguarded)
+**And** malformed YAML produces a clear, actionable error message identifying the syntax issue (NFR22)
+**And** if taxonomy.yaml is missing, doctor reports: `⚠️ taxonomy.yaml not found — run convoke-migrate-artifacts or convoke-update to create`
+**And** the check integrates as a new validation in the existing doctor check sequence
+**And** existing `convoke-doctor` tests continue to pass
+
+### Story 5.3: Workflow Frontmatter Adoption
+
+As a Convoke operator creating new PRDs or epics,
+I want the creation workflows to automatically include governance frontmatter,
+So that new artifacts are governed from birth without manual metadata entry.
+
+**Acceptance Criteria:**
+
+**Given** taxonomy.yaml exists and the operator runs `bmad-create-prd` or `bmad-create-epics-and-stories`
+**When** the workflow creates a new output artifact
+**Then** `bmad-create-prd` emits frontmatter with: initiative (prompted or inferred from context), artifact_type: `prd`, status: `draft`, created: current date, schema_version: 1 (FR44)
+**And** `bmad-create-epics-and-stories` emits frontmatter with: initiative (prompted or inferred), artifact_type: `epic`, status: `draft`, created: current date, schema_version: 1 (FR45)
+**And** if taxonomy.yaml is not found, the workflow proceeds normally without frontmatter emission (graceful degradation — don't break existing workflows)
+**And** if the initiative cannot be inferred from context, the workflow prompts the operator: `Which initiative is this for? [{list from taxonomy}]: `
+**And** emitted frontmatter follows the schema v1 exactly as defined in Epic 1 Story 1.3
+**And** existing workflow functionality is unaffected — frontmatter is additive, not disruptive
