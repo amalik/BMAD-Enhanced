@@ -51,7 +51,7 @@ function isValidCategory(cat) {
  * @param {import('./types').TaxonomyConfig} [taxonomy] - Optional taxonomy for extended initiative inference
  * @returns {import('./types').ParsedFilename}
  */
-function parseFilename(filename, taxonomy) {
+function parseFilename(filename, _taxonomy) {
   const lower = filename.toLowerCase();
   const dated = lower.match(DATED_PATTERN);
   const categorized = lower.match(CATEGORIZED_PATTERN);
@@ -135,7 +135,8 @@ function readTaxonomy(projectRoot) {
     raw = yaml.load(fs.readFileSync(configPath, 'utf8'));
   } catch (err) {
     throw new Error(
-      `Invalid YAML in taxonomy config: ${err.message}. File: ${configPath}`
+      `Invalid YAML in taxonomy config: ${err.message}. File: ${configPath}`,
+      { cause: err }
     );
   }
 
@@ -220,7 +221,7 @@ function parseFrontmatter(fileContent) {
     const parsed = matter(fileContent);
     return { data: parsed.data, content: parsed.content };
   } catch (err) {
-    throw new Error(`Failed to parse frontmatter: ${err.message}`);
+    throw new Error(`Failed to parse frontmatter: ${err.message}`, { cause: err });
   }
 }
 
