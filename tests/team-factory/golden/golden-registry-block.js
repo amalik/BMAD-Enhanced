@@ -27,7 +27,7 @@ const TEST_TEAM_WORKFLOWS = [
   { name: 'component-building', agent: 'beta-builder' },
 ];
 
-// Derived lists for Test Team
+// Derived lists for Test Team (available for golden comparisons)
 const _TEST_TEAM_AGENT_FILES = TEST_TEAM_AGENTS.map(a => `${a.id}.md`);
 const _TEST_TEAM_AGENT_IDS = TEST_TEAM_AGENTS.map(a => a.id);
 const _TEST_TEAM_WORKFLOW_NAMES = TEST_TEAM_WORKFLOWS.map(w => w.name);
