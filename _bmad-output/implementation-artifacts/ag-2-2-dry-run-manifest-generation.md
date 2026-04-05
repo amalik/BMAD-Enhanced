@@ -16,8 +16,9 @@ so that I can review, validate, and resolve ambiguities before committing to irr
 4. With `--verbose`, ambiguous files additionally show referencing files (cross-reference scan)
 5. Target filename collisions are detected and flagged before any execution
 6. Invalid-governed files (filename/frontmatter conflict) are flagged as "CONFLICT -- resolve before migration"
-7. Already fully-governed files are listed as "SKIP -- already governed"
-8. Half-governed files (filename matches convention, no frontmatter) are listed as "INJECT ONLY -- frontmatter needed"
+7. Already fully-governed files whose filename already matches the governance convention are listed as "SKIP -- already governed"
+8. Files whose filename already matches the governance convention but lack frontmatter are listed as "INJECT ONLY -- frontmatter needed"
+   - Note: half-governed files whose filename does NOT match the target convention (e.g., `prd-gyre.md` -> `gyre-prd.md`) are listed as RENAME, not INJECT ONLY
 9. The manifest is 100% accurate -- what it shows must match what execution would do (NFR7)
 10. Dry-run manifest generation completes in under 10 seconds for up to 200 artifacts (NFR2)
 
@@ -25,7 +26,7 @@ so that I can review, validate, and resolve ambiguities before committing to irr
 
 - [ ] Task 1: Implement `getContextClues(filePath, projectRoot)` (AC: #3)
   - [ ] Read first 3 lines of file content (trimmed, handle files with < 3 lines)
-  - [ ] Run `git log -1 --format="%an (%ai)"` on the file to get last author + date
+  - [ ] Run `git log -1 --format="%an|%as"` on the file, split on `|` to get author + short date (YYYY-MM-DD)
   - [ ] Return `{ firstLines: string[], gitAuthor: string, gitDate: string }`
   - [ ] Handle non-git files gracefully (return null for git fields)
   - [ ] Add to `scripts/lib/artifact-utils.js`, export
@@ -41,13 +42,16 @@ so that I can review, validate, and resolve ambiguities before committing to irr
   - [ ] `fileInfo` = `{ filename, dir, fullPath }` from `scanArtifactDirs()`
   - [ ] Read file content via `fs.readFile(fullPath, 'utf8')`
   - [ ] Call `getGovernanceState(filename, fileContent, taxonomy)` to classify
-  - [ ] Map governance state to manifest action:
-    - `fully-governed` -> action: `SKIP`, no new filename
-    - `half-governed` -> action: `INJECT_ONLY`, no rename, build frontmatter fields
-    - `ungoverned` -> action: `RENAME`, generate new filename via `generateNewFilename()`
+  - [ ] For `half-governed` and `fully-governed` states: call `generateNewFilename()` and compare with current filename to determine true action
+  - [ ] Map to manifest action using the filename comparison:
+    - `fully-governed` + filename matches generated name -> action: `SKIP`
+    - `fully-governed` + filename differs from generated name -> action: `RENAME` (old convention, has frontmatter)
+    - `half-governed` + filename matches generated name -> action: `INJECT_ONLY` (just needs frontmatter)
+    - `half-governed` + filename differs from generated name -> action: `RENAME` (old convention, needs rename + frontmatter)
+    - `ungoverned` (no type match) -> action: `AMBIGUOUS`, include context clues
+    - `ambiguous` (type OK, initiative unclear) -> action: `AMBIGUOUS`, include candidates
     - `invalid-governed` -> action: `CONFLICT`, no new filename
-    - `ambiguous` -> action: `AMBIGUOUS`, no new filename, include candidates
-  - [ ] Return `RenameManifestEntry` (extend typedef in types.js -- see Dev Notes)
+  - [ ] Return `ManifestEntry` (new typedef in types.js -- see Dev Notes)
   - [ ] Add to `scripts/lib/artifact-utils.js`, export
 
 - [ ] Task 4: Implement `detectCollisions(entries)` (AC: #5)
@@ -97,14 +101,11 @@ so that I can review, validate, and resolve ambiguities before committing to irr
   - [ ] Summary footer: counts per action type
   - [ ] Add to `scripts/lib/artifact-utils.js`, export
 
-- [ ] Task 7: Update types.js with extended manifest types (AC: #1-#8)
-  - [ ] Extend `RenameManifestEntry` or create `ManifestEntry` typedef with:
-    - `action: 'RENAME'|'SKIP'|'INJECT_ONLY'|'CONFLICT'|'AMBIGUOUS'`
-    - `contextClues: { firstLines: string[], gitAuthor: string, gitDate: string } | null`
-    - `crossReferences: string[] | null`
-    - `candidates: string[]`
-    - `collisionWith: string[] | null`
-  - [ ] Add `ManifestResult` typedef: `{ entries, collisions, summary }`
+- [ ] Task 7: Update types.js with new manifest types (AC: #1-#8)
+  - [ ] Create new `ManifestEntry` typedef (replaces old `RenameManifestEntry` which is a planning placeholder with only 6 fields and 4 states)
+  - [ ] Deprecate `RenameManifestEntry` with a `@deprecated Use ManifestEntry instead` JSDoc tag (do NOT remove yet -- check for consumers first)
+  - [ ] `ManifestEntry` fields -- see Type Extensions Needed in Dev Notes below
+  - [ ] Add `ManifestResult` typedef: `{ entries: ManifestEntry[], collisions: Map<string, string[]>, summary: { total, skip, rename, inject, conflict, ambiguous } }`
 
 - [ ] Task 8: Write manifest generation tests (AC: #1-#10)
   - [ ] Create `tests/lib/manifest.test.js`
@@ -118,11 +119,13 @@ so that I can review, validate, and resolve ambiguities before committing to irr
     - Finds relative path references `[text](../dir/target.md)`
     - Returns empty array for unreferenced files
   - [ ] Test `buildManifestEntry()`:
-    - Ungoverned file -> action RENAME with new filename
-    - Fully-governed file -> action SKIP
-    - Half-governed file -> action INJECT_ONLY
+    - Ungoverned file (no type match) -> action AMBIGUOUS
+    - Fully-governed file + filename matches target -> action SKIP
+    - Fully-governed file + filename differs from target (old convention) -> action RENAME
+    - Half-governed file + filename matches target -> action INJECT_ONLY
+    - Half-governed file + filename differs from target (old convention, e.g., `prd-gyre.md`) -> action RENAME
     - Invalid-governed file -> action CONFLICT
-    - Ambiguous file -> action AMBIGUOUS with candidates
+    - Ambiguous file (type OK, initiative unclear) -> action AMBIGUOUS with candidates
   - [ ] Test `detectCollisions()`:
     - No collisions -> empty map
     - Two files with same target -> collision detected
@@ -155,7 +158,7 @@ so that I can review, validate, and resolve ambiguities before committing to irr
 - `inferArtifactType` returns `{ type, hcPrefix, remainder, date }` -- the `remainder` feeds into `inferInitiative`
 - `inferInitiative` returns `{ initiative, confidence, source, candidates }` -- the `confidence` and `source` fields are what gets displayed in the manifest
 - `getGovernanceState` returns `{ state, fileInitiative, frontmatterInitiative, candidates }` -- this is the primary classifier for manifest entries
-- `generateNewFilename` returns a string -- only call this for ungoverned files where initiative was resolved (confidence: high)
+- `generateNewFilename` returns a string -- call for ALL files where type + initiative are resolved (half-governed and fully-governed), then compare with current filename to determine RENAME vs SKIP/INJECT_ONLY
 - `scanArtifactDirs` returns `[{ filename, dir, fullPath }]` -- this is the input to manifest generation
 - Existing tests: 103 across 3 files (artifact-utils.test.js, taxonomy.test.js, inference.test.js)
 - ag-2-1 had 3 test failures during dev: alias ordering, suffix initiative matching, qualifier extraction. All resolved. Patterns are now stable.
@@ -177,24 +180,30 @@ so that I can review, validate, and resolve ambiguities before committing to irr
 
 ### Governance State -> Manifest Action Mapping
 
-| Governance State | Manifest Action | New Filename? | Context Clues? |
-|-----------------|----------------|---------------|----------------|
-| `fully-governed` | SKIP | No | No |
-| `half-governed` | INJECT_ONLY | No (keep current name) | No |
-| `ungoverned` (high confidence) | RENAME | Yes (via `generateNewFilename`) | No |
-| `ungoverned` (low confidence) | AMBIGUOUS | No | Yes |
-| `ambiguous` | AMBIGUOUS | No | Yes |
-| `invalid-governed` | CONFLICT | No | Yes (show both values) |
+**Critical**: `getGovernanceState` classifies based on inference ability, NOT whether the filename follows the new governance convention. A file like `prd-gyre.md` is `half-governed` (type + initiative resolved, no frontmatter) but its filename differs from the governance target `gyre-prd.md`. The `buildManifestEntry` function must compare the current filename with `generateNewFilename()` output to determine the correct action.
 
-Note: `getGovernanceState` returns `ambiguous` when the artifact type matches but initiative has low confidence. `ungoverned` is when no artifact type matches at all. Both surface as AMBIGUOUS in the manifest since neither can be auto-migrated.
+| Governance State | Filename == Generated? | Action | Context Clues? |
+|-----------------|----------------------|--------|----------------|
+| `fully-governed` | Yes | SKIP | No |
+| `fully-governed` | No (old convention) | RENAME | No |
+| `half-governed` | Yes | INJECT_ONLY | No |
+| `half-governed` | No (old convention) | RENAME | No |
+| `ambiguous` | N/A | AMBIGUOUS | Yes |
+| `ungoverned` | N/A | AMBIGUOUS | Yes |
+| `invalid-governed` | N/A | CONFLICT | Yes (show both values) |
+
+**State definitions:**
+- `ambiguous`: artifact type matches but initiative has low confidence (candidates available)
+- `ungoverned`: no artifact type matches at all (e.g., `initiatives-backlog.md`)
+- Both surface as AMBIGUOUS since neither can produce a valid new filename
 
 ### Type Extensions Needed
 
-Extend `types.js` with:
+Create new `ManifestEntry` in `types.js` (replaces old `RenameManifestEntry` planning placeholder):
 
 ```javascript
 /**
- * Extended manifest entry for dry-run display.
+ * Manifest entry for dry-run display. Replaces RenameManifestEntry.
  * @typedef {Object} ManifestEntry
  * @property {string} oldPath - Current relative path (e.g., 'planning-artifacts/prd-gyre.md')
  * @property {string|null} newPath - Proposed new path (null for SKIP/CONFLICT/AMBIGUOUS)
@@ -212,6 +221,8 @@ Extend `types.js` with:
  * @property {string|null} fileInitiative - Initiative from filename (for CONFLICT display)
  */
 ```
+
+**Note:** The old `RenameManifestEntry` (6 fields, 4 states, missing `ambiguous`) is a planning placeholder not consumed by any code. Deprecate it with `@deprecated` JSDoc tag but do not remove until consumers are verified.
 
 ### Anti-Patterns to AVOID
 
