@@ -317,6 +317,99 @@ function ensureCleanTree(scopeDirs, projectRoot) {
   }
 }
 
+// --- Schema Validation ---
+
+/** Valid artifact-level status values (closed enum) */
+const VALID_STATUSES = ['draft', 'validated', 'superseded', 'active'];
+
+/** ISO 8601 date format: YYYY-MM-DD */
+const DATE_PATTERN = /^\d{4}-\d{2}-\d{2}$/;
+
+/**
+ * Validate frontmatter fields against the governance schema v1.
+ *
+ * @param {Object} fields - Frontmatter fields to validate
+ * @param {import('./types').TaxonomyConfig} taxonomy - Taxonomy config for initiative/type validation
+ * @returns {{valid: boolean, errors: string[]}} Validation result with error messages
+ */
+function validateFrontmatterSchema(fields, taxonomy) {
+  const errors = [];
+
+  // Required fields
+  if (!fields.initiative) {
+    errors.push('Missing required field: initiative');
+  }
+  if (!fields.artifact_type) {
+    errors.push('Missing required field: artifact_type');
+  }
+  if (!fields.created) {
+    errors.push('Missing required field: created');
+  }
+  if (fields.schema_version === undefined || fields.schema_version === null) {
+    errors.push('Missing required field: schema_version');
+  }
+
+  // schema_version must be integer >= 1
+  if (fields.schema_version !== undefined && fields.schema_version !== null) {
+    if (!Number.isInteger(fields.schema_version) || fields.schema_version < 1) {
+      errors.push(`Invalid schema_version "${fields.schema_version}": must be an integer >= 1`);
+    }
+  }
+
+  // created must be ISO 8601 date format
+  if (fields.created && !DATE_PATTERN.test(fields.created)) {
+    errors.push(`Invalid created date "${fields.created}": must be YYYY-MM-DD format`);
+  }
+
+  // status is optional but must be from closed enum if present
+  if (fields.status !== undefined && !VALID_STATUSES.includes(fields.status)) {
+    errors.push(`Invalid status "${fields.status}": must be one of ${VALID_STATUSES.join(', ')}`);
+  }
+
+  // initiative must exist in taxonomy
+  if (fields.initiative && taxonomy) {
+    const allInitiatives = [...taxonomy.initiatives.platform, ...taxonomy.initiatives.user];
+    if (!allInitiatives.includes(fields.initiative)) {
+      errors.push(`Initiative "${fields.initiative}" not found in taxonomy (platform or user sections)`);
+    }
+  }
+
+  // artifact_type must exist in taxonomy
+  if (fields.artifact_type && taxonomy) {
+    if (!taxonomy.artifact_types.includes(fields.artifact_type)) {
+      errors.push(`Artifact type "${fields.artifact_type}" not found in taxonomy artifact_types list`);
+    }
+  }
+
+  return { valid: errors.length === 0, errors };
+}
+
+/**
+ * Build a complete frontmatter field set conforming to schema v1.
+ * Does NOT validate — use validateFrontmatterSchema() for that.
+ *
+ * @param {string} initiative - Initiative ID from taxonomy
+ * @param {string} artifactType - Artifact type from taxonomy
+ * @param {Object} [options={}] - Optional overrides (status, created)
+ * @param {string} [options.status] - Optional artifact status (draft/validated/superseded/active)
+ * @param {string} [options.created] - Optional created date (defaults to today YYYY-MM-DD)
+ * @returns {import('./types').FrontmatterSchema} Complete frontmatter fields
+ */
+function buildSchemaFields(initiative, artifactType, options = {}) {
+  const fields = {
+    initiative,
+    artifact_type: artifactType,
+    created: options.created || new Date().toISOString().split('T')[0],
+    schema_version: 1
+  };
+
+  if (options.status !== undefined) {
+    fields.status = options.status;
+  }
+
+  return fields;
+}
+
 // --- Exports ---
 
 module.exports = {
@@ -325,6 +418,7 @@ module.exports = {
   NAMING_PATTERN,
   DATED_PATTERN,
   CATEGORIZED_PATTERN,
+  VALID_STATUSES,
   // Filename parsing
   isValidCategory,
   parseFilename,
@@ -336,6 +430,9 @@ module.exports = {
   // Frontmatter
   parseFrontmatter,
   injectFrontmatter,
+  // Schema
+  validateFrontmatterSchema,
+  buildSchemaFields,
   // Git
   ensureCleanTree
 };
