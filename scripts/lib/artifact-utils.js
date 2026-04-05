@@ -64,7 +64,7 @@ function parseFilename(filename, taxonomy) {
     category: categorized ? categorized[1] : null,
     hasValidCategory: categorized ? isValidCategory(categorized[1]) : false,
     isUppercase: filename !== lower,
-    matchesConvention: NAMING_PATTERN.test(filename) && categorized && isValidCategory(categorized[1])
+    matchesConvention: !!(NAMING_PATTERN.test(filename) && categorized && isValidCategory(categorized[1]))
   };
 }
 
@@ -97,7 +97,7 @@ async function scanArtifactDirs(projectRoot, includeDirs, excludeDirs = ['_archi
     const fullDir = path.join(outputDir, dir);
     if (!await fs.pathExists(fullDir)) continue;
 
-    const files = await fs.readdir(fullDir);
+    const files = (await fs.readdir(fullDir)).sort();
     for (const filename of files) {
       if (filename.startsWith('.')) continue;
       const fullPath = path.join(fullDir, filename);
@@ -213,8 +213,15 @@ function readTaxonomy(projectRoot) {
  * @returns {{data: Object, content: string}} Parsed frontmatter data and content below
  */
 function parseFrontmatter(fileContent) {
-  const parsed = matter(fileContent);
-  return { data: parsed.data, content: parsed.content };
+  if (typeof fileContent !== 'string') {
+    throw new Error('parseFrontmatter expects a string. Ensure files are read with utf8 encoding.');
+  }
+  try {
+    const parsed = matter(fileContent);
+    return { data: parsed.data, content: parsed.content };
+  } catch (err) {
+    throw new Error(`Failed to parse frontmatter: ${err.message}`);
+  }
 }
 
 /**
@@ -260,30 +267,41 @@ function injectFrontmatter(fileContent, newFields) {
  * @throws {Error} If working tree is dirty with details of dirty files
  */
 function ensureCleanTree(scopeDirs, projectRoot) {
-  // Check tracked changes (staged and unstaged)
+  // Build scoped paths for git diff (forward slashes for git)
+  const scopePaths = scopeDirs.map(dir => `_bmad-output/${dir}`);
+  const scopeArgs = scopePaths.map(p => `"${p}"`).join(' ');
+
+  // Check tracked changes (staged and unstaged) — scoped to scopeDirs only
   try {
-    execSync('git diff --quiet', { cwd: projectRoot, encoding: 'utf8', stdio: 'pipe' });
+    execSync(`git diff --quiet -- ${scopeArgs}`, { cwd: projectRoot, encoding: 'utf8', stdio: 'pipe' });
   } catch {
-    const diff = execSync('git diff --name-only', { cwd: projectRoot, encoding: 'utf8', stdio: 'pipe' }).trim();
+    let diff = '(unable to list files)';
+    try {
+      diff = execSync(`git diff --name-only -- ${scopeArgs}`, { cwd: projectRoot, encoding: 'utf8', stdio: 'pipe' }).trim();
+    } catch { /* best-effort */ }
     throw new Error(
-      'Working tree has uncommitted changes. Commit or stash before running migration.\n' +
+      'Working tree has uncommitted changes in scope directories. Commit or stash before running migration.\n' +
       `Dirty files:\n${diff}`
     );
   }
 
   try {
-    execSync('git diff --cached --quiet', { cwd: projectRoot, encoding: 'utf8', stdio: 'pipe' });
+    execSync(`git diff --cached --quiet -- ${scopeArgs}`, { cwd: projectRoot, encoding: 'utf8', stdio: 'pipe' });
   } catch {
-    const staged = execSync('git diff --cached --name-only', { cwd: projectRoot, encoding: 'utf8', stdio: 'pipe' }).trim();
+    let staged = '(unable to list files)';
+    try {
+      staged = execSync(`git diff --cached --name-only -- ${scopeArgs}`, { cwd: projectRoot, encoding: 'utf8', stdio: 'pipe' }).trim();
+    } catch { /* best-effort */ }
     throw new Error(
-      'Working tree has staged changes. Commit or stash before running migration.\n' +
+      'Working tree has staged changes in scope directories. Commit or stash before running migration.\n' +
       `Staged files:\n${staged}`
     );
   }
 
   // Check untracked files within scope directories
   for (const dir of scopeDirs) {
-    const scopePath = path.join('_bmad-output', dir);
+    // Use forward slashes for git commands (git expects posix paths even on Windows)
+    const scopePath = `_bmad-output/${dir}`;
     const untracked = execSync(
       `git ls-files --others --exclude-standard "${scopePath}"`,
       { cwd: projectRoot, encoding: 'utf8', stdio: 'pipe' }
