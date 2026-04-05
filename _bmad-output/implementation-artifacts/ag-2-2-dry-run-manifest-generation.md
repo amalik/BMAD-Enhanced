@@ -1,6 +1,6 @@
 # Story 2.2: Dry-Run Manifest Generation
 
-Status: review
+Status: done
 
 ## Story
 
@@ -149,6 +149,20 @@ so that I can review, validate, and resolve ambiguities before committing to irr
   - [x] Export: `getContextClues`, `getCrossReferences`, `buildManifestEntry`, `detectCollisions`, `generateManifest`, `formatManifest`
   - [x] Run `npx jest tests/lib/` -- all tests pass
   - [x] Run `node scripts/archive.js --rename` -- regression check
+
+### Review Findings
+
+- [x] [Review][Decision] Non-markdown files (YAML) in artifact dirs get misleading manifest entries — `buildManifestEntry` has no extension filter; YAML files may extract spurious frontmatter [artifact-utils.js:772]
+- [x] [Review][Decision] `formatManifest` hardcodes type confidence/source as "high, prefix match" — AC #2 requires actual type confidence+source but `inferArtifactType` has no confidence field [artifact-utils.js:977]
+- [x] [Review][Patch] Shell metacharacter injection in `getContextClues` — `execSync` with string interpolation allows `$()` expansion; use `execFileSync` instead [artifact-utils.js:716]
+- [x] [Review][Patch] `generateNewFilename` throw aborts entire manifest — no try/catch in `buildManifestEntry`; a single bad file kills all entries [artifact-utils.js:820]
+- [x] [Review][Patch] `detectCollisions` pushes duplicate `(existing)` sentinel when 2+ RENAMEs target the same SKIP path [artifact-utils.js:866]
+- [x] [Review][Patch] `formatManifest` shows only first line, not first 3 lines as AC #3 requires [artifact-utils.js:988,1001]
+- [x] [Review][Patch] No unit test for SKIP action path — missing fixture file in governance convention with matching frontmatter [manifest.test.js]
+- [x] [Review][Patch] No unit test for INJECT_ONLY action path — missing test exercising `filename === newFilename` with no frontmatter [manifest.test.js]
+- [x] [Review][Patch] Duplicate inference calls in `buildManifestEntry` — calls `inferArtifactType`+`inferInitiative` separately after `getGovernanceState` already did; uses mixed results (NFR7 risk) [artifact-utils.js:785-794]
+- [x] [Review][Defer] Sequential I/O in `getCrossReferences` and `generateManifest` loop — pre-existing pattern from `scanArtifactDirs`; deferred
+- [x] [Review][Defer] `execSync` blocks event loop in async `getContextClues` — low count (AMBIGUOUS/CONFLICT only); deferred
 
 ## Dev Notes
 
