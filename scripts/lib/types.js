@@ -52,6 +52,8 @@
  * @property {string[]|null} collisionWith - Other files colliding on same newPath
  * @property {string|null} frontmatterInitiative - Initiative from frontmatter (for CONFLICT display)
  * @property {string|null} fileInitiative - Initiative from filename (for CONFLICT display)
+ * @property {'high'|'low'} typeConfidence - Artifact type inference confidence
+ * @property {string} typeSource - Artifact type inference source (prefix/alias/none)
  */
 
 /**
