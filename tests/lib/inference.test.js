@@ -229,9 +229,21 @@ describe('getGovernanceState', () => {
     expect(result.frontmatterInitiative).toBe('gyre');
   });
 
-  test('ungoverned: type matches but initiative is ambiguous', () => {
+  test('ambiguous: type matches but initiative cannot be confidently inferred', () => {
     const result = getGovernanceState('persona-engineering-lead-2026-03-21.md', '# Persona', taxonomy);
+    expect(result.state).toBe('ambiguous');
+    expect(result.candidates).toBeDefined();
+  });
+
+  test('ungoverned: no type match at all', () => {
+    const result = getGovernanceState('accuracy-validation-2026-03-23.md', '# Accuracy', taxonomy);
     expect(result.state).toBe('ungoverned');
+    expect(result.candidates).toEqual([]);
+  });
+
+  test('null fileContent treated as no frontmatter', () => {
+    const result = getGovernanceState('prd-gyre.md', null, taxonomy);
+    expect(result.state).toBe('half-governed');
   });
 });
 
