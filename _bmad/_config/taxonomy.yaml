@@ -54,4 +54,7 @@ artifact_types:
 aliases:
   strategy-perimeter: helm
   strategy: helm
+  strategic: helm
+  strategic-navigator: helm
+  strategic-practitioner: helm
   team-factory: loom
