@@ -1,6 +1,6 @@
 # Story 1.1: Shared Library Extraction & gray-matter
 
-Status: ready-for-dev
+Status: review
 
 ## Story
 
@@ -20,69 +20,60 @@ so that migration, portfolio, and archive tools share consistent filename parsin
 
 ## Tasks / Subtasks
 
-- [ ] Task 1: Create `scripts/lib/` directory and `types.js` (AC: #2)
-  - [ ] Define `InitiativeState` JSDoc typedef with fields: initiative, phase ({value, source, confidence}), status ({value, source, confidence}), lastArtifact ({file, date}), nextAction ({value, source})
-  - [ ] Define `RenameManifestEntry` typedef with fields: oldPath, newPath, initiative, artifactType, confidence, governanceState
-  - [ ] Define `LinkUpdate` typedef with fields: filePath, oldLink, newLink, pattern
-  - [ ] Define `TaxonomyConfig` typedef with fields: initiatives ({platform, user}), artifact_types, aliases
-  - [ ] Define `FrontmatterSchema` typedef with fields: initiative, artifact_type, status, created, schema_version
+- [x] Task 1: Create `scripts/lib/` directory and `types.js` (AC: #2)
+  - [x] Define `InitiativeState` JSDoc typedef with fields: initiative, phase ({value, source, confidence}), status ({value, source, confidence}), lastArtifact ({file, date}), nextAction ({value, source})
+  - [x] Define `RenameManifestEntry` typedef with fields: oldPath, newPath, initiative, artifactType, confidence, governanceState
+  - [x] Define `LinkUpdate` typedef with fields: filePath, oldLink, newLink, pattern
+  - [x] Define `TaxonomyConfig` typedef with fields: initiatives ({platform, user}), artifact_types, aliases
+  - [x] Define `FrontmatterSchema` typedef with fields: initiative, artifact_type, status, created, schema_version
 
-- [ ] Task 2: Install gray-matter dependency (AC: #3)
-  - [ ] Run `npm install gray-matter`
-  - [ ] Verify it appears in `package.json` dependencies
+- [x] Task 2: Install gray-matter dependency (AC: #3)
+  - [x] Run `npm install gray-matter`
+  - [x] Verify it appears in `package.json` dependencies
 
-- [ ] Task 3: Extract `parseFilename()` to `artifact-utils.js` (AC: #1, #4)
-  - [ ] Copy `parseFilename()`, `isValidCategory()`, `VALID_CATEGORIES`, `NAMING_PATTERN`, `DATED_PATTERN`, `CATEGORIZED_PATTERN`, `toLowerKebab()` from archive.js
-  - [ ] Extend `parseFilename(filename, taxonomy)` to accept optional taxonomy parameter (backward compatible — works without it for archive.js)
-  - [ ] Export all functions via `module.exports = { ... }`
-  - [ ] Update archive.js to `const { parseFilename, isValidCategory, VALID_CATEGORIES, ... } = require('./lib/artifact-utils')`
-  - [ ] Verify archive.js dry-run output matches pre-refactor output
+- [x] Task 3: Extract `parseFilename()` to `artifact-utils.js` (AC: #1, #4)
+  - [x] Copy `parseFilename()`, `isValidCategory()`, `VALID_CATEGORIES`, `NAMING_PATTERN`, `DATED_PATTERN`, `CATEGORIZED_PATTERN`, `toLowerKebab()` from archive.js
+  - [x] Extend `parseFilename(filename, taxonomy)` to accept optional taxonomy parameter (backward compatible — works without it for archive.js)
+  - [x] Export all functions via `module.exports = { ... }`
+  - [x] Update archive.js to `const { parseFilename, NAMING_PATTERN, toLowerKebab, ensureCleanTree } = require('./lib/artifact-utils')`
+  - [x] Verify archive.js dry-run output matches pre-refactor output
 
-- [ ] Task 4: Create `scanArtifactDirs()` function (AC: #1)
-  - [ ] Extract scanning logic from archive.js `run()` (lines 127-188) into `scanArtifactDirs(projectRoot, includeDirs, excludeDirs)`
-  - [ ] Accept configurable directory list instead of hardcoded `SCAN_DIRS`
-  - [ ] Default `excludeDirs` to `['_archive']`
-  - [ ] Return array of `{ filename, dir, fullPath }` objects
-  - [ ] Use `path.join()` for all paths (NFR13 — Windows compat)
+- [x] Task 4: Create `scanArtifactDirs()` function (AC: #1)
+  - [x] Extract scanning logic into `scanArtifactDirs(projectRoot, includeDirs, excludeDirs)`
+  - [x] Accept configurable directory list instead of hardcoded `SCAN_DIRS`
+  - [x] Default `excludeDirs` to `['_archive']`
+  - [x] Return array of `{ filename, dir, fullPath }` objects
+  - [x] Use `path.join()` for all paths (NFR13 — Windows compat)
 
-- [ ] Task 5: Create `readTaxonomy()` function (AC: #1)
-  - [ ] Load `_bmad/_config/taxonomy.yaml` using `js-yaml` (already a dependency)
-  - [ ] Parse and validate structure: `initiatives.platform`, `initiatives.user`, `artifact_types`, `aliases`
-  - [ ] Return `TaxonomyConfig` object
-  - [ ] Throw clear error if file not found or malformed YAML (NFR22)
-  - [ ] Use `findProjectRoot()` from `scripts/update/lib/utils.js` — never `process.cwd()`
+- [x] Task 5: Create `readTaxonomy()` function (AC: #1)
+  - [x] Load `_bmad/_config/taxonomy.yaml` using `js-yaml` (already a dependency)
+  - [x] Parse and validate structure: `initiatives.platform`, `initiatives.user`, `artifact_types`, `aliases`
+  - [x] Return `TaxonomyConfig` object
+  - [x] Throw clear error if file not found or malformed YAML (NFR22)
+  - [x] Use `findProjectRoot()` from `scripts/update/lib/utils.js` — never `process.cwd()`
 
-- [ ] Task 6: Create frontmatter functions using gray-matter (AC: #1)
-  - [ ] `parseFrontmatter(fileContent)` — wraps `matter(fileContent)`, returns `{ data, content }`
-  - [ ] `injectFrontmatter(fileContent, newFields)` — adds new fields, **never overwrites** existing fields. Uses `gray-matter.stringify()`. Returns modified content with frontmatter.
-  - [ ] Handle edge cases: no existing frontmatter, existing frontmatter, metadata-only files (empty content), `---` horizontal rules that aren't frontmatter
-  - [ ] Field conflicts: if `newFields.initiative` differs from `parsed.data.initiative`, return a conflict indicator rather than silently overwriting
+- [x] Task 6: Create frontmatter functions using gray-matter (AC: #1)
+  - [x] `parseFrontmatter(fileContent)` — wraps `matter(fileContent)`, returns `{ data, content }`
+  - [x] `injectFrontmatter(fileContent, newFields)` — adds new fields, **never overwrites** existing fields. Uses `gray-matter.stringify()`. Returns modified content with frontmatter.
+  - [x] Handle edge cases: no existing frontmatter, existing frontmatter, metadata-only files (empty content), `---` horizontal rules that aren't frontmatter
+  - [x] Field conflicts: if `newFields.initiative` differs from `parsed.data.initiative`, return a conflict indicator rather than silently overwriting
 
-- [ ] Task 7: Create `ensureCleanTree()` function (AC: #1, #5)
-  - [ ] Check tracked changes: `git diff --quiet && git diff --cached --quiet`
-  - [ ] Check untracked files in scope dirs: `git ls-files --others --exclude-standard {scopeDirs}`
-  - [ ] If dirty: throw error with clear message listing which files are dirty
-  - [ ] Use `child_process.execSync` with `stdio: 'pipe'`
+- [x] Task 7: Create `ensureCleanTree()` function (AC: #1, #5)
+  - [x] Check tracked changes: `git diff --quiet && git diff --cached --quiet`
+  - [x] Check untracked files in scope dirs: `git ls-files --others --exclude-standard {scopeDirs}`
+  - [x] If dirty: throw error with clear message listing which files are dirty
+  - [x] Use `child_process.execSync` with `stdio: 'pipe'`
 
-- [ ] Task 8: Wire `ensureCleanTree()` into archive.js (AC: #5)
-  - [ ] Add `ensureCleanTree(SCAN_DIRS)` call at the start of archive.js `run()`, before `--apply` execution
-  - [ ] Only enforce when `--apply` is passed (dry-run doesn't need clean tree)
+- [x] Task 8: Wire `ensureCleanTree()` into archive.js (AC: #5)
+  - [x] Add `ensureCleanTree(SCAN_DIRS, projectRoot)` call at the start of archive.js `run()`, before `--apply` execution
+  - [x] Only enforce when `--apply` is passed (dry-run doesn't need clean tree)
 
-- [ ] Task 9: Write unit tests (AC: #7)
-  - [ ] Create `tests/lib/artifact-utils.test.js`
-  - [ ] Test `parseFilename()` with at least these patterns:
-    - `prd-gyre.md` → category: prd, hasValidCategory: true
-    - `hc2-problem-definition-gyre-2026-03-21.md` → dated, category: hc2
-    - `lean-persona-strategic-navigator-2026-04-04.md` → dated, category: lean (note: current archive.js won't recognize `lean` — this is expected; will be extended in Story 2.1)
-    - `architecture.md` → exempt file
-    - `sprint-change-proposal-2026-03-07.md` → dated, category: sprint
-  - [ ] Test `injectFrontmatter()` edge cases:
-    - No existing frontmatter
-    - Existing frontmatter (preserve fields)
-    - Metadata-only file (empty content below frontmatter)
-    - Field conflict detection
-  - [ ] Test `ensureCleanTree()` — mock `execSync` to simulate clean and dirty states
-  - [ ] Test `scanArtifactDirs()` — mock filesystem
+- [x] Task 9: Write unit tests (AC: #7)
+  - [x] Create `tests/lib/artifact-utils.test.js`
+  - [x] Test `parseFilename()` with 7 representative filename patterns
+  - [x] Test `injectFrontmatter()` 5 edge cases (no frontmatter, existing, metadata-only, conflict, content preservation)
+  - [x] Test `ensureCleanTree()` — 4 test cases with mocked `execSync` (clean, dirty tracked, staged, untracked)
+  - [x] Test `scanArtifactDirs()` — 3 test cases with real temp filesystem
 
 ## Dev Notes
 
@@ -178,8 +169,28 @@ Before submitting: run `node scripts/archive.js --rename` dry-run and compare ou
 
 ### Agent Model Used
 
+Claude Opus 4.6 (1M context)
+
 ### Debug Log References
+
+- Regression test: `node scripts/archive.js --rename` output identical before/after refactor (1 archive action, 67 warnings)
+- All 28 unit tests pass. Pre-existing test failures in other suites unrelated to this story.
 
 ### Completion Notes List
 
+- ✅ Created `scripts/lib/types.js` with 8 JSDoc typedefs (InitiativeState, RenameManifestEntry, LinkUpdate, TaxonomyConfig, FrontmatterSchema, ParsedFilename, FrontmatterConflict, InjectResult)
+- ✅ Installed `gray-matter@^4.0.3` — sole new dependency
+- ✅ Created `scripts/lib/artifact-utils.js` with 11 exported functions: parseFilename, isValidCategory, VALID_CATEGORIES, NAMING_PATTERN, DATED_PATTERN, CATEGORIZED_PATTERN, toLowerKebab, scanArtifactDirs, readTaxonomy, parseFrontmatter, injectFrontmatter, ensureCleanTree
+- ✅ Refactored `scripts/archive.js` to import from shared lib — only imports what it actually uses (parseFilename, NAMING_PATTERN, toLowerKebab, ensureCleanTree)
+- ✅ Added ensureCleanTree() check to archive.js (only on --apply, not dry-run)
+- ✅ 28 unit tests: 7 parseFilename, 4 isValidCategory, 2 toLowerKebab, 3 parseFrontmatter, 5 injectFrontmatter, 4 ensureCleanTree, 3 scanArtifactDirs
+- ✅ Regression verified: archive.js dry-run output identical pre/post refactor
+
 ### File List
+
+- `scripts/lib/types.js` — NEW (JSDoc typedefs)
+- `scripts/lib/artifact-utils.js` — NEW (shared utility functions)
+- `scripts/archive.js` — MODIFIED (import from shared lib + ensureCleanTree)
+- `tests/lib/artifact-utils.test.js` — NEW (28 unit tests)
+- `package.json` — MODIFIED (gray-matter dependency added)
+- `package-lock.json` — MODIFIED (gray-matter + transitive deps)
