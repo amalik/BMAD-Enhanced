@@ -317,6 +317,245 @@ function ensureCleanTree(scopeDirs, projectRoot) {
   }
 }
 
+// --- Inference Engine ---
+
+/** HC prefix pattern: matches hcN- at start of basename (e.g., hc2-, hc3-) */
+const HC_PREFIX_PATTERN = /^hc\d+-/;
+
+/**
+ * Maps long-form artifact type names found in existing filenames to canonical taxonomy types.
+ * Migration-specific — these are OLD naming patterns that don't match the taxonomy abbreviations.
+ */
+const ARTIFACT_TYPE_ALIASES = {
+  'problem-definition': 'problem-def',
+  'pre-registration': 'pre-reg',
+  'architecture': 'arch',
+  'hypothesis-contract': 'hypothesis'
+};
+
+/**
+ * Infer artifact type from a filename using greedy longest-prefix matching.
+ * Handles HC-prefixed files by stripping the HC prefix before matching.
+ *
+ * @param {string} filename - The filename to analyze (e.g., 'prd-gyre.md')
+ * @param {import('./types').TaxonomyConfig} taxonomy - Taxonomy with artifact_types list
+ * @returns {{type: string|null, hcPrefix: string|null, remainder: string}} Inferred type, HC prefix if any, and remaining segments
+ */
+function inferArtifactType(filename, taxonomy) {
+  const lower = filename.toLowerCase();
+  // Strip extension
+  const withoutExt = lower.replace(/\.(md|yaml)$/, '');
+  // Strip date suffix if present
+  const dateMatch = withoutExt.match(/-(\d{4}-\d{2}-\d{2})$/);
+  const date = dateMatch ? dateMatch[1] : null;
+  const baseName = date ? withoutExt.slice(0, -(date.length + 1)) : withoutExt;
+
+  // Check for HC prefix (hc2-, hc3-, etc.)
+  let hcPrefix = null;
+  let nameToMatch = baseName;
+  const hcMatch = baseName.match(HC_PREFIX_PATTERN);
+  if (hcMatch) {
+    hcPrefix = hcMatch[0].slice(0, -1); // e.g., 'hc2' (without trailing dash)
+    nameToMatch = baseName.slice(hcMatch[0].length);
+  }
+
+  // Sort taxonomy types by length descending (greedy: longest match first)
+  const sortedTypes = [...taxonomy.artifact_types].sort((a, b) => b.length - a.length);
+
+  // Try direct match against taxonomy types (dash boundary)
+  for (const type of sortedTypes) {
+    if (nameToMatch.startsWith(type + '-') || nameToMatch === type) {
+      const remainder = nameToMatch === type ? '' : nameToMatch.slice(type.length + 1);
+      return { type, hcPrefix, remainder, date };
+    }
+  }
+
+  // Try artifact type aliases (long-form → canonical)
+  const sortedAliasKeys = Object.keys(ARTIFACT_TYPE_ALIASES).sort((a, b) => b.length - a.length);
+  for (const aliasKey of sortedAliasKeys) {
+    if (nameToMatch.startsWith(aliasKey + '-') || nameToMatch === aliasKey) {
+      const canonicalType = ARTIFACT_TYPE_ALIASES[aliasKey];
+      const remainder = nameToMatch === aliasKey ? '' : nameToMatch.slice(aliasKey.length + 1);
+      return { type: canonicalType, hcPrefix, remainder, date };
+    }
+  }
+
+  // No match
+  return { type: null, hcPrefix, remainder: nameToMatch, date };
+}
+
+/**
+ * Infer which initiative owns an artifact based on the remaining filename segments.
+ * Three-step lookup: exact taxonomy match → alias match → ambiguous.
+ *
+ * @param {string} remainder - Filename segments after type prefix and date are removed
+ * @param {import('./types').TaxonomyConfig} taxonomy - Taxonomy with initiatives and aliases
+ * @returns {{initiative: string|null, confidence: 'high'|'low', source: string, candidates: string[]}}
+ */
+function inferInitiative(remainder, taxonomy) {
+  if (!remainder) {
+    return { initiative: null, confidence: 'low', source: 'empty', candidates: [] };
+  }
+
+  const allInitiatives = [...taxonomy.initiatives.platform, ...taxonomy.initiatives.user];
+  const segments = remainder.split('-');
+
+  // Step 1: Try full remainder as exact initiative match
+  if (allInitiatives.includes(remainder)) {
+    return { initiative: remainder, confidence: 'high', source: 'exact', candidates: [] };
+  }
+
+  // Step 2: Try full remainder as alias match
+  if (taxonomy.aliases && taxonomy.aliases[remainder]) {
+    return { initiative: taxonomy.aliases[remainder], confidence: 'high', source: 'alias', candidates: [] };
+  }
+
+  // Step 3: Try progressive prefixes (longest first) against initiatives and aliases
+  // e.g., for 'strategy-perimeter-foo', try 'strategy-perimeter-foo', then 'strategy-perimeter', then 'strategy'
+  for (let i = segments.length - 1; i >= 1; i--) {
+    const prefix = segments.slice(0, i).join('-');
+
+    if (allInitiatives.includes(prefix)) {
+      return { initiative: prefix, confidence: 'high', source: 'exact', candidates: [] };
+    }
+
+    if (taxonomy.aliases && taxonomy.aliases[prefix]) {
+      return { initiative: taxonomy.aliases[prefix], confidence: 'high', source: 'alias', candidates: [] };
+    }
+  }
+
+  // Step 4: Try first segment alone
+  const firstSegment = segments[0];
+  if (allInitiatives.includes(firstSegment)) {
+    return { initiative: firstSegment, confidence: 'high', source: 'exact', candidates: [] };
+  }
+  if (taxonomy.aliases && taxonomy.aliases[firstSegment]) {
+    return { initiative: taxonomy.aliases[firstSegment], confidence: 'high', source: 'alias', candidates: [] };
+  }
+
+  // Ambiguous — build candidate list from any partial matches
+  const candidates = allInitiatives.filter(id =>
+    segments.some(seg => seg === id || seg.startsWith(id) || id.startsWith(seg))
+  );
+
+  return { initiative: null, confidence: 'low', source: 'unresolved', candidates };
+}
+
+/**
+ * Determine the governance state of a file based on filename convention and frontmatter.
+ *
+ * @param {string} filename - The filename to check
+ * @param {string} fileContent - Raw file content (for frontmatter parsing)
+ * @param {import('./types').TaxonomyConfig} taxonomy - Taxonomy config
+ * @returns {{state: 'fully-governed'|'half-governed'|'ungoverned'|'invalid-governed', fileInitiative: string|null, frontmatterInitiative: string|null}}
+ */
+function getGovernanceState(filename, fileContent, taxonomy) {
+  const typeResult = inferArtifactType(filename, taxonomy);
+  const initiativeResult = typeResult.type
+    ? inferInitiative(typeResult.remainder, taxonomy)
+    : { initiative: null, confidence: 'low', source: 'no-type', candidates: [] };
+
+  const fileInitiative = initiativeResult.initiative;
+
+  // Check frontmatter
+  let frontmatterInitiative = null;
+  try {
+    const { data } = parseFrontmatter(fileContent);
+    frontmatterInitiative = data.initiative || null;
+  } catch {
+    // No valid frontmatter — treat as absent
+  }
+
+  // Determine state
+  const filenameMatchesConvention = typeResult.type !== null && initiativeResult.confidence === 'high';
+
+  if (!filenameMatchesConvention) {
+    return { state: 'ungoverned', fileInitiative, frontmatterInitiative };
+  }
+
+  if (!frontmatterInitiative) {
+    return { state: 'half-governed', fileInitiative, frontmatterInitiative };
+  }
+
+  if (frontmatterInitiative !== fileInitiative) {
+    return { state: 'invalid-governed', fileInitiative, frontmatterInitiative };
+  }
+
+  return { state: 'fully-governed', fileInitiative, frontmatterInitiative };
+}
+
+/**
+ * Generate a new filename following the governance convention.
+ * Format: {initiative}-{artifactType}[-{qualifier}][-{date}].md
+ *
+ * @param {string} filename - Original filename
+ * @param {string} initiative - Resolved initiative ID
+ * @param {string} artifactType - Resolved artifact type
+ * @param {import('./types').TaxonomyConfig} taxonomy - Taxonomy config
+ * @returns {string} New filename following convention
+ */
+function generateNewFilename(filename, initiative, artifactType, taxonomy) {
+  const typeResult = inferArtifactType(filename, taxonomy);
+
+  // Build qualifier from: HC prefix + remainder after initiative extraction
+  const parts = [];
+
+  // Add HC prefix as qualifier if present
+  if (typeResult.hcPrefix) {
+    parts.push(typeResult.hcPrefix);
+  }
+
+  // Extract qualifier: remainder minus the initiative segments
+  if (typeResult.remainder) {
+    const initiativeResult = inferInitiative(typeResult.remainder, taxonomy);
+    if (initiativeResult.initiative && initiativeResult.confidence === 'high') {
+      // Remove the matched initiative/alias segments from remainder to get pure qualifier
+      const remainderSegments = typeResult.remainder.split('-');
+      const allInitiatives = [...taxonomy.initiatives.platform, ...taxonomy.initiatives.user];
+      const aliasKeys = Object.keys(taxonomy.aliases || {});
+
+      // Find how many segments the initiative match consumed
+      let consumed = 0;
+      for (let i = remainderSegments.length; i >= 1; i--) {
+        const candidate = remainderSegments.slice(0, i).join('-');
+        if (allInitiatives.includes(candidate) || aliasKeys.includes(candidate)) {
+          consumed = i;
+          break;
+        }
+      }
+      // Also check single first segment
+      if (consumed === 0) {
+        const first = remainderSegments[0];
+        if (allInitiatives.includes(first) || aliasKeys.includes(first)) {
+          consumed = 1;
+        }
+      }
+
+      const qualifierSegments = remainderSegments.slice(consumed);
+      if (qualifierSegments.length > 0) {
+        parts.push(qualifierSegments.join('-'));
+      }
+    } else {
+      // No initiative found in remainder — entire remainder is qualifier
+      parts.push(typeResult.remainder);
+    }
+  }
+
+  const qualifier = parts.length > 0 ? parts.join('-') : null;
+
+  // Build new filename
+  let newName = `${initiative}-${artifactType}`;
+  if (qualifier) {
+    newName += `-${qualifier}`;
+  }
+  if (typeResult.date) {
+    newName += `-${typeResult.date}`;
+  }
+  newName += '.md';
+
+  return newName;
+}
+
 // --- Schema Validation ---
 
 /** Valid artifact-level status values (closed enum) */
