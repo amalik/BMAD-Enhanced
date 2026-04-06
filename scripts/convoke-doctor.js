@@ -70,6 +70,7 @@ async function main() {
   checks.push(await checkOutputDir(projectRoot));
   checks.push(checkMigrationLock(projectRoot));
   checks.push(checkVersionConsistency(projectRoot, modules));
+  checks.push(...checkTaxonomy(projectRoot));
 
   printResults(checks);
 
@@ -367,7 +368,134 @@ function printResults(checks) {
   console.log('');
 }
 
-main().catch(err => {
-  console.error(chalk.red(`Doctor failed: ${err.message}`));
-  process.exit(1);
-});
+// --- Taxonomy Validation ---
+
+/** Valid ID pattern: lowercase alphanumeric with optional dashes */
+const TAXONOMY_ID_PATTERN = /^[a-z][a-z0-9-]*$/;
+
+/**
+ * Validate taxonomy configuration file.
+ * Returns array of check results (never throws).
+ * @param {string} projectRoot
+ * @returns {Array<{name: string, passed: boolean, error?: string, warning?: string, fix?: string, info?: string}>}
+ */
+function checkTaxonomy(projectRoot) {
+  const results = [];
+  const configPath = path.join(projectRoot, '_bmad', '_config', 'taxonomy.yaml');
+
+  // Check 1: file exists
+  if (!fs.existsSync(configPath)) {
+    results.push({
+      name: 'Taxonomy: file exists',
+      passed: false,
+      warning: 'taxonomy.yaml not found at _bmad/_config/taxonomy.yaml',
+      fix: 'Run convoke-migrate-artifacts or convoke-update to create it'
+    });
+    return results;
+  }
+  results.push({ name: 'Taxonomy: file exists', passed: true });
+
+  // Check 2: YAML parseable
+  let config;
+  try {
+    config = yaml.load(fs.readFileSync(configPath, 'utf8'));
+  } catch (err) {
+    results.push({
+      name: 'Taxonomy: valid YAML',
+      passed: false,
+      error: `Invalid YAML in taxonomy.yaml: ${err.message}`,
+      fix: 'Fix the YAML syntax in _bmad/_config/taxonomy.yaml'
+    });
+    return results;
+  }
+  results.push({ name: 'Taxonomy: valid YAML', passed: true });
+
+  if (!config || typeof config !== 'object') {
+    results.push({ name: 'Taxonomy: structure', passed: false, error: 'taxonomy.yaml is empty or not an object' });
+    return results;
+  }
+
+  // Check 3: required sections
+  const issues = [];
+  if (!config.initiatives || !Array.isArray(config.initiatives.platform)) {
+    issues.push('Missing initiatives.platform (must be an array)');
+  }
+  if (!config.initiatives || !Array.isArray(config.initiatives.user)) {
+    issues.push('Missing initiatives.user (must be an array)');
+  }
+  if (!Array.isArray(config.artifact_types)) {
+    issues.push('Missing artifact_types (must be an array)');
+  }
+
+  if (issues.length > 0) {
+    results.push({ name: 'Taxonomy: structure', passed: false, error: issues.join('; ') });
+    return results;
+  }
+  results.push({ name: 'Taxonomy: structure', passed: true });
+
+  // Check 4: ID format validation
+  const allPlatform = config.initiatives.platform || [];
+  const allUser = config.initiatives.user || [];
+  const allTypes = config.artifact_types || [];
+  const invalidIds = [];
+
+  for (const id of [...allPlatform, ...allUser]) {
+    if (!TAXONOMY_ID_PATTERN.test(id)) {
+      invalidIds.push(`initiative "${id}"`);
+    }
+  }
+  for (const id of allTypes) {
+    if (!TAXONOMY_ID_PATTERN.test(id)) {
+      invalidIds.push(`artifact_type "${id}"`);
+    }
+  }
+
+  if (invalidIds.length > 0) {
+    results.push({
+      name: 'Taxonomy: ID format',
+      passed: false,
+      error: `Invalid IDs (must be lowercase alphanumeric with dashes): ${invalidIds.join(', ')}`
+    });
+  } else {
+    results.push({ name: 'Taxonomy: ID format', passed: true });
+  }
+
+  // Check 5: duplicates between platform and user
+  const platformSet = new Set(allPlatform);
+  const duplicates = allUser.filter(id => platformSet.has(id));
+  if (duplicates.length > 0) {
+    results.push({
+      name: 'Taxonomy: no duplicates',
+      passed: false,
+      error: `Duplicate IDs in both platform and user sections: ${duplicates.join(', ')}`,
+      fix: 'Remove duplicates from the user section (they are already in platform)'
+    });
+  } else {
+    results.push({ name: 'Taxonomy: no duplicates', passed: true });
+  }
+
+  // Check 6: collisions between initiatives and artifact types
+  const allInitiatives = new Set([...allPlatform, ...allUser]);
+  const collisions = allTypes.filter(t => allInitiatives.has(t));
+  if (collisions.length > 0) {
+    results.push({
+      name: 'Taxonomy: no collisions',
+      passed: false,
+      error: `IDs used as both initiative and artifact type: ${collisions.join(', ')}`,
+      fix: 'Rename the colliding IDs to be unique across sections'
+    });
+  } else {
+    results.push({ name: 'Taxonomy: no collisions', passed: true });
+  }
+
+  return results;
+}
+
+if (require.main === module) {
+  main().catch(err => {
+    console.error(chalk.red(`Doctor failed: ${err.message}`));
+    process.exit(1);
+  });
+}
+
+module.exports = { checkTaxonomy };
