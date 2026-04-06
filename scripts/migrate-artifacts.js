@@ -4,7 +4,7 @@
  * Convoke Artifact Governance Migration CLI
  *
  * Dry-run by default — shows what the migration would do without changing anything.
- * Execution (--apply) is not yet implemented (coming in ag-3-1).
+ * Use --apply to execute renames. Use --apply --force to skip confirmation.
  *
  * @module migrate-artifacts
  */
@@ -16,7 +16,11 @@ const { findProjectRoot } = require('./update/lib/utils');
 const {
   readTaxonomy,
   generateManifest,
-  formatManifest
+  formatManifest,
+  ensureCleanTree,
+  executeRenames,
+  ArtifactMigrationError,
+  verifyHistoryChain
 } = require('./lib/artifact-utils');
 
 // --- CLI Argument Parsing ---
@@ -73,8 +77,8 @@ Options:
   --include <dirs>  Comma-separated directory names to scan (relative to _bmad-output/)
                     Default: planning-artifacts,vortex-artifacts,gyre-artifacts
   --verbose         Show cross-references for ambiguous files
-  --apply           Execute the migration (not yet implemented -- coming in ag-3-1)
-  --force           Bypass confirmation prompt (not yet implemented -- coming in ag-3-1)
+  --apply           Execute the rename migration (commit 1: git mv)
+  --force           Bypass confirmation prompt (use with --apply for automation)
   --help, -h        Show this help
 
 Examples:
@@ -133,6 +137,26 @@ function bootstrapTaxonomy(projectRoot) {
   return true;
 }
 
+// --- Interactive Prompt ---
+
+/**
+ * Prompt the operator to confirm migration apply.
+ * Exported for mocking in tests — tests should NEVER interact with real readline.
+ *
+ * @returns {Promise<boolean>} true if operator confirms
+ */
+async function confirmApply() {
+  const readline = require('readline');
+  const rl = readline.createInterface({ input: process.stdin, output: process.stdout });
+  return new Promise(resolve => {
+    rl.on('close', () => resolve(false)); // piped/closed stdin → reject
+    rl.question('Apply migration? [y/n] ', answer => {
+      rl.close();
+      resolve(typeof answer === 'string' && answer.trim().toLowerCase() === 'y');
+    });
+  });
+}
+
 // --- Main ---
 
 async function main() {
@@ -143,13 +167,8 @@ async function main() {
     return;
   }
 
-  // --apply / --force: recognized but not yet implemented
   if (args.force && !args.apply) {
     console.log('Warning: --force has no effect without --apply. Running dry-run instead.');
-  }
-  if (args.apply) {
-    console.log('Not yet implemented -- coming in ag-3-1');
-    return;
   }
 
   const projectRoot = findProjectRoot();
@@ -189,7 +208,7 @@ async function main() {
     process.exit(1);
   }
 
-  // Dry-run manifest generation
+  // Generate manifest (shared by dry-run and apply)
   const manifest = await generateManifest(projectRoot, {
     includeDirs: filteredIncludeDirs,
     excludeDirs,
@@ -198,6 +217,75 @@ async function main() {
 
   const output = formatManifest(manifest, { verbose: args.verbose });
   console.log(output);
+
+  // Dry-run mode (default): just print manifest and exit
+  if (!args.apply) {
+    return;
+  }
+
+  // --- Apply mode ---
+
+  // Pre-apply summary
+  const renameCount = manifest.summary.rename;
+  const skipCount = manifest.summary.ambiguous + manifest.summary.conflict;
+  console.log(`\n${renameCount} files will be renamed. ${skipCount} files skipped (ambiguous/conflict).`);
+
+  // Block on collisions
+  if (manifest.collisions.size > 0) {
+    console.error(`Error: ${manifest.collisions.size} filename collision(s) detected. Resolve before applying.`);
+    process.exit(1);
+  }
+
+  if (renameCount === 0) {
+    console.log('Nothing to rename.');
+    return;
+  }
+
+  // Confirmation prompt (unless --force)
+  if (!args.force) {
+    const confirmed = await confirmApply();
+    if (!confirmed) {
+      console.log('Migration aborted.');
+      return;
+    }
+  }
+
+  // Pre-flight: ensure clean tree
+  try {
+    ensureCleanTree(filteredIncludeDirs, projectRoot);
+  } catch (err) {
+    console.error(`Error: ${err.message}`);
+    process.exit(1);
+  }
+
+  // Execute renames
+  try {
+    const result = executeRenames(manifest, projectRoot);
+    console.log(`\nRename phase complete. ${result.renamedCount} files renamed. Commit: ${result.commitSha}`);
+
+    // Verify history chain (informational)
+    const renamedEntries = manifest.entries.filter(e => e.action === 'RENAME');
+    const verification = verifyHistoryChain(renamedEntries, projectRoot);
+    if (verification.failed.length > 0) {
+      console.warn(`Warning: git log --follow failed for ${verification.failed.length} file(s):`);
+      for (const f of verification.failed) {
+        console.warn(`  ${f}`);
+      }
+    } else {
+      console.log(`History chain verified for ${verification.verified} sample file(s).`);
+    }
+  } catch (err) {
+    if (err instanceof ArtifactMigrationError && err.phase === 'rename') {
+      console.error(`\nRename failed: ${err.message}`);
+      if (err.recoverable) {
+        console.error('Rollback complete. No changes made.');
+      } else {
+        console.error('WARNING: Rollback may have failed. Run `git status` to check working tree state.');
+      }
+      process.exit(1);
+    }
+    throw err;
+  }
 }
 
 // Run if invoked directly
@@ -208,4 +296,4 @@ if (require.main === module) {
   });
 }
 
-module.exports = { parseArgs, main, bootstrapTaxonomy, DEFAULT_INCLUDE_DIRS, PLATFORM_INITIATIVES, DEFAULT_ARTIFACT_TYPES, VALID_DIR_PATTERN };
+module.exports = { parseArgs, main, confirmApply, bootstrapTaxonomy, DEFAULT_INCLUDE_DIRS, PLATFORM_INITIATIVES, DEFAULT_ARTIFACT_TYPES, VALID_DIR_PATTERN };
