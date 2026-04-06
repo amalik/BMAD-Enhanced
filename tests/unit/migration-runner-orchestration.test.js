@@ -312,10 +312,11 @@ describe('runMigrations multi-version chain traversal', () => {
     assert.deepEqual(deltaNames, [
       '1.5.x-to-1.6.0',
       '1.6.x-to-1.7.0',
-      '1.7.x-to-2.0.0'
+      '1.7.x-to-2.0.0',
+      '2.0.x-to-3.1.0'
     ]);
 
-    // Migration history should record all 3
+    // Migration history should record all 4
     const configPath = path.join(tmpDir, '_bmad/bme/_vortex/config.yaml');
     const config = yaml.load(fs.readFileSync(configPath, 'utf8'));
     assert.ok(config.migration_history);
@@ -324,7 +325,8 @@ describe('runMigrations multi-version chain traversal', () => {
     assert.deepEqual(lastEntry.migrations_applied, [
       '1.5.x-to-1.6.0',
       '1.6.x-to-1.7.0',
-      '1.7.x-to-2.0.0'
+      '1.7.x-to-2.0.0',
+      '2.0.x-to-3.1.0'
     ]);
   });
 
