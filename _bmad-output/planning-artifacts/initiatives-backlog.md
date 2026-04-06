@@ -2,7 +2,7 @@
 
 **Created:** 2026-03-08
 **Method:** RICE (Reach, Impact, Confidence, Effort)
-**Last Updated:** 2026-04-05
+**Last Updated:** 2026-04-06
 
 ---
 
@@ -96,6 +96,11 @@
 | P10 | **Capability Evaluation Framework** — Decision tool for ecosystem growth: skill→agent→team tiers with bidirectional promotion/demotion triggers. Overlap analysis template (Gyre pattern). Sentinel evaluated as proof-of-concept (result: 1 agent in Gyre, not standalone team). **Tier 1 (Skill) maps to Enhance module pattern** — new capabilities at skill tier are implemented as Enhance workflows patched onto existing agents (see `ENHANCE-GUIDE.md`). Framework document complete. Operationalize: integrate into team review process, link to friction logs. Artifact: `capability-evaluation-framework.md` | Ecosystem strategy session, 2026-03-21 | 7 | 2 | 80% | 2 | 5.6 | Move the needle | Backlog |
 | P11 | **Friction log capture for consulting teams** — Template and quarterly review process for tracking capability gaps across real engagements. Template complete, needs distribution to consulting teams. Links to Capability Evaluation Framework (P10) — friction logs feed the decision tree. Artifact: `friction-log-template.md` | Ecosystem strategy session, 2026-03-21 | 8 | 1 | 70% | 1 | 5.6 | Move the needle | Backlog |
 | P15 | **Portfolio skill — cross-initiative visibility, WIP radar & context re-entry** — BMM skill that scans planning artifacts across all initiatives, produces portfolio kanban view (initiative name, phase, health signal, next action, context re-entry hint). WIP radar flags overload when too many initiatives are in-flight. Derives state from existing artifacts — zero manual tracking files. Depends on I14 (Artifact Governance) for naming convention and frontmatter. Graduation path: if skill hits limits, feed gaps into Vortex discovery for governance perimeter. Vision traceability: lifecycle-expansion-vision.md Section 8 — Flow & WIP governance + Value stream visibility. Added from party-mode session, 2026-04-05 | Party-mode session (Bob, John, Winston, Mary, Paige, Emma), 2026-04-05 | 7 | 2 | 60% | 5 | 1.7 | Move the needle | Backlog |
+| P16 | **Standalone skills repository** — Separate GitHub repo (`convoke-skills-catalog`) with exported LLM-agnostic skills, per-skill READMEs, and platform adapters (Claude Code, Copilot, Cursor). Zero-install distribution for teammates who need individual skills without the full BMAD framework. Added from vision-skill-portability.md, 2026-04-06 | Party-mode session (Winston, Paige), 2026-04-06 | 9 | 2 | 70% | 3 | 4.2 | Move the needle | Backlog |
+| P17 | **Skill portability metadata schema** — Extend skill-manifest.csv with tier (standalone/light-deps/pipeline), intent category, and dependency fields for every skill. Foundation for exporter and catalog. Added from vision-skill-portability.md, 2026-04-06 | Party-mode session (Winston, Paige), 2026-04-06 | 7 | 1 | 80% | 2 | 2.8 | Move the needle | Backlog |
+| P18 | **LLM-agnostic skill exporter CLI** — `convoke export` command that transforms installed skills into canonical markdown format: strips Claude-specific tool names, framework refs, micro-file conventions; inlines step files; produces self-contained `instructions.md`. Added from vision-skill-portability.md, 2026-04-06 | Party-mode session (Winston, Paige), 2026-04-06 | 8 | 2 | 70% | 6 | 1.9 | Move the needle | Backlog |
+| P19 | **Intent-based skill catalog generator** — Auto-generate decision-tree README from manifests, organized by user intent ("I need to..."), with tier badges and persona info. Answers "what can I use?" in < 60 seconds. Added from vision-skill-portability.md, 2026-04-06 | Party-mode session (Winston, Paige), 2026-04-06 | 8 | 1 | 70% | 3 | 1.9 | Move the needle | Backlog |
+| P20 | **Multi-platform adapter generation** — Generate thin platform-specific wrappers (Claude Code SKILL.md, Copilot instructions, Cursor rules) from the canonical format. Each adapter < 20 lines of wrapper. Added from vision-skill-portability.md, 2026-04-06 | Party-mode session (Winston, Paige), 2026-04-06 | 7 | 2 | 50% | 4 | 1.8 | Move the needle | Backlog |
 
 ---
 
@@ -155,6 +160,9 @@ Four small agent quality items that can be swept in a single pass: validate menu
 ### Epic: "Update System Robustness" (U2 + U3 + U5)
 Remaining update system items not in Hardening: load-time validation, version detection fallback, and npx command fix.
 
+### Epic: "Skill Portability" (P17 → P18 → P19 → P16 → P20)
+LLM-agnostic skill distribution for teammates on any AI coding tool. P17 (metadata schema, score 2.8) is the foundation. P18 (exporter CLI, score 1.9) builds the transformation engine. P19 (catalog generator, score 1.9) produces the browsable menu. P16 (standalone repo, score 4.2) is where teammates get value — highest score because low incremental effort once exporter exists. P20 (platform adapters, score 1.8) extends to Copilot/Cursor. Sequencing: P17 first (foundation), then P18+P19 in parallel, then P16 (seed repo), then P20 (adapters). Vision: `vision-skill-portability.md`. Epics: `epics-skill-portability.md`.
+
 ---
 
 ## Prioritized View (by RICE Score)
@@ -165,49 +173,54 @@ Remaining update system items not in Hardening: load-time validation, version de
 | 2 | P10 | Capability Evaluation Framework | 5.6 | Move the needle | Platform |
 | 3 | P11 | Friction log capture for consulting teams | 5.6 | Move the needle | Platform |
 | 4 | **U7** | **Changelog surface during update** | **4.3** | **Move the needle** | **Update System** |
-| 5 | **S3** | **One-command standalone install (`npx convoke-agents init`)** | **3.6** | **Move the needle** | **Infrastructure** |
-| 6 | I14 | Artifact Governance — naming convention, taxonomies & migration skill | 3.2 | Move the needle | Infrastructure |
-| 7 | P12 | Enhance framework — Team Module Generator (BMB) | 3.2 | Move the needle | Unblocked |
-| 8 | **U8** | **Respect user agent exclusions on update** | **3.2** | **Move the needle** | **Update System** |
-| 9 | P9 | Forge team — Domain Knowledge Extraction (KORE) | 3.0 | Move the needle | Blocked (Gate 1) |
-| 10 | T3 | End-to-end update test on real project | 2.7 | Keep the lights on | Testing |
-| 11 | P13 | Vortex redesign (align to Enhance patterns) | 2.5 | Move the needle | Platform |
-| 12 | T4 | Migration idempotency CLI test | 2.4 | Keep the lights on | Testing |
-| 13 | T7 | Add Python linting to CI pipeline | 2.4 | Keep the lights on | Testing |
-| 14 | I2 | `gh auth` for CI release creation | 2.4 | Keep the lights on | Infrastructure |
-| 15 | D2 | Add output examples for more agents | 2.1 | Move the needle | Documentation |
-| 16 | **U9** | **Module-aware refresh and validation** | **1.9** | **Move the needle** | **Update System** |
-| 17 | I1 | NPM_TOKEN secret for CI publish | 1.8 | Keep the lights on | Infrastructure |
-| 18 | I7 | Team Factory CSV quoting hardening | 1.8 | Keep the lights on | Infrastructure |
-| 19 | P15 | Portfolio skill — cross-initiative visibility, WIP radar & context re-entry | 1.7 | Move the needle | Platform |
-| 20 | T8 | Standardize Python PEP 723 dependency declarations | 1.6 | Keep the lights on | Testing |
-| 21 | D6 | Reduce narrative overlap in journey example | 1.6 | Keep the lights on | Documentation |
-| 22 | U4 | Test upgrade-path step file cleanup | 1.4 | Keep the lights on | Update System |
-| 23 | I9 | Registry writer idempotency drift detection | 1.4 | Keep the lights on | Infrastructure |
-| 24 | P3 | Team installer architecture | 1.2 | Move the needle | Platform |
-| 25 | I5 | Workflow output naming enforcement | 1.2 | Keep the lights on | Infrastructure |
-| 26 | P7 | ML/AI Engineering team exploration | 1.2 | Move the needle | Platform |
-| 27 | S1 | Interactive installer | 1.0 | Move the needle | Infrastructure |
-| 28 | D3 | BMAD Core return arrow in diagram | 0.9 | Keep the lights on | Documentation |
-| 29 | I10 | Config appender YAML comment preservation | 0.9 | Keep the lights on | Infrastructure |
-| 30 | A1 | Add validate menu items to Wave 3 agents | 0.8 | Keep the lights on | Agent Quality |
-| 31 | A3 | Add npm keywords (`agentic`, `team-of-teams`) | 0.8 | Keep the lights on | Agent Quality |
-| 32 | I6 | Add `--verbose` flag to all CLI commands | 0.8 | Keep the lights on | Infrastructure |
-| 33 | T1 | `convoke-update.js` coverage to 80%+ | 0.8 | Keep the lights on | Testing |
-| 34 | U2 | Validate migration modules at load time | 0.8 | Keep the lights on | Update System |
-| 35 | S2 | Simplified entry point | 0.7 | Move the needle | Infrastructure |
-| 36 | I8 | Team Factory write verification — value correctness | 0.6 | Keep the lights on | Infrastructure |
-| 37 | P8 | Governance & Support skill set | 0.5 | Move the needle | Platform |
-| 38 | U3 | Robust version detection fallback | 0.5 | Keep the lights on | Update System |
-| 39 | I11 | Registry Fragment Architecture (D-Q6) | 0.5 | Keep the lights on | Infrastructure |
-| 40 | I13 | Team Factory Express Mode | 0.5 | Keep the lights on | Infrastructure |
-| 41 | P2 | Multi-module collaboration workflows | 0.4 | Move the needle | Unblocked |
-| 42 | T2 | `convoke-version.js` coverage to 80%+ | 0.4 | Keep the lights on | Testing |
-| 43 | I12 | Validator.js hardcoded to Vortex paths | 0.4 | Keep the lights on | Infrastructure |
-| 44 | I3 | CSV parser library for manifest | 0.4 | Keep the lights on | Infrastructure |
-| 45 | T5 | Expand docs audit — remaining gaps | 0.3 | Keep the lights on | Testing |
-| 46 | A4 | Fix temp dir prefix inconsistency | 0.3 | Keep the lights on | Agent Quality |
-| 47 | A2 | Create `.agent.yaml` source files | 0.2 | Keep the lights on | Agent Quality |
+| 5 | **P16** | **Standalone skills repository** | **4.2** | **Move the needle** | **Platform** |
+| 6 | **S3** | **One-command standalone install (`npx convoke-agents init`)** | **3.6** | **Move the needle** | **Infrastructure** |
+| 7 | I14 | Artifact Governance — naming convention, taxonomies & migration skill | 3.2 | Move the needle | Infrastructure |
+| 8 | P12 | Enhance framework — Team Module Generator (BMB) | 3.2 | Move the needle | Unblocked |
+| 9 | **U8** | **Respect user agent exclusions on update** | **3.2** | **Move the needle** | **Update System** |
+| 10 | P9 | Forge team — Domain Knowledge Extraction (KORE) | 3.0 | Move the needle | Blocked (Gate 1) |
+| 11 | **P17** | **Skill portability metadata schema** | **2.8** | **Move the needle** | **Platform** |
+| 12 | T3 | End-to-end update test on real project | 2.7 | Keep the lights on | Testing |
+| 13 | P13 | Vortex redesign (align to Enhance patterns) | 2.5 | Move the needle | Platform |
+| 14 | T4 | Migration idempotency CLI test | 2.4 | Keep the lights on | Testing |
+| 15 | T7 | Add Python linting to CI pipeline | 2.4 | Keep the lights on | Testing |
+| 16 | I2 | `gh auth` for CI release creation | 2.4 | Keep the lights on | Infrastructure |
+| 17 | D2 | Add output examples for more agents | 2.1 | Move the needle | Documentation |
+| 18 | **P18** | **LLM-agnostic skill exporter CLI** | **1.9** | **Move the needle** | **Platform** |
+| 19 | **P19** | **Intent-based skill catalog generator** | **1.9** | **Move the needle** | **Platform** |
+| 20 | **U9** | **Module-aware refresh and validation** | **1.9** | **Move the needle** | **Update System** |
+| 21 | I1 | NPM_TOKEN secret for CI publish | 1.8 | Keep the lights on | Infrastructure |
+| 22 | I7 | Team Factory CSV quoting hardening | 1.8 | Keep the lights on | Infrastructure |
+| 23 | **P20** | **Multi-platform adapter generation** | **1.8** | **Move the needle** | **Platform** |
+| 24 | P15 | Portfolio skill — cross-initiative visibility, WIP radar & context re-entry | 1.7 | Move the needle | Platform |
+| 25 | T8 | Standardize Python PEP 723 dependency declarations | 1.6 | Keep the lights on | Testing |
+| 26 | D6 | Reduce narrative overlap in journey example | 1.6 | Keep the lights on | Documentation |
+| 27 | U4 | Test upgrade-path step file cleanup | 1.4 | Keep the lights on | Update System |
+| 28 | I9 | Registry writer idempotency drift detection | 1.4 | Keep the lights on | Infrastructure |
+| 29 | P3 | Team installer architecture | 1.2 | Move the needle | Platform |
+| 30 | I5 | Workflow output naming enforcement | 1.2 | Keep the lights on | Infrastructure |
+| 31 | P7 | ML/AI Engineering team exploration | 1.2 | Move the needle | Platform |
+| 32 | S1 | Interactive installer | 1.0 | Move the needle | Infrastructure |
+| 33 | D3 | BMAD Core return arrow in diagram | 0.9 | Keep the lights on | Documentation |
+| 34 | I10 | Config appender YAML comment preservation | 0.9 | Keep the lights on | Infrastructure |
+| 35 | A1 | Add validate menu items to Wave 3 agents | 0.8 | Keep the lights on | Agent Quality |
+| 36 | A3 | Add npm keywords (`agentic`, `team-of-teams`) | 0.8 | Keep the lights on | Agent Quality |
+| 37 | I6 | Add `--verbose` flag to all CLI commands | 0.8 | Keep the lights on | Infrastructure |
+| 38 | T1 | `convoke-update.js` coverage to 80%+ | 0.8 | Keep the lights on | Testing |
+| 39 | U2 | Validate migration modules at load time | 0.8 | Keep the lights on | Update System |
+| 40 | S2 | Simplified entry point | 0.7 | Move the needle | Infrastructure |
+| 41 | I8 | Team Factory write verification — value correctness | 0.6 | Keep the lights on | Infrastructure |
+| 42 | P8 | Governance & Support skill set | 0.5 | Move the needle | Platform |
+| 43 | U3 | Robust version detection fallback | 0.5 | Keep the lights on | Update System |
+| 44 | I11 | Registry Fragment Architecture (D-Q6) | 0.5 | Keep the lights on | Infrastructure |
+| 45 | I13 | Team Factory Express Mode | 0.5 | Keep the lights on | Infrastructure |
+| 46 | P2 | Multi-module collaboration workflows | 0.4 | Move the needle | Unblocked |
+| 47 | T2 | `convoke-version.js` coverage to 80%+ | 0.4 | Keep the lights on | Testing |
+| 48 | I12 | Validator.js hardcoded to Vortex paths | 0.4 | Keep the lights on | Infrastructure |
+| 49 | I3 | CSV parser library for manifest | 0.4 | Keep the lights on | Infrastructure |
+| 50 | T5 | Expand docs audit — remaining gaps | 0.3 | Keep the lights on | Testing |
+| 51 | A4 | Fix temp dir prefix inconsistency | 0.3 | Keep the lights on | Agent Quality |
+| 52 | A2 | Create `.agent.yaml` source files | 0.2 | Keep the lights on | Agent Quality |
 
 ---
 
@@ -269,6 +282,7 @@ Remaining update system items not in Hardening: load-time validation, version de
 
 | Date | Change |
 |------|--------|
+| 2026-04-06 | Triage: Added 5 items from Skill Portability vision (party-mode session with Winston + Paige). P16 (Standalone skills repository, score 4.2 — rank #5) in Platform. P17 (Skill portability metadata schema, score 2.8 — rank #11) in Platform. P18 (LLM-agnostic skill exporter CLI, score 1.9 — rank #18) in Platform. P19 (Intent-based skill catalog generator, score 1.9 — rank #19) in Platform. P20 (Multi-platform adapter generation, score 1.8 — rank #23) in Platform. New epic grouping "Skill Portability" (P17→P18→P19→P16→P20). Source: vision-skill-portability.md — addressing adoption barrier for teammates new to agentic tools who need individual skills without full BMAD installation, LLM-agnostic (Claude Code, Copilot, Cursor). Epics: epics-skill-portability.md (5 epics, 14 stories). Sprint status updated. 52 ranked items. |
 | 2026-04-05 | Triage: Added 2 items from party-mode session (Portfolio & Artifact Governance). I14 (Artifact Governance — naming convention, taxonomies & migration skill, score 3.2 — rank #6) in Infrastructure. P15 (Portfolio skill — cross-initiative visibility, WIP radar & context re-entry, score 1.7 — rank #19) in Platform & Product Vision. I14 overlaps I5 (workflow naming enforcement) but broader scope. P15 depends on I14. Source: party-mode session diagnosing scaling pain across 5+ concurrent initiatives, traced to lifecycle-expansion-vision.md Section 8 gap (Flow & WIP governance). Also confirmed: Helm as Strategy team name, Loom as Team Factory team name (agent self-identifies as "Loom Master"). 47 ranked items. |
 | 2026-04-02 | Team Factory conversational workflow layer built and reviewed. 28 new files added to `_bmad/bme/_team-factory/`: Forge Master agent definition, 6 workflow steps (step-00-route through step-05-validate), 6 JS modules (cascade-logic, collision-detector, spec-parser, spec-writer, spec-differ + schemas), spec template, config, module-help.csv, skill entry point. Code review (Blind Hunter + Edge Case Hunter) found 11 actionable issues — all fixed: CSV header alignment, schema persona fields, spec-parser validation strengthening, collision-detector warnings, dead parameters, JSDoc gaps, round-trip validation expansion, object comparison fix, compass_routing standardization. P14 Completed entry updated. P9 blocker changed from "Enhance + Vortex redesign" to "Gate 1 (shadow engagement)" — Team Factory can scaffold Forge directly. Platform Foundation epic updated. 45 ranked items. |
 | 2026-03-25 | Winston adoption review: Added U7 (Changelog surface during update, score 4.3 — rank #4), U8 (Respect user agent exclusions, score 3.2 — rank #8), U9 (Module-aware refresh and validation, score 1.9 — rank #17). New epic grouping "Update Experience for Adoption" (U7+U8+U9). Sequencing: U7 first (standalone, highest leverage), U8 (config schema), U9 (highest effort, depends on U8 patterns). Source: user-reported update friction on big releases affecting adoption. 43 ranked items. |
