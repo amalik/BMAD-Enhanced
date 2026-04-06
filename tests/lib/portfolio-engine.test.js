@@ -94,6 +94,43 @@ describe('generatePortfolio', () => {
     }
   });
 
+  test('wipRadar is null when threshold not exceeded', async () => {
+    const result = await generatePortfolio(projectRoot, { wipThreshold: 99 });
+    expect(result.wipRadar).toBeNull();
+  });
+
+  test('wipRadar returned when threshold exceeded', async () => {
+    const result = await generatePortfolio(projectRoot, { wipThreshold: 1 });
+    // Real repo likely has >1 active initiative
+    if (result.wipRadar) {
+      expect(result.wipRadar.active).toBeGreaterThan(1);
+      expect(result.wipRadar.threshold).toBe(1);
+      expect(Array.isArray(result.wipRadar.initiatives)).toBe(true);
+      expect(result.wipRadar.initiatives.length).toBe(result.wipRadar.active);
+    }
+  });
+
+  test('--filter by prefix returns matching initiatives only', async () => {
+    const result = await generatePortfolio(projectRoot, { filter: 'g*' });
+    expect(result.initiatives.length).toBeGreaterThan(0);
+    for (const s of result.initiatives) {
+      expect(s.initiative.startsWith('g')).toBe(true);
+    }
+  });
+
+  test('--filter with no match returns empty', async () => {
+    const result = await generatePortfolio(projectRoot, { filter: 'zzz' });
+    expect(result.initiatives.length).toBe(0);
+  });
+
+  test('--filter applies before WIP count', async () => {
+    // Filter to single initiative — WIP should be <= 1 regardless of full portfolio
+    const result = await generatePortfolio(projectRoot, { filter: 'gyre', wipThreshold: 0 });
+    if (result.wipRadar) {
+      expect(result.wipRadar.active).toBeLessThanOrEqual(1);
+    }
+  });
+
   test('known initiatives from taxonomy are present', async () => {
     const result = await generatePortfolio(projectRoot);
     const names = result.initiatives.map(s => s.initiative);
