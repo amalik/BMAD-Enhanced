@@ -79,18 +79,7 @@ async function generatePortfolio(projectRoot, options = {}) {
 
   for (const file of mdFiles) {
 
-    const typeResult = inferArtifactType(file.filename, taxonomy);
-    const initResult = typeResult.type
-      ? inferInitiative(typeResult.remainder, taxonomy)
-      : { initiative: null, confidence: 'low', source: 'no-type', candidates: [] };
-
-    // Files with no resolved initiative cannot be attributed — skip
-    if (!initResult.initiative) {
-      unattributed++;
-      continue;
-    }
-
-    // Read frontmatter to classify governed vs ungoverned
+    // Read frontmatter FIRST — governed files have authoritative metadata
     let frontmatter = null;
     let content = '';
     try {
@@ -100,11 +89,31 @@ async function generatePortfolio(projectRoot, options = {}) {
       // Unreadable — treat as no frontmatter
     }
 
-    // Governed = has frontmatter with matching initiative field
-    const isGoverned = !!(frontmatter && frontmatter.initiative && frontmatter.initiative === initResult.initiative);
-    if (isGoverned) {
+    // Strategy: frontmatter initiative is authoritative if present
+    let initiative, artifactType, isGoverned, typeResult;
+
+    if (frontmatter && frontmatter.initiative && frontmatter.artifact_type) {
+      // Governed file — use frontmatter as source of truth
+      initiative = frontmatter.initiative;
+      artifactType = frontmatter.artifact_type;
+      isGoverned = true;
       governed++;
+      typeResult = { type: artifactType, hcPrefix: null, remainder: '', date: null, typeConfidence: 'high', typeSource: 'frontmatter' };
     } else {
+      // Ungoverned file — fall back to filename inference
+      typeResult = inferArtifactType(file.filename, taxonomy);
+      const initResult = typeResult.type
+        ? inferInitiative(typeResult.remainder, taxonomy)
+        : { initiative: null, confidence: 'low', source: 'no-type', candidates: [] };
+
+      if (!initResult.initiative) {
+        unattributed++;
+        continue;
+      }
+
+      initiative = initResult.initiative;
+      artifactType = typeResult.type;
+      isGoverned = false;
       ungoverned++;
     }
 
@@ -112,20 +121,20 @@ async function generatePortfolio(projectRoot, options = {}) {
       filename: file.filename,
       dir: file.dir,
       fullPath: file.fullPath,
-      type: typeResult.type,
+      type: artifactType,
       hcPrefix: typeResult.hcPrefix,
       date: typeResult.date,
-      initiative: initResult.initiative,
+      initiative,
       frontmatter,
       content,
       isGoverned,
       degradedMode: !isGoverned
     };
 
-    if (!registry.has(initResult.initiative)) {
-      registry.set(initResult.initiative, []);
+    if (!registry.has(initiative)) {
+      registry.set(initiative, []);
     }
-    registry.get(initResult.initiative).push(enriched);
+    registry.get(initiative).push(enriched);
   }
 
   // FR39: warn if no governed artifacts
