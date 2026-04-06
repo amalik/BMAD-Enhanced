@@ -10,7 +10,7 @@ const fs = require('fs-extra');
 const path = require('path');
 const yaml = require('js-yaml');
 const matter = require('gray-matter');
-const { execSync, execFileSync } = require('child_process');
+const { execFileSync } = require('child_process');
 
 // --- Constants (extracted from archive.js) ---
 
@@ -268,17 +268,16 @@ function injectFrontmatter(fileContent, newFields) {
  * @throws {Error} If working tree is dirty with details of dirty files
  */
 function ensureCleanTree(scopeDirs, projectRoot) {
-  // Build scoped paths for git diff (forward slashes for git)
+  // Build scoped paths for git commands (forward slashes for git)
   const scopePaths = scopeDirs.map(dir => `_bmad-output/${dir}`);
-  const scopeArgs = scopePaths.map(p => `"${p}"`).join(' ');
 
   // Check tracked changes (staged and unstaged) — scoped to scopeDirs only
   try {
-    execSync(`git diff --quiet -- ${scopeArgs}`, { cwd: projectRoot, encoding: 'utf8', stdio: 'pipe' });
+    execFileSync('git', ['diff', '--quiet', '--', ...scopePaths], { cwd: projectRoot, encoding: 'utf8', stdio: 'pipe' });
   } catch {
     let diff = '(unable to list files)';
     try {
-      diff = execSync(`git diff --name-only -- ${scopeArgs}`, { cwd: projectRoot, encoding: 'utf8', stdio: 'pipe' }).trim();
+      diff = execFileSync('git', ['diff', '--name-only', '--', ...scopePaths], { cwd: projectRoot, encoding: 'utf8', stdio: 'pipe' }).trim();
     } catch { /* best-effort */ }
     throw new Error(
       'Working tree has uncommitted changes in scope directories. Commit or stash before running migration.\n' +
@@ -287,11 +286,11 @@ function ensureCleanTree(scopeDirs, projectRoot) {
   }
 
   try {
-    execSync(`git diff --cached --quiet -- ${scopeArgs}`, { cwd: projectRoot, encoding: 'utf8', stdio: 'pipe' });
+    execFileSync('git', ['diff', '--cached', '--quiet', '--', ...scopePaths], { cwd: projectRoot, encoding: 'utf8', stdio: 'pipe' });
   } catch {
     let staged = '(unable to list files)';
     try {
-      staged = execSync(`git diff --cached --name-only -- ${scopeArgs}`, { cwd: projectRoot, encoding: 'utf8', stdio: 'pipe' }).trim();
+      staged = execFileSync('git', ['diff', '--cached', '--name-only', '--', ...scopePaths], { cwd: projectRoot, encoding: 'utf8', stdio: 'pipe' }).trim();
     } catch { /* best-effort */ }
     throw new Error(
       'Working tree has staged changes in scope directories. Commit or stash before running migration.\n' +
@@ -300,11 +299,9 @@ function ensureCleanTree(scopeDirs, projectRoot) {
   }
 
   // Check untracked files within scope directories
-  for (const dir of scopeDirs) {
-    // Use forward slashes for git commands (git expects posix paths even on Windows)
-    const scopePath = `_bmad-output/${dir}`;
-    const untracked = execSync(
-      `git ls-files --others --exclude-standard "${scopePath}"`,
+  for (const scopePath of scopePaths) {
+    const untracked = execFileSync(
+      'git', ['ls-files', '--others', '--exclude-standard', scopePath],
       { cwd: projectRoot, encoding: 'utf8', stdio: 'pipe' }
     ).trim();
 
