@@ -31,6 +31,7 @@ describe('parseTargetVersion', () => {
     assert.equal(registry.parseTargetVersion('1.0.x-to-1.3.0'), '1.3.0');
     assert.equal(registry.parseTargetVersion('1.5.x-to-1.6.0'), '1.6.0');
     assert.equal(registry.parseTargetVersion('1.7.x-to-2.0.0'), '2.0.0');
+    assert.equal(registry.parseTargetVersion('2.0.x-to-3.1.0'), '3.1.0');
   });
 
   it('returns null for unparseable names', () => {
@@ -56,8 +57,8 @@ describe('getMigrationsFor', () => {
     assert.equal(migrations.length, 0);
   });
 
-  it('returns empty for current version', () => {
-    const migrations = registry.getMigrationsFor('2.3.1');
+  it('returns empty for future version beyond all migrations', () => {
+    const migrations = registry.getMigrationsFor('99.0.1');
     assert.equal(migrations.length, 0);
   });
 });
@@ -71,7 +72,8 @@ describe('getMigrationsFor - chain traversal', () => {
       '1.3.x-to-1.5.0',
       '1.5.x-to-1.6.0',
       '1.6.x-to-1.7.0',
-      '1.7.x-to-2.0.0'
+      '1.7.x-to-2.0.0',
+      '2.0.x-to-3.1.0'
     ]);
   });
 
@@ -83,7 +85,8 @@ describe('getMigrationsFor - chain traversal', () => {
       '1.3.x-to-1.5.0',
       '1.5.x-to-1.6.0',
       '1.6.x-to-1.7.0',
-      '1.7.x-to-2.0.0'
+      '1.7.x-to-2.0.0',
+      '2.0.x-to-3.1.0'
     ]);
   });
 
@@ -94,7 +97,8 @@ describe('getMigrationsFor - chain traversal', () => {
       '1.3.x-to-1.5.0',
       '1.5.x-to-1.6.0',
       '1.6.x-to-1.7.0',
-      '1.7.x-to-2.0.0'
+      '1.7.x-to-2.0.0',
+      '2.0.x-to-3.1.0'
     ]);
   });
 
@@ -104,7 +108,8 @@ describe('getMigrationsFor - chain traversal', () => {
     assert.deepEqual(names, [
       '1.5.x-to-1.6.0',
       '1.6.x-to-1.7.0',
-      '1.7.x-to-2.0.0'
+      '1.7.x-to-2.0.0',
+      '2.0.x-to-3.1.0'
     ]);
   });
 
@@ -113,14 +118,27 @@ describe('getMigrationsFor - chain traversal', () => {
     const names = migrations.map(m => m.name);
     assert.deepEqual(names, [
       '1.6.x-to-1.7.0',
-      '1.7.x-to-2.0.0'
+      '1.7.x-to-2.0.0',
+      '2.0.x-to-3.1.0'
     ]);
   });
 
-  it('returns single hop from 1.7.1', () => {
+  it('chains from 1.7.1 through 2 hops', () => {
     const migrations = registry.getMigrationsFor('1.7.1');
     const names = migrations.map(m => m.name);
-    assert.deepEqual(names, ['1.7.x-to-2.0.0']);
+    assert.deepEqual(names, ['1.7.x-to-2.0.0', '2.0.x-to-3.1.0']);
+  });
+
+  it('returns single hop from 2.0.1', () => {
+    const migrations = registry.getMigrationsFor('2.0.1');
+    const names = migrations.map(m => m.name);
+    assert.deepEqual(names, ['2.0.x-to-3.1.0']);
+  });
+
+  it('returns single hop from 3.0.4 (parallel entry)', () => {
+    const migrations = registry.getMigrationsFor('3.0.4');
+    const names = migrations.map(m => m.name);
+    assert.deepEqual(names, ['3.0.x-to-3.1.0']);
   });
 });
 
@@ -165,8 +183,8 @@ describe('getBreakingChanges', () => {
     assert.ok(changes[0].includes('Product rename'));
   });
 
-  it('returns empty for current version', () => {
-    const changes = registry.getBreakingChanges('2.3.1');
+  it('returns empty for future version beyond all migrations', () => {
+    const changes = registry.getBreakingChanges('99.0.1');
     assert.equal(changes.length, 0);
   });
 });
