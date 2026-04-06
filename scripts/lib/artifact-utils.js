@@ -1487,6 +1487,114 @@ function generateRenameMap(renamedEntries) {
  * @param {string} projectRoot - Absolute path to project root
  * @returns {'complete'|'renames-done'|'fresh'} Current migration state
  */
+/**
+ * Generate the content for the new governance convention ADR.
+ *
+ * @param {string} date - ISO date string (YYYY-MM-DD)
+ * @param {{renamedCount: number, injectedCount: number, linksUpdated: number, scopeDirs: string[]}} migrationStats
+ * @returns {string} Markdown content for the ADR file
+ */
+function generateGovernanceADR(date, migrationStats = {}) {
+  const { renamedCount = 0, injectedCount = 0, linksUpdated = 0, scopeDirs = [] } = migrationStats;
+  return `# Architecture Decision Record: Artifact Governance Convention
+
+**Status:** ACCEPTED
+**Date:** ${date}
+**Decision Makers:** Convoke migration tool
+**Supersedes:** adr-repo-organization-conventions-2026-03-22.md
+
+---
+
+## Context
+
+The project accumulated artifacts across multiple initiatives (Vortex, Gyre, Forge, Helm, Enhance, Loom, Convoke) using inconsistent naming conventions. Files like \`prd-gyre.md\`, \`architecture-gyre.md\`, and \`hc2-problem-definition-gyre-2026-03-21.md\` followed different patterns, making it difficult to identify which initiative owned each artifact and to build automated tooling on top of the artifact structure.
+
+## Decision
+
+All artifacts within \`_bmad-output/\` follow the governance naming convention:
+
+\`\`\`
+{initiative}-{artifact_type}[-{qualifier}][-{date}].md
+\`\`\`
+
+**Examples:**
+- \`gyre-prd.md\` (initiative: gyre, type: prd)
+- \`helm-lean-persona-2026-04-04.md\` (initiative: helm, type: lean-persona, date)
+- \`forge-problem-def-hc2-2026-03-21.md\` (initiative: forge, type: problem-def, qualifier: hc2, date)
+
+## Taxonomy
+
+**Platform initiatives (8):** vortex, gyre, bmm, forge, helm, enhance, loom, convoke
+
+**Artifact types (21):** prd, epic, arch, adr, persona, lean-persona, empathy-map, problem-def, hypothesis, experiment, signal, decision, scope, pre-reg, sprint, brief, vision, report, research, story, spec
+
+**Aliases (migration-specific):** Historical name variants mapped to canonical initiative IDs during migration (e.g., strategy-perimeter -> helm, team-factory -> loom).
+
+## Frontmatter Schema v1
+
+Every governed artifact includes YAML frontmatter with these required fields:
+
+\`\`\`yaml
+---
+initiative: gyre          # Required. From taxonomy.yaml
+artifact_type: prd        # Required. From taxonomy.yaml
+created: 2026-04-06       # Required. ISO 8601 date
+schema_version: 1         # Required. Integer >= 1
+---
+\`\`\`
+
+Existing frontmatter fields are preserved — migration adds fields, never overwrites.
+
+## Migration Scope
+
+- **Directories:** ${scopeDirs.length > 0 ? scopeDirs.join(', ') : 'planning-artifacts, vortex-artifacts, gyre-artifacts'}
+- **Files renamed:** ${renamedCount}
+- **Frontmatter injected:** ${injectedCount}
+- **Links updated:** ${linksUpdated}
+- **Archive excluded:** \`_bmad-output/_archive/\` always excluded (FR50)
+
+## Consequences
+
+- All artifacts are discoverable by initiative and type via filename convention
+- Automated portfolio tooling can infer initiative state from artifact metadata
+- \`git log --follow\` preserves full history for renamed files
+- The previous convention (type-first: \`prd-gyre.md\`) is superseded
+`;
+}
+
+/**
+ * Update the previous ADR's status to SUPERSEDED and add a Superseded-by reference.
+ *
+ * @param {string} projectRoot - Absolute path to project root
+ * @param {string} newADRFilename - Filename of the new ADR (e.g., 'adr-artifact-governance-convention-2026-04-06.md')
+ * @returns {boolean} true if updated, false if old ADR not found
+ */
+function supersedePreviousADR(projectRoot, newADRFilename) {
+  const oldADRPath = path.join(projectRoot, '_bmad-output', 'planning-artifacts', 'adr-repo-organization-conventions-2026-03-22.md');
+
+  if (!fs.existsSync(oldADRPath)) {
+    console.warn('Warning: Previous ADR not found at expected path. Skipping supersession.');
+    return false;
+  }
+
+  let content = fs.readFileSync(oldADRPath, 'utf8');
+
+  // Replace status
+  content = content.replace('**Status:** ACCEPTED', '**Status:** SUPERSEDED');
+
+  // Insert Superseded-by line after the Supersedes line (guard against double-insertion on re-run)
+  const supersedesLine = '**Supersedes:** N/A (first formal repo organization standard)';
+  if (content.includes(supersedesLine) && !content.includes('**Superseded by:**')) {
+    content = content.replace(
+      supersedesLine,
+      `${supersedesLine}\n**Superseded by:** ${newADRFilename}`
+    );
+  }
+
+  fs.writeFileSync(oldADRPath, content, 'utf8');
+  return true;
+}
+
 function detectMigrationState(projectRoot) {
   try {
     // Check recent commits (not just last one) to handle intervening manual commits
@@ -1497,7 +1605,8 @@ function detectMigrationState(projectRoot) {
 
     // Check in order: most recent first
     for (const msg of recentMsgs) {
-      if (msg === 'chore: inject frontmatter metadata and update links') {
+      if (msg === 'chore: inject frontmatter metadata and update links' ||
+          msg === 'chore: generate governance convention ADR') {
         return 'complete';
       }
       if (msg === 'chore: rename artifacts to governance convention') {
@@ -1559,5 +1668,7 @@ module.exports = {
   promptInitiative,
   resolveAmbiguous,
   generateRenameMap,
-  detectMigrationState
+  detectMigrationState,
+  generateGovernanceADR,
+  supersedePreviousADR
 };
