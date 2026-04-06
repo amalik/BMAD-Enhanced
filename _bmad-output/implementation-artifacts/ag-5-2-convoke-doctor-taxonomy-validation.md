@@ -1,6 +1,6 @@
 # Story 5.2: convoke-doctor Taxonomy Validation
 
-Status: ready-for-dev
+Status: done
 
 ## Story
 
@@ -22,35 +22,35 @@ so that I catch malformed config, invalid IDs, and collisions before they cause 
 
 ## Tasks / Subtasks
 
-- [ ] Task 1: Implement `checkTaxonomy(projectRoot)` in convoke-doctor.js (AC: #1-#7)
-  - [ ] Add new function `checkTaxonomy(projectRoot)` returning check result object `{ name, passed, error?, warning?, fix? }`
-  - [ ] Check 1: file exists at `_bmad/_config/taxonomy.yaml`. If missing: return warning with fix: "run convoke-migrate-artifacts or convoke-update"
-  - [ ] Check 2: YAML parseable. If malformed: return error with clear message (NFR22)
-  - [ ] Check 3: structure has required sections (initiatives.platform array, initiatives.user array, artifact_types array, aliases object)
-  - [ ] Check 4: all IDs match pattern `/^[a-z][a-z0-9-]*$/` (same as `readTaxonomy` validation)
-  - [ ] Check 5: no duplicates between `initiatives.platform` and `initiatives.user`
-  - [ ] Check 6: no collisions between initiative IDs and artifact type IDs
-  - [ ] Return array of check results (one per sub-check, or combined single result with details)
+- [x] Task 1: Implement `checkTaxonomy(projectRoot)` in convoke-doctor.js (AC: #1-#7)
+  - [x] Add new function `checkTaxonomy(projectRoot)` returning check result object `{ name, passed, error?, warning?, fix? }`
+  - [x] Check 1: file exists at `_bmad/_config/taxonomy.yaml`. If missing: return warning with fix: "run convoke-migrate-artifacts or convoke-update"
+  - [x] Check 2: YAML parseable. If malformed: return error with clear message (NFR22)
+  - [x] Check 3: structure has required sections (initiatives.platform array, initiatives.user array, artifact_types array, aliases object)
+  - [x] Check 4: all IDs match pattern `/^[a-z][a-z0-9-]*$/` (same as `readTaxonomy` validation)
+  - [x] Check 5: no duplicates between `initiatives.platform` and `initiatives.user`
+  - [x] Check 6: no collisions between initiative IDs and artifact type IDs
+  - [x] Return array of check results (one per sub-check, or combined single result with details)
 
-- [ ] Task 2: Integrate into doctor check sequence (AC: #8)
-  - [ ] Call `checkTaxonomy(projectRoot)` in the global checks section (after existing checks)
-  - [ ] Push results to the `checks[]` array
-  - [ ] Match existing check result format: `{ name: 'Taxonomy: ...', passed, error/warning/fix }`
+- [x] Task 2: Integrate into doctor check sequence (AC: #8)
+  - [x] Call `checkTaxonomy(projectRoot)` in the global checks section (after existing checks)
+  - [x] Push results to the `checks[]` array
+  - [x] Match existing check result format: `{ name: 'Taxonomy: ...', passed, error/warning/fix }`
 
-- [ ] Task 3: Write tests (AC: #1-#9)
-  - [ ] Add to existing `tests/unit/validator.test.js` or create new test file
-  - [ ] Use Node built-in test runner (`node:test`) matching existing doctor test pattern
-  - [ ] Test: valid taxonomy passes all checks
-  - [ ] Test: missing taxonomy returns warning (not error)
-  - [ ] Test: malformed YAML returns actionable error
-  - [ ] Test: invalid ID format detected
-  - [ ] Test: duplicate between platform/user detected
-  - [ ] Test: collision between initiative and artifact type detected
-  - [ ] Existing `npm test` must pass (AC #9)
+- [x] Task 3: Write tests (AC: #1-#9)
+  - [x] Add to existing `tests/unit/validator.test.js` or create new test file
+  - [x] Use Node built-in test runner (`node:test`) matching existing doctor test pattern
+  - [x] Test: valid taxonomy passes all checks
+  - [x] Test: missing taxonomy returns warning (not error)
+  - [x] Test: malformed YAML returns actionable error
+  - [x] Test: invalid ID format detected
+  - [x] Test: duplicate between platform/user detected
+  - [x] Test: collision between initiative and artifact type detected
+  - [x] Existing `npm test` must pass (AC #9)
 
-- [ ] Task 4: Run convoke-check and regression suite
-  - [ ] Run `node scripts/convoke-check.js --skip-coverage` -- all steps pass
-  - [ ] Run `node scripts/convoke-doctor.js` -- shows taxonomy check in output
+- [x] Task 4: Run convoke-check and regression suite
+  - [x] Run `node scripts/convoke-check.js --skip-coverage` -- all steps pass
+  - [x] Run `node scripts/convoke-doctor.js` -- shows taxonomy check in output
 
 ## Dev Notes
 
@@ -95,8 +95,26 @@ tests/
 
 ### Agent Model Used
 
+Claude Opus 4.6 (1M context)
+
 ### Debug Log References
+
+- convoke-check: all 5 steps pass
+- 6/6 taxonomy doctor tests pass
+- `convoke-doctor` shows 6 taxonomy checks all passing against real repo
+- Zero test failures, zero lint errors
 
 ### Completion Notes List
 
+- Implemented `checkTaxonomy(projectRoot)` in convoke-doctor.js returning array of check results
+- 6 sub-checks: file exists, valid YAML, structure, ID format, no duplicates, no collisions
+- Missing taxonomy = warning (not error) with fix guidance
+- Malformed YAML = clear error (NFR22)
+- Integrated into global checks via `checks.push(...checkTaxonomy(projectRoot))`
+- Added `require.main === module` guard + `module.exports = { checkTaxonomy }` for testability
+- 6 new tests using Node built-in test runner
+
 ### File List
+
+- `scripts/convoke-doctor.js` — MODIFIED (added checkTaxonomy, require.main guard, export)
+- `tests/unit/taxonomy-doctor.test.js` — NEW (6 tests)
