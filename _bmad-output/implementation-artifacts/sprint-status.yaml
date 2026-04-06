@@ -297,7 +297,7 @@ development_status:
   ag-2-1-initiative-inference-engine: done
   ag-2-2-dry-run-manifest-generation: done
   ag-2-3-migration-cli-scope-configuration: done
-  ag-epic-2-retrospective: optional
+  ag-epic-2-retrospective: done
 
   # Epic 3: Migration Execution & Safety
   ag-epic-3: backlog
