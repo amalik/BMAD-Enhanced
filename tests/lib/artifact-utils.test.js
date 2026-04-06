@@ -185,36 +185,36 @@ describe('injectFrontmatter', () => {
 });
 
 // --- ensureCleanTree tests ---
-// These use a separate require with jest.spyOn to mock child_process.execSync
+// These use a separate require with jest.spyOn to mock child_process.execFileSync
 
 describe('ensureCleanTree', () => {
-  let mockExecSync;
+  let mockExecFileSync;
   let ensureCleanTree;
 
   beforeEach(() => {
     // Clear module cache to get fresh require with spy
     jest.resetModules();
     const cp = require('child_process');
-    mockExecSync = jest.spyOn(cp, 'execSync');
+    mockExecFileSync = jest.spyOn(cp, 'execFileSync');
     // Re-require artifact-utils so it picks up the spy
     ensureCleanTree = require('../../scripts/lib/artifact-utils').ensureCleanTree;
   });
 
   afterEach(() => {
-    mockExecSync.mockRestore();
+    mockExecFileSync.mockRestore();
   });
 
   test('passes when tree is clean', () => {
-    mockExecSync.mockReturnValue('');
+    mockExecFileSync.mockReturnValue('');
     expect(() => ensureCleanTree(['planning-artifacts'], '/fake/root')).not.toThrow();
   });
 
   test('throws on uncommitted tracked changes', () => {
-    mockExecSync.mockImplementation((cmd) => {
-      if (cmd.startsWith('git diff --quiet')) {
+    mockExecFileSync.mockImplementation((_cmd, args) => {
+      if (args.includes('--quiet') && !args.includes('--cached')) {
         throw new Error('diff found');
       }
-      if (cmd.startsWith('git diff --name-only')) {
+      if (args.includes('--name-only') && !args.includes('--cached')) {
         return 'file-a.md\nfile-b.md';
       }
       return '';
@@ -224,12 +224,12 @@ describe('ensureCleanTree', () => {
   });
 
   test('throws on staged changes', () => {
-    mockExecSync.mockImplementation((cmd) => {
-      if (cmd.startsWith('git diff --quiet')) return '';
-      if (cmd.startsWith('git diff --cached --quiet')) {
+    mockExecFileSync.mockImplementation((_cmd, args) => {
+      if (args.includes('--quiet') && !args.includes('--cached')) return '';
+      if (args.includes('--cached') && args.includes('--quiet')) {
         throw new Error('staged found');
       }
-      if (cmd.startsWith('git diff --cached --name-only')) {
+      if (args.includes('--cached') && args.includes('--name-only')) {
         return 'staged-file.md';
       }
       return '';
@@ -239,8 +239,8 @@ describe('ensureCleanTree', () => {
   });
 
   test('throws on untracked files in scope', () => {
-    mockExecSync.mockImplementation((cmd) => {
-      if (cmd.startsWith('git ls-files')) {
+    mockExecFileSync.mockImplementation((_cmd, args) => {
+      if (args.includes('ls-files')) {
         return 'new-untracked.md';
       }
       return '';
