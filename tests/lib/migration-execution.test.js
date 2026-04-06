@@ -838,8 +838,138 @@ describe('detectMigrationState', () => {
     expect(detectMigrationState('/fake')).toBe('renames-done');
   });
 
+  test('ADR commit message also returns complete', () => {
+    mockExecFileSync.mockReturnValue('chore: generate governance convention ADR\n');
+    expect(detectMigrationState('/fake')).toBe('complete');
+  });
+
   test('git log fails (not a repo) -> returns fresh', () => {
     mockExecFileSync.mockImplementation(() => { throw new Error('not a git repo'); });
     expect(detectMigrationState('/fake')).toBe('fresh');
+  });
+});
+
+// --- generateGovernanceADR tests ---
+
+describe('generateGovernanceADR', () => {
+  let generateGovernanceADR;
+
+  beforeAll(() => {
+    jest.restoreAllMocks();
+    jest.resetModules();
+    generateGovernanceADR = require('../../scripts/lib/artifact-utils').generateGovernanceADR;
+  });
+
+  test('returns markdown string with correct structure', () => {
+    const md = generateGovernanceADR('2026-04-06', {
+      renamedCount: 42, injectedCount: 42, linksUpdated: 15, scopeDirs: ['planning-artifacts', 'vortex-artifacts']
+    });
+    expect(md).toContain('# Architecture Decision Record: Artifact Governance Convention');
+    expect(md).toContain('**Status:** ACCEPTED');
+    expect(md).toContain('**Date:** 2026-04-06');
+    expect(md).toContain('**Supersedes:** adr-repo-organization-conventions-2026-03-22.md');
+  });
+
+  test('contains naming convention section', () => {
+    const md = generateGovernanceADR('2026-04-06');
+    expect(md).toContain('{initiative}-{artifact_type}');
+    expect(md).toContain('## Decision');
+  });
+
+  test('contains taxonomy structure', () => {
+    const md = generateGovernanceADR('2026-04-06');
+    expect(md).toContain('## Taxonomy');
+    expect(md).toContain('vortex, gyre, bmm, forge, helm, enhance, loom, convoke');
+  });
+
+  test('contains frontmatter schema v1', () => {
+    const md = generateGovernanceADR('2026-04-06');
+    expect(md).toContain('## Frontmatter Schema v1');
+    expect(md).toContain('schema_version: 1');
+  });
+
+  test('includes migration stats', () => {
+    const md = generateGovernanceADR('2026-04-06', {
+      renamedCount: 42, injectedCount: 42, linksUpdated: 15,
+      scopeDirs: ['planning-artifacts', 'vortex-artifacts']
+    });
+    expect(md).toContain('Files renamed:** 42');
+    expect(md).toContain('Frontmatter injected:** 42');
+    expect(md).toContain('Links updated:** 15');
+    expect(md).toContain('planning-artifacts, vortex-artifacts');
+  });
+
+  test('defaults stats gracefully when not provided', () => {
+    const md = generateGovernanceADR('2026-04-06');
+    expect(md).toContain('Files renamed:** 0');
+  });
+});
+
+// --- supersedePreviousADR tests ---
+
+describe('supersedePreviousADR', () => {
+  let tmpDir;
+  let supersedePreviousADR;
+
+  beforeAll(() => {
+    jest.restoreAllMocks();
+    jest.resetModules();
+    supersedePreviousADR = require('../../scripts/lib/artifact-utils').supersedePreviousADR;
+  });
+
+  beforeEach(async () => {
+    tmpDir = await fs.mkdtemp(path.join(os.tmpdir(), 'convoke-adr-'));
+    const adrDir = path.join(tmpDir, '_bmad-output', 'planning-artifacts');
+    await fs.ensureDir(adrDir);
+
+    // Create the old ADR with the expected format
+    const oldADR = [
+      '# Architecture Decision Record: Repository Organization Conventions',
+      '',
+      '**Status:** ACCEPTED',
+      '**Date:** 2026-03-22',
+      '**Decision Makers:** Amalik (project lead), Winston (architect)',
+      '**Supersedes:** N/A (first formal repo organization standard)',
+      '',
+      '---',
+      '',
+      '## Context',
+      'Content here.'
+    ].join('\n');
+    await fs.writeFile(path.join(adrDir, 'adr-repo-organization-conventions-2026-03-22.md'), oldADR);
+  });
+
+  afterEach(async () => {
+    await fs.remove(tmpDir);
+  });
+
+  test('updates status from ACCEPTED to SUPERSEDED', () => {
+    supersedePreviousADR(tmpDir, 'adr-artifact-governance-convention-2026-04-06.md');
+    const content = fs.readFileSync(
+      path.join(tmpDir, '_bmad-output', 'planning-artifacts', 'adr-repo-organization-conventions-2026-03-22.md'), 'utf8'
+    );
+    expect(content).toContain('**Status:** SUPERSEDED');
+    expect(content).not.toContain('**Status:** ACCEPTED');
+  });
+
+  test('adds Superseded-by line with new ADR filename', () => {
+    supersedePreviousADR(tmpDir, 'adr-artifact-governance-convention-2026-04-06.md');
+    const content = fs.readFileSync(
+      path.join(tmpDir, '_bmad-output', 'planning-artifacts', 'adr-repo-organization-conventions-2026-03-22.md'), 'utf8'
+    );
+    expect(content).toContain('**Superseded by:** adr-artifact-governance-convention-2026-04-06.md');
+    // Original Supersedes line preserved
+    expect(content).toContain('**Supersedes:** N/A (first formal repo organization standard)');
+  });
+
+  test('non-existent old ADR logs warning, does not throw', () => {
+    const warnSpy = jest.spyOn(console, 'warn').mockImplementation();
+    const emptyDir = path.join(tmpDir, 'empty-project');
+    fs.ensureDirSync(emptyDir);
+
+    const result = supersedePreviousADR(emptyDir, 'adr-artifact-governance-convention-2026-04-06.md');
+    expect(result).toBe(false);
+    expect(warnSpy).toHaveBeenCalledWith(expect.stringContaining('Previous ADR not found'));
+    warnSpy.mockRestore();
   });
 });
