@@ -203,6 +203,7 @@ Options:
   --markdown        Markdown table output
   --sort <mode>     Sort: alpha (default), last-activity
   --filter <prefix> Filter initiatives by prefix (e.g., --filter gyre)
+  --verbose         Show inference trace per initiative (source + confidence)
   --help, -h        Show this help
 
 Examples:
@@ -227,6 +228,7 @@ async function main() {
   }
 
   const useMarkdown = args.includes('--markdown');
+  const useVerbose = args.includes('--verbose');
   const sortMode = args.includes('--sort') && args[args.indexOf('--sort') + 1] === 'last-activity'
     ? 'last-activity'
     : 'alpha';
@@ -277,6 +279,16 @@ async function main() {
     console.log(`\nTotal: ${result.summary.total} artifacts | Governed: ${result.summary.governed} | Ungoverned: ${result.summary.ungoverned} | Unattributed: ${result.summary.unattributed}`);
     const hs = result.summary.healthScore;
     console.log(`Governance: ${hs.governed}/${hs.total} artifacts governed (${hs.percentage}%)`);
+
+    // Verbose: inference trace per initiative
+    if (useVerbose) {
+      console.log('\n--- Inference Trace ---');
+      for (const s of result.initiatives) {
+        const p = s.phase;
+        const st = s.status;
+        console.log(`  [${s.initiative}] phase: ${p.value} (${p.source}, ${p.confidence}) | status: ${st.value} (${st.source}, ${st.confidence})`);
+      }
+    }
   } catch (err) {
     console.error(`Error: ${err.message}`);
     process.exit(1);
