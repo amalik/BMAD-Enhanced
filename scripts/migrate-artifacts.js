@@ -20,7 +20,8 @@ const {
   ensureCleanTree,
   executeRenames,
   ArtifactMigrationError,
-  verifyHistoryChain
+  verifyHistoryChain,
+  executeInjections
 } = require('./lib/artifact-utils');
 
 // --- CLI Argument Parsing ---
@@ -274,11 +275,24 @@ async function main() {
     } else {
       console.log(`History chain verified for ${verification.verified} sample file(s).`);
     }
+
+    // Execute commit 2: frontmatter injection + link updating
+    const injResult = await executeInjections(manifest, projectRoot, filteredIncludeDirs);
+    console.log(`\nInjection phase complete. ${injResult.injectedCount} files injected, ${injResult.linkUpdates.updatedLinks} links updated, ${injResult.conflictCount} conflicts skipped. Commit: ${injResult.commitSha}`);
   } catch (err) {
     if (err instanceof ArtifactMigrationError && err.phase === 'rename') {
       console.error(`\nRename failed: ${err.message}`);
       if (err.recoverable) {
         console.error('Rollback complete. No changes made.');
+      } else {
+        console.error('WARNING: Rollback may have failed. Run `git status` to check working tree state.');
+      }
+      process.exit(1);
+    }
+    if (err instanceof ArtifactMigrationError && err.phase === 'inject') {
+      console.error(`\nInjection failed: ${err.message}`);
+      if (err.recoverable) {
+        console.error('Renames preserved (commit 1). Injections discarded.');
       } else {
         console.error('WARNING: Rollback may have failed. Run `git status` to check working tree state.');
       }
