@@ -346,3 +346,321 @@ describe('executeRenames integration', () => {
     expect(duration).toBeLessThan(60000);
   });
 });
+
+// --- updateLinks tests ---
+
+describe('updateLinks', () => {
+  let tmpDir;
+  let outputDir;
+
+  beforeEach(async () => {
+    tmpDir = await fs.mkdtemp(path.join(os.tmpdir(), 'convoke-links-'));
+    outputDir = path.join(tmpDir, '_bmad-output', 'planning-artifacts');
+    await fs.ensureDir(outputDir);
+  });
+
+  afterEach(async () => {
+    await fs.remove(tmpDir);
+  });
+
+  test('[text](old.md) -> [text](new.md) direct pattern', async () => {
+    await fs.writeFile(path.join(outputDir, 'referrer.md'), 'See [PRD](prd-gyre.md) for details.\n');
+    const { updateLinks } = require('../../scripts/lib/artifact-utils');
+    const map = new Map([['prd-gyre.md', 'gyre-prd.md']]);
+    const result = await updateLinks(map, ['planning-artifacts'], tmpDir);
+    expect(result.updatedFiles).toBe(1);
+    const content = fs.readFileSync(path.join(outputDir, 'referrer.md'), 'utf8');
+    expect(content).toContain('[PRD](gyre-prd.md)');
+    expect(content).not.toContain('prd-gyre.md');
+  });
+
+  test('[text](./old.md) -> [text](./new.md) dot-slash pattern', async () => {
+    await fs.writeFile(path.join(outputDir, 'referrer.md'), 'See [PRD](./prd-gyre.md) here.\n');
+    const { updateLinks } = require('../../scripts/lib/artifact-utils');
+    const map = new Map([['prd-gyre.md', 'gyre-prd.md']]);
+    await updateLinks(map, ['planning-artifacts'], tmpDir);
+    const content = fs.readFileSync(path.join(outputDir, 'referrer.md'), 'utf8');
+    expect(content).toContain('[PRD](./gyre-prd.md)');
+  });
+
+  test('[text](../dir/old.md) -> [text](../dir/new.md) parent-dir pattern', async () => {
+    await fs.writeFile(path.join(outputDir, 'referrer.md'), 'See [Epic](../vortex-artifacts/epic-forge.md) here.\n');
+    const { updateLinks } = require('../../scripts/lib/artifact-utils');
+    const map = new Map([['epic-forge.md', 'forge-epic.md']]);
+    await updateLinks(map, ['planning-artifacts'], tmpDir);
+    const content = fs.readFileSync(path.join(outputDir, 'referrer.md'), 'utf8');
+    expect(content).toContain('[Epic](../vortex-artifacts/forge-epic.md)');
+  });
+
+  test('[text](old.md#section) -> [text](new.md#section) anchor preserved', async () => {
+    await fs.writeFile(path.join(outputDir, 'referrer.md'), 'See [section](prd-gyre.md#overview) here.\n');
+    const { updateLinks } = require('../../scripts/lib/artifact-utils');
+    const map = new Map([['prd-gyre.md', 'gyre-prd.md']]);
+    await updateLinks(map, ['planning-artifacts'], tmpDir);
+    const content = fs.readFileSync(path.join(outputDir, 'referrer.md'), 'utf8');
+    expect(content).toContain('[section](gyre-prd.md#overview)');
+  });
+
+  test('frontmatter inputDocuments array entries updated', async () => {
+    const fileContent = '---\ninputDocuments:\n  - prd-gyre.md\n  - architecture.md\n---\n# Content\n';
+    await fs.writeFile(path.join(outputDir, 'referrer.md'), fileContent);
+    const { updateLinks } = require('../../scripts/lib/artifact-utils');
+    const map = new Map([['prd-gyre.md', 'gyre-prd.md']]);
+    await updateLinks(map, ['planning-artifacts'], tmpDir);
+    const content = fs.readFileSync(path.join(outputDir, 'referrer.md'), 'utf8');
+    expect(content).toContain('gyre-prd.md');
+    expect(content).not.toMatch(/inputDocuments:[\s\S]*prd-gyre\.md/);
+  });
+
+  test('files with no matching links are NOT rewritten', async () => {
+    const original = '# No links here\nJust text.\n';
+    await fs.writeFile(path.join(outputDir, 'nolinks.md'), original);
+    const { updateLinks } = require('../../scripts/lib/artifact-utils');
+    const map = new Map([['prd-gyre.md', 'gyre-prd.md']]);
+    const result = await updateLinks(map, ['planning-artifacts'], tmpDir);
+    expect(result.updatedFiles).toBe(0);
+    const content = fs.readFileSync(path.join(outputDir, 'nolinks.md'), 'utf8');
+    expect(content).toBe(original);
+  });
+
+  test('files outside _bmad-output/ scope are NOT touched (FR15)', async () => {
+    // Create a file OUTSIDE _bmad-output/ that references old filename
+    const outsideDir = path.join(tmpDir, 'docs');
+    await fs.ensureDir(outsideDir);
+    const outsideContent = 'See [PRD](prd-gyre.md) for details.\n';
+    await fs.writeFile(path.join(outsideDir, 'readme.md'), outsideContent);
+
+    const { updateLinks } = require('../../scripts/lib/artifact-utils');
+    const map = new Map([['prd-gyre.md', 'gyre-prd.md']]);
+    await updateLinks(map, ['planning-artifacts'], tmpDir);
+
+    // Outside file should be untouched
+    const content = fs.readFileSync(path.join(outsideDir, 'readme.md'), 'utf8');
+    expect(content).toBe(outsideContent);
+  });
+
+  test('inputDocuments substring does NOT corrupt similar filenames', async () => {
+    // prd.md should NOT match inside report-prd.md
+    const fileContent = '---\ninputDocuments:\n  - report-prd-gyre.md\n  - prd-gyre.md\n---\n# Content\n';
+    await fs.writeFile(path.join(outputDir, 'referrer.md'), fileContent);
+    const { updateLinks } = require('../../scripts/lib/artifact-utils');
+    const map = new Map([['prd-gyre.md', 'gyre-prd.md']]);
+    await updateLinks(map, ['planning-artifacts'], tmpDir);
+    const content = fs.readFileSync(path.join(outputDir, 'referrer.md'), 'utf8');
+    // prd-gyre.md should be replaced
+    expect(content).toContain('gyre-prd.md');
+    // report-prd-gyre.md should NOT be corrupted
+    expect(content).toContain('report-prd-gyre.md');
+    expect(content).not.toContain('report-gyre-prd.md');
+  });
+});
+
+// --- executeInjections tests ---
+
+describe('executeInjections', () => {
+  let tmpDir;
+  let outputDir;
+
+  beforeEach(async () => {
+    jest.restoreAllMocks();
+    jest.resetModules();
+    tmpDir = await fs.mkdtemp(path.join(os.tmpdir(), 'convoke-inject-'));
+    outputDir = path.join(tmpDir, '_bmad-output', 'planning-artifacts');
+    await fs.ensureDir(outputDir);
+    await fs.ensureDir(path.join(tmpDir, '_bmad', '_config'));
+
+    // Create taxonomy for readTaxonomy
+    const yaml = require('js-yaml');
+    const taxonomy = {
+      initiatives: { platform: ['gyre', 'forge'], user: [] },
+      artifact_types: ['prd', 'epic', 'brief'],
+      aliases: {}
+    };
+    fs.writeFileSync(
+      path.join(tmpDir, '_bmad', '_config', 'taxonomy.yaml'),
+      yaml.dump(taxonomy),
+      'utf8'
+    );
+
+    // Init git repo
+    const { execFileSync: exec } = require('child_process');
+    exec('git', ['init'], { cwd: tmpDir, stdio: 'pipe' });
+    exec('git', ['config', 'user.email', 'test@test.com'], { cwd: tmpDir, stdio: 'pipe' });
+    exec('git', ['config', 'user.name', 'Test'], { cwd: tmpDir, stdio: 'pipe' });
+  });
+
+  afterEach(async () => {
+    await fs.remove(tmpDir);
+  });
+
+  test('injects frontmatter into file with no existing frontmatter', async () => {
+    // Create file, commit, rename (simulate commit 1)
+    fs.writeFileSync(path.join(outputDir, 'prd-gyre.md'), '# PRD Gyre\nContent here.\n');
+    const { execFileSync: exec } = require('child_process');
+    exec('git', ['add', '-A'], { cwd: tmpDir, stdio: 'pipe' });
+    exec('git', ['commit', '-m', 'initial'], { cwd: tmpDir, stdio: 'pipe' });
+    exec('git', ['mv', path.join(outputDir, 'prd-gyre.md'), path.join(outputDir, 'gyre-prd.md')], { cwd: tmpDir, stdio: 'pipe' });
+    exec('git', ['commit', '-m', 'chore: rename artifacts to governance convention'], { cwd: tmpDir, stdio: 'pipe' });
+
+    const { executeInjections } = require('../../scripts/lib/artifact-utils');
+    const manifest = {
+      entries: [
+        { action: 'RENAME', oldPath: 'planning-artifacts/prd-gyre.md', newPath: 'planning-artifacts/gyre-prd.md', initiative: 'gyre', artifactType: 'prd', collisionWith: null }
+      ],
+      collisions: new Map(),
+      summary: { rename: 1 }
+    };
+
+    const result = await executeInjections(manifest, tmpDir, ['planning-artifacts']);
+    expect(result.injectedCount).toBe(1);
+
+    const content = fs.readFileSync(path.join(outputDir, 'gyre-prd.md'), 'utf8');
+    expect(content).toContain('initiative: gyre');
+    expect(content).toContain('artifact_type: prd');
+    expect(content).toContain('schema_version: 1');
+    expect(content).toContain('# PRD Gyre');
+    expect(content).toContain('Content here.');
+  });
+
+  test('preserves existing frontmatter fields (NFR20)', async () => {
+    fs.writeFileSync(path.join(outputDir, 'prd-gyre.md'), '---\ntitle: My PRD\nstatus: validated\n---\n# PRD\n');
+    const { execFileSync: exec } = require('child_process');
+    exec('git', ['add', '-A'], { cwd: tmpDir, stdio: 'pipe' });
+    exec('git', ['commit', '-m', 'initial'], { cwd: tmpDir, stdio: 'pipe' });
+    exec('git', ['mv', path.join(outputDir, 'prd-gyre.md'), path.join(outputDir, 'gyre-prd.md')], { cwd: tmpDir, stdio: 'pipe' });
+    exec('git', ['commit', '-m', 'chore: rename'], { cwd: tmpDir, stdio: 'pipe' });
+
+    const { executeInjections } = require('../../scripts/lib/artifact-utils');
+    const manifest = {
+      entries: [{ action: 'RENAME', oldPath: 'planning-artifacts/prd-gyre.md', newPath: 'planning-artifacts/gyre-prd.md', initiative: 'gyre', artifactType: 'prd', collisionWith: null }],
+      collisions: new Map(), summary: { rename: 1 }
+    };
+
+    await executeInjections(manifest, tmpDir, ['planning-artifacts']);
+    const content = fs.readFileSync(path.join(outputDir, 'gyre-prd.md'), 'utf8');
+    expect(content).toContain('title: My PRD');
+    expect(content).toContain('status: validated');
+    expect(content).toContain('initiative: gyre');
+  });
+
+  test('logs conflicts but does not overwrite existing differing values', async () => {
+    fs.writeFileSync(path.join(outputDir, 'prd-gyre.md'), '---\ninitiative: forge\n---\n# PRD\n');
+    const { execFileSync: exec } = require('child_process');
+    exec('git', ['add', '-A'], { cwd: tmpDir, stdio: 'pipe' });
+    exec('git', ['commit', '-m', 'initial'], { cwd: tmpDir, stdio: 'pipe' });
+    exec('git', ['mv', path.join(outputDir, 'prd-gyre.md'), path.join(outputDir, 'gyre-prd.md')], { cwd: tmpDir, stdio: 'pipe' });
+    exec('git', ['commit', '-m', 'chore: rename'], { cwd: tmpDir, stdio: 'pipe' });
+
+    const warnSpy = jest.spyOn(console, 'warn').mockImplementation();
+    const { executeInjections } = require('../../scripts/lib/artifact-utils');
+    const manifest = {
+      entries: [{ action: 'RENAME', oldPath: 'planning-artifacts/prd-gyre.md', newPath: 'planning-artifacts/gyre-prd.md', initiative: 'gyre', artifactType: 'prd', collisionWith: null }],
+      collisions: new Map(), summary: { rename: 1 }
+    };
+
+    const result = await executeInjections(manifest, tmpDir, ['planning-artifacts']);
+    expect(result.conflictCount).toBe(1);
+    expect(warnSpy).toHaveBeenCalledWith(expect.stringContaining('Skipping field "initiative"'));
+
+    // Existing value preserved
+    const content = fs.readFileSync(path.join(outputDir, 'gyre-prd.md'), 'utf8');
+    expect(content).toContain('initiative: forge');
+    warnSpy.mockRestore();
+  });
+
+  test('content below frontmatter preserved byte-for-byte', async () => {
+    const body = '# PRD Gyre\n\nThis has **bold** and `code` and special chars: <>&\n';
+    fs.writeFileSync(path.join(outputDir, 'prd-gyre.md'), body);
+    const { execFileSync: exec } = require('child_process');
+    exec('git', ['add', '-A'], { cwd: tmpDir, stdio: 'pipe' });
+    exec('git', ['commit', '-m', 'initial'], { cwd: tmpDir, stdio: 'pipe' });
+    exec('git', ['mv', path.join(outputDir, 'prd-gyre.md'), path.join(outputDir, 'gyre-prd.md')], { cwd: tmpDir, stdio: 'pipe' });
+    exec('git', ['commit', '-m', 'chore: rename'], { cwd: tmpDir, stdio: 'pipe' });
+
+    const { executeInjections } = require('../../scripts/lib/artifact-utils');
+    const manifest = {
+      entries: [{ action: 'RENAME', oldPath: 'planning-artifacts/prd-gyre.md', newPath: 'planning-artifacts/gyre-prd.md', initiative: 'gyre', artifactType: 'prd', collisionWith: null }],
+      collisions: new Map(), summary: { rename: 1 }
+    };
+
+    await executeInjections(manifest, tmpDir, ['planning-artifacts']);
+    const content = fs.readFileSync(path.join(outputDir, 'gyre-prd.md'), 'utf8');
+    // Body should be preserved after frontmatter
+    expect(content).toContain(body.trim());
+  });
+
+  test('two commits exist after full pipeline', async () => {
+    fs.writeFileSync(path.join(outputDir, 'prd-gyre.md'), '# PRD\n');
+    const { execFileSync: exec } = require('child_process');
+    exec('git', ['add', '-A'], { cwd: tmpDir, stdio: 'pipe' });
+    exec('git', ['commit', '-m', 'initial'], { cwd: tmpDir, stdio: 'pipe' });
+    exec('git', ['mv', path.join(outputDir, 'prd-gyre.md'), path.join(outputDir, 'gyre-prd.md')], { cwd: tmpDir, stdio: 'pipe' });
+    exec('git', ['commit', '-m', 'chore: rename artifacts to governance convention'], { cwd: tmpDir, stdio: 'pipe' });
+
+    const { executeInjections } = require('../../scripts/lib/artifact-utils');
+    const manifest = {
+      entries: [{ action: 'RENAME', oldPath: 'planning-artifacts/prd-gyre.md', newPath: 'planning-artifacts/gyre-prd.md', initiative: 'gyre', artifactType: 'prd', collisionWith: null }],
+      collisions: new Map(), summary: { rename: 1 }
+    };
+
+    await executeInjections(manifest, tmpDir, ['planning-artifacts']);
+
+    // Check two migration commits
+    const log = exec('git', ['log', '--oneline'], { cwd: tmpDir, encoding: 'utf8', stdio: 'pipe' }).trim();
+    const commits = log.split('\n');
+    expect(commits.length).toBeGreaterThanOrEqual(3); // initial + rename + inject
+    expect(log).toContain('chore: rename artifacts to governance convention');
+    expect(log).toContain('chore: inject frontmatter metadata and update links');
+  });
+
+  test('injects frontmatter into metadata-only file (no body below ---)', async () => {
+    // A file whose entire content is frontmatter with no body
+    fs.writeFileSync(path.join(outputDir, 'prd-gyre.md'), '---\ntitle: PRD\n---\n');
+    const { execFileSync: exec } = require('child_process');
+    exec('git', ['add', '-A'], { cwd: tmpDir, stdio: 'pipe' });
+    exec('git', ['commit', '-m', 'initial'], { cwd: tmpDir, stdio: 'pipe' });
+    exec('git', ['mv', path.join(outputDir, 'prd-gyre.md'), path.join(outputDir, 'gyre-prd.md')], { cwd: tmpDir, stdio: 'pipe' });
+    exec('git', ['commit', '-m', 'chore: rename'], { cwd: tmpDir, stdio: 'pipe' });
+
+    const { executeInjections } = require('../../scripts/lib/artifact-utils');
+    const manifest = {
+      entries: [{ action: 'RENAME', oldPath: 'planning-artifacts/prd-gyre.md', newPath: 'planning-artifacts/gyre-prd.md', initiative: 'gyre', artifactType: 'prd', collisionWith: null }],
+      collisions: new Map(), summary: { rename: 1 }
+    };
+
+    await executeInjections(manifest, tmpDir, ['planning-artifacts']);
+    const content = fs.readFileSync(path.join(outputDir, 'gyre-prd.md'), 'utf8');
+    expect(content).toContain('initiative: gyre');
+    expect(content).toContain('title: PRD'); // existing field preserved
+  });
+
+  test('rollback on write failure discards injections, preserves commit 1', async () => {
+    fs.writeFileSync(path.join(outputDir, 'prd-gyre.md'), '# PRD\n');
+    const { execFileSync: exec } = require('child_process');
+    exec('git', ['add', '-A'], { cwd: tmpDir, stdio: 'pipe' });
+    exec('git', ['commit', '-m', 'initial'], { cwd: tmpDir, stdio: 'pipe' });
+    exec('git', ['mv', path.join(outputDir, 'prd-gyre.md'), path.join(outputDir, 'gyre-prd.md')], { cwd: tmpDir, stdio: 'pipe' });
+    exec('git', ['commit', '-m', 'chore: rename'], { cwd: tmpDir, stdio: 'pipe' });
+
+    // Make the file read-only to cause write failure
+    fs.chmodSync(path.join(outputDir, 'gyre-prd.md'), 0o444);
+
+    const { executeInjections, ArtifactMigrationError } = require('../../scripts/lib/artifact-utils');
+    const manifest = {
+      entries: [{ action: 'RENAME', oldPath: 'planning-artifacts/prd-gyre.md', newPath: 'planning-artifacts/gyre-prd.md', initiative: 'gyre', artifactType: 'prd', collisionWith: null }],
+      collisions: new Map(), summary: { rename: 1 }
+    };
+
+    await expect(executeInjections(manifest, tmpDir, ['planning-artifacts'])).rejects.toThrow(ArtifactMigrationError);
+
+    // Restore permissions for cleanup
+    fs.chmodSync(path.join(outputDir, 'gyre-prd.md'), 0o644);
+
+    // Verify commit 1 (rename) still exists
+    const log = exec('git', ['log', '--oneline'], { cwd: tmpDir, encoding: 'utf8', stdio: 'pipe' }).trim();
+    expect(log).toContain('chore: rename');
+    // File should NOT have frontmatter (rollback discarded injection)
+    const content = fs.readFileSync(path.join(outputDir, 'gyre-prd.md'), 'utf8');
+    expect(content).not.toContain('initiative:');
+  });
+});
