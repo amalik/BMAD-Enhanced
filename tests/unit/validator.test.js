@@ -194,9 +194,17 @@ describe('validateManifest', () => {
 
   it('passes when manifest contains all agents', async () => {
     const manifestPath = path.join(tmpDir, '_bmad/_config/agent-manifest.csv');
-    const { AGENT_IDS } = require('../../scripts/update/lib/agent-registry');
-    const csvRows = ['"agent_id"', ...AGENT_IDS.map(id => `"${id}"`)].join('\n') + '\n';
+    const { AGENT_IDS, EXTRA_BME_AGENTS } = require('../../scripts/update/lib/agent-registry');
+    const extraIds = EXTRA_BME_AGENTS.map(a => `bmad-agent-bme-${a.id}`);
+    const csvRows = ['"agent_id"', ...AGENT_IDS.map(id => `"${id}"`), ...extraIds.map(id => `"${id}"`)].join('\n') + '\n';
     await fs.writeFile(manifestPath, csvRows, 'utf8');
+
+    // Standalone bme agent files must exist on disk for validation to pass
+    for (const a of EXTRA_BME_AGENTS) {
+      const agentFile = path.join(tmpDir, '_bmad', 'bme', a.submodule, 'agents', `${a.id}.md`);
+      await fs.ensureDir(path.dirname(agentFile));
+      await fs.writeFile(agentFile, '# stub', 'utf8');
+    }
 
     const result = await validateManifest(tmpDir);
     assert.equal(result.passed, true);
