@@ -10,7 +10,7 @@
                 Agent teams for complex systems
 ```
 
-[![Version](https://img.shields.io/badge/version-3.0.4-blue)](https://github.com/amalik/convoke-agents)
+[![Version](https://img.shields.io/badge/version-3.1.0-blue)](https://github.com/amalik/convoke-agents)
 [![License](https://img.shields.io/badge/license-MIT-blue)](LICENSE)
 
 </div>
