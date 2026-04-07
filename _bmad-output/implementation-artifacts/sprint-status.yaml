@@ -34,7 +34,7 @@
 # - Dev moves story to 'review', then runs code-review (fresh context, different LLM recommended)
 
 generated: 2026-03-23
-last_updated: 2026-04-06
+last_updated: 2026-04-07
 project: BMAD-Enhanced
 project_key: NOKEY
 tracking_system: file-system
@@ -326,8 +326,8 @@ development_status:
   # Epic 6: Operator Experience & Skill Wiring
   ag-epic-6: in-progress
   ag-6-1-wire-loom-master-agent: ready-for-dev
-  ag-6-2-migration-inference-improvements: backlog
-  ag-6-3-portfolio-attribution-improvements: backlog
+  ag-6-2-migration-inference-improvements: ready-for-dev
+  ag-6-3-portfolio-attribution-improvements: ready-for-dev
   ag-6-4-migration-skill-wrapper: backlog
   ag-6-5-portfolio-skill-wrapper: backlog
   ag-6-6-skill-registration-wiring: backlog
@@ -340,8 +340,8 @@ development_status:
   # ============================================================
 
   # Epic 1: Skill Classification & Metadata
-  sp-epic-1: backlog
-  sp-1-1-define-portability-schema: backlog
+  sp-epic-1: in-progress
+  sp-1-1-define-portability-schema: ready-for-dev
   sp-1-2-classify-all-skills: backlog
   sp-1-3-validate-classification-completeness: backlog
   sp-epic-1-retrospective: optional
