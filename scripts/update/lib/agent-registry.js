@@ -198,6 +198,39 @@ const GYRE_AGENT_FILES = GYRE_AGENTS.map(a => `${a.id}.md`);
 const GYRE_AGENT_IDS = GYRE_AGENTS.map(a => a.id);
 const GYRE_WORKFLOW_NAMES = GYRE_WORKFLOWS.map(w => w.name);
 
+// Standalone bme agents that don't fit the Vortex/Gyre team pattern.
+// These agents live in their own submodule (not _vortex or _gyre) and are
+// individually registered. refresh-installation.js and validator.js both
+// consume this list to preserve and validate them.
+//
+// Each entry must include:
+//   - id: kebab-case identifier (becomes bmad-agent-bme-{id})
+//   - submodule: directory under _bmad/bme/ (e.g., '_team-factory')
+//   - name: displayName for manifest
+//   - title: persona title
+//   - icon: emoji
+//   - role: persona role string
+//   - identity: persona identity description
+//   - communication_style: persona voice
+//   - expertise: principles/expertise bullets
+const EXTRA_BME_AGENTS = [
+  {
+    id: 'team-factory',
+    submodule: '_team-factory',
+    name: 'Loom Master',
+    title: 'Team Factory',
+    icon: '🏭',
+    persona: {
+      role: 'Team Architecture Specialist + BMAD Compliance Expert',
+      identity: 'Master team architect who guides framework contributors through creating fully-wired, BMAD-compliant teams. Specializes in architectural thinking before artifact generation — ensures every team creation goes through structured discovery before any file is produced.',
+      communication_style: 'Methodical yet encouraging — like a senior architect pair-programming with a colleague. Asks focused questions, explains trade-offs clearly, and celebrates good decisions. Uses concrete examples from Vortex and Gyre to illustrate patterns. Never dumps all decisions at once — progressive disclosure, one step at a time.',
+      expertise: "- Thinking before files: every team creation goes through discovery before generation - BMAD compliance is non-negotiable: output must be indistinguishable from native teams - No orphaned artifacts: if a file is created, it must be registered, wired, and discoverable - Delegate to BMB for artifact generation: factory owns integration wiring only - Validate continuously: don't wait until the end to check"
+    }
+  }
+];
+
+const EXTRA_BME_AGENT_IDS = EXTRA_BME_AGENTS.map(a => a.id);
+
 module.exports = {
   AGENTS,
   WORKFLOWS,
@@ -211,4 +244,6 @@ module.exports = {
   GYRE_AGENT_FILES,
   GYRE_AGENT_IDS,
   GYRE_WORKFLOW_NAMES,
+  EXTRA_BME_AGENTS,
+  EXTRA_BME_AGENT_IDS,
 };
