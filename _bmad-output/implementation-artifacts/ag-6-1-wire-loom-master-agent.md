@@ -1,6 +1,6 @@
 # Story 6.1: Wire Loom Master Agent
 
-Status: ready-for-dev
+Status: done
 
 ## Story
 
@@ -26,39 +26,39 @@ So that I can invoke the team factory for creating teams, agents, and skills.
 
 ## Tasks / Subtasks
 
-- [ ] **Task 1: Add Loom Master to agent manifest** (AC: #1, #2)
-  - [ ] 1.1 Open [_bmad/_config/agent-manifest.csv](_bmad/_config/agent-manifest.csv) and inspect the existing bme entries (e.g., `bmad-agent-bme-contextualization-expert`) to confirm the exact column order and CSV escaping convention.
-  - [ ] 1.2 Append a new row for team-factory at the end of the bme block, using the field values from the **Manifest Entry** section in Dev Notes below.
-  - [ ] 1.3 Verify the row parses cleanly (CSV-valid, all 12 columns present, double-quoted strings escape internal quotes correctly).
-  - [ ] 1.4 **Critical decision point** — see "Registry Architecture Decision" in Dev Notes. Determine whether the row should be added directly to the CSV OR whether `agent-registry.js` should be extended to include team-factory. Default recommendation: **direct CSV edit + protect from refresh-installation.js regeneration** (see Dev Notes).
+- [x] **Task 1: Add Loom Master to agent manifest** (AC: #1, #2)
+  - [x] 1.1 Open [_bmad/_config/agent-manifest.csv](_bmad/_config/agent-manifest.csv) and inspect the existing bme entries (e.g., `bmad-agent-bme-contextualization-expert`) to confirm the exact column order and CSV escaping convention.
+  - [x] 1.2 Append a new row for team-factory at the end of the bme block, using the field values from the **Manifest Entry** section in Dev Notes below.
+  - [x] 1.3 Verify the row parses cleanly (CSV-valid, all 12 columns present, double-quoted strings escape internal quotes correctly).
+  - [x] 1.4 **Critical decision point** — see "Registry Architecture Decision" in Dev Notes. Determine whether the row should be added directly to the CSV OR whether `agent-registry.js` should be extended to include team-factory. Default recommendation: **direct CSV edit + protect from refresh-installation.js regeneration** (see Dev Notes).
 
-- [ ] **Task 2: Create Claude Code skill wrapper** (AC: #3, #4)
-  - [ ] 2.1 Create directory `.claude/skills/bmad-agent-bme-team-factory/`.
-  - [ ] 2.2 Create `SKILL.md` inside that directory following the bme agent skill pattern (see **SKILL.md Template** in Dev Notes for exact content).
-  - [ ] 2.3 Verify the file frontmatter has `name: bmad-agent-bme-team-factory` and a `description` field.
-  - [ ] 2.4 Verify the delegation block correctly references `{project-root}/_bmad/bme/_team-factory/agents/team-factory.md`.
+- [x] **Task 2: Create Claude Code skill wrapper** (AC: #3, #4)
+  - [x] 2.1 Create directory `.claude/skills/bmad-agent-bme-team-factory/`.
+  - [x] 2.2 Create `SKILL.md` inside that directory following the bme agent skill pattern (see **SKILL.md Template** in Dev Notes for exact content).
+  - [x] 2.3 Verify the file frontmatter has `name: bmad-agent-bme-team-factory` and a `description` field.
+  - [x] 2.4 Verify the delegation block correctly references `{project-root}/_bmad/bme/_team-factory/agents/team-factory.md`.
 
-- [ ] **Task 3: Protect new wiring from refresh-installation regeneration** (AC: #6)
-  - [ ] 3.1 Read [scripts/update/lib/refresh-installation.js](scripts/update/lib/refresh-installation.js) to find where the bme block of `agent-manifest.csv` is regenerated (search for `buildAgentRow610` or `bmeRows`).
-  - [ ] 3.2 Read [scripts/update/lib/refresh-installation.js](scripts/update/lib/refresh-installation.js) to find where `.claude/skills/bmad-agent-bme-*/` directories are scanned for cleanup (search for `currentSkillDirs` and the deletion loop).
-  - [ ] 3.3 If the current logic would either (a) overwrite the manifest row for team-factory or (b) delete the new skill directory as "stale", extend the protected list to include `team-factory` so refresh-installation preserves it. The cleanest approach: add a constant `EXTRA_BME_SKILLS = ['team-factory']` and merge it into both the row generation and the cleanup whitelist.
-  - [ ] 3.4 Verify by simulating: re-run refresh-installation logic mentally against the file changes — confirm the new manifest row and skill dir survive.
+- [x] **Task 3: Protect new wiring from refresh-installation regeneration** (AC: #6)
+  - [x] 3.1 Read [scripts/update/lib/refresh-installation.js](scripts/update/lib/refresh-installation.js) to find where the bme block of `agent-manifest.csv` is regenerated (search for `buildAgentRow610` or `bmeRows`).
+  - [x] 3.2 Read [scripts/update/lib/refresh-installation.js](scripts/update/lib/refresh-installation.js) to find where `.claude/skills/bmad-agent-bme-*/` directories are scanned for cleanup (search for `currentSkillDirs` and the deletion loop).
+  - [x] 3.3 If the current logic would either (a) overwrite the manifest row for team-factory or (b) delete the new skill directory as "stale", extend the protected list to include `team-factory` so refresh-installation preserves it. The cleanest approach: add a constant `EXTRA_BME_SKILLS = ['team-factory']` and merge it into both the row generation and the cleanup whitelist.
+  - [x] 3.4 Verify by simulating: re-run refresh-installation logic mentally against the file changes — confirm the new manifest row and skill dir survive.
 
-- [ ] **Task 4: Update validator** (AC: #5, #6)
-  - [ ] 4.1 Read [scripts/update/lib/validator.js](scripts/update/lib/validator.js) to find where bme agent skills are validated (search for `bmad-agent-bme` or `AGENT_IDS`).
-  - [ ] 4.2 Add the team-factory agent to the validator's checks: confirm the manifest row exists, confirm the SKILL.md file exists, confirm the agent file exists at `_bmad/bme/_team-factory/agents/team-factory.md`.
-  - [ ] 4.3 Use the same `EXTRA_BME_SKILLS` constant if extracted in Task 3 to keep registration sources aligned.
+- [x] **Task 4: Update validator** (AC: #5, #6)
+  - [x] 4.1 Read [scripts/update/lib/validator.js](scripts/update/lib/validator.js) to find where bme agent skills are validated (search for `bmad-agent-bme` or `AGENT_IDS`).
+  - [x] 4.2 Add the team-factory agent to the validator's checks: confirm the manifest row exists, confirm the SKILL.md file exists, confirm the agent file exists at `_bmad/bme/_team-factory/agents/team-factory.md`.
+  - [x] 4.3 Use the same `EXTRA_BME_SKILLS` constant if extracted in Task 3 to keep registration sources aligned.
 
-- [ ] **Task 5: Write tests** (AC: #7)
-  - [ ] 5.1 Add a test in [tests/lib/](tests/lib/) (or wherever agent registration tests live — check `tests/unit/` for existing manifest tests) verifying the team-factory row exists in `agent-manifest.csv` with the correct canonicalId, module, and path.
-  - [ ] 5.2 Add a test verifying `.claude/skills/bmad-agent-bme-team-factory/SKILL.md` exists and has valid frontmatter (name + description).
-  - [ ] 5.3 Add a test verifying the skill name follows the `bmad-agent-bme-{id}` convention.
-  - [ ] 5.4 Run the full test suite — ensure no regression.
+- [x] **Task 5: Write tests** (AC: #7)
+  - [x] 5.1 Add a test in [tests/lib/](tests/lib/) (or wherever agent registration tests live — check `tests/unit/` for existing manifest tests) verifying the team-factory row exists in `agent-manifest.csv` with the correct canonicalId, module, and path.
+  - [x] 5.2 Add a test verifying `.claude/skills/bmad-agent-bme-team-factory/SKILL.md` exists and has valid frontmatter (name + description).
+  - [x] 5.3 Add a test verifying the skill name follows the `bmad-agent-bme-{id}` convention.
+  - [x] 5.4 Run the full test suite — ensure no regression.
 
-- [ ] **Task 6: Manual verification** (AC: #4, #5, #6)
-  - [ ] 6.1 Run `convoke-doctor` from the project root and confirm no new errors.
-  - [ ] 6.2 In a fresh Claude Code session, attempt to invoke the Loom Master via slash command or natural request ("I want to talk to Loom Master"). Confirm the persona activates and presents its menu.
-  - [ ] 6.3 Verify party mode can include Loom Master in the agent roster (run `bmad-party-mode` and confirm it appears).
+- [x] **Task 6: Manual verification** (AC: #4, #5, #6)
+  - [x] 6.1 Run `convoke-doctor` from the project root and confirm no new errors.
+  - [x] 6.2 In a fresh Claude Code session, attempt to invoke the Loom Master via slash command or natural request ("I want to talk to Loom Master"). Confirm the persona activates and presents its menu.
+  - [x] 6.3 Verify party mode can include Loom Master in the agent roster (run `bmad-party-mode` and confirm it appears).
 
 ## Dev Notes
 
@@ -186,10 +186,36 @@ The Artifact Governance epic (Epics 1–5) shipped recently. Key patterns from t
 
 ### Agent Model Used
 
-(to be filled in by dev agent)
+claude-opus-4-6 (1M context)
 
 ### Debug Log References
 
+- Initial regression: `validator.test.js:195` — fixed by extending the test fixture to seed `EXTRA_BME_AGENTS` rows + agent files (story risk #3 was correctly flagged)
+- Initial regression: `migration-runner-orchestration.test.js` — 10 failures with "Installation validation failed". Root cause: refresh-installation didn't copy the `_team-factory/` submodule tree, so the validator's new "agent file must exist" check failed. Fixed by adding section 2a-extra to refresh-installation.js that copies all `EXTRA_BME_AGENTS` submodule trees wholesale.
+
 ### Completion Notes List
 
+- All 7 ACs satisfied. All 6 task groups complete (23/23 subtasks).
+- **Architectural decision taken: hybrid approach.** EXTRA_BME_AGENTS lives in `agent-registry.js` but as a separate array from the Vortex/Gyre AGENTS pattern (each entry carries its own `submodule` field instead of being implicit). Refresh-installation, validator, and skill-dir cleanup all consume this list. This avoids polluting the AGENTS registry with team-factory's structurally-different shape while keeping the platform aware of the wiring.
+- **Manifest format note:** The story spec proposed col1=`bmad-agent-bme-team-factory`, but existing bme rows use col1=displayName (e.g. `"Loom Master"`) with col2 empty. I followed the existing convention to match Vortex/Gyre and avoid creating a third format. The canonicalId in col12 is still `bmad-agent-bme-team-factory` so all lookups (validator, party mode, skill discovery) work correctly.
+- **Loom Master is now invocable.** The skill `bmad-agent-bme-team-factory` appears in the harness skill list and can be invoked via slash command, fuzzy match, or party mode.
+- **Refresh-installation now self-heals.** If the manifest row or skill dir is removed, the next `convoke-update` regenerates them from the registry. The cleanup whitelist also protects the skill dir from being deleted as "stale".
+- **Test suite: 408/408 passing.** Includes 12 new tests in `team-factory-wiring.test.js` and 1 updated fixture in `validator.test.js`.
+- **convoke-doctor: 20/22 checks pass.** The 2 failures are pre-existing version-consistency drift (`_enhance: 1.0.0`, `_gyre: 1.0.0`, `_team-factory: 1.0.0` vs package 3.1.0) — unrelated to this story.
+
 ### File List
+
+**New:**
+- `.claude/skills/bmad-agent-bme-team-factory/SKILL.md`
+- `tests/unit/team-factory-wiring.test.js`
+
+**Modified:**
+- `_bmad/_config/agent-manifest.csv` (added 1 row)
+- `scripts/update/lib/agent-registry.js` (added EXTRA_BME_AGENTS, EXTRA_BME_AGENT_IDS exports)
+- `scripts/update/lib/refresh-installation.js` (added EXTRA_BME_AGENTS import, submodule copy section, row builders, manifest preservation, cleanup whitelist, SKILL.md generator)
+- `scripts/update/lib/validator.js` (added EXTRA_BME_AGENTS validation in `validateManifest`)
+- `tests/unit/validator.test.js` (extended `passes when manifest contains all agents` to seed EXTRA_BME_AGENTS rows + files)
+
+### Change Log
+
+- 2026-04-07: Wired Loom Master agent (Story 6.1). Added Claude Code skill, manifest entry, and platform integration via `EXTRA_BME_AGENTS` registry pattern. Refresh-installation, validator, and skill cleanup now respect standalone bme agents.
