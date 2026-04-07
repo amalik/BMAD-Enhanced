@@ -1,12 +1,22 @@
 const { findProjectRoot } = require('../../scripts/update/lib/utils');
-const { generatePortfolio, makeEmptyState } = require('../../scripts/lib/portfolio/portfolio-engine');
+const {
+  generatePortfolio,
+  makeEmptyState,
+  attributeFile,
+  explainUnattributed,
+  STORY_PREFIX_MAP,
+  PORTFOLIO_FOLDER_DEFAULT_MAP
+} = require('../../scripts/lib/portfolio/portfolio-engine');
 const { formatTerminal } = require('../../scripts/lib/portfolio/formatters/terminal-formatter');
 const { formatMarkdown } = require('../../scripts/lib/portfolio/formatters/markdown-formatter');
+const { readTaxonomy } = require('../../scripts/lib/artifact-utils');
 
 let projectRoot;
+let taxonomy;
 
 beforeAll(() => {
   projectRoot = findProjectRoot();
+  taxonomy = readTaxonomy(projectRoot);
 });
 
 // --- generatePortfolio integration tests ---
@@ -244,5 +254,200 @@ describe('makeEmptyState', () => {
     expect(state.status.value).toBeNull();
     expect(state.lastArtifact.file).toBeNull();
     expect(state.nextAction.value).toBeNull();
+  });
+});
+
+// --- Story 6.3: attributeFile tests ---
+
+describe('attributeFile', () => {
+  test('A — frontmatter title with initiative → frontmatter-title', () => {
+    const file = { filename: 'validation-report.md', dir: 'planning-artifacts' };
+    const fm = { title: 'Gyre Validation Report' };
+    const result = attributeFile(file, '# Random body\n', fm, taxonomy);
+    expect(result.initiative).toBe('gyre');
+    expect(result.source).toBe('frontmatter-title');
+  });
+
+  test('B — content fallback first 5 lines → content-fallback', () => {
+    const file = { filename: 'untitled.md', dir: 'vortex-artifacts' };
+    const content = '# Forge Discovery Report\n\nDate: 2026-03-21\n\nBody continues here.\n';
+    const result = attributeFile(file, content, null, taxonomy);
+    expect(result.initiative).toBe('forge');
+    expect(result.source).toBe('content-fallback');
+  });
+
+  test('C — parent dir match (gyre-artifacts) → parent-dir', () => {
+    const file = { filename: 'random.md', dir: 'gyre-artifacts' };
+    const result = attributeFile(file, 'no signal', null, taxonomy);
+    expect(result.initiative).toBe('gyre');
+    expect(result.source).toBe('parent-dir');
+  });
+
+  test('D — priority: frontmatter title beats parent-dir', () => {
+    const file = { filename: 'note.md', dir: 'gyre-artifacts' };
+    const fm = { title: 'Helm Strategy Notes' };
+    const result = attributeFile(file, '', fm, taxonomy);
+    expect(result.initiative).toBe('helm');
+    expect(result.source).toBe('frontmatter-title');
+  });
+
+  test('E — alias resolution: Strategy Perimeter → helm', () => {
+    const file = { filename: 'foo.md', dir: 'planning-artifacts' };
+    const fm = { title: 'Strategy Perimeter Discovery' };
+    const result = attributeFile(file, '', fm, taxonomy);
+    expect(result.initiative).toBe('helm');
+  });
+
+  test('F — no-content file in synthetic dir with no signals → null', () => {
+    // Use a synthetic dir that does NOT match any taxonomy initiative.
+    // (Real `vortex-artifacts/` dir matches `vortex` via parent-dir scan, by design.)
+    const file = { filename: 'opaque.md', dir: 'unknown-dir' };
+    const result = attributeFile(file, 'random body content with no initiative', null, taxonomy);
+    expect(result.initiative).toBeNull();
+  });
+
+  test('Filename prefix: gyre-1-1-foo.md → gyre via filename-prefix', () => {
+    const file = { filename: 'gyre-1-1-some-story.md', dir: 'implementation-artifacts' };
+    const result = attributeFile(file, 'body', null, taxonomy);
+    expect(result.initiative).toBe('gyre');
+    expect(result.source).toBe('filename-prefix');
+  });
+
+  test('Story prefix: tf-2-10-foo.md → loom via story-prefix', () => {
+    const file = { filename: 'tf-2-10-some-story.md', dir: 'implementation-artifacts' };
+    const result = attributeFile(file, 'body', null, taxonomy);
+    expect(result.initiative).toBe('loom');
+    expect(result.source).toBe('story-prefix');
+  });
+
+  test('Story prefix: ag-6-3-foo.md → convoke', () => {
+    const file = { filename: 'ag-6-3-portfolio.md', dir: 'implementation-artifacts' };
+    const result = attributeFile(file, 'body', null, taxonomy);
+    expect(result.initiative).toBe('convoke');
+    expect(result.source).toBe('story-prefix');
+  });
+
+  test('Folder default: planning-artifacts → convoke (last resort)', () => {
+    const file = { filename: 'opaque.md', dir: 'planning-artifacts' };
+    const result = attributeFile(file, 'body with no signal', null, taxonomy);
+    expect(result.initiative).toBe('convoke');
+    expect(result.source).toBe('folder-default');
+  });
+
+  test('Hyphen boundary: pre-gyre in title does NOT content-match gyre (regression for content scan)', () => {
+    // Use a synthetic dir to isolate the content-keyword scan from parent-dir matching.
+    const file = { filename: 'opaque.md', dir: 'unknown-dir' };
+    const fm = { title: 'pre-gyre planning notes' };
+    const result = attributeFile(file, '', fm, taxonomy);
+    // Frontmatter scan rejects (kebab boundary), no content, no parent-dir match, no story prefix.
+    expect(result.initiative).toBeNull();
+  });
+
+  test('STORY_PREFIX_MAP and PORTFOLIO_FOLDER_DEFAULT_MAP are exported for inspection', () => {
+    expect(STORY_PREFIX_MAP.tf).toBe('loom');
+    expect(STORY_PREFIX_MAP.ag).toBe('convoke');
+    expect(PORTFOLIO_FOLDER_DEFAULT_MAP['planning-artifacts']).toBe('convoke');
+  });
+});
+
+// --- Story 6.3: explainUnattributed tests ---
+
+describe('explainUnattributed', () => {
+  test('G — empty content → unreadable or empty', () => {
+    const file = { filename: 'foo.md', dir: 'planning-artifacts' };
+    expect(explainUnattributed(file, '', null)).toBe('unreadable or empty');
+  });
+
+  test('H — short content (< 5 lines) → insufficient content', () => {
+    const file = { filename: 'foo-bar.md', dir: 'planning-artifacts' };
+    expect(explainUnattributed(file, '# title\nshort body', null)).toBe('insufficient content for inference');
+  });
+
+  test('I — no type prefix in filename → reason mentions prefix', () => {
+    const file = { filename: 'whatever.md', dir: 'planning-artifacts' };
+    const longContent = '# title\n\nline 3\nline 4\nline 5\nline 6\n';
+    expect(explainUnattributed(file, longContent, null)).toBe('no type prefix in filename');
+  });
+
+  test('J — default reason when filename has prefix but no signals', () => {
+    const file = { filename: 'persona-foo.md', dir: 'vortex-artifacts' };
+    const longContent = '# title\n\nline 3\nline 4\nline 5\nline 6\n';
+    expect(explainUnattributed(file, longContent, null)).toBe(
+      'no initiative signal in filename, frontmatter title, content, or parent directory'
+    );
+  });
+});
+
+// --- Story 6.3: integration verification ---
+
+describe('Story 6.3 — portfolio attribution improvements', () => {
+  test('generatePortfolio surfaces unattributedFiles array with reasons', async () => {
+    const result = await generatePortfolio(projectRoot);
+    expect(Array.isArray(result.unattributedFiles)).toBe(true);
+    // Each entry has filename, dir, reason
+    for (const u of result.unattributedFiles) {
+      expect(u.filename).toBeTruthy();
+      expect(u.dir).toBeTruthy();
+      expect(typeof u.reason).toBe('string');
+    }
+  });
+
+  test('summary.attributableButUngoverned tracks fallback attributions', async () => {
+    const result = await generatePortfolio(projectRoot);
+    expect(typeof result.summary.attributableButUngoverned).toBe('number');
+    // On the current repo, fallback layers attribute many files
+    expect(result.summary.attributableButUngoverned).toBeGreaterThan(0);
+  });
+
+  test('unattributed count is well under 20 on the current repo (AC2)', async () => {
+    const result = await generatePortfolio(projectRoot);
+    // Story 6.3 AC2: under 20 unattributed
+    expect(result.summary.unattributed).toBeLessThan(20);
+  });
+});
+
+// --- Story 6.3: CLI output tests (Tests O, P, Q) ---
+
+describe('convoke-portfolio CLI output (Story 6.3)', () => {
+  const path = require('path');
+  const { execFileSync } = require('child_process');
+  const cliPath = path.join(__dirname, '..', '..', 'scripts', 'lib', 'portfolio', 'portfolio-engine.js');
+
+  function runCli(args = []) {
+    try {
+      return execFileSync('node', [cliPath, ...args], {
+        cwd: projectRoot,
+        encoding: 'utf8',
+        stdio: ['ignore', 'pipe', 'pipe']
+      });
+    } catch (err) {
+      // CLI may write warnings to stderr; combine for test inspection
+      return (err.stdout || '') + (err.stderr || '');
+    }
+  }
+
+  test('O — without --show-unattributed: summary line, NOT individual filenames', () => {
+    const output = runCli([]);
+    // Summary line present
+    expect(output).toMatch(/\d+ unattributed files \(run with --show-unattributed/);
+    // No "--- Unattributed Files (" detail header
+    expect(output).not.toContain('--- Unattributed Files (');
+    // No "  vortex-artifacts/persona-..." style per-file lines
+    expect(output).not.toMatch(/vortex-artifacts\/persona-compliance-officer/);
+  });
+
+  test('P — with --show-unattributed: both summary and per-file lines', () => {
+    const output = runCli(['--show-unattributed']);
+    // Detail header present
+    expect(output).toContain('--- Unattributed Files (');
+    // At least one per-file entry rendered with reason
+    expect(output).toMatch(/^ {2}[^/\s]+\/[^:]+:.+$/m);
+  });
+
+  test('Q — attributableButUngoverned line contains migration guidance', () => {
+    const output = runCli([]);
+    // Story 6.3 AC8: when attributableButUngoverned > 0, output mentions migration
+    expect(output).toContain('files attributable to existing initiatives');
+    expect(output).toContain('run convoke-migrate-artifacts to govern them');
   });
 });
