@@ -6,7 +6,8 @@ const {
   detectCollisions,
   generateManifest,
   formatManifest,
-  readTaxonomy
+  readTaxonomy,
+  suggestDifferentiator
 } = require('../../scripts/lib/artifact-utils');
 const { findProjectRoot } = require('../../scripts/update/lib/utils');
 
@@ -477,5 +478,184 @@ describe('formatManifest', () => {
     expect(output).toContain('Rename: 1');
     expect(output).toContain('Skip: 1');
     expect(output).toContain('Ambiguous: 1');
+  });
+});
+
+// --- suggestDifferentiator tests (Story 6.2) ---
+
+describe('suggestDifferentiator', () => {
+  test('I — helm lean-persona case: navigator/practitioner differentiated', () => {
+    const sources = [
+      'vortex-artifacts/lean-persona-strategic-navigator-2026-04-04.md',
+      'vortex-artifacts/lean-persona-strategic-practitioner-2026-04-04.md'
+    ];
+    const target = 'vortex-artifacts/helm-lean-persona-2026-04-04.md';
+    const result = suggestDifferentiator(sources, target);
+
+    const navigatorPath = result.get('vortex-artifacts/lean-persona-strategic-navigator-2026-04-04.md');
+    const practitionerPath = result.get('vortex-artifacts/lean-persona-strategic-practitioner-2026-04-04.md');
+
+    expect(navigatorPath).toBeTruthy();
+    expect(navigatorPath).toContain('navigator');
+    expect(navigatorPath).toMatch(/2026-04-04\.md$/);
+
+    expect(practitionerPath).toBeTruthy();
+    expect(practitionerPath).toContain('practitioner');
+    expect(practitionerPath).toMatch(/2026-04-04\.md$/);
+
+    // Suggested paths must be unique
+    expect(navigatorPath).not.toBe(practitionerPath);
+  });
+
+  test('J — synthetic 3-way collision: each gets unique differentiator', () => {
+    const sources = [
+      'vortex-artifacts/persona-junior-2026-01-01.md',
+      'vortex-artifacts/persona-mid-2026-01-01.md',
+      'vortex-artifacts/persona-senior-2026-01-01.md'
+    ];
+    const target = 'vortex-artifacts/forge-persona-2026-01-01.md';
+    const result = suggestDifferentiator(sources, target);
+
+    const paths = sources.map(s => result.get(s));
+    paths.forEach(p => expect(p).toBeTruthy());
+    // All three suggested paths must be unique
+    expect(new Set(paths).size).toBe(3);
+    // Each contains its distinguishing segment
+    expect(paths[0]).toContain('junior');
+    expect(paths[1]).toContain('mid');
+    expect(paths[2]).toContain('senior');
+  });
+
+  test('K — indistinguishable sources: returns null without crashing', () => {
+    // Two sources whose stems are identical strings (synthetic — would never happen in real
+    // collision detection but the function must handle it gracefully)
+    const sources = [
+      'a/foo-2026-01-01.md',
+      'b/foo-2026-01-01.md'
+    ];
+    const target = 'a/foo-2026-01-01.md';
+    const result = suggestDifferentiator(sources, target);
+    // Both sources have no segments distinguishing them from the target stem ('foo')
+    expect(result.get('a/foo-2026-01-01.md')).toBeNull();
+    expect(result.get('b/foo-2026-01-01.md')).toBeNull();
+  });
+
+  test('Sentinel entries (existing files) are skipped, only real sources differentiated', () => {
+    const sources = [
+      'vortex-artifacts/persona-alpha-2026-01-01.md',
+      '(existing) vortex-artifacts/forge-persona-2026-01-01.md'
+    ];
+    const target = 'vortex-artifacts/forge-persona-2026-01-01.md';
+    const result = suggestDifferentiator(sources, target);
+    // With only one real source, can't differentiate
+    expect(result.get('vortex-artifacts/persona-alpha-2026-01-01.md')).toBeNull();
+    expect(result.get('(existing) vortex-artifacts/forge-persona-2026-01-01.md')).toBeNull();
+  });
+});
+
+// --- formatManifest suggestion rendering tests (Story 6.2) ---
+
+describe('formatManifest with Story 6.2 suggestions', () => {
+  test('L — AMBIGUOUS entry with suggestion shows REVIEW SUGGESTION line', () => {
+    const manifest = {
+      entries: [
+        {
+          oldPath: 'planning-artifacts/some-doc.md',
+          newPath: null,
+          dir: 'planning-artifacts',
+          initiative: null,
+          artifactType: null,
+          confidence: 'low',
+          source: 'no-type',
+          typeConfidence: 'low',
+          typeSource: 'none',
+          contextClues: null,
+          crossReferences: null,
+          candidates: [],
+          collisionWith: null,
+          frontmatterInitiative: null,
+          fileInitiative: null,
+          action: 'AMBIGUOUS',
+          suggestedInitiative: 'convoke',
+          suggestedFrom: 'folder-default',
+          suggestedConfidence: 'low'
+        }
+      ],
+      collisions: new Map(),
+      summary: { total: 1, skip: 0, rename: 0, inject: 0, conflict: 0, ambiguous: 1 }
+    };
+    const output = formatManifest(manifest);
+    expect(output).toContain('Suggested: convoke');
+    expect(output).toContain('source: folder-default');
+    expect(output).toContain('REVIEW SUGGESTION');
+    expect(output).not.toContain('ACTION REQUIRED: Specify initiative for this file');
+  });
+
+  test('AMBIGUOUS entry without suggestion still shows ACTION REQUIRED (back-compat)', () => {
+    const manifest = {
+      entries: [
+        {
+          oldPath: 'vortex-artifacts/persona-foo.md',
+          newPath: null,
+          dir: 'vortex-artifacts',
+          initiative: null,
+          artifactType: 'persona',
+          confidence: 'low',
+          source: 'unresolved',
+          typeConfidence: 'high',
+          typeSource: 'prefix',
+          contextClues: null,
+          crossReferences: null,
+          candidates: [],
+          collisionWith: null,
+          frontmatterInitiative: null,
+          fileInitiative: null,
+          action: 'AMBIGUOUS',
+          suggestedInitiative: null,
+          suggestedFrom: null,
+          suggestedConfidence: null
+        }
+      ],
+      collisions: new Map(),
+      summary: { total: 1, skip: 0, rename: 0, inject: 0, conflict: 0, ambiguous: 1 }
+    };
+    const output = formatManifest(manifest);
+    expect(output).toContain('ACTION REQUIRED');
+    expect(output).not.toContain('REVIEW SUGGESTION');
+    expect(output).not.toContain('Suggested:');
+  });
+
+  test('M — RENAME entry with collision + suggestedNewPath shows Suggested rename line', () => {
+    const manifest = {
+      entries: [
+        {
+          oldPath: 'a/lean-persona-foo-2026-01-01.md',
+          newPath: 'a/helm-lean-persona-2026-01-01.md',
+          dir: 'a',
+          initiative: 'helm',
+          artifactType: 'lean-persona',
+          confidence: 'high',
+          source: 'inferred',
+          typeConfidence: 'high',
+          typeSource: 'prefix',
+          contextClues: null,
+          crossReferences: null,
+          candidates: [],
+          collisionWith: ['a/lean-persona-bar-2026-01-01.md'],
+          frontmatterInitiative: null,
+          fileInitiative: 'helm',
+          action: 'RENAME',
+          suggestedNewPath: 'a/helm-lean-persona-foo-2026-01-01.md',
+          suggestedInitiative: null,
+          suggestedFrom: null,
+          suggestedConfidence: null
+        }
+      ],
+      collisions: new Map([['a/helm-lean-persona-2026-01-01.md', ['a/lean-persona-foo-2026-01-01.md', 'a/lean-persona-bar-2026-01-01.md']]]),
+      summary: { total: 1, skip: 0, rename: 1, inject: 0, conflict: 0, ambiguous: 0 }
+    };
+    const output = formatManifest(manifest);
+    expect(output).toContain('COLLISION');
+    expect(output).toContain('Suggested rename: a/helm-lean-persona-foo-2026-01-01.md');
   });
 });
