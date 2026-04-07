@@ -5,7 +5,7 @@ const path = require('path');
 const yaml = require('js-yaml');
 const configMerger = require('./config-merger');
 const { countUserDataFiles } = require('./utils');
-const { AGENT_FILES, AGENT_IDS, WORKFLOW_NAMES, WAVE3_WORKFLOW_NAMES } = require('./agent-registry');
+const { AGENT_FILES, AGENT_IDS, WORKFLOW_NAMES, WAVE3_WORKFLOW_NAMES, EXTRA_BME_AGENTS, EXTRA_BME_AGENT_IDS } = require('./agent-registry');
 
 /**
  * Validator for Convoke
@@ -202,11 +202,22 @@ async function validateManifest(projectRoot) {
 
     const manifestContent = fs.readFileSync(manifestPath, 'utf8');
 
-    // Check for all Convoke agents
+    // Check for all Convoke agents (Vortex/Gyre IDs and standalone bme agents)
     const missingFromManifest = AGENT_IDS.filter(id => !manifestContent.includes(id));
+    const missingExtras = EXTRA_BME_AGENT_IDS.filter(id => !manifestContent.includes(`bmad-agent-bme-${id}`));
 
-    if (missingFromManifest.length > 0) {
-      check.error = `Agent manifest missing: ${missingFromManifest.join(', ')}`;
+    const allMissing = [...missingFromManifest, ...missingExtras];
+    if (allMissing.length > 0) {
+      check.error = `Agent manifest missing: ${allMissing.join(', ')}`;
+      return check;
+    }
+
+    // Confirm standalone bme agent files exist on disk
+    const missingExtraFiles = EXTRA_BME_AGENTS
+      .filter(a => !fs.existsSync(path.join(projectRoot, '_bmad', 'bme', a.submodule, 'agents', `${a.id}.md`)))
+      .map(a => a.id);
+    if (missingExtraFiles.length > 0) {
+      check.error = `Standalone bme agent files missing: ${missingExtraFiles.join(', ')}`;
       return check;
     }
 
