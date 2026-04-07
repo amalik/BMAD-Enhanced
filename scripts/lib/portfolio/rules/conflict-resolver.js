@@ -32,6 +32,28 @@ function applyConflictResolver(state, artifacts, _options = {}) {
     state.lastArtifact = { file: last.filename, date: last.date || 'unknown' };
   }
 
+  // Story 6.3: If phase is unknown AND a recognized-type artifact exists AND we have evidence,
+  // surface a context-aware next action instead of the generic "Create PRD or brief".
+  // - Initiatives with zero artifacts still get the generic message (legitimate use case).
+  // - Initiatives whose ONLY artifacts are fallback-attributed (synthetic 'unknown' type)
+  //   also get the generic message — those don't reflect a real phase signal worth elaborating on.
+  // This guards against the design-intent inversion caught in code review:
+  // a single fallback-attributed note shouldn't override "Create PRD or brief".
+  const hasRecognizedArtifact = artifacts.some(a => a && a.type && a.type !== 'unknown');
+  if (
+    state.phase.value === 'unknown' &&
+    Array.isArray(state.phase.evidence) &&
+    state.phase.evidence.length > 0 &&
+    hasRecognizedArtifact
+  ) {
+    const summary = state.phase.evidence.slice(0, 2).join(', ');
+    state.nextAction = {
+      value: `Unknown phase: ${summary}`,
+      source: 'conflict-resolver'
+    };
+    return state;
+  }
+
   // Derive nextAction from phase if not already set by chain-gap analysis
   if (!state.nextAction.value) {
     state.nextAction = deriveNextAction(state);
