@@ -1,6 +1,12 @@
+const fs = require('fs-extra');
+const os = require('os');
+const path = require('path');
+const { execFileSync } = require('child_process');
 const {
   inferArtifactType,
   inferInitiative,
+  suggestInitiative,
+  FOLDER_DEFAULT_MAP,
   getGovernanceState,
   generateNewFilename,
   readTaxonomy,
@@ -286,5 +292,165 @@ describe('generateNewFilename', () => {
     // After type 'scope', remainder is 'decision-strategy-perimeter'.
     // Initiative 'strategy-perimeter' consumed from segments. Qualifier: 'decision'
     expect(result).toBe('helm-scope-decision-2026-04-04.md');
+  });
+});
+
+// --- suggestInitiative tests (Story 6.2) ---
+
+describe('suggestInitiative', () => {
+  // No project root needed for content-based tests; pass a sentinel for the git path.
+  // Git step is rate-limited and silently fails on non-tracked files, so it does not interfere.
+  const fakeRoot = '/tmp/fake-suggest-root';
+
+  test('A — folder default: planning-artifacts → convoke', () => {
+    const content = '# Some Document\n\nNo initiative keywords here.';
+    const result = suggestInitiative('some-doc.md', 'planning-artifacts', content, taxonomy, fakeRoot);
+    expect(result.initiative).toBe('convoke');
+    expect(result.source).toBe('folder-default');
+    expect(result.confidence).toBe('low');
+  });
+
+  test('B — content keyword: # Gyre Validation Report → gyre', () => {
+    const content = '# Gyre Validation Report\n\nDate: 2026-03-23\n';
+    const result = suggestInitiative('validation-report.md', 'planning-artifacts', content, taxonomy, fakeRoot);
+    expect(result.initiative).toBe('gyre');
+    expect(result.source).toBe('content-keyword');
+    expect(result.confidence).toBe('medium');
+  });
+
+  test('C — alias resolution: Strategy Perimeter title → helm', () => {
+    const content = '---\ntitle: "Strategy Perimeter Discovery"\n---\n\nBody.';
+    const result = suggestInitiative('discovery.md', 'planning-artifacts', content, taxonomy, fakeRoot);
+    expect(result.initiative).toBe('helm');
+    expect(result.source).toBe('content-keyword');
+  });
+
+  test('D — priority: content beats folder default', () => {
+    // File in planning-artifacts (would default to convoke) but content mentions gyre
+    const content = '# Gyre Pilot Plan\n\nNotes.';
+    const result = suggestInitiative('pilot-plan.md', 'planning-artifacts', content, taxonomy, fakeRoot);
+    expect(result.initiative).toBe('gyre');
+    expect(result.source).toBe('content-keyword');
+  });
+
+  test('E — git context fallback: real commit message containing initiative ID → source: git-context', () => {
+    // Build a temp git repo, commit a file with a message containing 'gyre',
+    // then call suggestInitiative against it. This exercises the positive
+    // git-context branch (AC10(d)) that the original Test E missed.
+    const tmpDir = fs.mkdtempSync(path.join(os.tmpdir(), 'suggest-git-'));
+    try {
+      execFileSync('git', ['init', '-q'], { cwd: tmpDir });
+      execFileSync('git', ['config', 'user.email', 'test@example.com'], { cwd: tmpDir });
+      execFileSync('git', ['config', 'user.name', 'test'], { cwd: tmpDir });
+
+      const subDir = path.join(tmpDir, '_bmad-output', 'vortex-artifacts');
+      fs.ensureDirSync(subDir);
+      const filePath = path.join(subDir, 'persona-foo.md');
+      // Content has NO initiative keyword and no folder default applies → falls through to git
+      fs.writeFileSync(filePath, '# Untitled persona\n\nBody with no signal.', 'utf8');
+
+      execFileSync('git', ['add', '.'], { cwd: tmpDir });
+      execFileSync('git', ['commit', '-q', '-m', 'feat: add gyre persona for review'], { cwd: tmpDir });
+
+      const content = fs.readFileSync(filePath, 'utf8');
+      const result = suggestInitiative('persona-foo.md', 'vortex-artifacts', content, taxonomy, tmpDir);
+      expect(result.initiative).toBe('gyre');
+      expect(result.source).toBe('git-context');
+      expect(result.confidence).toBe('low');
+    } finally {
+      fs.removeSync(tmpDir);
+    }
+  });
+
+  test('F — no signal: content + folder + git all fail → null', () => {
+    const content = '# Untitled\n';
+    const result = suggestInitiative('foo.md', 'unknown-dir', content, taxonomy, fakeRoot);
+    expect(result.initiative).toBeNull();
+  });
+
+  test('G — case-insensitivity: GYRE matches', () => {
+    const content = '# GYRE Notes\n';
+    const result = suggestInitiative('notes.md', 'vortex-artifacts', content, taxonomy, fakeRoot);
+    expect(result.initiative).toBe('gyre');
+    expect(result.source).toBe('content-keyword');
+  });
+
+  test('H — whole-word matching: gyrescope does NOT match gyre', () => {
+    const content = '# A study of gyrescope dynamics\n';
+    const result = suggestInitiative('study.md', 'vortex-artifacts', content, taxonomy, fakeRoot);
+    // No content match (gyrescope is not gyre), no folder default for vortex-artifacts
+    expect(result.initiative).toBeNull();
+  });
+
+  test('FOLDER_DEFAULT_MAP exposes the canonical defaults', () => {
+    expect(FOLDER_DEFAULT_MAP['planning-artifacts']).toBe('convoke');
+    expect(FOLDER_DEFAULT_MAP['gyre-artifacts']).toBe('gyre');
+    expect(FOLDER_DEFAULT_MAP['vortex-artifacts']).toBeNull();
+  });
+
+  test('Longest match wins: strategy-perimeter beats strategy', () => {
+    // 'strategy' is not an initiative; 'strategy-perimeter' is an alias for 'helm'
+    const content = '# Strategy Perimeter Notes\n';
+    const result = suggestInitiative('notes.md', 'vortex-artifacts', content, taxonomy, fakeRoot);
+    expect(result.initiative).toBe('helm');
+  });
+
+  test('Hyphen boundary: pre-gyre does NOT match initiative gyre (regression)', () => {
+    // JS \b treats - as a word boundary, so a naive \bgyre\b would match
+    // 'pre-gyre planning'. The fix uses [a-z0-9-]-aware lookarounds.
+    const content = '# pre-gyre planning notes\n';
+    const result = suggestInitiative('notes.md', 'vortex-artifacts', content, taxonomy, fakeRoot);
+    // No content match (boundary class blocks it), no folder default for vortex-artifacts
+    expect(result.initiative).toBeNull();
+  });
+
+  test('Hyphen boundary: meta-gyre-thing does NOT match gyre', () => {
+    const content = 'See the meta-gyre-thing for details.';
+    const result = suggestInitiative('notes.md', 'vortex-artifacts', content, taxonomy, fakeRoot);
+    expect(result.initiative).toBeNull();
+  });
+
+  test('Hyphen boundary: gyre as standalone word still matches', () => {
+    // Sanity check that the new boundary rule didn't break the happy path
+    const content = '# gyre planning notes\n';
+    const result = suggestInitiative('notes.md', 'vortex-artifacts', content, taxonomy, fakeRoot);
+    expect(result.initiative).toBe('gyre');
+  });
+
+  test('Git query cap: 51st call short-circuits without crashing', () => {
+    // The cap is module-level state. We can't import the cap constant, but we can
+    // call suggestInitiative many times against an untracked file. After the cap
+    // is reached, calls return null but the function does not crash.
+    // This is a regression guard for the cap logic itself, not a perf test.
+    const tmpDir = fs.mkdtempSync(path.join(os.tmpdir(), 'suggest-cap-'));
+    try {
+      execFileSync('git', ['init', '-q'], { cwd: tmpDir });
+      execFileSync('git', ['config', 'user.email', 'test@example.com'], { cwd: tmpDir });
+      execFileSync('git', ['config', 'user.name', 'test'], { cwd: tmpDir });
+
+      const subDir = path.join(tmpDir, '_bmad-output', 'vortex-artifacts');
+      fs.ensureDirSync(subDir);
+      // Suppress cap warning during the test
+      const origWarn = console.warn;
+      console.warn = () => {};
+      try {
+        // Call suggestInitiative 60 times — exceeds the 50-query cap
+        for (let i = 0; i < 60; i++) {
+          const result = suggestInitiative(
+            `persona-${i}.md`,
+            'vortex-artifacts',
+            '# untitled\n',
+            taxonomy,
+            tmpDir
+          );
+          // All return null (no content match, no folder default, no git history for untracked)
+          expect(result.initiative).toBeNull();
+        }
+      } finally {
+        console.warn = origWarn;
+      }
+    } finally {
+      fs.removeSync(tmpDir);
+    }
   });
 });
