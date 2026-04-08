@@ -58,6 +58,66 @@ describe('parseArgs', () => {
     expect(result.verbose).toBe(true);
   });
 
+  // --- Story 6.4: --resolution-file flag ---
+
+  test('default args → resolutionFile is null', () => {
+    const result = parseArgs([]);
+    expect(result.resolutionFile).toBeNull();
+  });
+
+  test('--resolution-file <path> captured', () => {
+    const result = parseArgs(['--resolution-file', '/tmp/resolutions.json']);
+    expect(result.resolutionFile).toBe('/tmp/resolutions.json');
+  });
+
+  test('--resolution-file followed by another flag → parse error (does not silently swallow)', () => {
+    const result = parseArgs(['--resolution-file', '--force']);
+    expect(result.resolutionFile).toBeNull();
+    expect(result.resolutionFileError).toBeTruthy();
+    expect(result.resolutionFileError).toContain('--resolution-file requires a path');
+    // The next flag is still consumed normally
+    expect(result.force).toBe(true);
+  });
+
+  test('--resolution-file without value → parse error', () => {
+    const result = parseArgs(['--resolution-file']);
+    expect(result.resolutionFile).toBeNull();
+    expect(result.resolutionFileError).toBeTruthy();
+    expect(result.resolutionFileError).toContain('<missing>');
+  });
+
+  test('--resolution-file with single-dash value → parse error', () => {
+    const result = parseArgs(['--resolution-file', '-foo.json']);
+    expect(result.resolutionFile).toBeNull();
+    expect(result.resolutionFileError).toBeTruthy();
+  });
+
+  test('--resolution-file=path (GNU equals form) is accepted', () => {
+    const result = parseArgs(['--resolution-file=/tmp/r.json']);
+    expect(result.resolutionFile).toBe('/tmp/r.json');
+    expect(result.resolutionFileError).toBeNull();
+  });
+
+  test('--resolution-file= (empty equals form) → parse error', () => {
+    const result = parseArgs(['--resolution-file=']);
+    expect(result.resolutionFile).toBeNull();
+    expect(result.resolutionFileError).toBeTruthy();
+  });
+
+  test('valid --resolution-file → no error', () => {
+    const result = parseArgs(['--resolution-file', '/tmp/resolutions.json']);
+    expect(result.resolutionFile).toBe('/tmp/resolutions.json');
+    expect(result.resolutionFileError).toBeNull();
+  });
+
+  test('--resolution-file combined with --apply --force', () => {
+    const result = parseArgs(['--apply', '--force', '--resolution-file', 'r.json']);
+    expect(result.apply).toBe(true);
+    expect(result.force).toBe(true);
+    expect(result.resolutionFile).toBe('r.json');
+    expect(result.resolutionFileError).toBeNull();
+  });
+
   test('--include with path traversal rejects invalid names', () => {
     const spy = jest.spyOn(console, 'warn').mockImplementation();
     const result = parseArgs(['--include', '../../../etc,planning-artifacts']);
@@ -214,6 +274,9 @@ describe('dry-run integration', () => {
     projectRoot = findProjectRoot();
   });
 
+  // 30-second timeout: real-repo dry-run does up to 50 git-context queries
+  // (Story 6.2 cap), which under load can exceed Jest's default 5s budget.
+  // NFR2 says < 10s for 200 files; 30s gives 3x headroom for CI flake.
   test('generateManifest + formatManifest produces non-empty output', async () => {
     const manifest = await generateManifest(projectRoot, {
       includeDirs: DEFAULT_INCLUDE_DIRS,
@@ -223,7 +286,7 @@ describe('dry-run integration', () => {
     expect(output.length).toBeGreaterThan(0);
     expect(output).toContain('Manifest Summary');
     expect(manifest.summary.total).toBeGreaterThan(0);
-  });
+  }, 30000);
 
   test('--include with single dir restricts scope', async () => {
     const manifest = await generateManifest(projectRoot, {
@@ -233,7 +296,7 @@ describe('dry-run integration', () => {
     for (const entry of manifest.entries) {
       expect(entry.dir).toBe('gyre-artifacts');
     }
-  });
+  }, 30000);
 });
 
 // --- --apply stub ---
