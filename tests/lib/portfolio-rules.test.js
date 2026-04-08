@@ -1,6 +1,22 @@
+'use strict';
+
+const { describe, it, beforeEach, afterEach } = require('node:test');
+const assert = require('node:assert/strict');
+
+const { mockExecFileSync } = require('../mock-cp');
+
 const { applyFrontmatterRule } = require('../../scripts/lib/portfolio/rules/frontmatter-rule');
-const { applyArtifactChainRule, isEpicDone, detectHCChain, collectPhaseEvidence } = require('../../scripts/lib/portfolio/rules/artifact-chain-rule');
-const { applyConflictResolver, deriveNextAction, comparePhasePriority } = require('../../scripts/lib/portfolio/rules/conflict-resolver');
+const {
+  applyArtifactChainRule,
+  isEpicDone,
+  detectHCChain,
+  collectPhaseEvidence,
+} = require('../../scripts/lib/portfolio/rules/artifact-chain-rule');
+const {
+  applyConflictResolver,
+  deriveNextAction,
+  comparePhasePriority,
+} = require('../../scripts/lib/portfolio/rules/conflict-resolver');
 
 // Helper: create empty InitiativeState
 function makeState(initiative = 'test') {
@@ -9,523 +25,559 @@ function makeState(initiative = 'test') {
     phase: { value: null, source: null, confidence: null },
     status: { value: null, source: null, confidence: null },
     lastArtifact: { file: null, date: null },
-    nextAction: { value: null, source: null }
+    nextAction: { value: null, source: null },
   };
 }
 
 // --- frontmatter-rule tests ---
 
 describe('frontmatter-rule', () => {
-  test('reads explicit status from frontmatter', () => {
+  it('reads explicit status from frontmatter', () => {
     const state = makeState();
     const artifacts = [{ filename: 'gyre-prd.md', frontmatter: { status: 'validated' } }];
     const result = applyFrontmatterRule(state, artifacts);
-    expect(result.status.value).toBe('validated');
-    expect(result.status.source).toBe('frontmatter');
-    expect(result.status.confidence).toBe('explicit');
+    assert.equal(result.status.value, 'validated');
+    assert.equal(result.status.source, 'frontmatter');
+    assert.equal(result.status.confidence, 'explicit');
   });
 
-  test('reads explicit phase from frontmatter (operator override)', () => {
+  it('reads explicit phase from frontmatter (operator override)', () => {
     const state = makeState();
     const artifacts = [{ filename: 'gyre-prd.md', frontmatter: { phase: 'build' } }];
     const result = applyFrontmatterRule(state, artifacts);
-    expect(result.phase.value).toBe('build');
-    expect(result.phase.confidence).toBe('explicit');
+    assert.equal(result.phase.value, 'build');
+    assert.equal(result.phase.confidence, 'explicit');
   });
 
-  test('no frontmatter status -> state unchanged', () => {
+  it('no frontmatter status -> state unchanged', () => {
     const state = makeState();
     const artifacts = [{ filename: 'gyre-prd.md', frontmatter: { initiative: 'gyre' } }];
     const result = applyFrontmatterRule(state, artifacts);
-    expect(result.status.value).toBeNull();
-    expect(result.phase.value).toBeNull();
+    assert.equal(result.status.value, null);
+    assert.equal(result.phase.value, null);
   });
 
-  test('no frontmatter at all -> state unchanged', () => {
+  it('no frontmatter at all -> state unchanged', () => {
     const state = makeState();
     const artifacts = [{ filename: 'gyre-prd.md' }];
     const result = applyFrontmatterRule(state, artifacts);
-    expect(result.status.value).toBeNull();
+    assert.equal(result.status.value, null);
   });
 
-  test('first explicit value wins (most recent first)', () => {
+  it('first explicit value wins (most recent first)', () => {
     const state = makeState();
     const artifacts = [
       { filename: 'a.md', frontmatter: { status: 'validated' } },
-      { filename: 'b.md', frontmatter: { status: 'draft' } }
+      { filename: 'b.md', frontmatter: { status: 'draft' } },
     ];
     const result = applyFrontmatterRule(state, artifacts);
-    expect(result.status.value).toBe('validated');
+    assert.equal(result.status.value, 'validated');
   });
 
-  test('empty-string status treated as absent (not explicit)', () => {
+  it('empty-string status treated as absent (not explicit)', () => {
     const state = makeState();
     const artifacts = [{ filename: 'a.md', frontmatter: { status: '' } }];
     const result = applyFrontmatterRule(state, artifacts);
-    expect(result.status.value).toBeNull();
+    assert.equal(result.status.value, null);
   });
 
-  test('empty-string phase treated as absent', () => {
+  it('empty-string phase treated as absent', () => {
     const state = makeState();
     const artifacts = [{ filename: 'a.md', frontmatter: { phase: '' } }];
     const result = applyFrontmatterRule(state, artifacts);
-    expect(result.phase.value).toBeNull();
+    assert.equal(result.phase.value, null);
   });
 
-  test('does not override existing explicit status', () => {
+  it('does not override existing explicit status', () => {
     const state = makeState();
     state.status = { value: 'active', source: 'frontmatter', confidence: 'explicit' };
     const artifacts = [{ filename: 'a.md', frontmatter: { status: 'draft' } }];
     const result = applyFrontmatterRule(state, artifacts);
-    expect(result.status.value).toBe('active');
+    assert.equal(result.status.value, 'active');
   });
 });
 
 // --- artifact-chain-rule tests ---
 
 describe('artifact-chain-rule', () => {
-  test('epic with status-context done -> phase: complete', () => {
+  it('epic with status-context done -> phase: complete', () => {
     const state = makeState();
     const artifacts = [
-      { filename: 'gyre-epic.md', type: 'epic', content: 'epic-1: done\nepic-2: done' }
+      { filename: 'gyre-epic.md', type: 'epic', content: 'epic-1: done\nepic-2: done' },
     ];
     const result = applyArtifactChainRule(state, artifacts);
-    expect(result.phase.value).toBe('complete');
-    expect(result.phase.source).toBe('artifact-chain');
+    assert.equal(result.phase.value, 'complete');
+    assert.equal(result.phase.source, 'artifact-chain');
   });
 
-  test('epic with ✅ marker -> phase: complete', () => {
+  it('epic with ✅ marker -> phase: complete', () => {
     const state = makeState();
     const artifacts = [
-      { filename: 'gyre-epic.md', type: 'epic', content: '## Status: ✅ All stories delivered' }
+      { filename: 'gyre-epic.md', type: 'epic', content: '## Status: ✅ All stories delivered' },
     ];
     const result = applyArtifactChainRule(state, artifacts);
-    expect(result.phase.value).toBe('complete');
+    assert.equal(result.phase.value, 'complete');
   });
 
-  test('epic with [x] marker -> phase: complete', () => {
+  it('epic with [x] marker -> phase: complete', () => {
     const state = makeState();
     const artifacts = [
-      { filename: 'gyre-epic.md', type: 'epic', content: '- [x] All stories' }
+      { filename: 'gyre-epic.md', type: 'epic', content: '- [x] All stories' },
     ];
     const result = applyArtifactChainRule(state, artifacts);
-    expect(result.phase.value).toBe('complete');
+    assert.equal(result.phase.value, 'complete');
   });
 
-  test('epic with strikethrough -> phase: complete', () => {
+  it('epic with strikethrough -> phase: complete', () => {
     const state = makeState();
     const artifacts = [
-      { filename: 'gyre-epic.md', type: 'epic', content: '~~This epic is finished~~' }
+      { filename: 'gyre-epic.md', type: 'epic', content: '~~This epic is finished~~' },
     ];
     const result = applyArtifactChainRule(state, artifacts);
-    expect(result.phase.value).toBe('complete');
+    assert.equal(result.phase.value, 'complete');
   });
 
-  test('epic with bold done marker -> phase: complete', () => {
+  it('epic with bold done marker -> phase: complete', () => {
     const state = makeState();
     const artifacts = [
-      { filename: 'gyre-epic.md', type: 'epic', content: '**Status:** ** done**' }
+      { filename: 'gyre-epic.md', type: 'epic', content: '**Status:** ** done**' },
     ];
     const result = applyArtifactChainRule(state, artifacts);
-    expect(result.phase.value).toBe('complete');
+    assert.equal(result.phase.value, 'complete');
   });
 
-  test('epic mentioning "done" in narrative context -> NOT complete (no false positive)', () => {
+  it('epic mentioning "done" in narrative context -> NOT complete (no false positive)', () => {
     const state = makeState();
     const artifacts = [
-      { filename: 'gyre-epic.md', type: 'epic', content: 'We are not done yet. Story 1 is in progress.' }
+      { filename: 'gyre-epic.md', type: 'epic', content: 'We are not done yet. Story 1 is in progress.' },
     ];
     const result = applyArtifactChainRule(state, artifacts);
-    expect(result.phase.value).not.toBe('complete');
+    assert.notStrictEqual(result.phase.value, 'complete');
   });
 
-  test('epic + sprint -> phase: build', () => {
+  it('epic + sprint -> phase: build', () => {
     const state = makeState();
     const artifacts = [
       { filename: 'gyre-epic.md', type: 'epic', content: '## Stories\n\n- story 1: in progress' },
-      { filename: 'gyre-sprint.md', type: 'sprint' }
+      { filename: 'gyre-sprint.md', type: 'sprint' },
     ];
     const result = applyArtifactChainRule(state, artifacts);
-    expect(result.phase.value).toBe('build');
+    assert.equal(result.phase.value, 'build');
   });
 
-  test('architecture doc -> phase: planning', () => {
+  it('architecture doc -> phase: planning', () => {
     const state = makeState();
     const artifacts = [
-      { filename: 'gyre-arch.md', type: 'arch' }
+      { filename: 'gyre-arch.md', type: 'arch' },
     ];
     const result = applyArtifactChainRule(state, artifacts);
-    expect(result.phase.value).toBe('planning');
+    assert.equal(result.phase.value, 'planning');
   });
 
-  test('HC artifacts -> phase: discovery', () => {
+  it('HC artifacts -> phase: discovery', () => {
     const state = makeState();
     const artifacts = [
       { filename: 'gyre-problem-def-hc2.md', type: 'problem-def', hcPrefix: 'hc2' },
-      { filename: 'gyre-hypothesis-hc3.md', type: 'hypothesis', hcPrefix: 'hc3' }
+      { filename: 'gyre-hypothesis-hc3.md', type: 'hypothesis', hcPrefix: 'hc3' },
     ];
     const result = applyArtifactChainRule(state, artifacts);
-    expect(result.phase.value).toBe('discovery');
+    assert.equal(result.phase.value, 'discovery');
   });
 
-  test('PRD only -> phase: planning', () => {
+  it('PRD only -> phase: planning', () => {
     const state = makeState();
     const artifacts = [{ filename: 'gyre-prd.md', type: 'prd' }];
     const result = applyArtifactChainRule(state, artifacts);
-    expect(result.phase.value).toBe('planning');
+    assert.equal(result.phase.value, 'planning');
   });
 
-  test('brief only -> phase: planning', () => {
+  it('brief only -> phase: planning', () => {
     const state = makeState();
     const artifacts = [{ filename: 'gyre-brief.md', type: 'brief' }];
     const result = applyArtifactChainRule(state, artifacts);
-    expect(result.phase.value).toBe('planning');
+    assert.equal(result.phase.value, 'planning');
   });
 
-  test('no recognized artifacts -> phase: unknown', () => {
+  it('no recognized artifacts -> phase: unknown', () => {
     const state = makeState();
     const artifacts = [{ filename: 'random.md', type: null }];
     const result = applyArtifactChainRule(state, artifacts);
-    expect(result.phase.value).toBe('unknown');
+    assert.equal(result.phase.value, 'unknown');
   });
 
-  test('does not override explicit frontmatter phase', () => {
+  it('does not override explicit frontmatter phase', () => {
     const state = makeState();
     state.phase = { value: 'build', source: 'frontmatter', confidence: 'explicit' };
     const artifacts = [{ filename: 'gyre-prd.md', type: 'prd' }];
     const result = applyArtifactChainRule(state, artifacts);
-    expect(result.phase.value).toBe('build');
-    expect(result.phase.source).toBe('frontmatter');
+    assert.equal(result.phase.value, 'build');
+    assert.equal(result.phase.source, 'frontmatter');
   });
 
-  test('multiple epics -> latest date used', () => {
+  it('multiple epics -> latest date used', () => {
     const state = makeState();
     const artifacts = [
       { filename: 'gyre-epic-old.md', type: 'epic', date: '2026-01-01', content: 'done' },
-      { filename: 'gyre-epic-new.md', type: 'epic', date: '2026-04-01', content: 'in progress' }
+      { filename: 'gyre-epic-new.md', type: 'epic', date: '2026-04-01', content: 'in progress' },
     ];
     const result = applyArtifactChainRule(state, artifacts);
     // Latest epic (2026-04-01) has "in progress" — no done marker, so falls through
     // Has epic but no sprint -> doesn't match build. Falls to next check.
-    expect(result.phase.value).not.toBe('complete');
+    assert.notStrictEqual(result.phase.value, 'complete');
   });
 
-  test('tracks lastArtifact from dated files', () => {
+  it('tracks lastArtifact from dated files', () => {
     const state = makeState();
     const artifacts = [
       { filename: 'old.md', type: 'prd', date: '2026-01-01' },
-      { filename: 'new.md', type: 'prd', date: '2026-04-01' }
+      { filename: 'new.md', type: 'prd', date: '2026-04-01' },
     ];
     applyArtifactChainRule(state, artifacts);
-    expect(state.lastArtifact.file).toBe('new.md');
-    expect(state.lastArtifact.date).toBe('2026-04-01');
+    assert.equal(state.lastArtifact.file, 'new.md');
+    assert.equal(state.lastArtifact.date, '2026-04-01');
   });
 });
 
 // --- isEpicDone ---
+//
+// Original used Jest's test.each([...]) data-driven syntax. node:test has no
+// built-in equivalent, so we expand the cases into a for-loop generating
+// individual it() calls. The test names match what test.each would have
+// generated, so grepping for old test names still works.
 
 describe('isEpicDone', () => {
-  test.each([
+  const cases = [
     ['epic-1: done', true],
     ['Status: complete', true],
     ['✅ Delivered', true],
     ['- [x] All tasks', true],
     ['~~Finished epic~~', true],
-    ['** done', true],                  // bold marker
+    ['** done', true],                     // bold marker
     ['epic-3: complete', true],
     ['In progress, not done yet', false], // narrative "done" is NOT a status context
-    ['We are not complete', false],       // narrative "complete" is NOT a status context
+    ['We are not complete', false],        // narrative "complete" is NOT a status context
     ['No status markers here', false],
-    ['', false]
-  ])('"%s" -> %s', (content, expected) => {
-    expect(isEpicDone(content)).toBe(expected);
-  });
+    ['', false],
+  ];
+  for (const [content, expected] of cases) {
+    it(`"${content}" -> ${expected}`, () => {
+      assert.equal(isEpicDone(content), expected);
+    });
+  }
 });
 
 // --- detectHCChain ---
 
 describe('detectHCChain', () => {
-  test('complete HC chain -> nextAction says ready', () => {
+  it('complete HC chain -> nextAction says ready', () => {
     const state = makeState();
     detectHCChain(state, new Set(['hc2', 'hc3', 'hc4', 'hc5', 'hc6']));
-    expect(state.nextAction.value).toContain('complete');
+    assert.ok(state.nextAction.value.includes('complete'));
   });
 
-  test('partial chain -> nextAction shows first missing HC', () => {
+  it('partial chain -> nextAction shows first missing HC', () => {
     const state = makeState();
     detectHCChain(state, new Set(['hc2', 'hc3']));
-    expect(state.nextAction.value).toContain('HC4');
-    expect(state.nextAction.value).toContain('Experiment');
+    assert.ok(state.nextAction.value.includes('HC4'));
+    assert.ok(state.nextAction.value.includes('Experiment'));
   });
 
-  test('empty chain -> no nextAction set', () => {
+  it('empty chain -> no nextAction set', () => {
     const state = makeState();
     detectHCChain(state, new Set());
-    expect(state.nextAction.value).toBeNull();
+    assert.equal(state.nextAction.value, null);
   });
 });
 
 // --- git-recency-rule tests (mocked) ---
+//
+// First production use of tests/mock-cp.js. The original used jest.spyOn
+// against child_process.execFileSync; the helper provides the equivalent
+// surface on top of node:test/mock plus the module-cache-reset semantic
+// that the target module needs.
+//
+// Local variable named cpMock to avoid colliding with the imported helper
+// function name (mockExecFileSync) and with the node:test mock namespace.
 
 describe('git-recency-rule', () => {
-  let mockExecFileSync;
-  let applyGitRecencyRule;
+  let cpMock;
 
   beforeEach(() => {
-    jest.resetModules();
-    const cp = require('child_process');
-    mockExecFileSync = jest.spyOn(cp, 'execFileSync');
-    applyGitRecencyRule = require('../../scripts/lib/portfolio/rules/git-recency-rule').applyGitRecencyRule;
+    cpMock = mockExecFileSync(
+      '../../scripts/lib/portfolio/rules/git-recency-rule',
+      __dirname,
+    );
   });
 
   afterEach(() => {
-    mockExecFileSync.mockRestore();
+    // Defensive optional-chain: if beforeEach threw before assigning cpMock,
+    // afterEach must not secondary-throw on undefined and mask the root cause.
+    cpMock?.restore();
   });
 
-  test('recent activity -> status: ongoing', () => {
-    const today = new Date().toISOString().split('T')[0];
-    mockExecFileSync.mockReturnValue(today + '\n');
+  it('recent activity -> status: ongoing', () => {
+    // Fixed 15-days-ago offset (well inside the 30-day window) instead of
+    // `new Date().toISOString()` to avoid UTC-midnight boundary flake.
+    const recent = new Date();
+    recent.setUTCDate(recent.getUTCDate() - 15);
+    const recentDate = recent.toISOString().split('T')[0];
+    cpMock.setReturnValue(recentDate + '\n');
+    const { applyGitRecencyRule } = cpMock.module;
     const state = makeState();
     const artifacts = [{ filename: 'a.md', fullPath: '/project/a.md' }];
     const result = applyGitRecencyRule(state, artifacts, { staleDays: 30, projectRoot: '/project' });
-    expect(result.status.value).toBe('ongoing');
-    expect(result.status.source).toBe('git-recency');
+    assert.equal(result.status.value, 'ongoing');
+    assert.equal(result.status.source, 'git-recency');
   });
 
-  test('old activity (>30 days) -> status: stale', () => {
-    mockExecFileSync.mockReturnValue('2020-01-01\n');
+  it('old activity (>30 days) -> status: stale', () => {
+    cpMock.setReturnValue('2020-01-01\n');
+    const { applyGitRecencyRule } = cpMock.module;
     const state = makeState();
     const artifacts = [{ filename: 'a.md', fullPath: '/project/a.md' }];
     const result = applyGitRecencyRule(state, artifacts, { staleDays: 30, projectRoot: '/project' });
-    expect(result.status.value).toBe('stale');
+    assert.equal(result.status.value, 'stale');
   });
 
-  test('custom staleDays threshold', () => {
+  it('custom staleDays threshold', () => {
     // 10 days ago
     const d = new Date();
     d.setDate(d.getDate() - 10);
     const dateStr = d.toISOString().split('T')[0];
-    mockExecFileSync.mockReturnValue(dateStr + '\n');
+    cpMock.setReturnValue(dateStr + '\n');
+    const { applyGitRecencyRule } = cpMock.module;
     const state = makeState();
     const artifacts = [{ filename: 'a.md', fullPath: '/project/a.md' }];
 
     // 30 days threshold -> ongoing
     let result = applyGitRecencyRule(state, artifacts, { staleDays: 30, projectRoot: '/project' });
-    expect(result.status.value).toBe('ongoing');
+    assert.equal(result.status.value, 'ongoing');
 
     // 5 days threshold -> stale
     state.status = { value: null, source: null, confidence: null };
     result = applyGitRecencyRule(state, artifacts, { staleDays: 5, projectRoot: '/project' });
-    expect(result.status.value).toBe('stale');
+    assert.equal(result.status.value, 'stale');
   });
 
-  test('does not override explicit frontmatter status', () => {
-    mockExecFileSync.mockReturnValue('2020-01-01\n');
+  it('does not override explicit frontmatter status', () => {
+    cpMock.setReturnValue('2020-01-01\n');
+    const { applyGitRecencyRule } = cpMock.module;
     const state = makeState();
     state.status = { value: 'active', source: 'frontmatter', confidence: 'explicit' };
     const artifacts = [{ filename: 'a.md', fullPath: '/project/a.md' }];
     const result = applyGitRecencyRule(state, artifacts, { staleDays: 30, projectRoot: '/project' });
-    expect(result.status.value).toBe('active');
-    expect(result.status.confidence).toBe('explicit');
+    assert.equal(result.status.value, 'active');
+    assert.equal(result.status.confidence, 'explicit');
   });
 
-  test('no projectRoot -> state unchanged', () => {
+  it('no projectRoot -> state unchanged', () => {
+    const { applyGitRecencyRule } = cpMock.module;
     const state = makeState();
     const artifacts = [{ filename: 'a.md', fullPath: '/project/a.md' }];
     const result = applyGitRecencyRule(state, artifacts, {});
-    expect(result.status.value).toBeNull();
+    assert.equal(result.status.value, null);
   });
 
-  test('multiple artifacts -> picks latest date', () => {
-    const today = new Date().toISOString().split('T')[0];
+  it('multiple artifacts -> picks latest date', () => {
+    // Fixed 15-days-ago offset for the recent artifact (inside 30-day window)
+    // to avoid UTC-midnight boundary flake.
+    const recent = new Date();
+    recent.setUTCDate(recent.getUTCDate() - 15);
+    const recentDate = recent.toISOString().split('T')[0];
     let callCount = 0;
-    mockExecFileSync.mockImplementation(() => {
+    cpMock.setImpl(() => {
       callCount++;
-      return callCount === 1 ? '2020-01-01\n' : today + '\n';
+      return callCount === 1 ? '2020-01-01\n' : recentDate + '\n';
     });
+    const { applyGitRecencyRule } = cpMock.module;
     const state = makeState();
     const artifacts = [
       { filename: 'old.md', fullPath: '/project/old.md' },
-      { filename: 'new.md', fullPath: '/project/new.md' }
+      { filename: 'new.md', fullPath: '/project/new.md' },
     ];
     const result = applyGitRecencyRule(state, artifacts, { staleDays: 30, projectRoot: '/project' });
-    expect(result.status.value).toBe('ongoing');
-    expect(result.lastArtifact.file).toBe('new.md');
+    assert.equal(result.status.value, 'ongoing');
+    assert.equal(result.lastArtifact.file, 'new.md');
   });
 
-  test('empty artifacts array -> state unchanged', () => {
+  it('empty artifacts array -> state unchanged', () => {
+    const { applyGitRecencyRule } = cpMock.module;
     const state = makeState();
     const result = applyGitRecencyRule(state, [], { staleDays: 30, projectRoot: '/project' });
-    expect(result.status.value).toBeNull();
+    assert.equal(result.status.value, null);
   });
 
-  test('git log fails -> state unchanged', () => {
-    mockExecFileSync.mockImplementation(() => { throw new Error('not tracked'); });
+  it('git log fails -> state unchanged', () => {
+    cpMock.setImpl(() => { throw new Error('not tracked'); });
+    const { applyGitRecencyRule } = cpMock.module;
     const state = makeState();
     const artifacts = [{ filename: 'a.md', fullPath: '/project/a.md' }];
     const result = applyGitRecencyRule(state, artifacts, { staleDays: 30, projectRoot: '/project' });
-    expect(result.status.value).toBeNull();
+    assert.equal(result.status.value, null);
   });
 });
 
 // --- conflict-resolver tests ---
 
 describe('conflict-resolver', () => {
-  test('ensures phase has a value when empty', () => {
+  it('ensures phase has a value when empty', () => {
     const state = makeState();
     const result = applyConflictResolver(state, []);
-    expect(result.phase.value).toBe('unknown');
+    assert.equal(result.phase.value, 'unknown');
   });
 
-  test('ensures status has a value when empty', () => {
+  it('ensures status has a value when empty', () => {
     const state = makeState();
     const result = applyConflictResolver(state, []);
-    expect(result.status.value).toBe('unknown');
+    assert.equal(result.status.value, 'unknown');
   });
 
-  test('derives nextAction from phase when not set', () => {
+  it('derives nextAction from phase when not set', () => {
     const state = makeState();
     state.phase = { value: 'discovery', source: 'artifact-chain', confidence: 'inferred' };
     const result = applyConflictResolver(state, []);
-    expect(result.nextAction.value).toContain('discovery');
+    assert.ok(result.nextAction.value.includes('discovery'));
   });
 
-  test('does not override existing nextAction', () => {
+  it('does not override existing nextAction', () => {
     const state = makeState();
     state.nextAction = { value: 'HC4 experiment', source: 'chain-gap' };
     state.phase = { value: 'discovery', source: 'artifact-chain', confidence: 'inferred' };
     const result = applyConflictResolver(state, []);
-    expect(result.nextAction.value).toBe('HC4 experiment');
+    assert.equal(result.nextAction.value, 'HC4 experiment');
   });
 
-  test('populates lastArtifact from artifacts when missing', () => {
+  it('populates lastArtifact from artifacts when missing', () => {
     const state = makeState();
     const artifacts = [{ filename: 'test.md', date: '2026-04-01' }];
     const result = applyConflictResolver(state, artifacts);
-    expect(result.lastArtifact.file).toBe('test.md');
+    assert.equal(result.lastArtifact.file, 'test.md');
   });
 
-  test('preserves existing lastArtifact', () => {
+  it('preserves existing lastArtifact', () => {
     const state = makeState();
     state.lastArtifact = { file: 'existing.md', date: '2026-04-05' };
     const result = applyConflictResolver(state, [{ filename: 'other.md' }]);
-    expect(result.lastArtifact.file).toBe('existing.md');
+    assert.equal(result.lastArtifact.file, 'existing.md');
   });
 });
 
 // --- deriveNextAction ---
 
 describe('deriveNextAction', () => {
-  test.each([
+  const cases = [
     ['unknown', 'Create PRD'],
     ['discovery', 'discovery'],
     ['planning', 'architecture'],
     ['build', 'story execution'],
-    ['complete', 'retrospective']
-  ])('phase "%s" -> action contains "%s"', (phase, expectedFragment) => {
-    const state = makeState();
-    state.phase = { value: phase, source: 'test', confidence: 'inferred' };
-    const action = deriveNextAction(state);
-    expect(action.value.toLowerCase()).toContain(expectedFragment.toLowerCase());
-  });
+    ['complete', 'retrospective'],
+  ];
+  for (const [phase, expectedFragment] of cases) {
+    it(`phase "${phase}" -> action contains "${expectedFragment}"`, () => {
+      const state = makeState();
+      state.phase = { value: phase, source: 'test', confidence: 'inferred' };
+      const action = deriveNextAction(state);
+      assert.ok(action.value.toLowerCase().includes(expectedFragment.toLowerCase()));
+    });
+  }
 });
 
 // --- comparePhasePriority ---
 
 describe('comparePhasePriority', () => {
-  test('complete > build > planning > discovery > unknown', () => {
-    expect(comparePhasePriority('complete', 'build')).toBeGreaterThan(0);
-    expect(comparePhasePriority('build', 'planning')).toBeGreaterThan(0);
-    expect(comparePhasePriority('planning', 'discovery')).toBeGreaterThan(0);
-    expect(comparePhasePriority('discovery', 'unknown')).toBeGreaterThan(0);
+  it('complete > build > planning > discovery > unknown', () => {
+    assert.ok(comparePhasePriority('complete', 'build') > 0);
+    assert.ok(comparePhasePriority('build', 'planning') > 0);
+    assert.ok(comparePhasePriority('planning', 'discovery') > 0);
+    assert.ok(comparePhasePriority('discovery', 'unknown') > 0);
   });
 
-  test('same phase -> 0', () => {
-    expect(comparePhasePriority('build', 'build')).toBe(0);
+  it('same phase -> 0', () => {
+    assert.equal(comparePhasePriority('build', 'build'), 0);
   });
 });
 
 // --- Story 6.3: phase evidence collection ---
 
 describe('collectPhaseEvidence (Story 6.3)', () => {
-  test('K — initiative with 3 artifacts but no PRD/arch/HC/epic → full evidence list', () => {
+  it('K — initiative with 3 artifacts but no PRD/arch/HC/epic → full evidence list', () => {
     const artifacts = [
       { type: 'note' },
       { type: 'note' },
-      { type: 'note' }
+      { type: 'note' },
     ];
     const types = new Set(['note']);
     const hcPrefixes = new Set();
     const evidence = collectPhaseEvidence(artifacts, types, hcPrefixes);
-    expect(evidence[0]).toBe('3 artifacts found');
-    expect(evidence).toContain('no PRD/brief');
-    expect(evidence).toContain('no architecture');
-    expect(evidence).toContain('no HC chain');
-    expect(evidence).toContain('no epic');
+    assert.equal(evidence[0], '3 artifacts found');
+    assert.ok(evidence.includes('no PRD/brief'));
+    assert.ok(evidence.includes('no architecture'));
+    assert.ok(evidence.includes('no HC chain'));
+    assert.ok(evidence.includes('no epic'));
   });
 
-  test('L — initiative with only HC1 → incomplete HC chain marker', () => {
+  it('L — initiative with only HC1 → incomplete HC chain marker', () => {
     const artifacts = [{ type: 'hc1', hcPrefix: 'hc1' }];
     const types = new Set(['hc1']);
     const hcPrefixes = new Set(['hc1']);
     const evidence = collectPhaseEvidence(artifacts, types, hcPrefixes);
-    expect(evidence[0]).toBe('1 artifact found');
-    expect(evidence).toContain('incomplete HC chain (needs HC2-HC6)');
+    assert.equal(evidence[0], '1 artifact found');
+    assert.ok(evidence.includes('incomplete HC chain (needs HC2-HC6)'));
   });
 
-  test('Single artifact pluralization: "1 artifact found" not "1 artifacts found"', () => {
+  it('Single artifact pluralization: "1 artifact found" not "1 artifacts found"', () => {
     const artifacts = [{ type: 'note' }];
     const evidence = collectPhaseEvidence(artifacts, new Set(['note']), new Set());
-    expect(evidence[0]).toBe('1 artifact found');
+    assert.equal(evidence[0], '1 artifact found');
   });
 
-  test('applyArtifactChainRule attaches evidence on unknown phase', () => {
+  it('applyArtifactChainRule attaches evidence on unknown phase', () => {
     const state = {
       initiative: 'test',
       phase: { value: null, source: null, confidence: null },
       status: { value: null, source: null, confidence: null },
       lastArtifact: { file: null, date: null },
-      nextAction: { value: null, source: null }
+      nextAction: { value: null, source: null },
     };
     const artifacts = [
       { type: 'note', filename: 'note-1.md', date: '2026-01-01' },
-      { type: 'note', filename: 'note-2.md', date: '2026-01-02' }
+      { type: 'note', filename: 'note-2.md', date: '2026-01-02' },
     ];
     const result = applyArtifactChainRule(state, artifacts);
-    expect(result.phase.value).toBe('unknown');
-    expect(result.phase.source).toBe('artifact-chain');
-    expect(Array.isArray(result.phase.evidence)).toBe(true);
-    expect(result.phase.evidence[0]).toBe('2 artifacts found');
+    assert.equal(result.phase.value, 'unknown');
+    assert.equal(result.phase.source, 'artifact-chain');
+    assert.ok(Array.isArray(result.phase.evidence));
+    assert.equal(result.phase.evidence[0], '2 artifacts found');
   });
 });
 
 // --- Story 6.3: conflict-resolver nextAction override ---
 
 describe('applyConflictResolver Story 6.3 nextAction override', () => {
-  test('M — initiative with zero artifacts keeps generic "Create PRD or brief" message', () => {
+  it('M — initiative with zero artifacts keeps generic "Create PRD or brief" message', () => {
     const state = {
       initiative: 'empty',
       phase: { value: null, source: null, confidence: null },
       status: { value: null, source: null, confidence: null },
       lastArtifact: { file: null, date: null },
-      nextAction: { value: null, source: null }
+      nextAction: { value: null, source: null },
     };
     const result = applyConflictResolver(state, [], {});
-    expect(result.nextAction.value).toBe('Create PRD or brief to start planning');
+    assert.equal(result.nextAction.value, 'Create PRD or brief to start planning');
   });
 
-  test('N — initiative with recognized-type artifacts but unknown phase → context-aware nextAction', () => {
+  it('N — initiative with recognized-type artifacts but unknown phase → context-aware nextAction', () => {
     const state = {
       initiative: 'busy',
       phase: {
         value: 'unknown',
         source: 'artifact-chain',
         confidence: 'inferred',
-        evidence: ['3 artifacts found', 'no PRD/brief', 'no architecture']
+        evidence: ['3 artifacts found', 'no PRD/brief', 'no architecture'],
       },
       status: { value: null, source: null, confidence: null },
       lastArtifact: { file: null, date: null },
-      nextAction: { value: null, source: null }
+      nextAction: { value: null, source: null },
     };
     // At least one artifact must have a real (non-'unknown') type to trigger the override.
     // This guards against the design-intent inversion where a single fallback-attributed
@@ -533,17 +585,17 @@ describe('applyConflictResolver Story 6.3 nextAction override', () => {
     const artifacts = [
       { filename: 'a.md', type: 'spec' },
       { filename: 'b.md', type: 'spec' },
-      { filename: 'c.md', type: 'spec' }
+      { filename: 'c.md', type: 'spec' },
     ];
     const result = applyConflictResolver(state, artifacts, {});
-    expect(result.nextAction.value).toContain('Unknown phase:');
-    expect(result.nextAction.value).toContain('3 artifacts found');
-    expect(result.nextAction.value).toContain('no PRD/brief');
+    assert.ok(result.nextAction.value.includes('Unknown phase:'));
+    assert.ok(result.nextAction.value.includes('3 artifacts found'));
+    assert.ok(result.nextAction.value.includes('no PRD/brief'));
     // Generic fallback NOT used
-    expect(result.nextAction.value).not.toBe('Create PRD or brief to start planning');
+    assert.notStrictEqual(result.nextAction.value, 'Create PRD or brief to start planning');
   });
 
-  test('Override does NOT trigger when only fallback-attributed (unknown-type) artifacts exist', () => {
+  it('Override does NOT trigger when only fallback-attributed (unknown-type) artifacts exist', () => {
     // Regression guard for the design-intent inversion: if all artifacts are
     // fallback-attributed with synthetic `type: 'unknown'`, the operator should
     // still see the generic "Create PRD or brief" message.
@@ -553,26 +605,26 @@ describe('applyConflictResolver Story 6.3 nextAction override', () => {
         value: 'unknown',
         source: 'artifact-chain',
         confidence: 'inferred',
-        evidence: ['1 artifact found', 'no PRD/brief']
+        evidence: ['1 artifact found', 'no PRD/brief'],
       },
       status: { value: null, source: null, confidence: null },
       lastArtifact: { file: null, date: null },
-      nextAction: { value: null, source: null }
+      nextAction: { value: null, source: null },
     };
     const artifacts = [{ filename: 'fallback.md', type: 'unknown' }];
     const result = applyConflictResolver(state, artifacts, {});
-    expect(result.nextAction.value).toBe('Create PRD or brief to start planning');
+    assert.equal(result.nextAction.value, 'Create PRD or brief to start planning');
   });
 
-  test('Override does NOT trigger when phase is known (e.g. discovery)', () => {
+  it('Override does NOT trigger when phase is known (e.g. discovery)', () => {
     const state = {
       initiative: 'forge',
       phase: { value: 'discovery', source: 'artifact-chain', confidence: 'inferred' },
       status: { value: null, source: null, confidence: null },
       lastArtifact: { file: null, date: null },
-      nextAction: { value: null, source: null }
+      nextAction: { value: null, source: null },
     };
     const result = applyConflictResolver(state, [{ filename: 'foo.md' }], {});
-    expect(result.nextAction.value).not.toContain('Unknown phase:');
+    assert.ok(!result.nextAction.value.includes('Unknown phase:'));
   });
 });
