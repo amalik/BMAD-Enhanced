@@ -23,7 +23,7 @@
  *
  * Public API
  * ----------
- * const mock = mockExecFileSync('../../scripts/lib/artifact-utils');
+ * const mock = mockExecFileSync('../../scripts/lib/artifact-utils', __dirname);
  *
  * mock.setImpl(fn)             // (cmd, args, opts) => returnValue | throw
  * mock.setReturnValue(value)   // shorthand for setImpl(() => value)
@@ -32,6 +32,9 @@
  * mock.callsMatching(pred)     // calls where pred(args) is truthy
  * mock.callCount()             // total call count
  * mock.restore()               // tear down — call from afterEach
+ *
+ * The second argument (__dirname) is required so the helper can resolve
+ * relative module paths from your test file's location, not from this file.
  *
  * Typical usage in a converted test
  * ---------------------------------
@@ -42,7 +45,7 @@
  *   describe('executeRenames', () => {
  *     let mock;
  *     beforeEach(() => {
- *       mock = mockExecFileSync('../../scripts/lib/artifact-utils');
+ *       mock = mockExecFileSync('../../scripts/lib/artifact-utils', __dirname);
  *     });
  *     afterEach(() => {
  *       mock.restore();
@@ -64,14 +67,17 @@
  */
 
 const cp = require('node:child_process');
-const path = require('path');
 const { mock } = require('node:test');
 
 /**
  * Create a managed execFileSync mock bound to a specific target module.
  *
- * @param {string} targetModulePath - Path to the module under test, relative
- *   to the calling test file's directory (same convention as require()).
+ * @param {string} targetModulePath - Path to the module under test. Either an
+ *   absolute path, OR a relative path interpreted from `callerDirname`. Use
+ *   the same relative path you'd use in a `require()` call from the test file.
+ * @param {string} callerDirname - The calling test file's `__dirname`. Required
+ *   so that the helper can resolve relative paths from the caller's location,
+ *   not from `tests/mock-cp.js`. Pass `__dirname` from your test file.
  * @returns {{
  *   setImpl: (fn: (...args: any[]) => any) => void,
  *   setReturnValue: (value: any) => void,
@@ -83,28 +89,20 @@ const { mock } = require('node:test');
  *   restore: () => void,
  * }}
  */
-function mockExecFileSync(targetModulePath) {
-  // Resolve the target module path against the *caller's* directory, not this
-  // helper's directory. We use require.resolve from the caller's perspective
-  // by walking back up via require's lookup. Simplest reliable approach:
-  // accept that callers pass paths relative to tests/<subdir>/<file>.test.js
-  // by including the relative prefix (e.g. '../../scripts/lib/foo'), then
-  // resolve from this file's location upward.
-  //
-  // tests/mock-cp.js sits at tests/, so '../scripts/lib/foo' from a caller in
-  // tests/lib/<file>.test.js becomes 'scripts/lib/foo' from project root. The
-  // simplest robust approach: resolve from PACKAGE_ROOT (one level above this
-  // file) using the path the caller provided, after stripping leading '../'.
-  //
-  // We avoid that fragility by requiring callers to use a path that resolves
-  // correctly via require.resolve from THIS file. Concretely: callers in
-  // tests/lib/ should pass '../../scripts/lib/foo' which resolves the same
-  // way from tests/mock-cp.js as it would from tests/lib/anything.
-  //
-  // This works because tests/mock-cp.js and tests/lib/* are siblings under
-  // tests/, so '../../<x>' from either file points to the same '<x>'.
+function mockExecFileSync(targetModulePath, callerDirname) {
+  if (typeof callerDirname !== 'string') {
+    throw new TypeError(
+      'mockExecFileSync requires callerDirname (pass __dirname from your test file)',
+    );
+  }
+
+  // Resolve the target module path from the caller's directory. This makes
+  // mockExecFileSync('../../scripts/lib/foo', __dirname) work the same way
+  // as require('../../scripts/lib/foo') from the caller — independent of
+  // where mock-cp.js itself lives. Without this explicit caller location,
+  // any caller outside tests/lib/ would silently fail to resolve.
   const resolved = require.resolve(targetModulePath, {
-    paths: [path.join(__dirname, 'lib')],
+    paths: [callerDirname],
   });
 
   // Step 1: drop any cached copy so the next require() re-evaluates the
@@ -114,17 +112,16 @@ function mockExecFileSync(targetModulePath) {
   // Step 2: install the spy on cp.execFileSync. Default impl returns '' so
   // calls without an explicit setImpl don't crash. Tests almost always call
   // setImpl/setReturnValue immediately, but the default keeps unset paths
-  // safe rather than throwing TypeError.
+  // safe rather than throwing TypeError. Capture the spy reference returned
+  // by mock.method so we can restore ONLY this spy in restore() — using
+  // mock.restoreAll() would destroy any sibling spies the test installed
+  // (e.g. a console.warn spy alongside the cp spy).
   let currentImpl = () => '';
-  mock.method(cp, 'execFileSync', (...args) => currentImpl(...args));
+  const spy = mock.method(cp, 'execFileSync', (...args) => currentImpl(...args));
 
   // Step 3: load the target module fresh — it will capture the spied
   // execFileSync at require-time.
   const targetModule = require(resolved);
-
-  // The MockFunctionContext for our spy is exposed via cp.execFileSync.mock
-  // because mock.method replaces the property in place.
-  const spy = cp.execFileSync;
 
   return {
     setImpl(fn) {
@@ -140,7 +137,7 @@ function mockExecFileSync(targetModulePath) {
     },
 
     calls() {
-      // node:test mock.calls() returns array of { arguments, result, ... }
+      // node:test mock.calls is an array of { arguments, result, ... }
       // entries; we project to [cmd, args, opts] tuples to match the shape
       // the legacy tests expected from jest.mock.calls.
       return spy.mock.calls.map((call) => call.arguments);
@@ -158,17 +155,15 @@ function mockExecFileSync(targetModulePath) {
     },
 
     restore() {
-      // node:test mock.restoreAll() reverts all installed mocks. Since this
-      // helper installs exactly one spy per call, restoreAll is the right
-      // tool. Callers using multiple helpers in one test should still be
-      // safe because mock.restoreAll restores ALL mocks installed via
-      // node:test/mock — that's the semantic we want for cleanup.
-      mock.restoreAll();
+      // Restore ONLY this spy, not all mocks installed in the test. Using
+      // mock.restoreAll() here would destroy sibling spies the test set up
+      // (e.g. console.warn) and produce confusing "spy not called" failures
+      // in unrelated assertions.
+      spy.mock.restore();
       // Drop the cached target module so the next test that calls
       // mockExecFileSync re-loads it against a fresh spy. Without this, a
       // second beforeEach would re-spy cp but the cached target module
-      // would still hold a reference to the *previous* spy (which has been
-      // restored), leading to confusing "spy not called" failures.
+      // would still hold a reference to the *previous* (now-restored) spy.
       delete require.cache[resolved];
     },
   };
