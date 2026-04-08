@@ -10,7 +10,7 @@ So that I get contextual explanations and can interactively explore my initiativ
 
 ## Acceptance Criteria
 
-1. **Given** the existing skill at `.claude/skills/bmad-portfolio-status/` (currently a 5-line thin wrapper) **When** the upgrade is complete **Then** it has full BMAD workflow skill anatomy: `SKILL.md` (frontmatter only), `workflow.md` (orchestration), and `steps/` directory with 3 step files. The source-of-truth lives at `_bmad/bmm/4-implementation/bmad-portfolio-status/`.
+1. **Given** the existing skill at `.claude/skills/bmad-portfolio-status/` (currently a 5-line thin wrapper) **When** the upgrade is complete **Then** it has full BMAD workflow skill anatomy: `SKILL.md` (frontmatter only), `workflow.md` (orchestration), and `steps/` directory with 3 step files. The source-of-truth lives at `_bmad/bme/_artifacts/workflows/bmad-portfolio-status/`.
 
 2. **Given** the operator invokes the skill via slash command or fuzzy match (e.g. "show portfolio", "portfolio status") **When** Step 1 (Scan & Present) executes **Then** the agent shells out to `node scripts/lib/portfolio/portfolio-engine.js --markdown`, captures the markdown table, and presents it to the operator with two leading sentences explaining what the table shows (initiative, phase, status, next action).
 
@@ -34,7 +34,7 @@ So that I get contextual explanations and can interactively explore my initiativ
 
 7. **Given** the engine fails (non-zero exit, missing taxonomy.yaml, etc.) **When** the error surfaces **Then** the agent presents the raw error to the operator and exits gracefully. The portfolio engine already produces clear errors (e.g. "taxonomy.yaml not found — run convoke-migrate-artifacts or convoke-update to create"); the skill should NOT swallow them.
 
-8. **Given** the new skill needs to be discoverable **When** registration is complete **Then** the existing entry in `_bmad/_config/skill-manifest.csv` for `bmad-portfolio-status` is **updated** to point at the new source path `_bmad/bmm/4-implementation/bmad-portfolio-status/SKILL.md` (currently the manifest may not have an entry; if not, add one with `module: bmm` and `install_to_bmad: "true"`).
+8. **Given** the new skill needs to be discoverable **When** registration is complete **Then** the existing entry in `_bmad/_config/skill-manifest.csv` for `bmad-portfolio-status` is **updated** to point at the new source path `_bmad/bme/_artifacts/workflows/bmad-portfolio-status/SKILL.md` (currently the manifest may not have an entry; if not, add one with `module: bme` and `install_to_bmad: "true"`). Also update `_bmad/bme/_artifacts/config.yaml` to add the new workflow entry alongside `bmad-migrate-artifacts`.
 
 9. **Given** the implementation is complete **When** `npm run check` runs **Then** all 5 stages pass (Lint, Unit, Integration, Jest lib, Coverage). No new tests are required for the skill itself (markdown only).
 
@@ -43,10 +43,10 @@ So that I get contextual explanations and can interactively explore my initiativ
 ## Tasks / Subtasks
 
 - [ ] **Task 1: Create skill source directory** (AC: #1)
-  - [ ] 1.1 Create `_bmad/bmm/4-implementation/bmad-portfolio-status/` (the source-of-truth location).
-  - [ ] 1.2 Create `_bmad/bmm/4-implementation/bmad-portfolio-status/SKILL.md` (see **SKILL.md Template** in Dev Notes).
-  - [ ] 1.3 Create `_bmad/bmm/4-implementation/bmad-portfolio-status/workflow.md` (see **workflow.md Template**).
-  - [ ] 1.4 Create `_bmad/bmm/4-implementation/bmad-portfolio-status/steps/` directory.
+  - [ ] 1.1 Create `_bmad/bme/_artifacts/workflows/bmad-portfolio-status/` (the source-of-truth location). The `_bmad/bme/_artifacts/` submodule was created in Story 6.4 (re-housing decision); see its `config.yaml` for the existing `bmad-migrate-artifacts` workflow entry — Task 6 will add a sibling entry for this skill.
+  - [ ] 1.2 Create `_bmad/bme/_artifacts/workflows/bmad-portfolio-status/SKILL.md` (see **SKILL.md Template** in Dev Notes).
+  - [ ] 1.3 Create `_bmad/bme/_artifacts/workflows/bmad-portfolio-status/workflow.md` (see **workflow.md Template**).
+  - [ ] 1.4 Create `_bmad/bme/_artifacts/workflows/bmad-portfolio-status/steps/` directory.
   - [ ] 1.5 Create the three step files: `step-01-scan.md`, `step-02-explore.md`, `step-03-recommend.md`.
   - [ ] 1.6 The existing `.claude/skills/bmad-portfolio-status/workflow.md` will be replaced by Story 6.6's refresh-installation logic when it copies the new source files. **Do NOT delete the existing `.claude/skills/` file in this story** — Story 6.6 owns the cleanup.
 
@@ -84,15 +84,22 @@ So that I get contextual explanations and can interactively explore my initiativ
 
 - [ ] **Task 6: Manifest registration** (AC: #8)
   - [ ] 6.1 Open `_bmad/_config/skill-manifest.csv` and check for an existing `bmad-portfolio-status` row.
-  - [ ] 6.2 If a row exists: update its `path` column to `_bmad/bmm/4-implementation/bmad-portfolio-status/SKILL.md`.
+  - [ ] 6.2 If a row exists: update its `path` column to `_bmad/bme/_artifacts/workflows/bmad-portfolio-status/SKILL.md` and `module` column to `bme`.
   - [ ] 6.3 If no row exists: add this new row at the end of the file:
     ```csv
-    "bmad-portfolio-status","bmad-portfolio-status","Show a portfolio view of all initiatives with phase, status, and next actions. Use when the user says ""show portfolio"" or ""portfolio status""","bmm","_bmad/bmm/4-implementation/bmad-portfolio-status/SKILL.md","true"
+    "bmad-portfolio-status","bmad-portfolio-status","Show a portfolio view of all initiatives with phase, status, and next actions. Use when the user says ""show portfolio"" or ""portfolio status""","bme","_bmad/bme/_artifacts/workflows/bmad-portfolio-status/SKILL.md","true"
     ```
   - [ ] 6.4 Verify the row parses cleanly and has 6 columns.
+  - [ ] 6.5 Open `_bmad/bme/_artifacts/config.yaml` and add a sibling workflow entry below `bmad-migrate-artifacts`:
+    ```yaml
+      - name: bmad-portfolio-status
+        entry: workflows/bmad-portfolio-status/workflow.md
+        standalone: true
+    ```
+  - [ ] 6.6 Remove the comment line `# Story 6.5 will add bmad-portfolio-status when its files land.` from `_bmad/bme/_artifacts/config.yaml` since it's now obsolete.
 
 - [ ] **Task 7: Verification** (AC: #9)
-  - [ ] 7.1 Verify all source files exist at `_bmad/bmm/4-implementation/bmad-portfolio-status/`.
+  - [ ] 7.1 Verify all source files exist at `_bmad/bme/_artifacts/workflows/bmad-portfolio-status/`.
   - [ ] 7.2 Run `npm run check` and confirm all 5 stages pass.
   - [ ] 7.3 Manually invoke the new skill in a fresh Claude Code session and walk through the 3-step flow (scan, explore at least 2 menu options, get recommendations). Confirm the conversational UX is materially better than the existing 5-line thin wrapper.
 
@@ -119,7 +126,7 @@ The operator can chain explorations as many times as they want. This is a delibe
 If the operator filters to one initiative in Step 2, that filtered view shouldn't drive the final recommendations — the recommendations should reflect the full portfolio state. The agent must remember the Step 1 output across the loop.
 
 **Decision 5: Replace, don't extend.**
-The existing `.claude/skills/bmad-portfolio-status/workflow.md` (5 lines) is the wrong shape for what we need. The new source at `_bmad/bmm/4-implementation/bmad-portfolio-status/` is a clean rewrite. Story 6.6 will handle the cleanup of the old file via `refresh-installation.js`.
+The existing `.claude/skills/bmad-portfolio-status/workflow.md` (5 lines) is the wrong shape for what we need. The new source at `_bmad/bme/_artifacts/workflows/bmad-portfolio-status/` is a clean rewrite. Story 6.6 will handle the cleanup of the old file via `refresh-installation.js`.
 
 ### Engine Output Reference
 
@@ -137,7 +144,7 @@ The skill's parser only needs to recognize these patterns to drive the recommend
 
 ### SKILL.md Template
 
-Create `_bmad/bmm/4-implementation/bmad-portfolio-status/SKILL.md` with this exact content:
+Create `_bmad/bme/_artifacts/workflows/bmad-portfolio-status/SKILL.md` with this exact content:
 
 ```markdown
 ---
@@ -167,11 +174,11 @@ Same as Story 6.4 — see that story's "Step File Anatomy Reference" section. Ea
 
 | File | Action | Purpose |
 |------|--------|---------|
-| `_bmad/bmm/4-implementation/bmad-portfolio-status/SKILL.md` | Create | Skill entry point |
-| `_bmad/bmm/4-implementation/bmad-portfolio-status/workflow.md` | Create | Workflow orchestration |
-| `_bmad/bmm/4-implementation/bmad-portfolio-status/steps/step-01-scan.md` | Create | Scan & present |
-| `_bmad/bmm/4-implementation/bmad-portfolio-status/steps/step-02-explore.md` | Create | Explore loop |
-| `_bmad/bmm/4-implementation/bmad-portfolio-status/steps/step-03-recommend.md` | Create | Recommendations |
+| `_bmad/bme/_artifacts/workflows/bmad-portfolio-status/SKILL.md` | Create | Skill entry point |
+| `_bmad/bme/_artifacts/workflows/bmad-portfolio-status/workflow.md` | Create | Workflow orchestration |
+| `_bmad/bme/_artifacts/workflows/bmad-portfolio-status/steps/step-01-scan.md` | Create | Scan & present |
+| `_bmad/bme/_artifacts/workflows/bmad-portfolio-status/steps/step-02-explore.md` | Create | Explore loop |
+| `_bmad/bme/_artifacts/workflows/bmad-portfolio-status/steps/step-03-recommend.md` | Create | Recommendations |
 | [_bmad/_config/skill-manifest.csv](_bmad/_config/skill-manifest.csv) | Edit | Add or update bmad-portfolio-status row |
 
 **Do NOT modify:**
