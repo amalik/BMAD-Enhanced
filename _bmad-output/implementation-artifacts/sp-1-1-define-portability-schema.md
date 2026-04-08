@@ -1,6 +1,6 @@
 # Story SP-1.1: Define Portability Schema
 
-Status: review
+Status: done
 
 ## Story
 
@@ -175,6 +175,7 @@ claude-opus-4-6 (Amelia / dev agent)
 **Modified:**
 - `_bmad/_config/skill-manifest.csv` — added 3 columns to header, padded all 101 data rows
 - `scripts/update/lib/refresh-installation.js` — updated runtime CSV writer to produce 9-column rows
+- `tests/unit/refresh-installation-enhance.test.js` — updated SK_MANIFEST_HEADER fixture to 9 columns (P4 from code review)
 
 **Created:**
 - `_bmad/_config/portability-schema.md` — schema reference document
@@ -185,3 +186,4 @@ claude-opus-4-6 (Amelia / dev agent)
 | Date | Change |
 |------|--------|
 | 2026-04-08 | Story sp-1-1 implemented. Added tier/intent/dependencies columns to skill-manifest.csv (101 rows padded). Created portability-schema.md with full taxonomy, tier rules, dependency notation, and 3 worked examples. Added 5 schema validation tests. Updated refresh-installation.js writer for forward compatibility. All ACs satisfied. |
+| 2026-04-08 | Code review complete (Blind Hunter + Edge Case Hunter + Acceptance Auditor). Acceptance Auditor: all 8 ACs PASS. Applied 5 patches: P1 (CRLF/BOM tolerance + whitespace-line filter in test loader), P2 (RFC-4180-aware CSV parser unifying countCsvColumns + parseCsvRow with escaped-quote handling), P3 (folded into P1), P4 (updated stale 6-column SK_MANIFEST_HEADER fixture in tests/unit/refresh-installation-enhance.test.js to 9 columns), P5 (clarified portability-schema.md "empty dependencies is valid" rule + corrected Story 1.3 description to not require non-empty dependencies). Deferred: D1-D4 (vacuous test pass, dep coverage, column-count guard, idempotency guard) — all appropriate for future stories. Dismissed 3 false positives. Re-ran tests/lib/portability-schema.test.js (5/5 pass) and tests/unit/refresh-installation-enhance.test.js (20/20 pass). Story marked done. |
