@@ -50,7 +50,7 @@ These category strings are stable and **MUST** match exactly between the manifes
 
 ## Dependencies
 
-The `dependencies` column is a semicolon-delimited list of dependency identifiers. Empty string is valid for skills with no dependencies (typical for `standalone` tier).
+The `dependencies` column is a semicolon-delimited list of dependency identifiers. **Empty string is the canonical value for skills with no dependencies** (always the case for `standalone` tier; possible for `light-deps` and `pipeline` if they truly need none, though uncommon). Story 1.3's validator treats empty `dependencies` as valid in all cases — it does not require a non-empty value.
 
 ### Notation conventions
 
@@ -113,7 +113,7 @@ The exporter uses this list to:
 ## Schema validation
 
 Story 1.3 (`sp-1-3-validate-classification-completeness`) will add a script that:
-- Verifies every row has non-empty values in `tier`, `intent`, and `dependencies` (where applicable)
+- Verifies every row has non-empty values in `tier` and `intent` (the `dependencies` column may be empty)
 - Validates dependency file paths resolve to existing files
 - Validates config keys exist in the relevant module config
 - Validates skill name dependencies exist in the manifest
