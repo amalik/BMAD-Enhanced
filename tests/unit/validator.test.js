@@ -728,6 +728,47 @@ describe('validateArtifactsModule', () => {
     assert.equal(result.error, null);
     await fs.remove(dir);
   });
+
+  it('aggregates multiple failures into a single error string', async () => {
+    const dir = await fs.mkdtemp(path.join(os.tmpdir(), 'convoke-art-multi-'));
+    await createValidArtifacts(dir);
+    // Break BOTH workflows: remove portfolio wrapper and migrate entry point
+    await fs.remove(path.join(dir, '.claude/skills/bmad-portfolio-status'));
+    await fs.remove(path.join(dir, '_bmad/bme/_artifacts/workflows/bmad-migrate-artifacts/workflow.md'));
+
+    const result = await validateArtifactsModule(dir);
+    assert.equal(result.passed, false);
+    // Should contain BOTH failures separated by "; "
+    assert.ok(result.error.includes('workflow entry missing for bmad-migrate-artifacts'),
+      `expected migrate entry failure, got: ${result.error}`);
+    assert.ok(result.error.includes('skill wrapper missing for bmad-portfolio-status'),
+      `expected portfolio wrapper failure, got: ${result.error}`);
+    const failureCount = result.error.split('; ').length;
+    assert.ok(failureCount >= 2, `expected ≥2 aggregated failures, got: ${result.error}`);
+    await fs.remove(dir);
+  });
+
+  it('skips wrapper/entry checks for non-standalone workflows', async () => {
+    // Mirror the refresh-installation contract: non-standalone workflows are NOT
+    // installed by section 6d, so the validator must NOT require their wrapper.
+    const dir = await fs.mkdtemp(path.join(os.tmpdir(), 'convoke-art-nonstd-'));
+    const artDir = path.join(dir, '_bmad/bme/_artifacts');
+    await fs.ensureDir(artDir);
+    const config = {
+      name: 'artifacts', version: '1.0.0',
+      workflows: [
+        // Non-standalone workflow with NO entry point and NO wrapper — must still pass
+        { name: 'future-menu-patch-workflow', entry: 'workflows/never-installed/workflow.md' }
+      ]
+    };
+    await fs.writeFile(path.join(artDir, 'config.yaml'), yaml.dump(config), 'utf8');
+
+    const result = await validateArtifactsModule(dir);
+    assert.equal(result.passed, true,
+      `non-standalone workflow should pass validation; got: ${result.error}`);
+    assert.equal(result.error, null);
+    await fs.remove(dir);
+  });
 });
 
 // === validateSkillMd ===
