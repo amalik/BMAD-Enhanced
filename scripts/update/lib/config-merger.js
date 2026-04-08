@@ -2,12 +2,22 @@
 
 const fs = require('fs-extra');
 const yaml = require('js-yaml');
+const YAML = require('yaml'); // Comment-preserving YAML library (ag-7-1: I29). Used by mergeConfig + writeConfig to preserve comments across the merge round-trip.
 const { AGENT_IDS, WORKFLOW_NAMES } = require('./agent-registry');
+const { assertVersion } = require('./utils');
 
 /**
  * Config Merger for Convoke
  * Smart YAML merging preserving user settings
+ *
+ * ag-7-1 (I29): mergeConfig now returns a sentinel-tagged structure that carries
+ * the parsed YAML.Document alongside the merged plain-object form. writeConfig
+ * detects the sentinel and writes via the Document API (preserving comments) when
+ * possible, falling back to js-yaml.dump for backwards compatibility with any
+ * caller that passes a bare object.
  */
+
+const MERGED_DOC_SENTINEL = Symbol.for('convoke.config-merger.docMerged');
 
 /**
  * Merge current config with new template while preserving user preferences.
@@ -18,20 +28,32 @@ const { AGENT_IDS, WORKFLOW_NAMES } = require('./agent-registry');
  * @param {string} currentConfigPath - Path to current config.yaml
  * @param {string} newVersion - New version to set
  * @param {object} updates - Updates to apply (agents, workflows, etc.)
- * @returns {Promise<object>} Merged config object
+ * @returns {Promise<object>} Merged config object (with hidden Document sentinel for comment preservation)
  */
 async function mergeConfig(currentConfigPath, newVersion, updates = {}) {
+  assertVersion(newVersion, 'config-merger'); // ag-7-1: I30 — fail fast on undefined/null/empty version
+
   let current = {};
+  let doc = null; // YAML.Document for comment preservation
 
   // Read current config if it exists
   if (fs.existsSync(currentConfigPath)) {
     try {
       const currentContent = fs.readFileSync(currentConfigPath, 'utf8');
-      const parsed = yaml.load(currentContent);
-      current = (parsed && typeof parsed === 'object') ? parsed : {};
+      doc = YAML.parseDocument(currentContent);
+      // Note: YAML.parseDocument does not throw on syntax errors — check doc.errors
+      if (doc.errors && doc.errors.length > 0) {
+        console.warn(`Warning: Could not parse current config.yaml (${doc.errors[0].message}), using defaults`);
+        current = {};
+        doc = null;
+      } else {
+        const parsed = doc.toJSON();
+        current = (parsed && typeof parsed === 'object') ? parsed : {};
+      }
     } catch (_error) {
       console.warn('Warning: Could not parse current config.yaml, using defaults');
       current = {};
+      doc = null;
     }
   }
 
@@ -78,6 +100,18 @@ async function mergeConfig(currentConfigPath, newVersion, updates = {}) {
   // Ensure migration_history exists
   if (!merged.migration_history) {
     merged.migration_history = [];
+  }
+
+  // ag-7-1 (I29): attach the Document for comment-preserving writes.
+  // writeConfig detects the sentinel and writes via doc.toString() when set;
+  // otherwise it falls back to js-yaml.dump (backwards compat).
+  if (doc) {
+    Object.defineProperty(merged, MERGED_DOC_SENTINEL, {
+      value: doc,
+      enumerable: false,
+      writable: false,
+      configurable: false
+    });
   }
 
   return merged;
@@ -194,19 +228,68 @@ function validateConfig(config) {
 }
 
 /**
- * Write config to file
+ * Write config to file.
+ * If the config object carries the merged-doc sentinel from mergeConfig (ag-7-1),
+ * write via the Document API to preserve comments. Otherwise fall back to
+ * js-yaml.dump for backwards compatibility.
+ *
  * @param {string} configPath - Path to write config
- * @param {object} config - Config object
+ * @param {object} config - Config object (optionally carrying a Document sentinel)
  * @returns {Promise<void>}
  */
 async function writeConfig(configPath, config) {
-  const yamlContent = yaml.dump(config, {
-    indent: 2,
-    lineWidth: -1, // Don't wrap long lines
-    noRefs: true
-  });
+  const doc = config[MERGED_DOC_SENTINEL];
+
+  let yamlContent;
+  if (doc) {
+    // Comment-preserving path: sync the merged structure into the Document via per-field
+    // doc.set() calls. Replacing doc.contents wholesale would blow away comments attached
+    // to the top-level mapping (e.g., header comments above the first key).
+    // Per-field updates preserve all comment metadata anchored to the document or to fields.
+    const merged = stripSentinel(config);
+
+    // Update existing fields and add new ones
+    for (const key of Object.keys(merged)) {
+      doc.set(key, merged[key]);
+    }
+    // Remove keys that were in the original doc but are no longer in the merged structure
+    if (doc.contents && typeof doc.contents.items !== 'undefined') {
+      const mergedKeys = new Set(Object.keys(merged));
+      const docKeys = doc.contents.items.map(item => String(item.key.value));
+      for (const docKey of docKeys) {
+        if (!mergedKeys.has(docKey)) {
+          doc.delete(docKey);
+        }
+      }
+    }
+
+    yamlContent = doc.toString({ lineWidth: 0 });
+  } else {
+    // Backwards-compat path: bare object, no comments to preserve.
+    yamlContent = yaml.dump(config, {
+      indent: 2,
+      lineWidth: -1, // Don't wrap long lines
+      noRefs: true
+    });
+  }
 
   await fs.writeFile(configPath, yamlContent, 'utf8');
+}
+
+/**
+ * Return a plain-object copy of config with the sentinel symbol stripped,
+ * so doc.createNode doesn't try to serialize it.
+ * @param {object} config
+ * @returns {object}
+ */
+function stripSentinel(config) {
+  // Symbol-keyed properties are not enumerable in our case (defineProperty above),
+  // but as a safety net we explicitly clone only string-keyed enumerable fields.
+  const plain = {};
+  for (const key of Object.keys(config)) {
+    plain[key] = config[key];
+  }
+  return plain;
 }
 
 /**
