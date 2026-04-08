@@ -3,6 +3,7 @@
 const fs = require('fs-extra');
 const path = require('path');
 const yaml = require('js-yaml');
+const YAML = require('yaml'); // Comment-preserving YAML library (ag-7-1: I10). Used for the WRITE round-trip; js-yaml stays for the post-write read-back validation.
 const { checkDirtyTree } = require('./registry-writer');
 
 /** @typedef {import('../types/factory-types').CreatorResult} CreatorResult */
@@ -42,10 +43,17 @@ async function appendConfigAgent(newAgentId, configPath, options = {}) {
     return { success: false, filePath: configPath, errors: [`Cannot read config: ${err.message}`] };
   }
 
-  // --- Parse and validate ---
+  // --- Parse and validate (ag-7-1: I10 — use comment-preserving YAML.parseDocument) ---
+  // Note: YAML.parseDocument does NOT throw on syntax errors; it returns a Document
+  // with .errors populated. Check both throw AND doc.errors to match js-yaml semantics.
+  let doc;
   let config;
   try {
-    config = yaml.load(content);
+    doc = YAML.parseDocument(content);
+    if (doc.errors && doc.errors.length > 0) {
+      return { success: false, filePath: configPath, errors: [`Cannot parse config YAML: ${doc.errors[0].message}`] };
+    }
+    config = doc.toJSON();
   } catch (err) {
     return { success: false, filePath: configPath, errors: [`Cannot parse config YAML: ${err.message}`] };
   }
@@ -59,16 +67,22 @@ async function appendConfigAgent(newAgentId, configPath, options = {}) {
     return { success: true, filePath: configPath, errors: [], skipped: 'agent already in config' };
   }
 
-  // --- Append ---
-  config.agents.push(newAgentId);
+  // --- Append (mutate via Document API to preserve comments) ---
+  const agentsNode = doc.get('agents');
+  if (agentsNode && typeof agentsNode.add === 'function') {
+    agentsNode.add(newAgentId);
+  } else {
+    // Fallback: create a new sequence with the appended item
+    doc.set('agents', [...config.agents, newAgentId]);
+  }
 
   // --- Atomic write (.tmp → validate → rename) ---
   const tmpPath = configPath + '.tmp';
   try {
-    const newContent = yaml.dump(config, { indent: 2, lineWidth: -1, noRefs: true });
+    const newContent = doc.toString({ lineWidth: 0 });
     await fs.writeFile(tmpPath, newContent, 'utf8');
 
-    // Verify parse of tmp file
+    // Verify parse of tmp file (ag-7-1 Task 5.4: read-back stays on js-yaml — checks structure only, not comments)
     const readBack = yaml.load(await fs.readFile(tmpPath, 'utf8'));
     if (!readBack || !Array.isArray(readBack.agents) || !readBack.agents.includes(newAgentId)) {
       await fs.remove(tmpPath);
@@ -120,10 +134,17 @@ async function appendConfigWorkflow(newWorkflowName, configPath, options = {}) {
     return { success: false, filePath: configPath, errors: [`Cannot read config: ${err.message}`] };
   }
 
-  // --- Parse and validate ---
+  // --- Parse and validate (ag-7-1: I10 — use comment-preserving YAML.parseDocument) ---
+  // Note: YAML.parseDocument does NOT throw on syntax errors; it returns a Document
+  // with .errors populated. Check both throw AND doc.errors to match js-yaml semantics.
+  let doc;
   let config;
   try {
-    config = yaml.load(content);
+    doc = YAML.parseDocument(content);
+    if (doc.errors && doc.errors.length > 0) {
+      return { success: false, filePath: configPath, errors: [`Cannot parse config YAML: ${doc.errors[0].message}`] };
+    }
+    config = doc.toJSON();
   } catch (err) {
     return { success: false, filePath: configPath, errors: [`Cannot parse config YAML: ${err.message}`] };
   }
@@ -137,16 +158,21 @@ async function appendConfigWorkflow(newWorkflowName, configPath, options = {}) {
     return { success: true, filePath: configPath, errors: [], skipped: 'workflow already in config' };
   }
 
-  // --- Append ---
-  config.workflows.push(newWorkflowName);
+  // --- Append (mutate via Document API to preserve comments) ---
+  const workflowsNode = doc.get('workflows');
+  if (workflowsNode && typeof workflowsNode.add === 'function') {
+    workflowsNode.add(newWorkflowName);
+  } else {
+    doc.set('workflows', [...config.workflows, newWorkflowName]);
+  }
 
   // --- Atomic write (.tmp → validate → rename) ---
   const tmpPath = configPath + '.tmp';
   try {
-    const newContent = yaml.dump(config, { indent: 2, lineWidth: -1, noRefs: true });
+    const newContent = doc.toString({ lineWidth: 0 });
     await fs.writeFile(tmpPath, newContent, 'utf8');
 
-    // Verify parse of tmp file
+    // Verify parse of tmp file (ag-7-1 Task 5.4: read-back stays on js-yaml — checks structure only, not comments)
     const readBack = yaml.load(await fs.readFile(tmpPath, 'utf8'));
     if (!readBack || !Array.isArray(readBack.workflows) || !readBack.workflows.includes(newWorkflowName)) {
       await fs.remove(tmpPath);
