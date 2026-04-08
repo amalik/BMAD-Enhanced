@@ -70,6 +70,6 @@ export default [
     }
   },
   {
-    ignores: ["node_modules/", "_bmad/", "_bmad-output/", "_quint/", "coverage/"]
+    ignores: ["node_modules/", "_bmad/", "_bmad-output/", "_quint/", "coverage/", "tests/team-factory/golden/"]
   }
 ];
