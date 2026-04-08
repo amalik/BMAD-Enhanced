@@ -9,6 +9,7 @@
     "_bmad/bme/_vortex/",
     "_bmad/bme/_enhance/",
     "_bmad/bme/_gyre/",
+    "_bmad/bme/_artifacts/",
     "INSTALLATION.md",
     "UPDATE-GUIDE.md",
     "CHANGELOG.md",
