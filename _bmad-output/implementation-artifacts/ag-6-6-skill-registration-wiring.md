@@ -300,3 +300,56 @@ claude-opus-4-6 (1M context)
 ### Change Log
 
 - 2026-04-08: Wired `_bmad/bme/_artifacts/` into install, refresh, and validation pipelines. The `bmad-migrate-artifacts` and `bmad-portfolio-status` skills now ship as part of `convoke-update` / `convoke-install`, replacing the obsolete pre-Story-6.5 thin wrapper and closing Epic 6's loop. (claude-opus-4-6, 1M ctx)
+- 2026-04-08: Code review (`bmad-code-review`, 3 parallel reviewers) — Acceptance Auditor 14/16 SATISFIED, 2 UNCLEAR (#13/#14 runtime-only, acknowledged). 2 patches applied:
+  1. **Validator now aggregates failures** across all workflows (mirrors `validateEnhanceModule`) instead of returning on first failure — operators see every problem in one `convoke-doctor` run.
+  2. **Validator skips wrapper/entry checks for non-standalone workflows** — closes a contract gap where `refresh-installation.js` section 6d skips non-standalone workflows but the validator was still requiring their wrapper, causing a future-compat trap.
+  Added 2 regression tests (`aggregates multiple failures`, `skips wrapper/entry checks for non-standalone workflows`). All 5 stages of `npm run check` pass; 75 validator tests pass total.
+
+## Senior Developer Review (AI)
+
+**Review date:** 2026-04-08
+**Reviewers:** Blind Hunter (adversarial), Edge Case Hunter (boundary analysis), Acceptance Auditor (spec verification)
+**Outcome:** Approve with patches
+
+### Summary
+
+3 parallel reviewers analyzed the diff (≈603 lines across 7 files). Acceptance Auditor verified 14/16 ACs SATISFIED outright; the remaining 2 (#13 doctor smoke, #14 Claude Code session discovery) are runtime-only and were acknowledged in Completion Notes. Blind Hunter and Edge Case Hunter together raised 8 unique findings; after triage, 2 were applied as patches, 5 deferred (pre-existing patterns shared with Enhance, or out of scope), 1 dismissed (false positive on `{project-root}` placeholder).
+
+### Action Items (all resolved)
+
+- [x] **[High] Reconcile validator/refresh contract on `standalone` flag.** `refresh-installation.js` section 6d skips non-standalone workflows (logs warning, `continue`s), but `validateArtifactsModule` was still requiring `.claude/skills/{wf.name}/SKILL.md` for every workflow. Future trap: any non-standalone workflow added to `_artifacts/config.yaml` would brick `convoke-doctor`. **Fix:** validator now skips wrapper and entry checks for `wf.standalone !== true`. Regression test added (`skips wrapper/entry checks for non-standalone workflows`). Source: blind+edge.
+
+- [x] **[Med] Validator first-failure-wins inconsistent with Enhance aggregation.** `validateEnhanceModule` aggregates failures into a `failures[]` array and joins with `"; "` so a single doctor run reports every problem. `validateArtifactsModule` was returning on first failure, forcing iterative fix cycles. **Fix:** refactored to use the same `failures[]` aggregation pattern. Regression test added (`aggregates multiple failures into a single error string`). Source: blind+edge.
+
+### Deferred (5 — non-blocking)
+
+These are real concerns but either match the established Enhance pattern (consistent precedent across the codebase) or fall outside Story 6.6's scope. They should feed into the Epic 6 retrospective and possibly a follow-up backlog item.
+
+- **YAML comments stripped on version stamp** — `yaml.load → mutate → yaml.dump` strips the documentation comment in `_artifacts/config.yaml`. Identical pattern in Enhance line 149-151. Cross-cutting fix would require a comment-preserving YAML library (or a regex stamper) and should land in one PR for both modules. *Edge Case Hunter*.
+
+- **Workflow name not namespaced + no orphan-wrapper cleanup** — Unlike Enhance (which prefixes with `bmad-enhance-`), Artifacts uses `workflow.name` verbatim. Two consequences: (a) low-probability collision risk if a third-party skill installs at `.claude/skills/bmad-migrate-artifacts/`, (b) removing a workflow from config.yaml leaves an orphan wrapper forever. The verbatim-name choice is intentional per spec AC #11; an orphan-cleanup pass would mirror the agent stale-skill sweep at refresh-installation.js:553-567 and is its own story. *Edge Case Hunter*.
+
+- **Dev mode (`isSameRoot`) skips wrapper generation** — Section 6d skips skill wrapper generation when source === destination. This is consistent with Enhance's identical gate (refresh-installation.js:595) and mirrors the explicit `isSameRoot` precedent. The dev-mode skip is documented in the changes log. *Blind Hunter*.
+
+- **`convoke-doctor` doesn't validate skill wrappers, only source tree** — `convoke-doctor` currently calls `checkModuleConfig` / `checkModuleAgents` / `checkModuleWorkflows` per discovered module, none of which check `.claude/skills/{name}/SKILL.md`. So a partial install where 2c succeeded but 6d silently failed (e.g., EACCES) would be reported healthy by the doctor — even though `validateArtifactsModule` would catch it. Bridging the doctor to the validator is a cross-module change and belongs in a separate platform story. *Edge Case Hunter*.
+
+- **Version stamp has no try/catch** — `acContent.version = version; fs.writeFileSync(...)` is unguarded. Identical pattern in Enhance line 148-151. If `getPackageVersion()` ever returned `undefined`, both modules would corrupt their config the same way. Cross-cutting fix. *Blind Hunter*.
+
+### Dismissed (1)
+
+- **`{project-root}` literal token in SKILL.md** — False positive. The Claude Code harness expands `{project-root}` at runtime; identical syntax is in production use in `bmad-enhance-initiatives-backlog/SKILL.md` and works.
+
+### Verification After Patches
+
+- `node --test tests/unit/validator.test.js` — **75/75 pass** (was 71, +4: 2 originally added by dev, 2 added by review)
+- `npm run check` — **all 5 stages PASS** (lint, unit, integration, jest lib, coverage)
+- Coverage: **91.61%** (up from 91.59%)
+
+### Files Modified by Review
+
+- `scripts/update/lib/validator.js` — refactored `validateArtifactsModule` to aggregate failures and skip non-standalone workflows
+- `tests/unit/validator.test.js` — added 2 regression tests covering the patches
+
+### Recommendation
+
+**Approve.** Story 6.6 is complete and load-bearing. The 5 deferred findings should be triaged into the backlog (most cross-cut with Enhance and warrant a single platform-wide PR). Epic 6 retrospective is unblocked.
