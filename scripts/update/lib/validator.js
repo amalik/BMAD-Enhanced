@@ -505,7 +505,10 @@ async function validateArtifactsModule(projectRoot) {
       return check;
     }
 
-    // Check 2: Config parse
+    const failures = [];
+
+    // Check 2: Config parse — bail early if config is unreadable, since later checks
+    // depend on a parsed workflows array.
     const configPath = path.join(artifactsDir, 'config.yaml');
     if (!fs.existsSync(configPath)) {
       check.error = 'Artifacts: config.yaml not found';
@@ -531,30 +534,42 @@ async function validateArtifactsModule(projectRoot) {
       return check;
     }
 
-    // Checks 4 & 5: Per-workflow entry point and skill wrapper
+    // Checks 4 & 5: Per-workflow entry point and skill wrapper.
+    // Aggregate failures across all workflows so a single doctor run reports every
+    // problem at once (mirrors validateEnhanceModule).
+    // Non-standalone workflows are skipped from wrapper/entry checks because
+    // refresh-installation.js section 6d does NOT install them — validating their
+    // wrapper would be a contract mismatch with the refresh logic.
     for (const wf of config.workflows) {
       if (!wf || !wf.name || !wf.entry) {
-        check.error = `Artifacts: workflow entry missing name or entry field`;
-        return check;
+        failures.push('workflow entry missing name or entry field');
+        continue;
+      }
+
+      if (wf.standalone !== true) {
+        // Refresh skips non-standalone workflows; nothing to validate.
+        continue;
       }
 
       // Check 4: Workflow entry point file exists
       const entryPath = path.join(artifactsDir, wf.entry);
       if (!fs.existsSync(entryPath)) {
-        check.error = `Artifacts: workflow entry missing for ${wf.name}: ${wf.entry}`;
-        return check;
+        failures.push(`workflow entry missing for ${wf.name}: ${wf.entry}`);
       }
 
       // Check 5: Skill wrapper exists at .claude/skills/{workflow.name}/SKILL.md
       // (workflow.name already carries the bmad- prefix; do NOT synthesize bmad-${wf.name})
       const skillWrapperPath = path.join(projectRoot, '.claude', 'skills', wf.name, 'SKILL.md');
       if (!fs.existsSync(skillWrapperPath)) {
-        check.error = `Artifacts: skill wrapper missing for ${wf.name}`;
-        return check;
+        failures.push(`skill wrapper missing for ${wf.name}`);
       }
     }
 
-    check.passed = true;
+    if (failures.length > 0) {
+      check.error = `Artifacts: ${failures.join('; ')}`;
+    } else {
+      check.passed = true;
+    }
   } catch (error) {
     check.error = error.message;
   }
