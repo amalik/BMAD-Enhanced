@@ -1,6 +1,6 @@
 # Story SP-1.1: Define Portability Schema
 
-Status: ready-for-dev
+Status: review
 
 ## Story
 
@@ -20,48 +20,48 @@ so that classification is consistent and the exporter can consume it programmati
    - The dependency notation conventions (path format, prefix conventions for non-file deps)
    - At least one fully-worked example per tier (standalone, light-deps, pipeline)
 6. The schema document explicitly states the rule that Tier 3 (pipeline) skills are NOT force-exported standalone — their `dependencies` column documents prerequisites instead
-7. All existing 99 skill manifest rows remain valid CSV after the column addition (no parse errors when reading with a standard CSV parser); pre-existing column values are preserved unchanged
+7. All existing 101 skill manifest rows remain valid CSV after the column addition (no parse errors when reading with a standard CSV parser); pre-existing column values are preserved unchanged
 8. New unit test verifies the manifest can be parsed and that all rows have either empty or valid values in the new columns (validation that they exist as columns, not yet that every row is classified — that is Story 1.2's job)
 
 ## Tasks / Subtasks
 
-- [ ] Task 1: Add new columns to skill manifest header (AC: #1, #7)
-  - [ ] Read `_bmad/_config/skill-manifest.csv` with the existing CSV utilities (`scripts/lib/csv-utils.js` if available, otherwise use `scripts/update/lib/utils.js` patterns)
-  - [ ] Append `tier,intent,dependencies` to the header row
-  - [ ] Append `,,` (three empty fields) to every existing data row to preserve CSV column count alignment
-  - [ ] Verify file parses cleanly with a standard CSV parser
-  - [ ] Verify line count is unchanged (100 lines including header)
+- [x] Task 1: Add new columns to skill manifest header (AC: #1, #7)
+  - [x] Read `_bmad/_config/skill-manifest.csv` with the existing CSV utilities (`scripts/lib/csv-utils.js` if available, otherwise use `scripts/update/lib/utils.js` patterns)
+  - [x] Append `tier,intent,dependencies` to the header row
+  - [x] Append `,,` (three empty fields) to every existing data row to preserve CSV column count alignment
+  - [x] Verify file parses cleanly with a standard CSV parser
+  - [x] Verify line count is unchanged (102 lines including header)
 
-- [ ] Task 2: Create the schema reference document (AC: #5, #6)
-  - [ ] Create `_bmad/_config/portability-schema.md`
-  - [ ] Add header section explaining the purpose: "Defines the metadata schema used by the skill exporter and catalog generator for the Skill Portability initiative. Source: vision-skill-portability.md."
-  - [ ] Add `## Tier` section documenting the three valid values with criteria for each:
+- [x] Task 2: Create the schema reference document (AC: #5, #6)
+  - [x] Create `_bmad/_config/portability-schema.md`
+  - [x] Add header section explaining the purpose: "Defines the metadata schema used by the skill exporter and catalog generator for the Skill Portability initiative. Source: vision-skill-portability.md."
+  - [x] Add `## Tier` section documenting the three valid values with criteria for each:
     - `standalone`: Agent persona + instructions, no external file deps. Exports as-is with framework refs stripped.
     - `light-deps`: Needs templates or config defaults to function. Exporter inlines template content and replaces config refs with placeholders.
     - `pipeline`: Depends on prior artifacts (e.g., a story file from SM) or chained skills. NOT force-exported standalone — prerequisites documented instead.
-  - [ ] Add `## Intent` section listing all 9 intent categories with one-line descriptions and example skills
-  - [ ] Add `## Dependencies` section documenting the notation:
+  - [x] Add `## Intent` section listing all 9 intent categories with one-line descriptions and example skills
+  - [x] Add `## Dependencies` section documenting the notation:
     - File path format: relative to project root (e.g., `_bmad/bmm/templates/prd-template.md`)
     - Config key format: `config:` prefix (e.g., `config:output_folder`)
     - Skill name format: bare skill name (e.g., `bmad-init`)
     - Multiple values: semicolon-delimited
-  - [ ] Add `## Examples` section with one fully-worked example per tier:
+  - [x] Add `## Examples` section with one fully-worked example per tier:
     - Tier 1 example: `bmad-brainstorming` (Carson) — tier=standalone, intent=think-through-problem, dependencies=
     - Tier 2 example: `bmad-create-prd` (John) — tier=light-deps, intent=define-what-to-build, dependencies=`_bmad/bmm/templates/prd-template.md;config:output_folder`
     - Tier 3 example: `bmad-dev-story` (Amelia) — tier=pipeline, intent=plan-your-work, dependencies=`bmad-create-story;config:implementation_artifacts`
 
-- [ ] Task 3: Write unit test for schema column existence (AC: #8)
-  - [ ] Create `tests/lib/portability-schema.test.js` (or add to existing manifest test if one exists)
-  - [ ] Test 1: Parse `skill-manifest.csv` and assert the header contains `tier`, `intent`, `dependencies` columns
-  - [ ] Test 2: Parse all data rows and assert each has 9 columns (the original 6 + the 3 new ones)
-  - [ ] Test 3: For any row where `tier` is non-empty, assert it equals one of `standalone`, `light-deps`, `pipeline`
-  - [ ] Test 4: For any row where `intent` is non-empty, assert it equals one of the 9 valid intent categories
-  - [ ] All tests pass with empty values (this story does NOT classify the skills — Story 1.2 does)
+- [x] Task 3: Write unit test for schema column existence (AC: #8)
+  - [x] Create `tests/lib/portability-schema.test.js` (or add to existing manifest test if one exists)
+  - [x] Test 1: Parse `skill-manifest.csv` and assert the header contains `tier`, `intent`, `dependencies` columns
+  - [x] Test 2: Parse all data rows and assert each has 9 columns (the original 6 + the 3 new ones)
+  - [x] Test 3: For any row where `tier` is non-empty, assert it equals one of `standalone`, `light-deps`, `pipeline`
+  - [x] Test 4: For any row where `intent` is non-empty, assert it equals one of the 9 valid intent categories
+  - [x] All tests pass with empty values (this story does NOT classify the skills — Story 1.2 does)
 
-- [ ] Task 4: Verify no regressions in existing tooling (AC: #7)
-  - [ ] Run any existing tests that consume `skill-manifest.csv` (search for test files referencing it)
-  - [ ] Run `convoke-doctor` to verify it doesn't choke on the new columns
-  - [ ] Run `convoke-update --dry-run` to verify the validator doesn't flag the new columns
+- [x] Task 4: Verify no regressions in existing tooling (AC: #7)
+  - [x] Run any existing tests that consume `skill-manifest.csv` (search for test files referencing it)
+  - [x] Run `convoke-doctor` to verify it doesn't choke on the new columns
+  - [x] Run `convoke-update --dry-run` to verify the validator doesn't flag the new columns
 
 ## Dev Notes
 
@@ -94,7 +94,7 @@ After this story (9 columns):
 canonicalId,name,description,module,path,install_to_bmad,tier,intent,dependencies
 ```
 
-Total existing rows: **99 skills** (file has 100 lines including header).
+Total existing rows: **101 skills** (file has 102 lines including header). Note: AG Epic 6 added 2 new skill wrappers (migration + portfolio) — these rows must also be padded with empty `tier`, `intent`, `dependencies` columns. Story 1.2 will classify them.
 
 ### Intent Category Taxonomy (final)
 
@@ -150,10 +150,38 @@ This story is the **foundation** for the entire Skill Portability initiative. Ev
 
 ### Agent Model Used
 
-(to be filled by dev agent)
+claude-opus-4-6 (Amelia / dev agent)
 
 ### Debug Log References
 
+- All 5 portability schema tests pass: `npx jest tests/lib/portability-schema.test.js`
+- All 20 refresh-installation tests pass (regression check): `npx jest tests/unit/refresh-installation-enhance.test.js`
+- `convoke-doctor`: 22 checks pass; 2 pre-existing issues unrelated to schema change (missing `add-team` workflow, version drift between modules)
+- Pre-existing Jest "test suite failed to run" errors in `tests/team-factory/` and `tests/p0/` are not regressions — those suites use `node:test` runner and pass under their native runner (verified with one suite output showing `pass 7`)
+
 ### Completion Notes List
 
+- AC #1: Added `tier`, `intent`, `dependencies` columns to skill-manifest.csv header (positions 7-9, after `install_to_bmad`)
+- AC #2-4: Schema doc enumerates valid values for all three new columns and notation conventions
+- AC #5: Created `_bmad/_config/portability-schema.md` with Tier, Intent, Dependencies, and Examples sections; includes one fully-worked example per tier (Carson/Tier 1, John PRD/Tier 2, Amelia dev-story/Tier 3)
+- AC #6: Schema doc explicitly states pipeline skills are NOT force-exported standalone (Tier section + repeated in Tier 3 example)
+- AC #7: All 101 existing skill rows padded with `,,,` (3 trailing commas → 9 columns total). CSV-aware column count verified across rows 2, 50, 100. Line count remains 102.
+- AC #8: New test file `tests/lib/portability-schema.test.js` with 5 tests covering header columns, row column count, tier value validity, intent value validity, and schema doc existence + section presence + vocabulary completeness
+- **Scope extension (out-of-original-AC but required for AC #7 no-regression):** Updated `scripts/update/lib/refresh-installation.js:677` — the only runtime writer that appends to skill-manifest.csv. Now writes 9-column rows (`,,,` padding) so future Enhance skill registration doesn't break alignment. Verified by re-running the existing refresh-installation test suite (20/20 pass including the idempotency test that exercises this code path).
+- Out of scope items honored: did not classify any skills (Story 1.2), did not add path resolution validation (Story 1.3), did not modify any agent or workflow files
+
 ### File List
+
+**Modified:**
+- `_bmad/_config/skill-manifest.csv` — added 3 columns to header, padded all 101 data rows
+- `scripts/update/lib/refresh-installation.js` — updated runtime CSV writer to produce 9-column rows
+
+**Created:**
+- `_bmad/_config/portability-schema.md` — schema reference document
+- `tests/lib/portability-schema.test.js` — 5 schema validation tests
+
+## Change Log
+
+| Date | Change |
+|------|--------|
+| 2026-04-08 | Story sp-1-1 implemented. Added tier/intent/dependencies columns to skill-manifest.csv (101 rows padded). Created portability-schema.md with full taxonomy, tier rules, dependency notation, and 3 worked examples. Added 5 schema validation tests. Updated refresh-installation.js writer for forward compatibility. All ACs satisfied. |
