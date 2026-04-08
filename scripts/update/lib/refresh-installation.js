@@ -674,7 +674,7 @@ You must fully embody this agent's persona and follow all activation instruction
       if (fs.existsSync(skManifestPath)) {
         const skCsv = fs.readFileSync(skManifestPath, 'utf8');
         if (!skCsv.includes(`"${canonicalId}"`)) {
-          const skRow = `\n"${canonicalId}","${canonicalId}","Manage RICE initiatives backlog — triage review findings, rescore existing items, or bootstrap new backlogs.","bme","_bmad/bme/_enhance/workflows/${workflow.name}/SKILL.md","true"`;
+          const skRow = `\n"${canonicalId}","${canonicalId}","Manage RICE initiatives backlog — triage review findings, rescore existing items, or bootstrap new backlogs.","bme","_bmad/bme/_enhance/workflows/${workflow.name}/SKILL.md","true",,,`;
           fs.appendFileSync(skManifestPath, skRow, 'utf8');
           changes.push(`Added ${canonicalId} to skill-manifest.csv`);
           if (verbose) console.log(`    Added ${canonicalId} to skill-manifest.csv`);
