@@ -1695,23 +1695,100 @@ async function promptInitiative(filename, candidates) {
 }
 
 /**
- * Resolve ambiguous manifest entries interactively or auto-skip in force mode.
+ * Resolve ambiguous manifest entries interactively, via a resolution map, or auto-skip in force mode.
  * Mutates manifest entries in-place.
+ *
+ * **Caller responsibility:** after this function returns, the caller MUST re-run `detectCollisions()`
+ * on the manifest. Resolution-map and interactive renames may produce target-path collisions that
+ * the original `generateManifest()` did not see. The CLI's `main()` does this; programmatic callers
+ * must do the same.
+ *
+ * Priority order for AMBIGUOUS entries:
+ *   1. Resolution map (Story 6.4) — operator decisions passed via --resolution-file
+ *   2. No-candidates auto-skip — entries the engine couldn't even generate candidates for
+ *   3. Force auto-skip — `--force` flag bypasses interactive prompts
+ *   4. Interactive prompt — fallback
  *
  * @param {import('./types').ManifestResult} manifest - Manifest to resolve
  * @param {import('./types').TaxonomyConfig} taxonomy - Taxonomy for filename generation
  * @param {string} _projectRoot - Project root (reserved)
  * @param {Object} [options={}]
  * @param {boolean} [options.force=false] - Auto-skip all ambiguous in force mode
+ * @param {Function} [options.promptFn=promptInitiative] - Prompt function for tests
+ * @param {Object|null} [options.resolutionMap=null] - Pre-loaded resolutions keyed by oldPath.
+ *   Each value: `{ action: 'rename'|'skip', initiative?: string }`. Validated by loadResolutionMap()
+ *   before being passed in here. When a resolution-map entry exists for an oldPath, it takes
+ *   precedence over BOTH the no-candidates auto-skip and the force flag — the operator's
+ *   explicit decision wins. If `entry.artifactType` is null (engine couldn't infer type) and the
+ *   resolution says rename, falls back to a synthetic 'note' type so generateNewFilename can run.
  * @returns {Promise<{resolved: number, skipped: number}>}
  */
 async function resolveAmbiguous(manifest, taxonomy, _projectRoot, options = {}) {
-  const { force = false, promptFn = promptInitiative } = options;
+  const { force = false, promptFn = promptInitiative, resolutionMap = null } = options;
   let resolved = 0;
   let skipped = 0;
 
   for (const entry of manifest.entries) {
     if (entry.action !== 'AMBIGUOUS') continue;
+
+    // Story 6.4: Resolution map takes precedence over all other guards.
+    // Operator decisions passed via --resolution-file are honored even when the engine
+    // would have auto-skipped (no candidates) or when --force is set.
+    if (resolutionMap && Object.prototype.hasOwnProperty.call(resolutionMap, entry.oldPath)) {
+      const resolution = resolutionMap[entry.oldPath];
+      if (resolution.action === 'skip') {
+        entry.action = 'SKIP';
+        entry.source = 'operator';
+        skipped++;
+        continue;
+      }
+      if (resolution.action === 'rename') {
+        // Initiative pre-validated against taxonomy by loadResolutionMap()
+        entry.initiative = resolution.initiative;
+        // Fallback type for entries the engine couldn't classify (e.g. bare `notes.md`).
+        // We synthesize 'note' ONLY if the taxonomy actually declares 'note' as an artifact type.
+        // Otherwise we leave the entry as AMBIGUOUS rather than producing a path that downstream
+        // schema validation would reject. The operator can extend taxonomy.artifact_types and re-run.
+        if (!entry.artifactType) {
+          const validTypes = Array.isArray(taxonomy && taxonomy.artifact_types) ? taxonomy.artifact_types : [];
+          if (!validTypes.includes('note')) {
+            console.warn(
+              `Warning: cannot honor resolution for ${entry.oldPath} — no artifact type inferable ` +
+              `and 'note' is not in taxonomy.artifact_types. Entry left as AMBIGUOUS.`
+            );
+            // Skip the rename logic and let the entry fall through to whatever the next guard says.
+            // We don't continue here so the existing no-candidates / force / interactive paths apply.
+          } else {
+            entry.artifactType = 'note';
+          }
+        }
+        // Only proceed with the rename if we now have a type (either real or synthesized).
+        if (entry.artifactType) {
+          // Guard: entry.dir must be set or the rename target becomes 'undefined/foo.md'.
+          // Derive from oldPath as a safety net.
+          if (!entry.dir) {
+            const lastSlash = entry.oldPath.lastIndexOf('/');
+            entry.dir = lastSlash >= 0 ? entry.oldPath.slice(0, lastSlash) : '';
+          }
+          const filename = entry.oldPath.split('/').pop();
+          const newFilename = generateNewFilename(filename, resolution.initiative, entry.artifactType, taxonomy);
+          entry.newPath = entry.dir ? `${entry.dir}/${newFilename}` : newFilename;
+          entry.action = 'RENAME';
+          entry.confidence = 'high';
+          entry.source = 'operator';
+          resolved++;
+          continue;
+        }
+        // Otherwise fall through to the normal AMBIGUOUS handling below.
+      } else {
+        // Unknown action — loadResolutionMap should have caught this. Throw rather than silently
+        // dropping the operator's intent.
+        throw new ArtifactMigrationError(
+          `Resolution map for ${entry.oldPath} has unknown action '${resolution.action}'`,
+          { phase: 'rename', recoverable: true }
+        );
+      }
+    }
 
     // Non-resolvable: no type or no candidates — auto-skip
     if (!entry.artifactType || !entry.candidates || entry.candidates.length === 0) {
@@ -1751,6 +1828,134 @@ async function resolveAmbiguous(manifest, taxonomy, _projectRoot, options = {}) 
   manifest.summary.ambiguous = manifest.entries.filter(e => e.action === 'AMBIGUOUS').length;
 
   return { resolved, skipped };
+}
+
+/**
+ * Load and validate a resolution-map JSON file for use with `resolveAmbiguous()`.
+ *
+ * Expected file shape:
+ * ```json
+ * {
+ *   "schemaVersion": 1,
+ *   "resolutions": {
+ *     "dir/file.md": { "action": "rename", "initiative": "convoke" },
+ *     "dir/other.md": { "action": "skip" }
+ *   }
+ * }
+ * ```
+ *
+ * Throws an `ArtifactMigrationError` (phase: 'rename', recoverable: true) on any validation
+ * failure with a clear message. Validation is strict — partial files are not accepted.
+ *
+ * @param {string} filePath - Absolute path to the JSON file
+ * @param {import('./types').TaxonomyConfig} taxonomy - Taxonomy for initiative validation
+ * @returns {Object} The validated `resolutions` map (oldPath → { action, initiative? })
+ * @throws {ArtifactMigrationError}
+ */
+function loadResolutionMap(filePath, taxonomy) {
+  if (!fs.existsSync(filePath)) {
+    throw new ArtifactMigrationError(
+      `Resolution file not found: ${filePath}`,
+      { phase: 'rename', recoverable: true }
+    );
+  }
+
+  let raw;
+  try {
+    raw = fs.readFileSync(filePath, 'utf8');
+  } catch (err) {
+    throw new ArtifactMigrationError(
+      `Cannot read resolution file ${filePath}: ${err.message}`,
+      { phase: 'rename', recoverable: true }
+    );
+  }
+
+  let parsed;
+  try {
+    parsed = JSON.parse(raw);
+  } catch (err) {
+    throw new ArtifactMigrationError(
+      `Invalid JSON in resolution file ${filePath}: ${err.message}`,
+      { phase: 'rename', recoverable: true }
+    );
+  }
+
+  if (!parsed || typeof parsed !== 'object') {
+    throw new ArtifactMigrationError(
+      `Resolution file must contain a JSON object: ${filePath}`,
+      { phase: 'rename', recoverable: true }
+    );
+  }
+
+  if (parsed.schemaVersion !== 1) {
+    throw new ArtifactMigrationError(
+      `Unsupported schemaVersion ${parsed.schemaVersion} in ${filePath} (expected 1)`,
+      { phase: 'rename', recoverable: true }
+    );
+  }
+
+  if (!parsed.resolutions || typeof parsed.resolutions !== 'object') {
+    throw new ArtifactMigrationError(
+      `Resolution file ${filePath} missing required 'resolutions' object`,
+      { phase: 'rename', recoverable: true }
+    );
+  }
+
+  const validInitiatives = new Set([
+    ...(Array.isArray(taxonomy && taxonomy.initiatives && taxonomy.initiatives.platform) ? taxonomy.initiatives.platform : []),
+    ...(Array.isArray(taxonomy && taxonomy.initiatives && taxonomy.initiatives.user) ? taxonomy.initiatives.user : [])
+  ]);
+
+  // Use Object.create(null) for the output map so consumers can do plain `map[key]`
+  // lookups without prototype pollution risk. We still validate the keys themselves.
+  const safeMap = Object.create(null);
+
+  for (const [oldPath, resolution] of Object.entries(parsed.resolutions)) {
+    // Reject keys that could pollute the prototype chain or are otherwise unsafe.
+    if (oldPath === '__proto__' || oldPath === 'constructor' || oldPath === 'prototype') {
+      throw new ArtifactMigrationError(
+        `Unsafe resolution key '${oldPath}' rejected`,
+        { phase: 'rename', recoverable: true }
+      );
+    }
+    if (typeof oldPath !== 'string' || oldPath.length === 0) {
+      throw new ArtifactMigrationError(
+        `Resolution keys must be non-empty strings`,
+        { phase: 'rename', recoverable: true }
+      );
+    }
+    if (!resolution || typeof resolution !== 'object') {
+      throw new ArtifactMigrationError(
+        `Invalid resolution entry for ${oldPath}: must be an object`,
+        { phase: 'rename', recoverable: true }
+      );
+    }
+    if (resolution.action !== 'rename' && resolution.action !== 'skip') {
+      throw new ArtifactMigrationError(
+        `Invalid action '${resolution.action}' for ${oldPath} (expected 'rename' or 'skip')`,
+        { phase: 'rename', recoverable: true }
+      );
+    }
+    if (resolution.action === 'rename') {
+      if (typeof resolution.initiative !== 'string' || resolution.initiative.length === 0) {
+        throw new ArtifactMigrationError(
+          `Resolution for ${oldPath} has action='rename' but no initiative`,
+          { phase: 'rename', recoverable: true }
+        );
+      }
+      if (!validInitiatives.has(resolution.initiative)) {
+        throw new ArtifactMigrationError(
+          `Unknown initiative '${resolution.initiative}' for ${oldPath} (not in taxonomy)`,
+          { phase: 'rename', recoverable: true }
+        );
+      }
+      safeMap[oldPath] = { action: 'rename', initiative: resolution.initiative };
+    } else {
+      safeMap[oldPath] = { action: 'skip' };
+    }
+  }
+
+  return safeMap;
 }
 
 /**
@@ -1969,6 +2174,7 @@ module.exports = {
   // Interactive & Recovery
   promptInitiative,
   resolveAmbiguous,
+  loadResolutionMap,
   generateRenameMap,
   detectMigrationState,
   generateGovernanceADR,
