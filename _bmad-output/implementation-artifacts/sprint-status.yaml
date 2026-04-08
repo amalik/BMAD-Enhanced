@@ -342,7 +342,7 @@ development_status:
   # Epic 1: Skill Classification & Metadata
   sp-epic-1: in-progress
   sp-1-1-define-portability-schema: done
-  sp-1-2-classify-all-skills: backlog
+  sp-1-2-classify-all-skills: ready-for-dev
   sp-1-3-validate-classification-completeness: backlog
   sp-epic-1-retrospective: optional
 
