@@ -89,6 +89,121 @@ astonishment-report sweep on this repo.
 
 ---
 
+## ⚠️ UPDATE 2026-04-09 — orphan count grew, diagnosis sharpened, F.2 blocked
+
+After completing Story B (all 8 `tests/lib/*.test.js` Jest→node:test
+conversions), F.2 (replace literal paths with `tests/lib/*.test.js` glob
+in `npm test`) was the next step. F.2 is **blocked** by the orphan
+portability tests below.
+
+### Updated state of `tests/lib/` orphans
+
+| File | Standalone result | LOC | Tests | Wired into `npm test`? |
+|---|---|---:|---:|---|
+| `tests/lib/portability-classification.test.js` | `tests 1, pass 0, fail 1` (file-load failure) | 171 | 7 | NO |
+| `tests/lib/portability-schema.test.js` | `tests 1, pass 0, fail 1` (file-load failure) | 118 | 5 | NO |
+| `tests/lib/portability-validation.test.js` (NEW since 2026-04-08) | `tests 1, pass 0, fail 1` (file-load failure) | 205 | 9 | NO |
+| **Total** | **3 phantoms** | **494** | **21** | **all NO** |
+
+### Sharpened diagnosis (supersedes 2026-04-08 guess)
+
+Yesterday's entry guessed the failure was "missing exports from
+`scripts/portability/manifest-csv`." That was wrong. The actual diagnosis,
+captured today by running standalone:
+
+```
+ReferenceError: describe is not defined
+    at Object.<anonymous> (tests/lib/portability-classification.test.js:38:1)
+```
+
+**The portability test files use Jest API directly without converting:**
+they call `describe()`, `test()`, `expect()`, `beforeAll()` at top level
+without importing from `node:test`. Confirmed by grep:
+
+```
+$ grep -c "expect(" tests/lib/portability-*.test.js
+tests/lib/portability-classification.test.js:20
+tests/lib/portability-schema.test.js:?
+tests/lib/portability-validation.test.js:?
+```
+
+`scripts/portability/manifest-csv.js` exists and exports the symbols the
+tests import — that part is fine. The crash is the missing `describe`
+import, identical in shape to the 8 original C1 phantom tests in
+`tests/lib/` that the recovery initiative just spent a day fixing.
+
+**This is the C1 pattern recurring exactly, in the same directory the
+recovery initiative just cleared.** The parallel session producing the
+portability work is using the same Jest-by-default behavior the original
+astonishment report flagged as the root cause.
+
+### Why F.2 is blocked
+
+F.2 was specified as: replace the literal-path enumeration in `npm test`
+and `test:coverage` with `tests/lib/*.test.js` glob. Now that all 8 Story
+B files pass, the glob would normally be safe. **But the glob also
+matches the 3 broken portability files**, which would crash the gate
+immediately on next CI run.
+
+Workarounds I considered and rejected:
+1. **Convert the 3 orphans myself** — same mechanical translation as
+   B.1-B.8, ~20-30 min total. **Rejected** because the parallel session
+   owner explicitly confirmed (2026-04-09) they are actively working on
+   these files. Editing them concurrently risks merge conflicts and
+   silently overwriting work-in-progress.
+2. **Delete the orphans and proceed with F.2** — clears the blocker but
+   destroys parallel-session work. Hostile.
+3. **Custom Node-side glob script that excludes them** — more complex
+   than the literal paths I'm trying to retire. Defeats F.2's purpose.
+
+**Chosen path:** keep the literal-path scaffolding in place; defer F.2
+until the parallel session converts the 3 portability files. When that
+lands, F.2 becomes a 2-line edit (test glob + test:coverage glob).
+
+### What the portability work owner needs to do
+
+Per the **completed** Story B sequence, the conversion pattern is now
+well-established. For each portability file:
+
+1. Add at the top of the file:
+   ```js
+   'use strict';
+   const { describe, it, before, beforeEach, afterEach } = require('node:test');
+   const assert = require('node:assert/strict');
+   ```
+2. Rename `test(` → `it(` (keep names verbatim).
+3. Rename `beforeAll` → `before` (and `afterAll` → `after` if used).
+4. Translate `expect()` assertions per the cumulative table in Stories
+   B.1-B.8 commit messages. Most patterns are 1:1 mechanical:
+   - `expect(x).toBe(y)` → `assert.equal(x, y)` (strict under
+     `node:assert/strict`)
+   - `expect(x).toEqual(y)` → `assert.deepEqual(x, y)`
+   - `expect(arr).toContain(item)` → `assert.ok(arr.includes(item))`
+   - `expect(x).toBeNull()` → `assert.equal(x, null)`
+   - `expect(x).toBeTruthy()` → `assert.ok(x)`
+   - `expect(arr).toHaveLength(n)` → `assert.equal(arr.length, n)`
+   - See B.5 commit message for the `toContainEqual(stringMatching())`
+     pattern if any portability test uses it.
+5. Run `node --test tests/lib/portability-<name>.test.js` standalone
+   and confirm `pass > 0, fail 0` before considering it done.
+6. Add the file to the `npm test` glob in `package.json` as a literal
+   path (or wait for F.2 to fold all `tests/lib/*` into a glob — this
+   becomes safe the moment all 3 portability files pass standalone).
+
+### When F.2 unblocks
+
+F.2 unblocks when **all 3 portability tests pass standalone under
+`node --test`**. At that point:
+
+1. Replace the literal `tests/lib/<8 files>` enumeration in `npm test`
+   with `tests/lib/*.test.js`.
+2. Same replacement in `test:coverage`.
+3. Delete the 8 individual lib path entries.
+4. Run `npm test` and confirm the gate count includes all 11
+   `tests/lib/*` files (8 original + 3 portability).
+5. Commit as Story F.2 with a one-paragraph note that the literal-path
+   scaffolding from B.1-B.8 is now retired.
+
 ## Deferred from: code review of Story B.4 portfolio-rules conversion (2026-04-08)
 
 - **Glob expansion in npm test scripts assumes POSIX shell** — `package.json` `test` and `test:coverage` scripts use shell glob expansion (`tests/unit/*.test.js`). On Windows `cmd.exe` this won't expand and `node --test` will receive literal patterns. Pre-existing pattern across all 5 npm test scripts; B.4 added a literal path, no new glob. **Real issue.** Belongs in a cross-platform compatibility story.
