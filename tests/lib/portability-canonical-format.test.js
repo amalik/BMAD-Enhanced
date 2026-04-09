@@ -18,7 +18,10 @@ const REQUIRED_FILES = [
 
 // Forbidden strings — every Claude-specific token, framework call, and
 // micro-file directive that the canonical example must NOT contain.
+// P3 (sp-2-1 review): expanded to cover bmad-speak, framework path leakage,
+// and additional micro-file directive variants the spec calls out.
 const FORBIDDEN_IN_EXAMPLE = [
+  // Claude tool names
   'Read tool',
   'Edit tool',
   'Write tool',
@@ -26,10 +29,19 @@ const FORBIDDEN_IN_EXAMPLE = [
   'Glob tool',
   'Grep tool',
   'Skill tool',
+  // Framework calls
   'bmad-init',
   'bmad-help',
+  'bmad-speak',
+  // Framework paths (must be stripped per canonical-format.md)
+  '_bmad/',
+  '.claude/hooks',
+  '{project-root}',
+  // Micro-file directives (all variants from canonical-format.md)
   'Load step:',
   'read fully and follow',
+  'Read fully and execute:',
+  'Load fully and follow:',
 ];
 
 // All 7 Claude tool names that must appear in canonical-format.md's
