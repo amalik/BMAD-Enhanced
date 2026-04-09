@@ -384,6 +384,44 @@ migration_history: []
     assert.equal(parsed.migration_history[0].to_version, '3.1.0');
   });
 
+  it('preserves user-added keys that the bare-object caller does not know about (Blind Hunter finding #3)', async () => {
+    // Self-heal must be ADDITIVE: bare-object callers may not know about every
+    // top-level field in the on-disk file. Specifically, a partial-update caller
+    // like writeConfig(path, { version: '4.0.0' }) must NOT silently delete
+    // user_pref, agents, workflows, etc.
+    const configPath = path.join(tmpDir, 'config.yaml');
+    const COMMENT = '# User documentation comment';
+    const original = `${COMMENT}
+name: vortex
+version: 1.0.0
+user_pref: keep_me
+custom_field: also_keep_me
+agents:
+  - existing-agent
+workflows:
+  - existing-workflow
+`;
+    await fs.writeFile(configPath, original, 'utf8');
+
+    // Bare-object call with ONLY a version update — emulates a future caller
+    // that doesn't know about user_pref/custom_field
+    await writeConfig(configPath, { version: '4.0.0' });
+
+    const after = fs.readFileSync(configPath, 'utf8');
+    const parsed = YAML.parse(after);
+
+    // Version was updated
+    assert.equal(parsed.version, '4.0.0');
+    // User-added fields preserved
+    assert.equal(parsed.user_pref, 'keep_me', `user_pref should be preserved, got: ${after}`);
+    assert.equal(parsed.custom_field, 'also_keep_me', `custom_field should be preserved, got: ${after}`);
+    assert.equal(parsed.name, 'vortex');
+    assert.deepEqual(parsed.agents, ['existing-agent']);
+    assert.deepEqual(parsed.workflows, ['existing-workflow']);
+    // Comment preserved
+    assert.ok(after.includes(COMMENT), `comment should be preserved, got: ${after}`);
+  });
+
   it('falls back to yaml.dump when called with a bare object on a non-existent file (fresh install)', async () => {
     // Self-heal only kicks in when the destination file exists. Fresh-install case
     // uses the bare-object yaml.dump fallback, which is correct behavior.
