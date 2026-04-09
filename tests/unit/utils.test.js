@@ -112,7 +112,7 @@ describe('assertVersion (ag-7-1: I30)', () => {
   it('throws when version is null', () => {
     assert.throws(
       () => assertVersion(null, 'artifacts'),
-      /Refresh: cannot stamp config — getPackageVersion\(\) returned object; check package\.json \(call site: artifacts\)/
+      /Refresh: cannot stamp config — getPackageVersion\(\) returned null; check package\.json \(call site: artifacts\)/
     );
   });
 
