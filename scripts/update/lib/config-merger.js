@@ -238,7 +238,33 @@ function validateConfig(config) {
  * @returns {Promise<void>}
  */
 async function writeConfig(configPath, config) {
-  const doc = config[MERGED_DOC_SENTINEL];
+  // ag-7-1 (I29) — Comment preservation paths, in order of preference:
+  //
+  // 1. SENTINEL PATH: caller went through `mergeConfig` which attached the parsed
+  //    Document via the MERGED_DOC_SENTINEL symbol. Use it directly.
+  // 2. SELF-HEAL PATH: caller passed a bare object (e.g., `migration-runner.js`'s
+  //    `updateMigrationHistory` calling `addMigrationHistory` then `writeConfig`)
+  //    AND the destination file exists. Re-parse the existing file as a Document
+  //    so any comments inside it survive the rewrite. This makes `writeConfig`
+  //    safe for ALL callers — they don't need to know about the sentinel.
+  // 3. FALLBACK PATH: bare object + no existing destination file (fresh install).
+  //    No comments to preserve. Use js-yaml.dump for backwards compatibility.
+  let doc = config[MERGED_DOC_SENTINEL];
+
+  if (!doc && fs.existsSync(configPath)) {
+    // Self-heal: re-parse the existing file so its comments survive the rewrite.
+    try {
+      const existingContent = fs.readFileSync(configPath, 'utf8');
+      const reparsed = YAML.parseDocument(existingContent);
+      if (!reparsed.errors || reparsed.errors.length === 0) {
+        doc = reparsed;
+      }
+      // If parse fails, fall through to the bare-object path silently —
+      // the caller is writing a known-good structure either way.
+    } catch (_err) {
+      // Silent — fall through to bare-object path.
+    }
+  }
 
   let yamlContent;
   if (doc) {
@@ -265,7 +291,7 @@ async function writeConfig(configPath, config) {
 
     yamlContent = doc.toString({ lineWidth: 0 });
   } else {
-    // Backwards-compat path: bare object, no comments to preserve.
+    // Backwards-compat path: bare object, no existing file, no comments to preserve.
     yamlContent = yaml.dump(config, {
       indent: 2,
       lineWidth: -1, // Don't wrap long lines
