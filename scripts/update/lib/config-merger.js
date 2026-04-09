@@ -241,15 +241,31 @@ async function writeConfig(configPath, config) {
   // ag-7-1 (I29) — Comment preservation paths, in order of preference:
   //
   // 1. SENTINEL PATH: caller went through `mergeConfig` which attached the parsed
-  //    Document via the MERGED_DOC_SENTINEL symbol. Use it directly.
+  //    Document via the MERGED_DOC_SENTINEL symbol. Use it directly. The sentinel
+  //    contract guarantees `merged` is a complete config (mergeConfig produces a
+  //    full structure), so it's safe to delete keys from the Document that aren't
+  //    in `merged` (e.g., a removed user field).
   // 2. SELF-HEAL PATH: caller passed a bare object (e.g., `migration-runner.js`'s
   //    `updateMigrationHistory` calling `addMigrationHistory` then `writeConfig`)
   //    AND the destination file exists. Re-parse the existing file as a Document
-  //    so any comments inside it survive the rewrite. This makes `writeConfig`
-  //    safe for ALL callers — they don't need to know about the sentinel.
+  //    so any comments inside it survive the rewrite. CRITICAL: in the self-heal
+  //    path, we ONLY apply additive/update operations (doc.set for each key the
+  //    caller knows about) — we do NOT delete keys the caller doesn't mention,
+  //    because the bare-object caller may not know about every field on disk
+  //    (e.g., a future caller passing `{ version: '4.0.0' }` to update only the
+  //    version would otherwise wipe out every other top-level field).
   // 3. FALLBACK PATH: bare object + no existing destination file (fresh install).
   //    No comments to preserve. Use js-yaml.dump for backwards compatibility.
-  let doc = config[MERGED_DOC_SENTINEL];
+  //
+  // CONTRACT NOTE: callers should not reuse the same `merged` object across multiple
+  // `writeConfig` calls. The Document reference inside the sentinel is mutated on
+  // write, so a second call would see an already-mutated Document instead of the
+  // originally parsed state. This is fine for current callers (refresh-installation
+  // calls writeConfig once per merged result) but document the constraint for
+  // future maintainers.
+  const sentinelDoc = config[MERGED_DOC_SENTINEL];
+  let doc = sentinelDoc;
+  const isSentinelPath = !!sentinelDoc;
 
   if (!doc && fs.existsSync(configPath)) {
     // Self-heal: re-parse the existing file so its comments survive the rewrite.
@@ -278,8 +294,13 @@ async function writeConfig(configPath, config) {
     for (const key of Object.keys(merged)) {
       doc.set(key, merged[key]);
     }
-    // Remove keys that were in the original doc but are no longer in the merged structure
-    if (doc.contents && typeof doc.contents.items !== 'undefined') {
+
+    // Remove keys that were in the original doc but are no longer in the merged structure.
+    // ONLY do this on the SENTINEL path — `mergeConfig` produces a complete config so any
+    // missing key was intentionally removed. On the SELF-HEAL path the caller is a legacy
+    // bare-object caller that may not know about every on-disk field, so deleting unknown
+    // keys would silently destroy user data.
+    if (isSentinelPath && doc.contents && typeof doc.contents.items !== 'undefined') {
       const mergedKeys = new Set(Object.keys(merged));
       const docKeys = doc.contents.items.map(item => String(item.key.value));
       for (const docKey of docKeys) {
