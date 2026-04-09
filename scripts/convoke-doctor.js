@@ -5,6 +5,7 @@ const path = require('path');
 const chalk = require('chalk');
 const yaml = require('js-yaml');
 const { findProjectRoot, getPackageVersion } = require('./update/lib/utils');
+const { parseCsvRow } = require('../_bmad/bme/_team-factory/lib/utils/csv-utils');
 
 /**
  * convoke-doctor — Diagnose common Convoke installation issues.
@@ -53,6 +54,10 @@ async function main() {
   });
 
   // 3. Per-module checks
+  // ag-7-2 (I31): load skill-manifest once for the wrapper-name lookup used by
+  // checkModuleSkillWrappers below. Empty Map is safe (falls back to verbatim).
+  const manifestMap = loadSkillManifest(projectRoot);
+
   for (const mod of modules) {
     const configCheck = checkModuleConfig(mod);
     checks.push(configCheck);
@@ -62,6 +67,13 @@ async function main() {
       }
       if (Array.isArray(mod.config.workflows) && mod.config.workflows.length > 0) {
         checks.push(checkModuleWorkflows(mod));
+      }
+      // ag-7-2 (I31): verify skill wrappers exist on disk for standalone-skill workflows.
+      // checkModuleSkillWrappers returns null if the module has no manifest entries
+      // (i.e., no standalone-skill workflows), so we filter those out.
+      if (Array.isArray(mod.config.workflows) && mod.config.workflows.length > 0) {
+        const wrapperCheck = checkModuleSkillWrappers(mod, projectRoot, manifestMap);
+        if (wrapperCheck) checks.push(wrapperCheck);
       }
     }
   }
@@ -248,6 +260,134 @@ function checkModuleWorkflows(mod) {
   }
 
   return { name: label, passed: true, info: `${workflowNames.length} workflows present` };
+}
+
+/**
+ * Load skill-manifest.csv into a Map keyed by source path → canonicalId.
+ * The manifest is the authoritative source for wrapper directory names
+ * (canonicalId = the directory name under .claude/skills/).
+ *
+ * Returns an empty Map and logs a warning on any read/parse error — never throws,
+ * never fails the doctor. checkModuleSkillWrappers will fall back to verbatim
+ * workflow names for any source path not in the map.
+ *
+ * Closes I31 (ag-7-2).
+ *
+ * @param {string} projectRoot - Absolute path to project root
+ * @returns {Map<string, string>} sourcePath → canonicalId
+ */
+function loadSkillManifest(projectRoot) {
+  const manifestPath = path.join(projectRoot, '_bmad/_config/skill-manifest.csv');
+  const map = new Map();
+
+  if (!fs.existsSync(manifestPath)) {
+    console.warn(chalk.yellow(`  ⚠ skill-manifest.csv not found at ${manifestPath}; skill wrapper checks will fall back to verbatim workflow names`));
+    return map;
+  }
+
+  try {
+    const content = fs.readFileSync(manifestPath, 'utf8');
+    const lines = content.split('\n').filter(l => l.trim().length > 0);
+    if (lines.length === 0) return map;
+
+    // Parse header to find column indices
+    const header = parseCsvRow(lines[0]);
+    const canonicalIdIdx = header.indexOf('canonicalId');
+    const pathIdx = header.indexOf('path');
+    if (canonicalIdIdx === -1 || pathIdx === -1) {
+      console.warn(chalk.yellow(`  ⚠ skill-manifest.csv missing required columns (canonicalId, path); falling back to verbatim names`));
+      return map;
+    }
+
+    // Parse data rows
+    for (let i = 1; i < lines.length; i++) {
+      const fields = parseCsvRow(lines[i]);
+      if (fields.length <= Math.max(canonicalIdIdx, pathIdx)) continue;
+      const canonicalId = fields[canonicalIdIdx];
+      const sourcePath = fields[pathIdx];
+      if (canonicalId && sourcePath) {
+        map.set(sourcePath, canonicalId);
+      }
+    }
+  } catch (err) {
+    console.warn(chalk.yellow(`  ⚠ skill-manifest.csv parse error (${err.message}); skill wrapper checks will fall back to verbatim workflow names`));
+    return new Map();
+  }
+
+  return map;
+}
+
+/**
+ * Check that every standalone-skill workflow declared in a module's config.yaml
+ * has a corresponding skill wrapper at .claude/skills/{canonicalId}/SKILL.md.
+ *
+ * Manifest-as-opt-in semantics:
+ * - The skill-manifest.csv is the OPT-IN marker for "this workflow is a standalone
+ *   skill that needs a wrapper." Modules whose workflows are NOT in the manifest
+ *   (Vortex, Gyre, team-factory, ...) generate menu-patch workflows or agent
+ *   skills, NOT standalone wrappers — those modules are silently skipped here.
+ * - Only Enhance + Artifacts workflows are in the manifest today (after ag-7-2
+ *   Task 0 added the Enhance row).
+ * - If a module has SOME workflows in the manifest and SOME not, only the
+ *   in-manifest ones are checked.
+ *
+ * Resolution: source path `_bmad/bme/{mod.name}/workflows/{workflowName}/SKILL.md`
+ *             → manifest lookup → canonicalId is the wrapper directory name.
+ *
+ * Failures are aggregated into a single result (mirrors validateEnhanceModule
+ * pattern from Story 6.6) so the operator sees every missing wrapper at once.
+ *
+ * Returns null if the module has NO standalone-skill workflows (caller skips
+ * pushing null results into the checks array).
+ *
+ * Closes I31 (ag-7-2).
+ *
+ * @param {object} mod - Module descriptor from discoverModules()
+ * @param {string} projectRoot - Absolute path to project root
+ * @param {Map<string, string>} manifestMap - From loadSkillManifest()
+ * @returns {object|null} Doctor check result, or null if module has no standalone-skill workflows
+ */
+function checkModuleSkillWrappers(mod, projectRoot, manifestMap) {
+  const label = `${mod.name} skill wrappers`;
+  const workflowNames = mod.config.workflows;
+  const failures = [];
+  const checked = [];
+
+  for (const w of workflowNames) {
+    const wfName = typeof w === 'object' ? w.name : w;
+    const sourcePath = `_bmad/bme/${mod.name}/workflows/${wfName}/SKILL.md`;
+
+    // Manifest is opt-in: only workflows declared in skill-manifest.csv are
+    // standalone-skill workflows that need wrappers. Skip the rest silently.
+    const wrapperName = manifestMap.get(sourcePath);
+    if (!wrapperName) continue;
+
+    checked.push(wfName);
+    const wrapperPath = path.join(projectRoot, '.claude', 'skills', wrapperName, 'SKILL.md');
+    if (!fs.existsSync(wrapperPath)) {
+      failures.push(`Missing skill wrapper for ${wfName}: .claude/skills/${wrapperName}/SKILL.md`);
+    }
+  }
+
+  // If no workflows in this module are standalone skills, skip the check entirely.
+  if (checked.length === 0) {
+    return null;
+  }
+
+  if (failures.length > 0) {
+    return {
+      name: label,
+      passed: false,
+      error: failures.join('; '),
+      fix: 'Run convoke-update to regenerate skill wrappers'
+    };
+  }
+
+  return {
+    name: label,
+    passed: true,
+    info: `${checked.length} standalone-skill workflows have wrappers`
+  };
 }
 
 async function checkOutputDir(projectRoot) {
@@ -498,4 +638,4 @@ if (require.main === module) {
   });
 }
 
-module.exports = { checkTaxonomy };
+module.exports = { checkTaxonomy, loadSkillManifest, checkModuleSkillWrappers };
