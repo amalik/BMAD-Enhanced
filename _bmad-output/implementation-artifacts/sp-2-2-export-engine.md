@@ -46,21 +46,23 @@ so that the CLI (sp-2-3) and batch exporter (sp-2-4) have a working transformati
    - `unstripped-xml-tag` — an XML tag remained after the strip pass (engine bug; should be 0 in healthy runs)
    - `step-file-not-found` — a referenced step file does not exist on disk
 
-   Warnings are non-fatal — the engine still returns valid canonical output. Carson and Sophia together should produce **no more than 2 warnings each** in the gold-standard run (per AC #8 + Test 9 — Fix 3 from sp-2-2 review). Warning types outside this allow-list are themselves a bug.
+   Warnings are non-fatal — the engine still returns valid canonical output. Carson and Winston together should produce **no more than 2 warnings each** in the gold-standard run (per AC #8 + Test 9 — Fix 3 from sp-2-2 review). Warning types outside this allow-list are themselves a bug.
 
-8. The engine output for **two** Tier 1 skills passes structural-invariant checks:
-   - **`bmad-brainstorming` (Carson)** — the gold-standard reference skill from sp-2-1
-   - **`bmad-cis-agent-storyteller` (Sophia)** — a second Tier 1 standalone skill that exercises the engine on a different persona shape, workflow structure, and step layout. This is the "Carson-only blind spot" guard from the sp-2-2 review (Fix 1).
+8. The engine output for **two** Tier 1 standalone skills passes structural-invariant checks:
+   - **`bmad-brainstorming` (Carson 🧠)** — the gold-standard reference skill from sp-2-1. Tier=`standalone`. Persona resolves via strategy 2 (`bmad-cis-agent-brainstorming-coach`).
+   - **`bmad-agent-architect` (Winston 🏗️)** — a second Tier 1 standalone skill that exercises the engine on a different persona shape, different module (bmm vs core), and different workflow structure. Tier=`standalone`. Persona resolves via strategy 1 (exact name match in agent manifest). This is the "Carson-only blind spot" guard from the sp-2-2 review (Fix 1).
 
    For both skills, the engine output must satisfy:
    - All 7 required section headings present in correct order
    - Persona section populated with name + icon + role + communication style + principles
    - Zero forbidden strings (same expanded list as sp-2-1's Test 3 — 19 entries)
    - Zero curly-brace placeholders (all `{var}` substituted to `[your X]`)
-   - Engine output mentions the persona name (Carson / Sophia) at least once
+   - Engine output mentions the persona name (Carson / Winston) at least once
    - `warnings.length <= 2` with all warnings drawn from the allowed types in AC #7
 
    The engine output does NOT need to match the gold standard verbatim — wording and ordering of sub-bullets may differ. The structural invariants are what's tested.
+
+   **Verified against the manifest before locking** (Epic 1 retro action item A3): both skills exist in skill-manifest.csv with `tier=standalone`, both have personas in agent-manifest.csv, persona resolution paths are distinct (strategy 1 vs strategy 2).
 
 9. A test file at `tests/lib/portability-export-engine.test.js` adds at least 7 tests:
    - **Test 1:** `exportSkill('bmad-brainstorming', projectRoot)` returns a non-null result with `instructions`, `persona`, `sections`, `warnings` keys
@@ -75,41 +77,41 @@ so that the CLI (sp-2-3) and batch exporter (sp-2-4) have a working transformati
 
 ## Tasks / Subtasks
 
-- [ ] Task 1: Build the export engine skeleton (AC: #1)
-  - [ ] Create `scripts/portability/export-engine.js` using CommonJS
-  - [ ] Use `findProjectRoot()` from `scripts/update/lib/utils.js`
-  - [ ] Import `readManifest` from `scripts/portability/manifest-csv.js` (read-only — no `writeManifest` import)
-  - [ ] Define and export the function `exportSkill(skillName, projectRoot, options = {})` with signature documented in JSDoc
-  - [ ] Return shape: `{ instructions: string, persona: object, sections: object, warnings: string[] }`
-  - [ ] No file writes — the engine is pure-transform
+- [x] Task 1: Build the export engine skeleton (AC: #1)
+  - [x] Create `scripts/portability/export-engine.js` using CommonJS
+  - [x] Use `findProjectRoot()` from `scripts/update/lib/utils.js`
+  - [x] Import `readManifest` from `scripts/portability/manifest-csv.js` (read-only — no `writeManifest` import)
+  - [x] Define and export the function `exportSkill(skillName, projectRoot, options = {})` with signature documented in JSDoc
+  - [x] Return shape: `{ instructions: string, persona: object, sections: object, warnings: string[] }`
+  - [x] No file writes — the engine is pure-transform
 
-- [ ] Task 2: Implement source loader (AC: #2)
-  - [ ] Build `loadSkillSource(skillName, projectRoot)` helper:
-    - [ ] Read skill row from `_bmad/_config/skill-manifest.csv` (use `manifest-csv.js`)
-    - [ ] Throw clear error if the skill name isn't in the manifest
-    - [ ] Extract `path` column (SKILL.md location) and `tier` column
-    - [ ] Read SKILL.md, workflow file (typically `path.dirname(skillPath) + '/workflow.md'`), and any referenced step files
-  - [ ] Build `loadPersona(skillName, skillContent, projectRoot)` helper:
-    - [ ] Read `_bmad/_config/agent-manifest.csv`
-    - [ ] Look for matching agent rows (try `bmad-cis-agent-*`, `bmad-agent-*`, or skill name directly — see Dev Notes for matching strategy)
-    - [ ] If found, extract `displayName`, `icon`, `title`, `role`, `identity`, `communicationStyle`, `principles` columns
-    - [ ] If not found, fall back to extracting persona from the skill's source content (look for `**Your Role:**`, `**Identity:**`, `**Communication style:**` markers)
-  - [ ] Reuse the `findFileInSubtree` pattern from `validate-classification.js` for relative step-file resolution (Epic 1 retro action item A2 — don't reinvent the workaround)
+- [x] Task 2: Implement source loader (AC: #2)
+  - [x] Build `loadSkillSource(skillName, projectRoot)` helper:
+    - [x] Read skill row from `_bmad/_config/skill-manifest.csv` (use `manifest-csv.js`)
+    - [x] Throw clear error if the skill name isn't in the manifest
+    - [x] Extract `path` column (SKILL.md location) and `tier` column
+    - [x] Read SKILL.md, workflow file (typically `path.dirname(skillPath) + '/workflow.md'`), and any referenced step files
+  - [x] Build `loadPersona(skillName, skillContent, projectRoot)` helper:
+    - [x] Read `_bmad/_config/agent-manifest.csv`
+    - [x] Look for matching agent rows (try `bmad-cis-agent-*`, `bmad-agent-*`, or skill name directly — see Dev Notes for matching strategy)
+    - [x] If found, extract `displayName`, `icon`, `title`, `role`, `identity`, `communicationStyle`, `principles` columns
+    - [x] If not found, fall back to extracting persona from the skill's source content (look for `**Your Role:**`, `**Identity:**`, `**Communication style:**` markers)
+  - [x] Reuse the `findFileInSubtree` pattern from `validate-classification.js` for relative step-file resolution (Epic 1 retro action item A2 — don't reinvent the workaround)
 
-- [ ] Task 3: Implement section extractors (AC: #3)
-  - [ ] Build per-section extractor functions. Each extractor has a documented source-pattern lookup chain (Fix 2 from sp-2-2 review). Apply patterns in priority order; first match wins; documented fallback applies if all patterns miss.
+- [x] Task 3: Implement section extractors (AC: #3)
+  - [x] Build per-section extractor functions. Each extractor has a documented source-pattern lookup chain (Fix 2 from sp-2-2 review). Apply patterns in priority order; first match wins; documented fallback applies if all patterns miss.
 
-  - [ ] **`extractTitle(skillName, persona)`** — produces `# <display name> with <persona name>` (Fix 5: locked humanization rule)
+  - [x] **`extractTitle(skillName, persona)`** — produces `# <display name> with <persona name>` (Fix 5: locked humanization rule)
 
     | Priority | Source pattern | Example |
     |---|---|---|
     | 1 | `agentManifest.find(a => a.name === skillName)?.title` (use the agent's title field) | Carson row's title=`Elite Brainstorming Specialist` → too long; prefer rule 2 |
-    | 2 | Strip `bmad-` and `bmad-cis-agent-` / `bmad-agent-` prefixes; kebab-to-title-case the rest; append `with <persona name>` if persona exists | `bmad-brainstorming` + Carson → `Brainstorming with Carson`; `bmad-cis-agent-storyteller` + Sophia → `Storyteller with Sophia` |
+    | 2 | Strip `bmad-` and `bmad-cis-agent-` / `bmad-agent-` prefixes; kebab-to-title-case the rest; append `with <persona name>` if persona exists | `bmad-brainstorming` + Carson → `Brainstorming with Carson`; `bmad-cis-agent-storyteller` + Winston → `Storyteller with Winston` |
     | 3 | Skill name as-is, kebab-to-title-case | `bmad-shard-doc` → `Shard Doc` (no persona append) |
 
     **Fallback:** humanized skill name with no persona suffix.
 
-  - [ ] **`extractPersona(persona)`** — produces the `## You are <name>` block
+  - [x] **`extractPersona(persona)`** — produces the `## You are <name>` block
 
     | Priority | Source pattern | Example |
     |---|---|---|
@@ -118,7 +120,7 @@ so that the CLI (sp-2-3) and batch exporter (sp-2-4) have a working transformati
 
     **Fallback:** throw `"persona resolution failed for <skillName>"` (Fix 4 — no silent generic).
 
-  - [ ] **`extractWhenToUse(skillRow, workflowContent)`** — produces description paragraph + "Use when:" bullet list
+  - [x] **`extractWhenToUse(skillRow, workflowContent)`** — produces description paragraph + "Use when:" bullet list
 
     | Priority | Source pattern | Example |
     |---|---|---|
@@ -126,7 +128,7 @@ so that the CLI (sp-2-3) and batch exporter (sp-2-4) have a working transformati
     | 2 | "Use when:" bullets: parse the workflow's `**Goal:**` line for trigger conditions; if absent, parse the workflow's first paragraph for keywords like "Use this when", "Trigger when" | Carson workflow.md line ~7 `**Goal:** Facilitate interactive brainstorming sessions...` |
     | 3 | If no triggers found, generate one bullet: `When the user explicitly requests <human-readable skill name>` | `bmad-shard-doc` → `When the user explicitly requests document sharding` |
 
-  - [ ] **`extractInputs(workflowContent, stepContents)`** — produces "Inputs you may need" bullet list
+  - [x] **`extractInputs(workflowContent, stepContents)`** — produces "Inputs you may need" bullet list
 
     | Priority | Source pattern | Example |
     |---|---|---|
@@ -137,9 +139,9 @@ so that the CLI (sp-2-3) and batch exporter (sp-2-4) have a working transformati
 
     **Fallback:** `(none required)` literal string
 
-  - [ ] **`extractHowToProceed(workflowContent, stepContents)`** — produces the inlined numbered workflow. Delegates to `inlineSteps()` (Task 4).
+  - [x] **`extractHowToProceed(workflowContent, stepContents)`** — produces the inlined numbered workflow. Delegates to `inlineSteps()` (Task 4).
 
-  - [ ] **`extractWhatYouProduce(workflowContent, stepContents)`** — extracts output description
+  - [x] **`extractWhatYouProduce(workflowContent, stepContents)`** — extracts output description
 
     | Priority | Source pattern | Example |
     |---|---|---|
@@ -151,7 +153,7 @@ so that the CLI (sp-2-3) and batch exporter (sp-2-4) have a working transformati
 
     **Fallback:** `A markdown document at [your output folder]/<skill-name>/[date].md`
 
-  - [ ] **`extractQualityChecks(workflowContent, stepContents)`** — optional
+  - [x] **`extractQualityChecks(workflowContent, stepContents)`** — optional
 
     | Priority | Source pattern | Example |
     |---|---|---|
@@ -161,10 +163,10 @@ so that the CLI (sp-2-3) and batch exporter (sp-2-4) have a working transformati
 
     **If none of these are found, omit the section entirely** — Quality checks is the only optional section per AC #2.
 
-- [ ] Task 4: Implement step file inlining (AC: #5)
-  - [ ] Build `inlineSteps(workflowContent, stepContents)` helper:
-    - [ ] Parse the workflow's step references in order (look for `Load step:`, `read fully and follow:`, `Read fully and execute:`, `./steps/*.md` patterns, and `<step n="X">` XML tags)
-    - [ ] For each step file, extract the actual instructional content by stripping these meta sections (use heading-based detection):
+- [x] Task 4: Implement step file inlining (AC: #5)
+  - [x] Build `inlineSteps(workflowContent, stepContents)` helper:
+    - [x] Parse the workflow's step references in order (look for `Load step:`, `read fully and follow:`, `Read fully and execute:`, `./steps/*.md` patterns, and `<step n="X">` XML tags)
+    - [x] For each step file, extract the actual instructional content by stripping these meta sections (use heading-based detection):
       - `## MANDATORY EXECUTION RULES`
       - `## EXECUTION PROTOCOLS`
       - `## CONTEXT BOUNDARIES`
@@ -174,30 +176,30 @@ so that the CLI (sp-2-3) and batch exporter (sp-2-4) have a working transformati
       - `## ROLE REINFORCEMENT`
       - `## STEP-SPECIFIC RULES`
       - `## NEXT STEPS`
-    - [ ] Keep these "instructional content" sections:
+    - [x] Keep these "instructional content" sections:
       - `## YOUR TASK`
       - `## INITIALIZATION SEQUENCE`
       - `## EXECUTION SEQUENCE`
       - `## MANDATORY SEQUENCE`
       - Any heading that doesn't match the meta-section list
-    - [ ] Detect branching step files by name pattern (`step-02a`, `step-02b`, `step-02c`, etc.) and present the branches as nested options under ONE numbered step (not separate top-level steps)
-    - [ ] After extraction, apply the transformation rules from Task 5 to the inlined content
-    - [ ] If a step file can't be resolved (broken reference), append an entry to the `warnings` array like `"step file <path> not found — content omitted"` and continue
+    - [x] Detect branching step files by name pattern (`step-02a`, `step-02b`, `step-02c`, etc.) and present the branches as nested options under ONE numbered step (not separate top-level steps)
+    - [x] After extraction, apply the transformation rules from Task 5 to the inlined content
+    - [x] If a step file can't be resolved (broken reference), append an entry to the `warnings` array like `"step file <path> not found — content omitted"` and continue
 
-- [ ] Task 5: Implement transformation rules (AC: #4)
-  - [ ] Build `applyTransformations(text)` helper that applies all transformation rules from `canonical-format.md` in order:
-    - [ ] **Phase 1 — Strip frontmatter blocks:** match `^---\n[\s\S]*?\n---\n` at the start of any block and remove
-    - [ ] **Phase 2 — Strip XML/MDX tags:** `<workflow>`, `<step n="X">`, `<action>`, `<check>`, `<critical>`, `<output>`, `<ask>` — strip the tags, keep the content. Use `string.replace(/<\/?(workflow|step|action|check|critical|output|ask)[^>]*>/g, '')`.
-    - [ ] **Phase 3 — Strip framework calls:** remove lines containing `bmad-init`, `bmad-help`, `Skill: bmad-*`, `_bmad/`, `{project-root}`, `.claude/hooks/`, `bmad-speak`. Use line-by-line filter.
-    - [ ] **Phase 4 — Strip micro-file directives:** remove lines containing `Load step:`, `read fully and follow`, `Read fully and execute:`, `Load fully and follow:`
-    - [ ] **Phase 5 — Replace tool names:** apply the 7 tool replacements from the table (`Read tool` → `read the file at`, `Edit tool` → `edit the file at`, etc.). The Skill tool is stripped entirely (replace with empty string or a marker comment — see "Skill tool handling" in Dev Notes).
-    - [ ] **Phase 6 — Substitute config vars:** replace each of the 6 universal vars with `[your X]` square-bracket prompts
-    - [ ] **Phase 7 — Collapse whitespace:** after all the strips and replaces, collapse multiple blank lines (`\n\n\n+` → `\n\n`) and trim the result
-  - [ ] Each phase produces a transformed string that the next phase consumes — pure functional, no side effects
-  - [ ] Order matters: frontmatter must be stripped BEFORE tag stripping (otherwise XML-like content inside frontmatter could leak), tag stripping BEFORE line filtering (otherwise multiline tags get partially stripped), etc.
+- [x] Task 5: Implement transformation rules (AC: #4)
+  - [x] Build `applyTransformations(text)` helper that applies all transformation rules from `canonical-format.md` in order:
+    - [x] **Phase 1 — Strip frontmatter blocks:** match `^---\n[\s\S]*?\n---\n` at the start of any block and remove
+    - [x] **Phase 2 — Strip XML/MDX tags:** `<workflow>`, `<step n="X">`, `<action>`, `<check>`, `<critical>`, `<output>`, `<ask>` — strip the tags, keep the content. Use `string.replace(/<\/?(workflow|step|action|check|critical|output|ask)[^>]*>/g, '')`.
+    - [x] **Phase 3 — Strip framework calls:** remove lines containing `bmad-init`, `bmad-help`, `Skill: bmad-*`, `_bmad/`, `{project-root}`, `.claude/hooks/`, `bmad-speak`. Use line-by-line filter.
+    - [x] **Phase 4 — Strip micro-file directives:** remove lines containing `Load step:`, `read fully and follow`, `Read fully and execute:`, `Load fully and follow:`
+    - [x] **Phase 5 — Replace tool names:** apply the 7 tool replacements from the table (`Read tool` → `read the file at`, `Edit tool` → `edit the file at`, etc.). The Skill tool is stripped entirely (replace with empty string or a marker comment — see "Skill tool handling" in Dev Notes).
+    - [x] **Phase 6 — Substitute config vars:** replace each of the 6 universal vars with `[your X]` square-bracket prompts
+    - [x] **Phase 7 — Collapse whitespace:** after all the strips and replaces, collapse multiple blank lines (`\n\n\n+` → `\n\n`) and trim the result
+  - [x] Each phase produces a transformed string that the next phase consumes — pure functional, no side effects
+  - [x] Order matters: frontmatter must be stripped BEFORE tag stripping (otherwise XML-like content inside frontmatter could leak), tag stripping BEFORE line filtering (otherwise multiline tags get partially stripped), etc.
 
-- [ ] Task 6: Wire it all together in `exportSkill()` (AC: #1, #6, #7)
-  - [ ] Implement the main `exportSkill(skillName, projectRoot, options)` function:
+- [x] Task 6: Wire it all together in `exportSkill()` (AC: #1, #6, #7)
+  - [x] Implement the main `exportSkill(skillName, projectRoot, options)` function:
     1. Load skill source via `loadSkillSource()`
     2. Check tier — if not `standalone`, throw clear error per AC #6
     3. Load persona via `loadPersona()`
@@ -205,25 +207,40 @@ so that the CLI (sp-2-3) and batch exporter (sp-2-4) have a working transformati
     5. Assemble the canonical `instructions.md` content by concatenating section outputs
     6. Apply final pass of transformations (in case extractors missed something)
     7. Return `{ instructions, persona, sections: { title, persona, whenToUse, inputs, howToProceed, whatYouProduce, qualityChecks }, warnings }`
-  - [ ] No console.log output unless `options.verbose` is true (the engine is silent by default — sp-2-3's CLI handles user output)
+  - [x] No console.log output unless `options.verbose` is true (the engine is silent by default — sp-2-3's CLI handles user output)
 
-- [ ] Task 7: Write export engine tests (AC: #9)
-  - [ ] Create `tests/lib/portability-export-engine.test.js`
-  - [ ] **Test 1:** `exportSkill('bmad-brainstorming', findProjectRoot())` returns object with all 4 keys
-  - [ ] **Test 2:** Result's `instructions` contains all 7 section headings in order. Use the `RegExp.exec().index` pattern from sp-2-1's Test 2 (P2 fix) — do NOT use `indexOf(m[0])`.
-  - [ ] **Test 3:** Result's `instructions` contains zero forbidden strings. Reuse the expanded forbidden-string list from sp-2-1's Test 3 (19 entries including bmad-speak, _bmad/, .claude/hooks, etc.).
-  - [ ] **Test 4:** Result's `instructions` contains zero curly-brace placeholders.
-  - [ ] **Test 5:** Result's `persona.name === 'Carson'` and `persona.icon === '🧠'`
-  - [ ] **Test 6:** `exportSkill('bmad-create-prd', ...)` throws an error containing the word `tier` and `light-deps` or `standalone`
-  - [ ] **Test 7:** `exportSkill('bmad-dev-story', ...)` throws an error containing `tier` and `pipeline` or `standalone`
-  - [ ] **Test 8:** `exportSkill` is read-only — snapshot directory mtime / git status before and after the call, assert no diff
-  - [ ] **Test 9:** Carson's export produces `warnings.length === 0` (gold-standard skill should produce zero warnings)
+- [x] Task 7: Write export engine tests (AC: #9)
+  - [x] Create `tests/lib/portability-export-engine.test.js`
+  - [x] Define a shared `STRUCTURAL_INVARIANTS` helper function that takes a result object + expected persona name + expected icon, and asserts:
+    - All 4 result keys present (`instructions`, `persona`, `sections`, `warnings`)
+    - All 7 section headings in correct order (use `RegExp.exec().index` pattern from sp-2-1's Test 2 — never `indexOf(m[0])`)
+    - Zero forbidden strings (reuse the 19-entry list from sp-2-1's Test 3 — import or duplicate)
+    - Zero curly-brace placeholders (regex `/\{[\w-]+\}/g`)
+    - Persona name + icon match the expected values
+    - Persona name appears at least once in the `instructions` text
+    - `warnings.length <= 2`
+    - All warning types are in the allowed set: `hook-script-stripped`, `unresolved-template-path`, `deep-conditional-skipped`, `unstripped-xml-tag`, `step-file-not-found`
 
-- [ ] Task 8: Run regression suite + verify (AC: #1-9)
-  - [ ] `npx jest tests/lib/portability-schema.test.js tests/lib/portability-classification.test.js tests/lib/portability-validation.test.js tests/lib/portability-canonical-format.test.js tests/lib/portability-export-engine.test.js`
-  - [ ] All tests pass (29 existing + 9 new = 38 minimum)
-  - [ ] `node scripts/convoke-doctor.js` — same baseline (2 pre-existing issues OK)
-  - [ ] Manual smoke check: write a tiny script that calls `exportSkill('bmad-brainstorming', findProjectRoot())` and prints the resulting `instructions` to stdout. Eyeball it — does it look like a usable instructions file? If yes, the engine works. If no, iterate. (This is a sanity check, not a checked-in test.)
+  - [x] **Test 1:** `exportSkill('bmad-brainstorming', findProjectRoot())` returns object satisfying `STRUCTURAL_INVARIANTS` with persona Carson + 🧠
+  - [x] **Test 2:** `exportSkill('bmad-agent-architect', findProjectRoot())` returns object satisfying `STRUCTURAL_INVARIANTS` with persona Winston + 🏗️ (Fix 1 — second fixture catches Carson-only blind spots)
+  - [x] **Test 3:** `exportSkill('bmad-create-prd', ...)` throws an error whose message contains BOTH the word `tier` and one of (`light-deps`, `standalone`)
+  - [x] **Test 4:** `exportSkill('bmad-dev-story', ...)` throws an error whose message contains BOTH `tier` and one of (`pipeline`, `standalone`)
+  - [x] **Test 5:** `exportSkill('bmad-nonexistent-skill', ...)` throws an error whose message contains `not in the manifest` or similar (sanity check on error path)
+  - [x] **Test 6: read-only invariant.** (Fix 6 — concrete implementation)
+    - Use `child_process.execSync('git status --porcelain', { cwd: projectRoot })` to capture the working tree state before the call
+    - If the captured output is non-empty (working tree is dirty), `console.warn('skipping read-only test — working tree has pre-existing changes')` and `return` early (don't fail the test on a dirty tree)
+    - Otherwise, call `exportSkill('bmad-brainstorming', projectRoot)` and capture `git status --porcelain` again
+    - Assert the two outputs are byte-identical
+  - [x] **Test 7:** Carson's export produces `warnings.length <= 2` AND every warning is in the allowed type set (Fix 3 — softened from `=== 0`)
+  - [x] **Test 8:** Winston's export produces `warnings.length <= 2` AND every warning is in the allowed type set
+  - [x] **Bonus Test 9:** `exportSkill('bmad-brainstorming', ...).sections` has all 7 keys (`title`, `persona`, `whenToUse`, `inputs`, `howToProceed`, `whatYouProduce`, `qualityChecks`) — exercises the structured-data return path
+
+- [x] Task 8: Run regression suite + verify (AC: #1-9)
+  - [x] `npx jest tests/lib/portability-schema.test.js tests/lib/portability-classification.test.js tests/lib/portability-validation.test.js tests/lib/portability-canonical-format.test.js tests/lib/portability-export-engine.test.js`
+  - [x] All tests pass (29 existing + 9 new = 38 minimum)
+  - [x] `node scripts/convoke-doctor.js` — same baseline (2 pre-existing issues OK)
+  - [x] Manual smoke check: write a tiny script that calls `exportSkill('bmad-brainstorming', findProjectRoot())` AND `exportSkill('bmad-agent-architect', findProjectRoot())` and prints both resulting `instructions` to stdout. Eyeball them — do they look like usable instructions files? If yes, the engine works. If no, iterate. (This is a sanity check, not a checked-in test.)
+  - [x] Verify: `git status --porcelain` after running the test suite shows NO changes to `_bmad/_config/skill-manifest.csv` or any source skill file. The engine is read-only.
 
 ## Dev Notes
 
@@ -260,7 +277,7 @@ The skill manifest contains entries like `bmad-brainstorming` (the skill), but t
 
 **No 5th strategy.** If all 4 fail, the engine throws `"<skill-name> has no resolvable persona — strategies 1-4 all failed. Add a row to agent-manifest.csv or inline a persona block in the skill source."` This is the **fail-loud** behavior — sp-2-4 will revisit if a true utility skill (e.g., `bmad-shard-doc`) needs special handling, but sp-2-2 doesn't speculate about it. (Fix 4 from sp-2-2 review.)
 
-For sp-2-2's scope, both `bmad-brainstorming` (Carson, exercises strategies 1-3) and `bmad-cis-agent-storyteller` (Sophia, exercises strategy 1 directly) must resolve cleanly.
+For sp-2-2's scope, both `bmad-brainstorming` (Carson, exercises strategy 2 — agent name `bmad-cis-agent-brainstorming-coach`) and `bmad-agent-architect` (Winston, exercises strategy 1 — exact name match) must resolve cleanly.
 
 ### Skill tool handling (Phase 5 of transformations)
 
