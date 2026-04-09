@@ -99,11 +99,14 @@ function findProjectRoot() {
  * @throws {Error} if version is not a non-empty string
  */
 function assertVersion(version, callSite) {
-  if (version === undefined || version === null || version === '') {
+  // Reject all non-string types (numeric 0, boolean false, etc.) — version
+  // must be a non-empty string. Closes Blind Hunter finding #9 (ag-7-1 review).
+  if (typeof version !== 'string' || version === '') {
     let displayed;
     if (version === null) displayed = 'null';
+    else if (version === undefined) displayed = 'undefined';
     else if (version === '') displayed = "''";
-    else displayed = 'undefined';
+    else displayed = `${typeof version} (${String(version)})`;
     throw new Error(
       `Refresh: cannot stamp config — getPackageVersion() returned ${displayed}; check package.json (call site: ${callSite})`
     );
