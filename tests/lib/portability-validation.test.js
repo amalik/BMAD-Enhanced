@@ -2,7 +2,7 @@ const fs = require('fs');
 const os = require('os');
 const path = require('path');
 const { findProjectRoot } = require('../../scripts/update/lib/utils');
-const { writeManifest, readManifest } = require('../../scripts/portability/manifest-csv');
+const { writeManifest } = require('../../scripts/portability/manifest-csv');
 const {
   validate,
   HARD_FINDING_TYPES,
@@ -59,15 +59,34 @@ function setupFixture(rows) {
   return tmpRoot;
 }
 
-function findingTypes(findings) {
-  return findings.map((f) => f.type);
-}
-
 function hasFindingType(findings, type) {
   return findings.some((f) => f.type === type);
 }
 
 describe('Portability validator (sp-1-3)', () => {
+  // P1 (sp-1-3 review): track every tmpdir setupFixture creates and remove
+  // them in afterEach to prevent dev/CI machine pollution.
+  const createdTmpDirs = [];
+  const trackingSetupFixture = setupFixture;
+
+  afterEach(() => {
+    while (createdTmpDirs.length > 0) {
+      const dir = createdTmpDirs.pop();
+      try {
+        fs.rmSync(dir, { recursive: true, force: true });
+      } catch (e) {
+        // Best-effort cleanup; don't fail tests on filesystem races
+      }
+    }
+  });
+
+  // Wrap setupFixture to record dirs for cleanup
+  const setup = (rows) => {
+    const dir = trackingSetupFixture(rows);
+    createdTmpDirs.push(dir);
+    return dir;
+  };
+
   test('Test 1: validator passes on the real skill-manifest.csv (smoke)', () => {
     const realRoot = findProjectRoot();
     const { totalSkills, findings } = validate(realRoot);
@@ -81,7 +100,7 @@ describe('Portability validator (sp-1-3)', () => {
   });
 
   test('Test 2: missing tier triggers [MISSING]', () => {
-    const tmpRoot = setupFixture([
+    const tmpRoot = setup([
       makeRow({ name: 'bmad-broken', tier: '' }),
     ]);
     const { findings } = validate(tmpRoot);
@@ -92,7 +111,7 @@ describe('Portability validator (sp-1-3)', () => {
   });
 
   test('Test 3: invalid tier value triggers [INVALID]', () => {
-    const tmpRoot = setupFixture([
+    const tmpRoot = setup([
       makeRow({ name: 'bmad-bogus-tier', tier: 'bogus' }),
     ]);
     const { findings } = validate(tmpRoot);
@@ -103,7 +122,7 @@ describe('Portability validator (sp-1-3)', () => {
   });
 
   test('Test 4: nonexistent _bmad/ dependency triggers [BROKEN-DEP]', () => {
-    const tmpRoot = setupFixture([
+    const tmpRoot = setup([
       makeRow({
         name: 'bmad-broken-dep',
         dependencies: '_bmad/nonexistent/path/to/file.md',
@@ -117,7 +136,7 @@ describe('Portability validator (sp-1-3)', () => {
   });
 
   test('Test 5: orphan skill-name dependency triggers [ORPHAN-DEP]', () => {
-    const tmpRoot = setupFixture([
+    const tmpRoot = setup([
       makeRow({
         name: 'bmad-source-skill',
         dependencies: 'bmad-fake-skill-that-does-not-exist',
@@ -132,7 +151,7 @@ describe('Portability validator (sp-1-3)', () => {
 
   test('Test 6: malformed config: dependency triggers [BAD-CONFIG-DEP]', () => {
     // Use an uppercase character which violates [a-z_][a-z0-9_]*
-    const tmpRoot = setupFixture([
+    const tmpRoot = setup([
       makeRow({
         name: 'bmad-bad-config',
         dependencies: 'config:BadKey',
@@ -145,7 +164,7 @@ describe('Portability validator (sp-1-3)', () => {
   });
 
   test('Test 7: pipeline skill with empty deps triggers [MISSING-PREREQS] warning (not error)', () => {
-    const tmpRoot = setupFixture([
+    const tmpRoot = setup([
       makeRow({
         name: 'bmad-pipeline-skill',
         tier: 'pipeline',
@@ -161,7 +180,7 @@ describe('Portability validator (sp-1-3)', () => {
   });
 
   test('Test 8: meta-platform pipeline skill is exempt from [MISSING-PREREQS]', () => {
-    const tmpRoot = setupFixture([
+    const tmpRoot = setup([
       makeRow({
         name: 'bmad-meta',
         tier: 'pipeline',
@@ -174,7 +193,7 @@ describe('Portability validator (sp-1-3)', () => {
   });
 
   test('Test 9: validator does not modify the manifest', () => {
-    const tmpRoot = setupFixture([
+    const tmpRoot = setup([
       makeRow({ name: 'bmad-readonly-test' }),
     ]);
     const manifestPath = path.join(tmpRoot, '_bmad', '_config', 'skill-manifest.csv');
