@@ -1,6 +1,6 @@
 # Story 7.2: Doctor Skill-Wrapper Validation
 
-Status: ready-for-dev
+Status: in-progress
 
 ## Story
 
@@ -38,19 +38,26 @@ So that partial installs (e.g., source tree copied successfully but `.claude/ski
 
 14. **Given** the namespace audit rule from Epic 6 retro Action Item #2 **When** Story 7.2 creates new files **Then** any new test file lives under `tests/unit/` (the project's standard test directory, NOT under any `_bmad/{module}/` namespace). No new files under `_bmad/{module}/` or `.claude/skills/`. **Namespace decision:** ✅ verified — Story 7.2 only modifies `scripts/convoke-doctor.js` and adds tests under `tests/unit/`.
 
-15. **Given** the dev runs `node scripts/convoke-doctor.js` against the current dev repo after the migration **When** the doctor completes **Then** the doctor reports green for `_artifacts skill wrappers`, `_enhance skill wrappers`, and any other workflow-bearing module. The pre-existing version-consistency drift on `_enhance: 1.0.0`, `_gyre: 1.0.0`, `_artifacts: 1.0.0`, `_team-factory: 1.0.0` is OUT of scope and may continue to fail.
+15. **Given** the dev runs `node scripts/convoke-doctor.js` against the dev repo **AFTER** running `convoke-update` (or manually regenerating any missing wrappers) **When** the doctor completes **Then** the doctor reports green for `_artifacts skill wrappers`, `_enhance skill wrappers`, and any other workflow-bearing module. **Pre-existing dev-repo wrapper drift NOTE:** as of 2026-04-09, `.claude/skills/bmad-migrate-artifacts/SKILL.md` is missing from the dev repo (verified — the directory does not exist). Story 7.2 is built specifically to detect this kind of drift, so the doctor WILL fail until either (a) `convoke-update` is run to regenerate the wrapper, OR (b) the wrapper is manually restored. Task 6 includes a sub-task to handle this. The pre-existing version-consistency drift on `_enhance: 1.0.0`, `_gyre: 1.0.0`, `_artifacts: 1.0.0`, `_team-factory: 1.0.0` is OUT of scope and may continue to fail.
 
 ## Tasks / Subtasks
 
-- [ ] **Task 0: Manifest schema discovery** (AC: #2) — verify the skill-manifest.csv format BEFORE writing the lookup helper
+- [ ] **Task 0: Manifest schema discovery + add missing Enhance row** (AC: #2) — verify the skill-manifest.csv format AND fix a pre-existing manifest gap BEFORE writing the lookup helper
   - [ ] 0.1 Open [_bmad/_config/skill-manifest.csv](_bmad/_config/skill-manifest.csv).
-  - [ ] 0.2 Read the header row to confirm the column order: `canonicalId,name,description,module,path,install_to_bmad,...`.
-  - [ ] 0.3 For each Convoke-authored bme workflow row, verify the `path` column is `_bmad/bme/{module}/workflows/{workflow.name}/SKILL.md` (or the team-factory variant). Capture the format string and any per-module variations in Dev Notes for use by Task 2.
-  - [ ] 0.4 Confirm the expected wrapper directory matches the `canonicalId` column (column 1). For `bmad-migrate-artifacts` and `bmad-portfolio-status`, the canonicalId IS the wrapper directory name (verbatim). For `bmad-enhance-initiatives-backlog`, the canonicalId has the `bmad-enhance-` prefix. **This is the lookup key.**
+  - [ ] 0.2 Read the header row to confirm the column order: `canonicalId,name,description,module,path,install_to_bmad,tier,intent,dependencies` (verified 2026-04-09).
+  - [ ] 0.3 For each Convoke-authored bme workflow row, verify the `path` column is `_bmad/bme/{module}/workflows/{workflow.name}/SKILL.md`. Capture the format string in Dev Notes for use by Task 2.
+  - [ ] 0.4 Confirm the wrapper directory name = `canonicalId` column (column 1). For `bmad-migrate-artifacts` and `bmad-portfolio-status`, the canonicalId IS the workflow name (verbatim). For Enhance, the canonicalId would be `bmad-enhance-${workflowName}` (prefixed).
+  - [ ] 0.5 **CRITICAL pre-Story-7.2 defect: `bmad-enhance-initiatives-backlog` is currently NOT in skill-manifest.csv.** Verified via `grep enhance _bmad/_config/skill-manifest.csv` returns zero matches. Without this row, the manifest-based lookup in Task 2 would fall back to the verbatim name (`initiatives-backlog`) and fail to find `.claude/skills/bmad-enhance-initiatives-backlog/SKILL.md`, causing the doctor to false-fail Enhance on every healthy install. **Fix: append the missing row to skill-manifest.csv as part of Task 0:**
+    ```csv
+    bmad-enhance-initiatives-backlog,bmad-enhance-initiatives-backlog,"Manage RICE initiatives backlog — triage review findings, rescore existing items, or bootstrap new backlogs.",bme,_bmad/bme/_enhance/workflows/initiatives-backlog/SKILL.md,true,,,
+    ```
+    The empty trailing fields are `tier`, `intent`, `dependencies` (matching the header schema). Place the row alphabetically near other `bmad-enhance-*` entries if any exist, otherwise at the end of the bme section.
+  - [ ] 0.6 After adding the row, verify: `grep enhance _bmad/_config/skill-manifest.csv` should return exactly the new row. The expected wrapper directory `bmad-enhance-initiatives-backlog` exists at `.claude/skills/bmad-enhance-initiatives-backlog/SKILL.md` (verified 2026-04-09).
+  - [ ] 0.7 **GATE:** Do not proceed to Task 1 until the manifest row is added and verified. Without it, the entire architecture of Story 7.2 breaks for the Enhance module.
 
 - [ ] **Task 1: Add `loadSkillManifest()` helper** (AC: #2)
   - [ ] 1.1 Open [scripts/convoke-doctor.js](scripts/convoke-doctor.js).
-  - [ ] 1.2 Add a top-level function `loadSkillManifest(projectRoot)` that reads `{projectRoot}/_bmad/_config/skill-manifest.csv`, parses it as CSV, and returns a `Map<sourcePath, canonicalId>` keyed by the `path` column with values from the `canonicalId` column. Use the same lightweight CSV parser as elsewhere in the file (or a small inline split-and-quote-handle if no helper exists). On any error (missing file, parse failure), return an empty `Map` and emit a warning via `console.warn` — do not throw, do not fail the doctor.
+  - [ ] 1.2 Add a top-level function `loadSkillManifest(projectRoot)` that reads `{projectRoot}/_bmad/_config/skill-manifest.csv`, parses it as CSV, and returns a `Map<sourcePath, canonicalId>` keyed by the `path` column with values from the `canonicalId` column. **Use the existing CSV parser at [_bmad/bme/_team-factory/lib/utils/csv-utils.js](_bmad/bme/_team-factory/lib/utils/csv-utils.js) which exports `parseCsvRow`** — it handles quoted fields with embedded commas (skill-manifest descriptions contain commas inside double-quoted strings). Import it via: `const { parseCsvRow } = require('../_bmad/bme/_team-factory/lib/utils/csv-utils');` (verify the relative path from convoke-doctor.js's location). On any error (missing file, parse failure), return an empty `Map` and emit a warning via `console.warn` — do not throw, do not fail the doctor.
   - [ ] 1.3 The map lookup key MUST be the source path, NOT the canonicalId, because `checkModuleSkillWrappers` knows the source path (from the workflow declaration in config.yaml) and needs to look up the wrapper directory name (canonicalId).
 
 - [ ] **Task 2: Add `checkModuleSkillWrappers(mod, projectRoot, manifestMap)` function** (AC: #1, #2, #3, #4, #5)
@@ -85,12 +92,13 @@ So that partial installs (e.g., source tree copied successfully but `.claude/ski
   - [ ] 4.7 Test (f) — manifest fallback: set up a workflow declared in `config.yaml` but NOT in `skill-manifest.csv`. Assert the function falls back to verbatim name AND the result includes the warning text in the `info` field.
   - [ ] 4.8 Test (g) — graceful degradation when manifest CSV is missing: delete `_bmad/_config/skill-manifest.csv` from the temp project. Assert `loadSkillManifest` returns an empty Map AND `checkModuleSkillWrappers` falls through to verbatim-name lookup for every workflow (with appropriate fallback warnings).
 
-- [ ] **Task 5: Export new functions from convoke-doctor.js** (AC: #13)
-  - [ ] 5.1 Find the existing `module.exports` block at the bottom of `convoke-doctor.js` (or the equivalent if the file uses CommonJS in a different style — check the bottom of the file).
-  - [ ] 5.2 If `convoke-doctor.js` has no `module.exports` (it's a CLI entry point), add one for testability: `module.exports = { loadSkillManifest, checkModuleSkillWrappers, /* + any others tests need */ };`. Place it at the very bottom of the file, AFTER the `if (require.main === module)` block (so the CLI entry point still works when invoked directly via `node scripts/convoke-doctor.js`).
+- [ ] **Task 5: Extend the existing `module.exports` from convoke-doctor.js** (AC: #13)
+  - [ ] 5.1 The file already has `module.exports = { checkTaxonomy };` at line 501 (verified 2026-04-09), AFTER the `if (require.main === module)` block at line 494 — the CLI behavior is already preserved.
+  - [ ] 5.2 **EXTEND** the existing exports block by adding the new functions: `module.exports = { checkTaxonomy, loadSkillManifest, checkModuleSkillWrappers };`. Do NOT create a second exports block.
   - [ ] 5.3 Verify the CLI still works: `node scripts/convoke-doctor.js` should produce the same output as before plus the new `_artifacts skill wrappers` and `_enhance skill wrappers` checks.
 
 - [ ] **Task 6: Manual end-to-end smoke test** (AC: #15)
+  - [ ] 6.0 **Fix dev-repo wrapper drift first.** As of 2026-04-09 the dev repo is missing `.claude/skills/bmad-migrate-artifacts/SKILL.md` (verified — directory does not exist). Run `node scripts/update/convoke-update.js` (or invoke `refreshInstallation` against the dev repo) to regenerate the missing wrapper. This is dogfooding Story 7.2's exact use case — the wrapper drift is the bug Story 7.2 is built to detect. After `convoke-update`, verify `ls .claude/skills/bmad-migrate-artifacts/` shows `SKILL.md`.
   - [ ] 6.1 Run `node scripts/convoke-doctor.js` against the dev repo. Confirm it now reports:
     - `✓ _artifacts skill wrappers — 2 workflows have skill wrappers`
     - `✓ _enhance skill wrappers — 1 workflows have skill wrappers`
@@ -131,14 +139,16 @@ The existing `checkModuleConfig`, `checkModuleAgents`, and `checkModuleWorkflows
 **Constraint 2: NFR1 — validator.js must NOT be touched.**
 Story 7.2's primary file is convoke-doctor.js, NOT validator.js. The validator already has Enhance and Artifacts skill-wrapper validation (added by Stories 6.5/6.6). Story 7.2 adds a parallel check in the doctor — both layers are intentional defense-in-depth. Story 7.3's audit may consolidate them later. AC #11 explicit.
 
-**Constraint 3: skill-manifest.csv is the authoritative source for wrapper directory names.**
+**Constraint 3: skill-manifest.csv is the authoritative source for wrapper directory names — AFTER Task 0 fixes a pre-existing gap.**
 The Story 7.2 spec offered three options for resolving the wrapper convention (per-module `wrapper_prefix` field, hardcoded lookup in convoke-doctor, or manifest lookup). **The manifest is the cleanest answer because:**
 - It's already the source of truth for skill discovery (used by Claude Code to find skills)
-- It's already maintained as part of every story that adds a workflow (Story 6.4 + 6.5 added the Artifacts entries; Enhance was added in earlier stories)
 - It avoids hardcoding `_enhance` vs `_artifacts` in the doctor
 - It avoids requiring a schema change to every module's `config.yaml`
 - The manifest entry IS the source of truth for the canonical wrapper directory name (column 1)
-The fallback to verbatim name (AC #3) handles the case where the manifest hasn't been updated yet, so missing manifest entries don't break the doctor.
+
+**Pre-Story-7.2 manifest defect (verified 2026-04-09):** `bmad-enhance-initiatives-backlog` is currently NOT in skill-manifest.csv. The wrapper exists at `.claude/skills/bmad-enhance-initiatives-backlog/SKILL.md` but there's no manifest row pointing at its source. **Without Task 0.5's fix, the manifest-based lookup would fall back to the verbatim name `initiatives-backlog` for Enhance and false-fail the doctor on every healthy install.** Task 0.5 adds the missing row as a prerequisite GATE before any code is touched. After Task 0, the manifest is truly authoritative for both Enhance and Artifacts.
+
+The fallback to verbatim name (AC #3) handles the case where a FUTURE module hasn't been added to the manifest yet — it's a forward-compat guard, not a workaround for the current Enhance gap.
 
 **Constraint 4: Workflow declarations can be strings OR objects.**
 Look at [convoke-doctor.js:236-239](scripts/convoke-doctor.js#L236-L239):
@@ -150,8 +160,8 @@ const missing = workflowNames.filter(w => {
 ```
 The existing `checkModuleWorkflows` already handles both shapes. `checkModuleSkillWrappers` MUST handle both shapes too — see [_artifacts/config.yaml](_bmad/bme/_artifacts/config.yaml) (object form with `name`, `entry`, `standalone`) vs older modules that use bare strings.
 
-**Constraint 5: The doctor is a CLI, not a test target.**
-`convoke-doctor.js` currently has no `module.exports` — it's a top-level CLI entry point. Task 5.2 adds an exports block AFTER the `if (require.main === module)` block (or wraps the entry point in such a block if not already). This is a minor structural change but necessary for testability. **Do NOT** convert convoke-doctor.js into a library that always exports — keep the CLI behavior intact when invoked directly.
+**Constraint 5: The doctor is a CLI AND a partial test target.**
+`convoke-doctor.js` already has `module.exports = { checkTaxonomy };` at line 501, AFTER the `if (require.main === module)` CLI guard at line 494 (verified 2026-04-09). The CLI behavior is already preserved by the guard. Task 5.2 EXTENDS the existing exports block to add `loadSkillManifest` and `checkModuleSkillWrappers` — do NOT create a second exports block. **Do NOT** remove or restructure the existing CLI guard — the file is BOTH a CLI entry point AND a test-importable module.
 
 ### Pattern References
 
@@ -169,7 +179,8 @@ The existing `checkModuleWorkflows` already handles both shapes. `checkModuleSki
 
 | File | Action | Purpose |
 |---|---|---|
-| [scripts/convoke-doctor.js](scripts/convoke-doctor.js) | Edit | Add `loadSkillManifest()` helper, add `checkModuleSkillWrappers()` function, add 3-line wiring in per-module loop, add `module.exports` block for testability |
+| [_bmad/_config/skill-manifest.csv](_bmad/_config/skill-manifest.csv) | Edit (Task 0.5) | Add the missing `bmad-enhance-initiatives-backlog` row — pre-Story-7.2 defect that breaks the manifest-based lookup if not fixed first |
+| [scripts/convoke-doctor.js](scripts/convoke-doctor.js) | Edit | Add `loadSkillManifest()` helper, add `checkModuleSkillWrappers()` function, add 3-line wiring in per-module loop, EXTEND existing `module.exports` block (line 501) with the new functions |
 | [tests/unit/convoke-doctor-skill-wrappers.test.js](tests/unit/convoke-doctor-skill-wrappers.test.js) | Create | 7 tests covering the AC #13 matrix (a-g) |
 
 **Do NOT modify:**
