@@ -1,6 +1,6 @@
 # Story SP-2.1: Canonical Format Specification
 
-Status: review
+Status: done
 
 ## Story
 
