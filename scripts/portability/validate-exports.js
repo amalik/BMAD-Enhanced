@@ -94,8 +94,9 @@ function validateInstructions(filePath, skillName) {
   const localLinks = [...content.matchAll(/\[([^\]]*)\]\((?!https?:\/\/|#|mailto:)([^)]+)\)/g)];
   for (const match of localLinks) {
     const linkTarget = match[2];
-    // Skip links containing template placeholders
+    // Skip links containing template placeholders or non-path content
     if (linkTarget.includes('[') || linkTarget.includes('{')) continue;
+    if (linkTarget.includes(' ')) continue; // URLs/paths don't have spaces; this is prose like "(none found)"
     const resolved = path.resolve(path.dirname(filePath), linkTarget);
     if (!fs.existsSync(resolved)) {
       issues.push({ skill: skillName, file: 'instructions.md', issue: `broken link: [${match[1]}](${linkTarget})` });
