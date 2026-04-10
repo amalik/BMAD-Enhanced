@@ -384,4 +384,13 @@ development_status:
   sp-5-1-template-inlining-for-tier-2-export: done
   sp-5-2-platform-adapter-generation: done
   sp-5-3-export-tier-2-skills-and-update-catalog: done
-  sp-epic-5-retrospective: optional
+  sp-epic-5-retrospective: done
+
+  # Epic 6: Skill Portability UX — Slash Command Wrappers
+  # Epic file: epic-skill-portability-ux.md
+  sp-epic-6: backlog
+  sp-6-1-export-skill-wrapper: backlog
+  sp-6-2-catalog-seed-skill-wrappers: backlog
+  sp-6-3-validate-exports-skill-wrapper: backlog
+  sp-6-4-skill-registration-discovery: backlog
+  sp-epic-6-retrospective: optional
