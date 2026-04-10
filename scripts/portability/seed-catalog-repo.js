@@ -28,13 +28,7 @@ const { buildReadme } = require('./convoke-export');
 // CONSTANTS
 // =============================================================================
 
-const FORBIDDEN_STRINGS = [
-  'Read tool', 'Edit tool', 'Write tool', 'Bash tool', 'Glob tool', 'Grep tool',
-  'Skill tool',
-  'bmad-init', 'bmad-help', 'bmad-speak', '_bmad/', '.claude/hooks',
-  '{project-root}', 'Load step:', 'read fully and follow',
-  'Read fully and execute:', 'Load fully and follow:',
-];
+const { FORBIDDEN_STRINGS } = require('./test-constants');
 
 const MIT_LICENSE = `MIT License
 
