@@ -1,0 +1,502 @@
+#!/usr/bin/env node
+/**
+ * convoke-export.js — Story sp-2-3
+ *
+ * CLI entry point for the Tier 1 skill exporter. Wraps `exportSkill()` from
+ * sp-2-2's export-engine.js, writes per-skill `instructions.md` + `README.md`
+ * to disk, and reports success/failure with stable grep-friendly lines.
+ *
+ * Usage:
+ *   convoke-export <skill-name>           # single skill, default output
+ *   convoke-export <skill-name> --output <dir>
+ *   convoke-export --tier 1               # batch all standalone skills
+ *   convoke-export --all                  # alias for --tier 1 (sp-2-3)
+ *   convoke-export --tier 1 --dry-run     # preview without writing
+ *   convoke-export --help
+ *
+ * The CLI is read-only on the source tree — only the --output directory
+ * (or the default ./exported-skills/) is written.
+ *
+ * See _bmad-output/implementation-artifacts/sp-2-3-cli-entry-point.md for the
+ * full spec.
+ */
+
+'use strict';
+
+const fs = require('fs');
+const path = require('path');
+const { findProjectRoot } = require('../update/lib/utils');
+const { exportSkill, humanizeSkillName } = require('./export-engine');
+const { readManifest } = require('./manifest-csv');
+
+// =============================================================================
+// EXIT CODES
+// =============================================================================
+
+const EXIT_SUCCESS = 0;
+const EXIT_USAGE = 1;
+const EXIT_NOT_FOUND = 2;
+const EXIT_TIER_NOT_SUPPORTED = 3;
+const EXIT_PARTIAL_FAILURE = 4;
+
+// =============================================================================
+// ARG PARSER (hand-rolled, no deps — matches classify-skills.js style)
+// =============================================================================
+
+/**
+ * Parse argv into a simple options object.
+ * Returns { positional: string[], output: string|null, tier: string|null,
+ *           all: boolean, dryRun: boolean, help: boolean, unknown: string|null }
+ */
+function parseArgs(argv) {
+  const opts = {
+    positional: [],
+    output: null,
+    tier: null,
+    all: false,
+    dryRun: false,
+    help: false,
+    unknown: null,
+  };
+  for (let i = 0; i < argv.length; i++) {
+    const a = argv[i];
+    if (a === '--help' || a === '-h') {
+      opts.help = true;
+    } else if (a === '--dry-run') {
+      opts.dryRun = true;
+    } else if (a === '--all') {
+      opts.all = true;
+    } else if (a === '--output') {
+      const next = argv[i + 1];
+      if (!next || next.startsWith('--')) {
+        opts.unknown = '--output (missing value)';
+        return opts;
+      }
+      opts.output = argv[++i];
+    } else if (a.startsWith('--output=')) {
+      const val = a.slice('--output='.length);
+      if (!val) { opts.unknown = '--output= (empty value)'; return opts; }
+      opts.output = val;
+    } else if (a === '--tier') {
+      const next = argv[i + 1];
+      if (!next || next.startsWith('--')) {
+        opts.unknown = '--tier (missing value)';
+        return opts;
+      }
+      opts.tier = argv[++i];
+    } else if (a.startsWith('--tier=')) {
+      const val = a.slice('--tier='.length);
+      if (!val) { opts.unknown = '--tier= (empty value)'; return opts; }
+      opts.tier = val;
+    } else if (a.startsWith('--')) {
+      opts.unknown = a;
+      return opts;
+    } else {
+      opts.positional.push(a);
+    }
+  }
+  return opts;
+}
+
+// =============================================================================
+// HELP TEXT (ASCII only — no emoji)
+// =============================================================================
+
+function printHelp() {
+  const lines = [
+    'Usage: convoke-export <skill-name> [options]',
+    '       convoke-export --tier <N> [options]',
+    '       convoke-export --all [options]',
+    '       convoke-export --help',
+    '',
+    'Description:',
+    '  Export a Tier 1 (standalone) BMAD skill to a portable per-skill directory',
+    '  containing instructions.md and a README.md stub. Wraps the sp-2-2 export',
+    '  engine. Read-only on the source tree.',
+    '',
+    'Flags:',
+    '  <skill-name>          Positional. Manifest skill name (e.g. bmad-brainstorming).',
+    '  --output <path>       Output directory root. Defaults to ./exported-skills/',
+    '                        relative to the project root. User-supplied paths are',
+    '                        resolved against the current working directory.',
+    '  --tier <value>        Batch-export by tier. Accepts: 1, standalone (proceed);',
+    '                        2, light-deps (rejected, sp-5-1); 3, pipeline (rejected).',
+    '                        Any other value exits 1 (usage error).',
+    '  --all                 Alias for --tier 1. Currently equivalent; will expand to',
+    '                        all exportable tiers when Tier 2 export ships (sp-5-1).',
+    '  --dry-run             Run the engine in-memory; print would-be paths; write',
+    '                        nothing. Combinable with all other flags.',
+    '  --help, -h            Print this message and exit 0.',
+    '',
+    '  Conflicts:',
+    '    - <skill-name> with --tier or --all  -> exit 1',
+    '    - --tier with --all                  -> exit 1',
+    '    - unknown flag                       -> exit 1',
+    '',
+    'Exit codes:',
+    '  0  Success (or empty batch, --help, --dry-run with no failures)',
+    '  1  Usage error (unknown flag, conflicting flags, invalid --tier value)',
+    '  2  Skill not found in manifest (single-skill mode)',
+    '  3  Tier not supported (Tier 2 / Tier 3 requested)',
+    '  4  Partial failure (batch mode with at least one failed skill)',
+    '',
+    'Examples:',
+    '  Example: single skill, default output',
+    '    convoke-export bmad-brainstorming',
+    '',
+    '  Example: single skill, custom output',
+    '    convoke-export bmad-brainstorming --output ./out',
+    '',
+    '  Example: batch tier 1, dry-run preview',
+    '    convoke-export --tier 1 --dry-run',
+    '',
+    '  Example: batch all (alias for --tier 1)',
+    '    convoke-export --all',
+    '',
+  ];
+  process.stdout.write(lines.join('\n'));
+}
+
+// =============================================================================
+// REPORTER
+// =============================================================================
+
+function makeReporter() {
+  const results = { success: 0, failed: 0, skipped: 0, warnings: 0 };
+  return {
+    success(skill, relPath, warnings) {
+      results.success++;
+      results.warnings += warnings;
+      const suffix = warnings > 0 ? ` (${warnings} warnings)` : '';
+      process.stdout.write(`✅ ${skill} → ${relPath}${suffix}\n`);
+    },
+    failure(skill, error) {
+      results.failed++;
+      const msg = (error && error.message ? error.message : String(error)).split('\n')[0];
+      process.stderr.write(`❌ ${skill} — ${msg}\n`);
+    },
+    skip(skill, reason) {
+      results.skipped++;
+      process.stdout.write(`⏭️  ${skill} — ${reason}\n`);
+    },
+    summary(dryRun) {
+      const prefix = dryRun ? '[DRY RUN] ' : '';
+      const total = results.success + results.failed + results.skipped;
+      process.stdout.write(
+        `${prefix}Exported ${total} skills (${results.success} success, ${results.failed} failed, ${results.skipped} skipped) — ${results.warnings} warnings total\n`
+      );
+    },
+    counts() {
+      return results;
+    },
+  };
+}
+
+// =============================================================================
+// README STUB GENERATION (Task 4)
+// =============================================================================
+
+/**
+ * Read the readme template once. Cached after first call.
+ */
+let _templateCache = null;
+function loadReadmeTemplate(projectRoot) {
+  if (_templateCache !== null) return _templateCache;
+  const tplPath = path.join(
+    projectRoot,
+    'scripts',
+    'portability',
+    'templates',
+    'readme-template.md'
+  );
+  _templateCache = fs.readFileSync(tplPath, 'utf8');
+  return _templateCache;
+}
+
+/**
+ * Build a per-skill README stub from manifest row + engine result.
+ * Throws if any placeholder remains after substitution (catches CLI bugs).
+ */
+function buildReadmeStub(skillRow, result, projectRoot) {
+  const template = loadReadmeTemplate(projectRoot);
+  const persona = result.persona || {};
+
+  const displayName = humanizeSkillName(skillRow.name);
+  const nameWithIcon = persona.icon ? `${persona.name} ${persona.icon}` : persona.name || '';
+  const commStyle =
+    (persona.communicationStyle && persona.communicationStyle.trim()) ||
+    (persona.identity && persona.identity.trim()) ||
+    'See instructions.md for details.';
+
+  // Strip the heading from "What you produce" — keep the body only.
+  const whatYouProduceBody = (result.sections.whatYouProduce || '')
+    .replace(/^##\s+What you produce\s*\n+/, '')
+    .trim();
+
+  // Parse the "Use when:" bullet block from whenToUse.
+  const whenSection = result.sections.whenToUse || '';
+  const bulletLines = whenSection
+    .split('\n')
+    .filter((l) => /^\s*-\s+/.test(l))
+    .map((l) => l.replace(/^\s+/, ''));
+  const triggerList =
+    bulletLines.length > 0
+      ? bulletLines.join('\n')
+      : '- See instructions.md for trigger conditions';
+
+  // Substitute. Order matters where one token is a prefix of another.
+  let out = template;
+  out = out.replaceAll('<Skill display name>', displayName);
+  out = out.replaceAll('<persona name + icon>', nameWithIcon);
+  out = out.replaceAll('<persona name>', persona.name || '');
+  out = out.replaceAll(
+    '<one-paragraph description of what the skill does and what value it delivers>',
+    skillRow.description || ''
+  );
+  out = out.replaceAll('<persona communication style summary>', commStyle);
+  out = out.replaceAll('<output artifact description>', whatYouProduceBody);
+  out = out.replaceAll('<trigger-list>', triggerList);
+  out = out.replaceAll('<skill-name>', skillRow.name);
+  out = out.replaceAll('<tier>', skillRow.tier);
+  out = out.replaceAll('<standalone | light-deps | pipeline>', skillRow.tier);
+
+  // Sanity check: strip HTML comments, then verify no multi-word <placeholder>
+  // tokens remain. Single-word HTML tags (br, em, code, sub, details, pre, etc.)
+  // are NOT flagged — only multi-word placeholders like <persona name> or
+  // <output artifact description> contain spaces.
+  const stripped = out.replace(/<!--[\s\S]*?-->/g, '');
+  const leftover = stripped.match(/<[a-z][a-z\s-]{2,}[a-z]>/gi);
+  if (leftover && leftover.length > 0) {
+    throw new Error(
+      `README stub generation left unsubstituted placeholders: ${leftover.join(', ')}`
+    );
+  }
+  return out;
+}
+
+// =============================================================================
+// SINGLE-SKILL EXPORT
+// =============================================================================
+
+/**
+ * Export one skill. Returns { ok: bool, exitCode: number, error?: Error }.
+ * Reporter is updated as a side effect.
+ */
+function runSingle(skillName, outputBase, dryRun, projectRoot, reporter) {
+  let result;
+  try {
+    result = exportSkill(skillName, projectRoot);
+  } catch (err) {
+    reporter.failure(skillName, err);
+    const msg = err.message || '';
+    if (msg.includes('not in the manifest')) {
+      return { ok: false, exitCode: EXIT_NOT_FOUND, error: err };
+    }
+    if (msg.includes('not standalone') || msg.includes('tier "')) {
+      return { ok: false, exitCode: EXIT_TIER_NOT_SUPPORTED, error: err };
+    }
+    return { ok: false, exitCode: EXIT_PARTIAL_FAILURE, error: err };
+  }
+
+  // Re-read the skill row for README stub generation
+  const manifestPath = path.join(projectRoot, '_bmad', '_config', 'skill-manifest.csv');
+  const { header, rows } = readManifest(manifestPath);
+  const nameIdx = header.indexOf('name');
+  const row = rows.find((r) => r[nameIdx] === skillName);
+  if (!row) {
+    const err = new Error(`Manifest row for "${skillName}" disappeared between engine call and README generation`);
+    reporter.failure(skillName, err);
+    return { ok: false, exitCode: EXIT_PARTIAL_FAILURE, error: err };
+  }
+  const skillRow = {};
+  for (let i = 0; i < header.length; i++) skillRow[header[i]] = row[i];
+
+  let readme;
+  try {
+    readme = buildReadmeStub(skillRow, result, projectRoot);
+  } catch (err) {
+    reporter.failure(skillName, err);
+    return { ok: false, exitCode: EXIT_PARTIAL_FAILURE, error: err };
+  }
+
+  const skillDir = path.join(outputBase, skillName);
+  const instructionsPath = path.join(skillDir, 'instructions.md');
+  const readmePath = path.join(skillDir, 'README.md');
+  const relInstructions = path.relative(projectRoot, instructionsPath);
+
+  if (!dryRun) {
+    try {
+      fs.mkdirSync(skillDir, { recursive: true });
+      fs.writeFileSync(instructionsPath, result.instructions);
+      fs.writeFileSync(readmePath, readme);
+    } catch (writeErr) {
+      reporter.failure(skillName, writeErr);
+      return { ok: false, exitCode: EXIT_PARTIAL_FAILURE, error: writeErr };
+    }
+  }
+
+  reporter.success(skillName, relInstructions, result.warnings.length);
+  return { ok: true, exitCode: EXIT_SUCCESS };
+}
+
+// =============================================================================
+// BATCH EXPORT
+// =============================================================================
+
+/**
+ * Validate the --tier value. Returns { ok, normalizedTier, exitCode, message }.
+ */
+function validateTier(tierValue) {
+  if (tierValue === '1' || tierValue === 'standalone') {
+    return { ok: true, normalizedTier: 'standalone' };
+  }
+  if (tierValue === '2' || tierValue === 'light-deps') {
+    return {
+      ok: false,
+      exitCode: EXIT_TIER_NOT_SUPPORTED,
+      message: "Tier 2 export is sp-5-1's job.",
+    };
+  }
+  if (tierValue === '3' || tierValue === 'pipeline') {
+    return {
+      ok: false,
+      exitCode: EXIT_TIER_NOT_SUPPORTED,
+      message: 'Tier 3 skills are not exported per the portability schema.',
+    };
+  }
+  return {
+    ok: false,
+    exitCode: EXIT_USAGE,
+    message: `Invalid --tier value: '${tierValue}'. Valid values: 1, 2, 3, standalone, light-deps, pipeline.`,
+  };
+}
+
+function runBatch(tierValue, outputBase, dryRun, projectRoot, reporter) {
+  const tier = validateTier(tierValue);
+  if (!tier.ok) {
+    process.stderr.write(`${tier.message}\n`);
+    return tier.exitCode;
+  }
+
+  const manifestPath = path.join(projectRoot, '_bmad', '_config', 'skill-manifest.csv');
+  const { header, rows } = readManifest(manifestPath);
+  const nameIdx = header.indexOf('name');
+  const tierIdx = header.indexOf('tier');
+
+  // Manifest may contain the same skill name across multiple modules.
+  // Dedupe — each skill name is exported once.
+  const matchingSkills = [
+    ...new Set(rows.filter((r) => r[tierIdx] === tier.normalizedTier).map((r) => r[nameIdx])),
+  ].sort();
+
+  if (matchingSkills.length === 0) {
+    process.stdout.write('Nothing to export — manifest matches found 0 skills\n');
+    return EXIT_SUCCESS;
+  }
+
+  for (const skillName of matchingSkills) {
+    runSingle(skillName, outputBase, dryRun, projectRoot, reporter);
+  }
+
+  const counts = reporter.counts();
+  return counts.failed > 0 ? EXIT_PARTIAL_FAILURE : EXIT_SUCCESS;
+}
+
+// =============================================================================
+// MAIN
+// =============================================================================
+
+function main() {
+  const argv = process.argv.slice(2);
+
+  // No args = print help and exit 0
+  if (argv.length === 0) {
+    printHelp();
+    return EXIT_SUCCESS;
+  }
+
+  const opts = parseArgs(argv);
+
+  if (opts.help) {
+    printHelp();
+    return EXIT_SUCCESS;
+  }
+
+  if (opts.unknown) {
+    process.stderr.write(`Unknown flag: ${opts.unknown}. Run --help for usage.\n`);
+    return EXIT_USAGE;
+  }
+
+  // Conflict matrix
+  const hasPositional = opts.positional.length > 0;
+  const hasTier = opts.tier !== null;
+  const hasAll = opts.all;
+  if (hasPositional && (hasTier || hasAll)) {
+    process.stderr.write(
+      'Conflict: positional skill name cannot be combined with --tier or --all. Run --help for usage.\n'
+    );
+    return EXIT_USAGE;
+  }
+  if (hasTier && hasAll) {
+    process.stderr.write('Conflict: --tier and --all cannot be combined. Run --help for usage.\n');
+    return EXIT_USAGE;
+  }
+  if (!hasPositional && !hasTier && !hasAll) {
+    process.stderr.write('No skill or batch flag provided. Run --help for usage.\n');
+    return EXIT_USAGE;
+  }
+  if (opts.positional.length > 1) {
+    process.stderr.write(
+      `Conflict: only one positional skill name allowed (got ${opts.positional.length}). Run --help for usage.\n`
+    );
+    return EXIT_USAGE;
+  }
+
+  const projectRoot = findProjectRoot();
+
+  // Resolve output base
+  let outputBase;
+  if (opts.output) {
+    outputBase = path.isAbsolute(opts.output)
+      ? opts.output
+      : path.resolve(process.cwd(), opts.output);
+  } else {
+    outputBase = path.join(projectRoot, 'exported-skills');
+  }
+
+  const reporter = makeReporter();
+
+  let exitCode;
+  if (hasPositional) {
+    const result = runSingle(opts.positional[0], outputBase, opts.dryRun, projectRoot, reporter);
+    reporter.summary(opts.dryRun);
+    exitCode = result.exitCode;
+  } else {
+    // Batch: --tier or --all
+    const tierValue = hasAll ? '1' : opts.tier;
+    exitCode = runBatch(tierValue, outputBase, opts.dryRun, projectRoot, reporter);
+    if (exitCode !== EXIT_TIER_NOT_SUPPORTED && exitCode !== EXIT_USAGE) {
+      reporter.summary(opts.dryRun);
+    }
+  }
+
+  return exitCode;
+}
+
+if (require.main === module) {
+  process.exit(main());
+}
+
+module.exports = {
+  parseArgs,
+  validateTier,
+  buildReadmeStub,
+  runSingle,
+  runBatch,
+  main,
+  EXIT_SUCCESS,
+  EXIT_USAGE,
+  EXIT_NOT_FOUND,
+  EXIT_TIER_NOT_SUPPORTED,
+  EXIT_PARTIAL_FAILURE,
+};
