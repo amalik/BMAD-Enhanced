@@ -136,8 +136,9 @@ function loadAgentManifest(projectRoot) {
 }
 
 /**
- * Resolve a persona for the given skill via the 4-strategy fallback chain.
- * Throws on failure (no silent generic — Fix 4).
+ * Resolve a persona for the given skill via the 5-strategy fallback chain.
+ * Strategies 1-4 use agent-manifest or inline extraction. Strategy 5
+ * synthesizes a minimal persona from workflow content (never throws).
  */
 function loadPersona(skillName, skillContent, workflowContent, projectRoot) {
   const agents = loadAgentManifest(projectRoot);
@@ -148,17 +149,33 @@ function loadPersona(skillName, skillContent, workflowContent, projectRoot) {
   // Strategy 2: bmad-cis-agent-* pattern transformation
   if (!agent) {
     // bmad-brainstorming → look up bmad-cis-agent-brainstorming-coach
-    // Try various transformations
+    // Try various transformations. Use bmad-cis- → bmad-cis-agent- first
+    // (avoids double-cis: bmad-cis-storytelling → bmad-cis-agent-cis-storytelling bug).
+    const base = skillName.startsWith('bmad-cis-')
+      ? skillName.replace(/^bmad-cis-/, 'bmad-cis-agent-')
+      : skillName.replace(/^bmad-/, 'bmad-cis-agent-');
     const candidates = [
-      skillName.replace(/^bmad-/, 'bmad-cis-agent-'),
-      skillName.replace(/^bmad-/, 'bmad-cis-agent-') + '-coach',
-      skillName.replace(/^bmad-/, 'bmad-cis-agent-') + '-specialist',
-      skillName.replace(/^bmad-/, 'bmad-cis-agent-') + '-expert',
-      skillName.replace(/^bmad-cis-/, 'bmad-cis-agent-'),
+      base,
+      base + '-coach',
+      base + '-specialist',
+      base + '-expert',
     ];
     for (const candidate of candidates) {
       agent = agents.find((a) => a.name === candidate);
       if (agent) break;
+    }
+  }
+
+  // Strategy 2b: alias map for CIS skill-to-agent stem mismatches
+  if (!agent) {
+    const CIS_SKILL_TO_AGENT = {
+      'bmad-cis-storytelling': 'bmad-cis-agent-storyteller',
+      'bmad-cis-innovation-strategy': 'bmad-cis-agent-innovation-strategist',
+      'bmad-cis-problem-solving': 'bmad-cis-agent-creative-problem-solver',
+    };
+    const aliasName = CIS_SKILL_TO_AGENT[skillName];
+    if (aliasName) {
+      agent = agents.find((a) => a.name === aliasName);
     }
   }
 
@@ -180,11 +197,9 @@ function loadPersona(skillName, skillContent, workflowContent, projectRoot) {
     if (inline) return inline;
   }
 
+  // Strategy 5: synthesize minimal persona from workflow/skill content (sp-2-4)
   if (!agent) {
-    throw new Error(
-      `${skillName} has no resolvable persona — strategies 1-4 all failed. ` +
-      `Add a row to agent-manifest.csv or inline a persona block in the skill source.`
-    );
+    return synthesizePersonaFromWorkflow(skillName, skillContent, workflowContent, projectRoot);
   }
 
   // Convert agent row to persona object
@@ -239,6 +254,65 @@ function extractInlinePersona(content) {
     communicationStyle: commStyle || '',
     principles: principles || '',
     source: 'inline',
+  };
+}
+
+/**
+ * Strategy 5: synthesize a minimal persona from workflow/skill content.
+ * Used for tool-like and wrapper skills that have no agent-manifest row
+ * and no inline persona block. Always returns a valid persona — never throws.
+ */
+function synthesizePersonaFromWorkflow(skillName, skillContent, workflowContent, projectRoot) {
+  const allContent = skillContent + '\n' + workflowContent;
+
+  // Name: humanized skill name (e.g., bmad-distillator → Distillator)
+  const name = humanizeSkillName(skillName);
+
+  // Role: extract from **Goal:** line, or Your Role: line, or fall back to skill name
+  let role = '';
+  const goalMatch = allContent.match(/\*\*Goal:\*\*\s*(.+?)(?:\n|$)/);
+  if (goalMatch) {
+    role = goalMatch[1].trim();
+  } else {
+    const roleMatch = allContent.match(/(?:\*\*)?Your Role:?\*?\*?\s*(.+?)(?:\n|$)/i);
+    if (roleMatch) role = roleMatch[1].trim();
+  }
+
+  // Identity: ## Overview first paragraph, or manifest description
+  let identity = '';
+  const overview = extractSectionByHeading(allContent, 'Overview');
+  if (overview) {
+    // First non-empty paragraph
+    const para = overview.split(/\n\n/)[0];
+    identity = para ? para.trim().slice(0, 200) : '';
+  }
+  if (!identity) {
+    // Fall back to manifest description. Wrapped in try/catch to preserve the
+    // "never throws" contract — manifest was already read earlier in the pipeline
+    // but we re-read here for the description column.
+    try {
+      const manifestPath = path.join(projectRoot, '_bmad', '_config', 'skill-manifest.csv');
+      const { header, rows } = readManifest(manifestPath);
+      const nameIdx = header.indexOf('name');
+      const descIdx = header.indexOf('description');
+      const row = rows.find((r) => r[nameIdx] === skillName);
+      if (row && descIdx >= 0) {
+        identity = (row[descIdx] || '').slice(0, 200);
+      }
+    } catch (_) {
+      // Manifest read failed — identity stays empty, which is acceptable
+    }
+  }
+
+  return {
+    name,
+    icon: '🔧',
+    title: role || name,
+    role: role || '',
+    identity: identity || role || '',
+    communicationStyle: '',
+    principles: '',
+    source: 'workflow-derived',
   };
 }
 
