@@ -46,6 +46,32 @@ const ALLOWED_WARNING_TYPES = new Set([
 ]);
 
 // =============================================================================
+// HELPERS
+// =============================================================================
+
+/**
+ * Recursively search a directory tree for a file by basename.
+ * Returns the first match found, or null.
+ */
+function findFileByName(dir, basename) {
+  try {
+    const entries = fs.readdirSync(dir, { withFileTypes: true });
+    for (const entry of entries) {
+      const full = path.join(dir, entry.name);
+      if (entry.isDirectory()) {
+        const found = findFileByName(full, basename);
+        if (found) return found;
+      } else if (entry.name === basename) {
+        return full;
+      }
+    }
+  } catch (_) {
+    // Permission error, symlink loop, etc. — skip silently
+  }
+  return null;
+}
+
+// =============================================================================
 // SOURCE LOADERS
 // =============================================================================
 
@@ -351,7 +377,7 @@ function extractSectionByHeading(content, headingName) {
  * Apply all transformation rules in order. Pure functional, no side effects
  * except optional warning emission.
  */
-function applyTransformations(text, warnings) {
+function applyTransformations(text, warnings, options = {}) {
   let result = text;
 
   // Phase 1: Strip frontmatter blocks at the start of any block
@@ -429,7 +455,12 @@ function applyTransformations(text, warnings) {
     .filter((line) => !/Skill tool/.test(line))
     .join('\n');
 
-  // Phase 6: Substitute config vars
+  // Phase 6: Substitute config vars (skipped when processing template content — preserves {{var}} placeholders)
+  if (options.skipPhase6) {
+    // Phase 7: Collapse whitespace (still applies even when Phase 6 is skipped)
+    result = result.replace(/\n{3,}/g, '\n\n').trim();
+    return result;
+  }
   const configVarMap = {
     user_name: '[your name]',
     communication_language: '[your preferred language]',
@@ -814,6 +845,127 @@ function extractQualityChecks(workflowContent, stepContents) {
 }
 
 // =============================================================================
+// TIER 2: DEPENDENCY HANDLING (sp-5-1)
+// =============================================================================
+
+/**
+ * Categorize a skill's dependencies into templates, skill-refs, and sidecars.
+ * @param {string} depsString - semicolon-separated deps from manifest
+ * @param {string} projectRoot
+ * @param {Set<string>} manifestSkillNames - all skill names in manifest
+ * @param {string} skillDir - the skill's source directory (for relative path resolution)
+ * @returns {{ templates: Array, skillRefs: Array, sidecars: Array }}
+ */
+function categorizeDependencies(depsString, projectRoot, manifestSkillNames, skillDir) {
+  const templates = [];
+  const skillRefs = [];
+  const sidecars = [];
+
+  if (!depsString || !depsString.trim()) return { templates, skillRefs, sidecars };
+
+  const deps = depsString.split(';').map((d) => d.trim()).filter(Boolean);
+
+  for (const dep of deps) {
+    // 1. Skill reference (matches a manifest name)
+    if (manifestSkillNames.has(dep)) {
+      skillRefs.push({ name: dep });
+      continue;
+    }
+
+    // 2. Sidecar (path contains _memory or sidecar)
+    if (dep.includes('_memory') || dep.includes('sidecar')) {
+      sidecars.push({ name: path.basename(dep), path: dep });
+      continue;
+    }
+
+    // 3. Template (path under templates/ directory, exists on disk)
+    // Try to resolve: direct resolution, project-root-relative, then subtree search by basename
+    let resolvedPath = null;
+    const candidates = [
+      path.resolve(skillDir, dep),
+      path.join(projectRoot, dep),
+    ];
+    for (const candidate of candidates) {
+      if (fs.existsSync(candidate)) {
+        resolvedPath = candidate;
+        break;
+      }
+    }
+    // Subtree search fallback: look for the basename under the skill dir tree
+    if (!resolvedPath && dep.endsWith('.md')) {
+      const basename = path.basename(dep);
+      const searchDirs = [skillDir, path.join(projectRoot, '_bmad')];
+      for (const searchDir of searchDirs) {
+        if (!fs.existsSync(searchDir)) continue;
+        const found = findFileByName(searchDir, basename);
+        if (found) { resolvedPath = found; break; }
+      }
+    }
+
+    if (resolvedPath && dep.includes('templates/')) {
+      const content = fs.readFileSync(resolvedPath, 'utf8');
+      const displayName = path.basename(dep, '.md')
+        .replace(/-/g, ' ')
+        .replace(/\b\w/g, (c) => c.toUpperCase());
+      templates.push({ name: displayName, path: resolvedPath, content });
+      continue;
+    }
+
+    // 4. Exists on disk but not under templates/ → sidecar (conservative)
+    if (resolvedPath) {
+      sidecars.push({ name: path.basename(dep), path: dep });
+      continue;
+    }
+
+    // 5. Unknown → sidecar
+    sidecars.push({ name: path.basename(dep), path: dep });
+  }
+
+  return { templates, skillRefs, sidecars };
+}
+
+/**
+ * Build inlined template sections for Tier 2 skills.
+ * Each template gets its own ## heading with the content below.
+ * Applies transformations with skipPhase6 to preserve {{var}} placeholders.
+ */
+function buildTemplateSections(templates, warnings) {
+  const sections = [];
+  for (const tpl of templates) {
+    let content = tpl.content;
+    // Strip YAML frontmatter from template
+    content = content.replace(/^---\n[\s\S]*?\n---\n/, '');
+    // Apply transformations Phases 1-5 + 7 only (skip Phase 6 to preserve {{var}})
+    content = applyTransformations(content, warnings, { skipPhase6: true });
+
+    sections.push(`## Template: ${tpl.name}`);
+    sections.push('');
+    sections.push('> Replace template placeholders ({{...}}) with your project\'s actual values.');
+    sections.push('');
+    sections.push('Use this template as the starting structure for your output document.');
+    sections.push('');
+    sections.push(content);
+  }
+  return sections.join('\n');
+}
+
+/**
+ * Build companion-skill and sidecar notes for the Inputs section.
+ */
+function buildDependencyNotes(skillRefs, sidecars, manifestSkillNames) {
+  const lines = [];
+  for (const ref of skillRefs) {
+    const qualifier = manifestSkillNames.has(ref.name) ? ' Available in the skills catalog.' : '';
+    const displayName = humanizeSkillName(ref.name);
+    lines.push(`- **Companion skill: ${displayName}.** This skill works best when used together with the ${displayName} skill.${qualifier}`);
+  }
+  for (const sc of sidecars) {
+    lines.push(`- **Persistent data: ${sc.name}.** This skill maintains a data file for session history. Create an empty file at this path if starting fresh.`);
+  }
+  return lines.join('\n');
+}
+
+// =============================================================================
 // MAIN: exportSkill
 // =============================================================================
 
@@ -827,28 +979,36 @@ function extractQualityChecks(workflowContent, stepContents) {
  *
  * Throws:
  * - if the skill is not in the manifest
- * - if the skill's tier is not 'standalone' (light-deps and pipeline are out of scope)
- * - if persona resolution fails (all 4 strategies)
+ * - if the skill's tier is 'pipeline' (only standalone + light-deps are exportable)
+ * - if persona resolution fails (all 5 strategies)
  */
 function exportSkill(skillName, projectRoot, options = {}) {
   const warnings = [];
 
-  // 1. Load skill row + tier check
+  // 1. Load skill row + tier check (standalone + light-deps allowed; pipeline rejected)
   const skillRow = loadSkillRow(skillName, projectRoot);
-  if (skillRow.tier !== 'standalone') {
+  if (skillRow.tier === 'pipeline') {
     throw new Error(
-      `${skillName} is tier "${skillRow.tier}", not standalone — Tier 2 export is sp-5-1's job, ` +
-      `Tier 3 skills are not exported per the portability schema.`
+      `${skillName} is tier "pipeline" — pipeline skills are not exported per the portability schema.`
     );
   }
 
   // 2. Load source files
-  const { skillContent, workflowContent, stepContents } = loadSkillSource(skillRow, projectRoot, warnings);
+  const { skillContent, workflowContent, stepContents, skillDir } = loadSkillSource(skillRow, projectRoot, warnings);
 
-  // 3. Resolve persona (throws if all 4 strategies fail)
+  // 3. Resolve persona (throws if all 5 strategies fail)
   const persona = loadPersona(skillName, skillContent, workflowContent, projectRoot);
 
-  // 4. Run all section extractors
+  // 4. Categorize dependencies for Tier 2 (no-op for standalone — empty deps)
+  const manifestPath = path.join(projectRoot, '_bmad', '_config', 'skill-manifest.csv');
+  const { header: mHeader, rows: mRows } = readManifest(manifestPath);
+  const mNameIdx = mHeader.indexOf('name');
+  const manifestSkillNames = new Set(mRows.map((r) => r[mNameIdx]));
+  const deps = categorizeDependencies(
+    skillRow.dependencies || '', projectRoot, manifestSkillNames, skillDir || path.dirname(path.join(projectRoot, skillRow.path))
+  );
+
+  // 5. Run all section extractors
   const sections = {
     title: extractTitle(skillName, persona),
     persona: extractPersona(persona),
@@ -866,6 +1026,29 @@ function exportSkill(skillName, projectRoot, options = {}) {
       transformedSections[key] = null;
     } else {
       transformedSections[key] = applyTransformations(value, warnings);
+    }
+  }
+
+  // 5b. Replace template-path references in workflow text with "see Template section below"
+  if (deps.templates.length > 0 && transformedSections.howToProceed) {
+    for (const tpl of deps.templates) {
+      const basename = path.basename(tpl.path);
+      // Replace lines referencing the template file (load, read, use the template, etc.)
+      transformedSections.howToProceed = transformedSections.howToProceed
+        .split('\n')
+        .map((line) => {
+          if (line.includes(basename) || (line.includes('template') && line.includes('load'))) {
+            // Only replace if the line looks like a template-loading directive
+            if (/(?:load|read|use|initialize from|open)\b/i.test(line) && line.includes(basename)) {
+              return line.replace(
+                new RegExp(`[^\`]*${basename.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}[^\`]*`, 'i'),
+                `see the "Template: ${tpl.name}" section below`
+              );
+            }
+          }
+          return line;
+        })
+        .join('\n');
     }
   }
 
@@ -887,6 +1070,24 @@ function exportSkill(skillName, projectRoot, options = {}) {
     parts.push('');
     parts.push(transformedSections.qualityChecks);
   }
+
+  // 6b. Append dependency notes to inputs section (Tier 2 — no-op for standalone)
+  const depNotes = buildDependencyNotes(deps.skillRefs, deps.sidecars, manifestSkillNames);
+  if (depNotes) {
+    // Find the inputs part and append notes
+    const inputsIdx = parts.indexOf(transformedSections.inputs);
+    if (inputsIdx >= 0) {
+      parts[inputsIdx] = parts[inputsIdx] + '\n' + depNotes;
+    }
+  }
+
+  // 6c. Append inlined template sections (Tier 2 — no-op for standalone)
+  const templateContent = buildTemplateSections(deps.templates, warnings);
+  if (templateContent) {
+    parts.push('');
+    parts.push(templateContent);
+  }
+
   const instructions = parts.join('\n').replace(/\n{3,}/g, '\n\n').trim() + '\n';
 
   // 7. Final pass: catch any remaining unstripped XML tags as warnings
