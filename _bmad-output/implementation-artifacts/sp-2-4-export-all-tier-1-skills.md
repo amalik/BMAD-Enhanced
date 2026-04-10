@@ -1,6 +1,6 @@
 # Story SP-2.4: Export All Tier 1 Skills
 
-Status: in-progress
+Status: done
 
 ## Story
 
@@ -44,7 +44,7 @@ so that the first batch of portable skills is ready for the catalog repository (
 
 ## Tasks / Subtasks
 
-- [ ] Task 1a: Fix Strategy 2 stem-mismatch for 4 CIS wrapper skills (AC: #2)
+- [x] Task 1a: Fix Strategy 2 stem-mismatch for 4 CIS wrapper skills (AC: #2)
   - [ ] Debug why Strategies 1-4 fail for the 4 `bmad-cis-*` wrapper skills. The root cause is a stem mismatch between skill name and agent-manifest name:
     - `bmad-cis-storytelling` → agent is `bmad-cis-agent-storyteller` (stem: `storytelling` vs `storyteller`)
     - `bmad-cis-innovation-strategy` → agent is `bmad-cis-agent-innovation-strategist` (stem: `innovation-strategy` vs `innovation-strategist`)
@@ -64,7 +64,7 @@ so that the first batch of portable skills is ready for the catalog repository (
   - [ ] Choose whichever approach (fuzzy or alias map) is more robust — dev's judgment call. The alias map is safer for a 4-entry set; fuzzy is more forward-compatible.
   - [ ] After this fix, the 4 CIS wrapper skills should resolve to their named personas (Sophia, Victor, Maya, Dr. Quinn) via Strategy 2/2b, NOT via Strategy 5. Verify by re-running the batch and confirming these 4 now appear with rich personas.
 
-- [ ] Task 1b: Add Strategy 5 (workflow-derived persona) to `export-engine.js` (AC: #2)
+- [x] Task 1b: Add Strategy 5 (workflow-derived persona) to `export-engine.js` (AC: #2)
   - [ ] Add a new function `synthesizePersonaFromWorkflow(skillName, skillContent, workflowContent, skillRow)` below `extractInlinePersona`
   - [ ] Extract `name` from: (a) `**Goal:**` line action noun if recognizable, else (b) `humanizeSkillName(skillRow.name)` — e.g., `bmad-distillator` → `Distillator`, `bmad-testarch-atdd` → `Testarch Atdd`
   - [ ] Set `icon` to `🔧` (generic tool icon)
@@ -76,23 +76,23 @@ so that the first batch of portable skills is ready for the catalog repository (
   - [ ] Wire it into `loadPersona()` as the new Strategy 5 (after Strategy 4, before the throw)
   - [ ] After this, only the 24 remaining skills (Groups B + C minus the 4 CIS now fixed) should hit Strategy 5
 
-- [ ] Task 2: Verify all 44 standalone skills export successfully (AC: #1, #2)
+- [x] Task 2: Verify all 44 standalone skills export successfully (AC: #1, #2)
   - [ ] Run `node scripts/portability/convoke-export.js --tier 1 --output /tmp/sp-2-4-verify` and confirm exit 0
   - [ ] Count the output directories: should equal the manifest's unique standalone count (currently 44)
   - [ ] Spot-check 3 workflow-derived persona skills: verify the persona section is minimal but valid (`## You are <humanized name> 🔧`)
   - [ ] Spot-check 3 named-persona skills (Carson, Winston, Murat): verify the persona section is rich (name + icon + role + identity + communication style + principles)
 
-- [ ] Task 3: Programmatic forbidden-string verification (AC: #3, #4, #5)
+- [x] Task 3: Programmatic forbidden-string verification (AC: #3, #4, #5)
   - [ ] Write a script or inline test that iterates every `instructions.md` in the output and checks for all 19 forbidden strings
   - [ ] Write a check that every `instructions.md` contains `## You are`
   - [ ] Write a check that every `README.md` contains persona name, description, and `How to use`
   - [ ] If any violations are found, fix the engine/CLI (likely transformation rule gaps for skills that weren't tested before)
 
-- [ ] Task 4: Add `exported-skills/` to `.gitignore` (AC: #7)
+- [x] Task 4: Add `exported-skills/` to `.gitignore` (AC: #7)
   - [ ] Check if `.gitignore` exists at project root. If yes, append `exported-skills/` on a new line. If no, create it with `exported-skills/\n` as content. Do NOT clobber existing entries.
   - [ ] Verify `git status` no longer shows the directory after a test export
 
-- [ ] Task 5: Write tests (AC: #8)
+- [x] Task 5: Write tests (AC: #8)
   - [ ] Create `tests/lib/portability-export-all.test.js`
   - [ ] Use `child_process.spawnSync` to run the CLI as a subprocess (match sp-2-3 test pattern)
   - [ ] Use `os.tmpdir() + crypto.randomUUID()` for isolated output directories
@@ -100,7 +100,7 @@ so that the first batch of portable skills is ready for the catalog repository (
   - [ ] All 5 tests from AC #8 implemented
   - [ ] **Performance note:** the full batch export takes ~2-5 seconds; use `beforeAll` to run the CLI once and share the output across all 5 tests (avoid running the batch 5x)
 
-- [ ] Task 6: Run regression suite + verify (AC: #1-9)
+- [x] Task 6: Run regression suite + verify (AC: #1-9)
   - [ ] `npx jest tests/lib/portability` — all portability tests pass (47 existing + 5 new = 52 minimum)
   - [ ] `node scripts/convoke-doctor.js` — same baseline (2 pre-existing issues OK)
   - [ ] `git status --porcelain` after the test run shows NO changes outside tmpdirs
@@ -197,8 +197,25 @@ afterAll(() => cleanupTmpDir(tmpDir));
 
 ### Agent Model Used
 
+claude-opus-4-6[1m]
+
 ### Debug Log References
 
 ### Completion Notes List
 
+- **Task 1a — Strategy 2 double-cis bug fix:** The first `replace(/^bmad-/, 'bmad-cis-agent-')` produced `bmad-cis-agent-cis-storytelling` (double `cis`). Fixed by checking `startsWith('bmad-cis-')` and routing to the correct replace. Added Strategy 2b alias map for 3 stem mismatches (`storytelling→storyteller`, `innovation-strategy→innovation-strategist`, `problem-solving→creative-problem-solver`). `bmad-cis-design-thinking` → `bmad-cis-agent-design-thinking-coach` now resolves via the fixed Strategy 2 `-coach` suffix (no alias needed). All 4 CIS wrappers now resolve to named personas: Sophia, Victor, Maya, Dr. Quinn.
+- **Task 1b — Strategy 5 (workflow-derived persona):** Added `synthesizePersonaFromWorkflow()` as a never-throw fallback after Strategy 4. Extracts name from `humanizeSkillName()`, role from `**Goal:**`/`Your Role:` lines, identity from `## Overview` section or manifest description. Produces `## You are <Name> 🔧` blocks. Source: `'workflow-derived'`.
+- **Task 2 — Full batch verification:** `--tier 1 --output /tmp/sp-2-4-verify` exits 0 with 44/44 success. 400 total warnings (mostly `unresolved-template-path` from Phase 6 catch-all on workflow-derived skills).
+- **Task 3 — Forbidden string + structural grep:** Zero violations across all 44 skills. Every `instructions.md` has `## You are`, every `README.md` has `How to use`.
+- **Task 4 — `.gitignore`:** Added `exported-skills/` under `# Build outputs`.
+- **Task 5 — 5 tests:** `beforeAll` runs the batch once, shares output across tests. Test 5 counts 20 named-persona skills (>= 12 floor).
+- **Regression:** 52/52 portability tests pass. Doctor: 2 pre-existing issues, no new.
+
 ### File List
+
+**Modified:**
+- `scripts/portability/export-engine.js` — Strategy 2 double-cis fix, Strategy 2b alias map (3 entries), `synthesizePersonaFromWorkflow()` function (~50 lines), wired into `loadPersona()` as Strategy 5
+- `.gitignore` — added `exported-skills/`
+
+**New:**
+- `tests/lib/portability-export-all.test.js` — 5 batch-verification tests (~140 lines)
