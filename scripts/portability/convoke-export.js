@@ -28,6 +28,7 @@ const path = require('path');
 const { findProjectRoot } = require('../update/lib/utils');
 const { exportSkill, humanizeSkillName } = require('./export-engine');
 const { readManifest } = require('./manifest-csv');
+const { generateAdapters } = require('./generate-adapters');
 
 // =============================================================================
 // EXIT CODES
@@ -110,20 +111,19 @@ function printHelp() {
     '       convoke-export --help',
     '',
     'Description:',
-    '  Export a Tier 1 (standalone) BMAD skill to a portable per-skill directory',
-    '  containing instructions.md and a README.md stub. Wraps the sp-2-2 export',
-    '  engine. Read-only on the source tree.',
+    '  Export a BMAD skill (Tier 1 standalone or Tier 2 light-deps) to a portable',
+    '  per-skill directory containing instructions.md and a README.md. Wraps the',
+    '  export engine. Read-only on the source tree.',
     '',
     'Flags:',
     '  <skill-name>          Positional. Manifest skill name (e.g. bmad-brainstorming).',
     '  --output <path>       Output directory root. Defaults to ./exported-skills/',
     '                        relative to the project root. User-supplied paths are',
     '                        resolved against the current working directory.',
-    '  --tier <value>        Batch-export by tier. Accepts: 1, standalone (proceed);',
-    '                        2, light-deps (rejected, sp-5-1); 3, pipeline (rejected).',
+    '  --tier <value>        Batch-export by tier. Accepts: 1/standalone, 2/light-deps',
+    '                        (both proceed); 3/pipeline (rejected).',
     '                        Any other value exits 1 (usage error).',
-    '  --all                 Alias for --tier 1. Currently equivalent; will expand to',
-    '                        all exportable tiers when Tier 2 export ships (sp-5-1).',
+    '  --all                 Export all exportable tiers (standalone + light-deps).',
     '  --dry-run             Run the engine in-memory; print would-be paths; write',
     '                        nothing. Combinable with all other flags.',
     '  --help, -h            Print this message and exit 0.',
@@ -137,7 +137,7 @@ function printHelp() {
     '  0  Success (or empty batch, --help, --dry-run with no failures)',
     '  1  Usage error (unknown flag, conflicting flags, invalid --tier value)',
     '  2  Skill not found in manifest (single-skill mode)',
-    '  3  Tier not supported (Tier 2 / Tier 3 requested)',
+    '  3  Tier not supported (Tier 3 / pipeline requested)',
     '  4  Partial failure (batch mode with at least one failed skill)',
     '',
     'Examples:',
@@ -150,7 +150,7 @@ function printHelp() {
     '  Example: batch tier 1, dry-run preview',
     '    convoke-export --tier 1 --dry-run',
     '',
-    '  Example: batch all (alias for --tier 1)',
+    '  Example: batch all (standalone + light-deps)',
     '    convoke-export --all',
     '',
   ];
@@ -345,6 +345,7 @@ function runSingle(skillName, outputBase, dryRun, projectRoot, reporter) {
       fs.mkdirSync(skillDir, { recursive: true });
       fs.writeFileSync(instructionsPath, result.instructions);
       fs.writeFileSync(readmePath, readme);
+      generateAdapters(skillName, skillRow, result.instructions, skillDir);
     } catch (writeErr) {
       reporter.failure(skillName, writeErr);
       return { ok: false, exitCode: EXIT_PARTIAL_FAILURE, error: writeErr };
@@ -363,15 +364,14 @@ function runSingle(skillName, outputBase, dryRun, projectRoot, reporter) {
  * Validate the --tier value. Returns { ok, normalizedTier, exitCode, message }.
  */
 function validateTier(tierValue) {
+  if (tierValue === 'all') {
+    return { ok: true, normalizedTier: 'all' };
+  }
   if (tierValue === '1' || tierValue === 'standalone') {
     return { ok: true, normalizedTier: 'standalone' };
   }
   if (tierValue === '2' || tierValue === 'light-deps') {
-    return {
-      ok: false,
-      exitCode: EXIT_TIER_NOT_SUPPORTED,
-      message: "Tier 2 export is sp-5-1's job.",
-    };
+    return { ok: true, normalizedTier: 'light-deps' };
   }
   if (tierValue === '3' || tierValue === 'pipeline') {
     return {
@@ -401,8 +401,12 @@ function runBatch(tierValue, outputBase, dryRun, projectRoot, reporter) {
 
   // Manifest may contain the same skill name across multiple modules.
   // Dedupe — each skill name is exported once.
+  // 'all' exports standalone + light-deps; specific tier exports that tier only
+  const tierFilter = tier.normalizedTier === 'all'
+    ? (t) => t === 'standalone' || t === 'light-deps'
+    : (t) => t === tier.normalizedTier;
   const matchingSkills = [
-    ...new Set(rows.filter((r) => r[tierIdx] === tier.normalizedTier).map((r) => r[nameIdx])),
+    ...new Set(rows.filter((r) => tierFilter(r[tierIdx])).map((r) => r[nameIdx])),
   ].sort();
 
   if (matchingSkills.length === 0) {
@@ -489,7 +493,7 @@ function main() {
     exitCode = result.exitCode;
   } else {
     // Batch: --tier or --all
-    const tierValue = hasAll ? '1' : opts.tier;
+    const tierValue = hasAll ? 'all' : opts.tier;
     exitCode = runBatch(tierValue, outputBase, opts.dryRun, projectRoot, reporter);
     if (exitCode !== EXIT_TIER_NOT_SUPPORTED && exitCode !== EXIT_USAGE) {
       reporter.summary(opts.dryRun);
