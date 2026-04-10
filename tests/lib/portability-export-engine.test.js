@@ -109,16 +109,17 @@ describe('Export engine (sp-2-2)', () => {
     assertStructuralInvariants(result, 'Winston', '🏗️');
   });
 
-  test('Test 3: bmad-create-prd (Tier 2 light-deps) throws an error', () => {
-    expect(() => {
-      exportSkill('bmad-create-prd', projectRoot);
-    }).toThrow(/tier.*(?:light-deps|standalone)/i);
+  test('Test 3: bmad-create-prd (Tier 2 light-deps) exports successfully', () => {
+    const result = exportSkill('bmad-create-prd', projectRoot);
+    expect(result).toBeDefined();
+    expect(result.instructions.length).toBeGreaterThan(0);
+    expect(result.instructions).toContain('## You are');
   });
 
   test('Test 4: bmad-dev-story (Tier 3 pipeline) throws an error', () => {
     expect(() => {
       exportSkill('bmad-dev-story', projectRoot);
-    }).toThrow(/tier.*(?:pipeline|standalone)/i);
+    }).toThrow(/pipeline/i);
   });
 
   test('Test 5: nonexistent skill throws a helpful error', () => {
