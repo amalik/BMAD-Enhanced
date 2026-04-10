@@ -214,10 +214,12 @@ function loadReadmeTemplate(projectRoot) {
 }
 
 /**
- * Build a per-skill README stub from manifest row + engine result.
- * Throws if any placeholder remains after substitution (catches CLI bugs).
+ * Build a per-skill README from manifest row + engine result.
+ * Reads the template, substitutes placeholders, strips HTML comments,
+ * cleans up leaked engine placeholders, and collapses whitespace.
+ * Throws if any multi-word placeholder remains after substitution.
  */
-function buildReadmeStub(skillRow, result, projectRoot) {
+function buildReadme(skillRow, result, projectRoot) {
   const template = loadReadmeTemplate(projectRoot);
   const persona = result.persona || {};
 
@@ -244,7 +246,7 @@ function buildReadmeStub(skillRow, result, projectRoot) {
       ? bulletLines.join('\n')
       : '- See instructions.md for trigger conditions';
 
-  // Substitute. Order matters where one token is a prefix of another.
+  // Substitute placeholders. Order matters where one token is a prefix of another.
   let out = template;
   out = out.replaceAll('<Skill display name>', displayName);
   out = out.replaceAll('<persona name + icon>', nameWithIcon);
@@ -260,17 +262,31 @@ function buildReadmeStub(skillRow, result, projectRoot) {
   out = out.replaceAll('<tier>', skillRow.tier);
   out = out.replaceAll('<standalone | light-deps | pipeline>', skillRow.tier);
 
-  // Sanity check: strip HTML comments, then verify no multi-word <placeholder>
-  // tokens remain. Single-word HTML tags (br, em, code, sub, details, pre, etc.)
-  // are NOT flagged — only multi-word placeholders like <persona name> or
-  // <output artifact description> contain spaces.
-  const stripped = out.replace(/<!--[\s\S]*?-->/g, '');
-  const leftover = stripped.match(/<[a-z][a-z\s-]{2,}[a-z]>/gi);
+  // Sanity check: verify no multi-word <placeholder> tokens remain BEFORE
+  // stripping HTML comments (comments contain < chars that are fine).
+  const checkContent = out.replace(/<!--[\s\S]*?-->/g, '');
+  const leftover = checkContent.match(/<[a-z][a-z\s-]{2,}[a-z]>/gi);
   if (leftover && leftover.length > 0) {
     throw new Error(
-      `README stub generation left unsubstituted placeholders: ${leftover.join(', ')}`
+      `README generation left unsubstituted placeholders: ${leftover.join(', ')}`
     );
   }
+
+  // Strip HTML comments (developer docs in template, not user-facing)
+  out = out.replace(/<!--[\s\S]*?-->/g, '');
+
+  // Clean up leaked engine placeholders from Phase 6 catch-all (all 6 mapped vars + catch-all)
+  out = out.replaceAll('[your output folder]', 'your-output-folder');
+  out = out.replaceAll('[your name]', 'your-name');
+  out = out.replaceAll('[your preferred language]', 'your-preferred-language');
+  out = out.replaceAll('[your document language]', 'your-document-language');
+  out = out.replaceAll('[your planning artifacts directory]', 'your-planning-artifacts');
+  out = out.replaceAll('[your implementation artifacts directory]', 'your-implementation-artifacts');
+  out = out.replaceAll('[your context]', 'your-project-context');
+
+  // Collapse multiple blank lines and trim
+  out = out.replace(/\n{3,}/g, '\n\n').trim() + '\n';
+
   return out;
 }
 
@@ -313,7 +329,7 @@ function runSingle(skillName, outputBase, dryRun, projectRoot, reporter) {
 
   let readme;
   try {
-    readme = buildReadmeStub(skillRow, result, projectRoot);
+    readme = buildReadme(skillRow, result, projectRoot);
   } catch (err) {
     reporter.failure(skillName, err);
     return { ok: false, exitCode: EXIT_PARTIAL_FAILURE, error: err };
@@ -490,7 +506,7 @@ if (require.main === module) {
 module.exports = {
   parseArgs,
   validateTier,
-  buildReadmeStub,
+  buildReadme,
   runSingle,
   runBatch,
   main,
