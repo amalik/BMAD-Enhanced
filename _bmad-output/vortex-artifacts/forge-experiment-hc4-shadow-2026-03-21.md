@@ -1,13 +1,17 @@
 ---
+initiative: forge
+artifact_type: experiment
+created: 2026-03-21T00:00:00.000Z
+schema_version: 1
 contract: HC4
 type: artifact
 source_agent: wade
 source_workflow: lean-experiment
-target_agents: [noah]
+target_agents:
+  - noah
 input_artifacts:
-  - path: "_bmad-output/vortex-artifacts/hc3-hypothesis-contract-forge-2026-03-21.md"
+  - path: _bmad-output/vortex-artifacts/hc3-hypothesis-contract-forge-2026-03-21.md
     contract: HC3
-created: 2026-03-21
 status: PRE-REGISTERED
 ---
 

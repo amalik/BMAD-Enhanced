@@ -1,10 +1,19 @@
 ---
-stepsCompleted: [step-01-validate-prerequisites, step-02-design-epics, step-03-create-stories, step-04-final-validation]
-status: 'complete'
+initiative: convoke
+artifact_type: epic
+created: '2026-04-10'
+schema_version: 1
+stepsCompleted:
+  - step-01-validate-prerequisites
+  - step-02-design-epics
+  - step-03-create-stories
+  - step-04-final-validation
+status: complete
 completedAt: '2026-04-05'
 inputDocuments:
-  - _bmad-output/planning-artifacts/prd-artifact-governance-portfolio.md
-  - _bmad-output/planning-artifacts/arch-artifact-governance-portfolio.md
+  - _bmad-output/planning-artifacts/convoke-prd-artifact-governance-portfolio.md
+  - >-
+    _bmad-output/planning-artifacts/convoke-arch-artifact-governance-portfolio.md
 ---
 
 # Artifact Governance & Portfolio - Epic Breakdown

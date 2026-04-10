@@ -1,3 +1,9 @@
+---
+initiative: convoke
+artifact_type: report
+created: '2026-04-10'
+schema_version: 1
+---
 # N1 — Usage Telemetry Discovery Session
 
 **Date:** 2026-03-10

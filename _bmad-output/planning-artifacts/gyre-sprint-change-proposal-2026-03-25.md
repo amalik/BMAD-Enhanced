@@ -1,3 +1,9 @@
+---
+initiative: gyre
+artifact_type: sprint
+created: '2026-04-10'
+schema_version: 1
+---
 # Sprint Change Proposal — Party Mode Gyre Team Scoping
 
 **Date:** 2026-03-25

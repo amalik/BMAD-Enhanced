@@ -1,5 +1,11 @@
 ---
-stepsCompleted: [design-epics, create-stories]
+initiative: convoke
+artifact_type: epic
+created: '2026-04-10'
+schema_version: 1
+stepsCompleted:
+  - design-epics
+  - create-stories
 inputDocuments:
   - .claude/plans/curried-jumping-thunder.md
   - _bmad-output/planning-artifacts/epics-phase2.md

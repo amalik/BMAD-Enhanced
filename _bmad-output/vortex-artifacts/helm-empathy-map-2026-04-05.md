@@ -1,13 +1,17 @@
 ---
-title: "Empathy Map: Strategic Navigator (Nadia)"
-date: 2026-04-05
+initiative: helm
+artifact_type: empathy-map
+created: '2026-04-10'
+schema_version: 1
+title: 'Empathy Map: Strategic Navigator (Nadia)'
+date: 2026-04-05T00:00:00.000Z
 created-by: Amalik with Isla (discovery-empathy-expert)
 research-sources: Expert observation (Amalik's consulting experience with product teams)
 status: HYPOTHESIS
-version: 1.0
+version: 1
 discovery-context: Self-Discovery Protocol — Strategy Perimeter (Wave 0.4)
 companion-persona: lean-persona-strategic-navigator-2026-04-04.md
-confidence-level: LOW — built from expert observation, not direct novice research
+confidence-level: 'LOW — built from expert observation, not direct novice research'
 ---
 
 # Empathy Map: Strategic Navigator (Nadia)

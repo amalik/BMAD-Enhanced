@@ -1,3 +1,9 @@
+---
+initiative: convoke
+artifact_type: adr
+created: '2026-04-10'
+schema_version: 1
+---
 # Convoke: Architectural Comparison Analysis
 ## Option 1 (Quint-First) vs Option 2 (BMAD-First)
 

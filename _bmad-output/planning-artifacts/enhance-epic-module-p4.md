@@ -1,9 +1,18 @@
 ---
-stepsCompleted: [step-01-validate-prerequisites, step-02-design-epics, step-03-create-stories, step-04-final-validation]
+initiative: enhance
+artifact_type: epic
+created: '2026-04-10'
+schema_version: 1
+stepsCompleted:
+  - step-01-validate-prerequisites
+  - step-02-design-epics
+  - step-03-create-stories
+  - step-04-final-validation
 inputDocuments:
   - _bmad-output/planning-artifacts/prd-p4-enhance-module.md
   - _bmad-output/planning-artifacts/P4-enhance-module-architecture.md
-  - _bmad-output/planning-artifacts/implementation-readiness-report-2026-03-15.md
+  - >-
+    _bmad-output/planning-artifacts/implementation-readiness-report-2026-03-15.md
 ---
 
 # P4: Enhance Module — Epic Breakdown

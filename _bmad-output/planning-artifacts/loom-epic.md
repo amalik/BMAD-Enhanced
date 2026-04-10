@@ -1,15 +1,33 @@
 ---
-stepsCompleted: [step-01-validate-prerequisites, step-02-design-epics, step-03-create-stories, step-04-final-validation]
-status: 'complete'
+initiative: loom
+artifact_type: epic
+created: '2026-04-10'
+schema_version: 1
+stepsCompleted:
+  - step-01-validate-prerequisites
+  - step-02-design-epics
+  - step-03-create-stories
+  - step-04-final-validation
+status: complete
 completedAt: '2026-03-23'
 editHistory:
   - date: '2026-03-23'
-    changes: "Extracted from combined epics.md into dedicated per-initiative file. Epics 6-8 cover Team Factory across three phases: Architecture Reference, Guided Workflow, Extensions. 15 stories total. Pre-mortem fixes applied (Story 7.6/7.7/7.8 split from original oversized story)."
+    changes: >-
+      Extracted from combined epics.md into dedicated per-initiative file. Epics
+      6-8 cover Team Factory across three phases: Architecture Reference, Guided
+      Workflow, Extensions. 15 stories total. Pre-mortem fixes applied (Story
+      7.6/7.7/7.8 split from original oversized story).
   - date: '2026-04-02'
-    changes: "Epic 2 implementation completed. 28 new files: agent definition, 6 workflow steps, 6 JS modules, 2 JSON schemas, spec template, config, module-help.csv, skill entry. Code review (Blind Hunter + Edge Case Hunter) applied 11 fixes. Stories 2.1-2.9 assessed: 6 complete, 2 partial (BMB templates deferred to P12, B-lite semantic validation deferred to I13), 1 minor gap (README entry). Epic 3 not started."
+    changes: >-
+      Epic 2 implementation completed. 28 new files: agent definition, 6
+      workflow steps, 6 JS modules, 2 JSON schemas, spec template, config,
+      module-help.csv, skill entry. Code review (Blind Hunter + Edge Case
+      Hunter) applied 11 fixes. Stories 2.1-2.9 assessed: 6 complete, 2 partial
+      (BMB templates deferred to P12, B-lite semantic validation deferred to
+      I13), 1 minor gap (README entry). Epic 3 not started.
 inputDocuments:
-  - _bmad-output/planning-artifacts/prd-team-factory.md
-  - _bmad-output/planning-artifacts/architecture-team-factory.md
+  - _bmad-output/planning-artifacts/loom-prd.md
+  - _bmad-output/planning-artifacts/loom-arch.md
 implementationStatus:
   epic1: done
   epic2: done-with-deferred

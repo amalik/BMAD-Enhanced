@@ -1,13 +1,18 @@
 ---
+initiative: helm
+artifact_type: hypothesis
+created: 2026-04-05T00:00:00.000Z
+schema_version: 1
 contract: HC3
 type: artifact
 source_agent: liam
 source_workflow: hypothesis-engineering
-target_agents: [wade]
+target_agents:
+  - wade
 input_artifacts:
-  - path: "_bmad-output/vortex-artifacts/hc2-problem-definition-strategy-perimeter-2026-04-05.md"
+  - path: >-
+      _bmad-output/vortex-artifacts/hc2-problem-definition-strategy-perimeter-2026-04-05.md
     contract: HC2
-created: 2026-04-05
 discovery-context: Self-Discovery Protocol — Strategy Perimeter (Wave 0.4)
 pre-registration: pre-registration-strategy-perimeter-2026-04-04.md
 ---

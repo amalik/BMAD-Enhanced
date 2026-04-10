@@ -1,22 +1,38 @@
 ---
-stepsCompleted: [step-01-init, step-02-discovery, step-03-success, step-04-journeys, step-05-domain, step-06-innovation, step-07-project-type, step-08-scoping, step-09-functional, step-10-nonfunctional, step-11-polish, step-12-complete]
+initiative: vortex
+artifact_type: prd
+created: '2026-04-10'
+schema_version: 1
+stepsCompleted:
+  - step-01-init
+  - step-02-discovery
+  - step-03-success
+  - step-04-journeys
+  - step-05-domain
+  - step-06-innovation
+  - step-07-project-type
+  - step-08-scoping
+  - step-09-functional
+  - step-10-nonfunctional
+  - step-11-polish
+  - step-12-complete
 inputDocuments:
   - _bmad-output/planning-artifacts/product-brief-Convoke-2026-02-22.md
   - docs/agents.md
   - docs/testing.md
   - docs/development.md
   - docs/faq.md
-workflowType: 'prd'
+workflowType: prd
 documentCounts:
   briefs: 1
   research: 0
   projectDocs: 4
 classification:
-  projectType: "Developer Tool + Content Platform (hybrid)"
-  domain: "Product Discovery / Innovation Methodology"
+  projectType: Developer Tool + Content Platform (hybrid)
+  domain: Product Discovery / Innovation Methodology
   complexity: medium
   projectContext: brownfield
-version: "1.6.0"
+version: 1.6.0
 ---
 
 # Product Requirements Document - Convoke v1.6.0

@@ -1,3 +1,9 @@
+---
+initiative: loom
+artifact_type: arch
+created: '2026-04-10'
+schema_version: 1
+---
 # Architecture Reference — Team Validity & Composition
 
 ## Introduction

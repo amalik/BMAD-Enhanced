@@ -1,3 +1,9 @@
+---
+initiative: convoke
+artifact_type: adr
+created: '2026-04-10'
+schema_version: 1
+---
 # Architecture Decision Record: Repository Organization Conventions
 
 **Status:** ACCEPTED

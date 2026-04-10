@@ -1,23 +1,29 @@
 ---
+initiative: gyre
+artifact_type: problem-def
+created: 2026-03-21T00:00:00.000Z
+schema_version: 1
 contract: HC2
 type: artifact
 source_agent: mila
 source_workflow: research-convergence
-target_agents: [liam]
+target_agents:
+  - liam
 input_artifacts:
-  - path: "_bmad-output/vortex-artifacts/scope-decision-gyre-2026-03-21.md"
+  - path: _bmad-output/vortex-artifacts/scope-decision-gyre-2026-03-21.md
     contract: non-HC1 (contextualize-scope output)
-  - path: "_bmad-output/vortex-artifacts/lean-persona-engineering-lead-2026-03-21.md"
+  - path: _bmad-output/vortex-artifacts/lean-persona-engineering-lead-2026-03-21.md
     contract: non-HC1 (lean-persona output)
-  - path: "_bmad-output/vortex-artifacts/lean-persona-sre-platform-engineer-2026-03-21.md"
+  - path: >-
+      _bmad-output/vortex-artifacts/lean-persona-sre-platform-engineer-2026-03-21.md
     contract: non-HC1 (lean-persona output)
-  - path: "_bmad-output/vortex-artifacts/lean-persona-compliance-officer-2026-03-21.md"
+  - path: >-
+      _bmad-output/vortex-artifacts/lean-persona-compliance-officer-2026-03-21.md
     contract: non-HC1 (lean-persona output)
-  - path: "_bmad-output/planning-artifacts/prd-gyre.md"
+  - path: _bmad-output/planning-artifacts/prd-gyre.md
     contract: non-HC1 (PRD)
-  - path: "_bmad-output/planning-artifacts/product-brief-gyre-2026-03-19.md"
+  - path: _bmad-output/planning-artifacts/product-brief-gyre-2026-03-19.md
     contract: non-HC1 (product brief)
-created: 2026-03-21
 ---
 
 # HC2 Problem Definition: Gyre — Operational Readiness Discovery

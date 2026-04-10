@@ -1,29 +1,48 @@
 ---
-stepsCompleted: [step-01-init, step-02-discovery, step-03-functional-requirements, step-04-nfr, step-05-interaction-design, step-06-architecture, step-07-risks, step-08-metrics, step-09-dependencies, step-10-timeline, step-11-stakeholders, step-12-acceptance, step-13-assembly]
+initiative: loom
+artifact_type: prd
+created: '2026-04-10'
+schema_version: 1
+stepsCompleted:
+  - step-01-init
+  - step-02-discovery
+  - step-03-functional-requirements
+  - step-04-nfr
+  - step-05-interaction-design
+  - step-06-architecture
+  - step-07-risks
+  - step-08-metrics
+  - step-09-dependencies
+  - step-10-timeline
+  - step-11-stakeholders
+  - step-12-acceptance
+  - step-13-assembly
 inputDocuments:
-  - _bmad-output/vortex-artifacts/vision-team-factory-2026-03-21.md
-  - _bmad-output/vortex-artifacts/decision-scope-team-factory-2026-03-21.md
-  - _bmad-output/vortex-artifacts/adr-assumption-map-team-factory-2026-03-22.md
-  - _bmad-output/planning-artifacts/brief-gyre-2026-03-19.md
-workflowType: 'prd'
+  - _bmad-output/vortex-artifacts/loom-vision-2026-03-21.md
+  - _bmad-output/vortex-artifacts/loom-decision-scope-2026-03-21.md
+  - _bmad-output/vortex-artifacts/loom-adr-assumption-map-2026-03-22.md
+  - _bmad-output/planning-artifacts/gyre-brief-2026-03-19.md
+workflowType: prd
 documentCounts:
   briefs: 1
   research: 0
   vortexArtifacts: 3
   projectDocs: 0
 classification:
-  projectType: "Internal Tooling — Guided Factory"
-  domain: "AI Agent Framework Extensibility"
+  projectType: Internal Tooling — Guided Factory
+  domain: AI Agent Framework Extensibility
   implementationComplexity: medium
   userFacingComplexity: must-feel-low
-  userMentalModel: "Team Builder / Create a new team"
+  userMentalModel: Team Builder / Create a new team
   projectContext: brownfield
 status: DRAFT
 version: 1.1
 lastEdited: '2026-03-22'
 editHistory:
   - date: '2026-03-22'
-    changes: 'Post-validation fixes: 3 frontmatter path corrections, 4 measurability improvements (FR18, NFR6, NFR9, NFR11), terminology mapping note'
+    changes: >-
+      Post-validation fixes: 3 frontmatter path corrections, 4 measurability
+      improvements (FR18, NFR6, NFR9, NFR11), terminology mapping note
 ---
 
 # Product Requirements Document — Team Factory

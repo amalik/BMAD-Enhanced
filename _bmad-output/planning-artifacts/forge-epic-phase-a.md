@@ -1,3 +1,9 @@
+---
+initiative: forge
+artifact_type: epic
+created: '2026-04-10'
+schema_version: 1
+---
 # Forge Phase A — Epic Breakdown (Silo + Rune)
 
 **Version:** 1.0.0-draft

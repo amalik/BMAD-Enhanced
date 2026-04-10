@@ -1,3 +1,9 @@
+---
+initiative: gyre
+artifact_type: note
+created: '2026-04-10'
+schema_version: 1
+---
 # Forge↔Gyre Handoff Contracts — Design Specification
 
 **Version:** 1.0.0-draft

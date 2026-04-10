@@ -1,3 +1,9 @@
+---
+initiative: enhance
+artifact_type: arch
+created: '2026-04-10'
+schema_version: 1
+---
 # P4: Enhance Module — Architecture
 
 **Initiative:** P4 — Enhance Module

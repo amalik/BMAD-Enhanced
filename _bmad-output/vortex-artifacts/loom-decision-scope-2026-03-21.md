@@ -1,10 +1,14 @@
 ---
-title: "Scope Decision: Team Factory"
-date: 2026-03-21
+initiative: loom
+artifact_type: decision
+created: '2026-04-10'
+schema_version: 1
+title: 'Scope Decision: Team Factory'
+date: 2026-03-21T00:00:00.000Z
 created-by: Amalik with Emma (contextualization-expert)
 type: scope-decision
 status: DECIDED
-version: 1.0
+version: 1
 ---
 
 # Scope Decision: Team Factory

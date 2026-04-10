@@ -1,3 +1,9 @@
+---
+initiative: convoke
+artifact_type: note
+created: '2026-04-10'
+schema_version: 1
+---
 # Lifecycle Expansion Plan — Draft for Challenge
 
 > **Status:** Draft v3 — Strategy self-discovery track added (2026-04-04 Vortex+CIS challenge)

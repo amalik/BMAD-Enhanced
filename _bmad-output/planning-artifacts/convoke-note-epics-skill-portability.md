@@ -1,8 +1,13 @@
 ---
-stepsCompleted: [1, 2]
-inputDocuments:
-  - _bmad-output/planning-artifacts/vision-skill-portability.md
 initiative: convoke
+artifact_type: note
+created: '2026-04-10'
+schema_version: 1
+stepsCompleted:
+  - 1
+  - 2
+inputDocuments:
+  - _bmad-output/planning-artifacts/convoke-vision-skill-portability.md
 ---
 
 # Skill Portability & Distribution - Epic Breakdown

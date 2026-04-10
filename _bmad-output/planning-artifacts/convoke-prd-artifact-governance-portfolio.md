@@ -1,22 +1,45 @@
 ---
-stepsCompleted: [step-01-init, step-02-discovery, step-02b-vision, step-02c-executive-summary, step-03-success, step-04-journeys, step-05-domain, step-06-innovation, step-07-project-type, step-08-scoping, step-09-functional, step-10-nonfunctional, step-11-polish, step-12-complete]
+initiative: convoke
+artifact_type: prd
+created: '2026-04-10'
+schema_version: 1
+stepsCompleted:
+  - step-01-init
+  - step-02-discovery
+  - step-02b-vision
+  - step-02c-executive-summary
+  - step-03-success
+  - step-04-journeys
+  - step-05-domain
+  - step-06-innovation
+  - step-07-project-type
+  - step-08-scoping
+  - step-09-functional
+  - step-10-nonfunctional
+  - step-11-polish
+  - step-12-complete
 inputDocuments:
-  - _bmad-output/planning-artifacts/initiatives-backlog.md
+  - _bmad-output/planning-artifacts/convoke-note-initiatives-backlog.md
   - docs/lifecycle-expansion-vision.md
-  - _bmad-output/planning-artifacts/adr-repo-organization-conventions-2026-03-22.md
-workflowType: 'prd'
+  - >-
+    _bmad-output/planning-artifacts/convoke-adr-repo-organization-conventions-2026-03-22.md
+workflowType: prd
 documentCounts:
   briefs: 0
   research: 0
   projectDocs: 3
 classification:
-  projectType: 'Governance & Knowledge Management Infrastructure'
-  domain: 'Agentic Workflow Governance'
-  complexity: 'Medium-High'
-  projectContext: 'brownfield'
+  projectType: Governance & Knowledge Management Infrastructure
+  domain: Agentic Workflow Governance
+  complexity: Medium-High
+  projectContext: brownfield
   annotations:
-    - 'Complexity concentrated in P15 (portfolio inference), not uniformly distributed'
-    - 'Frontmatter schema is a cross-cutting contract — requires architect + tech writer co-design'
+    - >-
+      Complexity concentrated in P15 (portfolio inference), not uniformly
+      distributed
+    - >-
+      Frontmatter schema is a cross-cutting contract — requires architect + tech
+      writer co-design
 ---
 
 # Product Requirements Document - Artifact Governance & Portfolio

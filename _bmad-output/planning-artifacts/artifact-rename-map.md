@@ -1,0 +1,85 @@
+# Artifact Rename Map
+
+**Generated:** 2026-04-10
+**Total renamed:** 78
+
+| Old Path | New Path |
+|----------|----------|
+| planning-artifacts/adr-enhance-gyre-build-sequencing.md | planning-artifacts/enhance-adr-gyre-build-sequencing.md |
+| planning-artifacts/adr-quint-vs-bmad-first-comparison.md | planning-artifacts/convoke-adr-quint-vs-bmad-first-comparison.md |
+| planning-artifacts/adr-repo-organization-conventions-2026-03-22.md | planning-artifacts/convoke-adr-repo-organization-conventions-2026-03-22.md |
+| planning-artifacts/arch-artifact-governance-portfolio.md | planning-artifacts/convoke-arch-artifact-governance-portfolio.md |
+| planning-artifacts/arch-enhance-module-p4.md | planning-artifacts/enhance-arch-module-p4.md |
+| planning-artifacts/architecture-gyre.md | planning-artifacts/gyre-arch.md |
+| planning-artifacts/architecture-reference-teams.md | planning-artifacts/loom-arch-reference-teams.md |
+| planning-artifacts/architecture-team-factory.md | planning-artifacts/loom-arch.md |
+| planning-artifacts/architecture.md | planning-artifacts/vortex-arch.md |
+| planning-artifacts/audit-validator-refresh-contracts-2026-04-08.md | planning-artifacts/loom-note-audit-validator-refresh-contracts-2026-04-08.md |
+| planning-artifacts/backlog-candidate-experience-contract.md | planning-artifacts/loom-note-backlog-candidate-experience-contract.md |
+| planning-artifacts/brief-gyre-2026-03-19.md | planning-artifacts/gyre-brief-2026-03-19.md |
+| planning-artifacts/epic-7-platform-debt.md | planning-artifacts/convoke-epic-7-platform-debt.md |
+| planning-artifacts/epic-artifact-governance-portfolio.md | planning-artifacts/convoke-epic-artifact-governance-portfolio.md |
+| planning-artifacts/epic-enhance-module-p4.md | planning-artifacts/enhance-epic-module-p4.md |
+| planning-artifacts/epic-forge-phase-a.md | planning-artifacts/forge-epic-phase-a.md |
+| planning-artifacts/epic-gyre.md | planning-artifacts/gyre-epic.md |
+| planning-artifacts/epic-migration-chaining-fix-p5.md | planning-artifacts/convoke-epic-migration-chaining-fix-p5.md |
+| planning-artifacts/epic-phase3.md | planning-artifacts/convoke-epic-phase3.md |
+| planning-artifacts/epic-team-factory.md | planning-artifacts/loom-epic.md |
+| planning-artifacts/epics-skill-portability.md | planning-artifacts/convoke-note-epics-skill-portability.md |
+| planning-artifacts/gyre-validation-report.md | planning-artifacts/gyre-note-validation-report.md |
+| planning-artifacts/hc-forge-gyre-handoff.md | planning-artifacts/gyre-note-hc-forge-gyre-handoff.md |
+| planning-artifacts/implementation-readiness-report-2026-03-23.md | planning-artifacts/convoke-note-implementation-readiness-report-2026-03-23.md |
+| planning-artifacts/initiatives-backlog.md | planning-artifacts/convoke-note-initiatives-backlog.md |
+| planning-artifacts/lifecycle-expansion-plan.md | planning-artifacts/convoke-note-lifecycle-expansion-plan.md |
+| planning-artifacts/portability-borderline.md | planning-artifacts/convoke-note-portability-borderline.md |
+| planning-artifacts/portability-validation-report.md | planning-artifacts/convoke-note-portability-validation-report.md |
+| planning-artifacts/prd-artifact-governance-portfolio.md | planning-artifacts/convoke-prd-artifact-governance-portfolio.md |
+| planning-artifacts/prd-enhance-module-p4.md | planning-artifacts/enhance-prd-module-p4.md |
+| planning-artifacts/prd-gyre.md | planning-artifacts/gyre-prd.md |
+| planning-artifacts/prd-team-factory.md | planning-artifacts/loom-prd.md |
+| planning-artifacts/prd.md | planning-artifacts/vortex-prd.md |
+| planning-artifacts/report-implementation-readiness-artifact-governance-2026-04-05.md | planning-artifacts/convoke-report-implementation-readiness-artifact-governance-2026-04-05.md |
+| planning-artifacts/report-prd-validation-gyre.md | planning-artifacts/gyre-report-prd-validation.md |
+| planning-artifacts/report-prd-validation-team-factory.md | planning-artifacts/loom-report-prd-validation.md |
+| planning-artifacts/research-domain-operational-readiness-gyre-2026-03-19.md | planning-artifacts/gyre-research-domain-operational-readiness-2026-03-19.md |
+| planning-artifacts/spec-baseartifact-contract.md | planning-artifacts/convoke-spec-baseartifact-contract.md |
+| planning-artifacts/sprint-change-proposal-2026-03-07.md | planning-artifacts/convoke-sprint-change-proposal-2026-03-07.md |
+| planning-artifacts/sprint-change-proposal-2026-03-25.md | planning-artifacts/gyre-sprint-change-proposal-2026-03-25.md |
+| planning-artifacts/story-team-factory-review-fixes.md | planning-artifacts/loom-story-review-fixes.md |
+| planning-artifacts/vision-convoke-ecosystem.md | planning-artifacts/convoke-vision-ecosystem.md |
+| planning-artifacts/vision-original-readme.md | planning-artifacts/convoke-vision-original-readme.md |
+| planning-artifacts/vision-skill-portability.md | planning-artifacts/convoke-vision-skill-portability.md |
+| planning-artifacts/vortex-validation-report.md | planning-artifacts/vortex-note-validation-report.md |
+| vortex-artifacts/adr-assumption-map-team-factory-2026-03-22.md | vortex-artifacts/loom-adr-assumption-map-2026-03-22.md |
+| vortex-artifacts/decision-scope-forge-2026-03-21.md | vortex-artifacts/forge-decision-scope-2026-03-21.md |
+| vortex-artifacts/decision-scope-gyre-2026-03-21.md | vortex-artifacts/gyre-decision-scope-2026-03-21.md |
+| vortex-artifacts/decision-scope-team-factory-2026-03-21.md | vortex-artifacts/loom-decision-scope-2026-03-21.md |
+| vortex-artifacts/empathy-map-strategic-navigator-2026-04-05.md | vortex-artifacts/helm-empathy-map-2026-04-05.md |
+| vortex-artifacts/experiment-gyre-discovery-interviews-2026-03-20.md | vortex-artifacts/gyre-experiment-discovery-interviews-2026-03-20.md |
+| vortex-artifacts/hc2-problem-definition-forge-2026-03-21.md | vortex-artifacts/forge-problem-def-hc2-2026-03-21.md |
+| vortex-artifacts/hc2-problem-definition-gyre-2026-03-21.md | vortex-artifacts/gyre-problem-def-hc2-2026-03-21.md |
+| vortex-artifacts/hc2-problem-definition-strategy-perimeter-2026-04-05.md | vortex-artifacts/helm-problem-def-hc2-2026-04-05.md |
+| vortex-artifacts/hc3-hypothesis-contract-forge-2026-03-21.md | vortex-artifacts/forge-hypothesis-hc3-2026-03-21.md |
+| vortex-artifacts/hc3-hypothesis-contract-gyre-2026-03-21.md | vortex-artifacts/gyre-hypothesis-hc3-2026-03-21.md |
+| vortex-artifacts/hc3-hypothesis-contract-strategy-perimeter-2026-04-05.md | vortex-artifacts/helm-hypothesis-hc3-2026-04-05.md |
+| vortex-artifacts/hc4-experiment-forge-shadow-2026-03-21.md | vortex-artifacts/forge-experiment-hc4-shadow-2026-03-21.md |
+| vortex-artifacts/hc4-experiment-gyre-pilot-2026-03-21.md | vortex-artifacts/gyre-experiment-hc4-pilot-2026-03-21.md |
+| vortex-artifacts/hc4-experiment-strategy-concierge-2026-04-05.md | vortex-artifacts/helm-experiment-hc4-concierge-2026-04-05.md |
+| vortex-artifacts/hc5-signal-framework-forge-2026-03-21.md | vortex-artifacts/forge-signal-hc5-framework-2026-03-21.md |
+| vortex-artifacts/hc5-signal-framework-gyre-2026-03-21.md | vortex-artifacts/gyre-signal-hc5-framework-2026-03-21.md |
+| vortex-artifacts/hc6-decision-framework-forge-2026-03-21.md | vortex-artifacts/forge-decision-hc6-framework-2026-03-21.md |
+| vortex-artifacts/hc6-decision-framework-gyre-2026-03-21.md | vortex-artifacts/gyre-decision-hc6-framework-2026-03-21.md |
+| vortex-artifacts/lean-persona-navigator-2026-04-04.md | vortex-artifacts/helm-lean-persona-navigator-2026-04-04.md |
+| vortex-artifacts/lean-persona-practitioner-2026-04-04.md | vortex-artifacts/helm-lean-persona-practitioner-2026-04-04.md |
+| vortex-artifacts/persona-compliance-officer-2026-03-21.md | vortex-artifacts/gyre-persona-compliance-officer-2026-03-21.md |
+| vortex-artifacts/persona-engineering-lead-2026-03-21.md | vortex-artifacts/gyre-persona-engineering-lead-2026-03-21.md |
+| vortex-artifacts/persona-knowledge-holder-2026-03-21.md | vortex-artifacts/forge-persona-knowledge-holder-2026-03-21.md |
+| vortex-artifacts/persona-landing-consultant-2026-03-21.md | vortex-artifacts/forge-persona-landing-consultant-2026-03-21.md |
+| vortex-artifacts/persona-sre-platform-engineer-2026-03-21.md | vortex-artifacts/gyre-persona-sre-platform-engineer-2026-03-21.md |
+| vortex-artifacts/pre-registration-strategy-perimeter-2026-04-04.md | vortex-artifacts/helm-pre-reg-2026-04-04.md |
+| vortex-artifacts/report-usage-telemetry-discovery-2026-03-10.md | vortex-artifacts/convoke-report-usage-telemetry-discovery-2026-03-10.md |
+| vortex-artifacts/scope-decision-strategy-perimeter-2026-04-04.md | vortex-artifacts/helm-scope-decision-2026-04-04.md |
+| vortex-artifacts/scope-note-forge-written-knowledge-agent-2026-03-22.md | vortex-artifacts/forge-scope-note-forge-written-knowledge-agent-2026-03-22.md |
+| vortex-artifacts/signal-gyre-brownfield-pilot-2026-04-02.md | vortex-artifacts/gyre-signal-brownfield-pilot-2026-04-02.md |
+| vortex-artifacts/vision-team-factory-2026-03-21.md | vortex-artifacts/loom-vision-2026-03-21.md |
+| gyre-artifacts/accuracy-validation-2026-03-23.md | gyre-artifacts/convoke-note-accuracy-validation-2026-03-23.md |

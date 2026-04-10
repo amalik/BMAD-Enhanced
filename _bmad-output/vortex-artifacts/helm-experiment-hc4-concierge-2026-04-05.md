@@ -1,14 +1,20 @@
 ---
-title: "HC4 Lean Experiment: Strategy Perimeter Concierge"
-date: 2026-04-05
+initiative: helm
+artifact_type: experiment
+created: '2026-04-10'
+schema_version: 1
+title: 'HC4 Lean Experiment: Strategy Perimeter Concierge'
+date: 2026-04-05T00:00:00.000Z
 type: lean-experiment
 status: DESIGNED — ready for execution
 contract: HC4
 source_agent: wade
 source_workflow: lean-experiment
-target_agents: [noah]
+target_agents:
+  - noah
 input_artifacts:
-  - path: "_bmad-output/vortex-artifacts/hc3-hypothesis-contract-strategy-perimeter-2026-04-05.md"
+  - path: >-
+      _bmad-output/vortex-artifacts/hc3-hypothesis-contract-strategy-perimeter-2026-04-05.md
     contract: HC3
 discovery-context: Self-Discovery Protocol — Strategy Perimeter (Wave 0.4)
 pre-registration: pre-registration-strategy-perimeter-2026-04-04.md

@@ -1,4 +1,10 @@
 ---
+initiative: gyre
+artifact_type: experiment
+created: '2026-04-10'
+schema_version: 1
+---
+---
 contract: HC4
 type: artifact
 source_agent: wade

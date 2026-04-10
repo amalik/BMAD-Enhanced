@@ -1,6 +1,9 @@
 ---
-status: done
+initiative: loom
+artifact_type: story
 created: '2026-04-02'
+schema_version: 1
+status: done
 source: code-review
 epic: Team Factory
 priority: high

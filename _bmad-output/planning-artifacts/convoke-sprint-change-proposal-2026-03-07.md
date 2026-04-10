@@ -1,3 +1,9 @@
+---
+initiative: convoke
+artifact_type: sprint
+created: '2026-04-10'
+schema_version: 1
+---
 # Sprint Change Proposal: npm Package Name convoke → convoke-agents
 
 **Date:** 2026-03-07

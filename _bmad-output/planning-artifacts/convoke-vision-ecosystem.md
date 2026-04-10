@@ -1,3 +1,9 @@
+---
+initiative: convoke
+artifact_type: vision
+created: '2026-04-10'
+schema_version: 1
+---
 # Convoke Ecosystem Vision
 
 **Version:** 1.0.0

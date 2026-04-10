@@ -1,3 +1,9 @@
+---
+initiative: loom
+artifact_type: note
+created: '2026-04-10'
+schema_version: 1
+---
 # Backlog Candidate: Convoke Experience Contract
 
 **Origin:** Party mode session (2026-04-06) — Winston + Loom Master discussing Artifact Governance release UX gaps

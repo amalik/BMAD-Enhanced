@@ -1,20 +1,39 @@
 ---
-stepsCompleted: [1, 2, 3, 4, 5, 6, 7, 8]
+initiative: gyre
+artifact_type: arch
+created: '2026-04-10'
+schema_version: 1
+stepsCompleted:
+  - 1
+  - 2
+  - 3
+  - 4
+  - 5
+  - 6
+  - 7
+  - 8
 lastStep: 8
-status: 'complete'
+status: complete
 completedAt: '2026-03-21'
 inputDocuments:
-  - _bmad-output/planning-artifacts/prd-gyre.md
+  - _bmad-output/planning-artifacts/gyre-prd.md
   - _bmad-output/planning-artifacts/product-brief-gyre-2026-03-19.md
-  - _bmad-output/planning-artifacts/research/domain-operational-readiness-research-2026-03-19.md
-  - _bmad-output/vortex-artifacts/lean-experiment-gyre-discovery-interviews-2026-03-20.md
-workflowType: 'architecture'
-project_name: 'Gyre'
-user_name: 'Amalik'
+  - >-
+    _bmad-output/planning-artifacts/research/domain-operational-readiness-research-2026-03-19.md
+  - >-
+    _bmad-output/vortex-artifacts/lean-experiment-gyre-discovery-interviews-2026-03-20.md
+workflowType: architecture
+project_name: Gyre
+user_name: Amalik
 date: '2026-03-21'
 editHistory:
   - date: '2026-03-21'
-    changes: "Full rewrite: Gyre redesigned as Convoke team module following Vortex patterns. Replaces CLI-tool architecture (Commander, provider abstraction, exit codes, streaming renderer) with conversational persona agents, handoff contracts, step-file workflows, and compass routing. 4 agents, 4 contracts, 7 workflows."
+    changes: >-
+      Full rewrite: Gyre redesigned as Convoke team module following Vortex
+      patterns. Replaces CLI-tool architecture (Commander, provider abstraction,
+      exit codes, streaming renderer) with conversational persona agents,
+      handoff contracts, step-file workflows, and compass routing. 4 agents, 4
+      contracts, 7 workflows.
 ---
 
 # Architecture Decision Document — Gyre (Convoke Team)

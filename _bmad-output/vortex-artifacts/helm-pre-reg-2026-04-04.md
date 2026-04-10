@@ -1,9 +1,15 @@
+---
+initiative: helm
+artifact_type: pre-reg
+created: '2026-04-10'
+schema_version: 1
+---
 # Strategy Perimeter — Pre-Registration
 
 > **Status:** Pre-registered — binding criteria for Vortex discovery
 > **Date:** 2026-04-04
 > **Discovery method:** Self-Discovery Protocol (Convoke as test case)
-> **Source:** [Lifecycle Expansion Plan, Section 0.4](../planning-artifacts/lifecycle-expansion-plan.md)
+> **Source:** [Lifecycle Expansion Plan, Section 0.4](../planning-artifacts/convoke-note-lifecycle-expansion-plan.md)
 > **Vortex stream:** Contextualize (Emma) — discovery not yet started
 
 ---

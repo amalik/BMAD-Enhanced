@@ -1,12 +1,27 @@
 ---
-stepsCompleted: [1, 2, 3, 4, 5, 6]
+initiative: gyre
+artifact_type: research
+created: '2026-04-10'
+schema_version: 1
+stepsCompleted:
+  - 1
+  - 2
+  - 3
+  - 4
+  - 5
+  - 6
 inputDocuments: []
-workflowType: 'research'
+workflowType: research
 lastStep: 2
-research_type: 'domain'
-research_topic: 'Operational Readiness & Standard Authority — Production readiness practices for the Gyre team'
-research_goals: 'Validate operational readiness as highest-value second Convoke team. Identify top 2-3 pain sub-domains from industry best practices (SRE golden signals, DORA, Google/Netflix). Build evidence base for Gyre agent scope definition.'
-user_name: 'Amalik'
+research_type: domain
+research_topic: >-
+  Operational Readiness & Standard Authority — Production readiness practices
+  for the Gyre team
+research_goals: >-
+  Validate operational readiness as highest-value second Convoke team. Identify
+  top 2-3 pain sub-domains from industry best practices (SRE golden signals,
+  DORA, Google/Netflix). Build evidence base for Gyre agent scope definition.
+user_name: Amalik
 date: '2026-03-19'
 web_research_enabled: true
 source_verification: true

@@ -1,10 +1,14 @@
 ---
-title: "Lean Persona: Sana — Engineering Lead"
-date: 2026-03-21
+initiative: gyre
+artifact_type: persona
+created: '2026-04-10'
+schema_version: 1
+title: 'Lean Persona: Sana — Engineering Lead'
+date: 2026-03-21T00:00:00.000Z
 created-by: Amalik with Emma (contextualization-expert)
 type: lean-persona
 status: HYPOTHESIS
-version: 1.0
+version: 1
 scope-decision: scope-decision-gyre-2026-03-21.md
 ---
 

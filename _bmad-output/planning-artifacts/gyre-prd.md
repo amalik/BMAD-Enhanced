@@ -1,31 +1,77 @@
 ---
-stepsCompleted: [step-01-init, step-02-discovery, step-02b-vision, step-02c-executive-summary, step-03-success, step-04-journeys, step-05-domain, step-06-innovation, step-07-project-type, step-08-scoping, step-09-functional, step-10-nonfunctional, step-11-polish, step-12-complete]
+initiative: gyre
+artifact_type: prd
+created: '2026-04-10'
+schema_version: 1
+stepsCompleted:
+  - step-01-init
+  - step-02-discovery
+  - step-02b-vision
+  - step-02c-executive-summary
+  - step-03-success
+  - step-04-journeys
+  - step-05-domain
+  - step-06-innovation
+  - step-07-project-type
+  - step-08-scoping
+  - step-09-functional
+  - step-10-nonfunctional
+  - step-11-polish
+  - step-12-complete
 inputDocuments:
   - _bmad-output/planning-artifacts/product-brief-gyre-2026-03-19.md
-  - _bmad-output/planning-artifacts/research/domain-operational-readiness-research-2026-03-19.md
+  - >-
+    _bmad-output/planning-artifacts/research/domain-operational-readiness-research-2026-03-19.md
   - docs/agents.md
   - docs/development.md
   - docs/BMAD-METHOD-COMPATIBILITY.md
-workflowType: 'prd'
+workflowType: prd
 documentCounts:
   briefs: 1
   research: 1
   projectDocs: 3
 classification:
-  projectType: "Convoke Team Module — conversational agent delivery"
-  domain: "Production Readiness Discovery"
-  complexity: "high — product novelty & trust, not regulatory"
-  projectContext: "brownfield infrastructure, greenfield product"
+  projectType: Convoke Team Module — conversational agent delivery
+  domain: Production Readiness Discovery
+  complexity: 'high — product novelty & trust, not regulatory'
+  projectContext: 'brownfield infrastructure, greenfield product'
 lastEdited: '2026-03-21'
 editHistory:
   - date: '2026-03-21'
-    changes: "Delivery mechanism pivot: Gyre redesigned as Convoke team module (like Vortex) — conversational persona agents inside Claude Code. Replaced all CLI references (Commander, exit codes, JSON output, streaming renderer, provider abstraction, npm install -g) with Convoke team patterns (agents, workflows, contracts, compass routing). Updated FRs, NFRs, journeys, success criteria, and scoping accordingly. Domain logic preserved."
+    changes: >-
+      Delivery mechanism pivot: Gyre redesigned as Convoke team module (like
+      Vortex) — conversational persona agents inside Claude Code. Replaced all
+      CLI references (Commander, exit codes, JSON output, streaming renderer,
+      provider abstraction, npm install -g) with Convoke team patterns (agents,
+      workflows, contracts, compass routing). Updated FRs, NFRs, journeys,
+      success criteria, and scoping accordingly. Domain logic preserved.
   - date: '2026-03-21'
-    changes: "Structural edit for LLM readability: cut How to Read, Project Classification (redundant with frontmatter), What Makes This Special (merged privacy into exec summary), Market Context, Monetization, Divergence note. Condensed journeys to structured format, Innovation Architecture to table, Resource Requirements, Post-MVP Roadmap. Moved Traceability Matrix to after Product Scope. Added status marker to Emergency Cut."
+    changes: >-
+      Structural edit for LLM readability: cut How to Read, Project
+      Classification (redundant with frontmatter), What Makes This Special
+      (merged privacy into exec summary), Market Context, Monetization,
+      Divergence note. Condensed journeys to structured format, Innovation
+      Architecture to table, Resource Requirements, Post-MVP Roadmap. Moved
+      Traceability Matrix to after Product Scope. Added status marker to
+      Emergency Cut.
   - date: '2026-03-21'
-    changes: "Post-validation edits: scope pivot acknowledgment, scoping section consolidation, J6 traceability, FR13/FR22a/FR47/FR48 measurability refinements"
+    changes: >-
+      Post-validation edits: scope pivot acknowledgment, scoping section
+      consolidation, J6 traceability, FR13/FR22a/FR47/FR48 measurability
+      refinements
   - date: '2026-03-21'
-    changes: "Adversarial review fixes (14 items): removed unsourced 98% stat, qualified pilot as qualitative n=5, anchored novel findings metric to team confirmation, added privacy test timing after H2, acknowledged cross-domain 2-agent limitation, resolved FR32/FR57 streaming contradiction, expanded guard question to ≤3 detection-derived questions, softened NFR10 determinism to behavioral consistency + caching, added interactive walkthrough UX for review-and-amend, added capability-level source tagging and web search conflict resolution, specified monorepo detection heuristics with explicit signals, retained M1 in Emergency Cut, added exit code 5 for config errors, added intermediate phase performance targets for NFR1."
+    changes: >-
+      Adversarial review fixes (14 items): removed unsourced 98% stat, qualified
+      pilot as qualitative n=5, anchored novel findings metric to team
+      confirmation, added privacy test timing after H2, acknowledged
+      cross-domain 2-agent limitation, resolved FR32/FR57 streaming
+      contradiction, expanded guard question to ≤3 detection-derived questions,
+      softened NFR10 determinism to behavioral consistency + caching, added
+      interactive walkthrough UX for review-and-amend, added capability-level
+      source tagging and web search conflict resolution, specified monorepo
+      detection heuristics with explicit signals, retained M1 in Emergency Cut,
+      added exit code 5 for config errors, added intermediate phase performance
+      targets for NFR1.
 ---
 
 # Product Requirements Document - Gyre

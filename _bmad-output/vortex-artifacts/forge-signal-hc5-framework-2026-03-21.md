@@ -1,13 +1,17 @@
 ---
+initiative: forge
+artifact_type: signal
+created: 2026-03-21T00:00:00.000Z
+schema_version: 1
 contract: HC5
 type: artifact
 source_agent: noah
 source_workflow: signal-interpretation
-target_agents: [max]
+target_agents:
+  - max
 input_artifacts:
-  - path: "_bmad-output/vortex-artifacts/hc4-experiment-forge-shadow-2026-03-21.md"
+  - path: _bmad-output/vortex-artifacts/hc4-experiment-forge-shadow-2026-03-21.md
     contract: HC4
-created: 2026-03-21
 status: PRE-DEPLOYMENT
 ---
 

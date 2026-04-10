@@ -1,13 +1,25 @@
 ---
-stepsCompleted: [1, 2, 3, 4]
-status: 'complete'
+initiative: gyre
+artifact_type: epic
+created: '2026-04-10'
+schema_version: 1
+stepsCompleted:
+  - 1
+  - 2
+  - 3
+  - 4
+status: complete
 completedAt: '2026-03-21'
 editHistory:
   - date: '2026-03-21'
-    changes: "Full rewrite: Epics regenerated from Convoke team architecture. Replaces CLI-tool epics (32 stories across 5 epics) with Convoke team module epics (4 epics, ~24 stories). No application code — only markdown agent definitions, workflow step-files, contracts, and integration scripts."
+    changes: >-
+      Full rewrite: Epics regenerated from Convoke team architecture. Replaces
+      CLI-tool epics (32 stories across 5 epics) with Convoke team module epics
+      (4 epics, ~24 stories). No application code — only markdown agent
+      definitions, workflow step-files, contracts, and integration scripts.
 inputDocuments:
-  - _bmad-output/planning-artifacts/prd-gyre.md
-  - _bmad-output/planning-artifacts/architecture-gyre.md
+  - _bmad-output/planning-artifacts/gyre-prd.md
+  - _bmad-output/planning-artifacts/gyre-arch.md
   - _bmad-output/planning-artifacts/product-brief-gyre-2026-03-19.md
 ---
 

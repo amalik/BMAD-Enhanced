@@ -1,47 +1,89 @@
 ---
-stepsCompleted: [step-01-init, step-02-discovery, step-02b-vision, step-02c-executive-summary, step-03-success, step-04-journeys, step-05-domain-skipped, step-06-innovation, step-07-project-type, step-08-scoping, step-09-functional, step-10-nonfunctional, step-11-polish]
+initiative: enhance
+artifact_type: prd
+created: '2026-04-10'
+schema_version: 1
+stepsCompleted:
+  - step-01-init
+  - step-02-discovery
+  - step-02b-vision
+  - step-02c-executive-summary
+  - step-03-success
+  - step-04-journeys
+  - step-05-domain-skipped
+  - step-06-innovation
+  - step-07-project-type
+  - step-08-scoping
+  - step-09-functional
+  - step-10-nonfunctional
+  - step-11-polish
 inputDocuments:
   - _bmad-output/planning-artifacts/P4-enhance-module-architecture.md
-  - _bmad-output/planning-artifacts/initiatives-backlog.md
-workflowType: 'prd'
+  - _bmad-output/planning-artifacts/convoke-note-initiatives-backlog.md
+workflowType: prd
 documentCounts:
   briefs: 0
   research: 0
   projectDocs: 2
 classification:
-  projectType: "Content Platform + Workflow System"
-  domain: "Product Discovery / Innovation Methodology"
-  complexity: "medium (v1 scope), with architectural note that the Enhance pattern establishes cross-module extension precedent"
+  projectType: Content Platform + Workflow System
+  domain: Product Discovery / Innovation Methodology
+  complexity: >-
+    medium (v1 scope), with architectural note that the Enhance pattern
+    establishes cross-module extension precedent
   projectContext: brownfield
 elicitation:
-  methods_applied: [architecture-decision-records, stakeholder-round-table, first-principles-analysis, 5-whys-deep-dive]
-  core_framing: "Closing the review-to-backlog feedback loop"
-  success_metric: "80% reduction in time-to-backlog-update (currently 20-40 minutes manual)"
-  incubation_angle: "Prove the Enhance pattern in Convoke, then propose upstream to BMAD core as dynamic extensions tag"
+  methods_applied:
+    - architecture-decision-records
+    - stakeholder-round-table
+    - first-principles-analysis
+    - 5-whys-deep-dive
+  core_framing: Closing the review-to-backlog feedback loop
+  success_metric: 80% reduction in time-to-backlog-update (currently 20-40 minutes manual)
+  incubation_angle: >-
+    Prove the Enhance pattern in Convoke, then propose upstream to BMAD core as
+    dynamic extensions tag
   adrs:
-    - "ADR-1: Single install via convoke-install-vortex — no new CLI command"
-    - "ADR-2: Verify workflow entry point in installer — additive-only patch, fail-fast on missing"
-    - "ADR-3: Explicit user menu for mode selection (T/R/C) — no auto-detection"
-    - "ADR-4: No mode switching — modes run independently, backlog file is shared state"
-    - "ADR-5: Shared RICE scoring guide as reference doc in templates/"
+    - 'ADR-1: Single install via convoke-install-vortex — no new CLI command'
+    - >-
+      ADR-2: Verify workflow entry point in installer — additive-only patch,
+      fail-fast on missing
+    - 'ADR-3: Explicit user menu for mode selection (T/R/C) — no auto-detection'
+    - >-
+      ADR-4: No mode switching — modes run independently, backlog file is shared
+      state
+    - 'ADR-5: Shared RICE scoring guide as reference doc in templates/'
   stakeholder_concerns:
-    - "John PM: Triage mode is the highest-value deliverable"
-    - "Winston: Cross-module coupling boundaries and failure isolation"
-    - "Morgan: Installation path and package distribution for _enhance/"
-    - "Wendy: Tri-modal workflow complexity and shared state"
-    - "Emma: RICE scoring must feel like strategic conversation, not calculator"
-    - "Max: Input format flexibility for diverse review transcript types"
-  first_principles: "Core deliverable is RICE backlog workflow for John PM. The _enhance/ structure is an architectural investment. Option C chosen — full v1 with pattern establishment."
+    - 'John PM: Triage mode is the highest-value deliverable'
+    - 'Winston: Cross-module coupling boundaries and failure isolation'
+    - 'Morgan: Installation path and package distribution for _enhance/'
+    - 'Wendy: Tri-modal workflow complexity and shared state'
+    - 'Emma: RICE scoring must feel like strategic conversation, not calculator'
+    - 'Max: Input format flexibility for diverse review transcript types'
+  first_principles: >-
+    Core deliverable is RICE backlog workflow for John PM. The _enhance/
+    structure is an architectural investment. Option C chosen — full v1 with
+    pattern establishment.
   vision:
-    statement: "Convoke's Enhance module makes existing BMAD agents more capable. First enhancement — RICE backlog management for John PM — closes the feedback loop between review sessions and strategic prioritization."
-    differentiator: "Going from chaos (a review transcript) to clarity (a scored, prioritized list) in one step. Not a new tool — a capability upgrade to an agent you already use."
-    core_insight: "The bottleneck isn't generating findings, it's turning findings into prioritized action."
-    interaction_model: "Agent proposes, human validates. Batch validation — John extracts all, scores all, presents in one shot, user validates in one pass."
-    proof_of_concept_bar: "Zero lost findings + calibrated scoring = success"
+    statement: >-
+      Convoke's Enhance module makes existing BMAD agents more capable. First
+      enhancement — RICE backlog management for John PM — closes the feedback
+      loop between review sessions and strategic prioritization.
+    differentiator: >-
+      Going from chaos (a review transcript) to clarity (a scored, prioritized
+      list) in one step. Not a new tool — a capability upgrade to an agent you
+      already use.
+    core_insight: >-
+      The bottleneck isn't generating findings, it's turning findings into
+      prioritized action.
+    interaction_model: >-
+      Agent proposes, human validates. Batch validation — John extracts all,
+      scores all, presents in one shot, user validates in one pass.
+    proof_of_concept_bar: Zero lost findings + calibrated scoring = success
   party_mode_refinements:
-    - "Batch over individual — one interaction per phase, not one per finding"
-    - "Success metric reframed to 80% reduction rather than absolute minutes"
-    - "Deprecation question acknowledged but deferred to post-v1"
+    - 'Batch over individual — one interaction per phase, not one per finding'
+    - Success metric reframed to 80% reduction rather than absolute minutes
+    - Deprecation question acknowledged but deferred to post-v1
 ---
 
 # Product Requirements Document - Convoke P4: Enhance Module

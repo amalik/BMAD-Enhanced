@@ -1,3 +1,9 @@
+---
+initiative: convoke
+artifact_type: spec
+created: '2026-04-10'
+schema_version: 1
+---
 # BaseArtifact Integration Contract Specification
 
 **Version:** 2.0.0

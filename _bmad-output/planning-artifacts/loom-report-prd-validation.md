@@ -1,15 +1,32 @@
 ---
-validationTarget: '_bmad-output/planning-artifacts/prd-team-factory.md'
+initiative: loom
+artifact_type: report
+created: '2026-04-10'
+schema_version: 1
+validationTarget: _bmad-output/planning-artifacts/prd-team-factory.md
 validationDate: '2026-03-22'
 revalidationDate: '2026-03-22'
 inputDocuments:
-  - _bmad-output/vortex-artifacts/vision-team-factory-2026-03-21.md
-  - _bmad-output/vortex-artifacts/decision-scope-team-factory-2026-03-21.md
-  - _bmad-output/vortex-artifacts/adr-assumption-map-team-factory-2026-03-22.md
-  - _bmad-output/planning-artifacts/brief-gyre-2026-03-19.md
-validationStepsCompleted: [step-v-01-discovery, step-v-02-format-detection, step-v-03-density-validation, step-v-04-brief-coverage, step-v-05-measurability, step-v-06-traceability, step-v-07-implementation-leakage, step-v-08-domain-compliance, step-v-09-project-type, step-v-10-smart, step-v-11-holistic-quality, step-v-12-completeness, step-v-13-report-complete]
+  - _bmad-output/vortex-artifacts/loom-vision-2026-03-21.md
+  - _bmad-output/vortex-artifacts/loom-decision-scope-2026-03-21.md
+  - _bmad-output/vortex-artifacts/loom-adr-assumption-map-2026-03-22.md
+  - _bmad-output/planning-artifacts/gyre-brief-2026-03-19.md
+validationStepsCompleted:
+  - step-v-01-discovery
+  - step-v-02-format-detection
+  - step-v-03-density-validation
+  - step-v-04-brief-coverage
+  - step-v-05-measurability
+  - step-v-06-traceability
+  - step-v-07-implementation-leakage
+  - step-v-08-domain-compliance
+  - step-v-09-project-type
+  - step-v-10-smart
+  - step-v-11-holistic-quality
+  - step-v-12-completeness
+  - step-v-13-report-complete
 validationStatus: COMPLETE
-holisticQualityRating: '5/5'
+holisticQualityRating: 5/5
 overallStatus: PASS
 ---
 

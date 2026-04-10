@@ -1,21 +1,34 @@
 ---
+initiative: forge
+artifact_type: decision
+created: 2026-03-21T00:00:00.000Z
+schema_version: 1
 contract: HC6
 type: artifact
 source_agent: max
 source_workflow: learning-card
-target_agents: [emma, mila, liam, wade, noah]
+target_agents:
+  - emma
+  - mila
+  - liam
+  - wade
+  - noah
 input_artifacts:
-  - path: "_bmad-output/vortex-artifacts/hc5-signal-framework-forge-2026-03-21.md"
+  - path: _bmad-output/vortex-artifacts/hc5-signal-framework-forge-2026-03-21.md
     contract: HC5
-  - path: "_bmad-output/vortex-artifacts/hc4-experiment-forge-shadow-2026-03-21.md"
+  - path: _bmad-output/vortex-artifacts/hc4-experiment-forge-shadow-2026-03-21.md
     contract: HC4
-  - path: "_bmad-output/vortex-artifacts/hc3-hypothesis-contract-forge-2026-03-21.md"
+  - path: _bmad-output/vortex-artifacts/hc3-hypothesis-contract-forge-2026-03-21.md
     contract: HC3
-  - path: "_bmad-output/vortex-artifacts/hc2-problem-definition-forge-2026-03-21.md"
+  - path: _bmad-output/vortex-artifacts/hc2-problem-definition-forge-2026-03-21.md
     contract: HC2
-created: 2026-03-21
 status: PRE-REGISTERED
-tags: [forge, knowledge-extraction, KORE, decision-framework, brownfield-consulting]
+tags:
+  - forge
+  - knowledge-extraction
+  - KORE
+  - decision-framework
+  - brownfield-consulting
 ---
 
 # HC6 Decision Framework: Forge — Institutional Learning System
@@ -38,10 +51,10 @@ We have designed but not yet validated that structured knowledge extraction (KOR
 |--------|-------|----------|--------|
 | 1. Contextualize | Emma 🎯 | [scope-decision-forge-2026-03-21.md](scope-decision-forge-2026-03-21.md) | Complete — Forge selected at 4.65/5, 6 alternatives de-scoped |
 | 2. Empathize | Emma 🎯 | [lean-persona-landing-consultant](lean-persona-landing-consultant-2026-03-21.md), [lean-persona-knowledge-holder](lean-persona-knowledge-holder-2026-03-21.md) | Complete — 2 personas, JTBD defined, forces mapped |
-| 3. Synthesize | Mila 🔬 | [hc2-problem-definition-forge](hc2-problem-definition-forge-2026-03-21.md) | Complete — converged problem, 6 pains, 4 gains, 6 assumptions |
-| 4. Hypothesize | Liam 💡 | [hc3-hypothesis-contract-forge](hc3-hypothesis-contract-forge-2026-03-21.md) | Complete — 3 hypotheses, 11 assumptions, testing order |
-| 5. Externalize | Wade 🧪 | [hc4-experiment-forge-shadow](hc4-experiment-forge-shadow-2026-03-21.md) | Complete — shadow engagement designed, metrics pre-registered |
-| 6. Sensitize | Noah 📡 | [hc5-signal-framework-forge](hc5-signal-framework-forge-2026-03-21.md) | Complete — 15 signals, 6 anomaly patterns, 3-tier monitoring |
+| 3. Synthesize | Mila 🔬 | [hc2-problem-definition-forge](forge-problem-def-hc2-2026-03-21.md) | Complete — converged problem, 6 pains, 4 gains, 6 assumptions |
+| 4. Hypothesize | Liam 💡 | [hc3-hypothesis-contract-forge](forge-hypothesis-hc3-2026-03-21.md) | Complete — 3 hypotheses, 11 assumptions, testing order |
+| 5. Externalize | Wade 🧪 | [hc4-experiment-forge-shadow](forge-experiment-hc4-shadow-2026-03-21.md) | Complete — shadow engagement designed, metrics pre-registered |
+| 6. Sensitize | Noah 📡 | [hc5-signal-framework-forge](forge-signal-hc5-framework-2026-03-21.md) | Complete — 15 signals, 6 anomaly patterns, 3-tier monitoring |
 | 7. Systematize | Max 🧭 | This document | Complete — 4 decision gates, assumption cascades, strategy implications |
 
 **Full Vortex cycle complete.** All 7 streams have produced artifacts. The discovery phase is done. The next phase is execution (shadow engagement → data → decisions).

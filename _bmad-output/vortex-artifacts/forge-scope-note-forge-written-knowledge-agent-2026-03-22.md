@@ -1,11 +1,15 @@
 ---
-title: "Scope Exploration Note: Written Knowledge Analysis Agent (Forge)"
-date: 2026-03-22
+initiative: forge
+artifact_type: scope
+created: '2026-04-10'
+schema_version: 1
+title: 'Scope Exploration Note: Written Knowledge Analysis Agent (Forge)'
+date: 2026-03-22T00:00:00.000Z
 created-by: Amalik with Emma (contextualization-expert)
 type: scope-exploration-note
 status: EXPLORATION
 parent: decision-scope-forge-2026-03-21.md
-version: 1.0
+version: 1
 ---
 
 # Scope Exploration Note: Written Knowledge Analysis Agent (Forge)

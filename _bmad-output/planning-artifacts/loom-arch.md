@@ -1,18 +1,30 @@
 ---
-stepsCompleted: [1, 2, 3, 4, 5, 6, 7, 8]
+initiative: loom
+artifact_type: arch
+created: '2026-04-10'
+schema_version: 1
+stepsCompleted:
+  - 1
+  - 2
+  - 3
+  - 4
+  - 5
+  - 6
+  - 7
+  - 8
 lastStep: 8
-status: 'complete'
+status: complete
 completedAt: '2026-03-22'
 inputDocuments:
-  - _bmad-output/planning-artifacts/prd-team-factory.md
-  - _bmad-output/vortex-artifacts/vision-team-factory-2026-03-21.md
-  - _bmad-output/vortex-artifacts/decision-scope-team-factory-2026-03-21.md
-  - _bmad-output/vortex-artifacts/adr-assumption-map-team-factory-2026-03-22.md
-  - _bmad-output/planning-artifacts/brief-gyre-2026-03-19.md
-  - _bmad-output/planning-artifacts/report-prd-validation-team-factory.md
-workflowType: 'architecture'
-project_name: 'Team Factory'
-user_name: 'Amalik'
+  - _bmad-output/planning-artifacts/loom-prd.md
+  - _bmad-output/vortex-artifacts/loom-vision-2026-03-21.md
+  - _bmad-output/vortex-artifacts/loom-decision-scope-2026-03-21.md
+  - _bmad-output/vortex-artifacts/loom-adr-assumption-map-2026-03-22.md
+  - _bmad-output/planning-artifacts/gyre-brief-2026-03-19.md
+  - _bmad-output/planning-artifacts/loom-report-prd-validation.md
+workflowType: architecture
+project_name: Team Factory
+user_name: Amalik
 date: '2026-03-22'
 ---
 

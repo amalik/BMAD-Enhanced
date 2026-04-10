@@ -1,17 +1,35 @@
 ---
-validationTarget: '_bmad-output/planning-artifacts/prd-gyre.md'
+initiative: gyre
+artifact_type: report
+created: '2026-04-10'
+schema_version: 1
+validationTarget: _bmad-output/planning-artifacts/prd-gyre.md
 validationDate: '2026-03-21'
-validationType: 'post-edit re-validation'
+validationType: post-edit re-validation
 inputDocuments:
-  - _bmad-output/planning-artifacts/prd-gyre.md
+  - _bmad-output/planning-artifacts/gyre-prd.md
   - _bmad-output/planning-artifacts/product-brief-gyre-2026-03-19.md
-  - _bmad-output/planning-artifacts/research/domain-operational-readiness-research-2026-03-19.md
+  - >-
+    _bmad-output/planning-artifacts/research/domain-operational-readiness-research-2026-03-19.md
   - docs/agents.md
   - docs/development.md
   - docs/BMAD-METHOD-COMPATIBILITY.md
-validationStepsCompleted: [step-v-01-discovery, step-v-02-format-detection, step-v-03-density-validation, step-v-04-brief-coverage, step-v-05-measurability, step-v-06-traceability, step-v-07-implementation-leakage, step-v-08-domain-compliance, step-v-09-project-type, step-v-10-smart, step-v-11-holistic, step-v-12-completeness, step-v-13-report-complete]
+validationStepsCompleted:
+  - step-v-01-discovery
+  - step-v-02-format-detection
+  - step-v-03-density-validation
+  - step-v-04-brief-coverage
+  - step-v-05-measurability
+  - step-v-06-traceability
+  - step-v-07-implementation-leakage
+  - step-v-08-domain-compliance
+  - step-v-09-project-type
+  - step-v-10-smart
+  - step-v-11-holistic
+  - step-v-12-completeness
+  - step-v-13-report-complete
 validationStatus: COMPLETE
-holisticQualityRating: '5/5 - Excellent'
+holisticQualityRating: 5/5 - Excellent
 overallStatus: Pass
 ---
 

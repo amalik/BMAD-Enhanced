@@ -1,10 +1,14 @@
 ---
-title: "Assumption Risk Map: Team Factory"
-date: 2026-03-22
+initiative: loom
+artifact_type: adr
+created: '2026-04-10'
+schema_version: 1
+title: 'Assumption Risk Map: Team Factory'
+date: 2026-03-22T00:00:00.000Z
 created-by: Amalik with Liam (hypothesis-engineer)
 type: assumption-map
 status: VALIDATED
-version: 1.0
+version: 1
 upstream-artifacts:
   - product-vision-team-factory-2026-03-21.md
   - scope-decision-team-factory-2026-03-21.md

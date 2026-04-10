@@ -1,25 +1,34 @@
 ---
+initiative: helm
+artifact_type: problem-def
+created: 2026-04-05T00:00:00.000Z
+schema_version: 1
 contract: HC2
 type: artifact
 source_agent: mila
 source_workflow: research-convergence
-target_agents: [liam]
+target_agents:
+  - liam
 input_artifacts:
-  - path: "_bmad-output/vortex-artifacts/pre-registration-strategy-perimeter-2026-04-04.md"
+  - path: >-
+      _bmad-output/vortex-artifacts/pre-registration-strategy-perimeter-2026-04-04.md
     contract: non-HC1 (pre-registration)
-  - path: "_bmad-output/vortex-artifacts/scope-decision-strategy-perimeter-2026-04-04.md"
+  - path: >-
+      _bmad-output/vortex-artifacts/scope-decision-strategy-perimeter-2026-04-04.md
     contract: non-HC1 (scope decision)
-  - path: "_bmad-output/vortex-artifacts/lean-persona-strategic-practitioner-2026-04-04.md"
+  - path: >-
+      _bmad-output/vortex-artifacts/lean-persona-strategic-practitioner-2026-04-04.md
     contract: non-HC1 (lean persona)
-  - path: "_bmad-output/vortex-artifacts/lean-persona-strategic-navigator-2026-04-04.md"
+  - path: >-
+      _bmad-output/vortex-artifacts/lean-persona-strategic-navigator-2026-04-04.md
     contract: non-HC1 (lean persona)
-  - path: "_bmad-output/vortex-artifacts/empathy-map-strategic-navigator-2026-04-05.md"
+  - path: >-
+      _bmad-output/vortex-artifacts/empathy-map-strategic-navigator-2026-04-05.md
     contract: non-HC1 (empathy map)
-  - path: "_bmad-output/planning-artifacts/lifecycle-expansion-plan.md"
+  - path: _bmad-output/planning-artifacts/lifecycle-expansion-plan.md
     contract: non-HC1 (planning artifact)
-  - path: "docs/lifecycle-expansion-vision.md"
+  - path: docs/lifecycle-expansion-vision.md
     contract: non-HC1 (vision document)
-created: 2026-04-05
 discovery-context: Self-Discovery Protocol — Strategy Perimeter (Wave 0.4)
 ---
 

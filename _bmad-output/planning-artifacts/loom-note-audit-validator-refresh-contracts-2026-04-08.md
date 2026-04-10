@@ -1,3 +1,9 @@
+---
+initiative: loom
+artifact_type: note
+created: '2026-04-10'
+schema_version: 1
+---
 # Validator / Refresh / Doctor Contract Audit
 
 **Filename date:** 2026-04-08 (matches epic-7 spec reference)

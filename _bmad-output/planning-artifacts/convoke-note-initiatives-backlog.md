@@ -1,3 +1,9 @@
+---
+initiative: convoke
+artifact_type: note
+created: '2026-04-10'
+schema_version: 1
+---
 # Convoke Initiatives Backlog
 
 **Created:** 2026-03-08

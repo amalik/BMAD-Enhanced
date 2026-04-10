@@ -1,11 +1,17 @@
 ---
-title: "Scope Decision: Strategy Perimeter"
-date: 2026-04-04
+initiative: helm
+artifact_type: scope
+created: '2026-04-10'
+schema_version: 1
+title: 'Scope Decision: Strategy Perimeter'
+date: 2026-04-04T00:00:00.000Z
 created-by: Amalik with Emma (contextualization-expert)
 type: scope-decision
 status: DECIDED
-version: 1.0
-discovery-context: Self-Discovery Protocol — Vortex discovery on Strategy perimeter using Convoke as test case
+version: 1
+discovery-context: >-
+  Self-Discovery Protocol — Vortex discovery on Strategy perimeter using Convoke
+  as test case
 pre-registration: pre-registration-strategy-perimeter-2026-04-04.md
 ---
 

@@ -1,6 +1,6 @@
 # Story SP-5.1: Template Inlining for Tier 2 Export
 
-Status: ready-for-dev
+Status: done
 
 ## Story
 
@@ -61,37 +61,37 @@ so that Tier 2 (light-deps) skills can be exported as self-contained files that 
 
 ## Tasks / Subtasks
 
-- [ ] Task 1: Categorize dependencies in the engine (AC: #1)
+- [x] Task 1: Categorize dependencies in the engine (AC: #1)
   - [ ] Add a function `categorizeDependencies(depsString, projectRoot, manifestSkillNames)` that splits the `;`-separated deps string and classifies each as `template`, `skill-ref`, or `sidecar`
   - [ ] For template deps: resolve the path via `findFileInSubtree` or direct resolution against the skill's directory
   - [ ] Return `{ templates: [{name, path, content}], skillRefs: [{name, tier}], sidecars: [{name, path}] }`
 
-- [ ] Task 2: Implement template inlining (AC: #2, #5, #6)
+- [x] Task 2: Implement template inlining (AC: #2, #5, #6)
   - [ ] For each template: read file, strip frontmatter, apply transformations **Phases 1-5 and 7 ONLY** (skip Phase 6 — config var substitution). Phase 6's catch-all regex `\{\{[\w_-]+\}\}` would strip template placeholders like `{{project_name}}`, `{{fr_list}}`, `{{nfr_list}}` with `[your context]`. Templates need their `{{var}}` placeholders preserved so the user knows what to fill in.
   - [ ] To achieve this: extract Phase 6 out of `applyTransformations()` into a separate function `applyConfigVarSubstitution(text, warnings)`. The main `applyTransformations()` calls it as before (no behavior change for existing callers). Template inlining calls `applyTransformations()` with a new `{ skipPhase6: true }` option, or calls the individual phases directly.
   - [ ] Template display name: strip `.md` extension, replace hyphens with spaces, title-case
   - [ ] Add a note line above each inlined template: `> Replace template placeholders (\{\{...\}\}) with your project's actual values.`
   - [ ] Replace template-path references in the workflow text with `see the "Template: <name>" section below`
 
-- [ ] Task 3: Implement skill-ref and sidecar handling (AC: #3, #4)
+- [x] Task 3: Implement skill-ref and sidecar handling (AC: #3, #4)
   - [ ] For skill-refs: append companion-skill notes to the inputs section
   - [ ] For sidecars: append persistent-data notes to the inputs section
   - [ ] Both integrated into `extractInputs()` or as a post-processing step on the sections
 
-- [ ] Task 4: Relax tier check in engine + CLI (AC: #1, #7)
+- [x] Task 4: Relax tier check in engine + CLI (AC: #1, #7)
   - [ ] In `exportSkill()`: change the tier check from `!== 'standalone'` to `=== 'pipeline'` (reject only pipeline)
   - [ ] In `convoke-export.js` `validateTier()`: make `--tier 2` / `--tier light-deps` proceed instead of exit 3
   - [ ] In `convoke-export.js` batch mode: `--all` now iterates both `standalone` and `light-deps` tiers
   - [ ] Update `--help` text to reflect the new tier support
   - [ ] **Update sp-2-3 Test 6** (`tests/lib/portability-cli-entry-point.test.js`): currently asserts `--all` and `--tier 1` produce identical success sets. After this change, `--all` includes light-deps too. Change the assertion to: `--all` success count >= `--tier 1` success count (not equal). The `--tier 1` set must be a subset of the `--all` set.
 
-- [ ] Task 5: Write tests (AC: #8)
+- [x] Task 5: Write tests (AC: #8)
   - [ ] Create `tests/lib/portability-tier2-export.test.js`
   - [ ] All 6 tests from AC #8 implemented
   - [ ] Use `findProjectRoot()` for engine tests (direct call, not subprocess)
   - [ ] Use `spawnSync` for CLI tests (Tests 5-6)
 
-- [ ] Task 6: Run regression suite + verify (AC: #9)
+- [x] Task 6: Run regression suite + verify (AC: #9)
   - [ ] `npx jest tests/lib/portability` — all portability tests pass (71 existing + 6 new = 77 minimum)
   - [ ] `node scripts/convoke-doctor.js` — same baseline
   - [ ] Manual smoke: `node scripts/portability/convoke-export.js bmad-create-prd --output /tmp/tier2-smoke` — verify the PRD template is inlined
@@ -162,8 +162,26 @@ The template inlining reads files from `_bmad/` — these are inside the project
 
 ### Agent Model Used
 
+claude-opus-4-6[1m]
+
 ### Debug Log References
 
 ### Completion Notes List
 
+- **Task 1 — Dependency categorizer:** `categorizeDependencies()` with 5-step heuristic: manifest name → skill-ref, `_memory`/`sidecar` path → sidecar, `templates/` path on disk → template, other path on disk → sidecar, unknown → sidecar. Added `findFileByName()` helper for subtree search fallback when relative paths don't resolve directly (e.g., `../templates/prd-template.md` resolved by searching the skill dir tree).
+- **Task 2 — Template inlining:** `buildTemplateSections()` reads template files, strips frontmatter, applies transformations with `{ skipPhase6: true }` to preserve `{{var}}` placeholders. Phase 6 skip implemented via early return in `applyTransformations()`. Display name derived from filename with title-case. Note line added above each template.
+- **Task 3 — Skill-ref + sidecar notes:** `buildDependencyNotes()` appends companion-skill and persistent-data bullets to the inputs section. Fixed a FORBIDDEN_STRINGS violation: companion-skill note was using raw skill name (`bmad-help`) which triggered the forbidden-string check. Changed to use humanized display name only.
+- **Task 4 — Tier relaxation:** Engine: `!== 'standalone'` → `=== 'pipeline'`. CLI: `validateTier('2')` now returns `{ ok: true, normalizedTier: 'light-deps' }`. `--all` maps to `'all'` which filters `standalone || light-deps`. Updated sp-2-3 Test 6 (equality → superset assertion) and Test 4 (tier 2 rejection → tier 3 rejection). Updated sp-2-2 Test 3 (tier 2 throws → tier 2 succeeds).
+- **Smoke tests:** `bmad-create-prd` exports with `## Template: Prd Template`, `{{project_name}}` preserved, companion skills noted, zero `_bmad/` leaks. `bmad-cis-agent-storyteller` exports with sidecar notes. `--tier 2 --dry-run` exports all 5 light-deps skills. `seed-catalog-repo.js` passes verification with 44 skills.
+- **Regression:** 77/77 portability tests pass (71 existing, updated 3, added 6 new). Doctor: 2-issue baseline.
+
 ### File List
+
+**Modified:**
+- `scripts/portability/export-engine.js` — `findFileByName()`, `categorizeDependencies()`, `buildTemplateSections()`, `buildDependencyNotes()`, `skipPhase6` option, tier check relaxation, dependency wiring in `exportSkill()`
+- `scripts/portability/convoke-export.js` — `validateTier()` accepts tier 2, `--all` exports both tiers
+- `tests/lib/portability-export-engine.test.js` — Test 3 updated (tier 2 succeeds), Test 4 regex updated
+- `tests/lib/portability-cli-entry-point.test.js` — Test 4 (tier 3 rejection), Test 6 (superset assertion)
+
+**New:**
+- `tests/lib/portability-tier2-export.test.js` — 6 tests

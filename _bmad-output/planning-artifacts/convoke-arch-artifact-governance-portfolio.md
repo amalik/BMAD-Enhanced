@@ -1,16 +1,30 @@
 ---
-stepsCompleted: [1, 2, 3, 4, 5, 6, 7, 8]
-status: 'complete'
+initiative: convoke
+artifact_type: arch
+created: '2026-04-10'
+schema_version: 1
+stepsCompleted:
+  - 1
+  - 2
+  - 3
+  - 4
+  - 5
+  - 6
+  - 7
+  - 8
+status: complete
 completedAt: '2026-04-05'
 inputDocuments:
-  - _bmad-output/planning-artifacts/prd-artifact-governance-portfolio.md
-  - _bmad-output/planning-artifacts/adr-repo-organization-conventions-2026-03-22.md
+  - _bmad-output/planning-artifacts/convoke-prd-artifact-governance-portfolio.md
+  - >-
+    _bmad-output/planning-artifacts/convoke-adr-repo-organization-conventions-2026-03-22.md
   - docs/lifecycle-expansion-vision.md
-  - _bmad-output/planning-artifacts/report-implementation-readiness-artifact-governance-2026-04-05.md
+  - >-
+    _bmad-output/planning-artifacts/convoke-report-implementation-readiness-artifact-governance-2026-04-05.md
   - scripts/archive.js
-workflowType: 'architecture'
-project_name: 'Artifact Governance & Portfolio'
-user_name: 'Amalik'
+workflowType: architecture
+project_name: Artifact Governance & Portfolio
+user_name: Amalik
 date: '2026-04-05'
 ---
 

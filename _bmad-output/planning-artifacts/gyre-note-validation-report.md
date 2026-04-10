@@ -1,3 +1,9 @@
+---
+initiative: gyre
+artifact_type: note
+created: '2026-04-10'
+schema_version: 1
+---
 # Gyre Validation Report
 
 **Date:** 2026-03-24

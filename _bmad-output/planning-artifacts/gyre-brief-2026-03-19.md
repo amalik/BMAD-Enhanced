@@ -1,9 +1,19 @@
 ---
-stepsCompleted: [1, 2, 3, 4, 5]
+initiative: gyre
+artifact_type: brief
+created: '2026-04-10'
+schema_version: 1
+stepsCompleted:
+  - 1
+  - 2
+  - 3
+  - 4
+  - 5
 inputDocuments:
-  - _bmad-output/planning-artifacts/research/domain-operational-readiness-research-2026-03-19.md
-  - _bmad-output/planning-artifacts/initiatives-backlog.md
-date: 2026-03-19
+  - >-
+    _bmad-output/planning-artifacts/research/domain-operational-readiness-research-2026-03-19.md
+  - _bmad-output/planning-artifacts/convoke-note-initiatives-backlog.md
+date: 2026-03-19T00:00:00.000Z
 author: Amalik
 ---
 

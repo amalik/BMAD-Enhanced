@@ -1,17 +1,22 @@
 ---
+initiative: forge
+artifact_type: problem-def
+created: 2026-03-21T00:00:00.000Z
+schema_version: 1
 contract: HC2
 type: artifact
 source_agent: mila
 source_workflow: research-convergence
-target_agents: [liam]
+target_agents:
+  - liam
 input_artifacts:
-  - path: "_bmad-output/vortex-artifacts/scope-decision-forge-2026-03-21.md"
+  - path: _bmad-output/vortex-artifacts/scope-decision-forge-2026-03-21.md
     contract: non-HC1 (contextualize-scope output)
-  - path: "_bmad-output/vortex-artifacts/lean-persona-landing-consultant-2026-03-21.md"
+  - path: >-
+      _bmad-output/vortex-artifacts/lean-persona-landing-consultant-2026-03-21.md
     contract: non-HC1 (lean-persona output)
-  - path: "_bmad-output/vortex-artifacts/lean-persona-knowledge-holder-2026-03-21.md"
+  - path: _bmad-output/vortex-artifacts/lean-persona-knowledge-holder-2026-03-21.md
     contract: non-HC1 (lean-persona output)
-created: 2026-03-21
 ---
 
 # HC2 Problem Definition: Forge — Domain Knowledge Extraction

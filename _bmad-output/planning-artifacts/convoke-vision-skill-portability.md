@@ -1,3 +1,9 @@
+---
+initiative: convoke
+artifact_type: vision
+created: '2026-04-10'
+schema_version: 1
+---
 # Skill Portability & Distribution Vision
 
 **Version:** 1.0.0

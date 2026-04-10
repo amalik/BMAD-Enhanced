@@ -1,13 +1,17 @@
 ---
+initiative: forge
+artifact_type: hypothesis
+created: 2026-03-21T00:00:00.000Z
+schema_version: 1
 contract: HC3
 type: artifact
 source_agent: liam
 source_workflow: hypothesis-engineering
-target_agents: [wade]
+target_agents:
+  - wade
 input_artifacts:
-  - path: "_bmad-output/vortex-artifacts/hc2-problem-definition-forge-2026-03-21.md"
+  - path: _bmad-output/vortex-artifacts/hc2-problem-definition-forge-2026-03-21.md
     contract: HC2
-created: 2026-03-21
 ---
 
 # HC3 Hypothesis Contract: Forge — Domain Knowledge Extraction

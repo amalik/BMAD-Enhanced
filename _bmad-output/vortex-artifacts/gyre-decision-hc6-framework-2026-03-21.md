@@ -1,21 +1,34 @@
 ---
+initiative: gyre
+artifact_type: decision
+created: 2026-03-21T00:00:00.000Z
+schema_version: 1
 contract: HC6
 type: artifact
 source_agent: max
 source_workflow: learning-card
-target_agents: [emma, mila, liam, wade, noah]
+target_agents:
+  - emma
+  - mila
+  - liam
+  - wade
+  - noah
 input_artifacts:
-  - path: "_bmad-output/vortex-artifacts/hc5-signal-framework-gyre-2026-03-21.md"
+  - path: _bmad-output/vortex-artifacts/hc5-signal-framework-gyre-2026-03-21.md
     contract: HC5
-  - path: "_bmad-output/vortex-artifacts/hc4-experiment-gyre-pilot-2026-03-21.md"
+  - path: _bmad-output/vortex-artifacts/hc4-experiment-gyre-pilot-2026-03-21.md
     contract: HC4
-  - path: "_bmad-output/vortex-artifacts/hc3-hypothesis-contract-gyre-2026-03-21.md"
+  - path: _bmad-output/vortex-artifacts/hc3-hypothesis-contract-gyre-2026-03-21.md
     contract: HC3
-  - path: "_bmad-output/vortex-artifacts/hc2-problem-definition-gyre-2026-03-21.md"
+  - path: _bmad-output/vortex-artifacts/hc2-problem-definition-gyre-2026-03-21.md
     contract: HC2
-created: 2026-03-21
 status: PRE-REGISTERED
-tags: [gyre, operational-readiness, decision-framework, contextual-model, production-readiness]
+tags:
+  - gyre
+  - operational-readiness
+  - decision-framework
+  - contextual-model
+  - production-readiness
 ---
 
 # HC6 Decision Framework: Gyre — Operational Readiness Discovery
@@ -38,10 +51,10 @@ We have designed but not yet validated that generated contextual models will acc
 |--------|-------|----------|--------|
 | 1. Contextualize | Emma 🎯 | [scope-decision-gyre-2026-03-21.md](scope-decision-gyre-2026-03-21.md) | Complete — Gyre selected at 4.52/5, 5 alternatives de-scoped |
 | 2. Empathize | Isla 🔍 | [lean-persona-engineering-lead](lean-persona-engineering-lead-2026-03-21.md), [lean-persona-sre-platform-engineer](lean-persona-sre-platform-engineer-2026-03-21.md), [lean-persona-compliance-officer](lean-persona-compliance-officer-2026-03-21.md) | Complete — 3 personas (Sana primary, Ravi v2+, Priya v2 activation), JTBD defined, forces mapped |
-| 3. Synthesize | Mila 🔬 | [hc2-problem-definition-gyre](hc2-problem-definition-gyre-2026-03-21.md) | Complete — converged problem, 6 pains, 5 gains, 6 assumptions |
-| 4. Hypothesize | Liam 💡 | [hc3-hypothesis-contract-gyre](hc3-hypothesis-contract-gyre-2026-03-21.md) | Complete — 3 hypotheses, 9 assumptions, testing order |
-| 5. Externalize | Wade 🧪 | [hc4-experiment-gyre-pilot](hc4-experiment-gyre-pilot-2026-03-21.md) + [lean-experiment-gyre-discovery-interviews](lean-experiment-gyre-discovery-interviews-2026-03-20.md) | Complete — 3-phase pilot designed, metrics pre-registered |
-| 6. Sensitize | Noah 📡 | [hc5-signal-framework-gyre](hc5-signal-framework-gyre-2026-03-21.md) | Complete — 14 signals, 6 anomaly patterns, 3-tier monitoring |
+| 3. Synthesize | Mila 🔬 | [hc2-problem-definition-gyre](gyre-problem-def-hc2-2026-03-21.md) | Complete — converged problem, 6 pains, 5 gains, 6 assumptions |
+| 4. Hypothesize | Liam 💡 | [hc3-hypothesis-contract-gyre](gyre-hypothesis-hc3-2026-03-21.md) | Complete — 3 hypotheses, 9 assumptions, testing order |
+| 5. Externalize | Wade 🧪 | [hc4-experiment-gyre-pilot](gyre-experiment-hc4-pilot-2026-03-21.md) + [lean-experiment-gyre-discovery-interviews](lean-experiment-gyre-discovery-interviews-2026-03-20.md) | Complete — 3-phase pilot designed, metrics pre-registered |
+| 6. Sensitize | Noah 📡 | [hc5-signal-framework-gyre](gyre-signal-hc5-framework-2026-03-21.md) | Complete — 14 signals, 6 anomaly patterns, 3-tier monitoring |
 | 7. Systematize | Max 🧭 | This document | Complete — 4 decision gates, assumption cascades, strategy implications |
 
 **Full Vortex cycle complete.** All 7 streams have produced artifacts. The discovery phase is done. The next phase is execution (Phase 1 interviews → Phase 2 model accuracy → Phase 3 sprint integration → decisions).

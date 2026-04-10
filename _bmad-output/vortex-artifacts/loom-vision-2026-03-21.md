@@ -1,10 +1,14 @@
 ---
-title: "Product Vision: Team Factory"
-date: 2026-03-21
+initiative: loom
+artifact_type: vision
+created: '2026-04-10'
+schema_version: 1
+title: 'Product Vision: Team Factory'
+date: 2026-03-21T00:00:00.000Z
 created-by: Amalik with Emma (contextualization-expert)
 type: product-vision
 status: DRAFT
-version: 1.0
+version: 1
 ---
 
 # Product Vision: Team Factory

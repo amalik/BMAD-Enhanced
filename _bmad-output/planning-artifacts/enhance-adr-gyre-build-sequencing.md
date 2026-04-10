@@ -1,3 +1,9 @@
+---
+initiative: enhance
+artifact_type: adr
+created: '2026-04-10'
+schema_version: 1
+---
 # ADR-001: Enhance/Gyre Build Sequencing
 
 **Status:** ACCEPTED

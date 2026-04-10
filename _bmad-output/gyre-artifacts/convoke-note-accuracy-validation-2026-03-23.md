@@ -1,3 +1,9 @@
+---
+initiative: convoke
+artifact_type: note
+created: '2026-04-10'
+schema_version: 1
+---
 # Gyre Model Accuracy Validation — 2026-03-23
 
 ## Summary

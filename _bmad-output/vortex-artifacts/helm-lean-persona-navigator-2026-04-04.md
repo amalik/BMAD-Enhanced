@@ -1,10 +1,14 @@
 ---
-title: "Lean Persona: Strategic Navigator"
-date: 2026-04-04
+initiative: helm
+artifact_type: lean-persona
+created: '2026-04-10'
+schema_version: 1
+title: 'Lean Persona: Strategic Navigator'
+date: 2026-04-04T00:00:00.000Z
 created-by: Amalik with Emma (contextualization-expert)
 type: lean-persona
 status: HYPOTHESIS
-version: 1.0
+version: 1
 discovery-context: Self-Discovery Protocol — Strategy Perimeter (Wave 0.4)
 scope-decision: scope-decision-strategy-perimeter-2026-04-04.md
 pre-registration: pre-registration-strategy-perimeter-2026-04-04.md

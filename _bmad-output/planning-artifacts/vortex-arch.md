@@ -1,18 +1,31 @@
 ---
-stepsCompleted: [1, 2, 3, 4, 5, 6, 7, 8]
+initiative: vortex
+artifact_type: arch
+created: '2026-04-10'
+schema_version: 1
+stepsCompleted:
+  - 1
+  - 2
+  - 3
+  - 4
+  - 5
+  - 6
+  - 7
+  - 8
 lastStep: 8
-status: 'complete'
+status: complete
 completedAt: '2026-02-23'
 inputDocuments:
-  - _bmad-output/planning-artifacts/prd.md
+  - _bmad-output/planning-artifacts/vortex-prd.md
   - _bmad-output/planning-artifacts/product-brief-Convoke-2026-02-22.md
-  - _bmad-output/planning-artifacts/implementation-readiness-report-2026-02-23.md
+  - >-
+    _bmad-output/planning-artifacts/implementation-readiness-report-2026-02-23.md
   - docs/agents.md
   - docs/development.md
   - docs/testing.md
-workflowType: 'architecture'
-project_name: 'Convoke'
-user_name: 'Amalik'
+workflowType: architecture
+project_name: Convoke
+user_name: Amalik
 date: '2026-02-23'
 ---
 
