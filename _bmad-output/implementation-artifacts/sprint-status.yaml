@@ -380,8 +380,8 @@ development_status:
   sp-epic-4-retrospective: done
 
   # Epic 5: Tier 2 Export & Platform Adapters
-  sp-epic-5: backlog
-  sp-5-1-template-inlining-for-tier-2-export: backlog
+  sp-epic-5: in-progress
+  sp-5-1-template-inlining-for-tier-2-export: ready-for-dev
   sp-5-2-platform-adapter-generation: backlog
   sp-5-3-export-tier-2-skills-and-update-catalog: backlog
   sp-epic-5-retrospective: optional
