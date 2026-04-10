@@ -62,9 +62,10 @@ so that Tier 2 (light-deps) skills can be exported as self-contained files that 
   - [ ] Return `{ templates: [{name, path, content}], skillRefs: [{name, tier}], sidecars: [{name, path}] }`
 
 - [ ] Task 2: Implement template inlining (AC: #2, #5, #6)
-  - [ ] For each template: read file, strip frontmatter, apply `applyTransformations()`, format as `## Template: <name>` section
+  - [ ] For each template: read file, strip frontmatter, apply transformations **Phases 1-5 and 7 ONLY** (skip Phase 6 — config var substitution). Phase 6's catch-all regex `\{\{[\w_-]+\}\}` would strip template placeholders like `{{project_name}}`, `{{fr_list}}`, `{{nfr_list}}` with `[your context]`. Templates need their `{{var}}` placeholders preserved so the user knows what to fill in.
+  - [ ] To achieve this: extract Phase 6 out of `applyTransformations()` into a separate function `applyConfigVarSubstitution(text, warnings)`. The main `applyTransformations()` calls it as before (no behavior change for existing callers). Template inlining calls `applyTransformations()` with a new `{ skipPhase6: true }` option, or calls the individual phases directly.
   - [ ] Template display name: strip `.md` extension, replace hyphens with spaces, title-case
-  - [ ] Leave `{{var}}` placeholders as-is with a note line above the template content
+  - [ ] Add a note line above each inlined template: `> Replace template placeholders (\{\{...\}\}) with your project's actual values.`
   - [ ] Replace template-path references in the workflow text with `see the "Template: <name>" section below`
 
 - [ ] Task 3: Implement skill-ref and sidecar handling (AC: #3, #4)
