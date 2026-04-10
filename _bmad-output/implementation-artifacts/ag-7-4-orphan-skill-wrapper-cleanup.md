@@ -1,6 +1,6 @@
 # Story 7.4: Orphan Skill-Wrapper Cleanup
 
-Status: review
+Status: done
 
 ## Story
 
