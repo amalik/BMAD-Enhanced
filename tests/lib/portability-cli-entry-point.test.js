@@ -102,10 +102,10 @@ describe('convoke-export CLI (sp-2-3)', () => {
     expect(result.stdout).toContain('✅ bmad-agent-architect');
   });
 
-  test('Test 4: tier 2 rejection — exits 3', () => {
-    const result = runCli(['--tier', '2']);
+  test('Test 4: tier 3 rejection — exits 3', () => {
+    const result = runCli(['--tier', '3']);
     expect(result.status).toBe(3);
-    expect(result.stderr).toContain("Tier 2");
+    expect(result.stderr).toContain("Tier 3");
   });
 
   test('Test 5: nonexistent skill — exits 2 with "not in the manifest"', () => {
@@ -114,14 +114,22 @@ describe('convoke-export CLI (sp-2-3)', () => {
     expect(result.stdout + result.stderr).toMatch(/not in the manifest/);
   });
 
-  test('Test 6: --all is alias for --tier 1', () => {
+  test('Test 6: --all includes --tier 1 skills (superset)', () => {
     const tierResult = runCli(['--tier', '1', '--dry-run']);
     const allResult = runCli(['--all', '--dry-run']);
 
     const extractSuccessSet = (out) =>
-      [...out.matchAll(/^✅ (\S+)/gm)].map((m) => m[1]).sort();
+      new Set([...out.matchAll(/^✅ (\S+)/gm)].map((m) => m[1]));
 
-    expect(extractSuccessSet(allResult.stdout)).toEqual(extractSuccessSet(tierResult.stdout));
+    const tier1Set = extractSuccessSet(tierResult.stdout);
+    const allSet = extractSuccessSet(allResult.stdout);
+
+    // --all must include all --tier 1 skills (superset)
+    for (const skill of tier1Set) {
+      expect(allSet.has(skill)).toBe(true);
+    }
+    // --all should have >= --tier 1 count (includes light-deps too)
+    expect(allSet.size).toBeGreaterThanOrEqual(tier1Set.size);
   });
 
   test('Test 7: conflicting flags — exit 1', () => {
