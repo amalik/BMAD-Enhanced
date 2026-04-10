@@ -742,6 +742,39 @@ You must fully embody this agent's persona and follow all activation instruction
     if (verbose) console.log('    Skipped Artifacts skill wrapper generation (dev environment)');
   }
 
+  // 6e. Orphan workflow-wrapper cleanup (Story 7.4, I32)
+  // Removes stale .claude/skills/ directories for workflow wrappers that are no longer
+  // declared in the module configs. Uses a two-strategy matching approach:
+  //   Strategy 1 (Enhance): any bmad-enhance-* dir not in the current union → orphan
+  //   Strategy 2 (Artifacts): any dir whose name exactly matches a known Artifacts
+  //     workflow name but is not in the current union → orphan
+  // All other directories (agent wrappers, upstream BMAD skills, third-party) are ignored.
+  if (!isSameRoot) {
+    const currentWorkflowWrappers = new Set();
+    // Enhance wrappers: bmad-enhance-${workflow.name}
+    if (enhanceConfig && Array.isArray(enhanceConfig.workflows)) {
+      for (const wf of enhanceConfig.workflows) {
+        if (wf && wf.name) currentWorkflowWrappers.add(`bmad-enhance-${wf.name}`);
+      }
+    }
+    // Artifacts wrappers: workflow.name verbatim (only standalone:true are installed,
+    // but we track ALL names so a removed standalone workflow is still recognized as an orphan)
+    const knownArtifactsNames = new Set();
+    if (artifactsConfig && Array.isArray(artifactsConfig.workflows)) {
+      for (const wf of artifactsConfig.workflows) {
+        if (wf && wf.name) {
+          knownArtifactsNames.add(wf.name);
+          if (wf.standalone === true) currentWorkflowWrappers.add(wf.name);
+        }
+      }
+    }
+    const orphanChanges = cleanupOrphanWorkflowWrappers(skillsDir, currentWorkflowWrappers, knownArtifactsNames, { verbose });
+    changes.push(...orphanChanges);
+  } else {
+    changes.push('Skipped orphan workflow-wrapper cleanup (dev environment)');
+    if (verbose) console.log('    Skipped orphan workflow-wrapper cleanup (dev environment)');
+  }
+
   // 7. Generate agent customize files (only if they don't already exist)
   const customizeDir = path.join(projectRoot, '_bmad', '_config', 'agents');
   await fs.ensureDir(customizeDir);
@@ -787,4 +820,62 @@ prompts: []
   return changes;
 }
 
-module.exports = { refreshInstallation };
+/**
+ * Remove orphan workflow-wrapper directories from .claude/skills/.
+ *
+ * Two-strategy matching (Story 7.4, I32):
+ *   Strategy 1: Enhance prefix — any dir starting with `bmad-enhance-` that is
+ *               not in `currentWrappers` is an orphan.
+ *   Strategy 2: Artifacts exact-name — any dir whose name is in `knownArtifactsNames`
+ *               but not in `currentWrappers` is an orphan.
+ * Everything else (agent wrappers, upstream BMAD skills, third-party) is ignored.
+ *
+ * @param {string} skillsDir - Absolute path to .claude/skills/
+ * @param {Set<string>} currentWrappers - Union of live workflow wrapper names
+ * @param {Set<string>} knownArtifactsNames - ALL Artifacts workflow names (including non-standalone)
+ * @param {object} [options]
+ * @param {boolean} [options.verbose] - Log each action
+ * @returns {Array<string>} Changes array entries for removed orphans
+ */
+function cleanupOrphanWorkflowWrappers(skillsDir, currentWrappers, knownArtifactsNames, options = {}) {
+  const { verbose = false } = options;
+  const changes = [];
+
+  if (!fs.existsSync(skillsDir)) return changes;
+
+  const entries = fs.readdirSync(skillsDir, { withFileTypes: true });
+
+  for (const entry of entries) {
+    if (!entry.isDirectory()) continue;
+    const name = entry.name;
+
+    // Skip agent wrappers (handled by existing stale-skill sweep)
+    if (name.startsWith('bmad-agent-bme-')) continue;
+
+    // Strategy 1: Enhance prefix (unambiguous — no upstream module uses bmad-enhance-)
+    if (name.startsWith('bmad-enhance-')) {
+      if (!currentWrappers.has(name)) {
+        fs.removeSync(path.join(skillsDir, name));
+        changes.push(`Removed orphan skill wrapper: ${name}`);
+        if (verbose) console.log(`    Removed orphan skill wrapper: ${name}`);
+      }
+      continue;
+    }
+
+    // Strategy 2: Artifacts exact-name match
+    if (knownArtifactsNames.has(name)) {
+      if (!currentWrappers.has(name)) {
+        fs.removeSync(path.join(skillsDir, name));
+        changes.push(`Removed orphan skill wrapper: ${name}`);
+        if (verbose) console.log(`    Removed orphan skill wrapper: ${name}`);
+      }
+      continue;
+    }
+
+    // Everything else: not a workflow wrapper we own — leave alone
+  }
+
+  return changes;
+}
+
+module.exports = { refreshInstallation, cleanupOrphanWorkflowWrappers };
