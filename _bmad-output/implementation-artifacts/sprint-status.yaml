@@ -374,10 +374,10 @@ development_status:
   sp-epic-3-retrospective: done
 
   # Epic 4: Standalone Skills Repository (First Release)
-  sp-epic-4: in-progress
+  sp-epic-4: done
   sp-4-1-create-and-seed-repository: done
   sp-4-2-end-to-end-validation: done
-  sp-epic-4-retrospective: optional
+  sp-epic-4-retrospective: done
 
   # Epic 5: Tier 2 Export & Platform Adapters
   sp-epic-5: backlog
