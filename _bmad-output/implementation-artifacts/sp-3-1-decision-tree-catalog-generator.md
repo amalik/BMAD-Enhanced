@@ -1,6 +1,6 @@
 # Story SP-3.1: Decision-Tree Catalog Generator
 
-Status: ready-for-dev
+Status: done
 
 ## Story
 
@@ -73,19 +73,19 @@ so that I can find the right skill in under 60 seconds without knowing BMAD inte
 
 ## Tasks / Subtasks
 
-- [ ] Task 1: Extract `resolvePersonaSummary` helper from `export-engine.js` (AC: #8)
+- [x] Task 1: Extract `resolvePersonaSummary` helper from `export-engine.js` (AC: #8)
   - [ ] Add a new exported function `resolvePersonaSummary(skillName, agents)` that returns `{ name: string, icon: string }`
   - [ ] Extract Strategies 1 + 2 + 2b (manifest-based matching, no file I/O) from `loadPersona()`'s first ~30 lines into a shared internal function `findAgentMatch(skillName, agents)`. Both `loadPersona()` and `resolvePersonaSummary()` call it. **Do NOT extract Strategy 3** (description fuzzy match) — it reads file content and stays in `loadPersona()` only
   - [ ] If no agent match, return `{ name: humanizeSkillName(skillName), icon: '🔧' }`
   - [ ] Does NOT read any files (no fs calls) — operates purely on the passed-in agents array
   - [ ] Update the `module.exports` to include `resolvePersonaSummary`
 
-- [ ] Task 2: Build the intent-heading lookup table (AC: #2)
+- [x] Task 2: Build the intent-heading lookup table (AC: #2)
   - [ ] Define `INTENT_TO_HEADING` map with all 9 intent categories → "I need to..." phrases
   - [ ] `meta-platform` maps to `null` (excluded from catalog)
   - [ ] Unknown intents fall back to `"I need to: <intent>"` with a `console.warn`
 
-- [ ] Task 3: Build the catalog generator script (AC: #1, #3, #4, #5, #6, #7, #10)
+- [x] Task 3: Build the catalog generator script (AC: #1, #3, #4, #5, #6, #7, #10)
   - [ ] Create `scripts/portability/catalog-generator.js` with `#!/usr/bin/env node` shebang
   - [ ] Read both manifests via `readManifest()` from `manifest-csv.js`
   - [ ] Build the persona lookup using `resolvePersonaSummary()` from the engine
@@ -101,13 +101,13 @@ so that I can find the right skill in under 60 seconds without knowing BMAD inte
   - [ ] `--help` prints usage and exits 0
   - [ ] `chmod +x` the script
 
-- [ ] Task 4: Write tests (AC: #9)
+- [x] Task 4: Write tests (AC: #9)
   - [ ] Create `tests/lib/portability-catalog-generator.test.js`
   - [ ] Use `child_process.spawnSync` to invoke as subprocess (match sp-2-3 pattern)
   - [ ] All 6 tests from AC #9 implemented
   - [ ] Use tmpfiles for `--output` tests, clean up in `afterEach`
 
-- [ ] Task 5: Run regression suite + verify (AC: #1-10)
+- [x] Task 5: Run regression suite + verify (AC: #1-10)
   - [ ] `npx jest tests/lib/portability` — all portability tests pass (52 existing + 6 new = 58 minimum)
   - [ ] `node scripts/convoke-doctor.js` — same baseline
   - [ ] Manual smoke check: `node scripts/portability/catalog-generator.js | head -60` — eyeball the catalog, verify it looks browsable and correct
@@ -197,8 +197,23 @@ From Epic 2 retro action items:
 
 ### Agent Model Used
 
+claude-opus-4-6[1m]
+
 ### Debug Log References
 
 ### Completion Notes List
 
+- **Task 1 — `findAgentMatch` extraction:** Extracted Strategies 1+2+2b from `loadPersona()` into a shared `findAgentMatch(skillName, agents)` function. `loadPersona()` now calls it (Strategies 3-5 remain in `loadPersona()` only). Added `resolvePersonaSummary(skillName, agents)` as a lightweight wrapper: calls `findAgentMatch`, falls back to `humanizeSkillName + 🔧`. Both `resolvePersonaSummary` and `loadAgentManifest` added to `module.exports`. sp-2-2 engine tests (14/14) pass after refactor — no persona regression.
+- **Tasks 2+3 — Catalog generator:** Built `scripts/portability/catalog-generator.js` (~250 lines). Static `INTENT_TO_HEADING` map for all 9 intents. `meta-platform` excluded (maps to `null`). Description truncation at first `. ` or 120 chars. `Set`-based dedup. Header with title + quick-start + legend + split count line (`M in catalog | P framework-only below`). 6 standalone intent sections in display order. Collapsed `<details>` for pipeline skills grouped by intent. Footer with generation note + date + repo link. CLI: stdout default, `--output <path>`, `--help`. Exit codes 0/1/2.
+- **Catalog output stats:** 49 main-body skills (44 ready to use, 5 need setup) + 24 framework-only in collapsed section. 6 intent headings rendered. Carson appears twice (bmad-brainstorming + bmad-cis-agent-brainstorming-coach — both intentional per Dev Notes).
+- **6 tests all passing.** Validates title, intent headings, tier badges (Ready to use + Framework only), skill count parsing, and zero BMAD-internal leaks.
+- **Regression:** 58/58 portability tests pass. Doctor: 2 pre-existing issues, no new.
+
 ### File List
+
+**New:**
+- `scripts/portability/catalog-generator.js` (~250 lines, executable)
+- `tests/lib/portability-catalog-generator.test.js` (6 tests, ~130 lines)
+
+**Modified:**
+- `scripts/portability/export-engine.js` — extracted `findAgentMatch()`, added `resolvePersonaSummary()`, exported both + `loadAgentManifest`
