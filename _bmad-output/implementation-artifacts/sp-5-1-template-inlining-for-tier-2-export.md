@@ -15,7 +15,12 @@ so that Tier 2 (light-deps) skills can be exported as self-contained files that 
    - **skill-ref** — another skill name (e.g., `bmad-advanced-elicitation`) that can't be inlined but should be documented as a companion requirement
    - **sidecar** — a data file path (e.g., `_bmad/_memory/...`) that is runtime state, not instructional content
 
-   The categorization heuristic: if the dependency matches a skill name in the manifest, it's a `skill-ref`. If it's a path ending in `.md` and exists on disk, it's a `template`. Otherwise it's a `sidecar`.
+   The categorization heuristic (checked in order, first match wins):
+   1. If the dependency matches a skill name in the manifest → `skill-ref`
+   2. If the dependency path contains `_memory` or `sidecar` → `sidecar` (runtime state files, not instructional content — even though they exist on disk)
+   3. If it's a path ending in `.md`, exists on disk, and is under a `templates/` directory → `template`
+   4. If it's a path ending in `.md` and exists on disk but NOT under `templates/` → `sidecar` (conservative — don't inline unknown files)
+   5. Otherwise → `sidecar` (unknown dependency, document its existence)
 
 2. **Template inlining:** For each `template` dependency, the engine reads the file content, strips its YAML frontmatter (if any), applies the same 7-phase transformation pipeline (tool names, framework calls, config vars, etc.), and appends it to the `instructions.md` under a new section:
    ```
