@@ -53,9 +53,19 @@ cp -r <skill-name>/ .claude/skills/<skill-name>/
 
 Then invoke the skill in Claude Code by name (e.g., "use the brainstorming skill") or via slash command if your project registers it.
 
-<!-- TODO sp-5-2: GitHub Copilot install instructions go here -->
-<!-- TODO sp-5-2: Cursor install instructions go here -->
-<!-- TODO sp-5-2: Windsurf, Aider, etc. go here -->
+### GitHub Copilot
+
+<!-- Minimal copy-paste path for sp-3-2. sp-5-2 will add richer adapter wrappers. -->
+
+Append the contents of `instructions.md` to your project's `.github/copilot-instructions.md` file.
+
+### Cursor
+
+<!-- Minimal copy-paste path for sp-3-2. sp-5-2 will add richer adapter wrappers. -->
+
+Copy `instructions.md` into your project's `.cursor/rules/` directory as `<skill-name>.md`.
+
+<!-- TODO sp-5-2: Windsurf, Aider, and other platform instructions go here -->
 
 ## Tier explanation
 
