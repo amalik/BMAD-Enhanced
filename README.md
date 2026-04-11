@@ -10,7 +10,7 @@
                 Agent teams for complex systems
 ```
 
-[![Version](https://img.shields.io/badge/version-3.1.0-blue)](https://github.com/amalik/convoke-agents)
+[![Version](https://img.shields.io/badge/version-3.2.0-blue)](https://github.com/amalik/convoke-agents)
 [![License](https://img.shields.io/badge/license-MIT-blue)](LICENSE)
 
 </div>
@@ -22,11 +22,11 @@ Convoke extends AI agents with two types of installable modules: **Teams** bring
 | **Vortex** | 7 agents, 22 workflows | Product discovery — from user insight to evidence-based decisions |
 | **Gyre** | 4 agents, 7 workflows | Production readiness — from stack detection to gap analysis |
 
-### What's New
+### What's New in 3.2
 
-- **Gyre team** — 4 agents analyze your project's production readiness: detect your stack, model what "ready" looks like, find what's missing, and help you act on it
-- **Team Factory** — guided workflow for creating new BMAD-compliant teams from scratch (`/bmad-team-factory`)
-- **Skill Validator** — new `validateSkill()` quality gate in the update system for factory-generated skills ([development docs](docs/development.md))
+- **Portable skills** — export any BMAD skill to a standalone format with platform adapters for Claude, Copilot, and Cursor (`npx convoke-export <skill>`)
+- **Team Factory ships** — the module for creating new BMAD-compliant teams is now included in the npm package
+- **1,123 tests** — test infrastructure recovery resolved a phantom-test bug class; test gate tripled from 320+ to 1,123 verified-passing tests
 - See the [CHANGELOG](CHANGELOG.md) for the full release details
 
 ---
@@ -221,6 +221,26 @@ Three capabilities:
 - **Add Agent** — extend an existing team with a new agent
 - **Add Skill** — give an existing agent a new workflow
 
+### Portability — Export Skills Anywhere
+
+Take any BMAD skill and export it to a standalone, LLM-agnostic format that works outside Claude Code:
+
+```bash
+npx convoke-export bmad-brainstorming --output ./exported
+```
+
+The export engine transforms skill workflows into self-contained instruction documents, then generates platform-specific adapter files:
+
+| Platform | Adapter output |
+|----------|---------------|
+| Claude | `CLAUDE.md` commands |
+| GitHub Copilot | `.github/copilot-instructions.md` |
+| Cursor | `.cursor/rules/` |
+
+Skills are classified by tier: **standalone** skills export cleanly, **light-deps** skills include dependency notes, and **pipeline** skills (multi-step orchestration) are flagged as non-portable.
+
+Four skills support the workflow: `bmad-export-skill` (export), `bmad-validate-exports` (validate), `bmad-generate-catalog` (catalog README), `bmad-seed-catalog` (full catalog repo).
+
 ### Enhance — Agent Skills
 
 Skills give existing agents new workflows — installed via menu patching, not agent modification. The first skill adds RICE-scored backlog management to the PM agent:
@@ -349,11 +369,17 @@ your-project/
 │   │   ├── contracts/        # Artifact contract schemas (GC1-GC4)
 │   │   ├── guides/           # User guides (all 4 agents)
 │   │   └── config.yaml       # Configuration
-│   └── _enhance/             # Skill: Agent Capability Upgrades
-│       ├── workflows/        # Skill workflows (initiatives-backlog)
-│       ├── extensions/       # Agent menu patch descriptors
-│       ├── guides/           # Module author guide
-│       └── config.yaml       # Configuration
+│   ├── _enhance/             # Skill: Agent Capability Upgrades
+│   │   ├── workflows/        # Skill workflows (initiatives-backlog)
+│   │   ├── extensions/       # Agent menu patch descriptors
+│   │   ├── guides/           # Module author guide
+│   │   └── config.yaml       # Configuration
+│   ├── _portability/         # Skill: Export skills to other platforms
+│   │   └── skills/           # Export, validate, catalog, seed workflows
+│   ├── _team-factory/        # Skill: Create new BMAD-compliant teams
+│   │   └── lib/              # Factory generators and validators
+│   └── _artifacts/           # Skill: Artifact governance & portfolio
+│       └── workflows/        # Migrate artifacts, portfolio status
 └── _bmad-output/
     ├── vortex-artifacts/     # Vortex generated artifacts
     └── gyre-artifacts/       # Gyre generated artifacts
@@ -419,6 +445,7 @@ See [UPDATE-GUIDE.md](UPDATE-GUIDE.md) for migration paths and troubleshooting.
 - **v1.x** — Vortex foundation: 7 agents, 22 workflows, update system, CI/CD
 - **v2.0** — Product renamed to Convoke. CLI commands: `convoke-*`. Package: `convoke-agents`
 - **v2.x** — Enhance module (Skills architecture, RICE initiatives-backlog), Gyre team (production readiness, 4 agents), Team Factory
+- **v3.x** — Artifact governance, portfolio intelligence, portability system (export to Claude/Copilot/Cursor), 1,123 tests
 - **Next** — Forge (domain knowledge extraction for enterprise brownfield engagements)
 - **Future** — Additional teams, Forge-Gyre integration, cross-team workflows
 
