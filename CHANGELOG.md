@@ -7,6 +7,37 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [3.2.0] - 2026-04-11
+
+### Added
+
+- **Portability System** — Export BMAD skills to portable, LLM-agnostic format with platform adapters for Claude, Copilot, and Cursor. New CLI command `convoke-export` and 4 new skills: `bmad-export-skill`, `bmad-generate-catalog`, `bmad-seed-catalog`, `bmad-validate-exports`.
+- **Portability Export Engine** (`scripts/portability/export-engine.js`) — Transforms skill workflows into standalone instructions documents with persona, sections, and configurable warning types. Supports tier classification (standalone, light-deps, pipeline).
+- **Catalog Generator** — Generates a decision-tree skill catalog README from manifest data for the public catalog repository.
+- **Seed Catalog** — Seeds a complete catalog repository staging directory with all exportable skills, adapters, and catalog README.
+- **Export Validation** — Validates exported skill staging directories for structural correctness and BMAD-internal leaks.
+- **Platform Adapters** — Generates Claude (CLAUDE.md commands), GitHub Copilot (`.github/copilot-instructions.md`), and Cursor (`.cursor/rules/`) adapter files from exported skills.
+- **Team Factory module** — Now ships in the npm package (`_bmad/bme/_team-factory/`). Factory workflows for industrializing team, agent, and skill addition.
+
+### Changed
+
+- **Test infrastructure recovery** — Resolved the C1 phantom-test bug class discovered in the 2026-04-08 astonishment report. 22 test files in `tests/lib/` converted from Jest API to `node:test` + `node:assert/strict`. Test gate grew from 408 to 1,123 verified-passing tests.
+- **`npm test` glob** — Replaced 8 literal file paths with `tests/lib/*.test.js` glob. New test files in `tests/lib/` are now automatically discovered by CI.
+- **eslint config** — Removed Jest globals (`test`, `expect`, `jest`, `beforeEach`, `afterEach`, `beforeAll`, `afterAll`) from `tests/**/*.js` block. This is the structural fix that prevents future phantom tests from passing lint.
+- **`test:all` script** — Rewritten to compose `npm test && npm run test:integration && npm run test:p0` instead of a broken `tests/**/*.test.js` glob.
+- **`test:p0:gate`** — Now delegates to `test:p0` instead of duplicating the command.
+- **Definition of Done checklist** — Added Phantom Test Guard and Test Wiring Verified items to prevent AI-generated phantom tests from passing story completion.
+- **Golden fixture protection** — `tests/**/golden/` directories excluded from eslint with explanatory README documenting the byte-exact contract.
+
+### Infrastructure
+
+- **1,123 tests** across unit, integration, p0, team-factory, and lib suites (was 320+ in v3.1.0)
+- **`tests/mock-cp.js` helper** — Shared child_process mock helper for `node:test` suites. Handles module-cache reset, per-spy restoration, and explicit caller-dirname resolution.
+- **New dependency:** `yaml` ^2.8.3 (for YAML comment preservation in portability exports)
+- **Published modules:** Added `_bmad/bme/_portability/` and `_bmad/bme/_team-factory/` to npm package files
+
+---
+
 ## [3.1.0] - 2026-04-06
 
 ### Added

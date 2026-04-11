@@ -1,6 +1,6 @@
 {
   "name": "convoke-agents",
-  "version": "3.1.0",
+  "version": "3.2.0",
   "description": "Agent teams for complex systems, compatible with BMad Method",
   "main": "index.js",
   "files": [
@@ -10,6 +10,8 @@
     "_bmad/bme/_enhance/",
     "_bmad/bme/_gyre/",
     "_bmad/bme/_artifacts/",
+    "_bmad/bme/_portability/",
+    "_bmad/bme/_team-factory/",
     "INSTALLATION.md",
     "UPDATE-GUIDE.md",
     "CHANGELOG.md",
