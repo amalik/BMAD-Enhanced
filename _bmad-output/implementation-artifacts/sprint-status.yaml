@@ -388,9 +388,9 @@ development_status:
 
   # Epic 6: Skill Portability UX — Slash Command Wrappers
   # Epic file: epic-skill-portability-ux.md
-  sp-epic-6: in-progress
+  sp-epic-6: done
   sp-6-1-export-skill-wrapper: done
   sp-6-2-catalog-seed-skill-wrappers: done
-  sp-6-3-validate-exports-skill-wrapper: backlog
-  sp-6-4-skill-registration-discovery: backlog
+  sp-6-3-validate-exports-skill-wrapper: done
+  sp-6-4-skill-registration-discovery: done
   sp-epic-6-retrospective: optional
