@@ -8,17 +8,11 @@ const { runScript, PACKAGE_ROOT } = require('../helpers');
 
 const postinstallScript = path.join(PACKAGE_ROOT, 'scripts/postinstall.js');
 
-describe('postinstall smoke test', () => {
-  it('runs without error from project root', async () => {
-    const { exitCode, stderr } = await runScript(postinstallScript);
-    assert.equal(exitCode, 0, `postinstall should exit 0, stderr: ${stderr}`);
-  });
-
-  it('shows output when run from project root', async () => {
-    const { stdout } = await runScript(postinstallScript);
-    assert.ok(stdout.includes('Convoke'), 'should show project name');
-  });
-});
+// Behavior coverage for postinstall lives in the fixture-based describes below
+// (`fresh project`, `up-to-date installation`, `older installation detected`).
+// Previous bare smoke tests that ran against PACKAGE_ROOT were removed because
+// they turned any drift in the live repo into a CI failure — without actually
+// adding coverage the fixture tests did not already provide.
 
 describe('postinstall: fresh project (no _bmad)', () => {
   let tmpDir;
