@@ -1,13 +1,41 @@
-const { describe, it } = require('node:test');
+const { describe, it, before, after } = require('node:test');
 const assert = require('node:assert/strict');
 const path = require('path');
-const { runScript, PACKAGE_ROOT } = require('../helpers');
+const fs = require('fs-extra');
+const os = require('os');
+const yaml = require('js-yaml');
+const { runScript, PACKAGE_ROOT, createValidInstallation } = require('../helpers');
 const { AGENTS } = require('../../scripts/update/lib/agent-registry');
 
-const projectRoot = PACKAGE_ROOT;
+// These tests exercise CLI entry points against an isolated fixture project.
+// They must NOT run against PACKAGE_ROOT — coupling assertions to live repo
+// state turns any drift (config tweak, banner rename, version bump mid-PR)
+// into a red CI across every Node version. See project-context.md rule
+// "test-fixture-isolation".
+
+const projectRoot = PACKAGE_ROOT; // kept for locating scripts, NOT as CLI cwd
+let fixtureDir;
+
+before(async () => {
+  fixtureDir = await fs.mkdtemp(path.join(os.tmpdir(), 'convoke-cli-entry-'));
+  await createValidInstallation(fixtureDir);
+
+  // Align the fixture installation version with the current package version
+  // so `convoke-update --dry-run` reports "up to date" instead of suggesting
+  // a migration. createValidInstallation hardcodes an older version via
+  // fullConfig() — we patch just this one field, non-invasively.
+  const configPath = path.join(fixtureDir, '_bmad/bme/_vortex/config.yaml');
+  const config = yaml.load(fs.readFileSync(configPath, 'utf8'));
+  config.version = require('../../package.json').version;
+  fs.writeFileSync(configPath, yaml.dump(config), 'utf8');
+});
+
+after(async () => {
+  if (fixtureDir) await fs.remove(fixtureDir);
+});
 
 function run(script, args = []) {
-  return runScript(script, args);
+  return runScript(script, args, { cwd: fixtureDir });
 }
 
 describe('index.js entry point', () => {
