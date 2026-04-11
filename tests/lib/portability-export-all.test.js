@@ -1,3 +1,8 @@
+'use strict';
+
+const { describe, it, before, after } = require('node:test');
+const assert = require('node:assert/strict');
+
 const fs = require('fs');
 const os = require('os');
 const path = require('path');
@@ -34,7 +39,7 @@ const { header: agentHeader, rows: agentRows } = readManifest(agentManifestPath)
 const displayNameIdx = agentHeader.indexOf('displayName');
 const namedPersonas = new Set(agentRows.map((r) => r[displayNameIdx]).filter(Boolean));
 
-beforeAll(() => {
+before(() => {
   tmpDir = path.join(os.tmpdir(), `sp-2-4-${crypto.randomUUID()}`);
   fs.mkdirSync(tmpDir, { recursive: true });
   cliResult = spawnSync('node', [CLI_PATH, '--tier', '1', '--output', tmpDir], {
@@ -48,19 +53,19 @@ beforeAll(() => {
     : [];
 }, 30000);
 
-afterAll(() => {
+after(() => {
   if (tmpDir && fs.existsSync(tmpDir)) {
     fs.rmSync(tmpDir, { recursive: true, force: true });
   }
 });
 
 describe('Export All Tier 1 Skills (sp-2-4)', () => {
-  test('Test 1: full batch exits 0, directory count equals unique standalone count', () => {
-    expect(cliResult.status).toBe(0);
-    expect(skillDirs.length).toBe(uniqueStandalone.length);
+  it('Test 1: full batch exits 0, directory count equals unique standalone count', () => {
+    assert.equal(cliResult.status, 0);
+    assert.equal(skillDirs.length, uniqueStandalone.length);
   });
 
-  test('Test 2: zero forbidden strings across all exported instructions.md', () => {
+  it('Test 2: zero forbidden strings across all exported instructions.md', () => {
     const violations = [];
     for (const dir of skillDirs) {
       const instrPath = path.join(tmpDir, dir, 'instructions.md');
@@ -78,10 +83,10 @@ describe('Export All Tier 1 Skills (sp-2-4)', () => {
     if (violations.length > 0) {
       console.error('Forbidden string violations:', violations);
     }
-    expect(violations).toEqual([]);
+    assert.deepEqual(violations, []);
   });
 
-  test('Test 3: persona section "## You are" present in all exports', () => {
+  it('Test 3: persona section "## You are" present in all exports', () => {
     const missing = [];
     for (const dir of skillDirs) {
       const instrPath = path.join(tmpDir, dir, 'instructions.md');
@@ -94,10 +99,10 @@ describe('Export All Tier 1 Skills (sp-2-4)', () => {
     if (missing.length > 0) {
       console.error('Missing "## You are" heading:', missing);
     }
-    expect(missing).toEqual([]);
+    assert.deepEqual(missing, []);
   });
 
-  test('Test 4: README stub validity — persona name, description, "How to use", no leftover placeholders', () => {
+  it('Test 4: README stub validity — persona name, description, "How to use", no leftover placeholders', () => {
     // Build a skill-name → description map for the description check
     const descMap = {};
     for (const row of skillRows) {
@@ -135,10 +140,10 @@ describe('Export All Tier 1 Skills (sp-2-4)', () => {
     if (issues.length > 0) {
       console.error('README issues:', issues);
     }
-    expect(issues).toEqual([]);
+    assert.deepEqual(issues, []);
   });
 
-  test('Test 5: at least 12 named-persona skills exported', () => {
+  it('Test 5: at least 12 named-persona skills exported', () => {
     let namedCount = 0;
     for (const dir of skillDirs) {
       const instrPath = path.join(tmpDir, dir, 'instructions.md');
@@ -155,6 +160,6 @@ describe('Export All Tier 1 Skills (sp-2-4)', () => {
         }
       }
     }
-    expect(namedCount).toBeGreaterThanOrEqual(12);
+    assert.ok(namedCount >= 12);
   });
 });

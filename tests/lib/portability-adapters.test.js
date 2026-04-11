@@ -1,3 +1,8 @@
+'use strict';
+
+const { describe, it, before, after, afterEach } = require('node:test');
+const assert = require('node:assert/strict');
+
 const fs = require('fs');
 const os = require('os');
 const path = require('path');
@@ -35,79 +40,79 @@ describe('Platform Adapter Generation (sp-5-2)', () => {
     const result = spawnSync('node', [CLI_PATH, 'bmad-brainstorming', '--output', singleTmpDir], {
       cwd: projectRoot, encoding: 'utf8', env: process.env,
     });
-    expect(result.status).toBe(0);
+    assert.equal(result.status, 0);
     return path.join(singleTmpDir, 'bmad-brainstorming');
   }
 
-  test('Test 1: Claude Code adapter has YAML frontmatter', () => {
+  it('Test 1: Claude Code adapter has YAML frontmatter', () => {
     const skillDir = exportCarson();
     const adapterPath = path.join(skillDir, 'adapters', 'claude-code', 'SKILL.md');
-    expect(fs.existsSync(adapterPath)).toBe(true);
+    assert.equal(fs.existsSync(adapterPath), true);
     const content = fs.readFileSync(adapterPath, 'utf8');
-    expect(content.startsWith('---\n')).toBe(true);
-    expect(content).toContain('name: bmad-brainstorming');
-    expect(content).toContain('description:');
+    assert.equal(content.startsWith('---\n'), true);
+    assert.ok(content.includes('name: bmad-brainstorming'));
+    assert.ok(content.includes('description:'));
   });
 
-  test('Test 2: Copilot adapter has HTML comment header', () => {
+  it('Test 2: Copilot adapter has HTML comment header', () => {
     const skillDir = exportCarson();
     const adapterPath = path.join(skillDir, 'adapters', 'copilot', 'copilot-instructions.md');
-    expect(fs.existsSync(adapterPath)).toBe(true);
+    assert.equal(fs.existsSync(adapterPath), true);
     const content = fs.readFileSync(adapterPath, 'utf8');
     const firstLine = content.split('\n')[0];
-    expect(firstLine).toMatch(/^<!--.*Brainstorming.*-->$/);
+    assert.match(firstLine, /^<!--.*Brainstorming.*-->$/);
   });
 
-  test('Test 3: Cursor adapter is plain content matching instructions.md', () => {
+  it('Test 3: Cursor adapter is plain content matching instructions.md', () => {
     const skillDir = exportCarson();
     const cursorPath = path.join(skillDir, 'adapters', 'cursor', 'bmad-brainstorming.md');
-    expect(fs.existsSync(cursorPath)).toBe(true);
+    assert.equal(fs.existsSync(cursorPath), true);
     const cursorContent = fs.readFileSync(cursorPath, 'utf8');
     const instructionsContent = fs.readFileSync(path.join(skillDir, 'instructions.md'), 'utf8');
-    expect(cursorContent).toBe(instructionsContent);
+    assert.equal(cursorContent, instructionsContent);
   });
 
-  test('Test 4: all adapters under 20 lines of wrapper', () => {
+  it('Test 4: all adapters under 20 lines of wrapper', () => {
     const skillDir = exportCarson();
     const instructionsLines = fs.readFileSync(path.join(skillDir, 'instructions.md'), 'utf8').split('\n').length;
 
     // Claude Code: frontmatter adds ~5 lines
     const claudeLines = fs.readFileSync(path.join(skillDir, 'adapters', 'claude-code', 'SKILL.md'), 'utf8').split('\n').length;
-    expect(claudeLines - instructionsLines).toBeLessThanOrEqual(20);
+    assert.ok(claudeLines - instructionsLines <= 20);
 
     // Copilot: header comment adds 1 line
     const copilotLines = fs.readFileSync(path.join(skillDir, 'adapters', 'copilot', 'copilot-instructions.md'), 'utf8').split('\n').length;
-    expect(copilotLines - instructionsLines).toBeLessThanOrEqual(20);
+    assert.ok(copilotLines - instructionsLines <= 20);
 
     // Cursor: 0 lines of wrapper
     const cursorLines = fs.readFileSync(path.join(skillDir, 'adapters', 'cursor', 'bmad-brainstorming.md'), 'utf8').split('\n').length;
-    expect(cursorLines - instructionsLines).toBeLessThanOrEqual(20);
+    assert.ok(cursorLines - instructionsLines <= 20);
   });
 
   // Batch test
   describe('Batch adapter validation', () => {
     let batchTmpDir, batchResult;
 
-    beforeAll(() => {
+    before(() => {
       batchTmpDir = makeTmpDir();
       batchResult = spawnSync('node', [CLI_PATH, '--tier', '1', '--output', batchTmpDir], {
         cwd: projectRoot, encoding: 'utf8', env: process.env, timeout: 30000,
       });
     }, 30000);
 
-    afterAll(() => {
+    after(() => {
       if (batchTmpDir && fs.existsSync(batchTmpDir)) {
         fs.rmSync(batchTmpDir, { recursive: true, force: true });
       }
     });
 
-    test('Test 5: all exported skills have all 3 adapters', () => {
-      expect([0, 4]).toContain(batchResult.status);
+    it('Test 5: all exported skills have all 3 adapters', () => {
+      assert.ok([0, 4].includes(batchResult.status));
 
       const skillDirs = fs.readdirSync(batchTmpDir, { withFileTypes: true })
         .filter((e) => e.isDirectory() && !e.name.startsWith('.'))
         .map((e) => e.name);
-      expect(skillDirs.length).toBeGreaterThan(0);
+      assert.ok(skillDirs.length > 0);
 
       const missing = [];
       for (const dir of skillDirs) {
@@ -125,7 +130,7 @@ describe('Platform Adapter Generation (sp-5-2)', () => {
       if (missing.length > 0) {
         console.error('Missing adapters:', missing);
       }
-      expect(missing).toEqual([]);
+      assert.deepEqual(missing, []);
     });
   });
 });

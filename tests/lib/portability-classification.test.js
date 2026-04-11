@@ -1,3 +1,8 @@
+'use strict';
+
+const { describe, it, before } = require('node:test');
+const assert = require('node:assert/strict');
+
 const path = require('path');
 const { findProjectRoot } = require('../../scripts/update/lib/utils');
 const { readManifest } = require('../../scripts/portability/manifest-csv');
@@ -43,7 +48,7 @@ describe('Skill manifest classification (sp-1-2)', () => {
   let intentIdx;
   let depsIdx;
 
-  beforeAll(() => {
+  before(() => {
     const projectRoot = findProjectRoot();
     const manifestPath = path.join(projectRoot, '_bmad', '_config', 'skill-manifest.csv');
     const manifest = readManifest(manifestPath);
@@ -58,8 +63,8 @@ describe('Skill manifest classification (sp-1-2)', () => {
   // Helper: find a row by canonical name
   const findRow = (name) => rows.find((r) => r[nameIdx] === name);
 
-  test('Test 1: every data row has non-empty tier and non-empty intent', () => {
-    expect(rows.length).toBeGreaterThan(0);
+  it('Test 1: every data row has non-empty tier and non-empty intent', () => {
+    assert.ok(rows.length > 0);
     const unclassified = [];
     for (const row of rows) {
       const name = row[nameIdx];
@@ -72,16 +77,16 @@ describe('Skill manifest classification (sp-1-2)', () => {
     if (unclassified.length > 0) {
       console.error('Unclassified skills:', unclassified);
     }
-    expect(unclassified).toEqual([]);
+    assert.deepEqual(unclassified, []);
   });
 
-  test('Test 1b: every tier value is canonical, every intent value is canonical', () => {
+  it('Test 1b: every tier value is canonical, every intent value is canonical', () => {
     for (const row of rows) {
       const name = row[nameIdx];
       const tier = row[tierIdx];
       const intent = row[intentIdx];
-      expect(VALID_TIERS).toContain(tier);
-      expect(VALID_INTENTS).toContain(intent);
+      assert.ok(VALID_TIERS.includes(tier));
+      assert.ok(VALID_INTENTS.includes(intent));
       // Sanity message on failure
       if (!VALID_TIERS.includes(tier)) {
         throw new Error(`${name}: invalid tier "${tier}"`);
@@ -92,7 +97,7 @@ describe('Skill manifest classification (sp-1-2)', () => {
     }
   });
 
-  test('Test 2: CIS agent skills classified as standalone + think-through-problem', () => {
+  it('Test 2: CIS agent skills classified as standalone + think-through-problem', () => {
     const cisSamples = [
       'bmad-brainstorming',
       'bmad-cis-agent-storyteller',
@@ -100,35 +105,35 @@ describe('Skill manifest classification (sp-1-2)', () => {
     ];
     for (const name of cisSamples) {
       const row = findRow(name);
-      expect(row).toBeDefined();
+      assert.notStrictEqual(row, undefined);
       // Storyteller has a sidecar memory file → light-deps. Others should be standalone.
       // The point of this spot-check is intent, not tier.
-      expect(row[intentIdx]).toBe('think-through-problem');
+      assert.equal(row[intentIdx], 'think-through-problem');
     }
     // Brainstorming and creative-problem-solver are standalone
-    expect(findRow('bmad-brainstorming')[tierIdx]).toBe('standalone');
-    expect(findRow('bmad-cis-agent-creative-problem-solver')[tierIdx]).toBe('standalone');
+    assert.equal(findRow('bmad-brainstorming')[tierIdx], 'standalone');
+    assert.equal(findRow('bmad-cis-agent-creative-problem-solver')[tierIdx], 'standalone');
   });
 
-  test('Test 3: at least 3 testarch skills classified with intent=test-your-code', () => {
+  it('Test 3: at least 3 testarch skills classified with intent=test-your-code', () => {
     const testarchRows = rows.filter((r) => r[nameIdx].startsWith('bmad-testarch-'));
-    expect(testarchRows.length).toBeGreaterThanOrEqual(3);
+    assert.ok(testarchRows.length >= 3);
     for (const row of testarchRows) {
-      expect(row[intentIdx]).toBe('test-your-code');
+      assert.equal(row[intentIdx], 'test-your-code');
     }
   });
 
-  test('Test 4: all 5 canonical meta-platform skills are pipeline + meta-platform', () => {
+  it('Test 4: all 5 canonical meta-platform skills are pipeline + meta-platform', () => {
     for (const name of META_PLATFORM_SKILLS) {
       const row = findRow(name);
-      expect(row).toBeDefined();
+      assert.notStrictEqual(row, undefined);
       if (!row) continue;
-      expect(row[tierIdx]).toBe('pipeline');
-      expect(row[intentIdx]).toBe('meta-platform');
+      assert.equal(row[tierIdx], 'pipeline');
+      assert.equal(row[intentIdx], 'meta-platform');
     }
   });
 
-  test('Test 5: standalone utilities are NOT classified as meta-platform', () => {
+  it('Test 5: standalone utilities are NOT classified as meta-platform', () => {
     // Per AC #7, these are explicitly carved out from meta-platform
     const standaloneUtilities = {
       'bmad-distillator': 'write-documentation',
@@ -138,15 +143,15 @@ describe('Skill manifest classification (sp-1-2)', () => {
     };
     for (const [name, expectedIntent] of Object.entries(standaloneUtilities)) {
       const row = findRow(name);
-      expect(row).toBeDefined();
+      assert.notStrictEqual(row, undefined);
       if (!row) continue;
-      expect(row[intentIdx]).toBe(expectedIntent);
-      expect(row[intentIdx]).not.toBe('meta-platform');
-      expect(row[tierIdx]).toBe('standalone');
+      assert.equal(row[intentIdx], expectedIntent);
+      assert.notStrictEqual(row[intentIdx], 'meta-platform');
+      assert.equal(row[tierIdx], 'standalone');
     }
   });
 
-  test('Test 6: persona-only bmad-agent-* skills are standalone with empty deps', () => {
+  it('Test 6: persona-only bmad-agent-* skills are standalone with empty deps', () => {
     // Per sp-1-2 Task 3 enumerated table — these are menu wrappers, not pipelines.
     // Their dependencies column should be empty (menu options are not exporter deps).
     const personaAgents = [
@@ -162,10 +167,10 @@ describe('Skill manifest classification (sp-1-2)', () => {
     ];
     for (const name of personaAgents) {
       const row = findRow(name);
-      expect(row).toBeDefined();
+      assert.notStrictEqual(row, undefined);
       if (!row) continue;
-      expect(row[tierIdx]).toBe('standalone');
-      expect(row[depsIdx]).toBe('');
+      assert.equal(row[tierIdx], 'standalone');
+      assert.equal(row[depsIdx], '');
     }
   });
 });

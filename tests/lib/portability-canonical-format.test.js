@@ -1,3 +1,8 @@
+'use strict';
+
+const { describe, it, before } = require('node:test');
+const assert = require('node:assert/strict');
+
 const fs = require('fs');
 const path = require('path');
 const { findProjectRoot } = require('../../scripts/update/lib/utils');
@@ -63,7 +68,7 @@ describe('Canonical format specification (sp-2-1)', () => {
   let canonicalExampleContent;
   let readmeTemplateContent;
 
-  beforeAll(() => {
+  before(() => {
     projectRoot = findProjectRoot();
     templatesDir = path.join(projectRoot, TEMPLATES_DIR_REL);
     // P1 (sp-2-1 review): hard-fail if any required template file is missing.
@@ -84,18 +89,18 @@ describe('Canonical format specification (sp-2-1)', () => {
     readmeTemplateContent = readRequired('readme-template.md');
   });
 
-  test('Test 1: all 3 template files exist and are non-empty', () => {
+  it('Test 1: all 3 template files exist and are non-empty', () => {
     for (const filename of REQUIRED_FILES) {
       const filePath = path.join(templatesDir, filename);
-      expect(fs.existsSync(filePath)).toBe(true);
+      assert.equal(fs.existsSync(filePath), true);
       const content = fs.readFileSync(filePath, 'utf8');
-      expect(content.length).toBeGreaterThan(0);
+      assert.ok(content.length > 0);
       // Sanity: each spec file should have at least one heading
-      expect(content).toMatch(/^#/m);
+      assert.match(content, /^#/m);
     }
   });
 
-  test('Test 2: canonical-example.md contains all required section headings in order', () => {
+  it('Test 2: canonical-example.md contains all required section headings in order', () => {
     // Per AC #2: 7 sections in order. P4 (sp-2-1 review): include Quality
     // checks (section 7) — Carson's example has it, so we validate ordering
     // for all 7 sections explicitly.
@@ -116,7 +121,7 @@ describe('Canonical format specification (sp-2-1)', () => {
     const positions = requiredHeadingPatterns.map((pattern) => {
       const re = new RegExp(pattern.source, pattern.flags);
       const match = re.exec(canonicalExampleContent);
-      expect(match).not.toBeNull();
+      assert.notStrictEqual(match, null);
       return match.index;
     });
 
@@ -132,7 +137,7 @@ describe('Canonical format specification (sp-2-1)', () => {
     }
   });
 
-  test('Test 3: canonical-example.md contains NO forbidden Claude tool names or framework calls', () => {
+  it('Test 3: canonical-example.md contains NO forbidden Claude tool names or framework calls', () => {
     const violations = [];
     for (const forbidden of FORBIDDEN_IN_EXAMPLE) {
       if (canonicalExampleContent.includes(forbidden)) {
@@ -142,10 +147,10 @@ describe('Canonical format specification (sp-2-1)', () => {
     if (violations.length > 0) {
       console.error('canonical-example.md contains forbidden strings:', violations);
     }
-    expect(violations).toEqual([]);
+    assert.deepEqual(violations, []);
   });
 
-  test('Test 4: canonical-example.md contains ZERO curly-brace placeholders', () => {
+  it('Test 4: canonical-example.md contains ZERO curly-brace placeholders', () => {
     // Per AC #3: every {var-name} reference must be replaced with a [your X]
     // square-bracket prompt during canonical export. The finalized example
     // must therefore contain no curly-brace placeholders at all.
@@ -157,10 +162,10 @@ describe('Canonical format specification (sp-2-1)', () => {
         matches
       );
     }
-    expect(matches).toEqual([]);
+    assert.deepEqual(matches, []);
   });
 
-  test('Test 5: canonical-format.md contains all 7 Claude tool names in its replacement table', () => {
+  it('Test 5: canonical-format.md contains all 7 Claude tool names in its replacement table', () => {
     // The transformation rules table must document a replacement for every
     // Claude-specific tool the export engine might encounter.
     const missing = [];
@@ -172,28 +177,28 @@ describe('Canonical format specification (sp-2-1)', () => {
     if (missing.length > 0) {
       console.error('canonical-format.md missing tool name entries:', missing);
     }
-    expect(missing).toEqual([]);
+    assert.deepEqual(missing, []);
   });
 
-  test('Test 6: canonical-example.md mentions Carson (sanity — wrong skill = wrong persona)', () => {
+  it('Test 6: canonical-example.md mentions Carson (sanity — wrong skill = wrong persona)', () => {
     // Belt-and-suspenders check: if anyone swaps Carson for a different
     // example, this catches it before it reaches code review.
-    expect(canonicalExampleContent).toMatch(/\bCarson\b/);
+    assert.match(canonicalExampleContent, /\bCarson\b/);
   });
 
-  test('Test 7: canonical-format.md documents all 3 required top-level sections', () => {
+  it('Test 7: canonical-format.md documents all 3 required top-level sections', () => {
     // Per AC #1: canonical-format.md must contain Template + Transformation
     // rules + Output directory structure as top-level sections.
-    expect(canonicalFormatContent).toMatch(/^## Template$/m);
-    expect(canonicalFormatContent).toMatch(/^## Transformation rules$/m);
-    expect(canonicalFormatContent).toMatch(/^## Output directory structure$/m);
+    assert.match(canonicalFormatContent, /^## Template$/m);
+    assert.match(canonicalFormatContent, /^## Transformation rules$/m);
+    assert.match(canonicalFormatContent, /^## Output directory structure$/m);
   });
 
-  test('Test 8: readme-template.md documents Claude Code install path', () => {
+  it('Test 8: readme-template.md documents Claude Code install path', () => {
     // Per AC #7 + Task 4: the README template must document how to install
     // the skill into Claude Code, even though Copilot/Cursor adapters are
     // deferred to sp-5-2.
-    expect(readmeTemplateContent).toMatch(/Claude Code/);
-    expect(readmeTemplateContent).toMatch(/\.claude\/skills/);
+    assert.match(readmeTemplateContent, /Claude Code/);
+    assert.match(readmeTemplateContent, /\.claude\/skills/);
   });
 });

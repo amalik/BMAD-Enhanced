@@ -1,3 +1,8 @@
+'use strict';
+
+const { describe, it, afterEach } = require('node:test');
+const assert = require('node:assert/strict');
+
 const fs = require('fs');
 const os = require('os');
 const path = require('path');
@@ -87,41 +92,41 @@ describe('Portability validator (sp-1-3)', () => {
     return dir;
   };
 
-  test('Test 1: validator passes on the real skill-manifest.csv (smoke)', () => {
+  it('Test 1: validator passes on the real skill-manifest.csv (smoke)', () => {
     const realRoot = findProjectRoot();
     const { totalSkills, findings } = validate(realRoot);
     const errors = findings.filter((f) => HARD_FINDING_TYPES.has(f.type));
-    expect(totalSkills).toBeGreaterThan(0);
+    assert.ok(totalSkills > 0);
     if (errors.length > 0) {
       // Print for diagnostics if this ever fails
       console.error('Real-manifest hard errors:', errors);
     }
-    expect(errors).toEqual([]);
+    assert.deepEqual(errors, []);
   });
 
-  test('Test 2: missing tier triggers [MISSING]', () => {
+  it('Test 2: missing tier triggers [MISSING]', () => {
     const tmpRoot = setup([
       makeRow({ name: 'bmad-broken', tier: '' }),
     ]);
     const { findings } = validate(tmpRoot);
-    expect(hasFindingType(findings, '[MISSING]')).toBe(true);
+    assert.equal(hasFindingType(findings, '[MISSING]'), true);
     const missing = findings.find((f) => f.type === '[MISSING]');
-    expect(missing.skill).toBe('bmad-broken');
-    expect(missing.detail).toMatch(/tier/);
+    assert.equal(missing.skill, 'bmad-broken');
+    assert.match(missing.detail, /tier/);
   });
 
-  test('Test 3: invalid tier value triggers [INVALID]', () => {
+  it('Test 3: invalid tier value triggers [INVALID]', () => {
     const tmpRoot = setup([
       makeRow({ name: 'bmad-bogus-tier', tier: 'bogus' }),
     ]);
     const { findings } = validate(tmpRoot);
-    expect(hasFindingType(findings, '[INVALID]')).toBe(true);
+    assert.equal(hasFindingType(findings, '[INVALID]'), true);
     const invalid = findings.find((f) => f.type === '[INVALID]');
-    expect(invalid.skill).toBe('bmad-bogus-tier');
-    expect(invalid.detail).toContain('bogus');
+    assert.equal(invalid.skill, 'bmad-bogus-tier');
+    assert.ok(invalid.detail.includes('bogus'));
   });
 
-  test('Test 4: nonexistent _bmad/ dependency triggers [BROKEN-DEP]', () => {
+  it('Test 4: nonexistent _bmad/ dependency triggers [BROKEN-DEP]', () => {
     const tmpRoot = setup([
       makeRow({
         name: 'bmad-broken-dep',
@@ -129,13 +134,13 @@ describe('Portability validator (sp-1-3)', () => {
       }),
     ]);
     const { findings } = validate(tmpRoot);
-    expect(hasFindingType(findings, '[BROKEN-DEP]')).toBe(true);
+    assert.equal(hasFindingType(findings, '[BROKEN-DEP]'), true);
     const broken = findings.find((f) => f.type === '[BROKEN-DEP]');
-    expect(broken.skill).toBe('bmad-broken-dep');
-    expect(broken.detail).toContain('_bmad/nonexistent/path/to/file.md');
+    assert.equal(broken.skill, 'bmad-broken-dep');
+    assert.ok(broken.detail.includes('_bmad/nonexistent/path/to/file.md'));
   });
 
-  test('Test 5: orphan skill-name dependency triggers [ORPHAN-DEP]', () => {
+  it('Test 5: orphan skill-name dependency triggers [ORPHAN-DEP]', () => {
     const tmpRoot = setup([
       makeRow({
         name: 'bmad-source-skill',
@@ -143,13 +148,13 @@ describe('Portability validator (sp-1-3)', () => {
       }),
     ]);
     const { findings } = validate(tmpRoot);
-    expect(hasFindingType(findings, '[ORPHAN-DEP]')).toBe(true);
+    assert.equal(hasFindingType(findings, '[ORPHAN-DEP]'), true);
     const orphan = findings.find((f) => f.type === '[ORPHAN-DEP]');
-    expect(orphan.skill).toBe('bmad-source-skill');
-    expect(orphan.detail).toContain('bmad-fake-skill-that-does-not-exist');
+    assert.equal(orphan.skill, 'bmad-source-skill');
+    assert.ok(orphan.detail.includes('bmad-fake-skill-that-does-not-exist'));
   });
 
-  test('Test 6: malformed config: dependency triggers [BAD-CONFIG-DEP]', () => {
+  it('Test 6: malformed config: dependency triggers [BAD-CONFIG-DEP]', () => {
     // Use an uppercase character which violates [a-z_][a-z0-9_]*
     const tmpRoot = setup([
       makeRow({
@@ -158,12 +163,12 @@ describe('Portability validator (sp-1-3)', () => {
       }),
     ]);
     const { findings } = validate(tmpRoot);
-    expect(hasFindingType(findings, '[BAD-CONFIG-DEP]')).toBe(true);
+    assert.equal(hasFindingType(findings, '[BAD-CONFIG-DEP]'), true);
     const bad = findings.find((f) => f.type === '[BAD-CONFIG-DEP]');
-    expect(bad.skill).toBe('bmad-bad-config');
+    assert.equal(bad.skill, 'bmad-bad-config');
   });
 
-  test('Test 7: pipeline skill with empty deps triggers [MISSING-PREREQS] warning (not error)', () => {
+  it('Test 7: pipeline skill with empty deps triggers [MISSING-PREREQS] warning (not error)', () => {
     const tmpRoot = setup([
       makeRow({
         name: 'bmad-pipeline-skill',
@@ -173,13 +178,13 @@ describe('Portability validator (sp-1-3)', () => {
       }),
     ]);
     const { findings } = validate(tmpRoot);
-    expect(hasFindingType(findings, '[MISSING-PREREQS]')).toBe(true);
+    assert.equal(hasFindingType(findings, '[MISSING-PREREQS]'), true);
     // It must NOT also trigger a hard error
     const errors = findings.filter((f) => HARD_FINDING_TYPES.has(f.type));
-    expect(errors).toEqual([]);
+    assert.deepEqual(errors, []);
   });
 
-  test('Test 8: meta-platform pipeline skill is exempt from [MISSING-PREREQS]', () => {
+  it('Test 8: meta-platform pipeline skill is exempt from [MISSING-PREREQS]', () => {
     const tmpRoot = setup([
       makeRow({
         name: 'bmad-meta',
@@ -189,10 +194,10 @@ describe('Portability validator (sp-1-3)', () => {
       }),
     ]);
     const { findings } = validate(tmpRoot);
-    expect(hasFindingType(findings, '[MISSING-PREREQS]')).toBe(false);
+    assert.equal(hasFindingType(findings, '[MISSING-PREREQS]'), false);
   });
 
-  test('Test 9: validator does not modify the manifest', () => {
+  it('Test 9: validator does not modify the manifest', () => {
     const tmpRoot = setup([
       makeRow({ name: 'bmad-readonly-test' }),
     ]);
@@ -200,6 +205,6 @@ describe('Portability validator (sp-1-3)', () => {
     const before = fs.readFileSync(manifestPath, 'utf8');
     validate(tmpRoot);
     const after = fs.readFileSync(manifestPath, 'utf8');
-    expect(after).toBe(before);
+    assert.equal(after, before);
   });
 });

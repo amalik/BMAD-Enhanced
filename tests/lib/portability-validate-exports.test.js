@@ -1,3 +1,8 @@
+'use strict';
+
+const { describe, it, before, after, afterEach } = require('node:test');
+const assert = require('node:assert/strict');
+
 const fs = require('fs');
 const os = require('os');
 const path = require('path');
@@ -25,7 +30,7 @@ describe('Validate Exports (sp-4-2)', () => {
   describe('Full pipeline validation', () => {
     let stagingDir, seedResult, validateResult;
 
-    beforeAll(() => {
+    before(() => {
       stagingDir = makeTmpDir();
       seedResult = spawnSync('node', [SEED_PATH, '--output', stagingDir], {
         cwd: projectRoot,
@@ -40,27 +45,27 @@ describe('Validate Exports (sp-4-2)', () => {
       );
     }, 60000);
 
-    afterAll(() => {
+    after(() => {
       if (stagingDir && fs.existsSync(stagingDir)) {
         fs.rmSync(stagingDir, { recursive: true, force: true });
       }
     });
 
-    test('Test 1: validation passes on seed-generated staging dir', () => {
-      expect(seedResult.status).toBe(0);
-      expect(validateResult.status).toBe(0);
-      expect(validateResult.stdout).toContain('All checks passed');
+    it('Test 1: validation passes on seed-generated staging dir', () => {
+      assert.equal(seedResult.status, 0);
+      assert.equal(validateResult.status, 0);
+      assert.ok(validateResult.stdout.includes('All checks passed'));
     });
 
-    test('Test 4: VALIDATION-REPORT.md generated with PENDING markers', () => {
+    it('Test 4: VALIDATION-REPORT.md generated with PENDING markers', () => {
       const reportPath = path.join(stagingDir, 'VALIDATION-REPORT.md');
-      expect(fs.existsSync(reportPath)).toBe(true);
+      assert.equal(fs.existsSync(reportPath), true);
       const content = fs.readFileSync(reportPath, 'utf8');
-      expect(content).toContain('# Export Validation Report');
-      expect(content).toContain('[PENDING]');
-      expect(content).toContain('Carson');
-      expect(content).toContain('Winston');
-      expect(content).toContain('Murat');
+      assert.ok(content.includes('# Export Validation Report'));
+      assert.ok(content.includes('[PENDING]'));
+      assert.ok(content.includes('Carson'));
+      assert.ok(content.includes('Winston'));
+      assert.ok(content.includes('Murat'));
     });
   });
 
@@ -75,7 +80,7 @@ describe('Validate Exports (sp-4-2)', () => {
       fixtureDir = null;
     });
 
-    test('Test 2: catches planted forbidden string', () => {
+    it('Test 2: catches planted forbidden string', () => {
       fixtureDir = makeTmpDir();
       // Create minimal root files
       fs.writeFileSync(path.join(fixtureDir, 'README.md'), '# Convoke Skills Catalog\n');
@@ -98,11 +103,11 @@ describe('Validate Exports (sp-4-2)', () => {
         encoding: 'utf8',
         env: process.env,
       });
-      expect(result.status).toBe(1);
-      expect(result.stdout).toContain('Read tool');
+      assert.equal(result.status, 1);
+      assert.ok(result.stdout.includes('Read tool'));
     });
 
-    test('Test 3: catches missing persona section', () => {
+    it('Test 3: catches missing persona section', () => {
       fixtureDir = makeTmpDir();
       fs.writeFileSync(path.join(fixtureDir, 'README.md'), '# Convoke Skills Catalog\n');
       fs.writeFileSync(path.join(fixtureDir, 'LICENSE'), 'MIT License\n');
@@ -123,8 +128,8 @@ describe('Validate Exports (sp-4-2)', () => {
         encoding: 'utf8',
         env: process.env,
       });
-      expect(result.status).toBe(1);
-      expect(result.stdout).toContain('## You are');
+      assert.equal(result.status, 1);
+      assert.ok(result.stdout.includes('## You are'));
     });
   });
 });

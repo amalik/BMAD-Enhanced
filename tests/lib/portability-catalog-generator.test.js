@@ -1,3 +1,8 @@
+'use strict';
+
+const { describe, it, afterEach } = require('node:test');
+const assert = require('node:assert/strict');
+
 const fs = require('fs');
 const os = require('os');
 const path = require('path');
@@ -67,73 +72,73 @@ describe('Catalog Generator (sp-3-1)', () => {
     tmpFile = null;
   });
 
-  test('Test 1: stdout mode produces valid markdown with title and Carson', () => {
+  it('Test 1: stdout mode produces valid markdown with title and Carson', () => {
     const result = runCatalog();
-    expect(result.status).toBe(0);
-    expect(result.stdout).toContain('# Convoke Skills Catalog');
-    expect(result.stdout).toContain('Carson');
+    assert.equal(result.status, 0);
+    assert.ok(result.stdout.includes('# Convoke Skills Catalog'));
+    assert.ok(result.stdout.includes('Carson'));
 
     // At least 4 intent section headings
     let headingCount = 0;
     for (const heading of STANDALONE_INTENT_HEADINGS) {
       if (result.stdout.includes(`## ${heading}`)) headingCount++;
     }
-    expect(headingCount).toBeGreaterThanOrEqual(4);
+    assert.ok(headingCount >= 4);
   });
 
-  test('Test 2: --output mode writes file with title heading', () => {
+  it('Test 2: --output mode writes file with title heading', () => {
     tmpFile = path.join(os.tmpdir(), `sp-3-1-${crypto.randomUUID()}.md`);
     const result = runCatalog(['--output', tmpFile]);
-    expect(result.status).toBe(0);
-    expect(fs.existsSync(tmpFile)).toBe(true);
+    assert.equal(result.status, 0);
+    assert.equal(fs.existsSync(tmpFile), true);
 
     const content = fs.readFileSync(tmpFile, 'utf8');
-    expect(content.length).toBeGreaterThan(0);
-    expect(content).toContain('# Convoke Skills Catalog');
+    assert.ok(content.length > 0);
+    assert.ok(content.includes('# Convoke Skills Catalog'));
   });
 
-  test('Test 3: all 6 standalone intent categories present', () => {
+  it('Test 3: all 6 standalone intent categories present', () => {
     const result = runCatalog();
-    expect(result.status).toBe(0);
+    assert.equal(result.status, 0);
 
     for (const heading of STANDALONE_INTENT_HEADINGS) {
-      expect(result.stdout).toContain(`## ${heading}`);
+      assert.ok(result.stdout.includes(`## ${heading}`));
     }
   });
 
-  test('Test 4: tier badges present — Ready to use and Framework only', () => {
+  it('Test 4: tier badges present — Ready to use and Framework only', () => {
     const result = runCatalog();
-    expect(result.status).toBe(0);
+    assert.equal(result.status, 0);
 
-    expect(result.stdout).toContain('Ready to use');
-    expect(result.stdout).toContain('Framework only');
+    assert.ok(result.stdout.includes('Ready to use'));
+    assert.ok(result.stdout.includes('Framework only'));
 
     // Needs setup only if light-deps skills exist
     if (lightDepsCount > 0) {
-      expect(result.stdout).toContain('Needs setup');
+      assert.ok(result.stdout.includes('Needs setup'));
     }
   });
 
-  test('Test 5: skill count line matches manifest', () => {
+  it('Test 5: skill count line matches manifest', () => {
     const result = runCatalog();
-    expect(result.status).toBe(0);
+    assert.equal(result.status, 0);
 
     // Parse "**M skills in this catalog**"
     const countMatch = result.stdout.match(/\*\*(\d+) skills in this catalog\*\*/);
-    expect(countMatch).not.toBeNull();
+    assert.notStrictEqual(countMatch, null);
     const m = parseInt(countMatch[1], 10);
-    expect(m).toBe(mainBodyCount);
+    assert.equal(m, mainBodyCount);
 
     // Parse "| P framework-only skills listed below"
     const pipelineMatch = result.stdout.match(/(\d+) framework-only skills listed below/);
-    expect(pipelineMatch).not.toBeNull();
+    assert.notStrictEqual(pipelineMatch, null);
     const p = parseInt(pipelineMatch[1], 10);
-    expect(p).toBe(pipelineCount);
+    assert.equal(p, pipelineCount);
   });
 
-  test('Test 6: no BMAD internals leak into catalog', () => {
+  it('Test 6: no BMAD internals leak into catalog', () => {
     const result = runCatalog();
-    expect(result.status).toBe(0);
+    assert.equal(result.status, 0);
 
     const violations = [];
     for (const forbidden of FORBIDDEN_STRINGS) {
@@ -144,6 +149,6 @@ describe('Catalog Generator (sp-3-1)', () => {
     if (violations.length > 0) {
       console.error('BMAD internals found in catalog:', violations);
     }
-    expect(violations).toEqual([]);
+    assert.deepEqual(violations, []);
   });
 });

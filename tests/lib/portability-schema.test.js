@@ -1,3 +1,8 @@
+'use strict';
+
+const { describe, it, before } = require('node:test');
+const assert = require('node:assert/strict');
+
 const fs = require('fs');
 const path = require('path');
 const { findProjectRoot } = require('../../scripts/update/lib/utils');
@@ -42,7 +47,7 @@ describe('Skill manifest portability schema', () => {
   let header;
   let dataRows;
 
-  beforeAll(() => {
+  before(() => {
     const projectRoot = findProjectRoot();
     const manifestPath = path.join(projectRoot, '_bmad', '_config', 'skill-manifest.csv');
     let content = fs.readFileSync(manifestPath, 'utf8');
@@ -55,64 +60,64 @@ describe('Skill manifest portability schema', () => {
     dataRows = lines.slice(1);
   });
 
-  test('Test 1: header contains tier, intent, and dependencies columns in correct order', () => {
+  it('Test 1: header contains tier, intent, and dependencies columns in correct order', () => {
     const headerCols = parseCsvRow(header);
-    expect(headerCols).toEqual(EXPECTED_HEADER_COLUMNS);
+    assert.deepEqual(headerCols, EXPECTED_HEADER_COLUMNS);
   });
 
-  test('Test 2: every data row has exactly 9 columns (CSV-aware count)', () => {
-    expect(dataRows.length).toBeGreaterThan(0);
+  it('Test 2: every data row has exactly 9 columns (CSV-aware count)', () => {
+    assert.ok(dataRows.length > 0);
     for (const row of dataRows) {
       const cols = countCsvColumns(row);
-      expect(cols).toBe(9);
+      assert.equal(cols, 9);
     }
   });
 
-  test('Test 3: any non-empty tier value is one of the canonical tiers', () => {
+  it('Test 3: any non-empty tier value is one of the canonical tiers', () => {
     const headerCols = parseCsvRow(header);
     const tierIndex = headerCols.indexOf('tier');
-    expect(tierIndex).toBeGreaterThanOrEqual(0);
+    assert.ok(tierIndex >= 0);
 
     for (const row of dataRows) {
       const fields = parseCsvRow(row);
       const tier = fields[tierIndex];
       if (tier && tier.length > 0) {
-        expect(VALID_TIERS).toContain(tier);
+        assert.ok(VALID_TIERS.includes(tier));
       }
     }
   });
 
-  test('Test 4: any non-empty intent value is one of the 9 canonical categories', () => {
+  it('Test 4: any non-empty intent value is one of the 9 canonical categories', () => {
     const headerCols = parseCsvRow(header);
     const intentIndex = headerCols.indexOf('intent');
-    expect(intentIndex).toBeGreaterThanOrEqual(0);
+    assert.ok(intentIndex >= 0);
 
     for (const row of dataRows) {
       const fields = parseCsvRow(row);
       const intent = fields[intentIndex];
       if (intent && intent.length > 0) {
-        expect(VALID_INTENTS).toContain(intent);
+        assert.ok(VALID_INTENTS.includes(intent));
       }
     }
   });
 
-  test('Schema doc exists at _bmad/_config/portability-schema.md', () => {
+  it('Schema doc exists at _bmad/_config/portability-schema.md', () => {
     const projectRoot = findProjectRoot();
     const schemaPath = path.join(projectRoot, '_bmad', '_config', 'portability-schema.md');
-    expect(fs.existsSync(schemaPath)).toBe(true);
+    assert.equal(fs.existsSync(schemaPath), true);
     const content = fs.readFileSync(schemaPath, 'utf8');
     // Spot-check that the doc covers the required sections
-    expect(content).toMatch(/## Tier/);
-    expect(content).toMatch(/## Intent/);
-    expect(content).toMatch(/## Dependencies/);
-    expect(content).toMatch(/## Examples/);
+    assert.match(content, /## Tier/);
+    assert.match(content, /## Intent/);
+    assert.match(content, /## Dependencies/);
+    assert.match(content, /## Examples/);
     // Verify all 9 intent categories appear in the doc
     for (const intent of VALID_INTENTS) {
-      expect(content).toContain(intent);
+      assert.ok(content.includes(intent));
     }
     // Verify all 3 tiers appear
     for (const tier of VALID_TIERS) {
-      expect(content).toContain(tier);
+      assert.ok(content.includes(tier));
     }
   });
 });

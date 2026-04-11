@@ -1,3 +1,8 @@
+'use strict';
+
+const { describe, it, before, after } = require('node:test');
+const assert = require('node:assert/strict');
+
 const fs = require('fs');
 const os = require('os');
 const path = require('path');
@@ -15,7 +20,7 @@ const CLI_PATH = path.join(projectRoot, 'scripts', 'portability', 'seed-catalog-
 
 let tmpDir, cliResult, skillDirs;
 
-beforeAll(() => {
+before(() => {
   tmpDir = path.join(os.tmpdir(), `sp-4-1-${crypto.randomUUID()}`);
   cliResult = spawnSync('node', [CLI_PATH, '--output', tmpDir], {
     cwd: projectRoot,
@@ -32,15 +37,15 @@ beforeAll(() => {
   }
 }, 60000);
 
-afterAll(() => {
+after(() => {
   if (tmpDir && fs.existsSync(tmpDir)) {
     fs.rmSync(tmpDir, { recursive: true, force: true });
   }
 });
 
 describe('Seed Catalog Repository (sp-4-1)', () => {
-  test('Test 1: seed script generates correct directory count and root README', () => {
-    expect(cliResult.status).toBe(0);
+  it('Test 1: seed script generates correct directory count and root README', () => {
+    assert.equal(cliResult.status, 0);
     // Derive expected count from manifest instead of hardcoding
     const manifestPath = path.join(projectRoot, '_bmad', '_config', 'skill-manifest.csv');
     const { readManifest } = require('../../scripts/portability/manifest-csv');
@@ -48,13 +53,13 @@ describe('Seed Catalog Repository (sp-4-1)', () => {
     const ni = header.indexOf('name');
     const ti = header.indexOf('tier');
     const expectedCount = [...new Set(rows.filter((r) => r[ti] === 'standalone' || r[ti] === 'light-deps').map((r) => r[ni]))].length;
-    expect(skillDirs.length).toBe(expectedCount);
-    expect(fs.existsSync(path.join(tmpDir, 'README.md'))).toBe(true);
+    assert.equal(skillDirs.length, expectedCount);
+    assert.equal(fs.existsSync(path.join(tmpDir, 'README.md')), true);
   });
 
-  test('Test 2: every skill directory has both README.md and instructions.md', () => {
+  it('Test 2: every skill directory has both README.md and instructions.md', () => {
     // Guard: if the seed script failed and self-cleaned, skillDirs is empty — fail loudly
-    expect(skillDirs.length).toBeGreaterThan(0);
+    assert.ok(skillDirs.length > 0);
     const missing = [];
     for (const dir of skillDirs) {
       const instrPath = path.join(tmpDir, dir, 'instructions.md');
@@ -69,11 +74,11 @@ describe('Seed Catalog Repository (sp-4-1)', () => {
     if (missing.length > 0) {
       console.error('Missing or empty files:', missing);
     }
-    expect(missing).toEqual([]);
+    assert.deepEqual(missing, []);
   });
 
-  test('Test 3: zero BMAD internals across entire staging tree', () => {
-    expect(skillDirs.length).toBeGreaterThan(0);
+  it('Test 3: zero BMAD internals across entire staging tree', () => {
+    assert.ok(skillDirs.length > 0);
     const INTERNALS = ['_bmad/', 'bmad-init', '.claude/hooks', '{project-root}'];
     const violations = [];
 
@@ -98,16 +103,16 @@ describe('Seed Catalog Repository (sp-4-1)', () => {
     if (violations.length > 0) {
       console.error('BMAD internals found:', violations);
     }
-    expect(violations).toEqual([]);
+    assert.deepEqual(violations, []);
   });
 
-  test('Test 4: LICENSE and CONTRIBUTING.md present and valid', () => {
+  it('Test 4: LICENSE and CONTRIBUTING.md present and valid', () => {
     const licensePath = path.join(tmpDir, 'LICENSE');
-    expect(fs.existsSync(licensePath)).toBe(true);
-    expect(fs.readFileSync(licensePath, 'utf8')).toContain('MIT');
+    assert.equal(fs.existsSync(licensePath), true);
+    assert.ok(fs.readFileSync(licensePath, 'utf8').includes('MIT'));
 
     const contribPath = path.join(tmpDir, 'CONTRIBUTING.md');
-    expect(fs.existsSync(contribPath)).toBe(true);
-    expect(fs.readFileSync(contribPath, 'utf8')).toContain('auto-generated');
+    assert.equal(fs.existsSync(contribPath), true);
+    assert.ok(fs.readFileSync(contribPath, 'utf8').includes('auto-generated'));
   });
 });

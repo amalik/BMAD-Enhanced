@@ -1,3 +1,8 @@
+'use strict';
+
+const { describe, it, before, after, afterEach } = require('node:test');
+const assert = require('node:assert/strict');
+
 const fs = require('fs');
 const os = require('os');
 const path = require('path');
@@ -43,42 +48,42 @@ describe('Per-Skill README Generation (sp-3-2)', () => {
   function exportCarson() {
     if (!singleTmpDir) singleTmpDir = makeTmpDir();
     const result = runCli(['bmad-brainstorming', '--output', singleTmpDir]);
-    expect(result.status).toBe(0);
+    assert.equal(result.status, 0);
     return fs.readFileSync(
       path.join(singleTmpDir, 'bmad-brainstorming', 'README.md'),
       'utf8'
     );
   }
 
-  test('Test 1: README under 80 lines for Carson', () => {
+  it('Test 1: README under 80 lines for Carson', () => {
     const content = exportCarson();
     const lineCount = content.split('\n').length;
-    expect(lineCount).toBeLessThanOrEqual(80);
+    assert.ok(lineCount <= 80);
   });
 
-  test('Test 2: no HTML comments in output', () => {
+  it('Test 2: no HTML comments in output', () => {
     const content = exportCarson();
-    expect(content).not.toContain('<!--');
+    assert.ok(!content.includes('<!--'));
   });
 
-  test('Test 3: all 3 platform sections present', () => {
+  it('Test 3: all 3 platform sections present', () => {
     const content = exportCarson();
-    expect(content).toContain('Claude Code');
-    expect(content).toContain('Copilot');
-    expect(content).toContain('Cursor');
+    assert.ok(content.includes('Claude Code'));
+    assert.ok(content.includes('Copilot'));
+    assert.ok(content.includes('Cursor'));
   });
 
-  test('Test 4: no leaked engine placeholders', () => {
+  it('Test 4: no leaked engine placeholders', () => {
     const content = exportCarson();
-    expect(content).not.toContain('[your output folder]');
-    expect(content).not.toContain('[your context]');
+    assert.ok(!content.includes('[your output folder]'));
+    assert.ok(!content.includes('[your context]'));
   });
 
   // Batch test — shared run
   describe('Batch validation', () => {
     let batchTmpDir, batchResult, skillDirs;
 
-    beforeAll(() => {
+    before(() => {
       batchTmpDir = makeTmpDir();
       batchResult = spawnSync('node', [CLI_PATH, '--tier', '1', '--output', batchTmpDir], {
         cwd: projectRoot,
@@ -93,15 +98,15 @@ describe('Per-Skill README Generation (sp-3-2)', () => {
         : [];
     }, 30000);
 
-    afterAll(() => {
+    after(() => {
       if (batchTmpDir && fs.existsSync(batchTmpDir)) {
         fs.rmSync(batchTmpDir, { recursive: true, force: true });
       }
     });
 
-    test('Test 5: batch README validity — under 80 lines, no comments, all platforms', () => {
-      expect(batchResult.status).toBe(0);
-      expect(skillDirs.length).toBeGreaterThan(0);
+    it('Test 5: batch README validity — under 80 lines, no comments, all platforms', () => {
+      assert.equal(batchResult.status, 0);
+      assert.ok(skillDirs.length > 0);
 
       const issues = [];
       for (const dir of skillDirs) {
@@ -133,7 +138,7 @@ describe('Per-Skill README Generation (sp-3-2)', () => {
       if (issues.length > 0) {
         console.error('Batch README issues:', issues);
       }
-      expect(issues).toEqual([]);
+      assert.deepEqual(issues, []);
     });
   });
 });

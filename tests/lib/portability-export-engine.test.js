@@ -1,3 +1,8 @@
+'use strict';
+
+const { describe, it, before } = require('node:test');
+const assert = require('node:assert/strict');
+
 const { execSync } = require('child_process');
 const { findProjectRoot } = require('../../scripts/update/lib/utils');
 const { exportSkill, ALLOWED_WARNING_TYPES } = require('../../scripts/portability/export-engine');
@@ -24,12 +29,12 @@ const REQUIRED_HEADING_PATTERNS = [
  */
 function assertStructuralInvariants(result, expectedName, expectedIcon) {
   // 1. Result has all 4 keys
-  expect(result).toHaveProperty('instructions');
-  expect(result).toHaveProperty('persona');
-  expect(result).toHaveProperty('sections');
-  expect(result).toHaveProperty('warnings');
-  expect(typeof result.instructions).toBe('string');
-  expect(result.instructions.length).toBeGreaterThan(0);
+  assert.notStrictEqual(result['instructions'], undefined);
+  assert.notStrictEqual(result['persona'], undefined);
+  assert.notStrictEqual(result['sections'], undefined);
+  assert.notStrictEqual(result['warnings'], undefined);
+  assert.equal(typeof result.instructions, 'string');
+  assert.ok(result.instructions.length > 0);
 
   // 2. All required section headings present in correct order
   // Use RegExp.exec().index instead of indexOf(m[0]) — sp-2-1 P2 fix
@@ -63,7 +68,7 @@ function assertStructuralInvariants(result, expectedName, expectedIcon) {
   if (violations.length > 0) {
     console.error(`${expectedName} export contains forbidden strings:`, violations);
   }
-  expect(violations).toEqual([]);
+  assert.deepEqual(violations, []);
 
   // 4. Zero curly-brace placeholders (per sp-2-1 P3 — all should be substituted)
   const placeholderRegex = /\{[\w_-]+\}/g;
@@ -71,64 +76,64 @@ function assertStructuralInvariants(result, expectedName, expectedIcon) {
   if (placeholders.length > 0) {
     console.error(`${expectedName} export contains unsubstituted placeholders:`, placeholders);
   }
-  expect(placeholders).toEqual([]);
+  assert.deepEqual(placeholders, []);
 
   // 5. Persona name + icon match
-  expect(result.persona.name).toBe(expectedName);
-  expect(result.persona.icon).toBe(expectedIcon);
+  assert.equal(result.persona.name, expectedName);
+  assert.equal(result.persona.icon, expectedIcon);
 
   // 6. Persona name appears in instructions text
-  expect(result.instructions).toContain(expectedName);
+  assert.ok(result.instructions.includes(expectedName));
 
   // 7. warnings.length <= 2
   if (result.warnings.length > 2) {
     console.error(`${expectedName} produced ${result.warnings.length} warnings:`, result.warnings);
   }
-  expect(result.warnings.length).toBeLessThanOrEqual(2);
+  assert.ok(result.warnings.length <= 2);
 
   // 8. All warning types are in the allowed set
   for (const warning of result.warnings) {
-    expect(ALLOWED_WARNING_TYPES.has(warning.type)).toBe(true);
+    assert.equal(ALLOWED_WARNING_TYPES.has(warning.type), true);
   }
 }
 
 describe('Export engine (sp-2-2)', () => {
   let projectRoot;
 
-  beforeAll(() => {
+  before(() => {
     projectRoot = findProjectRoot();
   });
 
-  test('Test 1: bmad-brainstorming (Carson) satisfies all structural invariants', () => {
+  it('Test 1: bmad-brainstorming (Carson) satisfies all structural invariants', () => {
     const result = exportSkill('bmad-brainstorming', projectRoot);
     assertStructuralInvariants(result, 'Carson', '🧠');
   });
 
-  test('Test 2: bmad-agent-architect (Winston) satisfies all structural invariants — Fix 1 second fixture', () => {
+  it('Test 2: bmad-agent-architect (Winston) satisfies all structural invariants — Fix 1 second fixture', () => {
     const result = exportSkill('bmad-agent-architect', projectRoot);
     assertStructuralInvariants(result, 'Winston', '🏗️');
   });
 
-  test('Test 3: bmad-create-prd (Tier 2 light-deps) exports successfully', () => {
+  it('Test 3: bmad-create-prd (Tier 2 light-deps) exports successfully', () => {
     const result = exportSkill('bmad-create-prd', projectRoot);
-    expect(result).toBeDefined();
-    expect(result.instructions.length).toBeGreaterThan(0);
-    expect(result.instructions).toContain('## You are');
+    assert.notStrictEqual(result, undefined);
+    assert.ok(result.instructions.length > 0);
+    assert.ok(result.instructions.includes('## You are'));
   });
 
-  test('Test 4: bmad-dev-story (Tier 3 pipeline) throws an error', () => {
-    expect(() => {
+  it('Test 4: bmad-dev-story (Tier 3 pipeline) throws an error', () => {
+    assert.throws(() => {
       exportSkill('bmad-dev-story', projectRoot);
-    }).toThrow(/pipeline/i);
+    }, /pipeline/i);
   });
 
-  test('Test 5: nonexistent skill throws a helpful error', () => {
-    expect(() => {
+  it('Test 5: nonexistent skill throws a helpful error', () => {
+    assert.throws(() => {
       exportSkill('bmad-skill-that-does-not-exist', projectRoot);
-    }).toThrow(/not in the manifest/i);
+    }, /not in the manifest/i);
   });
 
-  test('Test 6: engine is read-only (git status unchanged before/after)', () => {
+  it('Test 6: engine is read-only (git status unchanged before/after)', () => {
     let before;
     try {
       before = execSync('git status --porcelain', { cwd: projectRoot, encoding: 'utf8' });
@@ -142,26 +147,26 @@ describe('Export engine (sp-2-2)', () => {
     }
     exportSkill('bmad-brainstorming', projectRoot);
     const after = execSync('git status --porcelain', { cwd: projectRoot, encoding: 'utf8' });
-    expect(after).toBe(before);
+    assert.equal(after, before);
   });
 
-  test('Test 7: Carson produces warnings.length <= 2 with allowed types only', () => {
+  it('Test 7: Carson produces warnings.length <= 2 with allowed types only', () => {
     const result = exportSkill('bmad-brainstorming', projectRoot);
-    expect(result.warnings.length).toBeLessThanOrEqual(2);
+    assert.ok(result.warnings.length <= 2);
     for (const warning of result.warnings) {
-      expect(ALLOWED_WARNING_TYPES.has(warning.type)).toBe(true);
+      assert.equal(ALLOWED_WARNING_TYPES.has(warning.type), true);
     }
   });
 
-  test('Test 8: Winston produces warnings.length <= 2 with allowed types only', () => {
+  it('Test 8: Winston produces warnings.length <= 2 with allowed types only', () => {
     const result = exportSkill('bmad-agent-architect', projectRoot);
-    expect(result.warnings.length).toBeLessThanOrEqual(2);
+    assert.ok(result.warnings.length <= 2);
     for (const warning of result.warnings) {
-      expect(ALLOWED_WARNING_TYPES.has(warning.type)).toBe(true);
+      assert.equal(ALLOWED_WARNING_TYPES.has(warning.type), true);
     }
   });
 
-  test('Test 9: Carson result.sections has all 7 expected keys', () => {
+  it('Test 9: Carson result.sections has all 7 expected keys', () => {
     const result = exportSkill('bmad-brainstorming', projectRoot);
     const expectedKeys = [
       'title',
@@ -173,7 +178,7 @@ describe('Export engine (sp-2-2)', () => {
       'qualityChecks',
     ];
     for (const key of expectedKeys) {
-      expect(result.sections).toHaveProperty(key);
+      assert.notStrictEqual(result.sections[key], undefined);
     }
   });
 });

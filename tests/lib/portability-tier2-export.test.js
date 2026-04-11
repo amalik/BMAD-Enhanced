@@ -1,3 +1,8 @@
+'use strict';
+
+const { describe, it } = require('node:test');
+const assert = require('node:assert/strict');
+
 const path = require('path');
 const { spawnSync } = require('child_process');
 const { findProjectRoot } = require('../../scripts/update/lib/utils');
@@ -13,32 +18,32 @@ const projectRoot = findProjectRoot();
 const CLI_PATH = path.join(projectRoot, 'scripts', 'portability', 'convoke-export.js');
 
 describe('Tier 2 Export (sp-5-1)', () => {
-  test('Test 1: bmad-create-prd exports successfully with Template section', () => {
+  it('Test 1: bmad-create-prd exports successfully with Template section', () => {
     const result = exportSkill('bmad-create-prd', projectRoot);
-    expect(result).toBeDefined();
-    expect(result.instructions).toContain('## Template:');
-    expect(result.instructions).toContain('Prd Template');
+    assert.notStrictEqual(result, undefined);
+    assert.ok(result.instructions.includes('## Template:'));
+    assert.ok(result.instructions.includes('Prd Template'));
   });
 
-  test('Test 2: template content is inlined, {{vars}} preserved, no _bmad/', () => {
+  it('Test 2: template content is inlined, {{vars}} preserved, no _bmad/', () => {
     const result = exportSkill('bmad-create-prd', projectRoot);
-    expect(result.instructions).toContain('Product Requirements Document');
-    expect(result.instructions).toContain('{{project_name}}');
-    expect(result.instructions).not.toContain('_bmad/');
+    assert.ok(result.instructions.includes('Product Requirements Document'));
+    assert.ok(result.instructions.includes('{{project_name}}'));
+    assert.ok(!result.instructions.includes('_bmad/'));
   });
 
-  test('Test 3: skill-ref dependencies documented as companion skills', () => {
+  it('Test 3: skill-ref dependencies documented as companion skills', () => {
     const result = exportSkill('bmad-create-prd', projectRoot);
-    expect(result.instructions).toContain('Companion skill:');
-    expect(result.instructions).toContain('Advanced Elicitation');
+    assert.ok(result.instructions.includes('Companion skill:'));
+    assert.ok(result.instructions.includes('Advanced Elicitation'));
   });
 
-  test('Test 4: bmad-cis-agent-storyteller exports with sidecar notes', () => {
+  it('Test 4: bmad-cis-agent-storyteller exports with sidecar notes', () => {
     const result = exportSkill('bmad-cis-agent-storyteller', projectRoot);
-    expect(result.instructions).toContain('Persistent data:');
+    assert.ok(result.instructions.includes('Persistent data:'));
   });
 
-  test('Test 5: CLI --tier 2 batch works', () => {
+  it('Test 5: CLI --tier 2 batch works', () => {
     const result = spawnSync('node', [CLI_PATH, '--tier', '2', '--dry-run'], {
       cwd: projectRoot,
       encoding: 'utf8',
@@ -46,11 +51,11 @@ describe('Tier 2 Export (sp-5-1)', () => {
       timeout: 30000,
     });
     // Accept 0 (all pass) or 4 (some fail) — both are valid
-    expect([0, 4]).toContain(result.status);
-    expect(result.stdout).toContain('✅ bmad-create-prd');
+    assert.ok([0, 4].includes(result.status));
+    assert.ok(result.stdout.includes('✅ bmad-create-prd'));
   });
 
-  test('Test 6: --all includes both tier 1 and tier 2 skills', () => {
+  it('Test 6: --all includes both tier 1 and tier 2 skills', () => {
     const allResult = spawnSync('node', [CLI_PATH, '--all', '--dry-run'], {
       cwd: projectRoot,
       encoding: 'utf8',
@@ -67,8 +72,8 @@ describe('Tier 2 Export (sp-5-1)', () => {
     const lightDepsCount = [...new Set(rows.filter((r) => r[tierIdx] === 'light-deps').map((r) => r[nameIdx]))].length;
 
     const successLines = [...allResult.stdout.matchAll(/^✅ (\S+)/gm)];
-    expect(successLines.length).toBeGreaterThanOrEqual(standaloneCount);
+    assert.ok(successLines.length >= standaloneCount);
     // Should also include some light-deps
-    expect(allResult.stdout).toContain('bmad-create-prd');
+    assert.ok(allResult.stdout.includes('bmad-create-prd'));
   });
 });

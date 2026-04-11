@@ -1,3 +1,8 @@
+'use strict';
+
+const { describe, it, before, after } = require('node:test');
+const assert = require('node:assert/strict');
+
 const fs = require('fs');
 const os = require('os');
 const path = require('path');
@@ -30,7 +35,7 @@ const expectedCount = [
 
 let tmpDir, seedResult, skillDirs;
 
-beforeAll(() => {
+before(() => {
   tmpDir = path.join(os.tmpdir(), `sp-5-3-${crypto.randomUUID()}`);
   seedResult = spawnSync('node', [SEED_PATH, '--output', tmpDir], {
     cwd: projectRoot,
@@ -47,16 +52,16 @@ beforeAll(() => {
   }
 }, 60000);
 
-afterAll(() => {
+after(() => {
   if (tmpDir && fs.existsSync(tmpDir)) {
     fs.rmSync(tmpDir, { recursive: true, force: true });
   }
 });
 
 describe('Full Pipeline (sp-5-3)', () => {
-  test('Test 1: seed produces correct skill dir count with adapters', () => {
-    expect(seedResult.status).toBe(0);
-    expect(skillDirs.length).toBe(expectedCount);
+  it('Test 1: seed produces correct skill dir count with adapters', () => {
+    assert.equal(seedResult.status, 0);
+    assert.equal(skillDirs.length, expectedCount);
 
     // Every skill dir has adapters
     const missing = [];
@@ -73,31 +78,31 @@ describe('Full Pipeline (sp-5-3)', () => {
       }
     }
     if (missing.length > 0) console.error('Missing adapters:', missing);
-    expect(missing).toEqual([]);
+    assert.deepEqual(missing, []);
   });
 
-  test('Test 2: validator passes on seed output', () => {
+  it('Test 2: validator passes on seed output', () => {
     const valResult = spawnSync('node', [VALIDATOR_PATH, '--input', tmpDir], {
       cwd: projectRoot,
       encoding: 'utf8',
       env: process.env,
       timeout: 30000,
     });
-    expect(valResult.status).toBe(0);
+    assert.equal(valResult.status, 0);
   });
 
-  test('Test 3: Tier 2 skills have template sections', () => {
+  it('Test 3: Tier 2 skills have template sections', () => {
     const prdPath = path.join(tmpDir, 'bmad-create-prd', 'instructions.md');
-    expect(fs.existsSync(prdPath)).toBe(true);
+    assert.equal(fs.existsSync(prdPath), true);
     const content = fs.readFileSync(prdPath, 'utf8');
-    expect(content).toContain('## Template:');
+    assert.ok(content.includes('## Template:'));
   });
 
-  test('Test 4: catalog includes both tier badges', () => {
+  it('Test 4: catalog includes both tier badges', () => {
     const catalogPath = path.join(tmpDir, 'README.md');
-    expect(fs.existsSync(catalogPath)).toBe(true);
+    assert.equal(fs.existsSync(catalogPath), true);
     const content = fs.readFileSync(catalogPath, 'utf8');
-    expect(content).toContain('Ready to use');
-    expect(content).toContain('Needs setup');
+    assert.ok(content.includes('Ready to use'));
+    assert.ok(content.includes('Needs setup'));
   });
 });
