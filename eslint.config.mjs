@@ -49,7 +49,9 @@ export default [
       "scripts/install-vortex-agents.js",
       "scripts/install-all-agents.js",
       "scripts/install-emma.js",
-      "scripts/install-wade.js"
+      "scripts/install-wade.js",
+      "scripts/portability/convoke-export.js",
+      "scripts/portability/seed-catalog-repo.js"
     ],
     rules: {
       "no-restricted-syntax": "off"
