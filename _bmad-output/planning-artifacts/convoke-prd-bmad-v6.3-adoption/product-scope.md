@@ -25,7 +25,7 @@ Per OP-1 and OP-2, each workstream is independently valuable. Per M10, partial M
 ## Growth Features (Post-MVP, 4.1+)
 
 - **Post-release drift monitoring** — explicitly deferred per PM3. Addresses the gap between pre-release synthetic validation and production behavior.
-- **Bolder Move 3 — platform-agnostic publishing** — contingent on EXP3. Ships in 4.1 if the smoke test succeeds; expands marketplace distribution to standalone skill exports + Copilot/Cursor adapters.
+- ~~**Bolder Move 3 — platform-agnostic publishing**~~ — **ABSORBED into 4.0** (EXP3 passed 2026-04-12). WS2 scope now includes validation that exported Tier 1 skills produce usable adapters across Claude Code, Copilot, and Cursor. Moved from Growth to MVP capability.
 - **Marketplace promotion to `community-reviewed`** — requires BMAD org review; out of scope for 4.0; 4.1+ follow-up.
 - **Buyer-facing positioning** — per shark tank ST2, enterprise buyer concerns out of scope for 4.0.
 - **Agent behavior telemetry + user feedback infrastructure** — would make `unknown_until_validated` measurable and replace structural proxies with direct user-reality measurements. Separate N1-telemetry initiative.
