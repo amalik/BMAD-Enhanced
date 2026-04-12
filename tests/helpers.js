@@ -7,6 +7,7 @@ const yaml = require('js-yaml');
 const { execFile } = require('node:child_process');
 
 const { AGENT_IDS, WORKFLOW_NAMES } = require('../scripts/update/lib/agent-registry');
+const pkg = require('../package.json');
 
 const PACKAGE_ROOT = path.join(__dirname, '..');
 
@@ -26,13 +27,16 @@ async function createTempDir(prefix = 'convoke-test-') {
 /**
  * Build a complete, valid Vortex config.
  * All agents + workflows are sourced from the registry.
+ * Version tracks package.json to satisfy project-context.md rule
+ * "no-hardcoded-versions" — callers needing a specific historical version
+ * should override via `fullConfig({ version: '1.3.8' })`.
  */
 function fullConfig(overrides = {}) {
   return {
     submodule_name: '_vortex',
     description: 'Vortex Pattern',
     module: 'bme',
-    version: '1.5.0',
+    version: pkg.version,
     output_folder: '{project-root}/_bmad-output/vortex-artifacts',
     agents: [...AGENT_IDS],
     workflows: [...WORKFLOW_NAMES],
