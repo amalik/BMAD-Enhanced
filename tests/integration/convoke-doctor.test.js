@@ -4,8 +4,14 @@ const path = require('path');
 const fs = require('fs-extra');
 const os = require('os');
 const { runScript, PACKAGE_ROOT } = require('../helpers');
+const pkg = require('../../package.json');
 
 const doctorScript = path.join(PACKAGE_ROOT, 'scripts/convoke-doctor.js');
+// Fixtures below use `pkg.version` for config `version:` fields so they
+// track package.json automatically — satisfies project-context.md rule
+// "no-hardcoded-versions". The "version mismatch" test deliberately uses
+// "0.0.1" (a literal) because it's testing version-inconsistency detection.
+const CURRENT_CONFIG_YAML = `version: "${pkg.version}"\nagents:\n  - contextualization-expert\n`;
 
 function runDoctor(cwd) {
   return runScript(doctorScript, [], { cwd });
@@ -85,7 +91,7 @@ describe('convoke-doctor: missing agent files', () => {
     // Write valid config but no agent files
     await fs.writeFile(
       path.join(vortexDir, 'config.yaml'),
-      'version: "1.5.0"\nagents:\n  - contextualization-expert\n',
+      CURRENT_CONFIG_YAML,
       'utf8'
     );
   });
@@ -112,7 +118,7 @@ describe('convoke-doctor: empty agent files', () => {
     await fs.ensureDir(agentsDir);
     await fs.writeFile(
       path.join(vortexDir, 'config.yaml'),
-      'version: "1.5.0"\nagents:\n  - contextualization-expert\n',
+      CURRENT_CONFIG_YAML,
       'utf8'
     );
     // Create all 7 agent files, but make them empty (0 bytes)
@@ -143,7 +149,7 @@ describe('convoke-doctor: stale migration lock', () => {
     await fs.ensureDir(path.join(vortexDir, 'agents'));
     await fs.writeFile(
       path.join(vortexDir, 'config.yaml'),
-      'version: "1.5.0"\nagents:\n  - contextualization-expert\n',
+      CURRENT_CONFIG_YAML,
       'utf8'
     );
     // Create a stale lock file (10 minutes old)
@@ -203,7 +209,7 @@ describe('convoke-doctor: corrupt migration lock', () => {
     await fs.ensureDir(path.join(vortexDir, 'agents'));
     await fs.writeFile(
       path.join(vortexDir, 'config.yaml'),
-      'version: "1.5.0"\nagents:\n  - contextualization-expert\n',
+      CURRENT_CONFIG_YAML,
       'utf8'
     );
     // Create a corrupt lock file
