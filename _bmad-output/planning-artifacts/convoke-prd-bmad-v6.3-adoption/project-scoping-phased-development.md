@@ -99,7 +99,7 @@ Risks consolidated from pre-mortem (PM1–PM5), shark tank (ST1–ST4), party ro
 
 **What we explicitly deferred (see Growth Features in Success Criteria):**
 - Post-release drift monitoring
-- Platform-agnostic publishing absorbing Bolder Move 3 (contingent on EXP3 — may be absorbed)
+- ~~Platform-agnostic publishing absorbing Bolder Move 3~~ — **ABSORBED into 4.0** (EXP3 passed 2026-04-12)
 - Marketplace trust tier promotion
 - Buyer-facing positioning
 - Agent behavior telemetry
