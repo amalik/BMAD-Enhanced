@@ -3,7 +3,6 @@ const assert = require('node:assert/strict');
 const path = require('path');
 const fs = require('fs-extra');
 const os = require('os');
-const yaml = require('js-yaml');
 const { runScript, PACKAGE_ROOT, createValidInstallation } = require('../helpers');
 const { AGENTS } = require('../../scripts/update/lib/agent-registry');
 
@@ -19,15 +18,9 @@ let fixtureDir;
 before(async () => {
   fixtureDir = await fs.mkdtemp(path.join(os.tmpdir(), 'convoke-cli-entry-'));
   await createValidInstallation(fixtureDir);
-
-  // Align the fixture installation version with the current package version
-  // so `convoke-update --dry-run` reports "up to date" instead of suggesting
-  // a migration. createValidInstallation hardcodes an older version via
-  // fullConfig() — we patch just this one field, non-invasively.
-  const configPath = path.join(fixtureDir, '_bmad/bme/_vortex/config.yaml');
-  const config = yaml.load(fs.readFileSync(configPath, 'utf8'));
-  config.version = require('../../package.json').version;
-  fs.writeFileSync(configPath, yaml.dump(config), 'utf8');
+  // fullConfig() now tracks package.json version, so the fixture reports
+  // "up to date" for `convoke-update --dry-run` automatically — no post-patch
+  // needed. See project-context.md rule "no-hardcoded-versions".
 });
 
 after(async () => {
