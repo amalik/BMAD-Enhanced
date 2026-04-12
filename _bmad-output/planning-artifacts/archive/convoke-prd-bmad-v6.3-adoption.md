@@ -476,7 +476,7 @@ partyFindingsRound2:
           Experiment 3 from Topic 4)
       feedsInto: vision-framing, WS2-scope, executive-summary
       source: Victor lead, Sophia + Wade + Isla cross-talk (Topic 3)
-      status: UNRESOLVED_VISION_DECISION
+      status: RESOLVED_GO_2026-04-12
       decisionRequired: >-
         Amalik must decide whether to absorb Bolder Move 3 into the 4.0
         vision framing. Decision is contingent on Wade's Experiment 3
