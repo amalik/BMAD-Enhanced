@@ -86,22 +86,22 @@ function generate(outputDir, projectRoot) {
   const manifestPath = path.join(projectRoot, '_bmad', '_config', 'skill-manifest.csv');
   const { header, rows } = readManifest(manifestPath);
   const nameIdx = header.indexOf('name');
-  const tierIdx = header.indexOf('tier');
 
-  // Get unique exportable skill names (standalone + light-deps)
+  // Get unique exportable skill names (all tiers — pipeline gets a framework-only notice)
+  // Exclude meta-platform skills (framework internals, not user-facing)
+  const intentIdx = header.indexOf('intent');
   const seen = new Set();
   const exportableNames = [];
   for (const row of rows) {
     const name = row[nameIdx];
     if (seen.has(name)) continue;
     seen.add(name);
-    if (row[tierIdx] === 'standalone' || row[tierIdx] === 'light-deps') {
-      exportableNames.push(name);
-    }
+    if (row[intentIdx] === 'meta-platform') continue;
+    exportableNames.push(name);
   }
   exportableNames.sort();
 
-  console.log(`Exporting ${exportableNames.length} skills (standalone + light-deps)...`);
+  console.log(`Exporting ${exportableNames.length} skills (all tiers)...`);
 
   // Create output directory
   fs.mkdirSync(outputDir, { recursive: true });
