@@ -24,11 +24,11 @@ const VALIDATOR_PATH = path.join(projectRoot, 'scripts', 'portability', 'validat
 const manifestPath = path.join(projectRoot, '_bmad', '_config', 'skill-manifest.csv');
 const { header, rows } = readManifest(manifestPath);
 const nameIdx = header.indexOf('name');
-const tierIdx = header.indexOf('tier');
+const intentIdx = header.indexOf('intent');
 const expectedCount = [
   ...new Set(
     rows
-      .filter((r) => r[tierIdx] === 'standalone' || r[tierIdx] === 'light-deps')
+      .filter((r) => r[intentIdx] !== 'meta-platform')
       .map((r) => r[nameIdx])
   ),
 ].length;
