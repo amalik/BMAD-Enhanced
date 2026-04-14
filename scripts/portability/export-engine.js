@@ -269,7 +269,7 @@ function loadPersona(skillName, skillContent, workflowContent, projectRoot) {
 
   // Convert agent row to persona object
   return {
-    name: agent.displayName,
+    name: agent.displayName || agent.name,
     icon: agent.icon || '',
     title: agent.title || '',
     role: agent.role || '',
@@ -1008,13 +1008,8 @@ function buildDependencyNotes(skillRefs, sidecars, manifestSkillNames) {
 function exportSkill(skillName, projectRoot, options = {}) {
   const warnings = [];
 
-  // 1. Load skill row + tier check (standalone + light-deps allowed; pipeline rejected)
+  // 1. Load skill row (all tiers exportable; pipeline skills get a framework-only notice)
   const skillRow = loadSkillRow(skillName, projectRoot);
-  if (skillRow.tier === 'pipeline') {
-    throw new Error(
-      `${skillName} is tier "pipeline" — pipeline skills are not exported per the portability schema.`
-    );
-  }
 
   // 2. Load source files
   const { skillContent, workflowContent, stepContents, skillDir } = loadSkillSource(skillRow, projectRoot, warnings);
@@ -1079,6 +1074,13 @@ function exportSkill(skillName, projectRoot, options = {}) {
   const parts = [
     transformedSections.title,
     '',
+  ];
+  // Framework-only notice for pipeline skills (not fully portable)
+  if (skillRow.tier === 'pipeline') {
+    parts.push('> **⚠️ Framework-only skill.** This skill depends on the full Convoke installation and cannot run standalone. It\'s included in the catalog for discoverability. Install Convoke from [convoke-agents](https://github.com/amalik/convoke-agents) to use it.');
+    parts.push('');
+  }
+  parts.push(
     transformedSections.persona,
     '',
     transformedSections.whenToUse,
@@ -1088,7 +1090,7 @@ function exportSkill(skillName, projectRoot, options = {}) {
     transformedSections.howToProceed,
     '',
     transformedSections.whatYouProduce,
-  ];
+  );
   if (transformedSections.qualityChecks) {
     parts.push('');
     parts.push(transformedSections.qualityChecks);
