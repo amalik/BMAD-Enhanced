@@ -51,8 +51,8 @@ describe('Seed Catalog Repository (sp-4-1)', () => {
     const { readManifest } = require('../../scripts/portability/manifest-csv');
     const { header, rows } = readManifest(manifestPath);
     const ni = header.indexOf('name');
-    const ti = header.indexOf('tier');
-    const expectedCount = [...new Set(rows.filter((r) => r[ti] === 'standalone' || r[ti] === 'light-deps').map((r) => r[ni]))].length;
+    const intentIdx = header.indexOf('intent');
+    const expectedCount = [...new Set(rows.filter((r) => r[intentIdx] !== 'meta-platform').map((r) => r[ni]))].length;
     assert.equal(skillDirs.length, expectedCount);
     assert.equal(fs.existsSync(path.join(tmpDir, 'README.md')), true);
   });
