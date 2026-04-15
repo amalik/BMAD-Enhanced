@@ -217,7 +217,7 @@ Items awaiting qualification. No lane, no priority, no commitment.
 | IN-6 (was W1) | Wardley Mapping as shared capability — cross-team strategic lens (multiple agents) | Winston ArcKit analysis | 2026-03-22 | Winston |
 | IN-7 (was W2) | Pre-write artifact validation hooks — Claude Code hooks validating artifacts before write | Winston ArcKit analysis | 2026-03-22 | Winston |
 | IN-8 (was P9-wka) | Forge Written Knowledge Analysis agent — potential third Forge agent for doc/code analysis | Emma contextualization | 2026-03-22 | Emma |
-| IN-9 | Initiative Lifecycle Engine — product-lens rework of backlog/portfolio/governance skills into integrated lifecycle management | Party mode session | 2026-04-12 | Amalik (via John+Winston) |
+| IN-9 | Initiative Lifecycle Engine — product-lens rework of backlog/portfolio/governance skills into integrated lifecycle management → ILE-1 | Party mode session | 2026-04-12 | Amalik (via John+Winston) |
 
 **Notes on intakes:**
 
@@ -225,7 +225,7 @@ Items awaiting qualification. No lane, no priority, no commitment.
 - IN-4 is an innovation hypothesis awaiting observation data.
 - IN-6 and IN-7 need qualification against the Capability Evaluation Framework (which P10 delivered).
 - IN-8 needs Forge shadow engagement evidence before qualification.
-- IN-9 is the meta-initiative that emerged from this very session — product-lens integration of lifecycle tooling. Needs John+Winston qualification in a subsequent session.
+- IN-9 was qualified by John+Winston on 2026-04-15 → ILE-1 in §2.4 Initiative Lane (portfolio: helm). The intake row stays here as audit trail per §1.1.
 
 ### 2.2 Bug Lane
 
@@ -328,6 +328,7 @@ Items requiring the full pipeline: Brief → PRD → Arch → PRD Validation →
 | P9 | **Forge team — Domain Knowledge Extraction** | 9 | 3 | 90% | 8 | 3.0 | forge | **In Pipeline** (Blocked on Gate 1) | D, E(partial) |
 | P13 | **Vortex redesign (align to Enhance-codified patterns)** | 7 | 2 | 70% | 4 | 2.5 | vortex | **Qualified** (Blocked on P12) | — |
 | U10+P23+A8+A9 | **BMAD v6.3.0 Adoption (Convoke 4.0)** | 10 | 2 | 80% | 7 | 2.3 | convoke | **In Sprint** | B, P✓, A, IR, E |
+| ILE-1 | **Initiative Lifecycle Engine** (rework of backlog/portfolio/governance skills into integrated lifecycle management) | 9 | 3 | 60% | 8 | 2.0 | helm | **Qualified** | — |
 | U9 | **Module-aware refresh and validation (modules-manifest.yaml)** | 8 | 2 | 70% | 6 | 1.9 | convoke | **Qualified** | — |
 | P3 | **Team installer architecture (`convoke-install <module-name>`)** | 6 | 1 | 80% | 4 | 1.2 | convoke | **Qualified** | — |
 | P7 | **ML/AI Engineering team exploration** | 6 | 2 | 30% | 3 | 1.2 | *(pending)* | **Qualified** (needs discovery) | — |
@@ -519,10 +520,51 @@ Full descriptions for items in §2.4 whose table row is a one-liner.
 
 **Scope hint:** Cross-module handoffs and routing between Teams (Vortex, Gyre) and Skills (Enhance). Example: Enhance backlog feeding Vortex discovery.
 
+### ILE-1 — Initiative Lifecycle Engine
+
+**Stage:** Qualified | **Portfolio:** helm | **RICE:** 2.0
+
+**Origin:** Party mode session 2026-04-12 (John, Winston, Amalik). Qualified 2026-04-15 by John+Winston (per §1.2 shortcut rule).
+
+**Planning artifacts:** None yet. Intake row in §2.1 (IN-9) is the only existing reference.
+
+**Missing (to reach Ready):** Brief, PRD, Architecture, PRD Validation, IR, Epics.
+
+**Scope hint (three workstreams):**
+
+1. **Rework existing skills as views on a shared model.**
+   - `bmad-enhance-initiatives-backlog` becomes the **write surface** (lifecycle-aware, lane-aware) — already reworked in 2026-04-15 session as v2.0.0; data model still implicit
+   - `bmad-portfolio-status` becomes the **read surface** (cross-initiative dashboard, pipeline completeness, WIP signals)
+   - `bmad-migrate-artifacts` feeds the shared model (artifact creation auto-advances pipeline stage)
+   - All three need a **shared data layer** (structured source + generated markdown views)
+
+2. **Enhance with new capabilities:**
+   - Kanban view (columns = lifecycle stages, rows = initiatives, WIP limits)
+   - Backlog-portfolio integration (creating a PRD auto-advances stage)
+   - Pipeline completeness dashboard (live "what artifacts exist?" computed from disk)
+
+3. **Reactive behaviors layer:**
+   - New initiative logged → orphan intake scan suggests attachment
+   - Artifact created → pipeline stage auto-advances
+   - Sprint closes → staleness detector flags broken file references
+   - RICE rescore requested → pulls current context (recent ships, adjacent changes)
+   - Epic completed → close absorbed items + unblock dependent items
+
+**Why helm (portfolio):** This is strategic governance tooling. Per §1.4 taxonomy, helm covers strategic governance — this is its flagship feature. Helm doesn't exist as a built team yet, but initiatives can attach to portfolio items that aren't yet scaffolded (precedent: P9 attached to forge before Forge team exists).
+
+**Why Initiative (lane):** Multi-module (3 skills + new shared layer), architectural (shared data model + reactive behaviors), user-facing (kanban + new commands), substantial scope (three workstreams). All §1.3 Initiative triggers fire.
+
+**Risk note:** Portfolio attachment (helm) is a current-best-fit, not a final answer. If WS3 planning surfaces a better home (e.g., a new "governance" portfolio item), revisit per §1.4 growth rule.
+
+**Scope precedents already absorbed (do not duplicate in pipeline):**
+- WS1 (process rules + restructure) and WS2 (retroactive review) — already executed as spikes on 2026-04-15 (Pass 1 and Pass 2 of the lifecycle backlog)
+- The skill rework of `bmad-enhance-initiatives-backlog` v2.0.0 — already shipped 2026-04-15, but only the write surface; the shared data model and integration with the other two skills remain
+
 ---
 
 ## Change Log
 
 | Date | Change |
 |------|--------|
+| 2026-04-15 | **Qualifying gate run on IN-9.** Qualifier: John+Winston (per §1.2 shortcut rule). Lane: Initiative. Portfolio: helm (current-best-fit, revisitable). RICE: R:9 I:3 C:60% E:8 = 2.0. New row added to §2.4 Initiative Lane as **ILE-1** (Initiative Lifecycle Engine). Intake row IN-9 in §2.1 cross-referenced via `→ ILE-1` per §1.1 audit-trail rule. Appendix entry added with three-workstream scope hint and precedent notes (WS1+WS2 already executed as spikes; skill rework v2.0.0 partially shipped). Initiative Lane re-sorted: ILE-1 (2.0) sits between v6.3 Adoption (2.3) and U9 (1.9). |
 | 2026-04-12 | **Pass 1 + Pass 2 complete.** Document created from `convoke-note-initiatives-backlog.md` retroactive review. All 88 items classified across three lanes per lifecycle process established in party mode session (John, Winston, Amalik). Supersedes `convoke-note-initiatives-backlog.md`. Intakes: 9 (was 8 "exploration candidates" + 1 new meta-initiative IN-9). Bug Lane: 0. Fast Lane: 65. Initiative Lane: 11 (4 absorbed into v6.3, 7 standalone). Absorbed/Archived: 27 (4 absorbed into v6.3 Epic, 2 absorbed into S3, 21 completed). S1/S2 folded into S3. Original IDs preserved for traceability. |
