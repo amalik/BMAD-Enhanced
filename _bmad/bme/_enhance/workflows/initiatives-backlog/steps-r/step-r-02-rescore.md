@@ -1,18 +1,18 @@
 ---
 name: 'step-r-02-rescore'
-description: 'Walk through backlog items one at a time for rescoring with RICE adjustments'
+description: 'Walk lane items one at a time for RICE rescoring, lane-aware (Bug / Fast / Initiative)'
 nextStepFile: '{project-root}/_bmad/bme/_enhance/workflows/initiatives-backlog/steps-r/step-r-03-update.md'
-outputFile: '{planning_artifacts}/initiatives-backlog.md'
+outputFile: '{planning_artifacts}/convoke-note-initiative-lifecycle-backlog.md'
 templateFile: '{project-root}/_bmad/bme/_enhance/workflows/initiatives-backlog/templates/rice-scoring-guide.md'
 advancedElicitationTask: '{project-root}/_bmad/core/workflows/advanced-elicitation/workflow.md'
 partyModeWorkflow: '{project-root}/_bmad/core/workflows/bmad-party-mode/workflow.md'
 ---
 
-# Step 2: Item Walkthrough & Rescoring
+# Step 2: Lane Walkthrough & Rescoring
 
 ## STEP GOAL:
 
-Walk through backlog items one at a time, presenting current scores and provenance, and allow the Product Owner to rescore, confirm, or skip each item. Track all decisions for the update step.
+Walk through the selected lane items one at a time, presenting current scores and lane-specific context (Bug status, Fast Lane RICE, Initiative stage + artifacts), and allow the user to rescore, confirm, or skip each item. Track all decisions for the update step.
 
 ## MANDATORY EXECUTION RULES (READ FIRST):
 
@@ -24,17 +24,17 @@ Walk through backlog items one at a time, presenting current scores and provenan
 
 ### Role Reinforcement:
 - ✅ You are a **rescoring analyst** — systematic, evidence-based, calibration-aware
-- ✅ Present items faithfully with all current data — do not editorialize or suggest scores unless asked via A
+- ✅ Present items faithfully with all current data — do not editorialize unless user invokes A
 - ✅ The user decides what changes to make — you calculate, display, and record
-- ✅ Compare adjusted scores against calibration examples for consistency
+- ✅ Lane-aware: bugs emphasize risk-vs-cost, Fast Lane emphasizes effort, Initiative Lane includes Stage + Artifacts context
 
 ### Step-Specific Rules:
 - 🎯 Focus on per-item presentation, score adjustment, and decision tracking
 - 🚫 FORBIDDEN to write to the backlog file (that is step-r-03's job)
 - 🚫 FORBIDDEN to add new items (that is Triage mode's job)
-- 🚫 FORBIDDEN to delete or remove items from the backlog
+- 🚫 FORBIDDEN to delete or promote/demote items between lanes (lane changes require separate qualification — noted for future item)
 - 🚫 FORBIDDEN to auto-advance without user input — ALWAYS halt and wait
-- 💬 Approach: present one item, wait for decision, record result, advance
+- 💬 Approach: present one item with its lane context, wait for decision, record result, advance
 
 ## EXECUTION PROTOCOLS:
 - 🎯 Follow the MANDATORY SEQUENCE exactly
@@ -42,10 +42,10 @@ Walk through backlog items one at a time, presenting current scores and provenan
 - 💾 Track each item's decision: rescored (with old/new scores), confirmed, or skipped
 
 ## CONTEXT BOUNDARIES:
-- Available context: Parsed backlog items from step-r-01, RICE scoring guide
+- Available context: `walk_scope` from step-r-01 (ordered list of lane items), RICE scoring guide
 - Focus: Per-item walkthrough and rescoring only
-- Limits: Do NOT write to backlog or modify the file
-- Dependencies: step-r-01-load.md (loaded and parsed items)
+- Limits: Do NOT write to backlog, do NOT change item lanes
+- Dependencies: step-r-01-load.md (loaded items + scope)
 
 ## MANDATORY SEQUENCE
 
@@ -53,22 +53,45 @@ Walk through backlog items one at a time, presenting current scores and provenan
 
 ### 1. Initialize Walkthrough State
 
-Set up tracking for the walkthrough:
+Set up tracking:
 - `current_index` = 1
-- `total_items` = count from step-r-01
-- `rescored_items` = [] (items with changed scores)
-- `confirmed_items` = [] (items explicitly confirmed or C'd without changes)
-- `skipped_items` = [] (items skipped)
+- `total_items` = count from `walk_scope`
+- `rescored_items` = [] — items with changed composite score
+- `confirmed_items` = [] — items explicitly confirmed or C'd without changes
+- `skipped_items` = [] — items skipped
 
-### 2. Present Current Item
+### 2. Present Current Item (Lane-Aware)
 
-Display the current item with all scoring data:
+Display the current item with lane-specific context:
 
-> **Item [current_index] of [total_items] — [Category Name]**
+**If Bug Lane item:**
+
+> **Item [current_index] of [total_items] — §2.2 Bug Lane**
 >
-> **[ID]: [Title]** — Score: [composite]
+> **[ID]: [Description]** — Score: [composite]
 > R:[reach] I:[impact] C:[confidence]% E:[effort]
-> *Provenance: [current provenance text]*
+> *Status: [Open/In Fix/In Review/Shipped]*
+> *Portfolio: [portfolio]*
+> *Linked Follow-up: [fastLaneID or initiativeID, if any]*
+
+**If Fast Lane item:**
+
+> **Item [current_index] of [total_items] — §2.3 Fast Lane**
+>
+> **[ID]: [Description]** — Score: [composite]
+> R:[reach] I:[impact] C:[confidence]% E:[effort]
+> *Status: [Backlog/In Story/In Sprint/Shipped]*
+> *Portfolio: [portfolio]*
+
+**If Initiative Lane item:**
+
+> **Item [current_index] of [total_items] — §2.4 Initiative Lane**
+>
+> **[ID]: [Description]** — Score: [composite]
+> R:[reach] I:[impact] C:[confidence]% E:[effort]
+> *Stage: [Qualified / In Pipeline / Ready / In Sprint / Done]*
+> *Portfolio: [portfolio]*
+> *Artifacts: [artifacts indicator, e.g., "D, P✓, A, IR, E" or "ADR only" or "—"]*
 
 ### 3. Present Per-Item Menu
 
@@ -90,21 +113,23 @@ Display:
 > **[A] Advanced Elicitation** — Deeper scoring analysis
 > **[P] Party Mode** — Multi-perspective discussion
 > **[C] Continue** — Apply changes and advance to next item
+>
+> *Note: Changing an item's lane, stage, portfolio, or status is NOT done in Review mode. If this item's lane no longer fits, raise a new intake via Triage mode.*
 
 #### Menu Handling Logic:
 
-- IF `R [value]`: Validate value is integer 1-10. Update Reach for current item. Recalculate composite: Score = (R x I x C) / E. Redisplay updated item scores and menu.
+- IF `R [value]`: Validate value is integer 1-10. Update Reach for current item. Recalculate composite: Score = (R × I × C) / E. Redisplay updated item scores and menu.
 - IF `I [value]`: Validate value is one of 0.25, 0.5, 1, 2, or 3. Update Impact. Recalculate composite. Redisplay updated item scores and menu.
 - IF `CF [value]`: Validate value is integer 20-100. Update Confidence. Recalculate composite. Redisplay updated item scores and menu.
 - IF `E [value]`: Validate value is integer 1-10. Update Effort. Recalculate composite. Redisplay updated item scores and menu.
 - IF K: Mark item as **confirmed**. Add to `confirmed_items`. Advance to next item (go to step 4).
 - IF S: Mark item as **skipped**. Add to `skipped_items`. Advance to next item (go to step 4).
 - IF X: Exit walkthrough early. Go to step 5.
-- IF A: Execute `{advancedElicitationTask}` for deeper scoring analysis of this item. When finished, redisplay the current item scores and this menu.
-- IF P: Execute `{partyModeWorkflow}` for multi-perspective scoring discussion of this item. When finished, redisplay the current item scores and this menu.
+- IF A: Execute `{advancedElicitationTask}` for deeper scoring analysis of this item. When finished, redisplay.
+- IF P: Execute `{partyModeWorkflow}` for multi-perspective discussion. When finished, redisplay.
 - IF C:
-  - **If scores were changed:** Record old and new composite scores. Add to `rescored_items` with: item ID, old R/I/C/E, new R/I/C/E, old composite, new composite. Advance to next item (go to step 4).
-  - **If NO scores were changed:** Treat as confirmed (same as K). Add to `confirmed_items`. Advance to next item (go to step 4).
+  - **If scores were changed:** Record old and new composite scores. Add to `rescored_items` with lane name, item ID, old R/I/C/E, new R/I/C/E, old composite, new composite. Advance.
+  - **If NO scores were changed:** Treat as confirmed (same as K). Advance.
 - IF any other input: Display "Unknown command. Use `R/I/CF/E [value]`, `K`, `S`, `X`, `A`, `P`, or `C`." then redisplay menu.
 
 #### EXECUTION RULES:
@@ -130,12 +155,17 @@ Display walkthrough summary:
 > **Confirmed:** [N] items
 > **Skipped:** [N] items
 > [If early exit: **Unvisited:** [N] items]
+>
+> **Rescored breakdown by lane:**
+> - §2.2 Bug Lane: [n]
+> - §2.3 Fast Lane: [n]
+> - §2.4 Initiative Lane: [n]
 
 Then load, read the entire file, and execute `{project-root}/_bmad/bme/_enhance/workflows/initiatives-backlog/steps-r/step-r-03-update.md`, passing:
-- The list of rescored items (with old/new R/I/C/E and composite scores)
-- The counts of confirmed, skipped, and unvisited items
+- `rescored_items` (each with lane name, ID, old and new R/I/C/E, old and new composites)
+- Counts of confirmed, skipped, and unvisited items
 
 ## 🚨 SYSTEM SUCCESS/FAILURE METRICS:
-### ✅ SUCCESS: Each item presented with full scoring data and provenance, user given per-item decision, score adjustments recalculated correctly, all decisions tracked (rescored/confirmed/skipped), results passed to step-r-03
-### ❌ SYSTEM FAILURE: Items auto-advanced without user input, scores not recalculated after adjustment, decisions not tracked, items modified in backlog file, walkthrough skipped items silently
+### ✅ SUCCESS: Each lane item presented with lane-specific context (status / stage / artifacts), user given per-item decision, score adjustments recalculated correctly, all decisions tracked by lane, results passed to step-r-03
+### ❌ SYSTEM FAILURE: Items auto-advanced without input, lane context missing, scores not recalculated after adjustment, decisions not tracked, lane changes attempted, items modified in backlog file
 **Master Rule:** Skipping steps is FORBIDDEN.
