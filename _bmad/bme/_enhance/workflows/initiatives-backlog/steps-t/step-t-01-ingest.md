@@ -2,14 +2,14 @@
 name: 'step-t-01-ingest'
 description: 'Accept text input — review transcript, meeting notes, or any findings source'
 nextStepFile: '{project-root}/_bmad/bme/_enhance/workflows/initiatives-backlog/steps-t/step-t-02-extract.md'
-outputFile: '{planning_artifacts}/initiatives-backlog.md'
+outputFile: '{planning_artifacts}/convoke-note-initiative-lifecycle-backlog.md'
 ---
 
 # Step 1: Ingest Review Findings
 
 ## STEP GOAL:
 
-Accept the Product Owner's text input (review transcript, meeting notes, audit output, or any findings source) and prepare it for extraction in the next step.
+Accept the user's text input (review transcript, meeting notes, audit output, party mode output, or any findings source) and prepare it for extraction in the next step.
 
 ## MANDATORY EXECUTION RULES (READ FIRST):
 
@@ -26,19 +26,19 @@ Accept the Product Owner's text input (review transcript, meeting notes, audit o
 
 ### Step-Specific Rules:
 - 🎯 Focus ONLY on accepting and preserving input text
-- 🚫 FORBIDDEN to extract findings, classify, or score in this step — that is step-t-02's job
-- 🚫 FORBIDDEN to truncate, summarize, or skip any part of the input regardless of length (FR46)
+- 🚫 FORBIDDEN to extract findings, classify, log, or qualify in this step — those are later steps' job
+- 🚫 FORBIDDEN to truncate, summarize, or skip any part of the input regardless of length
 - 💬 Approach: brief prompts, minimal overhead, get to the content quickly
 
 ## EXECUTION PROTOCOLS:
 - 🎯 Follow the MANDATORY SEQUENCE exactly
-- 📖 Load existing backlog if present — it will be needed for overlap detection in step-t-02
+- 📖 Load existing backlog if present — it will be needed for overlap detection and for appending in later steps
 
 ## CONTEXT BOUNDARIES:
 - Available context: Enhance config (loaded by workflow.md), existing backlog file (if present)
 - Focus: Accepting user input only
-- Limits: Do NOT analyze, classify, or score input
-- Dependencies: workflow.md T dispatch (completed in Story 1.3)
+- Limits: Do NOT analyze, classify, or qualify input
+- Dependencies: workflow.md T dispatch
 
 ## MANDATORY SEQUENCE
 
@@ -46,16 +46,16 @@ Accept the Product Owner's text input (review transcript, meeting notes, audit o
 
 ### 1. Check for Existing Backlog
 
-Check if an existing backlog file exists at `{planning_artifacts}/initiatives-backlog.md`.
+Check if an existing backlog file exists at `{outputFile}`.
 
-- **If found:** Load it silently — it will be used for overlap detection in step-t-02. Briefly note to the user: "Existing backlog loaded — overlap detection will be available during extraction."
-- **If not found:** Note silently — step-t-02 will skip overlap detection. Briefly note: "No existing backlog found — a new one will be created."
+- **If found:** Load it silently — it will be used for overlap detection in step-t-02 and for writes in step-t-04. Briefly note to the user: "Existing lifecycle backlog loaded — overlap detection against current Intakes and lane items will be available during extraction."
+- **If not found:** Note silently — step-t-02 will skip overlap detection. Briefly note: "No existing backlog found. Note: Triage cannot create a new backlog — use Create mode [C] for that. Triage will still extract findings but the final update step will require an existing file."
 
 ### 2. Prompt for Text Input
 
 Display:
 
-> **Triage Mode — Paste your review findings below.**
+> **Triage Mode — Paste your findings below.**
 >
 > Accepted formats: review transcripts, meeting notes, audit outputs, party-mode outputs, code review findings, retrospective notes, or any text containing actionable observations.
 >
@@ -65,7 +65,7 @@ Display:
 
 - Accept the user's complete text input
 - Preserve it exactly as provided — do not modify, reformat, or summarize
-- Process the **entire** input regardless of length (FR46)
+- Process the **entire** input regardless of length
 - Confirm receipt: "Received [N] lines of input. Ready to extract findings."
 
 ### 4. Present MENU OPTIONS
