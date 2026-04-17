@@ -144,8 +144,31 @@ jobs:
       - name: Check index.js runs
         run: node index.js
 
+  python-test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install Python test dependencies
+        run: pip install pytest pyyaml
+
+      - name: Run Python tests (BMB + Core)
+        run: |
+          python -m pytest \
+            _bmad/bmb/skills/bmad-builder-setup/scripts/tests/test-merge-config.py \
+            _bmad/bmb/skills/bmad-builder-setup/scripts/tests/test-merge-help-csv.py \
+            _bmad/bmb/skills/bmad-builder-setup/scripts/tests/test-cleanup-legacy.py \
+            _bmad/core/bmad-init/scripts/tests/test_bmad_init.py \
+            _bmad/core/bmad-distillator/scripts/tests/test_analyze_sources.py \
+            -v
+
   publish:
-    needs: [lint, test, coverage, security, package-check]
+    needs: [lint, test, python-test, coverage, security, package-check]
     runs-on: ubuntu-latest
     if: startsWith(github.ref, 'refs/tags/v')
     permissions:
