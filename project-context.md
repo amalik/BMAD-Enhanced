@@ -102,3 +102,21 @@ Rules and conventions that BMAD dev agents and contributors must follow when wor
 - If you're manually re-running a review, check whether the stopping criteria are met before proceeding.
 - If Round 2 produces only LOW/MEDIUM findings (no HIGH), stop — do not trigger Round 3.
 - Remaining findings after the final allowed round go to the initiatives backlog as deferred items, not into another review cycle.
+
+---
+
+## Rule: capability-form-factor-evaluation
+
+**Statement.** When a new capability enters the qualifying gate (§1.2 of the initiative lifecycle), and the question is "what form should this take?" — run it through the Capability Evaluation Framework decision tree before assigning a lane or committing to a form factor.
+
+**Reference document.** `_bmad-output/planning-artifacts/convoke-note-capability-evaluation-framework.md` — contains the 3-tier model (Skill → Agent → Team), decision tree, promotion/demotion triggers, and overlap analysis template.
+
+**Input feed.** Friction logs from consulting engagements (`_bmad-output/planning-artifacts/convoke-note-friction-log-template.md`). No capability gets built without friction log evidence — vision is not demand.
+
+**Why.** Convoke's ecosystem grows through Enhance skills (Tier 1), new agents in existing teams (Tier 2), and new teams (Tier 3). Building at the wrong tier wastes effort (over-engineering) or creates shallow tools (under-engineering). The framework prevents both by requiring evidence-based tier selection and providing bidirectional promotion/demotion triggers.
+
+**How to apply.**
+- At the qualifying gate: if the intake describes a new capability (not a bug, not a point fix), check whether the form factor question is relevant. If yes, run the decision tree from the framework doc.
+- For Tier 2+ (Agent or Team): run the overlap analysis template against existing scopes before building.
+- After 3 engagements using a shipped capability: check the promotion/demotion triggers table.
+- Quarterly: review accumulated friction log entries, cluster by scope, and run clusters with 3+ entries through the framework.
