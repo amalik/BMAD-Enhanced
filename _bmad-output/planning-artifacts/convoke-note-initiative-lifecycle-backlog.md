@@ -245,7 +245,6 @@ Items qualified as not needing the full initiative pipeline. Sorted by RICE scor
 | ID | Description | R | I | C | E | Score | Portfolio | Status | Dependencies |
 |----|-------------|---|---|---|---|-------|-----------|--------|--------------|
 | U7 | Changelog surface during `convoke-update` | 8 | 2 | 80% | 3 | 4.3 | convoke | Backlog | — |
-| I49 | Process uniformity — encoded constraints file (project-context.md) | 8 | 2 | 80% | 3 | 4.3 | convoke | Backlog | — |
 | U8 | Respect user agent exclusions on update | 6 | 2 | 80% | 3 | 3.2 | convoke | Backlog | — |
 | A5 | Research stories must use mechanical search protocol | 7 | 1 | 80% | 2 | 2.8 | convoke | Backlog | — |
 | T3 | End-to-end update test on real project | 5 | 2 | 80% | 3 | 2.7 | convoke | Backlog | — |
@@ -363,6 +362,7 @@ Items removed from the active backlog. Nothing disappears without a receipt.
 
 | ID | Description | Shipped | Score | Portfolio |
 |----|-------------|---------|-------|-----------|
+| I49 | Process uniformity — 4 rules added to project-context.md: derive-counts-from-source, shared-test-constants, catch-all-phase-review, spec-verify-referenced-files. | 2026-04-18 | 4.3 | convoke |
 | P10 | Capability Evaluation Framework operationalized — moved from archive to planning-artifacts, referenced from lifecycle §1.2 + project-context.md rule. | 2026-04-18 | 5.6 | helm |
 | P11 | Friction log template operationalized — moved from archive to planning-artifacts, linked as CEF input feed. | 2026-04-18 | 5.6 | helm |
 | A7 | Review convergence rule — R1 mandatory, R2 if HIGH, R3 if structural, no R4. Encoded in project-context.md + step-04-present.md (both source and installed). | 2026-04-18 | 6.4 | convoke |
@@ -567,6 +567,7 @@ Full descriptions for items in §2.4 whose table row is a one-liner.
 
 | Date | Change |
 |------|--------|
+| 2026-04-18 | **I49 shipped.** 4 rules added to `project-context.md`: `derive-counts-from-source` (no hardcoded counts — compute from source data), `shared-test-constants` (import from shared files like `test-constants.js`, don't duplicate), `catch-all-phase-review` (review catch-all matcher output for false positives before shipping), `spec-verify-referenced-files` (existence-check all file paths in specs before dev starts). Path-safety was already covered by existing rule. Total project-context.md rules: 13. Origin: SP Epic 5 retro A1. |
 | 2026-04-18 | **P10+P11 shipped.** Capability Evaluation Framework and Friction Log Template moved from `_archive/exploratory/` to `planning-artifacts/` with governance naming. Framework referenced from lifecycle §1.2 qualifying gate (capability-type intakes must run decision tree). Friction log linked as required input feed. `project-context.md` rule `capability-form-factor-evaluation` added. `lifecycle-process-spec.md` template updated with same gate rule. Archive INDEX.md entries annotated with move dates. |
 | 2026-04-18 | **A7 shipped.** Review convergence rule encoded in two locations: `project-context.md` (Rule: `code-review-convergence` — R1 mandatory, R2 only if HIGH, R3 only if structural changes, no R4, remainder deferred to backlog) and `bmad-code-review` step-04-present.md section 7 (enforcement logic: round counting via `### Review Findings` subsections, stopping criteria gate before offering re-run option). Both source (`_bmad/bmm/4-implementation/`) and installed (`.claude/skills/`) copies updated. Origin: ag-epic-7 retro Action Item #3. |
 | 2026-04-17 | **Shipped items moved to §2.5.** T6, I43, T7, T8 moved from §2.3 Fast Lane to §2.5 Completed per format spec. |
