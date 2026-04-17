@@ -195,13 +195,13 @@ _Initial archive: 2026-03-22, per ADR: adr-repo-organization-conventions-2026-03
 | architectural-decision-framework.md | 2026-03-22 | Initial repo organization |
 | architectural-decision-record.md | 2026-03-22 | Initial repo organization |
 | brainstorming-session-2026-02-05.md | 2026-03-22 | Initial repo organization |
-| capability-evaluation-framework.md | 2026-03-22 | Initial repo organization |
+| capability-evaluation-framework.md | 2026-03-22 | Initial repo organization. **Moved 2026-04-18** to `planning-artifacts/convoke-note-capability-evaluation-framework.md` (P10 operationalization) |
 | distribution-strategy.md | 2026-03-22 | Initial repo organization |
 | epics-top5.md | 2026-03-22 | Initial repo organization |
 | epics.md | 2026-03-22 | Initial repo organization |
 | executive-summary-presentation.md | 2026-03-22 | Initial repo organization |
 | framework-deep-dive-analysis.md | 2026-03-22 | Initial repo organization |
-| friction-log-template.md | 2026-03-22 | Initial repo organization |
+| friction-log-template.md | 2026-03-22 | Initial repo organization. **Moved 2026-04-18** to `planning-artifacts/convoke-note-friction-log-template.md` (P11 operationalization) |
 | greenfield-architecture-analysis.md | 2026-03-22 | Initial repo organization |
 | integration-roadmap.md | 2026-03-22 | Initial repo organization |
 | llm-agnostic-architecture.md | 2026-03-22 | Initial repo organization |
