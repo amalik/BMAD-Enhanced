@@ -120,3 +120,57 @@ Rules and conventions that BMAD dev agents and contributors must follow when wor
 - For Tier 2+ (Agent or Team): run the overlap analysis template against existing scopes before building.
 - After 3 engagements using a shipped capability: check the promotion/demotion triggers table.
 - Quarterly: review accumulated friction log entries, cluster by scope, and run clusters with 3+ entries through the framework.
+
+---
+
+## Rule: derive-counts-from-source
+
+**Statement.** Tests and deliverables that assert or report counts (number of agents, skills, findings, taxonomy entries, etc.) must derive those counts from the authoritative source data at runtime — never hardcode them.
+
+**Why.** Hardcoded counts rot silently. Adding an agent, a taxonomy entry, or a skill changes the real count but not the assertion. The test passes when it should fail. This class of bug has bitten Convoke across multiple initiatives: agent counts in validator tests, taxonomy entry counts in migration tests, skill counts in portability tests — all required fixing after the underlying data grew. SP Epic 5 retro A1.
+
+**How to apply.**
+- In tests: compute expected counts from the source (registry arrays, manifest files, config entries) — e.g., `AGENTS.length + GYRE_AGENTS.length` instead of `12`.
+- In deliverables (audit tables, coverage reports): generate counts programmatically from the data, not by hand-counting table rows.
+- **Reviewing a PR.** If a diff adds a magic number that represents a count of something that can change, block and cite this rule.
+
+---
+
+## Rule: shared-test-constants
+
+**Statement.** Test suites that validate the same invariants (forbidden strings, expected patterns, canonical IDs) must import from shared constant files — not duplicate the lists inline.
+
+**Reference.** `scripts/portability/test-constants.js` is the established pattern: `FORBIDDEN_STRINGS` is the single source of truth for the portability suite.
+
+**Why.** Duplicated constant lists drift. When a new forbidden string is added in one test file but not the others, coverage has a silent hole. Carried through SP Epic 2–5 retros as the #1 test-reliability debt item until `test-constants.js` was extracted.
+
+**How to apply.**
+- Before adding a constant list to a test file, check if a shared constants file already exists for that domain.
+- If it does, import from it.
+- If it doesn't and the list will be used by 2+ test files, create one following the `test-constants.js` pattern.
+
+---
+
+## Rule: catch-all-phase-review
+
+**Statement.** Any processing phase that uses a catch-all or fallback matcher (e.g., regex-based text substitution that operates on "everything not already handled") must have its output reviewed for false positives before the deliverable is accepted.
+
+**Why.** The portability export engine's Phase 6 catch-all produced 400+ warnings and false positives on patterns like `[your context]` (valid markdown links misidentified as framework references). The catch-all is necessary for coverage but inherently noisy. SP Epic 5 retro A2.
+
+**How to apply.**
+- When writing a catch-all phase: add a `--dry-run` or `--verbose` mode that shows what would be matched before applying.
+- When reviewing output from a catch-all: spot-check at least 10 matches for false positives. If false-positive rate exceeds ~10%, tighten the matcher before shipping.
+- In tests: include at least one test fixture containing known false-positive patterns to verify the catch-all doesn't match them.
+
+---
+
+## Rule: spec-verify-referenced-files
+
+**Statement.** Story specs that reference specific files (by path or by name) must verify those files exist before the story is marked ready-for-dev. The dev agent must re-verify at implementation time.
+
+**Why.** Specs written against a moving codebase accumulate stale file references. The dev agent follows the spec, can't find the file, improvises, and produces work that doesn't match the spec's intent. Story 7.3 went through 3 review rounds partly because non-mechanical enumeration missed files that had moved. AG Epic 7 retro A1.
+
+**How to apply.**
+- When writing a spec: for every file path mentioned, run a quick existence check (`ls` or glob). If the file doesn't exist, note the correct path or mark it as "to be created."
+- When picking up a story: before coding, grep/glob for every file referenced in the spec. Flag any that are missing — don't silently skip them.
+- **Reviewing a spec.** If a spec references a file path, verify it. If it references a pattern ("all files matching X"), run the glob and confirm the count matches the spec's claim.
