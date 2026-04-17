@@ -1,11 +1,10 @@
 #!/usr/bin/env python3
 # /// script
 # requires-python = ">=3.9"
-# dependencies = ["pyyaml"]
+# dependencies = ["pyyaml>=6.0"]
 # ///
 """Unit tests for merge-config.py."""
 
-import json
 import os
 import sys
 import tempfile
@@ -15,9 +14,9 @@ from pathlib import Path
 # Add parent directory to path so we can import the module
 sys.path.insert(0, str(Path(__file__).parent.parent))
 
-import yaml
+from importlib.util import module_from_spec, spec_from_file_location
 
-from importlib.util import spec_from_file_location, module_from_spec
+import yaml
 
 # Import merge_config module
 _spec = spec_from_file_location(
@@ -363,7 +362,7 @@ class TestEndToEnd(unittest.TestCase):
             merge_config_mod.write_config(result, config_path)
 
             # Read back
-            with open(config_path, "r") as f:
+            with open(config_path) as f:
                 written = yaml.safe_load(f)
 
             # User-only keys not written to config.yaml
@@ -396,7 +395,7 @@ class TestEndToEnd(unittest.TestCase):
             merge_config_mod.write_config(result2, config_path)
 
             # Verify
-            with open(config_path, "r") as f:
+            with open(config_path) as f:
                 final = yaml.safe_load(f)
 
             self.assertEqual(final["output_folder"], "/out")
@@ -629,7 +628,7 @@ class TestLegacyEndToEnd(unittest.TestCase):
             self.assertFalse(os.path.exists(os.path.join(mod_dir, "config.yaml")))
 
             # Verify final config — user-only keys NOT in config.yaml
-            with open(config_path, "r") as f:
+            with open(config_path) as f:
                 final = yaml.safe_load(f)
             self.assertNotIn("user_name", final)
             self.assertNotIn("communication_language", final)
