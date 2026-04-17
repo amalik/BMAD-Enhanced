@@ -1,12 +1,11 @@
 # /// script
-# requires-python = ">=3.10"
-# dependencies = ["pyyaml"]
+# requires-python = ">=3.9"
+# dependencies = ["pyyaml>=6.0"]
 # ///
 
 #!/usr/bin/env python3
 """Unit tests for bmad_init.py"""
 
-import json
 import os
 import shutil
 import sys
@@ -17,16 +16,16 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).parent.parent))
 
 from bmad_init import (
-    find_project_root,
-    parse_var_specs,
-    resolve_project_root_placeholder,
-    expand_template,
     apply_result_template,
-    load_module_yaml,
+    expand_template,
     find_core_module_yaml,
+    find_project_root,
     find_target_module_yaml,
     load_config_file,
     load_module_config,
+    load_module_yaml,
+    parse_var_specs,
+    resolve_project_root_placeholder,
 )
 
 
