@@ -243,7 +243,6 @@ Items qualified as not needing the full initiative pipeline. Sorted by RICE scor
 
 | ID | Description | R | I | C | E | Score | Portfolio | Status | Dependencies |
 |----|-------------|---|---|---|---|-------|-----------|--------|--------------|
-| A7 | Review convergence rule (R1 mandatory, R2 if HIGH, R3 if structural) | 8 | 1 | 80% | 1 | 6.4 | convoke | Backlog | — |
 | P10 | Operationalize Capability Evaluation Framework (doc complete, needs integration) | 7 | 2 | 80% | 2 | 5.6 | helm | Backlog | — |
 | P11 | Distribute friction log template to consulting teams | 8 | 1 | 70% | 1 | 5.6 | helm | Backlog | — |
 | U7 | Changelog surface during `convoke-update` | 8 | 2 | 80% | 3 | 4.3 | convoke | Backlog | — |
@@ -365,6 +364,7 @@ Items removed from the active backlog. Nothing disappears without a receipt.
 
 | ID | Description | Shipped | Score | Portfolio |
 |----|-------------|---------|-------|-----------|
+| A7 | Review convergence rule — R1 mandatory, R2 if HIGH, R3 if structural, no R4. Encoded in project-context.md + step-04-present.md (both source and installed). | 2026-04-18 | 6.4 | convoke |
 | T6 | Python test execution in CI — `python-test` job, 5 files, 116+ tests, publish gate updated. Resolves Gyre DL-001 blocker. | 2026-04-17 | 14.4 | convoke |
 | I43 | Doctor validates all 12 bme agent skill wrappers — `checkAgentSkillWrappers()`. Closes F6+F20+F21 GAPs. | 2026-04-17 | 6.4 | convoke |
 | T7 | Python linting in CI — ruff added to `python-test` job. `ruff.toml` config, 40 auto-fixes, 3 manual fixes. | 2026-04-17 | 2.4 | convoke |
@@ -566,6 +566,7 @@ Full descriptions for items in §2.4 whose table row is a one-liner.
 
 | Date | Change |
 |------|--------|
+| 2026-04-18 | **A7 shipped.** Review convergence rule encoded in two locations: `project-context.md` (Rule: `code-review-convergence` — R1 mandatory, R2 only if HIGH, R3 only if structural changes, no R4, remainder deferred to backlog) and `bmad-code-review` step-04-present.md section 7 (enforcement logic: round counting via `### Review Findings` subsections, stopping criteria gate before offering re-run option). Both source (`_bmad/bmm/4-implementation/`) and installed (`.claude/skills/`) copies updated. Origin: ag-epic-7 retro Action Item #3. |
 | 2026-04-17 | **Shipped items moved to §2.5.** T6, I43, T7, T8 moved from §2.3 Fast Lane to §2.5 Completed per format spec. |
 | 2026-04-15 | **WS1 spike: `bmad-enhance-initiatives-backlog` skill reworked to v2.0.0.** 14 files rewritten (workflow.md, 11 step files, SKILL.md) + 2 new templates (backlog-format-spec.md rewrite, lifecycle-process-spec.md new). Three modes updated: Triage now logs to Intakes then runs qualifying gate (lane + portfolio + RICE); Review is lane-aware with scope selection; Create emits Part 1 verbatim from template. Step renames: step-t-03-score → step-t-03-qualify, step-c-03-score → step-c-03-qualify, step-c-04-prioritize → step-c-04-generate. |
 | 2026-04-17 | **I43 shipped.** `checkAgentSkillWrappers()` added to `convoke-doctor.js`. Validates all 12 bme agent skill wrappers (7 Vortex + 4 Gyre + 1 team-factory) at `.claude/skills/bmad-agent-bme-{id}/SKILL.md`. Imports AGENTS/GYRE_AGENTS/EXTRA_BME_AGENTS from agent-registry.js. Mirrors I31 pattern. Verified: passes with all 12 present, fails with clear diagnostic when any missing. All 1,123 tests pass. Closes F6+F20+F21 GAPs from ag-7-3 contract audit. |
