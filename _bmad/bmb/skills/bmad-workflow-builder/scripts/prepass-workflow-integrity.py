@@ -26,7 +26,6 @@ import sys
 from datetime import datetime, timezone
 from pathlib import Path
 
-
 # Template artifacts that should NOT appear in finalized skills
 TEMPLATE_ARTIFACTS = [
     r'\{if-complex-workflow\}', r'\{/if-complex-workflow\}',
