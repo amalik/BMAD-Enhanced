@@ -154,8 +154,11 @@ jobs:
         with:
           python-version: '3.12'
 
-      - name: Install Python test dependencies
-        run: pip install pytest pyyaml
+      - name: Install Python dependencies
+        run: pip install pytest pyyaml ruff
+
+      - name: Lint Python files
+        run: ruff check _bmad/ --config ruff.toml
 
       - name: Run Python tests (BMB + Core)
         run: |
