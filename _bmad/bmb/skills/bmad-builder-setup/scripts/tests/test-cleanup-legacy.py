@@ -5,7 +5,6 @@
 # ///
 """Unit tests for cleanup-legacy.py."""
 
-import json
 import os
 import sys
 import tempfile
@@ -15,7 +14,7 @@ from pathlib import Path
 # Add parent directory to path so we can import the module
 sys.path.insert(0, str(Path(__file__).parent.parent))
 
-from importlib.util import spec_from_file_location, module_from_spec
+from importlib.util import module_from_spec, spec_from_file_location
 
 # Import cleanup_legacy module
 _spec = spec_from_file_location(
