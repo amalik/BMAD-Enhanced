@@ -285,3 +285,161 @@ describe('writeConfig', () => {
     assert.deepEqual(parsed.agents, ['emma']);
   });
 });
+
+// ── U8: excluded_agents ────────────────────────────────────────────────────
+
+describe('readExcludedAgents', () => {
+  let tmpDir;
+
+  before(async () => {
+    tmpDir = await fs.mkdtemp(path.join(os.tmpdir(), 'convoke-excluded-'));
+  });
+
+  after(async () => {
+    await fs.remove(tmpDir);
+  });
+
+  it('returns [] when file does not exist', () => {
+    const result = configMerger.readExcludedAgents(path.join(tmpDir, 'missing.yaml'));
+    assert.deepEqual(result, []);
+  });
+
+  it('returns [] when field is absent', async () => {
+    const configPath = path.join(tmpDir, 'no-field.yaml');
+    await fs.writeFile(configPath, yaml.dump({ agents: ['a', 'b'] }));
+    assert.deepEqual(configMerger.readExcludedAgents(configPath), []);
+  });
+
+  it('returns [] when field is not an array', async () => {
+    const configPath = path.join(tmpDir, 'not-array.yaml');
+    await fs.writeFile(configPath, yaml.dump({ excluded_agents: 'nope' }));
+    assert.deepEqual(configMerger.readExcludedAgents(configPath), []);
+  });
+
+  it('returns [] when YAML is malformed', async () => {
+    const configPath = path.join(tmpDir, 'malformed.yaml');
+    await fs.writeFile(configPath, '::: not yaml :::');
+    assert.deepEqual(configMerger.readExcludedAgents(configPath), []);
+  });
+
+  it('returns the list when field is a string array', async () => {
+    const configPath = path.join(tmpDir, 'valid.yaml');
+    await fs.writeFile(
+      configPath,
+      yaml.dump({ excluded_agents: ['production-intelligence-specialist', 'learning-decision-expert'] })
+    );
+    assert.deepEqual(configMerger.readExcludedAgents(configPath), [
+      'production-intelligence-specialist',
+      'learning-decision-expert',
+    ]);
+  });
+
+  it('filters non-string entries silently', async () => {
+    const configPath = path.join(tmpDir, 'mixed.yaml');
+    await fs.writeFile(
+      configPath,
+      yaml.dump({ excluded_agents: ['valid-id', null, 123, 'another-valid'] })
+    );
+    assert.deepEqual(configMerger.readExcludedAgents(configPath), ['valid-id', 'another-valid']);
+  });
+});
+
+describe('mergeConfig — excluded_agents (U8)', () => {
+  let tmpDir;
+  let configPath;
+
+  before(async () => {
+    tmpDir = await fs.mkdtemp(path.join(os.tmpdir(), 'convoke-merge-excl-'));
+    configPath = path.join(tmpDir, 'config.yaml');
+  });
+
+  after(async () => {
+    await fs.remove(tmpDir);
+  });
+
+  it('filters excluded agents from merged.agents', async () => {
+    await fs.writeFile(configPath, yaml.dump({
+      version: '3.1.0',
+      agents: ['emma', 'wade', 'noah'],
+      excluded_agents: ['noah'],
+    }));
+
+    const merged = await configMerger.mergeConfig(configPath, '3.2.0', {
+      agents: ['emma', 'wade', 'noah'],
+    });
+
+    assert.ok(!merged.agents.includes('noah'), 'excluded agent should be filtered out');
+    assert.ok(merged.agents.includes('emma'));
+    assert.ok(merged.agents.includes('wade'));
+  });
+
+  it('preserves excluded_agents across the merge', async () => {
+    await fs.writeFile(configPath, yaml.dump({
+      version: '3.1.0',
+      agents: ['emma'],
+      excluded_agents: ['noah', 'max'],
+    }));
+
+    const merged = await configMerger.mergeConfig(configPath, '3.2.0', {
+      agents: ['emma', 'noah', 'max'],
+    });
+
+    assert.deepEqual(merged.excluded_agents, ['noah', 'max']);
+  });
+
+  it('re-includes an agent when removed from excluded_agents on next merge', async () => {
+    // First merge: noah excluded
+    await fs.writeFile(configPath, yaml.dump({
+      version: '3.1.0',
+      agents: ['emma', 'wade'],
+      excluded_agents: ['noah'],
+    }));
+    const firstMerge = await configMerger.mergeConfig(configPath, '3.2.0', {
+      agents: ['emma', 'wade', 'noah'],
+    });
+    assert.ok(!firstMerge.agents.includes('noah'));
+
+    // Operator removes noah from excluded_agents — simulate by writing a config without it
+    await fs.writeFile(configPath, yaml.dump({
+      version: '3.2.0',
+      agents: firstMerge.agents,
+      excluded_agents: [],
+    }));
+    const secondMerge = await configMerger.mergeConfig(configPath, '3.3.0', {
+      agents: ['emma', 'wade', 'noah'],
+    });
+
+    assert.ok(secondMerge.agents.includes('noah'), 'agent should be restored when no longer excluded');
+    assert.deepEqual(secondMerge.excluded_agents, []);
+  });
+
+  it('defaults excluded_agents to [] when field is missing from current config', async () => {
+    await fs.writeFile(configPath, yaml.dump({
+      version: '3.1.0',
+      agents: ['contextualization-expert'],
+      // no excluded_agents field
+    }));
+
+    const merged = await configMerger.mergeConfig(configPath, '3.2.0', {
+      agents: ['contextualization-expert', 'discovery-empathy-expert'],
+    });
+
+    assert.deepEqual(merged.excluded_agents, []);
+    assert.deepEqual(merged.agents, ['contextualization-expert', 'discovery-empathy-expert']);
+  });
+
+  it('ignores non-string entries in excluded_agents during filter', async () => {
+    await fs.writeFile(configPath, yaml.dump({
+      version: '3.1.0',
+      agents: ['emma'],
+      excluded_agents: ['noah', null, 123],
+    }));
+
+    const merged = await configMerger.mergeConfig(configPath, '3.2.0', {
+      agents: ['emma', 'wade', 'noah'],
+    });
+
+    assert.ok(!merged.agents.includes('noah'));
+    assert.deepEqual(merged.excluded_agents, ['noah']); // sanitized
+  });
+});
