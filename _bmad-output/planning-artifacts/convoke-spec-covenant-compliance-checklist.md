@@ -42,7 +42,7 @@ schema_version: 1
 
 ### Allowed values
 
-Fill each Compliance Status cell with one of **five** enumerated values (strict; no free-form variants accepted):
+Fill each Compliance Status cell with one of **six** enumerated values (strict; no free-form variants accepted):
 
 | Value | Meaning |
 |-------|---------|
@@ -50,6 +50,7 @@ Fill each Compliance Status cell with one of **five** enumerated values (strict;
 | `FAIL` | Evidence from the skill's interaction surface violates the rule — even once. |
 | `N/A — vacuous (<reason>)` | The rule's question has no applicable surface in this skill by design. Example: `N/A — vacuous (skill is pure automation, no operator prompts)`. Vacuous ≠ PASS by default — only grant `N/A — vacuous` if the surface genuinely doesn't exist; otherwise answer PASS or FAIL. |
 | `N/A — out-of-scope (<reason>)` | The entire skill is declared out-of-scope for this audit (e.g., headless automation, non-operator-facing build tool). Typically applied at skill level once; all 7 rules then get the same `out-of-scope` answer. |
+| `N/A — external-declared (<tool>)` | **Applicable to OC-R6 only.** The skill's Layer 3 surface is stderr from an externally-owned CLI (git, npm, docker, etc.) whose error messages the skill does not rewrite. Worst-case aggregation excludes Layer 3 for this cell. Preconditions (ALL must hold, recorded in evidence notes): (a) the external tool is named in the `<tool>` slot; (b) Layer 3 output is enumerated in the OC-R0 evidence note; (c) Layers 1 and 2 would each pass OC-R6 on their own merits (i.e., the skill's own error-emitting paths all include next actions). If L1 or L2 would FAIL, the cell is FAIL regardless of declaration. Example: `N/A — external-declared (git)`. |
 | `DEPRECATED (<covenant-revision>)` | The rule was removed from the Covenant in the cited revision. The row is retained for rule-ID stability. Audits after the revision treat the cell as a non-finding (neither PASS nor FAIL). Example: `DEPRECATED (2026-07-01)`. |
 
 ### Parser grammar (for Story 2.2 Loom gate)
@@ -57,11 +58,11 @@ Fill each Compliance Status cell with one of **five** enumerated values (strict;
 The Loom validator parses each Compliance Status cell against this regex:
 
 ```
-^(PASS|FAIL|DEPRECATED \(.+\)|N/A — (vacuous|out-of-scope) \(.+\))$
+^(PASS|FAIL|DEPRECATED \(.+\)|N/A — (vacuous|out-of-scope|external-declared) \(.+\))$
 ```
 
 Normalization rules:
-- Em-dash (`—`, U+2014) is canonical **as the separator between a leading-token (`N/A` or equivalent) and the qualifier**. Parsers MUST accept `--` (double hyphen-minus) and `-` (single hyphen) as equivalents in that separator position only, coercing to em-dash before regex validation. Hyphens WITHIN the reason text (inside the parentheses) are NOT coerced — e.g., `N/A — out-of-scope (build-tool wrapper)` preserves the hyphens in "build-tool". Implementations anchor the coercion on the pattern `^(N/A) (—|--|-) (vacuous|out-of-scope) \(`.
+- Em-dash (`—`, U+2014) is canonical **as the separator between a leading-token (`N/A` or equivalent) and the qualifier**. Parsers MUST accept `--` (double hyphen-minus) and `-` (single hyphen) as equivalents in that separator position only, coercing to em-dash before regex validation. Hyphens WITHIN the reason text (inside the parentheses) are NOT coerced — e.g., `N/A — out-of-scope (build-tool wrapper)` preserves the hyphens in "build-tool". Implementations anchor the coercion on the pattern `^(N/A) (—|--|-) (vacuous|out-of-scope|external-declared) \(`.
 - Pipe characters (`|`) in cell content MUST be escaped as `&#124;` to preserve table structure.
 - Blank cells = FAIL (incomplete audit); parsers MUST emit a warning and treat as FAIL.
 - Leading/trailing whitespace is stripped before validation.
@@ -69,7 +70,7 @@ Normalization rules:
 
 ### No partial credit
 
-Strict binary + two N/A variants. No severity, no weighting, no "borderline". Nuance belongs in evidence notes alongside the Checklist, not in the Compliance Status cell.
+Strict binary + three N/A variants (one of which — `external-declared` — is OC-R6-only). No severity, no weighting, no "borderline". Nuance belongs in evidence notes alongside the Checklist, not in the Compliance Status cell.
 
 ---
 
@@ -138,6 +139,12 @@ The "operator-visible interaction surface" is the union of **three layers**. All
 
 The **skill-level verdict** for each rule is the **worst case across all 3 layers**. Example: if `workflow.md` is clean but `step-02-resolve.md` violates OC-R5, the cell is FAIL. Per-layer verdicts may be recorded in evidence notes for granularity; the Compliance Status cell reflects worst-case.
 
+**OC-R6 external-declared carve-out:** when a skill wraps an externally-owned CLI (git, npm, docker, ...) whose stderr the skill does not rewrite, Layer 3 error text is structurally outside the skill's authorship — the skill cannot add next-action clauses to errors it doesn't emit. In this specific case, the auditor MAY record the OC-R6 cell as `N/A — external-declared (<tool>)`, and worst-case aggregation for that cell excludes Layer 3. The carve-out is narrow:
+
+1. **OC-R6 only.** No other rule uses this value. (OC-R1/R2/R4/R5/R7 are about the skill's own prompts and decisions, not inherited error text; OC-R3 rationale is also skill-authored.)
+2. **Evidence note MUST record**: (a) the external tool name matching the `<tool>` slot, (b) Layer 3 enumeration in the OC-R0 evidence note, (c) per-layer verdicts showing L1 PASS and L2 PASS on OC-R6 (the skill's own error paths all include next actions). If L1 or L2 would FAIL, the cell is FAIL — the declaration does not mask skill-authored OC-R6 violations.
+3. **The skill is still encouraged to annotate common external errors.** A wrapper that catches known git/npm errors and emits next-action hints improves operator experience beyond the carve-out's minimum bar, and should record this in evidence notes for future audit calibration.
+
 ### Pre-audit enumeration (OC-R0 precondition)
 
 **Before answering any rule**, the auditor MUST:
@@ -192,5 +199,6 @@ Every revision records the change type so downstream consumers can detect rubric
 | 2026-04-18 | note | Round 3 DEFERRED findings (per no-R4 convergence rule): H5 (OC-R7 concept counting ambiguity persists even with inline glossary — methodology-level, flagged in audit §9.3), H6 (OC-R7 doc mapping double-counts in Paige's 4-part format → Covenant self-compliance gate may fail by construction; Story 1.4 pre-requisite), M1 (workflow-inherited concepts uni-directional), M2 (conditional-surface skills don't fit 2-N/A taxonomy), M4 (Layer 3 uncontrollable stderr locks skill to permanent FAIL on OC-R6). Triaged via `bmad-enhance-initiatives-backlog`. | oc-1-3 Round 3 |
 | 2026-04-18 | rule-content-edit | **A12 shipped** — OC-R7 doc-mapping fix. Rule now uses cumulative vocabulary (concepts introduced in earlier Covenant sections are pre-existing for later sections) and clarifies that good-example and anti-pattern illustrations don't count as novel if they illustrate an already-introduced concept. *Narrows* the OC-R7 doc-mapping failure surface (closes 4-part double-counting). Story 1.4 Section 1 passability depends additionally on the preamble authoring contract — see "Covenant preamble authoring contract" note below the doc-mapping table. | A12 (backlog) |
 | 2026-04-18 | rule-content-edit | **A12 follow-up patch** — Round 1 code review of A12 surfaced 3 HIGH findings. Applied inline: (P1) softened Revisions A12-shipped claim to "narrows surface" rather than "unblocks gate"; (P2) added Covenant preamble authoring contract requiring preamble to pre-introduce 9 foundational terms so Section 1 can pass; (P3) closed illustration loophole — new domain nouns introduced INSIDE illustrations still count toward the budget. | A12 follow-up (Round 1 A12 review) |
+| 2026-04-18 | rule-content-edit | **A15 shipped** — OC-R6 external-declared escape hatch. Added sixth Compliance Status value `N/A — external-declared (<tool>)`, applicable to OC-R6 only, for skills wrapping externally-owned CLIs (git, npm, docker, ...) whose stderr the skill cannot rewrite. Worst-case aggregation §gains an OC-R6 carve-out: Layer 3 excluded from aggregation when the declaration is used, with mandatory evidence-note preconditions (tool named, OC-R0 enumeration, L1+L2 independently PASS OC-R6). If L1 or L2 would FAIL, the cell is FAIL regardless — the carve-out does not mask skill-authored violations. Extends regex parser grammar and em-dash normalization anchor pattern. "No partial credit" note updated to reference three N/A variants. | A15 (backlog) |
 
 **Version discipline:** Schema_version in frontmatter is tied to structural breaking changes only (e.g., new required column added to the rules table). Content edits to existing rules go in Revisions without bumping schema_version.
