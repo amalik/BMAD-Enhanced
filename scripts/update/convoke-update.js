@@ -6,6 +6,7 @@ const versionDetector = require('./lib/version-detector');
 const migrationRunner = require('./lib/migration-runner');
 const registry = require('./migrations/registry');
 const { findProjectRoot } = require('./lib/utils');
+const { readChangelogEntries } = require('./lib/changelog-reader');
 
 /**
  * Convoke Update CLI
@@ -158,6 +159,8 @@ async function main() {
     console.log(chalk.cyan('No migration deltas needed — refreshing installation files.'));
     console.log('');
 
+    printChangelog(assessment.currentVersion, assessment.targetVersion);
+
     if (dryRun) {
       console.log(chalk.yellow.bold('DRY RUN — no changes will be made'));
       console.log('');
@@ -220,6 +223,8 @@ async function main() {
     console.log('');
   }
 
+  printChangelog(assessment.currentVersion, assessment.targetVersion);
+
   // Dry run - preview only
   if (dryRun) {
     console.log(chalk.yellow.bold('DRY RUN - Previewing changes'));
@@ -280,6 +285,26 @@ async function main() {
 }
 
 /**
+ * Render CHANGELOG sections for versions in (fromVersion, toVersion] to stdout.
+ * Silently skips if there are no matching entries — this is a decorative surface.
+ */
+function printChangelog(fromVersion, toVersion) {
+  const entries = readChangelogEntries(fromVersion, toVersion);
+  if (entries.length === 0) return;
+
+  console.log(chalk.cyan.bold("What's New:"));
+  console.log('');
+  for (const entry of entries) {
+    const header = entry.date
+      ? `${entry.version} — ${entry.date}`
+      : entry.version;
+    console.log(chalk.bold.green(header));
+    console.log(entry.body);
+    console.log('');
+  }
+}
+
+/**
  * Confirm action with user
  * @param {string} message - Confirmation message
  * @returns {Promise<boolean>} True if user confirms
@@ -298,8 +323,8 @@ async function confirm(message) {
   });
 }
 
-// Export assessUpdate for testing
-module.exports = { assessUpdate };
+// Export for testing
+module.exports = { assessUpdate, printChangelog };
 
 // Run main when executed directly
 if (require.main === module) {
