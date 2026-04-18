@@ -1277,6 +1277,20 @@ describe('generateGovernanceADR', () => {
     const md = generateGovernanceADR('2026-04-06', {}, taxonomy);
     assert.ok(md.includes('Files renamed:** 0'));
   });
+
+  it('throws a clear TypeError when taxonomy arg is missing or malformed', () => {
+    assert.throws(() => generateGovernanceADR('2026-04-06', {}), /taxonomy arg is required/);
+    assert.throws(() => generateGovernanceADR('2026-04-06', {}, null), /taxonomy arg is required/);
+    assert.throws(() => generateGovernanceADR('2026-04-06', {}, {}), /taxonomy arg is required/);
+    assert.throws(
+      () => generateGovernanceADR('2026-04-06', {}, { initiatives: { platform: 'not-an-array' }, artifact_types: [] }),
+      /taxonomy arg is required/
+    );
+    assert.throws(
+      () => generateGovernanceADR('2026-04-06', {}, { initiatives: { platform: [] }, artifact_types: 'not-an-array' }),
+      /taxonomy arg is required/
+    );
+  });
 });
 
 // --- supersedePreviousADR tests ---
