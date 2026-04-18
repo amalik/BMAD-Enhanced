@@ -5,6 +5,7 @@ stepsCompleted:
   - step-03-starter
   - step-04-decisions
   - step-05-patterns
+  - step-06-structure
 inputDocuments:
   - _bmad-output/planning-artifacts/convoke-brief-initiative-lifecycle-engine.md
   - _bmad-output/planning-artifacts/convoke-brief-initiative-lifecycle-engine-distillate.md
