@@ -5,6 +5,17 @@ real issues, but pre-existing or out of scope for the story under review.
 
 ---
 
+## Deferred from: code review of BUG-1 + U7 (2026-04-18)
+
+- **`DEFAULT_ARTIFACT_TYPES` drift from taxonomy** — `scripts/migrate-artifacts.js:135` lists 22 types (no `note`); `_bmad/_config/taxonomy.yaml` has 23. A fresh project that hits `bootstrapTaxonomy` before the first migration renders an ADR with the bootstrap list, not the committed taxonomy. Already tracked as **I54** in `convoke-note-initiative-lifecycle-backlog.md` — not re-logging.
+- **`taxonomy.initiatives.user` silently dropped from generated ADR** — `scripts/lib/artifact-utils.js:2031` renders only `taxonomy.initiatives.platform`. If user-scope initiatives grow meaningful, they're invisible in the governance artifact. Design decision — defer until user-scope initiative UX is explicitly on the table.
+- **Empty `taxonomy.initiatives.platform` / `artifact_types` arrays render degenerate ADR text** — `readTaxonomy` (`scripts/lib/artifact-utils.js:148-160`) validates the fields are arrays but not that they're non-empty. An operator editing `_bmad/_config/taxonomy.yaml` to comment out entries produces `**Platform initiatives (0):** ` with nothing after the colon. Upstream validation is the right place for the fix.
+- **`compareVersions` silently coerces pre-release versions to their base** — `scripts/update/lib/utils.js:27-39` does `Number('4-alpha') → NaN → 0`, so `compareVersions('1.0.4-alpha', '1.0.4')` returns 0. Pre-existing limitation of the shared utility; affects U7's version-range filter but also any other consumer. Broader-scope fix.
+- **`__dirname`-based CHANGELOG path resolution is fragile under bundlers/PnP** — `scripts/update/lib/changelog-reader.js:7` resolves three levels up from the lib file. Works for npm/npx today (verified via `package.json` files list) but breaks under Yarn Plug'n'Play zipped installs or any future bundler flattening. Speculative; defer until a real install mode complains.
+- **No verbose-gating or max-entry cap on printed changelog** — a user on `v1.0.0` upgrading to `v3.2.0` will see every intervening release body streamed to stdout before the confirm prompt, pushing the Plan/Breaking-Changes block off-screen. Defer until someone actually hits this; the cross-major-version span is rare by design.
+
+---
+
 ## Deferred from: code review of oc-1-2-taxonomy-extension (2026-04-18)
 
 - **Duplicate `DEFAULT_ARTIFACT_TYPES` across two files** — `scripts/migrate-artifacts.js:135` and `scripts/update/lib/taxonomy-merger.js:11` maintain identical hardcoded arrays that must stay in lockstep with each other and with `_bmad/_config/taxonomy.yaml`. Adding a new artifact_type requires editing three locations symmetrically — a drift bug waiting to happen. Refactor to a single source (either a shared constant module or reading from the shipped yaml at startup). Pre-existing architectural debt; surfaced by Blind Hunter during Round 1 review.
