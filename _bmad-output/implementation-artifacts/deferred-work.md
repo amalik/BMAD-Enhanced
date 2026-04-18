@@ -5,6 +5,15 @@ real issues, but pre-existing or out of scope for the story under review.
 
 ---
 
+## Deferred from: code review of A15 + A5 + A10 Round 2 (2026-04-18)
+
+- **Revisions table row is a multi-hundred-word paragraph per patch cycle** — LOW. Each shipping round appends a long cell to §Revisions. Cell readability is degrading. Consider splitting into one row per shipped patch or extracting Round-level detail to a dedicated `revisions/` folder with a pointer from the table.
+- **Parser grammar § doesn't recognize the `Layers:` evidence-note prefix** — MEDIUM. P1 added a mandatory `Layers:` bulleted line in evidence notes for OC-R6 when `external-declared` is used, but the Parser grammar §currently validates only the Compliance Status column. Until Story 2.2 builds the Loom parser, the "first-class data" discipline is aspirational — enforcement depends on reviewer vigilance.
+- **`(external)/(internal)` OC-R0 tokens share substring with `external-declared` OC-R6 value** — LOW. Grep-based tooling scanning evidence notes for `external` will match both the OC-R0 qualifier and the OC-R6 value. Namespace collision is cosmetic but worth noting for anyone writing grep-backed reporting in the future.
+- **Misprediction + DISPUTED interaction edge case** — LOW. If the auditor predicted PASS, both reviewers agreed FAIL (mispredicted but reproducible), and the cell is then DISPUTED-excluded via path (b) for unrelated reasons (e.g., the verdict itself was mutually-reviewer-contested in a re-run), the interaction between calibration-signal logging and DISPUTED exclusion isn't specified. Defer until observed in a real v2+ audit.
+
+---
+
 ## Deferred from: code review of A15 + A5 + A10 (2026-04-18)
 
 - **A10 3-cell minimum doesn't scale** — HIGH. A 2-skill audit has 14 cells (3 cells = 21% sample); an 8-skill audit has 56 cells (3 cells = 5%). Fixed floor regardless of audit size. Scaling via a percentage floor or explicit "minimum OR 10% of matrix" would be more defensible. Design-level rework — deferred.
