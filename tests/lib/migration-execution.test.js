@@ -1211,6 +1211,11 @@ describe('detectMigrationState', () => {
 
 describe('generateGovernanceADR', () => {
   let generateGovernanceADR;
+  const taxonomy = {
+    initiatives: { platform: ['vortex', 'gyre', 'bmm', 'forge', 'helm', 'enhance', 'loom', 'convoke'], user: [] },
+    artifact_types: ['prd', 'epic', 'arch', 'adr', 'persona', 'lean-persona', 'empathy-map', 'problem-def', 'hypothesis', 'experiment', 'signal', 'decision', 'scope', 'pre-reg', 'sprint', 'brief', 'vision', 'report', 'research', 'story', 'spec', 'note', 'covenant'],
+    aliases: {},
+  };
 
   before(() => {
     generateGovernanceADR = require('../../scripts/lib/artifact-utils').generateGovernanceADR;
@@ -1219,7 +1224,7 @@ describe('generateGovernanceADR', () => {
   it('returns markdown string with correct structure', () => {
     const md = generateGovernanceADR('2026-04-06', {
       renamedCount: 42, injectedCount: 42, linksUpdated: 15, scopeDirs: ['planning-artifacts', 'vortex-artifacts'],
-    });
+    }, taxonomy);
     assert.ok(md.includes('# Architecture Decision Record: Artifact Governance Convention'));
     assert.ok(md.includes('**Status:** ACCEPTED'));
     assert.ok(md.includes('**Date:** 2026-04-06'));
@@ -1227,19 +1232,32 @@ describe('generateGovernanceADR', () => {
   });
 
   it('contains naming convention section', () => {
-    const md = generateGovernanceADR('2026-04-06');
+    const md = generateGovernanceADR('2026-04-06', {}, taxonomy);
     assert.ok(md.includes('{initiative}-{artifact_type}'));
     assert.ok(md.includes('## Decision'));
   });
 
-  it('contains taxonomy structure', () => {
-    const md = generateGovernanceADR('2026-04-06');
+  it('derives taxonomy counts and lists from the provided taxonomy', () => {
+    const md = generateGovernanceADR('2026-04-06', {}, taxonomy);
     assert.ok(md.includes('## Taxonomy'));
-    assert.ok(md.includes('vortex, gyre, bmm, forge, helm, enhance, loom, convoke'));
+    assert.ok(md.includes('**Platform initiatives (8):** vortex, gyre, bmm, forge, helm, enhance, loom, convoke'));
+    assert.ok(md.includes('**Artifact types (23):**'));
+    assert.ok(md.includes('note, covenant'));
+  });
+
+  it('reflects custom taxonomy contents rather than hardcoded values', () => {
+    const custom = {
+      initiatives: { platform: ['alpha', 'beta'], user: [] },
+      artifact_types: ['thing', 'other-thing', 'widget'],
+      aliases: {},
+    };
+    const md = generateGovernanceADR('2026-04-06', {}, custom);
+    assert.ok(md.includes('**Platform initiatives (2):** alpha, beta'));
+    assert.ok(md.includes('**Artifact types (3):** thing, other-thing, widget'));
   });
 
   it('contains frontmatter schema v1', () => {
-    const md = generateGovernanceADR('2026-04-06');
+    const md = generateGovernanceADR('2026-04-06', {}, taxonomy);
     assert.ok(md.includes('## Frontmatter Schema v1'));
     assert.ok(md.includes('schema_version: 1'));
   });
@@ -1248,7 +1266,7 @@ describe('generateGovernanceADR', () => {
     const md = generateGovernanceADR('2026-04-06', {
       renamedCount: 42, injectedCount: 42, linksUpdated: 15,
       scopeDirs: ['planning-artifacts', 'vortex-artifacts'],
-    });
+    }, taxonomy);
     assert.ok(md.includes('Files renamed:** 42'));
     assert.ok(md.includes('Frontmatter injected:** 42'));
     assert.ok(md.includes('Links updated:** 15'));
@@ -1256,7 +1274,7 @@ describe('generateGovernanceADR', () => {
   });
 
   it('defaults stats gracefully when not provided', () => {
-    const md = generateGovernanceADR('2026-04-06');
+    const md = generateGovernanceADR('2026-04-06', {}, taxonomy);
     assert.ok(md.includes('Files renamed:** 0'));
   });
 });
