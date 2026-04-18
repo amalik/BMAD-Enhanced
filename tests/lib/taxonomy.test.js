@@ -62,6 +62,16 @@ describe('readTaxonomy — integration with real taxonomy.yaml', () => {
     assert.ok(config.artifact_types.includes('spec'));
   });
 
+  it('artifact_types includes covenant (commitment/rights documents)', () => {
+    const config = readTaxonomy(projectRoot);
+    assert.ok(
+      config.artifact_types.includes('covenant'),
+      'covenant must be in artifact_types — used for commitment/rights documents (e.g., Convoke Operator Covenant). ' +
+      'Qualifier test: (1) expresses commitments/rights binding multiple parties, ' +
+      '(2) compliance is testable/auditable against explicit criteria.'
+    );
+  });
+
   it('all initiative IDs pass validation pattern', () => {
     const config = readTaxonomy(projectRoot);
     const idPattern = /^[a-z][a-z0-9-]*$/;
