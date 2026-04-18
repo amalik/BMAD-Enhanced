@@ -5,6 +5,17 @@ real issues, but pre-existing or out of scope for the story under review.
 
 ---
 
+## Deferred from: code review of A15 + A5 + A10 (2026-04-18)
+
+- **A10 3-cell minimum doesn't scale** — HIGH. A 2-skill audit has 14 cells (3 cells = 21% sample); an 8-skill audit has 56 cells (3 cells = 5%). Fixed floor regardless of audit size. Scaling via a percentage floor or explicit "minimum OR 10% of matrix" would be more defensible. Design-level rework — deferred.
+- **A15 OC-R0 enumeration doesn't distinguish internal vs external Layer 3 authorship** — MEDIUM. After A15's patch, the Checklist now requires an `(external)`/`(internal)` qualifier on each L3 enumeration entry to validate `external-declared` precondition 2b. The OC-R0 row wording in the main checklist table was not updated to match — the qualifier is documented only in the A15 value row. Broader methodology edit (OC-R0 row + evidence-note template examples) should follow.
+- **A5 "research/catalog/audit/inventory" has no operational test** — MEDIUM. Is a retrospective (inventories lessons) covered? A portfolio status report (scans artifacts)? A PRD section listing personas? Rule reads as broad enough to rope in most status reporting. Fix requires either an operational test definition or an example list — scope decision pending.
+- **A5 retroactive gap on v1 audit sample selection** — MEDIUM. §6 of the v1 audit admits "One of each was sampled" for 20+7 workflows without a grep/glob enumeration paste. Rule is prospective, retro-application reopens closed work. Noting in case a v2 audit wants to close the gap prospectively.
+- **A15+A10 interaction: N/A-variant disagreement slips through verdict-agreement threshold** — MEDIUM. If two blind reviewers disagree on whether an OC-R6 cell is `N/A — external-declared (git)` vs `FAIL` vs `N/A — out-of-scope`, that's not a PASS/FAIL disagreement per A10's threshold semantics. Reviewers could agree on "it's not PASS" while differing on the reason. Threshold reworking needed; deferred pending v2+ audit evidence.
+- **A5 story templates not updated to require search-command field** — LOW. Rule asks specs to include the exact grep/glob command as a required input. `bmad-create-story` and sprint-planning templates weren't edited. Authors will forget. Small follow-up task.
+
+---
+
 ## Deferred from: code review of U8 — excluded_agents (2026-04-18)
 
 - **Cross-module exclusion-ID validation** — `excluded_agents: [stack-detective]` in `_bmad/bme/_vortex/config.yaml` silently no-ops (Vortex never iterates that ID), and typos like `noha` (meant `noah`) silently no-op too. Neither `mergeConfig`, `refresh-installation`, nor `convoke-doctor` warns. Validation would require knowing each module's legal agent ID set.
