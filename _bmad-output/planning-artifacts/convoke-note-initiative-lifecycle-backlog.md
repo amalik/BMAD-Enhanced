@@ -377,7 +377,7 @@ Items requiring the full pipeline: Brief → PRD → Arch → PRD Validation →
 | P9 | **Forge team — Domain Knowledge Extraction** | 9 | 3 | 90% | 8 | 3.0 | forge | **In Pipeline** (Blocked on Gate 1) | D, E(partial) | external: shadow engagement (Gate 1) |
 | P13 | **Vortex redesign (align to Enhance-codified patterns)** | 7 | 2 | 70% | 4 | 2.5 | vortex | **Qualified** (Blocked on P12) | — | P12 |
 | U10+P23+A8+A9 | **BMAD v6.3.0 Adoption (Convoke 4.0)** | 10 | 2 | 80% | 7 | 2.3 | convoke | **In Sprint** | B, P✓, A, IR, E | external: BMAD v6.3.0 release |
-| ILE-1 | **Initiative Lifecycle Engine** (Portfolio-as-Code — rework of backlog/portfolio/governance skills into integrated lifecycle management) | 9 | 3 | 60% | 8 | 2.0 | helm | **In Pipeline** | B, P, IR(pre-arch) | ✓P15, ✓P10, ✓I49, ✓bmad-enhance-initiatives-backlog-v2.0.0 |
+| ILE-1 | **Initiative Lifecycle Engine** (Portfolio-as-Code — rework of backlog/portfolio/governance skills into integrated lifecycle management) | 9 | 3 | 60% | 8 | 2.0 | helm | **In Pipeline** | B, P, IR(pre-arch), A | ✓P15, ✓P10, ✓I49, ✓bmad-enhance-initiatives-backlog-v2.0.0 |
 | U9 | **Module-aware refresh and validation (modules-manifest.yaml)** | 8 | 2 | 70% | 6 | 1.9 | convoke | **Qualified** | — | — |
 | P24 | **Relocate Covenant + Checklist out of `_bmad-output/planning-artifacts/`** — path smell conflating workflow output with canonical spec; propose `docs/covenant/` with pointer retained in old location; touches ~8 references | 4 | 1 | 70% | 2 | 1.4 | convoke | **Qualified** | — | deferred-from: oc-1-5 Round 1 |
 | P3 | **Team installer architecture (`convoke-install <module-name>`)** | 6 | 1 | 80% | 4 | 1.2 | convoke | **Qualified** | — | bundles-with: S3 |
@@ -589,13 +589,13 @@ Full descriptions for items in §2.4 whose table row is a one-liner.
 
 ### ILE-1 — Initiative Lifecycle Engine
 
-**Stage:** Qualified | **Portfolio:** helm | **RICE:** 2.0
+**Stage:** In Pipeline | **Portfolio:** helm | **RICE:** 2.0
 
 **Origin:** Party mode session 2026-04-12 (John, Winston, Amalik). Qualified 2026-04-15 by John+Winston (per §1.2 shortcut rule).
 
-**Planning artifacts:** None yet. Intake row in §2.1 (IN-9) is the only existing reference.
+**Planning artifacts (complete):** Brief (B) + distillate; PRD (P); pre-Architecture IR; Architecture (A) — `convoke-arch-initiative-lifecycle-engine.md` shipped 2026-04-19 with 8 ADRs + 24 patterns + complete project tree + validation.
 
-**Missing (to reach Ready):** Brief, PRD, Architecture, PRD Validation, IR, Epics.
+**Missing (to reach Ready):** Epics (+ post-Architecture IR).
 
 **Scope hint (three workstreams):**
 
@@ -633,6 +633,7 @@ Full descriptions for items in §2.4 whose table row is a one-liner.
 
 | Date | Change |
 |------|--------|
+| 2026-04-19 | **ILE-1 Architecture complete.** 8-step `bmad-create-architecture` workflow delivered `convoke-arch-initiative-lifecycle-engine.md` (status: complete). Contents: 8 ADRs (data substrate=in-memory-per-invocation / concurrency=per-backlog lock w/ heartbeat+tiered-staleness / error-enforcement=runtime registry+test backstop / event model=explicit+intra-skill triggers / proposal lifecycle=inline+batch-UX / migration trigger=preamble / observability=full-scan+intra-invocation memoization / BMAD compat=v6.3-gated); ISWC + Crash Recovery Model extracted as first-class cross-cutting concepts; 24 implementation-pattern decisions + 3 missing patterns (logger, paths API, AsyncLocalStorage+env-envelope) + 6 final-coherence refinements; Hybrid LLM-Host Invocation Model (fat-script entries + env var envelope with 30-min TTL); complete project tree with every file named; 26 enforceable N-row compliance tests; uninstall spec with archived-log preservation + re-install behavior. 4 party modes + 3 focused elicitations + final validation. 4 gaps identified with resolutions; 5 sprint-0 discovery tasks. READY FOR IMPLEMENTATION (HIGH confidence). Artifact indicator updated: `B, P, IR(pre-arch)` → `B, P, IR(pre-arch), A`. **Next pipeline step: Epics (+ post-Architecture IR).** |
 | 2026-04-19 | **D8 code review — 1 round, convergence reached.** 2 patches applied (0 HIGH): P1 (MEDIUM, both hunters converged) — "Applies to the submodules above" was factually wrong (each submodule ships its own `config.yaml`; verified via `scripts/convoke-doctor.js:105-136` + `scripts/update/lib/refresh-installation.js` only reading submodule configs). Reworded as "sibling, not a parent" with explicit code-path citation. P2 (LOW) — "Alongside this README" lead-in added to acknowledge the README itself is also at root. 0 deferred. |
 | 2026-04-19 | **D8 shipped.** `_bmad/bme/README.md` now has a `## Files at _bmad/bme/ root` section listing `config.yaml` with a one-line description (operator name, languages, output folder; preserved across updates). Placed between the Submodules table (directories-only) and the "When to add here vs upstream" guidance — semantic separation preserved. Closes oc-1-5 `[Review][Defer]` follow-up #1 (bme/README config.yaml omission). D8 moved Fast Lane → §2.5 Completed. |
 | 2026-04-19 | **D9 code review — 1 round, convergence reached.** 5 patches applied (0 HIGH, all MEDIUM/LOW): Covenant callout trigger broadened from authoring-only to "authoring, reviewing, or extending" with explicit planner/reviewer acknowledgment; hardcoded counts removed (dogfoods A5 `mechanical-research-enumeration` + `derive-counts-from-source` rules shipped earlier today) — "Vortex (7 streams) / Gyre (4 agents) / seven Operator Rights" → role-based phrasing; `development.md` description trimmed for accuracy (doesn't cover skill patterns per Edge Case verification); oc-1-5 `[Review][Defer]` line for this exact gap marked `[Defer→Resolved]` with D9 closure reference; invented "supporting BME specialists" category removed from `agents.md` description. 0 deferred. |
