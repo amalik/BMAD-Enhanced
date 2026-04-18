@@ -47,6 +47,15 @@ artifact_types:
   - story
   - spec
   - note
+  # 'covenant' — document type for commitment/rights artifacts.
+  # Qualifier test (both must hold):
+  #   (1) Expresses commitments/rights binding multiple parties (not implementation details)
+  #   (2) Compliance with the document is testable/auditable against explicit criteria
+  # Distinct from 'spec' (implementation-focused) in metabolic rate and audience:
+  # covenants evolve slowly as principles; specs evolve tactically with code.
+  # First planned example: the Convoke Operator Covenant (convoke-covenant-operator.md),
+  # to be authored in oc-1-4-covenant-authoring. Until then, this type has no files.
+  - covenant
 
 # Historical name aliases (migration-only)
 # Maps old initiative names found in existing filenames to canonical IDs.
