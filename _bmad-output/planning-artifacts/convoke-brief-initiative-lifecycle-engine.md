@@ -3,7 +3,7 @@ title: "Product Brief: Initiative Lifecycle Engine (ILE-1)"
 initiative: convoke
 artifact_type: brief
 qualifier: initiative-lifecycle-engine
-status: draft
+status: complete
 created: '2026-04-18'
 updated: '2026-04-18'
 schema_version: 1
@@ -23,9 +23,9 @@ inputs:
 
 Consulting team leads and solo practitioners managing concurrent initiatives face a constant cognitive tax: lateral switching between topics and vertical switching between strategic and operational altitude. Every context switch costs reconstruction time. Every altitude change risks losing either the big picture or the operational detail.
 
-The Initiative Lifecycle Engine (ILE-1) is an IDE-native navigation system for initiative management. It shows you where you stand on the map, what the expected routes are, and what move to make next — without leaving the conversation where your work happens. Three existing Convoke skills (initiatives-backlog, portfolio-status, migrate-artifacts) are reworked into views on a shared data model, enhanced with a kanban view and pipeline dashboard, and connected by a reactive behaviors layer that automates transitions and surfaces staleness.
+The Initiative Lifecycle Engine (ILE-1) is **Portfolio-as-Code** — an IDE-native navigation system for initiative management. It shows you where you stand on the map, what the expected routes are, and what move to make next — without leaving the conversation where your work happens. Three existing Convoke skills (initiatives-backlog, portfolio-status, migrate-artifacts) are reworked into views on a shared data model, enhanced with a kanban view and pipeline dashboard, and connected by a reactive behaviors layer that automates transitions and surfaces staleness.
 
-This is not a SaaS platform with AI features bolted on. The system IS the AI agent conversation. Lifecycle state lives in git-native markdown with structured frontmatter — portable, diffable, version-controlled. No vendor lock-in. No context-switching to a separate tool. The first IDE-native Strategic Portfolio Management capability, grounded in PMI, MSP, and SAFe LPM best practices, delivered through agent conversations and markdown contracts.
+This is **Portfolio-as-Code**. The system IS the AI agent conversation. Lifecycle state lives in git-native markdown with structured frontmatter — portable, diffable, version-controlled. Zero per-seat licensing, zero migration risk, zero data residency concerns. For regulated consulting (finance, health), no cloud dependency is a compliance advantage, not a limitation. The first Portfolio-as-Code capability, grounded in PMI, MSP, and SAFe LPM best practices, delivered through agent conversations and markdown contracts.
 
 ## The Problem
 
@@ -56,21 +56,25 @@ ILE-1 integrates three existing Convoke skills into a unified lifecycle manageme
 
 ## What Makes This Different
 
-**IDE-native, not SaaS.** The lifecycle engine lives where the work happens — inside Claude Code (or any LLM coding agent). No tab switching, no altitude tax, no separate login. Context re-entry is a conversation, not a dashboard.
+**Portfolio-as-Code.** The lifecycle engine lives where the work happens — inside Claude Code (or any LLM coding agent). No tab switching, no altitude tax, no separate login. Context re-entry is a conversation, not a dashboard. If your team uses Infrastructure-as-Code, Portfolio-as-Code is the same pattern applied to how you manage work.
+
+**Reactive behaviors are the moat.** Anyone can render a kanban in markdown. The novel mechanism is a feedback loop where artifact presence drives pipeline state: creating a PRD auto-advances stage, completing an epic unblocks dependents, sprint closure triggers staleness detection. The views are the visible layer; the automation underneath is what makes the system feel alive.
 
 **Agent-native semantics.** RICE scores, qualifying gates, lane routing, and pipeline stages are machine-readable contracts that agents enforce — not UI fields humans fill in and forget. The process IS the tooling.
 
-**Git-native state.** Everything is markdown with structured frontmatter in a git repo. Portable across platforms. Diffable in PRs. Version-controlled with full history. No database, no vendor lock-in.
+**Git-native state, zero lock-in.** Everything is markdown with structured frontmatter in a git repo. Portable across platforms. Diffable in PRs. Version-controlled with full history. Zero per-seat licensing. Zero migration risk. For regulated sectors, no cloud dependency is a compliance advantage.
 
 **Standards-grounded.** The lifecycle model draws from PMI (Standard for Portfolio Management), MSP 5th Edition, and SAFe Lean Portfolio Management — not invented from scratch. Portfolio Kanban, RICE/WSJF prioritization, benefits-oriented thinking, adaptive governance — all informed by established best practices.
 
-**Category-defining.** No existing tool offers initiative lifecycle management as an agent-native capability. Linear, Notion, and Jira add AI to traditional databases. ILE-1 inverts the model: the AI agent IS the management system.
+**Category-defining.** No existing tool offers Portfolio-as-Code. Linear, Notion, and Jira add AI to traditional databases. ILE-1 inverts the model: the AI agent IS the management system.
 
 ## Who This Serves
 
-**Primary: the consulting team lead.** Manages 3–8 concurrent initiatives across client engagements. Needs to see portfolio health, qualify incoming work, track pipeline completeness, and re-enter any initiative's context in under a minute. Uses BMAD + Convoke as the team's operating system.
+**Co-primary: the consulting team lead.** Manages 3–8 concurrent initiatives across client engagements. Needs to see portfolio health, qualify incoming work, track pipeline completeness, and re-enter any initiative's context in under a minute. Uses BMAD + Convoke as the team's operating system. Adjacent use: onboarding a new team member mid-engagement — the lifecycle view becomes a structured orientation tool ("show me everything in flight, where each stands, and what to touch first").
 
-**Secondary: the solo practitioner.** One person, many concurrent initiatives (open source maintainer, indie founder, internal platform team lead). Same lifecycle discipline, same cognitive load problem, less governance overhead.
+**Co-primary: the solo practitioner managing many concurrent initiatives.** Open source maintainer with 5+ active repos. Indie founder juggling product, marketing, and infrastructure initiatives. Internal platform team lead running parallel workstreams. Larger absolute population than consulting leads, same lifecycle discipline need, less governance overhead. Drives adoption volume; consulting team leads drive depth and validation.
+
+**Tertiary use: client-facing transparency.** The same pipeline/kanban views can be shared with clients as status artifacts (exported markdown or rendered HTML). Turns an internal management tool into a client-trust differentiator with zero additional effort.
 
 ## Success Criteria
 
@@ -81,7 +85,7 @@ ILE-1 integrates three existing Convoke skills into a unified lifecycle manageme
 ## Scope
 
 **In v1:**
-- Shared data model underpinning all three skills (architectural decision: markdown-as-source vs. structured backing store)
+- Shared data model underpinning all three skills (markdown-as-source vs. structured backing store is an Architecture-phase decision — not a Brief-phase commitment)
 - Portfolio-status rework: lifecycle-aware with stages, lanes, WIP signals, pipeline completeness
 - Kanban view: columns = lifecycle stages, WIP limits, sortable by portfolio
 - Reactive behaviors: intake orphan scan, artifact→stage auto-advance, staleness detection on sprint close
