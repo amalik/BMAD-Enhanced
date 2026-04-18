@@ -229,3 +229,68 @@ describe('convoke-doctor: corrupt migration lock', () => {
     assert.ok(stdout.includes('Corrupt') || stdout.includes('corrupt') || stdout.includes('issue'), 'should report corrupt lock');
   });
 });
+
+describe('convoke-doctor: excluded_agents (U8)', () => {
+  let tmpDir;
+  const EXCLUDED_ID = 'production-intelligence-specialist';
+
+  before(async () => {
+    tmpDir = await fs.mkdtemp(path.join(os.tmpdir(), 'bmad-doc-excl-'));
+    const vortexDir = path.join(tmpDir, '_bmad/bme/_vortex');
+    await fs.ensureDir(path.join(vortexDir, 'agents'));
+    await fs.ensureDir(path.join(vortexDir, 'workflows'));
+
+    // Config: agents list omits the excluded agent; excluded_agents lists it.
+    const yaml = require('js-yaml');
+    const { AGENT_IDS } = require('../../scripts/update/lib/agent-registry');
+    const activeAgents = AGENT_IDS.filter(id => id !== EXCLUDED_ID);
+    fs.writeFileSync(
+      path.join(vortexDir, 'config.yaml'),
+      yaml.dump({
+        version: pkg.version,
+        agents: activeAgents,
+        workflows: [],
+        excluded_agents: [EXCLUDED_ID],
+      }),
+      'utf8'
+    );
+
+    // Write agent files for all active agents (NOT the excluded one).
+    for (const id of activeAgents) {
+      await fs.writeFile(path.join(vortexDir, 'agents', `${id}.md`), `# ${id}`, 'utf8');
+    }
+
+    // Seed skill wrappers for active agents only.
+    const skillsDir = path.join(tmpDir, '.claude/skills');
+    await fs.ensureDir(skillsDir);
+    for (const id of activeAgents) {
+      const dir = path.join(skillsDir, `bmad-agent-bme-${id}`);
+      await fs.ensureDir(dir);
+      await fs.writeFile(path.join(dir, 'SKILL.md'), '# stub', 'utf8');
+    }
+    // Seed wrappers for Gyre + EXTRA_BME agents too, since checkAgentSkillWrappers scans them.
+    const { GYRE_AGENTS, EXTRA_BME_AGENTS } = require('../../scripts/update/lib/agent-registry');
+    for (const a of [...GYRE_AGENTS, ...EXTRA_BME_AGENTS]) {
+      const dir = path.join(skillsDir, `bmad-agent-bme-${a.id}`);
+      await fs.ensureDir(dir);
+      await fs.writeFile(path.join(dir, 'SKILL.md'), '# stub', 'utf8');
+    }
+  });
+
+  after(async () => {
+    await fs.remove(tmpDir);
+  });
+
+  it('surfaces the exclusion count and agent in the module agents info line', async () => {
+    const { stdout } = await runDoctor(tmpDir);
+    assert.ok(stdout.includes('_vortex agents'), 'should report module agents check');
+    assert.ok(stdout.includes('excluded'), `info line should mention exclusion — stdout:\n${stdout}`);
+    assert.ok(stdout.includes(EXCLUDED_ID), `info line should name the excluded agent — stdout:\n${stdout}`);
+  });
+
+  it('does not flag the excluded agent skill wrapper as missing', async () => {
+    const { stdout } = await runDoctor(tmpDir);
+    assert.ok(!stdout.includes(`Missing: .claude/skills/bmad-agent-bme-${EXCLUDED_ID}`),
+      'excluded agent wrapper must not be flagged as missing');
+  });
+});
