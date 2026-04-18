@@ -84,7 +84,7 @@ async function main() {
   }
 
   // 4. Agent skill wrapper check (I43: spans all bme modules)
-  checks.push(checkAgentSkillWrappers(projectRoot));
+  checks.push(checkAgentSkillWrappers(projectRoot, modules));
 
   // 5. Global checks (module-agnostic)
   checks.push(await checkOutputDir(projectRoot));
@@ -200,6 +200,12 @@ function checkModuleAgents(mod) {
   const label = `${mod.name} agents`;
   const agentsDir = path.join(mod.dir, 'agents');
   const agentIds = mod.config.agents;
+  // U8: `agents` in config.yaml already has exclusions filtered out (mergeConfig does this
+  // at upgrade time). We read `excluded_agents` purely to surface the opt-out list in the
+  // info line — so operators can see what's excluded without cross-referencing files.
+  const excluded = Array.isArray(mod.config.excluded_agents)
+    ? mod.config.excluded_agents.filter(a => typeof a === 'string')
+    : [];
 
   if (!fs.existsSync(agentsDir)) {
     return {
@@ -236,7 +242,11 @@ function checkModuleAgents(mod) {
     };
   }
 
-  return { name: label, passed: true, info: `${agentIds.length} agents present` };
+  let info = `${agentIds.length} agents present`;
+  if (excluded.length > 0) {
+    info += ` (${excluded.length} excluded: ${excluded.join(', ')})`;
+  }
+  return { name: label, passed: true, info };
 }
 
 function checkModuleWorkflows(mod) {
@@ -425,9 +435,22 @@ function checkModuleSkillWrappers(mod, projectRoot, manifestMap) {
   };
 }
 
-function checkAgentSkillWrappers(projectRoot) {
+function checkAgentSkillWrappers(projectRoot, modules = []) {
   const label = 'BME agent skill wrappers';
-  const allAgents = [...AGENTS, ...GYRE_AGENTS, ...EXTRA_BME_AGENTS];
+  // U8: gather excluded agent IDs across all discovered modules so their wrappers
+  // don't get flagged as missing (they are intentionally absent).
+  const excludedIds = new Set();
+  for (const mod of modules) {
+    if (mod.config && Array.isArray(mod.config.excluded_agents)) {
+      for (const id of mod.config.excluded_agents) {
+        if (typeof id === 'string') excludedIds.add(id);
+      }
+    }
+  }
+
+  const allAgents = [...AGENTS, ...GYRE_AGENTS, ...EXTRA_BME_AGENTS].filter(
+    a => !excludedIds.has(a.id)
+  );
   const failures = [];
 
   for (const agent of allAgents) {
@@ -446,11 +469,10 @@ function checkAgentSkillWrappers(projectRoot) {
     };
   }
 
-  return {
-    name: label,
-    passed: true,
-    info: `${allAgents.length} agent skill wrappers verified`
-  };
+  const info = excludedIds.size > 0
+    ? `${allAgents.length} agent skill wrappers verified (${excludedIds.size} excluded)`
+    : `${allAgents.length} agent skill wrappers verified`;
+  return { name: label, passed: true, info };
 }
 
 async function checkOutputDir(projectRoot) {
