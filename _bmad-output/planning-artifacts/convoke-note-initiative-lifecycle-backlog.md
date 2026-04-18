@@ -219,6 +219,8 @@ Items awaiting qualification. No lane, no priority, no commitment.
 | IN-7 (was W2) | Pre-write artifact validation hooks — Claude Code hooks validating artifacts before write | Winston ArcKit analysis | 2026-03-22 | Winston |
 | IN-8 (was P9-wka) | Forge Written Knowledge Analysis agent — potential third Forge agent for doc/code analysis | Emma contextualization | 2026-03-22 | Emma |
 | IN-9 | Initiative Lifecycle Engine — product-lens rework of backlog/portfolio/governance skills into integrated lifecycle management → ILE-1 | Party mode session | 2026-04-12 | Amalik (via John+Winston) |
+| IN-10 | Refactor `DEFAULT_ARTIFACT_TYPES` to single source of truth — eliminate drift across `scripts/migrate-artifacts.js:135`, `scripts/update/lib/taxonomy-merger.js:11`, and `taxonomy.yaml` → I54 | Code review oc-1-2 Round 1 (Blind Hunter) | 2026-04-18 | Winston |
+| IN-11 | Derive ADR type list from taxonomy in `generateGovernanceADR` — `scripts/lib/artifact-utils.js:2033` hardcodes "Artifact types (21)" while taxonomy has 23 → BUG-1 | Code review oc-1-2 Round 1 (Edge Case Hunter) | 2026-04-18 | Winston |
 
 **Notes on intakes:**
 
@@ -234,9 +236,9 @@ Active bugs — fix pipeline only. Deeper follow-ups spawn Fast Lane or Initiati
 
 | ID | Description | R | I | C | E | Score | Portfolio | Status | Dependencies | Linked Follow-up |
 |----|-------------|---|---|---|---|-------|-----------|--------|--------------|------------------|
-| *(none active)* | | | | | | | | | | — |
+| BUG-1 | `generateGovernanceADR` hardcodes "(21)" type count — emits 21 types, taxonomy has 23 (note + covenant). Every migration `--apply` produces misleading ADRs. | 3 | 1 | 90% | 1 | 2.7 | convoke | Backlog | related: A6 | — |
 
-**Note:** No actively broken functionality in the backlog as of 2026-04-12. All previous latent risks (YAML parsing, atomic writes, etc.) were never observed as bugs — they sit in Fast Lane as preventive hardening.
+**Note:** As of 2026-04-18, Bug Lane has its first active entry (BUG-1). Prior state (2026-04-12) was empty — previous latent risks (YAML parsing, atomic writes, etc.) were never observed as bugs; they sit in Fast Lane as preventive hardening.
 
 ### 2.3 Fast Lane (Quick Wins + Spikes)
 
@@ -276,6 +278,7 @@ Items qualified as not needing the full initiative pipeline. Sorted by RICE scor
 | I15 | `validateManifest` CSV parsing — replace substring matching | 4 | 0.5 | 90% | 2 | 0.9 | convoke | Backlog | bundles-with: I45, I48 |
 | I27 | Portfolio skill — Option [4] empty-state messaging | 4 | 0.25 | 90% | 1 | 0.9 | enhance | Backlog | — |
 | I52 | Collision resolution flag for migration CLI | 4 | 0.5 | 90% | 2 | 0.9 | enhance | Backlog | — |
+| I54 | Refactor `DEFAULT_ARTIFACT_TYPES` to single source of truth (migrate-artifacts.js + taxonomy-merger.js + taxonomy.yaml) | 4 | 0.5 | 90% | 2 | 0.9 | convoke | Backlog | — |
 | I33 | Workflow-name namespace collision risk (verbatim names) | 4 | 1 | 70% | 3 | 0.9 | enhance | Backlog | ✓I32 (I32 made orphan deletion active — blast radius increased) |
 | I39 | Non-atomic version stamp writes in `refresh-installation.js` | 4 | 1 | 70% | 3 | 0.9 | convoke | Backlog | bundles-with: I46 |
 | A1 | Add validate menu items to Wave 3 Vortex agents (Mila, Liam, Noah) | 4 | 0.5 | 80% | 2 | 0.8 | vortex | Backlog | — |
@@ -321,7 +324,7 @@ Items requiring the full pipeline: Brief → PRD → Arch → PRD Validation →
 | P9 | **Forge team — Domain Knowledge Extraction** | 9 | 3 | 90% | 8 | 3.0 | forge | **In Pipeline** (Blocked on Gate 1) | D, E(partial) | external: shadow engagement (Gate 1) |
 | P13 | **Vortex redesign (align to Enhance-codified patterns)** | 7 | 2 | 70% | 4 | 2.5 | vortex | **Qualified** (Blocked on P12) | — | P12 |
 | U10+P23+A8+A9 | **BMAD v6.3.0 Adoption (Convoke 4.0)** | 10 | 2 | 80% | 7 | 2.3 | convoke | **In Sprint** | B, P✓, A, IR, E | external: BMAD v6.3.0 release |
-| ILE-1 | **Initiative Lifecycle Engine** (rework of backlog/portfolio/governance skills into integrated lifecycle management) | 9 | 3 | 60% | 8 | 2.0 | helm | **Qualified** | — | ✓P15, ✓P10, ✓I49, ✓bmad-enhance-initiatives-backlog-v2.0.0 |
+| ILE-1 | **Initiative Lifecycle Engine** (Portfolio-as-Code — rework of backlog/portfolio/governance skills into integrated lifecycle management) | 9 | 3 | 60% | 8 | 2.0 | helm | **In Pipeline** | B | ✓P15, ✓P10, ✓I49, ✓bmad-enhance-initiatives-backlog-v2.0.0 |
 | U9 | **Module-aware refresh and validation (modules-manifest.yaml)** | 8 | 2 | 70% | 6 | 1.9 | convoke | **Qualified** | — | — |
 | P3 | **Team installer architecture (`convoke-install <module-name>`)** | 6 | 1 | 80% | 4 | 1.2 | convoke | **Qualified** | — | bundles-with: S3 |
 | P7 | **ML/AI Engineering team exploration** | 6 | 2 | 30% | 3 | 1.2 | *(pending)* | **Qualified** (needs discovery) | — | — |
@@ -567,6 +570,8 @@ Full descriptions for items in §2.4 whose table row is a one-liner.
 
 | Date | Change |
 |------|--------|
+| 2026-04-18 | **Triage by Winston: Logged 2 intakes (IN-10, IN-11) from code review of oc-1-2-taxonomy-extension Round 1.** Qualified 2: Bug Lane 1 (BUG-1 — `generateGovernanceADR` hardcoded type count, score 2.7), Fast Lane 1 (I54 — `DEFAULT_ARTIFACT_TYPES` refactor to single source, score 0.9). Raw intakes: 0. Dropped: 0. I54 cross-references A6 (Structured-source for count-sensitive deliverables) as a related item. Bug Lane first-populated (previously empty). |
+| 2026-04-18 | **ILE-1 Brief complete.** Product brief authored at `convoke-brief-initiative-lifecycle-engine.md` + detail pack at `convoke-brief-initiative-lifecycle-engine-distillate.md`. Stage advanced Qualified → In Pipeline. Artifact indicator updated: `—` → `B` (Brief). Positioning established as "Portfolio-as-Code." Co-primary personas: consulting team lead + solo practitioner. Success criteria: <60s context re-entry, portfolio health without altitude change, findings auto-land in correct lane. V1 scope locked (shared model + lifecycle-aware portfolio + kanban + reactive behaviors + pipeline dashboard + skill integration). Data model decision deferred to Architecture. **Next pipeline step: PRD.** |
 | 2026-04-18 | **I49 shipped.** 4 rules added to `project-context.md`: `derive-counts-from-source` (no hardcoded counts — compute from source data), `shared-test-constants` (import from shared files like `test-constants.js`, don't duplicate), `catch-all-phase-review` (review catch-all matcher output for false positives before shipping), `spec-verify-referenced-files` (existence-check all file paths in specs before dev starts). Path-safety was already covered by existing rule. Total project-context.md rules: 13. Origin: SP Epic 5 retro A1. |
 | 2026-04-18 | **P10+P11 shipped.** Capability Evaluation Framework and Friction Log Template moved from `_archive/exploratory/` to `planning-artifacts/` with governance naming. Framework referenced from lifecycle §1.2 qualifying gate (capability-type intakes must run decision tree). Friction log linked as required input feed. `project-context.md` rule `capability-form-factor-evaluation` added. `lifecycle-process-spec.md` template updated with same gate rule. Archive INDEX.md entries annotated with move dates. |
 | 2026-04-18 | **A7 shipped.** Review convergence rule encoded in two locations: `project-context.md` (Rule: `code-review-convergence` — R1 mandatory, R2 only if HIGH, R3 only if structural changes, no R4, remainder deferred to backlog) and `bmad-code-review` step-04-present.md section 7 (enforcement logic: round counting via `### Review Findings` subsections, stopping criteria gate before offering re-run option). Both source (`_bmad/bmm/4-implementation/`) and installed (`.claude/skills/`) copies updated. Origin: ag-epic-7 retro Action Item #3. |
