@@ -17,25 +17,25 @@ schema_version: 1
 
 ## 1. Executive Summary
 
-**Scope.** 8 skills audited: 2 calibration cases (Migration, Portfolio) + 6 representative skills drawn from 6 Convoke submodules (full Convoke `_bmad/bme/` submodule coverage).
+**Scope.** 8 skills audited: 2 calibration cases (Migration, Portfolio) + 6 representative skills drawn from 6 Convoke submodules (6 of 7 `_bmad/bme/` subdirectories; `_config` is empty scaffolding and excluded).
 
-**Compliance rate.** 47 of 56 cells (84%) PASS. 9 cells FAIL. 6 of 6 submodules represented; 0 submodules excluded.
+**Compliance rate (Round 3 final).** 46 of 56 cells (82%) PASS. 10 cells FAIL. All 4 archetypes represented. Loom Right-to-pacing verdict is scoped to step-01 only (per D4a).
 
 **Per-right violation frequency** (rights referenced by canonical name, not number, per AC #2):
 
 | Right | Violations |
 |-------|------------|
-| Right to a default | 2/8 (25%) |
+| Right to a default | 3/8 (38%) |
 | Right to the full universe | 1/8 (13%) |
 | Right to rationale | 0/8 |
 | Right to completeness | 0/8 |
-| Right to pause | 0/8 |
+| Right to pause | 1/8 (13%) |
 | Right to next action | 2/8 (25%) |
-| Right to pacing | 4/8 (**50%** — sole bottleneck per AC #7) |
+| Right to pacing | 3/8 (38%) |
 
-**Bottleneck right (≥50% violation per AC #7):** Right to pacing only, at 4/8 (50%). All other rights are below the bottleneck threshold; the Right to rationale, Right to completeness, and Right to pause have zero violations across all 8 skills.
+**Bottleneck right (≥50% violation per AC #7):** **NONE.** The Round 2 claim of "Right to pacing at 50%" did not survive Round 3's strict-glossary re-scoring of Portfolio. 2 rights tie at 38% (Right to a default, Right to pacing); no single-right bottleneck exists.
 
-**Retrofit scope for Epic 2 Story 2.1:** modest. 9 fails total across 6 skills; 4 of them are Right-to-pacing violations. Priority retrofits listed in §9.1 with explicit 1-to-1 mapping from audit cells to remediation items.
+**Retrofit scope for Epic 2 Story 2.1:** 10 retrofits for 10 fails (1-to-1 mapping in §9.1). Plus 1 committed follow-up: full audit of Loom add-team steps 02-05 (D4a).
 
 **Credibility caveats** (these temper the headline; see §10 for full limitations):
 - Single LLM reviewer, not a two-human inter-reviewer panel. The reproducibility gate was run on one cell (enhance-backlog R7) with 100% verdict agreement between two independent LLM agents — sufficient for rubric-disambiguation, insufficient for cross-human validation.
@@ -43,7 +43,7 @@ schema_version: 1
 - Auditor is inside the project. "Murat" is a Convoke-authored persona run against Convoke-authored skills. An external audit would add independence that this report does not claim.
 - Right-to-pacing rubric required a novel-concept glossary (§2.6) to achieve reproducibility. The glossary is Convoke-specific; other projects applying this Covenant would need to author their own.
 
-**Headline claim** (with the caveats above): Convoke's skills, as designed, substantially embody the Covenant's principles *before* the Covenant is authored. Right to rationale, completeness, and pause are universally honored across the audited set. Right to pacing is the area with the most friction and the clearest retrofit path.
+**Headline claim** (with the caveats above): Convoke's skills, as designed, substantially embody the Covenant's principles *before* the Covenant is authored. Right to rationale and Right to completeness are universally honored across all 8 skills. Right to a default and Right to pacing share the tied-highest violation rates (38% each) — these are the primary retrofit areas, but neither rises to bottleneck level under the AC #7 ≥50% threshold.
 
 ---
 
@@ -120,7 +120,7 @@ Added in Round 2 (closes H2). A "novel concept" is a noun, mechanism, or decisio
 
 **Pre-existing concepts that do NOT count as novel** (operator is assumed to know these from general computing literacy):
 
-> menu, option, prompt, ask, reply, input, continue, exit, abort, accept, reject, yes, no, skip, retry, help, back, filter, sort, scan, list, search, file, folder, path
+> menu, option, prompt, ask, reply, input, continue, exit, abort, accept, reject, yes, no, skip, retry, help, back, filter, sort, scan, list, search, file, folder, path, rename, move, copy, delete, done, cancel, confirm, review, submit
 
 **Workflow-inherited concepts** — within a single workflow, a concept introduced in earlier steps is pre-existing by the time the operator reaches later steps. Example: after step-t-02 introduces "finding" and "intake", those concepts are pre-existing when the operator reaches step-t-03.
 
@@ -180,9 +180,9 @@ Calibration validates the methodology against known-violating skills. Per story 
 | Right to completeness | PASS | PASS | **PASS (remediated since scar)** | `step-01-scan.md` §4: unattributed file count always shown; `--show-unattributed` flag gives per-file detail. Scar ("71% dropped silently") REMEDIATED. |
 | Right to pause | PASS | PASS | **PASS** | `step-02-explore.md` §1-§2: HALT at menu and at every sub-prompt. Auto-transition between steps only at non-decision points (step-01 → step-02). |
 | Right to next action | PASS | PASS | **PASS** | Engine errors are specific: `"taxonomy.yaml not found — run convoke-migrate-artifacts or convoke-update to create"`. `"run convoke-migrate-artifacts to govern them"`. Every error/degradation names a next command. |
-| Right to pacing | FAIL | PASS | **FAIL (Round 2 re-score, binary enforcement)** | `step-02-explore.md` §1 menu presents 5 distinct action types: `[1] Explain initiative status (verbose inference trace)`, `[2] Filter to initiative prefix`, `[3] Sort by last activity`, `[4] Show unattributed file details`, `[5] Done`. Applying §2.6 glossary: "filter", "sort", "done" are pre-existing. Novel concepts: "verbose inference trace", "initiative prefix" (not yet introduced), "unattributed file details" (though "unattributed" was introduced in step-01, the "details" sub-mechanism is new), plus the decision to pick an exploration path when none of the 5 has been motivated. Net novel concepts: 4 (inference trace, initiative prefix, unattributed-details sub-mechanism, exploration-path decision). Exceeds 3. |
+| Right to pacing | PASS | PASS | **PASS (Round 3 re-score under strict glossary, D3a)** | `step-02-explore.md` §1 menu presents 5 options: `[1] Explain initiative status (verbose inference trace)`, `[2] Filter to initiative prefix`, `[3] Sort by last activity`, `[4] Show unattributed file details`, `[5] Done`. Applying §2.6 glossary strictly: "filter", "sort", "done", "initiative" (familiar after step-01), "unattributed" (introduced in step-01 and therefore pre-existing within the workflow per §2.6 "workflow-inherited" rule) are all pre-existing. Novel concepts: only "verbose inference trace" (1). Below 3-concept limit → PASS. |
 
-**Calibration verdict (Round 2):** Portfolio's scar-predicted violations (Right to the full universe + Right to completeness) are remediated, and the methodology correctly identifies the remediation. Portfolio's *current* violation is Right to pacing, consistent with the pattern seen across several skills. Binary enforcement (H2 remediation) resolved the Round 1 "borderline" annotation by applying the §2.6 glossary strictly.
+**Calibration verdict (Round 3):** Portfolio's scar-predicted violations (Right to the full universe + Right to completeness) are remediated, and the methodology correctly identifies the remediation. Portfolio is currently compliant with all 7 rights (Round 2 had scored Right to pacing as FAIL under a loose glossary interpretation; Round 3 re-scored PASS under strict §2.6 application — see cell above). Portfolio is the "most-compliant skill" in the audited set.
 
 ---
 
@@ -217,6 +217,20 @@ Whatever path is chosen: the scar stories remain the Covenant's *canonical narra
 
 **Path A accepted.** Calibration re-baselined to "methodology catches violations where they currently exist." Migration + Portfolio retained as calibration cases with their *current* violations documented in §3.1–§3.2 serving as the calibration-confirmation signal. Scar stories remain canonical narrative evidence for the Covenant (Story 1.4).
 
+### 5.1 Round 3 Decisions (2026-04-18, all accepted by Amalik)
+
+Round 3 code review (2026-04-18, after Round 2 rewrite) produced additional findings. Per project-context.md `code-review-convergence` rule, Round 4 is forbidden — remaining unresolved items triaged to the initiatives backlog. Round 3 patches were applied (glossary extensions, lean-persona concept count correction to ≥5, residual R-number cleanup in §9.1 retrofits, `_config` subdirectory disclosure).
+
+The following **decisions were accepted** (2026-04-18, sign-off by Amalik):
+
+- **D1a (AC #3/#4 amendment — ACCEPTED):** AC #3 and AC #4 are formally amended from "Migration/Portfolio is flagged as violating [specific rights]" to **"methodology catches violations where they currently exist OR, where remediated, correctly identifies remediation."** The Migration scar's actual shape (Right-to-next-action) and the remediation status of both skills are documented in §3. Story file AC Verification Summary reflects this amendment.
+- **D2a (AC #1 timeline — ACCEPTED):** Round 2 rewrite is treated as the methodology lock event. The reproducibility gate (§2.5) ran against the Round 2 locked methodology with 100% verdict agreement, satisfying AC #1's reproducibility requirement at the locked-state.
+- **D3a (Portfolio Right-to-pacing — ACCEPTED):** Portfolio Right-to-pacing re-scored to PASS under strict §2.6 glossary application. Result: no bottleneck right exists at ≥50%. The "bottleneck" concept in AC #7 is satisfied trivially (no bottleneck). Epic 2 Story 2.3 Publication Gate criterion is adjusted: "all fails addressed or documented" replaces "bottleneck rights retrofitted."
+- **D4a (Loom add-team R7 scope narrowing — ACCEPTED):** Loom add-team × Right to pacing verdict is explicitly scoped to step-01 only. Full audit of steps 02-05 is committed as a follow-up action item within Epic 2 Story 2.1 scope.
+- **D5a (Gyre multi-service re-score — ACCEPTED):** Gyre × Right to a default and Gyre × Right to pause re-scored to FAIL reflecting the multi-service branch. Matrix updated; 2 retrofits added (#10, #11 in §9.1).
+
+**Deferred to backlog Triage (per no-Round-4 rule):** Vortex sampling representativeness (assumption-mapping workflow likely much worse than lean-persona — Vortex-wide projection risk); AC #6 archetype distribution skew; AC #1 "cells" plural interpretation; Migration scar re-interpretation evidence grounding; residual partial-credit language in some evidence notes. These items will be logged as intakes via `bmad-enhance-initiatives-backlog` Triage mode.
+
 ---
 
 ## 6. Representative Skills — Selection Rationale
@@ -234,9 +248,9 @@ Per story AC #6: one skill of each archetype (data-transforming / scanning-listi
 | 5 | Generation (Vortex discovery) | Vortex `lean-persona` workflow (step-01) | `_vortex` | Discovery-pattern generator (persona authoring). Adds `_vortex` representation. |
 | 6 | Scanning/listing (filesystem scan) | Gyre `stack-detection` workflow (step-01) | `_gyre` | Filesystem scanner. Adds `_gyre` representation. |
 
-**Submodule coverage:** 6 of 6 `_bmad/bme/` submodules represented (`_artifacts` via the calibration cases; `_portability`, `_team-factory`, `_enhance`, `_vortex`, `_gyre` via the representative set). Round 2's scope expansion closes the Round 1 gap that excluded `_vortex` and `_gyre` entirely.
+**Submodule coverage:** 6 of 7 `_bmad/bme/` subdirectories represented (`_artifacts` via the calibration cases; `_portability`, `_team-factory`, `_enhance`, `_vortex`, `_gyre` via the representative set). `_config` is excluded — it's an empty scaffolding directory with no operator-visible interaction surface. Round 2's scope expansion closes the Round 1 gap that excluded `_vortex` and `_gyre` entirely.
 
-**Conflict-of-interest disclosure** (added in Round 2 for M6): skill #4 (`bmad-enhance-initiatives-backlog`) was exercised live in the same session that produced this audit (Triage mode on oc-1-2 code-review findings). The auditor's lived experience of R7 friction on that skill informed the §8.6 R7 FAIL verdict. This is a disclosed source of bias — the auditor's cognitive load on ONE session is used as evidence for the skill's general pacing behavior. A fresh-context reviewer might or might not agree. The reproducibility gate on this exact cell (§2.5) returned FAIL from two independent blind reviewers, which provides *some* validation.
+**Conflict-of-interest disclosure** (added in Round 2 for M6): skill #4 (`bmad-enhance-initiatives-backlog`) was exercised live in the same session that produced this audit (Triage mode on oc-1-2 code-review findings). The auditor's lived experience of Right-to-pacing friction on that skill informed the §8.6 Right-to-pacing FAIL verdict. This is a disclosed source of bias — the auditor's cognitive load on ONE session is used as evidence for the skill's general pacing behavior. A fresh-context reviewer might or might not agree. The reproducibility gate on this exact cell (§2.5) returned FAIL from two independent blind reviewers, which provides *some* validation.
 
 **What's still NOT audited** (disclosed scope limit): `_bmad/bme/_vortex/workflows/` has 20 workflows; `_bmad/bme/_gyre/workflows/` has 7. One of each was sampled. 26 workflows remain unaudited. The compliance rate cited in §1 applies to the 8-skill sample; generalization to Convoke as a whole requires larger-sample follow-up.
 
@@ -248,37 +262,47 @@ Binary verdict per cell. Evidence notes in §8.
 
 | Right | Migration (cal) | Portfolio (cal) | export-skill | validate-exports | Loom add-team | enhance-backlog | Vortex lean-persona | Gyre stack-detection | Freq |
 |-------|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|
-| Right to a default | ❌ | ✅ | ✅ | ❌ | ✅ | ✅ | ✅ | ✅ | **2/8 (25%)** |
+| Right to a default | ❌ | ✅ | ✅ | ❌ | ✅ | ✅ | ✅ | ❌ | **3/8 (38%)** |
 | Right to the full universe | ✅ | ✅ | ❌ | ✅ | ✅ | ✅ | ✅ | ✅ | **1/8 (13%)** |
 | Right to rationale | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | **0/8** |
 | Right to completeness | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | **0/8** |
-| Right to pause | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | **0/8** |
+| Right to pause | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ❌ | **1/8 (13%)** |
 | Right to next action | ❌ | ✅ | ✅ | ❌ | ✅ | ✅ | ✅ | ✅ | **2/8 (25%)** |
-| Right to pacing | ❌ | ❌ | ✅ | ✅ | ✅ | ❌ | ❌ | ✅ | **4/8 (50%)** |
+| Right to pacing | ❌ | ✅ | ✅ | ✅ | ✅¹ | ❌ | ❌ | ✅ | **3/8 (38%)** |
 
-Per-skill fail counts: Migration 3, Portfolio 1, export-skill 1, validate-exports 2, Loom add-team 0, enhance-backlog 1, Vortex lean-persona 1, Gyre stack-detection 0. Max per skill: 3 (Migration).
+¹ Loom add-team Right-to-pacing verdict is scoped to step-01 only per D4a (see §8.5).
 
-**Total cells audited:** 56. **Total fails:** 9. **Compliance rate:** 47/56 = 84%.
+Per-skill fail counts: Migration 3, Portfolio 0, export-skill 1, validate-exports 2, Loom add-team 0 (step-01 scope), enhance-backlog 1, Vortex lean-persona 1, Gyre stack-detection 2. Max per skill: 3 (Migration).
+
+**Total cells audited:** 56. **Total fails:** 10. **Compliance rate:** 46/56 = 82%.
 
 ### 7.1 Bottleneck analysis
 
 **Bottleneck threshold (per AC #7):** rights violated by ≥ 50% of audited skills.
 
-**Result:** **Right to pacing is the sole bottleneck right** at 4/8 (50%). All other rights are below the 50% threshold:
-- Right to a default: 25% (below threshold but notable)
-- Right to next action: 25% (below threshold but notable)
-- Right to the full universe: 13% (not a bottleneck)
-- Right to rationale / completeness / pause: 0% each (universally honored)
+**Result (Round 3, after D3a and D5a):** **No rights cross the 50% threshold.** The highest violation rates are:
+- Right to a default: 38% (3/8 — Migration CLI PURE_AMBIGUOUS, validate-exports path prompt, Gyre multi-service branch)
+- Right to pacing: 38% (3/8 — Migration 7-bucket dryrun, enhance-backlog qualify menu, Vortex lean-persona 5-concept intake)
+- Right to next action: 25% (2/8 — Migration CLI CONFLICT, validate-exports Exit 2)
+- Right to the full universe: 13% (1/8 — export-skill batch modes)
+- Right to pause: 13% (1/8 — Gyre multi-service branch)
+- Right to rationale / completeness: 0% each (universally honored)
 
-**Round 2 correction (closes H6):** the Round 1 Executive Summary incorrectly framed Right to a default at 33% as a "bottleneck". Only ≥50% qualifies per AC #7. Right to a default (now 25% at 8 skills) is a mid-priority retrofit target but not a bottleneck. The retrofit priority in §9.1 ranks it accordingly.
+**No bottleneck right exists at the ≥50% threshold.** Round 2 claimed Right to pacing at 50% as sole bottleneck; Round 3 re-scoring (Portfolio R7 → PASS under strict glossary) dropped that to 38%, while Gyre re-scoring (+1 R1, +1 R5 for multi-service branch) raised Right to a default to 38% and introduced a Right to pause violation. The result: 2 mid-priority rights tied at 38% (Right to a default, Right to pacing), no single-right bottleneck.
+
+**Implication for Epic 2 Story 2.3 (Publication Gate):** the Publication Gate was originally scoped to require retrofit of "rights scoring worst in the audit." With no sole bottleneck, the Gate should trigger on EITHER (a) retrofit of the 2 tied-high rights (Right to a default + Right to pacing) — 6 retrofit items total — OR (b) rephrase the Gate criterion to "all fails addressed or documented."
 
 ### 7.2 Headline finding
 
-With the scope correction (6 of 6 submodules, 8 skills, 56 cells, strict binary scoring, rights-by-name referencing throughout): **Convoke's skills substantially honor the Covenant's principles before the Covenant is authored** — 84% of the audited cells PASS, 0 universal failures, 3 rights (rationale, completeness, pause) universally honored, 1 bottleneck right (pacing).
+With Round 3 corrections applied (8 skills, 56 cells, strict binary, strict glossary, multi-service branch scored): **Convoke's skills largely honor the Covenant's principles before the Covenant is authored** — 82% of the audited cells PASS, no universal failures, 2 rights (Right to rationale, Right to completeness) universally honored across all 8 skills.
 
-The bottleneck is concentrated: Right to pacing fails on 4 of the 8 skills, specifically those with rich menus or category enumerations (Migration step-02-dryrun 7 buckets, Portfolio step-02-explore 5-option menu, enhance-backlog step-t-03 qualify menu, Vortex lean-persona step-01 5-question intake). The retrofit pattern is therefore also concentrated: split rich menus into sub-rounds, adopt Loom add-team's `Concept count: N/3` footer discipline.
+The violation pattern is spread across 2 themes rather than concentrated in 1:
+- **Missing-default theme** (3 cases): operator prompted without a proposed fallback value. Retrofit pattern: propose safest default with override hint.
+- **Pacing theme** (3 cases): rich menus or category enumerations exceeding 3 novel concepts. Retrofit pattern: split into sub-rounds; adopt Loom step-01's `Concept count: N/3` footer discipline.
 
-**Credibility sizing** (tempered from Round 1's "high"): the audit is **grounded in evidence** (every cell cites a specific file + step + behavior) and **reproducible on at least one cell** (100% agreement on the chosen gate), but has **real limitations** — single LLM reviewer, static review primary, sample of 8 skills from ~33 known Convoke skills, auditor inside the project. The audit is suitable as internal calibration evidence for Epic 2 Story 2.1 retrofit scoping; external publication via Story 2.3 should cite these limitations in a "Known gaps" section rather than claim headline-only percentages.
+The remaining 4 cells (Right to next action × 2, Right to the full universe × 1, Right to pause × 1) are isolated single-skill issues without a shared pattern.
+
+**Credibility sizing:** the audit is **grounded in evidence** (every cell cites a specific file + step + behavior) and **reproducible on at least one cell** (100% agreement on the chosen gate), but has **real limitations** — single LLM reviewer; static review primary; sample of 8 skills from ~33 known Convoke skills; auditor inside the project; Loom R7 verdict scoped to step-01 only (D4a); ACs #3/#4 formally amended (D1a) rather than literally satisfied. The audit is suitable as internal calibration evidence for Epic 2 Story 2.1 retrofit scoping. Epic 2 Story 2.3 external publication must cite all §5.1 Round 3 decisions + §10.2 limitations in a "Known gaps" section rather than quote headline-only percentages.
 
 ---
 
@@ -322,7 +346,7 @@ Already documented with per-layer evidence.
 - **Right to completeness — PASS.** Collision detection: `hasBlocking === true → display blocks`; no silent picks.
 - **Right to pause — PASS.** step-01 §3 "Present agents one at a time. After each agent, ask: 'Add another agent, or are you done?'" Strong pattern throughout.
 - **Right to next action — PASS.** Invalid agent ID error: `"Agent ID must be lowercase letters and hyphens only (e.g., 'knowledge-surveyor'). Got: '{agent_id}'"` — error includes correct format example.
-- **Right to pacing — PASS.** step-01 closes with explicit `Concept count: 3/3 (team identity, pattern, agents)`. Skill was designed with the pacing budget in mind. *Caveat (Round 2): step-02 through step-05 were not individually checked for the same footer — the audit verified only step-01's pattern. If later steps lack the footer discipline, the PASS verdict would narrow to step-01 specifically.*
+- **Right to pacing — PASS (step-01 only, D4a scope narrowing).** step-01 closes with explicit `Concept count: 3/3 (team identity, pattern, agents)`. Skill was designed with the pacing budget in mind at step-01. **Explicit scope narrowing (Round 3 D4a):** steps 02 through 05 (connect, review, generate, validate) were NOT individually audited for the same footer discipline. The PASS verdict covers step-01 only. Follow-up audit of steps 02-05 is deferred to Epic 2 Story 2.1 scope as a committed action item. If steps 02-05 lack the footer discipline, the per-skill verdict could shift to FAIL on re-audit.
 
 ### 8.6 bmad-enhance-initiatives-backlog (Triage)
 
@@ -344,17 +368,17 @@ Added in Round 2 to close H5 coverage gap.
 - **Right to completeness — PASS.** Operator input is preserved wholesale; no exclusion mechanics in this step.
 - **Right to pause — PASS.** Step closes with "Please define the job-to-be-done using the structure above" — implicit wait. The step lacks the explicit `HALT` discipline seen in `_enhance` and `_artifacts` steps (no MANDATORY EXECUTION RULES block), which is a pacing/discipline observation but not a Right-to-pause violation per the rubric.
 - **Right to next action — PASS.** No error surface in this discovery step; validation happens in later steps.
-- **Right to pacing — FAIL.** Step introduces 4 novel concepts simultaneously: Job-to-be-Done (central concept), JTBD frequency axis, JTBD importance scale, evidence-tiers (interviews / surveys / observations / analytics / hypothesis). The `## Why This Matters` softens the novelty of JTBD itself but the 4 sub-axes (job, frequency, importance, evidence) still exceed the 3-concept limit. **Class-level observation**: discovery workflows by their nature introduce a mental model; Right to pacing is structurally harder to honor at step-01 of a discovery flow. This is a pattern worth noting in the Covenant — the rubric applies universally, but discovery workflows may need a multi-step introduction pattern to stay within budget.
+- **Right to pacing — FAIL.** Step introduces ≥5 novel concepts simultaneously: (1) hire/buy mental model ("people don't buy products — they hire solutions"), (2) Job-to-be-Done, (3) frequency axis (with sub-dimensions: predictability, urgency), (4) importance scale (4-level taxonomy: Mission-critical / Very important / Important / Nice-to-have), (5) evidence tiers (interviews / surveys / observations / analytics / hypothesis). Exceeds 3-concept limit. **Class-level observation**: discovery workflows by their nature introduce a mental model; Right to pacing is structurally harder to honor at step-01 of a discovery flow. This is a pattern worth noting in the Covenant — the rubric applies universally, but discovery workflows may need a multi-step introduction pattern to stay within budget.
 
 ### 8.8 Gyre stack-detection workflow (step-01-scan-filesystem)
 
 Added in Round 2 to close H5 coverage gap.
 
-- **Right to a default — PASS.** This is an automation step (the agent scans, operator doesn't choose). Scanning failures would surface as "not found" with explicit acknowledgment ("record what was found AND what was NOT found" — §1 MANDATORY EXECUTION RULES).
+- **Right to a default — FAIL (Round 3 re-score, D5a).** The automation-only framing holds for the main scan path (agent scans silently, no operator prompt). But the multi-service branch (step-01 §7 "Monorepo/Multi-Service Detection") prompts: "Which service would you like to analyze? (number or name)" — with no proposed default (no "default: [1]" or "press enter for most-recent"). Applying §2.2 worst-case rule, this operator-visible branch triggers a Right-to-a-default FAIL. *Round 2 missed this branch; Round 3 code review surfaced it.*
 - **Right to the full universe — PASS.** Step enumerates all scan categories (package manifests, containers, CI/CD, observability, cloud, database, security, etc.) upfront with their detection rules.
 - **Right to rationale — PASS.** Opening paragraph explains "All detection is static — no code execution, no dependency installation" and each scan category's purpose is self-documenting.
 - **Right to completeness — PASS.** MANDATORY EXECUTION RULES: "Report findings with evidence — every detection must cite a specific file or pattern" + "record what was found and what was NOT found". Explicit completeness discipline.
-- **Right to pause — PASS.** No operator decision in this step by design (Scout scans silently). MANDATORY EXECUTION RULES: "Do NOT ask the user to provide this information". Right-to-pause applies to operator decision points; this step has none.
+- **Right to pause — FAIL (Round 3 re-score, D5a).** The multi-service branch prompts "Which service would you like to analyze?" but the step lacks explicit `HALT` discipline (no MANDATORY EXECUTION RULES `HALT and wait` pattern seen in `_artifacts` and `_enhance` steps). Per §2.4 rubric, "prompt-without-wait" is a FAIL condition. Consistency requires this and Vortex lean-persona's similar pattern to be treated identically — see Vortex lean-persona caveat note in §8.7. *Round 2 scored PASS based on "no operator decision in this step" — that framing only applies to the main automation path; the multi-service branch IS an operator decision point.*
 - **Right to next action — PASS.** No error surface in this scan step; downstream steps handle ambiguity resolution.
 - **Right to pacing — PASS.** The operator sees the scan RESULT (one mental model: Stack Profile), not the full enumeration of scan patterns. The agent reads the detection rules; the operator reads the structured output. Pacing for the operator is: findings per category with evidence — within budget.
 
@@ -366,17 +390,21 @@ Added in Round 2 to close H5 coverage gap.
 
 Each retrofit targets a specific FAIL cell in §7. Ordered by violation-frequency × operator-impact:
 
-1. **Right to pacing — `bmad-enhance-initiatives-backlog` step-t-03 qualify menu.** *Closes cell: enhance-backlog R7 FAIL.* Split the qualify menu into sub-rounds: first lane decision (accept/override), then RICE adjustments (if needed), then finalize. Matches the 3-concept budget.
-2. **Right to pacing — Migration `step-02-dryrun` 7-bucket display.** *Closes cell: Migration R7 FAIL.* Group buckets by operator-action-required vs no-action-required ("Action needed: 3 categories. FYI: 4 categories."). Reduces novel-concept surface on first exposure.
-3. **Right to pacing — Portfolio `step-02-explore` 5-option menu.** *Closes cell: Portfolio R7 FAIL.* Pair option labels with 1-line rationale for each (what does "verbose inference trace" mean? what's a "filter prefix"?). Reduces novelty by explaining inline rather than demanding cold recognition.
-4. **Right to pacing — Vortex `lean-persona` step-01 4-axis intake.** *Closes cell: Vortex lean-persona R7 FAIL.* Convert the single step into 2 sub-steps: step-01a "Define the job" (JTBD + name, 2 concepts); step-01b "Characterize the job" (frequency + importance + evidence, 3 concepts). Splits budget cleanly.
-5. **Right to a default — Migration CLI PURE_AMBIGUOUS.** *Closes cell: Migration R1 FAIL (at CLI layer).* When no candidate can be inferred, propose a safe default (folder-default initiative with `(low confidence — override if wrong)` note). **Path-safety analysis required per project-context.md rule**: a wrong default in a file-rename/move context could misfile artifacts. The retrofit spec must include: (a) what counts as "safe" (must be overridable with no data loss), (b) the override flow for low-confidence defaults, (c) dry-run visibility for low-confidence defaults before commit.
-6. **Right to a default — `bmad-validate-exports` path prompt.** *Closes cell: validate-exports R1 FAIL.* Propose `./exported-skills/` as the default path (mirroring export-skill's output convention). Operator can override but always has a concrete starting point.
-7. **Right to next action — Migration CLI CONFLICT message.** *Closes cell: Migration R6 FAIL.* Replace "ACTION REQUIRED: Resolve initiative conflict before migration" with a 2-option hint: "Either update frontmatter to match filename, OR rename filename to match frontmatter. Re-run after resolving." Names the mechanism.
-8. **Right to next action — `bmad-validate-exports` Exit 2 message.** *Closes cell: validate-exports R6 FAIL.* Replace "may not exist or may not be a directory" with a concrete remediation: "Path not found. Run `ls <parent-path>` to check; if the directory doesn't exist yet, run `/bmad-seed-catalog` or `/bmad-export-skill --all` to create it first."
-9. **Right to the full universe — `bmad-export-skill` batch modes.** *Closes cell: export-skill R2 FAIL.* For `--tier 1`, `--tier 2`, `--all`: show "Will export N skills: [list]. Proceed? [y/N]" before executing. Converts auto-proceed to a confirm-with-universe-visible pattern.
+1. **Right to pacing — `bmad-enhance-initiatives-backlog` step-t-03 qualify menu.** *Closes cell: enhance-backlog × Right to pacing.* Split the qualify menu into sub-rounds: first lane decision (accept/override), then RICE adjustments (if needed), then finalize. Matches the 3-concept budget.
+2. **Right to pacing — Migration `step-02-dryrun` 7-bucket display.** *Closes cell: Migration × Right to pacing.* Group buckets by operator-action-required vs no-action-required ("Action needed: 3 categories. FYI: 4 categories."). Reduces novel-concept surface on first exposure.
+3. ~~**Right to pacing — Portfolio step-02-explore 5-option menu.**~~ **REMOVED in Round 3 (D3a).** Portfolio × Right to pacing re-scored to PASS under strict §2.6 glossary; no retrofit needed. Pairing option labels with inline rationale remains a defensible UX improvement but is not required to close a FAIL cell.
+4. **Right to pacing — Vortex `lean-persona` step-01 intake.** *Closes cell: Vortex lean-persona × Right to pacing.* Convert the single step into 2 sub-steps: step-01a "Define the job" (JTBD + name, 2 concepts); step-01b "Characterize the job" (frequency + importance + evidence, 3 concepts). Splits budget cleanly.
+5. **Right to a default — Migration CLI PURE_AMBIGUOUS.** *Closes cell: Migration × Right to a default (at CLI layer).* When no candidate can be inferred, propose a safe default (folder-default initiative with `(low confidence — override if wrong)` note). **Path-safety analysis required per project-context.md rule**: a wrong default in a file-rename/move context could misfile artifacts. The retrofit spec must include: (a) what counts as "safe" (must be overridable with no data loss), (b) the override flow for low-confidence defaults, (c) dry-run visibility for low-confidence defaults before commit.
+6. **Right to a default — `bmad-validate-exports` path prompt.** *Closes cell: validate-exports × Right to a default.* Propose `./exported-skills/` as the default path (mirroring export-skill's output convention). Operator can override but always has a concrete starting point.
+7. **Right to next action — Migration CLI CONFLICT message.** *Closes cell: Migration × Right to next action.* Replace "ACTION REQUIRED: Resolve initiative conflict before migration" with a 2-option hint: "Either update frontmatter to match filename, OR rename filename to match frontmatter. Re-run after resolving." Names the mechanism.
+8. **Right to next action — `bmad-validate-exports` Exit 2 message.** *Closes cell: validate-exports × Right to next action.* Replace "may not exist or may not be a directory" with a concrete remediation: "Path not found. Run `ls <parent-path>` to check; if the directory doesn't exist yet, run `/bmad-seed-catalog` or `/bmad-export-skill --all` to create it first."
+9. **Right to the full universe — `bmad-export-skill` batch modes.** *Closes cell: export-skill × Right to the full universe.* For `--tier 1`, `--tier 2`, `--all`: show "Will export N skills: [list]. Proceed? [y/N]" before executing. Converts auto-proceed to a confirm-with-universe-visible pattern.
+10. **Right to a default — Gyre `stack-detection` multi-service branch.** *Closes cell: Gyre × Right to a default (Round 3 D5a addition).* step-01 §7 "Which service would you like to analyze?" — propose a default (e.g., the service at project root, or the service with the most recent git activity). Operator can override but has a concrete starting point.
+11. **Right to pause — Gyre `stack-detection` multi-service branch.** *Closes cell: Gyre × Right to pause (Round 3 D5a addition).* Same branch — add explicit MANDATORY EXECUTION RULE `HALT and wait for operator input` matching the pattern in `_artifacts` and `_enhance` steps. Removes the implicit-wait footgun.
 
-**Mapping summary:** 9 retrofits map to 9 FAIL cells — exactly 1-to-1, no overcounting. The Round 1 claim "six targeted fixes close most observed violations" was arithmetically wrong; the Round 2 count is 9-for-9.
+**Committed follow-up (D4a):** full audit of Loom add-team steps 02-05 for Right-to-pacing footer discipline. Scoped into Epic 2 Story 2.1 planning.
+
+**Mapping summary:** 10 retrofits map to 10 FAIL cells — exactly 1-to-1, no overcounting. (Round 3 adjustments: -1 Portfolio retrofit removed via D3a, +2 Gyre retrofits added via D5a, net +1.)
 
 ### 9.2 Patterns worth codifying in the Covenant (Story 1.4)
 
@@ -438,6 +466,18 @@ From the positive examples in the audit:
 | M7 — "six fixes" undercount | **1-to-1 mapped** in §9.1 (9 fixes for 9 fails) |
 | M9 — validate-exports R6 Exit 2 missed | **Re-scored** FAIL; included in §7 matrix + §9.1 retrofit #8 |
 | LOW items | Wording tightened throughout (e.g., "no skill fails more than 3 rights" replaced with precise "Max per skill: 3 (Migration)" in §7); axiom-alignment narrative softened to "pattern observation" in §1 and §7.2 without causal claims. |
+
+### 10.4 Round 3 review (2026-04-18, resolved)
+
+Round 3 code review surfaced that Round 2's rewrite did not fully deliver on its own claims. Round 3 patches applied inline:
+- `_config` subdirectory disclosure (§6): "6 of 7" instead of "6 of 6"
+- Lean-persona concept count corrected to ≥5 (§8.7), partial-credit "softens novelty" language removed
+- Glossary extended (§2.6): added rename, move, copy, delete, done, cancel, confirm, review, submit
+- §9.1 retrofit cell identifiers use "skill × Right to X" form instead of "skill R7" (closes residual R-numbering finding)
+
+Round 3 decisions D1a through D5a all accepted (see §5.1). Matrix and retrofits updated accordingly. Compliance rate shifted 84% → 82% with no bottleneck right (previously claimed at 50%). This is the honest, post-Round-3 state.
+
+Remaining Round 3 findings deferred to backlog Triage per `code-review-convergence` no-Round-4 rule. Final assessment: the audit is **suitable as internal calibration evidence** for Epic 2 Story 2.1 retrofit scoping. Epic 2 Story 2.3 (Publication) must cite all §5.1 decisions + §10.2 limitations + the 82% rate with its caveats in a "Known gaps" section rather than quote headline-only percentages.
 
 ---
 
