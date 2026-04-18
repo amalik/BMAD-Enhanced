@@ -34,14 +34,17 @@ The Covenant uses the following terms with specific meanings. Introducing them h
 
 | Term | Meaning in this Covenant |
 |------|--------------------------|
-| **default** | A proposed value the operator can accept without typing, when the skill cannot infer one on its own or wants to offer a safe starting point. |
-| **fallback** | Synonymous with default for our purposes: the safe choice offered when primary resolution fails. |
+| **operator** | The human user a Convoke skill is serving. Operator decisions, when asked, are authoritative. |
+| **resolver** | The role the axiom assigns to the operator: the party whose decision completes a resolution the skill cannot complete alone. |
+| **default** | A proposed value shown *to the operator* — accepted with one keystroke or overridden by typing. |
+| **fallback** | A safe value the skill can use when no operator is present (automation contexts, non-interactive runs). Distinct from default: default is a prompt, fallback is a silent safety net. |
 | **override** | The operator's act of rejecting the default and providing their own value. An override is authoritative — the skill honors it without second-guessing. |
 | **unresolvable state** | Any branch where the skill cannot cleanly determine the answer. The Covenant treats this as a collaboration point, not a failure. |
+| **error** | A state where the skill attempted resolution and the attempt failed. Distinct from an unresolvable state (where resolution could not begin). Errors are governed by the Right to next action. |
 | **exclusion** | An item the skill has decided not to process, filter, or include. Exclusions are visible and justified, never silent. |
 | **decision point** | A place in a workflow where the skill must wait for operator input before advancing. |
 | **interaction round** | One operator-input boundary. A step presenting multiple questions before pausing for input is one round, not many. |
-| **concept budget** | The cognitive load a single interaction round places on the operator. See the Right to pacing. |
+| **concept budget** | A fixed allowance of novel concepts a single interaction round may introduce (currently three). See the Right to pacing. |
 | **scope** | The total set of items a skill is operating on, before any filter is applied. Operators see scope before they see filtered results. |
 
 With these established, the rest of the Covenant follows.
