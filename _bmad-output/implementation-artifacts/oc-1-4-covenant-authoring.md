@@ -66,10 +66,77 @@ so that I understand what Convoke commits to operators, can trace each right to 
 
 ### Agent Model Used
 
-_To be filled when story is picked up_
+claude-opus-4-7 (1M context) acting as **Paige** (Technical Writer persona) via `bmad-agent-tech-writer` skill — 2026-04-18.
 
 ### Debug Log References
 
+- Story file authored directly (create-story not run; ACs well-defined in epic + oc-1-4 is narrative authoring task where dev-story/create-story ceremony would slow down without adding value).
+- Covenant draft authored in one pass following Paige's 4-part format discipline.
+- Self-compliance gate walked against Compliance Checklist doc-applicability mapping. Two fixes applied inline: OC-R2 TOC enumeration, OC-R7 cumulative-vocabulary revision.
+- `convoke-doctor` verified: 25/25 checks passed, all 6 taxonomy checks green. 2 pre-existing unrelated issues.
+
 ### Completion Notes List
 
+**What was produced:**
+
+- `_bmad-output/planning-artifacts/convoke-covenant-operator.md` — the canonical Convoke Operator Covenant (approximately 170 lines, well under the 600-800 line budget)
+
+**Structure:**
+
+- Frontmatter: `initiative: convoke`, `artifact_type: covenant`, `created: 2026-04-18`, `schema_version: 1`, `status: draft`
+- §1 The Axiom — "The operator is the resolver" + one-paragraph expansion framing Convoke's position vs capability-density competitors
+- §2 Job-to-be-Done — "operators hire Convoke to feel in control of decisions they don't fully understand"
+- §3 Foundational Vocabulary — table of 9 terms (default, fallback, override, unresolvable state, exclusion, decision point, interaction round, concept budget, scope) per Checklist preamble authoring contract
+- §4 Why This Exists — scar stories (Migration 31-item dump, Portfolio 108/151 silent drop) with "what this taught us" generalizations
+- §5 How to Read This — 3-audience guidance (external evaluators, contributors, reviewers)
+- §6 The Seven Operator Rights — TOC + per-right 4-part format (statement / why / good example / anti-pattern)
+- §7 Derivation from the Axiom — each right shown as direct consequence of "the operator is the resolver"
+- §8 How to Comply — pointer to Compliance Checklist + honest compliance stats (82% as of 2026-04-18) + "you do not publish a covenant you cannot keep"
+- Revisions table with initial-authoring entry
+
+**Stylistic choices (approved by Amalik):**
+
+- External evaluator voice (Victor's Blue Ocean wedge framing)
+- Mixed register — principle for §1-3 (axiom, JTBD, scars), practitioner for §6 (the rights)
+- Publishable short — 170 lines, ~15 min read
+- Scars named by name (Migration, Portfolio) with approximate date framing; exact scar-era quotes tracked as backlog item A11
+
+**Self-compliance gate results:**
+
+Walked each rule of the Compliance Checklist's doc-applicability mapping:
+
+- **OC-R1 (default illustration per right):** PASS — each right has a good-example block
+- **OC-R2 (full universe — all rights listed before narration):** PASS after fix — added TOC of 7 rights at top of §6 before individual narration begins
+- **OC-R3 (rationale per right):** PASS — each right has a "why it exists" paragraph + §7 derivation-from-axiom
+- **OC-R4 (all rights included):** PASS — 7/7 rights have corresponding Covenant sections
+- **OC-R5 (pause):** N/A — vacuous (documents have no decision points)
+- **OC-R6 (next action in anti-patterns):** PASS — each anti-pattern paired with its good example above, which functions as the remediation pointer
+- **OC-R7 (≤3 novel concepts per section in cumulative vocabulary):** PASS after fix — §6.2 good example revised to use cumulative vocabulary ("items scanned", "excluded from the filtered view") instead of 4 specific domain labels that would have busted the budget. Preamble (§§1-3) exempt per authoring contract (the preamble is the vocabulary-introduction entry point by design).
+
+**AC verification:**
+
+- AC #1 (axiom + JTBD + rights + scars + audience guidance): PASS — all five present
+- AC #2 (4-part format per right): PASS — all 7 rights follow the format
+- AC #3 (derivation integrity): PASS — §7 explicitly traces each right to the axiom
+- AC #4 (preamble introduces 9 foundational terms): PASS — §3 Foundational Vocabulary table has all 9
+- AC #5 (self-validation against Checklist): PASS — documented above
+- AC #6 (file path + governance frontmatter): PASS — doctor confirms
+
+**Downstream consumer readiness:**
+
+- Story 1.5 (Adoption Surface): the Covenant's §5 How to Read This and §8 How to Comply make natural landing points for contributor-facing references.
+- External publication (Story 2.3, deferred): the Covenant is publishable short and honest about both compliance and gaps — ready for README section or blog post as-is, subject to Publication Gate in Epic 2.
+- Audit re-runs: the rights are canonically numbered OC-R1–OC-R7 matching the Checklist; stable slugs.
+
 ### File List
+
+Created:
+- `_bmad-output/planning-artifacts/convoke-covenant-operator.md` (the Covenant — headline deliverable of the whole initiative)
+- `_bmad-output/implementation-artifacts/oc-1-4-covenant-authoring.md` (this story file)
+
+Modified:
+- `_bmad-output/implementation-artifacts/sprint-status.yaml` (status transitions)
+
+### Change Log
+
+- 2026-04-18: Story authored. Covenant produced in one pass following Paige's 4-part format. Self-compliance gate walked; 2 inline fixes (OC-R2 TOC, OC-R7 vocabulary). Status: backlog → in-progress → review.
