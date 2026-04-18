@@ -2,6 +2,7 @@
 stepsCompleted:
   - step-01-init
   - step-02-context
+  - step-03-starter
 inputDocuments:
   - _bmad-output/planning-artifacts/convoke-brief-initiative-lifecycle-engine.md
   - _bmad-output/planning-artifacts/convoke-brief-initiative-lifecycle-engine-distillate.md
@@ -163,3 +164,72 @@ ILE-1 is not a greenfield architecture. It's a **rework-plus-layering** architec
 - **Layer**: new reactive-behaviors triad (Components 2–4) + observability library (Component 6 — partially new) + migration engine (Component 7) + debug/log infrastructure (Component 8)
 - **Integrate**: cross-skill contracts, portability validation, doctor extension (verification layer concerns)
 - **Constraint**: every architectural choice must preserve the propose-before-commit trust contract and comply with BMAD's skill contracts
+
+## Starter Template Evaluation
+
+### Decision: No starter template applies
+
+ILE-1 does not match any starter, scaffold, or seed template we could clone wholesale. The initiative is a **rework-plus-layering** of existing Convoke skills on an in-house framework (BMAD), grounded in conventions already established in this repository. The most reusable artifacts are **internal reference implementations** (below), not external starters.
+
+### Technology decisions inherited from Convoke stack
+
+Decided at the framework level; carried into ILE-1 without re-litigation:
+
+- **Language / runtime**: Node.js ≥ 18, no compile step (CommonJS); Python ≥ 3.9 for tooling scripts subject to T6 CI gate
+- **Package**: `convoke-agents` (npm); ILE-1 ships as skills + libraries inside the same package
+- **Test framework**: `node:test` (the C1 phantom-test resolution standardized this; Jest is forbidden)
+- **Lint**: `ruff` for Python (`ruff.toml` governs), `eslint` for JavaScript
+- **Markdown substrate**: all artifacts are `.md` files with YAML frontmatter; file paths are the primary identifiers
+- **Skill contract**: BMAD `SKILL.md` + `workflow.md` + `steps/` architecture; activation is the only entry point
+- **CLI pattern**: `convoke-*` scripts in `scripts/` with `bin` entries in `package.json`; slash-command wrappers mandatory for user-facing tools (feedback_slash_command_ux rule)
+- **Filesystem state**: git repo, no database; atomic writes via write-to-tmp → verify → rename (NFR13)
+
+No library or framework adoption decisions are open at this layer. Component-internal choices (e.g., watcher library if the event-model ADR picks file-watch) are deferred to ADRs.
+
+### Reference implementations — named patterns to mirror
+
+Six in-repo reference implementations. For each, the specific transferable pattern is named — the rest of the file's shape should not be assumed to transfer.
+
+1. **`_bmad/bme/_enhance/workflows/initiatives-backlog/` (v2.0.0)** — mirror the **step-file orchestration pattern**: `workflow.md` as declarative orchestrator + numbered `steps/NN-*.md` files with checklist-style instructions + `templates/` for output shapes. Transferable to Components 3 (validity contract evaluator skill surface) and 4 (propose-before-commit orchestrator skill surface). Do NOT transfer the lane-specific domain logic.
+2. **`scripts/convoke-doctor.js`** — mirror the **check-registration + summary-reporting pattern**: each check is a function returning `{ ok, messages[] }`; a top-level runner collects results and emits a unified report. Transferable to Component 7 (migration engine's per-version check loop) and to the "Extended `convoke-doctor` checks" extension pattern (NFR23 schema-version cross-skill match).
+3. **`tests/lib/test-constants.js`** — mirror the **shared-constants module pattern**: one file exporting named constants consumed by all tests, enforced by the `shared-test-constants` project-context rule. Transferable to the Error registry shared utility (Component-adjacent); same discipline (import constants, never duplicate strings).
+4. **`scripts/update/lib/registry.js`** — mirror the **append-only migration registry pattern**: array of `{ fromVersion, toVersion, apply }` entries, registered in order, never mutated. Transferable to Component 7 (migration engine data-migration registry). Note: data migrations are a distinct registry from install migrations; same shape, separate instance.
+5. **`scripts/update/lib/utils.js`** — mirror the **no-process.cwd pattern**: helpers like `findProjectRoot()`, `getPackageVersion()`, `compareVersions()` accept paths/versions as arguments; never read `process.cwd()` internally (no-process-cwd-in-libs rule). Transferable to every library component (1–8); bake the discipline in from day one.
+6. **`scripts/update/lib/refresh-installation.js`** — mirror the **thin-delta-over-bulk-copy pattern**: migration files contain only the logic specific to that migration; shared file-copying work lives in a refresh helper. Transferable to Component 7 (migration engine): per-version migrations stay small; shared I/O and atomic-rename machinery live in a shared helper.
+
+### Scaffolding tools available during implementation
+
+Four scaffolding categories. Each has a concrete trigger — do not invoke speculatively.
+
+1. **`bmad-workflow-builder`** — *applicable only for user-invokable sub-skill wrappers ILE-1 may add*. The 8 first-class components are libraries and are NOT scaffolded via workflow-builder. **Trigger**: an ILE-1 story requires creating a new user-invokable skill wrapper (a command surface the user types, e.g., slash command or `convoke-*` CLI). **Example**: if we add a `convoke-ile-logs` query sub-command or an `explain <concept>` contextual-help skill, scaffold via workflow-builder. **Do not use** for Components 1–8 internal libraries, validator functions, or the event-detection engine.
+2. **Clone-and-fork seed** — for components with close structural analogs in-repo. **Trigger**: a new component's shape closely matches an existing skill/module. **Examples**: (a) clone `_bmad/bme/_enhance/workflows/initiatives-backlog/v2.0.0/{workflow.md, steps/}` as the seed for any new user-invokable skill surface under Components 3 or 4; (b) clone `scripts/update/lib/registry.js` as the seed for Component 7's data-migration registry. Seeds are starting points, not scaffolds — expect to delete and rename extensively.
+3. **Reference implementations** — in-place patterns to read and translate, not clone (six named above). **Trigger**: a component needs a shape but not a skeleton. Consult the reference, carry the *pattern*, rewrite from scratch.
+4. **Technology decisions inherited** — the baked-in substrate (above). **Trigger**: any component. No decision required; reuse the stack.
+
+### Considered and rejected
+
+Explicitly evaluated and ruled out:
+
+- **Team Factory** (Convoke's own factory workflow) — wrong shape. Team Factory scaffolds multi-agent teams + workflows for discovery domains. ILE-1 adds no new agents and is governance infrastructure, not a discovery stream.
+- **`bmad-agent-builder`** — ILE-1 creates no new agents. Existing agents (John PM, Winston Architect, Vortex personas) are consumers of ILE-1, not products of it.
+- **`oclif` / `commander` / other CLI frameworks** — containment violation. Convoke CLIs use hand-rolled argv parsing in `scripts/convoke-*.js`; adopting a framework here would be a framework-wide decision outside ILE-1's scope.
+- **Code generators** (e.g., Yeoman, plop) — tooling overhead exceeds benefit at ILE-1's scale. Eight components do not justify a generator; the clone-and-fork seed pattern is lighter-weight.
+
+### Deferred to ADRs (Step 4+)
+
+These decisions were surfaced during context analysis and require first-class ADRs, not starter-template evaluation:
+
+1. **Event model** — file-watch / git-hook / explicit-invocation-only / scheduled-scan (cascades through Components 1, 2, 3, 4, 5, 6, 7)
+2. **Shared data model substrate** — markdown-as-source vs. structured backing (SQLite, JSON index, etc.)
+3. **Observability caching strategy** — v1 in-scope or deferred to Growth; fit-to-SLO analysis
+4. **BMAD version compatibility** — NFR19: v6.2 + v6.3 dual-support vs. release gated behind v6.3
+5. **Concurrency model** — `.ile.lock` shape, scope (per-backlog vs. per-repo), failure semantics
+6. **Schema-migration trigger model** — reactive-on-event vs. explicit-on-invocation-only (coupled to event-model decision)
+
+---
+
+### Step 3 menu
+
+**[A] Advanced Elicitation** — further refine the Starter Template Evaluation section
+**[P] Party Mode** — additional multi-perspective review
+**[C] Continue** — save and proceed to Step 4 (architectural decisions — ADRs for the 6 deferred decisions)
