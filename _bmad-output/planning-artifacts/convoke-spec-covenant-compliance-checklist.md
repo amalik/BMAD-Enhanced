@@ -185,6 +185,28 @@ Without this preamble pre-introduction, Section 1 will exceed the ≤3 budget in
 
 ---
 
+## Reproducibility gate (multi-skill audits)
+
+**Applies to:** Convoke Covenant audits that span two or more skills — e.g., the v1 baseline audit of 8 skills (2026-04-18). Single-skill audits and the Story 1.4 self-compliance gate on the Covenant document are exempt — the gate exists to validate rubric consistency across a population, not per-document.
+
+**Gate requirement.** The auditor MUST run a blind dual-reviewer reproducibility check covering **≥ 3 cells**, and the cell selection MUST span the verdict distribution:
+
+1. **≥ 1 expected-PASS** cell (auditor's own pre-gate verdict is PASS).
+2. **≥ 1 expected-FAIL** cell (auditor's own pre-gate verdict is FAIL).
+3. **≥ 1 borderline** cell (auditor's own pre-gate verdict is uncertain; the rubric was hard to apply).
+
+Cells beyond the minimum three are encouraged. LLM reviewers are acceptable; the gate validates rubric clarity for LLM judgment, not cross-human agreement. Reviewers must be blind to each other's verdicts before submitting.
+
+**Threshold.** ≥ 80% verdict agreement across the gate's cells (PASS/FAIL concurrence). Concept-category overlap for OC-R7 is measured separately; verdict agreement is primary.
+
+**Failure mode.** If the gate falls below threshold on any cell, the audit report MUST document the disagreement and either (a) revise the rubric to resolve the ambiguity, or (b) declare that cell's verdict DISPUTED and exclude it from headline findings.
+
+**Pre-gate verdict expectation discipline.** The expected-PASS / expected-FAIL / borderline labels are the auditor's *pre-gate* prediction. The prediction is recorded before the blind reviewers run. This creates a second signal: not just agreement across reviewers, but calibration — did the auditor predict the verdict correctly? Mispredicted cells (auditor expected PASS, reviewers agreed FAIL) are flagged in the audit report as rubric-application learning opportunities, even if reviewer agreement itself was high.
+
+**v1 baseline note.** The v1 audit (2026-04-18, §2.5 of `convoke-report-operator-covenant-audit-2026-04-18.md`) ran a 1-cell gate. That audit's own "Honest limitations" section identified the single-cell sample as a methodology weakness and recommended ≥3 cells for future audits. This section formalizes that recommendation. v2+ audits MUST satisfy this gate before headline findings are published.
+
+---
+
 ## Revisions
 
 Every revision records the change type so downstream consumers can detect rubric-version drift.
@@ -199,6 +221,7 @@ Every revision records the change type so downstream consumers can detect rubric
 | 2026-04-18 | note | Round 3 DEFERRED findings (per no-R4 convergence rule): H5 (OC-R7 concept counting ambiguity persists even with inline glossary — methodology-level, flagged in audit §9.3), H6 (OC-R7 doc mapping double-counts in Paige's 4-part format → Covenant self-compliance gate may fail by construction; Story 1.4 pre-requisite), M1 (workflow-inherited concepts uni-directional), M2 (conditional-surface skills don't fit 2-N/A taxonomy), M4 (Layer 3 uncontrollable stderr locks skill to permanent FAIL on OC-R6). Triaged via `bmad-enhance-initiatives-backlog`. | oc-1-3 Round 3 |
 | 2026-04-18 | rule-content-edit | **A12 shipped** — OC-R7 doc-mapping fix. Rule now uses cumulative vocabulary (concepts introduced in earlier Covenant sections are pre-existing for later sections) and clarifies that good-example and anti-pattern illustrations don't count as novel if they illustrate an already-introduced concept. *Narrows* the OC-R7 doc-mapping failure surface (closes 4-part double-counting). Story 1.4 Section 1 passability depends additionally on the preamble authoring contract — see "Covenant preamble authoring contract" note below the doc-mapping table. | A12 (backlog) |
 | 2026-04-18 | rule-content-edit | **A12 follow-up patch** — Round 1 code review of A12 surfaced 3 HIGH findings. Applied inline: (P1) softened Revisions A12-shipped claim to "narrows surface" rather than "unblocks gate"; (P2) added Covenant preamble authoring contract requiring preamble to pre-introduce 9 foundational terms so Section 1 can pass; (P3) closed illustration loophole — new domain nouns introduced INSIDE illustrations still count toward the budget. | A12 follow-up (Round 1 A12 review) |
+| 2026-04-18 | scope-rule-edit | **A10 shipped** — Reproducibility gate for multi-skill Covenant audits formalized as a new top-level section. v1 audit ran a 1-cell gate and flagged the single-cell sample as a methodology weakness (see v1 §2.5). v2+ audits MUST cover ≥3 cells spanning expected-PASS + expected-FAIL + borderline, with blind dual-reviewer verdicts and ≥80% agreement threshold. Adds a pre-gate verdict expectation discipline (auditor records predictions before blind review, enabling calibration signal separate from reviewer concurrence). Single-skill audits and Story 1.4 self-compliance on the Covenant document are exempt. | A10 (backlog) |
 | 2026-04-18 | rule-content-edit | **A15 shipped** — OC-R6 external-declared escape hatch. Added sixth Compliance Status value `N/A — external-declared (<tool>)`, applicable to OC-R6 only, for skills wrapping externally-owned CLIs (git, npm, docker, ...) whose stderr the skill cannot rewrite. Worst-case aggregation §gains an OC-R6 carve-out: Layer 3 excluded from aggregation when the declaration is used, with mandatory evidence-note preconditions (tool named, OC-R0 enumeration, L1+L2 independently PASS OC-R6). If L1 or L2 would FAIL, the cell is FAIL regardless — the carve-out does not mask skill-authored violations. Extends regex parser grammar and em-dash normalization anchor pattern. "No partial credit" note updated to reference three N/A variants. | A15 (backlog) |
 
 **Version discipline:** Schema_version in frontmatter is tied to structural breaking changes only (e.g., new required column added to the rules table). Content edits to existing rules go in Revisions without bumping schema_version.
