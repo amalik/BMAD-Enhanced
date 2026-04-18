@@ -1,0 +1,30 @@
+# `_bmad/bme/` — Convoke-Owned Modules
+
+This directory is Convoke's owned namespace — everything under `_bmad/bme/` is authored and maintained by the Convoke project, distinct from upstream BMAD Method modules (`_bmad/core/`, `_bmad/bmm/`, `_bmad/bmb/`, etc.).
+
+> **Authoring a new skill, workflow, or agent in `_bmad/bme/`?** Required reading first: [The Convoke Operator Covenant](../../_bmad-output/planning-artifacts/convoke-covenant-operator.md) — one axiom and seven commitments every Convoke skill must honor. The Covenant is what makes a `_bmad/bme/` skill a *Convoke* skill rather than a generic one; authoring without consulting it produces skills that may look structurally correct but violate the operator experience standard the rest of the ecosystem relies on.
+
+## Submodules
+
+| Submodule | Purpose |
+|-----------|---------|
+| [`_artifacts/`](./_artifacts/) | Artifact governance — migration + portfolio |
+| [`_enhance/`](./_enhance/) | Skill extensions — initiatives backlog, RICE scoring |
+| [`_gyre/`](./_gyre/) | Gyre team — production readiness agents |
+| [`_portability/`](./_portability/) | Skill export + catalog generation |
+| [`_team-factory/`](./_team-factory/) | Loom — guided team creation |
+| [`_vortex/`](./_vortex/) | Vortex team — 7-stream product discovery |
+| `_config/` | Scaffolding (currently empty; reserved) |
+
+## When to add here vs upstream
+
+- **Add to `_bmad/bme/`** when the capability is Convoke-specific (operator-experience patterns, team-of-teams orchestration, Convoke's artifact governance).
+- **Contribute upstream to BMAD Method** when the capability is generally useful across BMAD users (a new core agent pattern, a workflow primitive, a framework-level improvement).
+
+Every story that adds or modifies a `_bmad/bme/` skill or workflow must include a **Namespace decision** note explaining why it belongs here rather than upstream (per `project-context.md` rule `namespace-decision-for-new-skills`).
+
+## Adjacent references
+
+- [`../../project-context.md`](../../project-context.md) — project-wide rules AI agents must follow when editing this repo
+- [`../../_bmad-output/planning-artifacts/convoke-covenant-operator.md`](../../_bmad-output/planning-artifacts/convoke-covenant-operator.md) — the operator-experience standard all `_bmad/bme/` skills must honor
+- [`../../_bmad-output/planning-artifacts/convoke-spec-covenant-compliance-checklist.md`](../../_bmad-output/planning-artifacts/convoke-spec-covenant-compliance-checklist.md) — the auditable form of the Covenant
