@@ -1,6 +1,6 @@
 # Story 1.5: Adoption Surface
 
-Status: review
+Status: done
 
 ## Story
 
@@ -34,6 +34,14 @@ so that the Covenant is consulted at the point of authorship — not discovered 
 
 **Dismissed (noise):** `_config/` table row lacking a directory link (empty dir, link to empty dir is misleading); "~82%" imprecision (tilde-prefix is conventional rounding notation); duplicated prose across 3 landing surfaces (intentional — each surface is standalone, duplication is small).
 
+### Review Findings (Round 2 — 2026-04-18)
+
+- [x] [Review][Patch] Grammar: "violates OC-R3 (Right to rationale) that the Covenant itself encodes" has dangling relative clause [project-context.md:82] — MEDIUM. Fixed: relative clause moved inside parens — now reads "violates OC-R3 (the Right to rationale that the Covenant itself encodes)".
+- [x] [Review][Patch] Covenant preamble self-contradicts its own §6 heading [_bmad-output/planning-artifacts/convoke-covenant-operator.md:13] — MEDIUM. Fixed: "seven commitments" → "seven Operator Rights" in Covenant preamble, aligning with §6 canonical heading and the patched landing surfaces.
+- [x] [Review][Patch] Dev Notes rationale-pattern template still uses "seven commitments" [_bmad-output/implementation-artifacts/oc-1-5-adoption-surface.md:54] — LOW. Fixed: template now uses "seven Operator Rights".
+
+**Dismissed (Round 2, noise):** "seven Operator Rights every Convoke skill must honor" — 'honor a Right' is idiomatic English (cf. "honor a contract"); semantically fine. OC-R0 enumeration citing "workflow.md + step files + scripts/CLIs" doesn't literally apply to single-file skills without a workflow.md — the rule quotes the Checklist's OC-R0 text verbatim; softening the quote would drift from the source of truth.
+
 ## Dev Notes
 
 ### Surface availability reality check (conducted 2026-04-18)
@@ -51,7 +59,7 @@ Story 1.3 wrote the ACs assuming four specific landing surfaces. Reality check:
 
 Each reference must include *why* the Covenant matters — not just "read this". Template:
 
-> **Required reading before authoring a new Convoke skill:** [The Convoke Operator Covenant](path/to/convoke-covenant-operator.md) — one axiom and seven commitments that every skill must honor. The Covenant exists because the operator-facing UX of a skill is an architectural concern, not a styling concern; skills that violate it waste operator time and erode trust over the skill ecosystem as a whole.
+> **Required reading before authoring a new Convoke skill:** [The Convoke Operator Covenant](path/to/convoke-covenant-operator.md) — one axiom and seven Operator Rights that every skill must honor. The Covenant exists because the operator-facing UX of a skill is an architectural concern, not a styling concern; skills that violate it waste operator time and erode trust over the skill ecosystem as a whole.
 
 ### Anti-patterns
 
