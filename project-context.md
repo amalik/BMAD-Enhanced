@@ -2,7 +2,7 @@
 
 Rules and conventions that BMAD dev agents and contributors must follow when working in this repository. These are encoded here (not just in retros) so that the dev agent reads them before writing code.
 
-> **Authoring a new skill, workflow, or agent under `_bmad/bme/`?** Before anything else, read [The Convoke Operator Covenant](_bmad-output/planning-artifacts/convoke-covenant-operator.md) — one axiom and seven commitments every Convoke skill must honor — and self-check against the [Covenant Compliance Checklist](_bmad-output/planning-artifacts/convoke-spec-covenant-compliance-checklist.md). The rule is `covenant-compliance-for-convoke-skills` below. Covenant compliance is an architectural concern, not a styling concern: it's what makes a `_bmad/bme/` skill a *Convoke* skill rather than a generic one.
+> **Authoring a new skill, workflow, or agent under `_bmad/bme/`?** Before anything else, read [The Convoke Operator Covenant](_bmad-output/planning-artifacts/convoke-covenant-operator.md) — one axiom and seven Operator Rights every Convoke skill must honor — and self-check against the [Covenant Compliance Checklist](_bmad-output/planning-artifacts/convoke-spec-covenant-compliance-checklist.md). The rule is `covenant-compliance-for-convoke-skills` below. Covenant compliance is an architectural concern, not a styling concern: it's what makes a `_bmad/bme/` skill a *Convoke* skill rather than a generic one.
 
 ---
 
@@ -76,10 +76,10 @@ Rules and conventions that BMAD dev agents and contributors must follow when wor
 **Why.** The Covenant encodes one axiom ("the operator is the resolver") and seven Operator Rights that distinguish a Convoke skill from a generic skill. Authoring without consulting it produces skills that look structurally correct but violate the operator-experience standard the rest of the ecosystem relies on. The baseline audit (2026-04-18) found 10 violations across 56 cells (~82% compliance) in existing skills — all of them introduced by authors who never had the Covenant to consult. Making the Covenant required reading at the point of authorship is how we stop adding new violations while we retrofit the old ones.
 
 **How to apply.**
-- **Authoring a new `_bmad/bme/` skill or workflow.** Read the Covenant before you start. When drafting the deliverable, work through the Checklist's OC-R1 through OC-R7 rules and confirm each either PASSes or has a declared N/A variant with rationale.
+- **Authoring a new `_bmad/bme/` skill or workflow.** Read the Covenant before you start. When drafting the deliverable, satisfy the Checklist's OC-R0 enumeration precondition first (record the full 3-layer interaction surface — workflow.md + all step files + all invoked scripts/CLIs), then work through OC-R1 through OC-R7 and confirm each either PASSes or has a declared N/A variant with rationale. Cells answered against an incompletely-enumerated surface are invalid per OC-R0.
 - **Reviewing a `_bmad/bme/` skill PR.** Check whether the author ran the Checklist. If the diff introduces new operator-facing behavior (prompts, errors, output formats, decision points), verify the relevant Right's compliance — cite the specific OC-Rn rule in the review comment, not a generic "improve UX" note.
 - **Exception: upstream BMAD contributions.** Skills contributed upstream (`_bmad/core/`, `_bmad/bmm/`, `_bmad/bmb/`, etc.) are out of scope for the Covenant — it's a Convoke-specific standard, not a BMAD Method requirement. If the skill is genuinely upstream-appropriate (see `namespace-decision-for-new-skills`), the Covenant does not apply.
-- **Reference, not boilerplate.** Cite the Covenant by its display name and link, with a sentence explaining *why* compliance matters for the surface in question. "See the Covenant" with no rationale violates the Right to rationale that the Covenant itself encodes.
+- **Reference, not boilerplate.** Cite the Covenant by its display name and link, with a sentence explaining *why* compliance matters for the surface in question. "See the Covenant" with no rationale violates OC-R3 (Right to rationale) that the Covenant itself encodes.
 
 ---
 
