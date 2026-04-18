@@ -23,6 +23,17 @@ so that the Covenant is consulted at the point of authorship — not discovered 
 - [x] Task 4: Verify 3-of-4 discovery-path coverage (AC #3)
 - [x] Task 5: Verify each reference includes rationale (AC #4)
 
+### Review Findings (Round 1 — 2026-04-18)
+
+- [x] [Review][Patch] OC-R0 through OC-R7 enumeration missing OC-R0 [project-context.md:79] — HIGH. Fixed: rule now says "satisfy the Checklist's OC-R0 enumeration precondition first (record the full 3-layer interaction surface), then work through OC-R1 through OC-R7" and adds "Cells answered against an incompletely-enumerated surface are invalid per OC-R0".
+- [x] [Review][Patch] "seven commitments" vs "seven Operator Rights" vocabulary inconsistency [README.md:20, _bmad/bme/README.md:5, project-context.md:5] — MEDIUM. Fixed: all three landing surfaces now say "seven Operator Rights every Convoke skill must honor", aligning with the rule Why and the Covenant §6 canonical term "Rights".
+- [x] [Review][Patch] Rule cites "Right to rationale" without OC-R3 ID — dogfood fail [project-context.md:83] — LOW. Fixed: now reads "violates OC-R3 (Right to rationale)".
+- [x] [Review][Defer] bme/README submodule table omits `_bmad/bme/config.yaml` [_bmad/bme/README.md:10-17] — deferred. MEDIUM. Sibling file to the 7 submodule directories, not listed. Out of scope for Story 1.5 (about Covenant surfacing, not bme inventory completeness). Strictly a "submodules" table only covers directories, so arguably correct-as-scoped; a contributor orientation improvement.
+- [x] [Review][Defer] docs/ directory has 6 contributor-facing docs with no Covenant pointer [docs/] — deferred. MEDIUM. No `docs/README.md` or `docs/index.md` exists, so AC #3's "3-of-4 coverage" substitution is legitimate, but `docs/` itself is a contributor surface that could benefit from a Covenant pointer. Follow-up: create `docs/README.md` as the docs index with Covenant reference.
+- [x] [Review][Defer] Canonical Covenant location under `_bmad-output/planning-artifacts/` — architectural path smell [multiple] — deferred. LOW. The Covenant is durable required-reading but lives in the output/artifact tree, which typically signals ephemeral content. Architectural question beyond Story 1.5's scope (Covenant location established by oc-1-4). Follow-up: evaluate whether Covenant should move to a canonical docs path.
+
+**Dismissed (noise):** `_config/` table row lacking a directory link (empty dir, link to empty dir is misleading); "~82%" imprecision (tilde-prefix is conventional rounding notation); duplicated prose across 3 landing surfaces (intentional — each surface is standalone, duplication is small).
+
 ## Dev Notes
 
 ### Surface availability reality check (conducted 2026-04-18)
