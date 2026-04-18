@@ -79,7 +79,7 @@ Rules and conventions that BMAD dev agents and contributors must follow when wor
 - **Authoring a new `_bmad/bme/` skill or workflow.** Read the Covenant before you start. When drafting the deliverable, satisfy the Checklist's OC-R0 enumeration precondition first (record the full 3-layer interaction surface — workflow.md + all step files + all invoked scripts/CLIs), then work through OC-R1 through OC-R7 and confirm each either PASSes or has a declared N/A variant with rationale. Cells answered against an incompletely-enumerated surface are invalid per OC-R0.
 - **Reviewing a `_bmad/bme/` skill PR.** Check whether the author ran the Checklist. If the diff introduces new operator-facing behavior (prompts, errors, output formats, decision points), verify the relevant Right's compliance — cite the specific OC-Rn rule in the review comment, not a generic "improve UX" note.
 - **Exception: upstream BMAD contributions.** Skills contributed upstream (`_bmad/core/`, `_bmad/bmm/`, `_bmad/bmb/`, etc.) are out of scope for the Covenant — it's a Convoke-specific standard, not a BMAD Method requirement. If the skill is genuinely upstream-appropriate (see `namespace-decision-for-new-skills`), the Covenant does not apply.
-- **Reference, not boilerplate.** Cite the Covenant by its display name and link, with a sentence explaining *why* compliance matters for the surface in question. "See the Covenant" with no rationale violates OC-R3 (Right to rationale) that the Covenant itself encodes.
+- **Reference, not boilerplate.** Cite the Covenant by its display name and link, with a sentence explaining *why* compliance matters for the surface in question. "See the Covenant" with no rationale violates OC-R3 (the Right to rationale that the Covenant itself encodes).
 
 ---
 
