@@ -27,6 +27,14 @@ real issues, but pre-existing or out of scope for the story under review.
 
 ---
 
+## Deferred from: code review of oc-1-5-adoption-surface (2026-04-18)
+
+- **bme/README submodule table omits `_bmad/bme/config.yaml`** — MEDIUM. A sibling `config.yaml` file lives next to the 7 submodule directories but isn't listed in the new bme/README's Submodules table or anywhere else in the file. Strictly the table scope covers directories, so it's defensibly correct-as-scoped, but a contributor reading the README for bme-namespace orientation won't learn that `config.yaml` exists. Out of scope for Story 1.5 (Covenant surfacing). Follow-up: either add a "Files" note mentioning `config.yaml`, or widen the table scope to include it.
+- **`docs/` directory has 6 contributor-facing files with no Covenant pointer** — MEDIUM. `docs/` holds `agents.md`, `development.md`, `faq.md`, `references.md`, `testing.md`, `BMAD-METHOD-COMPATIBILITY.md` — but no `docs/README.md` or `docs/index.md`. Story 1.5's AC #3 "3-of-4 coverage" substitution (docs index doesn't exist) is legitimate, but a contributor landing on `docs/` via a GitHub tree view sees six docs with no Covenant orientation. Follow-up: create `docs/README.md` as the docs index, with a Covenant pointer as one of its first sections — makes the 4th discovery path real rather than absent.
+- **Canonical Covenant location under `_bmad-output/planning-artifacts/` — architectural path smell** — LOW. `_bmad-output/` is conventionally the output/artifact tree (often treated as ephemeral / git-ignored in other projects). Hosting durable required-reading documents like the Covenant and Compliance Checklist there confuses "output of a workflow" with "canonical spec". Story 1.5 inherits the location decided in oc-1-4; moving it would ripple across many references. Follow-up: evaluate whether the Covenant and Checklist should live at a canonical docs path (e.g., `docs/covenant/`) with `_bmad-output/planning-artifacts/` retaining a pointer.
+
+---
+
 ## Deferred from: code review of oc-1-2-taxonomy-extension (2026-04-18)
 
 - **Duplicate `DEFAULT_ARTIFACT_TYPES` across two files** — `scripts/migrate-artifacts.js:135` and `scripts/update/lib/taxonomy-merger.js:11` maintain identical hardcoded arrays that must stay in lockstep with each other and with `_bmad/_config/taxonomy.yaml`. Adding a new artifact_type requires editing three locations symmetrically — a drift bug waiting to happen. Refactor to a single source (either a shared constant module or reading from the shipped yaml at startup). Pre-existing architectural debt; surfaced by Blind Hunter during Round 1 review.
