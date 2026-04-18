@@ -221,6 +221,10 @@ Items awaiting qualification. No lane, no priority, no commitment.
 | IN-9 | Initiative Lifecycle Engine — product-lens rework of backlog/portfolio/governance skills into integrated lifecycle management → ILE-1 | Party mode session | 2026-04-12 | Amalik (via John+Winston) |
 | IN-10 | Refactor `DEFAULT_ARTIFACT_TYPES` to single source of truth — eliminate drift across `scripts/migrate-artifacts.js:135`, `scripts/update/lib/taxonomy-merger.js:11`, and `taxonomy.yaml` → I54 | Code review oc-1-2 Round 1 (Blind Hunter) | 2026-04-18 | Winston |
 | IN-11 | Derive ADR type list from taxonomy in `generateGovernanceADR` — `scripts/lib/artifact-utils.js:2033` hardcodes "Artifact types (21)" while taxonomy has 23 → BUG-1 | Code review oc-1-2 Round 1 (Edge Case Hunter) | 2026-04-18 | Winston |
+| IN-12 | Vortex audit expansion — oc-1-1 sampled only lean-persona (least-violating Vortex workflow); spot-check shows assumption-mapping has ~10 novel concepts in step-01. Audit 3-4 more Vortex workflows to compute Vortex-specific Right-to-pacing rate → A8 | Code review oc-1-1 Round 3 (Edge Case Hunter) | 2026-04-18 | Winston |
+| IN-13 | Decision-support archetype undersampled — oc-1-1 had only 1 decision-support skill (enhance-backlog) which also carried COI disclosure. Add 1 more decision-support skill to v2 Covenant audit baseline → A9 | Code review oc-1-1 Round 3 (Acceptance Auditor) | 2026-04-18 | Winston |
+| IN-14 | Reproducibility gate ≥3 cells for future Covenant audits — oc-1-1 AC #1 literal reading says "cells" (plural); v1 gate measured 1 cell via D2a pragmatic reading. Future audits should cover ≥3 cells (expected-PASS + expected-FAIL + borderline) per §2.5 → A10 | Code review oc-1-1 Round 3 (Acceptance Auditor) | 2026-04-18 | Winston |
+| IN-15 | Migration scar re-interpretation evidence grounding — oc-1-1 §4.2 asserted Right-to-next-action scar shape using current CLI evidence, not historical scar-era quotes. Locate scar-era retro/logs or soften the re-interpretation with evidence-limitation note → A11 | Code review oc-1-1 Round 3 (Edge Case Hunter) | 2026-04-18 | Winston |
 
 **Notes on intakes:**
 
@@ -251,8 +255,10 @@ Items qualified as not needing the full initiative pipeline. Sorted by RICE scor
 | A5 | Research stories must use mechanical search protocol | 7 | 1 | 80% | 2 | 2.8 | convoke | Backlog | — |
 | T3 | End-to-end update test on real project | 5 | 2 | 80% | 3 | 2.7 | convoke | Backlog | — |
 | I50 | `--quiet` flag for `convoke-export` batch mode (or drop) | 6 | 0.5 | 90% | 1 | 2.7 | enhance | Backlog | — |
+| A10 | Reproducibility gate ≥3 cells for v2 Covenant audits (expected-PASS + expected-FAIL + borderline per §2.5) | 3 | 0.5 | 90% | 0.5 | 2.7 | convoke | Backlog | deferred-from: oc-1-1 Round 3 |
 | T4 | Migration idempotency CLI test | 3 | 1 | 80% | 1 | 2.4 | convoke | Backlog | — |
 | I2 | `gh auth` for CI release creation | 6 | 1 | 80% | 2 | 2.4 | convoke | Backlog | — |
+| A8 | Vortex audit expansion — audit 3-4 more Vortex workflows (empathy-map, assumption-mapping, hypothesis-engineering, lean-experiment) for Vortex-specific Right-to-pacing rate; oc-1-1 sampled only lean-persona (least-violating) | 6 | 1 | 80% | 2 | 2.4 | vortex | Backlog | deferred-from: oc-1-1 Round 3 |
 | I20 | Portfolio markdown formatter — render `--show-unattributed` | 5 | 0.5 | 90% | 1 | 2.3 | enhance | Backlog | — |
 | D2 | Add output examples for more agents (Isla, Wade, Noah) | 6 | 1 | 70% | 2 | 2.1 | convoke | Backlog | — |
 | I16 | Skill description generator — semantic descriptions for bme skills | 5 | 0.5 | 80% | 1 | 2.0 | convoke | Backlog | — |
@@ -266,6 +272,7 @@ Items qualified as not needing the full initiative pipeline. Sorted by RICE scor
 | D6 | Reduce narrative overlap in journey example | 4 | 0.5 | 80% | 1 | 1.6 | convoke | Backlog | — |
 | I18 | Pre-compile regex in `_scanCorpusForInitiative` per migration run | 4 | 0.5 | 80% | 1 | 1.6 | enhance | Backlog | — |
 | I36 | `yaml` package `doc.warnings` ignored at 5 write sites | 4 | 0.5 | 80% | 1 | 1.6 | convoke | Backlog | — |
+| A9 | Decision-support archetype addition for v2 Covenant audit — add creative-problem-solver or innovation-strategy to break enhance-backlog single-sample-with-COI dependency | 4 | 0.5 | 80% | 1 | 1.6 | convoke | Backlog | deferred-from: oc-1-1 Round 3 |
 | U4 | Test upgrade-path step file cleanup | 3 | 1 | 90% | 2 | 1.4 | convoke | Backlog | — |
 | I9 | Registry writer idempotency drift detection | 3 | 0.5 | 90% | 1 | 1.4 | loom | Backlog | — |
 | I5 | Workflow output naming enforcement (ADR Phase C) | 8 | 0.5 | 90% | 3 | 1.2 | convoke | Backlog | — |
@@ -279,6 +286,7 @@ Items qualified as not needing the full initiative pipeline. Sorted by RICE scor
 | I27 | Portfolio skill — Option [4] empty-state messaging | 4 | 0.25 | 90% | 1 | 0.9 | enhance | Backlog | — |
 | I52 | Collision resolution flag for migration CLI | 4 | 0.5 | 90% | 2 | 0.9 | enhance | Backlog | — |
 | I54 | Refactor `DEFAULT_ARTIFACT_TYPES` to single source of truth (migrate-artifacts.js + taxonomy-merger.js + taxonomy.yaml) | 4 | 0.5 | 90% | 2 | 0.9 | convoke | Backlog | — |
+| A11 | Migration scar re-interpretation evidence grounding — locate scar-era retro/logs to anchor Right-to-next-action classification, or soften re-interpretation with evidence-limitation note | 3 | 0.5 | 60% | 1 | 0.9 | convoke | Backlog | deferred-from: oc-1-1 Round 3 |
 | I33 | Workflow-name namespace collision risk (verbatim names) | 4 | 1 | 70% | 3 | 0.9 | enhance | Backlog | ✓I32 (I32 made orphan deletion active — blast radius increased) |
 | I39 | Non-atomic version stamp writes in `refresh-installation.js` | 4 | 1 | 70% | 3 | 0.9 | convoke | Backlog | bundles-with: I46 |
 | A1 | Add validate menu items to Wave 3 Vortex agents (Mila, Liam, Noah) | 4 | 0.5 | 80% | 2 | 0.8 | vortex | Backlog | — |
@@ -324,7 +332,7 @@ Items requiring the full pipeline: Brief → PRD → Arch → PRD Validation →
 | P9 | **Forge team — Domain Knowledge Extraction** | 9 | 3 | 90% | 8 | 3.0 | forge | **In Pipeline** (Blocked on Gate 1) | D, E(partial) | external: shadow engagement (Gate 1) |
 | P13 | **Vortex redesign (align to Enhance-codified patterns)** | 7 | 2 | 70% | 4 | 2.5 | vortex | **Qualified** (Blocked on P12) | — | P12 |
 | U10+P23+A8+A9 | **BMAD v6.3.0 Adoption (Convoke 4.0)** | 10 | 2 | 80% | 7 | 2.3 | convoke | **In Sprint** | B, P✓, A, IR, E | external: BMAD v6.3.0 release |
-| ILE-1 | **Initiative Lifecycle Engine** (Portfolio-as-Code — rework of backlog/portfolio/governance skills into integrated lifecycle management) | 9 | 3 | 60% | 8 | 2.0 | helm | **In Pipeline** | B | ✓P15, ✓P10, ✓I49, ✓bmad-enhance-initiatives-backlog-v2.0.0 |
+| ILE-1 | **Initiative Lifecycle Engine** (Portfolio-as-Code — rework of backlog/portfolio/governance skills into integrated lifecycle management) | 9 | 3 | 60% | 8 | 2.0 | helm | **In Pipeline** | B, P | ✓P15, ✓P10, ✓I49, ✓bmad-enhance-initiatives-backlog-v2.0.0 |
 | U9 | **Module-aware refresh and validation (modules-manifest.yaml)** | 8 | 2 | 70% | 6 | 1.9 | convoke | **Qualified** | — | — |
 | P3 | **Team installer architecture (`convoke-install <module-name>`)** | 6 | 1 | 80% | 4 | 1.2 | convoke | **Qualified** | — | bundles-with: S3 |
 | P7 | **ML/AI Engineering team exploration** | 6 | 2 | 30% | 3 | 1.2 | *(pending)* | **Qualified** (needs discovery) | — | — |
@@ -571,7 +579,9 @@ Full descriptions for items in §2.4 whose table row is a one-liner.
 
 | Date | Change |
 |------|--------|
+| 2026-04-18 | **ILE-1 PRD complete.** 12-step PRD workflow delivered `convoke-prd-initiative-lifecycle-engine.md`: Executive Summary, Project Classification (developer_tool / capability-layer / portfolio-and-program-management / high / brownfield), Success Criteria (3 user success + business success + L1-L2 leading + M1-M4 outcomes + 4 falsification + 2 kill criteria w/ diagnostic + 4 TACs + 4 observability signals), Product Scope (MVP 6 items + Growth + Vision), 8 User Journeys + requirements summary + open questions + UX risk, Domain Requirements, Innovation (Christensen-honest framing + 3 positioning framings + 4 feature claims + 2-tier validation + month-3/6 reviews + 3-question kill diagnostic), Project-Type Requirements (13 subsections incl. Error Contract w/ 20 seed codes), Project Scoping & Phased Development (ship-essential vs thesis-essential + dependency graph + 5-7 sprint baseline + 4-tier contingency + descope governance), 63 FRs across 9 capability areas, 36 NFRs across 9 categories. 10 rounds of elicitation + multiple party-mode reviews. Stage: In Pipeline; artifacts: B, P. Next pipeline step: Architecture. |
 | 2026-04-18 | **BUG-1 shipped.** `generateGovernanceADR` (`scripts/lib/artifact-utils.js:2001`) now accepts `taxonomy` param and derives platform + artifact-type counts/lists from it (was hardcoded "(8)" and "(21)"); call site `scripts/migrate-artifacts.js:384` passes the already-loaded taxonomy through. Tests updated (`tests/lib/migration-execution.test.js:1210`) — 1 new case asserts custom taxonomy is reflected in output, not hardcoded. Full suite 1126/1126 green. BUG-1 moved Bug Lane → §2.5 Completed; Bug Lane empty again. |
+| 2026-04-18 | **Triage by Winston: Logged 4 intakes (IN-12, IN-13, IN-14, IN-15) from code review of oc-1-1-covenant-audit Round 3.** Qualified 4 to Fast Lane: A10 (reproducibility ≥3 cells for v2 audits, score 2.7), A8 (Vortex audit expansion, score 2.4), A9 (decision-support archetype addition, score 1.6), A11 (Migration scar evidence grounding, score 0.9). All deferred-from oc-1-1 Round 3 per code-review-convergence no-R4 rule. Raw intakes: 0. Dropped: 0. |
 | 2026-04-18 | **Triage by Winston: Logged 2 intakes (IN-10, IN-11) from code review of oc-1-2-taxonomy-extension Round 1.** Qualified 2: Bug Lane 1 (BUG-1 — `generateGovernanceADR` hardcoded type count, score 2.7), Fast Lane 1 (I54 — `DEFAULT_ARTIFACT_TYPES` refactor to single source, score 0.9). Raw intakes: 0. Dropped: 0. I54 cross-references A6 (Structured-source for count-sensitive deliverables) as a related item. Bug Lane first-populated (previously empty). |
 | 2026-04-18 | **ILE-1 Brief complete.** Product brief authored at `convoke-brief-initiative-lifecycle-engine.md` + detail pack at `convoke-brief-initiative-lifecycle-engine-distillate.md`. Stage advanced Qualified → In Pipeline. Artifact indicator updated: `—` → `B` (Brief). Positioning established as "Portfolio-as-Code." Co-primary personas: consulting team lead + solo practitioner. Success criteria: <60s context re-entry, portfolio health without altitude change, findings auto-land in correct lane. V1 scope locked (shared model + lifecycle-aware portfolio + kanban + reactive behaviors + pipeline dashboard + skill integration). Data model decision deferred to Architecture. **Next pipeline step: PRD.** |
 | 2026-04-18 | **I49 shipped.** 4 rules added to `project-context.md`: `derive-counts-from-source` (no hardcoded counts — compute from source data), `shared-test-constants` (import from shared files like `test-constants.js`, don't duplicate), `catch-all-phase-review` (review catch-all matcher output for false positives before shipping), `spec-verify-referenced-files` (existence-check all file paths in specs before dev starts). Path-safety was already covered by existing rule. Total project-context.md rules: 13. Origin: SP Epic 5 retro A1. |
