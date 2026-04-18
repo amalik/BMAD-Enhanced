@@ -1,4 +1,4 @@
-const { describe, it, before, after } = require('node:test');
+const { describe, it, before, after, beforeEach, afterEach } = require('node:test');
 const assert = require('node:assert/strict');
 const path = require('path');
 const fs = require('fs-extra');
@@ -290,6 +290,8 @@ describe('writeConfig', () => {
 
 describe('readExcludedAgents', () => {
   let tmpDir;
+  let originalWarn;
+  let capturedWarnings;
 
   before(async () => {
     tmpDir = await fs.mkdtemp(path.join(os.tmpdir(), 'convoke-excluded-'));
@@ -299,9 +301,20 @@ describe('readExcludedAgents', () => {
     await fs.remove(tmpDir);
   });
 
-  it('returns [] when file does not exist', () => {
+  beforeEach(() => {
+    capturedWarnings = [];
+    originalWarn = console.warn;
+    console.warn = (...args) => capturedWarnings.push(args.join(' '));
+  });
+
+  afterEach(() => {
+    console.warn = originalWarn;
+  });
+
+  it('returns [] when file does not exist (no warning — ENOENT is expected on fresh installs)', () => {
     const result = configMerger.readExcludedAgents(path.join(tmpDir, 'missing.yaml'));
     assert.deepEqual(result, []);
+    assert.equal(capturedWarnings.length, 0);
   });
 
   it('returns [] when field is absent', async () => {
@@ -316,10 +329,21 @@ describe('readExcludedAgents', () => {
     assert.deepEqual(configMerger.readExcludedAgents(configPath), []);
   });
 
-  it('returns [] when YAML is malformed', async () => {
+  it('returns [] and warns when YAML is malformed', async () => {
     const configPath = path.join(tmpDir, 'malformed.yaml');
     await fs.writeFile(configPath, '::: not yaml :::');
     assert.deepEqual(configMerger.readExcludedAgents(configPath), []);
+    assert.equal(capturedWarnings.length, 1, 'malformed YAML should emit one warning');
+    assert.match(capturedWarnings[0], /could not parse/);
+  });
+
+  it('returns [] and warns on non-ENOENT IO errors (e.g., EISDIR)', () => {
+    // Pass a directory path — readFileSync throws EISDIR, not ENOENT.
+    const result = configMerger.readExcludedAgents(tmpDir);
+    assert.deepEqual(result, []);
+    assert.equal(capturedWarnings.length, 1, 'non-ENOENT error should emit a warning');
+    assert.match(capturedWarnings[0], /could not read/);
+    assert.match(capturedWarnings[0], /EISDIR/);
   });
 
   it('returns the list when field is a string array', async () => {
@@ -441,5 +465,26 @@ describe('mergeConfig — excluded_agents (U8)', () => {
 
     assert.ok(!merged.agents.includes('noah'));
     assert.deepEqual(merged.excluded_agents, ['noah']); // sanitized
+  });
+
+  it('applies exclusions even when updates.agents is not provided (P2 regression)', async () => {
+    // Simulate a migration delta that only touches workflows — no updates.agents.
+    // Before the fix, merged.agents would fall through from `defaults`/`current` unfiltered,
+    // leaking the excluded agent back into the active list.
+    const { AGENT_IDS } = require('../../scripts/update/lib/agent-registry');
+    await fs.writeFile(configPath, yaml.dump({
+      version: '3.1.0',
+      agents: AGENT_IDS, // current config has all canonical agents
+      excluded_agents: ['production-intelligence-specialist'],
+    }));
+
+    const merged = await configMerger.mergeConfig(configPath, '3.2.0', {
+      // deliberately no `agents` key
+      workflows: ['some-workflow'],
+    });
+
+    assert.ok(!merged.agents.includes('production-intelligence-specialist'),
+      'excluded agent must be filtered even when updates.agents is absent');
+    assert.deepEqual(merged.excluded_agents, ['production-intelligence-specialist']);
   });
 });
