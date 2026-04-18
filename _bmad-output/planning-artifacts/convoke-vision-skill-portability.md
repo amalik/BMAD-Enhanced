@@ -2,6 +2,7 @@
 initiative: convoke
 artifact_type: vision
 created: '2026-04-10'
+updated: '2026-04-18'
 schema_version: 1
 ---
 # Skill Portability & Distribution Vision
@@ -66,7 +67,7 @@ CLI command that transforms any installed skill into a portable, LLM-agnostic fo
 **Export process:**
 1. Parse the skill's dependency graph (agent file, workflow steps, templates, sidecars)
 2. Merge steps into single instruction flow (for platforms without micro-file support)
-3. Decouple — replace `bmad-init` config reads with inline defaults, replace Claude-specific tool names with generic verbs
+3. Decouple — replace config loading calls (previously `bmad-init`, now `config-loader` in v4.0+) with inline defaults, replace Claude-specific tool names with generic verbs
 4. Generate platform-specific adapter wrappers
 
 ### 3. Standalone Skills Repository (distribution)
@@ -171,13 +172,27 @@ The core insight: existing BMAD skills are already ~90% LLM-agnostic. The person
 
 ---
 
+## Relationship to BMAD Marketplace
+
+> **Added 2026-04-18.** Convoke 4.0 introduces marketplace distribution (Epic 3).
+
+The skill portability system and the BMAD marketplace serve **different audiences with complementary distribution paths:**
+
+- **BMAD Marketplace** — full Convoke installation through the community module browser. Users discover and install the complete framework (all teams, all skills). Distribution via `.claude-plugin/marketplace.json` and `PluginResolver`.
+- **Skill Catalog Repo** — individual skills cherry-picked and copied into any project, any platform. Zero npm install. Zero framework commitment. Browse and copy.
+
+The marketplace is for users ready to adopt Convoke. The catalog is for users who want one skill without buying the ecosystem. Both feed discovery; neither replaces the other.
+
+---
+
 ## Risks and open questions
 
-1. **Skill quality without BMAD runtime** — Some skills rely on `bmad-init` to load project context. Standalone versions lose that intelligence. Mitigation: inline sensible defaults, add a "for best results, also set up..." section.
+1. **Skill quality without config context** — Some skills rely on project config (previously via `bmad-init`, now via `config-loader` in v4.0+). Standalone versions lose that intelligence. Mitigation: inline sensible defaults, add a "for best results, also set up..." section. **Note (2026-04-18):** v6.3's config-loader simplifies this — the config dependency is now a single YAML read, easier to replace with inline defaults than the old bmad-init activation block.
 2. **Drift between source and exports** — Catalog repo could fall behind main Convoke repo. Mitigation: Phase 7 automation.
 3. **Tier 3 portability** — Pipeline skills may not make sense standalone. Decision: document prerequisites clearly rather than force standalone packaging.
-4. **Platform adapter maintenance** — Each new AI tool adds an adapter to maintain. Mitigation: canonical format means adapters are thin and mechanical.
+4. **Platform adapter maintenance** — Each new AI tool adds an adapter to maintain. Mitigation: canonical format means adapters are thin and mechanical. **Note (2026-04-18):** Platform adapter validation is now formalized in Convoke 4.0 (Story 3.5) — Tier 1 skills validated across Claude Code, Copilot, and Cursor.
 5. **Naming** — "Shelf"? "Catalog"? "Skills Market"? To be decided.
+6. **Agent consolidation impact** — Convoke 4.0 removes Bob (SM), Quinn (QA), and Barry (Quick Flow), consolidating into upstream Amelia. Skill inventory and Tier classifications should be updated after consolidation ships. CIS agents (Tier 1) are unaffected.
 
 ---
 
