@@ -5,10 +5,11 @@ created: '2026-04-10'
 schema_version: 1
 title: 'Product Vision: Team Factory'
 date: 2026-03-21T00:00:00.000Z
+updated: '2026-04-18'
 created-by: Amalik with Emma (contextualization-expert)
 type: product-vision
-status: DRAFT
-version: 1
+status: SHIPPED
+version: 2
 ---
 
 # Product Vision: Team Factory
@@ -85,6 +86,15 @@ The Team Factory is thinking-first, not artifact-first:
 ### Why Now?
 7 teams incoming. The manual approach breaks at this scale. Gyre is ready to dev, Forge is in discovery — both are immediate customers of the factory.
 
+### Shipped Status (v3.2.0, 2026-04-18 update)
+
+The Team Factory shipped in Convoke v3.2.0 as part of the `_bmad/bme/_team-factory/` module. Validated on two teams (Vortex, Gyre). Awaiting Forge Gate 1 for next validation — the first externally-scaffolded team built through the factory process.
+
+**v6.3 Compliance Requirement:** With Convoke 4.0 (BMAD v6.3 adoption), all factory-produced teams must follow v6.3 conventions:
+- Direct-load config from `_bmad/{module}/config.yaml` (no bmad-init dependency)
+- SKILL.md files use v6.3 frontmatter with activation template (Pattern 6)
+- Agent consolidation: upstream Amelia replaces Bob/Quinn/Barry — factory agent templates must reference the consolidated agent lineup
+
 ---
 
 ## Future State (12-24 Months)
@@ -108,11 +118,11 @@ BMAD becomes a modular, community-extensible framework where adding a new team i
 - Contributors submit well-formed teams via PR, not half-baked file dumps
 
 ### Key Milestones
-- **M1:** Team Architecture Reference extracted from Vortex + native teams audit (the blueprint)
-- **M2:** "Add Team" factory workflow operational — tested on Gyre
-- **M3:** "Add Agent" and "Add Skill" workflows operational
-- **M4:** First colleague creates a team fully self-served
-- **M5:** 7 teams live, all factory-built
+- **M1:** Team Architecture Reference extracted from Vortex + native teams audit (the blueprint) — **DONE**
+- **M2:** "Add Team" factory workflow operational — tested on Gyre — **DONE** (shipped v3.2)
+- **M3:** "Add Agent" and "Add Skill" workflows operational — **DONE** (shipped v3.2)
+- **M4:** First colleague creates a team fully self-served — **PENDING** (awaiting Forge Gate 1)
+- **M5:** 7 teams live, all factory-built — **PENDING**
 
 ---
 
